@@ -18,7 +18,7 @@ export default function Hero() {
       {/* Overlay */}
       <div className="absolute bg-black bg-opacity-50 inset-0 z-10" />
       {/* Text */}
-      <div className="relative translate-y-[-130%] z-20 w-[55vw]">
+      <div className="relative translate-y-[-130%] z-20 lg:w-[55vw] md:w-[70vw]  w-full">
         <SearchContainer />
       </div>
     </div>
