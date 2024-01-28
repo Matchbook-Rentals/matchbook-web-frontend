@@ -7,7 +7,7 @@ export default function SearchContainer() {
     <div className="border border-gray-500 w-full md:w-auto py-6 px-4 rounded-full bg-white text-gray-500   shadow-sm hover:shadow-md transition cursor-pointer">
       <div className="flex flex-row items-center justify-between ">
 
-        <div className="text-lg pl-2 pr-8 ">
+        <div className="text-lg pl-2 pr-20 ">
           Where to?
         </div>
         <div className="hidden sm:block text-lg py-2 pl-6 border-x-[1px] border-gray-500 flex-1">
