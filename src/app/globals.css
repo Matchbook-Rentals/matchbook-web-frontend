@@ -85,10 +85,33 @@
 .cl-userButtonTrigger::after {
   content: "";
   position: absolute;
-  top: 0px; /* Expand as needed */
-  right: 0px; /* Adjust based on the actual size and position of the hamburger icon */
-  bottom: 0px; /* Expand as needed */
-  left: -50px; /* Starts from the left edge of the clickable component */
-  z-index: -1; /* Positions the overlay under the text/content but above the hamburger icon */
-  cursor: pointer; /* Indicates the area is clickable */
+  top: 0px;
+  /* Expand as needed */
+  right: 0px;
+  /* Adjust based on the actual size and position of the hamburger icon */
+  bottom: 0px;
+  /* Expand as needed */
+  left: -50px;
+  /* Starts from the left edge of the clickable component */
+  z-index: -1;
+  /* Positions the overlay under the text/content but above the hamburger icon */
+  cursor: pointer;
+  /* Indicates the area is clickable */
+}
+
+.cl-userButtonPopoverFooter {
+  display: none;
+}
+
+.cl-userButtonPopoverCard {
+  border: 1px gray solid;
+  }
+
+.cl-userButtonPopoverCard * {
+  color: black !important;
+  font-size: 1rem !important;
+}
+
+.cl-userButtonPopoverActions *:hover {
+  background-color: #a3b899;
 }

@@ -12,6 +12,6 @@ export default function AdCopy() {
 
 function HeartIcon() {
   return (
-<Image src={'/svg/heart.svg'} alt='heart-icon' width={24} height={24} className='inline'/>
+    <Image src={'/svg/heart.svg'} alt='heart-icon' width={24} height={24} className='inline' />
   )
 }
