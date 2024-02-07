@@ -2,11 +2,15 @@
 import React, { useState, useRef } from 'react';
 import { BiSearch, BiPlus, BiMinus } from 'react-icons/bi';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar"
+
 
 export default function SearchContainer() {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
+  const [moveInDate, setMoveInDate] = useState<Date>();
+  const [moveOutDate, setMoveOutDate] = useState<Date>();
 
   const moveOutRef = useRef<HTMLInputElement>(null);
   const moveInRef = useRef<HTMLInputElement>(null);
@@ -31,13 +35,35 @@ export default function SearchContainer() {
           type="text"
           placeholder='Where to?'
           className='placeholder:text-gray-500 focus:outline-primaryBrand rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
+          onClick={() => console.log(moveInDate)}
         />
-        <div className="hidden sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
-          Move In:<input ref={moveInRef} type="date" placeholder='Move In:' className='placeholder:text-gray-500' />
-        </div>
-        <div className="hidden text-left md:block  text-lg pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
-          Move Out:<input ref={moveOutRef} type="date" placeholder='Move In:' className='placeholder:text-gray-500' />
-        </div>
+        <Popover>
+          <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
+            {moveInDate ? moveInDate.toUTCString().slice(0, 16) : "Move In:"}
+            {/* <p>date picker</p> */}
+          </PopoverTrigger>
+          <PopoverContent>
+            <Calendar
+            mode="single"
+            selected={moveInDate}
+            onSelect={setMoveInDate}
+            initialFocus
+             />
+          </PopoverContent>
+        </Popover>
+        <Popover>
+        <PopoverTrigger className="hidden text-left md:block text-lg py-2 pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
+            {moveOutDate ? moveOutDate.toUTCString().slice(0, 16) : "Move Out:"}
+        </PopoverTrigger>
+        <PopoverContent>
+            <Calendar
+            mode="single"
+            selected={moveOutDate}
+            onSelect={setMoveOutDate}
+            initialFocus
+             />
+        </PopoverContent>
+        </Popover>
         <Popover>
           <PopoverTrigger className="hidden xl:block text-lg pl-6 pr-8">
             <p>Who?</p>
