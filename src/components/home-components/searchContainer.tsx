@@ -42,7 +42,7 @@ export default function SearchContainer() {
             {moveInDate ? moveInDate.toUTCString().slice(0, 16) : "Move In:"}
             {/* <p>date picker</p> */}
           </PopoverTrigger>
-          <PopoverContent>
+          <PopoverContent className='mt-5'>
             <Calendar
             mode="single"
             selected={moveInDate}
@@ -55,7 +55,7 @@ export default function SearchContainer() {
         <PopoverTrigger className="hidden text-left md:block text-lg py-2 pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
             {moveOutDate ? moveOutDate.toUTCString().slice(0, 16) : "Move Out:"}
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className='mt-5'>
             <Calendar
             mode="single"
             selected={moveOutDate}
