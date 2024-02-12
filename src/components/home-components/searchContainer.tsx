@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar"
 
 
 export default function SearchContainer() {
+  const [destination, setDestination] = useState('');
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
@@ -34,8 +35,9 @@ export default function SearchContainer() {
         <input
           type="text"
           placeholder='Where to?'
-          className='placeholder:text-gray-500 focus:outline-primaryBrand rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
-          onClick={() => console.log(moveInDate)}
+          className='placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
+          onChange={(e) => setDestination(e.target.value)}
+          onClick={() => console.log(destination)}
         />
         <Popover>
           <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
