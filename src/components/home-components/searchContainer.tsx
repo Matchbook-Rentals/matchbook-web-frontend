@@ -5,10 +5,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { Prisma } from '@prisma/client';
+import { Prisma, Trip } from '@prisma/client';
 
+type SearchContainerProps = {
+  createTrip: Function
+}
 
-export default function SearchContainer() {
+export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
   const [destination, setDestination] = useState('');
   const [adults, setAdults] = useState(1);
@@ -20,7 +23,7 @@ export default function SearchContainer() {
   const moveOutRef = useRef<HTMLInputElement>(null);
   const moveInRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
 
   const incrementCount = (type: string) => {
@@ -36,24 +39,52 @@ export default function SearchContainer() {
   };
 
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const queryParams = [];
 
-    // For each state, check if it has a truthy value and add to queryParams
-    if (destination) queryParams.push(`destination=${encodeURIComponent(destination)}`);
-    if (adults) queryParams.push(`adults=${adults}`);
-    if (children) queryParams.push(`children=${children}`);
-    if (pets) queryParams.push(`pets=${pets}`);
-    if (moveInDate) queryParams.push(`moveInDate=${moveInDate.toISOString().split('T')[0]}`);
-    if (moveOutDate) queryParams.push(`moveOutDate=${moveOutDate.toISOString().split('T')[0]}`);
+    if (isSignedIn) {
+    const trip: Trip = {
+      locationString: destination,
+      userId: user.id,
+      ...(moveOutDate && { endDate: moveOutDate }), // Add endDate only if moveOutDate is truthy
+      ...(moveInDate && { startDate: moveInDate }), // Add startDate only if moveInDate is truthy
+      ...(pets && { numPets: pets }), // Add numPets only if pets is truthy
+      ...(adults && { numAdults: adults }), // Add numAdults only if adults is truthy
+      ...(children && { numChildren: children }) // Add numChildren only if children is truthy
+    };
 
-    // Join all query parameters with '&' and prefix with '?'
-    const queryString = `?${queryParams.join('&')}`;
 
-    // Here you can use queryString, for example, to navigate to a search results page
-    console.log(queryString); // For demonstration, logging to the console
-    router.push(`/platform/trips/${queryString}`)
+
+   try {
+    
+   const newTrip: Trip = await createTrip(trip)
+   router.push(`/platform/trips/${newTrip.id}`)
+   } catch (error) {
+    alert(error.message);
+    
+   }
+   
+
+    }
+
+    else {
+      const queryParams = [];
+
+      // For each state, check if it has a truthy value and add to queryParams
+      if (destination) queryParams.push(`destination=${encodeURIComponent(destination)}`);
+      if (adults) queryParams.push(`adults=${adults}`);
+      if (children) queryParams.push(`children=${children}`);
+      if (pets) queryParams.push(`pets=${pets}`);
+      if (moveInDate) queryParams.push(`moveInDate=${moveInDate.toISOString().split('T')[0]}`);
+      if (moveOutDate) queryParams.push(`moveOutDate=${moveOutDate.toISOString().split('T')[0]}`);
+
+      // Join all query parameters with '&' and prefix with '?'
+      const queryString = `?${queryParams.join('&')}`;
+
+      // Here you can use queryString, for example, to navigate to a search results page
+      console.log(queryString); // For demonstration, logging to the console
+      router.push(`/guest/trips/${queryString}`)
+    }
   };
 
   return (
@@ -73,25 +104,25 @@ export default function SearchContainer() {
           </PopoverTrigger>
           <PopoverContent className='mt-5'>
             <Calendar
-            mode="single"
-            selected={moveInDate}
-            onSelect={setMoveInDate}
-            initialFocus
-             />
+              mode="single"
+              selected={moveInDate}
+              onSelect={setMoveInDate}
+              initialFocus
+            />
           </PopoverContent>
         </Popover>
         <Popover>
-        <PopoverTrigger className="hidden text-left md:block text-lg py-2 pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
+          <PopoverTrigger className="hidden text-left md:block text-lg py-2 pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
             {moveOutDate ? moveOutDate.toUTCString().slice(0, 16) : "Move Out:"}
-        </PopoverTrigger>
-        <PopoverContent className='mt-5'>
+          </PopoverTrigger>
+          <PopoverContent className='mt-5'>
             <Calendar
-            mode="single"
-            selected={moveOutDate}
-            onSelect={setMoveOutDate}
-            initialFocus
-             />
-        </PopoverContent>
+              mode="single"
+              selected={moveOutDate}
+              onSelect={setMoveOutDate}
+              initialFocus
+            />
+          </PopoverContent>
         </Popover>
         <Popover>
           <PopoverTrigger className="hidden xl:block text-lg pl-6 pr-8">
@@ -115,7 +146,7 @@ export default function SearchContainer() {
             </div>
           </PopoverContent>
         </Popover>
-        <div className="p-2 bg-primaryBrand rounded-full text-white">
+        <div onClick={handleSubmit} className="p-2 bg-primaryBrand rounded-full text-white">
           <BiSearch className='text-4xl' />
         </div>
       </form>

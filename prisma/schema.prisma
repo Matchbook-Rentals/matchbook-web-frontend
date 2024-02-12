@@ -102,18 +102,23 @@ model Reservation {
 }
 
 model Trip {
-  id             String   @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id             String    @id @default(uuid()) // Changed from MongoDB's ObjectId
   locationString String
-  city           String
-  state          String
+  city           String?
+  state          String?
   postalCode     String?
   locationLatLng String?
-  createdAt      DateTime @default(now())
-  startDate      DateTime
-  endDate        DateTime
+  createdAt      DateTime  @default(now())
+  startDate      DateTime?
+  endDate        DateTime?
   maxPrice       Int?
   minBedroom     Int?
   minBathroom    Int?
+  isSponsored    Boolean   @default(false)
+  numAdults Int @default(1)
+  numPets Int @default(0)
+  numChildren Int @default(0)
+  sponsorID      String?
   userId         String
 
   // Relationships
