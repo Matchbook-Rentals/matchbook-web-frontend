@@ -25,6 +25,8 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
   const router = useRouter();
   const { isSignedIn, user } = useUser();
 
+  // console.log(user);
+
 
   const incrementCount = (type: string) => {
     if (type === 'adults') setAdults(adults + 1);
@@ -82,7 +84,6 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       const queryString = `?${queryParams.join('&')}`;
 
       // Here you can use queryString, for example, to navigate to a search results page
-      console.log(queryString); // For demonstration, logging to the console
       router.push(`/guest/trips/${queryString}`)
     }
   };
@@ -95,7 +96,6 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
           placeholder='Where to?'
           className='placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
           onChange={(e) => setDestination(e.target.value)}
-          onClick={() => console.log(destination)}
         />
         <Popover>
           <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>

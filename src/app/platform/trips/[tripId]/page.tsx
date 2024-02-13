@@ -1,5 +1,5 @@
 type TripsPageProps = {
-  params: { slug: string };
+  params: { tripId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 

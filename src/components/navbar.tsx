@@ -7,7 +7,6 @@ export default async function NavBar() {
 const user = await currentUser();
 let isSignedIn = user ? true : false;
 
-console.log(isSignedIn, user);
   return (
       <nav className="bg-primaryBrand flex md:justify-between justify-center py-3 w-full ">
         <Image src={"/logo-nav-full.png"} alt="logo" width={450} height={450} className='hidden md:block' />

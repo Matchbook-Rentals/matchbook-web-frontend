@@ -4,10 +4,12 @@ import Container from '../container';
 import SearchContainer from './searchContainer';
 import prisma from '@/lib/prismadb'
 import { Trip } from '@/types';
+import { currentUser } from '@clerk/nextjs';
 
-export default function Hero() {
 
-  const createTrip = async (trip: Trip) => {
+export default async function Hero() {
+
+  const createTrip = async (trip: Trip,) => {
     'use server';
   
     // Check if there is a user with the provided userId
@@ -16,10 +18,16 @@ export default function Hero() {
     });
   
     // If the user does not exist, create a new user
+
     if (!userExists) {
+      const clerkUser = await currentUser();
       await prisma.user.create({
         data: {
           id: trip.userId,
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          email: clerkUser.emailAddresses[0].emailAddress,
+
           // You need to provide additional required fields for the User model here
         },
       });
