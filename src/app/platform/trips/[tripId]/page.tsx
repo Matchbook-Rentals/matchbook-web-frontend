@@ -1,3 +1,8 @@
+import PlatformNavbar from "@/components/platform-components/platformNavbar";
+import MatchBar from "./matchBar";
+import ListingPhotos from "./listingPhotos";
+
+
 type TripsPageProps = {
   params: { tripId: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -6,8 +11,13 @@ type TripsPageProps = {
 export default function TripsPage({ params, searchParams }: TripsPageProps) {
   console.log(params)
   return (
-    <div>
-      <h1>Trips Details: {params.tripId}</h1>
-    </div>
+    <>
+      <PlatformNavbar />
+      {/* MatchBar */}
+      <MatchBar />
+      {/* ListingPhotos */}
+      <ListingPhotos />
+      {/* ListingDetails */}
+    </>
   );
 }

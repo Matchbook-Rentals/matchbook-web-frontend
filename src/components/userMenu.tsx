@@ -9,14 +9,14 @@ import Link from 'next/link';
 
 
 
-export default function UserMenu({ isSignedIn }: { isSignedIn: boolean }) {
+export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   return (
     <div className="flex items-center">
 
       {isSignedIn ?
-        <div className='flex items-center'>
-          <Image src={"/svg/hamburger.svg"} alt='person icon' width={50} height={50} className='' />
-          <UserButton ></UserButton>
+        <div className='flex items-center scale-125'>
+          <Image src={`/svg/${color}-hamburger.svg`} alt='person icon' width={50} height={50} className='' />
+          <UserButton></UserButton>
 
         </div>
         :
