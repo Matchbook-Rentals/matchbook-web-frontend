@@ -14,7 +14,7 @@ export default function ListingPhotos() {
   ]);
 
   // Function to reorder the array
-  const reorderPhotos = (index) => {
+  const reorderPhotos = (index: number) => {
     setIsFocused(index);
     let newPhotos = [listingPhotos[index]];
     listingPhotos.forEach((photo, i) => {
