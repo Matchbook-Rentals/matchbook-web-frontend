@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Prisma, Trip } from '@prisma/client';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 
 type SearchContainerProps = {
   createTrip: Function
@@ -41,31 +42,35 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
   };
 
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = () => {
+
+  }
+
+  const pushToTripView = async (event: FormEvent) => {
     event.preventDefault();
 
     if (isSignedIn) {
-    const trip: Trip = {
-      locationString: destination,
-      userId: user.id,
-      ...(moveOutDate && { endDate: moveOutDate }), // Add endDate only if moveOutDate is truthy
-      ...(moveInDate && { startDate: moveInDate }), // Add startDate only if moveInDate is truthy
-      ...(pets && { numPets: pets }), // Add numPets only if pets is truthy
-      ...(adults && { numAdults: adults }), // Add numAdults only if adults is truthy
-      ...(children && { numChildren: children }) // Add numChildren only if children is truthy
-    };
+      const trip: Trip = {
+        locationString: destination,
+        userId: user.id,
+        ...(moveOutDate && { endDate: moveOutDate }), // Add endDate only if moveOutDate is truthy
+        ...(moveInDate && { startDate: moveInDate }), // Add startDate only if moveInDate is truthy
+        ...(pets && { numPets: pets }), // Add numPets only if pets is truthy
+        ...(adults && { numAdults: adults }), // Add numAdults only if adults is truthy
+        ...(children && { numChildren: children }) // Add numChildren only if children is truthy
+      };
 
 
 
-   try {
-    
-   const newTrip: Trip = await createTrip(trip)
-   router.push(`/platform/trips/${newTrip.id}`)
-   } catch (error) {
-    alert(error.message);
-    
-   }
-   
+      try {
+
+        const newTrip: Trip = await createTrip(trip)
+        router.push(`/platform/trips/${newTrip.id}`)
+      } catch (error) {
+        alert(error.message);
+
+      }
+
 
     }
 
@@ -146,9 +151,21 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
             </div>
           </PopoverContent>
         </Popover>
-        <div onClick={handleSubmit} className="p-2 bg-primaryBrand rounded-full text-white">
-          <BiSearch className='text-4xl' />
-        </div>
+        {/* <div onClick={handleSubmit} className="p-2 bg-primaryBrand rounded-full text-white"> */}
+        <Dialog>
+
+          <DialogTrigger className='bg-primaryBrand rounded-full text-white p-2'>
+            <BiSearch className='text-4xl' />
+          </DialogTrigger>
+          <DialogContent>
+            <p>Would you like to refine your search by telling us more about what you are looking for?</p>
+
+            <button className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
+            <button className='bg-primaryBrand rounded-full text-white p-2'>no</button>
+
+          </DialogContent>
+        </Dialog>
+        {/* </div> */}
       </form>
     </div>
   );
