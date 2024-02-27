@@ -1,3 +1,4 @@
+import { previousDay } from 'date-fns';
 import Image from 'next/image';
 import React, { useState, Dispatch, SetStateAction } from 'react';
 
@@ -26,9 +27,17 @@ const ListingTypeRadio: React.FC<ListingTypeRadioProps> = ({
     setUserPreferences(event.target.value); // Assuming the preference is just the selectedType value
   };
 
+  const handleNext = () => {
+    setUserPreferences(prev => {
+      return { ...prev, listingType: selectedType }
+    })
+    goToNext();
+  }
+
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2 className='text-2xl mb-10'>What kind of place are you looking for?</h2>
+      <h2 className='text-2xl text-center mt-10 font-semibold'>Welcome! Lets find you a match.</h2>
+      <h2 className='text-2xl my-10 font-semibold'>What kind of place are you looking for?</h2>
       <div className="flex justify-between">
         {housingOptions.map((option) => (
           <div className='flex flex-col items-center' key={option.id} onClick={() => setSelectedType(option.id)}>
@@ -50,7 +59,7 @@ const ListingTypeRadio: React.FC<ListingTypeRadioProps> = ({
         {/* Buttons to navigate to the next or previous questions */}
       </div>
       <div className="flex justify-center mt-5 ">
-        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={goToNext}>NEXT</button>
+        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
       </div>
     </div>
   );

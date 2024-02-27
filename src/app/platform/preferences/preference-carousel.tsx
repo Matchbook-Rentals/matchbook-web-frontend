@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel"
 import ListingTypeRadio from './listing-type-radio';
+import RoomsCounter from './rooms-counter';
 
 
 export default function PreferenceCarousel() {
@@ -13,6 +14,7 @@ export default function PreferenceCarousel() {
 
   // Function to go to the next question/component
   const goToNext = () => {
+    console.log(userPreferences);
     api?.scrollNext();
 
   };
@@ -26,10 +28,10 @@ export default function PreferenceCarousel() {
     <Carousel className='w-1/2 h-1/2 m-auto' opts={{ watchDrag: false }} setApi={setApi}>
       <CarouselContent>
         <CarouselItem>
-          <ListingTypeRadio goToNext={goToNext} />
+          <ListingTypeRadio goToNext={goToNext} setUserPreferences={setUserPreferences} />
         </CarouselItem>
         <CarouselItem>
-          <button onClick={goToPrevious}>HELLO</button>
+          <RoomsCounter goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}
