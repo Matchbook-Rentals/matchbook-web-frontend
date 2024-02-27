@@ -28,6 +28,41 @@ model User {
   notifications  Notification[] // Changed from MongoDB's String array
   messages       Message[] // Changed from MongoDB's String array
   HousingRequest HousingRequest[]
+  preferences    UserPreferences?
+}
+
+model UserPreferences {
+  id            String    @id @default(uuid())
+  userId        String    @unique
+  listingType   String
+  bedroomCount  Int
+  bathroomCount Int
+  furnished     Boolean
+  amenities     Amenity[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Amenity {
+  id            String  @id @default(uuid())
+  preferencesId String
+  amenityId     String
+  isRequired    Boolean
+
+  preferences UserPreferences @relation(fields: [preferencesId], references: [id])
+  label       AmenityLabel    @relation(fields: [amenityId], references: [id])
+
+  @@map("user_preferences_amenities")
+}
+
+model AmenityLabel {
+  id        String    @id @default(uuid())
+  label     String    @unique
+  amenities Amenity[]
+
+  @@map("amenities")
 }
 
 model Account {

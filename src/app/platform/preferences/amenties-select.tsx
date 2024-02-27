@@ -13,11 +13,11 @@ interface AmenitiesSelectProps {
 const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPrev, setUserPreferences }) => {
 
   const initAmenities = [
-    { id: 'airConditioning', label: 'Air Conditioning', isRequired: true },
+    { id: 'airConditioning', label: 'Air Conditioning', isRequired: false },
     { id: 'laundryFacilities', label: 'Laundry Facilities', isRequired: false },
     { id: 'inUnitWasherAndDryer', label: 'In Unit Washer and Dryer', isRequired: false },
     { id: 'fitnessCenter', label: 'Fitness Center', isRequired: false },
-    { id: 'washerAndDryerHookups', label: 'Washer and Dryer Hookups', isRequired: true },
+    { id: 'washerAndDryerHookups', label: 'Washer and Dryer Hookups', isRequired: false },
     { id: 'pool', label: 'Pool', isRequired: false },
     { id: 'dishwasher', label: 'Dishwasher', isRequired: false },
     { id: 'elevator', label: 'Elevator', isRequired: false },
