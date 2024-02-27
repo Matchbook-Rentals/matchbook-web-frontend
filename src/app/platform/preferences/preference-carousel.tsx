@@ -39,7 +39,7 @@ export default function PreferenceCarousel() {
           <FurnishedSelect goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} />
         </CarouselItem>
         <CarouselItem>
-          <AmenitiesSelect />
+          <AmenitiesSelect goToPrev={goToPrevious} setUserPreferences={setUserPreferences}/>
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}

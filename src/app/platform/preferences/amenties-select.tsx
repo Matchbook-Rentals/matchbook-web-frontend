@@ -50,7 +50,6 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ goToNext, goToPrev, s
   }
 
   const handleCheck = (id: string) => {
-    // console.log('CHECKED', id)
     setAmenities(prev => {
       let tempArray = prev.map(item => {
         if (item.id !== id) return item;
@@ -63,10 +62,10 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ goToNext, goToPrev, s
 
   return (
     <>
-      <h2 className=' text-center text-2xl my-10 font-semibold'>Are you looking for a furnished stay?</h2>
-      <div className='card border border-black flex flex-col w-1/2 mx-auto mt-5 rounded-2xl p-5'>
+      <h2 className=' text-center text-2xl my-10 font-semibold'>Which amenities are you interested in?</h2>
+      <div className='card border border-black grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5'>
         {amenities.map((item, idx) => (
-          <CheckboxDemo label={item.label} key={item.id} isChecked={item.isRequired} details={item} handleChange={handleCheck} />
+          <CheckboxDemo label={item.label} key={item.id} isChecked={item.isRequired} details={item} handleChange={handleCheck} checkOnLeft />
 
         ))}
       </div>
