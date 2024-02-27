@@ -16,14 +16,14 @@ const FurnishedSelect: React.FC<FurnishedSelectProps> = ({ goToNext, goToPrev, s
 
   const handleNext = () => {
     setUserPreferences(prev => {
-      // return { ...prev, bedroomCount, bathroomCount }
+      return { ...prev, furnished: isFurnished === 'Furnished' ? true : false }
     })
     goToNext();
   }
 
   return (
     <>
-      <h2 className=' text-center text-2xl my-10 font-semibold'>Are you looking for a finished stay?</h2>
+      <h2 className=' text-center text-2xl my-10 font-semibold'>Are you looking for a furnished stay?</h2>
       <div className='card border border-black flex flex-col w-1/2 mx-auto mt-5 rounded-2xl p-5'>
         {/* <CheckedRadio /> */}
         <CheckboxDemo label='Furnished' isChecked={isFurnished === 'Furnished'} handleChange={setIsFurnished} hasBorder />
