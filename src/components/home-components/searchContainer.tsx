@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Prisma, Trip } from '@prisma/client';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import { quartersToYears } from 'date-fns';
 
 type SearchContainerProps = {
   createTrip: Function
@@ -20,6 +21,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
   const [pets, setPets] = useState(0);
   const [moveInDate, setMoveInDate] = useState<Date>();
   const [moveOutDate, setMoveOutDate] = useState<Date>();
+  const [queryString, setQueryString] = useState('');
 
   const moveOutRef = useRef<HTMLInputElement>(null);
   const moveInRef = useRef<HTMLInputElement>(null);
@@ -88,7 +90,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       if (moveOutDate) queryParams.push(`moveOutDate=${moveOutDate.toISOString().split('T')[0]}`);
 
       // Join all query parameters with '&' and prefix with '?'
-      const queryString = `?${queryParams.join('&')}`;
+      setQueryString(`?${queryParams.join('&')}`);
       return queryString;
 
       // Here you can use queryString, for example, to navigate to a search results page
@@ -110,9 +112,14 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       router.push(`/guest/trips/${tripDetails}`)
 
     }
-
-
   };
+
+  const pushToPreferenceView = () => {
+    if (!isSignedIn) {
+      localStorage.setItem('tripQueryString', queryString);
+    }
+    router.push('/platform/preferences');
+  }
 
   return (
     <div className="border border-gray-500 w-full md:w-auto rounded-full bg-white text-gray-500 shadow-sm hover:shadow-md transition cursor-pointer">
@@ -181,7 +188,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
           <DialogContent>
             <p>Would you like to refine your search by telling us more about what you are looking for?</p>
 
-            <button className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
+            <button onClick={pushToPreferenceView} className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
             <button onClick={pushToTripView} className='bg-primaryBrand rounded-full text-white p-2'>no</button>
 
           </DialogContent>
