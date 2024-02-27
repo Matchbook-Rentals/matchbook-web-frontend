@@ -13,7 +13,7 @@ export default function PrefereceDisplay() {
         ))
         } )}
        {userPreferences.amenities.map(amenity => (
-        <p>{amenity.label}: {amenity.isRequired.toString()}</p>
+        <p key={amenity.id}>{amenity.label}: {amenity.isRequired.toString()}</p>
        ))}
 </div>
   )
