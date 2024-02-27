@@ -90,8 +90,11 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       if (moveOutDate) queryParams.push(`moveOutDate=${moveOutDate.toISOString().split('T')[0]}`);
 
       // Join all query parameters with '&' and prefix with '?'
-      setQueryString(`?${queryParams.join('&')}`);
-      return queryString;
+      let tempQueryString = `?${queryParams.join('&')}`
+      setQueryString(tempQueryString);
+      localStorage.setItem('tripQueryString', tempQueryString);
+
+      return tempQueryString;
 
       // Here you can use queryString, for example, to navigate to a search results page
       // router.push(`/guest/trips/${queryString}`)
@@ -114,10 +117,9 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
     }
   };
 
-  const pushToPreferenceView = () => {
-    if (!isSignedIn) {
-      localStorage.setItem('tripQueryString', queryString);
-    }
+  const pushToPreferenceView = async () => {
+    let tripDetails = await saveTripDetails();
+    console.log(tripDetails);
     router.push('/platform/preferences');
   }
 

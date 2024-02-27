@@ -5,12 +5,12 @@ import { CheckboxDemo } from './custom-checkbox';
 import { Check } from 'lucide-react';
 
 interface AmenitiesSelectProps {
-  goToNext: () => void;
+  handleFinish: () => void;
   goToPrev: () => void;
   setUserPreferences: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
 }
 
-const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ goToNext, goToPrev, setUserPreferences }) => {
+const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPrev, setUserPreferences }) => {
 
   const initAmenities = [
     { id: 'airConditioning', label: 'Air Conditioning', isRequired: true },
@@ -41,12 +41,12 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ goToNext, goToPrev, s
 
 
 
-  const handleNext = () => {
+  const handleSubmit = () => {
     console.log(amenities)
-    // setUserPreferences(prev => {
-    //   return { ...prev, furnished: isFurnished === 'Furnished' ? true : false }
-    // })
-    // goToNext();
+    setUserPreferences(prev => {
+      return { ...prev, amenities }
+    })
+    handleFinish();
   }
 
   const handleCheck = (id: string) => {
@@ -63,15 +63,15 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ goToNext, goToPrev, s
   return (
     <>
       <h2 className=' text-center text-2xl my-10 font-semibold'>Which amenities are you interested in?</h2>
-      <div className='card border border-black grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5'>
+      <div className='card  grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5'>
         {amenities.map((item, idx) => (
-          <CheckboxDemo label={item.label} key={item.id} isChecked={item.isRequired} details={item} handleChange={handleCheck} checkOnLeft />
+          <CheckboxDemo justifyDirection='left' label={item.label} key={item.id} isChecked={item.isRequired} details={item} handleChange={handleCheck} checkOnLeft />
 
         ))}
       </div>
-      <div className="flex gap-2 justify-center mt-5">
-        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={goToPrev}>BACK</button>
-        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
+      <div className="flex gap-2  justify-center mt-5 p-1">
+        <button className='bg-primaryBrand px-5 py-2 text-2xl shadow-md shadow-slate-500 hover:shadow-none text-white  rounded-lg' onClick={goToPrev}>BACK</button>
+        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black ' onClick={handleSubmit}>SUBMIT</button>
       </div>
     </>
   )
