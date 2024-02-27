@@ -5,7 +5,7 @@ import { CheckboxDemo } from './custom-checkbox';
 import { Check } from 'lucide-react';
 
 interface AmenitiesSelectProps {
-  handleFinish: () => void;
+  handleFinish: (amenities: any) => void;
   goToPrev: () => void;
   setUserPreferences: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
 }
@@ -46,7 +46,7 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPre
     setUserPreferences(prev => {
       return { ...prev, amenities }
     })
-    handleFinish();
+    handleFinish(amenities);
   }
 
   const handleCheck = (id: string) => {

@@ -34,10 +34,10 @@ export default function PreferenceCarousel() {
   //   'use server';
   // }
 
-  const handleFinish = () => {
-    console.log(userPreferences);
+  const handleFinish = (amenities) => {
+    const tempPreferences = {...userPreferences, amenities}
     if (!isSignedIn) {
-      let stringifiedPreferences = JSON.stringify(userPreferences);
+      let stringifiedPreferences = JSON.stringify(tempPreferences);
       localStorage.setItem('matchbookUserPreferences', stringifiedPreferences);
       let queryString = localStorage.getItem('tripQueryString');
      router.push(`/guest/trips/${queryString}`) 
