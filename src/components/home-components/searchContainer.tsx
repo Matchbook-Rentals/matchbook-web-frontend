@@ -46,8 +46,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
   }
 
-  const pushToTripView = async (event: FormEvent) => {
-    event.preventDefault();
+  const saveTripDetails = async () => {
 
     if (isSignedIn) {
       const trip: Trip = {
@@ -65,7 +64,10 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       try {
 
         const newTrip: Trip = await createTrip(trip)
-        router.push(`/platform/trips/${newTrip.id}`)
+        // router.push(`/platform/trips/${newTrip.id}`)
+
+        return newTrip
+
       } catch (error) {
         alert(error.message);
 
@@ -87,10 +89,29 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
       // Join all query parameters with '&' and prefix with '?'
       const queryString = `?${queryParams.join('&')}`;
+      return queryString;
 
       // Here you can use queryString, for example, to navigate to a search results page
-      router.push(`/guest/trips/${queryString}`)
+      // router.push(`/guest/trips/${queryString}`)
     }
+  }
+
+  const pushToTripView = async (event: FormEvent) => {
+    event.preventDefault();
+
+    let tripDetails = await saveTripDetails();
+    console.log('is Signed In-----', isSignedIn)
+
+
+    if (isSignedIn) {
+      router.push(`/platform/trips/${tripDetails.id}`)
+    }
+    else {
+      router.push(`/guest/trips/${tripDetails}`)
+
+    }
+
+
   };
 
   return (
@@ -161,7 +182,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
             <p>Would you like to refine your search by telling us more about what you are looking for?</p>
 
             <button className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
-            <button className='bg-primaryBrand rounded-full text-white p-2'>no</button>
+            <button onClick={pushToTripView} className='bg-primaryBrand rounded-full text-white p-2'>no</button>
 
           </DialogContent>
         </Dialog>
