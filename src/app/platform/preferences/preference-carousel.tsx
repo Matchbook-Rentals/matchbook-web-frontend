@@ -5,6 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import ListingTypeRadio from './listing-type-radio';
 import RoomsCounter from './rooms-counter';
 import FurnishedSelect from './furnished-select';
+import AmenitiesSelect from './amenties-select';
 
 
 export default function PreferenceCarousel() {
@@ -36,6 +37,9 @@ export default function PreferenceCarousel() {
         </CarouselItem>
         <CarouselItem>
           <FurnishedSelect goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} />
+        </CarouselItem>
+        <CarouselItem>
+          <AmenitiesSelect />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}
