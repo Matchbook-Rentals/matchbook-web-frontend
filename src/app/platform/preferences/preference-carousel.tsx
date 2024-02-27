@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel"
 import ListingTypeRadio from './listing-type-radio';
 import RoomsCounter from './rooms-counter';
+import FurnishedSelect from './furnished-select';
 
 
 export default function PreferenceCarousel() {
@@ -32,6 +33,9 @@ export default function PreferenceCarousel() {
         </CarouselItem>
         <CarouselItem>
           <RoomsCounter goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} />
+        </CarouselItem>
+        <CarouselItem>
+          <FurnishedSelect goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}
