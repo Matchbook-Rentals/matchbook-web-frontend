@@ -23,7 +23,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
         <>
           <Popover>
             <PopoverTrigger>
-              <Image src={"/svg/hamburger.svg"} alt='person icon' width={50} height={50} className='' />
+              <Image src={`/svg/${color}-hamburger.svg`} alt='person icon' width={50} height={50} className='' />
 
             </PopoverTrigger>
             <PopoverContent className='w-full p-0'>
