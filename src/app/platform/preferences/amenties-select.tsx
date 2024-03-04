@@ -15,9 +15,7 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPre
   const initAmenities = [
     { id: 'airConditioning', label: 'Air Conditioning', isRequired: false },
     { id: 'laundryFacilities', label: 'Laundry Facilities', isRequired: false },
-    { id: 'inUnitWasherAndDryer', label: 'In Unit Washer and Dryer', isRequired: false },
     { id: 'fitnessCenter', label: 'Fitness Center', isRequired: false },
-    { id: 'washerAndDryerHookups', label: 'Washer and Dryer Hookups', isRequired: false },
     { id: 'pool', label: 'Pool', isRequired: false },
     { id: 'dishwasher', label: 'Dishwasher', isRequired: false },
     { id: 'elevator', label: 'Elevator', isRequired: false },
@@ -27,8 +25,8 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPre
     { id: 'fireplace', label: 'Fireplace', isRequired: false },
     { id: 'wifi', label: 'Wifi', isRequired: false },
     { id: 'kitchen', label: 'Kitchen', isRequired: false },
-    { id: 'washer', label: 'Washer', isRequired: false },
-    { id: 'dryer', label: 'Dryer', isRequired: false },
+    { id: 'inUnitWasher', label: 'In Unit Washer', isRequired: false },
+    { id: 'inUnitDryer', label: 'In Unit Dryer', isRequired: false },
     { id: 'dedicatedWorkspace', label: 'Dedicated Workspace', isRequired: false },
     { id: 'tv', label: 'TV', isRequired: false },
     { id: 'hairDryer', label: 'Hair Dryer', isRequired: false },
@@ -53,7 +51,7 @@ const AmenitiesSelect: React.FC<AmenitiesSelectProps> = ({ handleFinish, goToPre
     setAmenities(prev => {
       let tempArray = prev.map(item => {
         if (item.id !== id) return item;
-        item = {...item, isRequired: !item.isRequired}
+        item = { ...item, isRequired: !item.isRequired }
         return item
       })
       return tempArray;

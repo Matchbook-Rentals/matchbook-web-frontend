@@ -11,12 +11,12 @@ export default async function Hero() {
 
   const createTrip = async (trip: Trip,) => {
     'use server';
-  
+
     // Check if there is a user with the provided userId
     const userExists = await prisma.user.findUnique({
       where: { id: trip.userId },
     });
-  
+
     // If the user does not exist, create a new user
 
     if (!userExists) {
@@ -32,10 +32,10 @@ export default async function Hero() {
         },
       });
     }
-  
+
     // Create the trip
     const newTrip = await prisma.trip.create({ data: trip });
-  
+
     return newTrip;
   };
 
@@ -54,7 +54,7 @@ export default async function Hero() {
       <div className="absolute bg-black bg-opacity-50 inset-0 z-10" />
       {/* Text */}
       <div className="relative translate-y-[-130%] z-20 lg:w-[55vw] md:w-[70vw]  w-full">
-        <SearchContainer createTrip={createTrip}/>
+        <SearchContainer createTrip={createTrip} />
       </div>
     </div>
   )

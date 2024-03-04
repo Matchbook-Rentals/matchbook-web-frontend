@@ -66,6 +66,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       try {
 
         const newTrip: Trip = await createTrip(trip)
+        localStorage.setItem('matchbookTripId', newTrip.id)
         // router.push(`/platform/trips/${newTrip.id}`)
 
         return newTrip
@@ -103,6 +104,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
   const pushToTripView = async (event: FormEvent) => {
     event.preventDefault();
+    localStorage.removeItem('matchbookUserPreferences');
 
     let tripDetails = await saveTripDetails();
     console.log('is Signed In-----', isSignedIn)
