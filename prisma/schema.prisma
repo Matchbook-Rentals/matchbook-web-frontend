@@ -8,6 +8,16 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum TripStatus {
+  searching
+  matching
+  finalizing
+  reserved
+  active
+  cancelled
+  completed
+}
+
 model User {
   id             String    @id @default(uuid()) // Changed from MongoDB's ObjectId
   firstName      String?
@@ -137,24 +147,25 @@ model Reservation {
 }
 
 model Trip {
-  id             String    @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id             String     @id @default(uuid()) // Changed from MongoDB's ObjectId
   locationString String
   city           String?
   state          String?
   postalCode     String?
   locationLatLng String?
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime   @default(now())
   startDate      DateTime?
   endDate        DateTime?
   maxPrice       Int?
   minBedroom     Int?
   minBathroom    Int?
-  isSponsored    Boolean   @default(false)
-  numAdults      Int       @default(1)
-  numPets        Int       @default(0)
-  numChildren    Int       @default(0)
+  isSponsored    Boolean    @default(false)
+  numAdults      Int        @default(1)
+  numPets        Int        @default(0)
+  numChildren    Int        @default(0)
   sponsorID      String?
   userId         String
+  tripStatus     TripStatus @default(searching)
 
   // Relationships
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)

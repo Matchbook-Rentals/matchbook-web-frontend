@@ -1,6 +1,9 @@
 import React from 'react'
 import prisma from '@/lib/prismadb'
-import { auth } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs';
+import CurrentStay from './current-stay';
+import UpcomingBookings from './upcoming-bookings';
+import RecentSearches from './recent-searches';
 
 
 export default async function DashboardPage
@@ -10,17 +13,19 @@ export default async function DashboardPage
     'use server';
     let trips = await prisma.trip.findMany({ where: { userId } })
     return trips;
-
-
   }
 
   let trips = await getTrips();
-  console.log(trips);
+  let userData = await currentUser();
+
+  console.log(userData);
+
   return (
     <div>
-      <h2 className='text-center text-3xl border-b-2 pb-3'>Your Current Booking</h2>
-      <h2 className='text-center text-3xl border-b-2 pb-3'>Your Reserved Bookings </h2>
-      <h2 className='text-center text-3xl border-b-2 pb-3'>Your Recent Searches </h2>
+      <h2 className='text-center text-3xl font-semibold border-b-2 pb-3'>Hey there, {userData?.firstName}</h2>
+      <CurrentStay />
+      <UpcomingBookings />
+      <RecentSearches />
       {trips.map((trip, idx) => (
         <p key={trip.id}>
           {trip.id}
