@@ -18,14 +18,13 @@ export default function CurrentStay() {
           <p>April 1st, 2024</p>
           <p>$1600</p>
         </div>
-        <div className='border-black border-2 text-2xl font-semibold grid grid-cols-6 rounded-lg py-2'>
+        <div className='border-black border-2 text-2xl font-semibold grid grid-cols-6 rounded-lg py-4'>
 
-          <span className='col-span-5 pl-8'>Messages</span><span>&gt;</span>
-          <span className='col-span-5 pl-8'>Lease Download</span><span>&gt;</span>
-          <span className='col-span-5 pl-8'>Payment History</span><span>&gt;</span>
-          <span className='col-span-5 pl-8'>Modify Stay Request</span><span>&gt;</span>
-          <span className='col-span-5 pl-8'>Lorem ipsum</span><span>&gt;</span>
-          <span className='col-span-5 pl-8'>Messages</span><span>&gt;</span>
+          <span className='col-span-5 pl-8'>Messages</span><span className='text-3xl'>&gt;</span>
+          <span className='col-span-5 pl-8'>Lease Download</span><span className='text-3xl'>&gt;</span>
+          <span className='col-span-5 pl-8'>Payment History</span><span className='text-3xl'>&gt;</span>
+          <span className='col-span-5 pl-8'>Modify Stay Request</span><span className='text-3xl'>&gt;</span>
+          <span className='col-span-5 pl-8'>Lorem ipsum</span><span className='text-3xl'>&gt;</span>
         </div>
       </div>
     </div>
