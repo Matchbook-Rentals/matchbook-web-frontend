@@ -12,7 +12,6 @@ export default function TripsPage({ params, searchParams }: TripsPageProps) {
   console.log(params)
   return (
     <>
-      <PlatformNavbar />
       {/* MatchBar */}
       <MatchBar />
       {/* ListingPhotos */}
