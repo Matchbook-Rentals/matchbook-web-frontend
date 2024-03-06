@@ -29,12 +29,6 @@ const upcomingBookings = trips.filter((trip) => trip?.tripStatus === 'reserved')
       <CurrentStay />
       <UpcomingBookings upcomingBookings={upcomingBookings} />
       <RecentSearches trips={trips} />
-      {trips.map((trip, idx) => (
-        <p key={trip.id}>
-          {trip.id}
-        </p>
-      ))}
-
     </div>
   )
 }
