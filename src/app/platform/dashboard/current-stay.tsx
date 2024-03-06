@@ -4,7 +4,7 @@ import React from 'react'
 export default function CurrentStay() {
   return (
     <div>
-      <h2 className='text-center text-3xl font-semibold border-b-2 pb-3'>Your Current Stay</h2>
+      <h2 className='text-center text-3xl w-1/2 mx-auto font-semibold border-b-2 pb-3'>Your Current Stay</h2>
       <div className='grid grid-cols-3 gap-y-10 py-10 w-3/4 mx-auto'>
         <div className='text-3xl font-semibold'><span className='underline'>Ogden Mountain Home</span> <span className='text-3xl'>&gt;</span></div>
 

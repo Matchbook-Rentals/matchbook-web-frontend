@@ -19,12 +19,15 @@ export default async function DashboardPage
   let trips: Trip[] = await getTrips();
   let userData = await currentUser();
 
+const upcomingBookings = trips.filter((trip) => trip?.tripStatus === 'reserved');
+
+  console.log('RESERVED',upcomingBookings)
 
   return (
     <div>
-      <h2 className='text-center text-3xl font-semibold border-b-2 pb-3'>Hey there, {userData?.firstName}</h2>
+      <h2 className='text-center text-3xl font-semibold pb-3'>Hey there, {userData?.firstName}</h2>
       <CurrentStay />
-      <UpcomingBookings trips={trips} />
+      <UpcomingBookings upcomingBookings={upcomingBookings} />
       <RecentSearches trips={trips} />
       {trips.map((trip, idx) => (
         <p key={trip.id}>
