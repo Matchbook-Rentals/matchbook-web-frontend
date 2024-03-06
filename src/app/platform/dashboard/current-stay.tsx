@@ -11,7 +11,7 @@ export default function CurrentStay() {
         <div className='text-3xl font-semibold text-center'>Trip Start - Trip End</div>
         <div className='placeholder'></div>
         <div>
-          <Image src={"https://source.unsplash.com/random/1"} alt="logo" width={500} height={350} className='rounded-xl' />
+          <Image src={"https://source.unsplash.com/random/500x350"} alt="logo" width={500} height={350} className='rounded-xl' />
         </div>
         <div style={{fontSize: '1.65rem'}} className='text-3xl font-semibold flex flex-col justify-center items-center gap-2'>
           <p><span className='underline'>Next Payment </span><span className='font-bold'>&gt;</span></p>
