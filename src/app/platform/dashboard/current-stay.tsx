@@ -13,12 +13,12 @@ export default function CurrentStay() {
         <div>
           <Image src={"https://source.unsplash.com/random/1"} alt="logo" width={500} height={350} className='rounded-xl' />
         </div>
-        <div className='text-2xl font-semibold flex flex-col justify-center items-center gap-2'>
-          <p><span className='underline'>Next Payment</span><span>&gt;</span></p>
-          <p>April 1st, 2024</p>
+        <div style={{fontSize: '1.65rem'}} className='text-3xl font-semibold flex flex-col justify-center items-center gap-2'>
+          <p><span className='underline'>Next Payment </span><span className='font-bold'>&gt;</span></p>
+          <p className=''>April 1st, 2024</p>
           <p>$1600</p>
         </div>
-        <div className='border-black border-2 text-2xl font-semibold grid grid-cols-6 rounded-lg py-4'>
+        <div className='border-slate-500 border-2 text-2xl font-semibold grid grid-cols-6 rounded-2xl py-4'>
 
           <span className='col-span-5 pl-8'>Messages</span><span className='text-3xl'>&gt;</span>
           <span className='col-span-5 pl-8'>Lease Download</span><span className='text-3xl'>&gt;</span>

@@ -25,7 +25,7 @@ const upcomingBookings = trips.filter((trip) => trip?.tripStatus === 'reserved')
 
   return (
     <div>
-      <h2 className='text-center text-3xl font-semibold pb-3'>Hey there, {userData?.firstName}</h2>
+      <h2 className='text-center text-4xl font-semibold pb-3 mb-10'>Hey there, {userData?.firstName}</h2>
       <CurrentStay />
       <UpcomingBookings upcomingBookings={upcomingBookings} />
       <RecentSearches trips={trips} />
