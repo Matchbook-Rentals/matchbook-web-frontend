@@ -1,21 +1,21 @@
-
 export type Trip = {
   id: string;
   locationString: string;
-  numAdults?: number;
-  numPets?: number;
-  numChilren?: number;
-  city?: string; // Optional field
-  state?: string; // Optional field
-  postalCode?: string; // Optional field
-  locationLatLng?: string; // Optional field
-  createdAt?: Date; // or string if you're using ISO strings
-  startDate?: Date; // or string
-  endDate?: Date; // or string
-  maxPrice?: number;
-  minBedroom?: number;
-  minBathroom?: number;
-  isSponsored?: boolean;
-  sponsorID?: string;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
+  locationLatLng: string | null; // Assuming string, adjust if it's a more complex type
+  createdAt: Date | string; // Date object or ISO string representation
+  startDate: Date | string | null;
+  endDate: Date | string | null;
+  maxPrice: number | null;
+  minBedroom: number | null;
+  minBathroom: number | null;
+  isSponsored: boolean;
+  numAdults: number;
+  numPets: number;
+  numChildren: number;
+  sponsorID: string | null;
   userId: string;
+  tripStatus: string;
 };
