@@ -183,8 +183,8 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
             </div>
           </PopoverContent>
         </Popover>
-        {/* <div onClick={handleSubmit} className="p-2 bg-primaryBrand rounded-full text-white"> */}
-        <Dialog>
+        <div onClick={pushToPreferenceView} className="p-2 bg-primaryBrand rounded-full text-white">
+        {/* <Dialog>
 
           <DialogTrigger className='bg-primaryBrand rounded-full text-white p-2'>
             <BiSearch className='text-4xl' />
@@ -196,8 +196,8 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
             <button onClick={pushToTripView} className='bg-primaryBrand rounded-full text-white p-2'>no</button>
 
           </DialogContent>
-        </Dialog>
-        {/* </div> */}
+        </Dialog> */}
+        </div>
       </form>
     </div>
   );

@@ -19,9 +19,9 @@ export default async function DashboardPage
   let trips: Trip[] = await getTrips();
   let userData = await currentUser();
 
-const upcomingBookings = trips.filter((trip) => trip?.tripStatus === 'reserved');
+  const upcomingBookings = trips.filter((trip) => trip?.tripStatus === 'reserved');
 
-  console.log('RESERVED',upcomingBookings)
+  console.log('RESERVED', upcomingBookings)
 
   return (
     <div>
