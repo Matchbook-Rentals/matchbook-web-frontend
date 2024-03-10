@@ -4,32 +4,37 @@ import React, { useState, useEffect, useMemo } from "react";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import { useLoadScript } from '@react-google-maps/api';
 
-
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-
 export default function ComboboxDemo() {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
-  const libraries = useMemo(() => ["places"], []); // Memoize libraries array
-
+  const libraries = useMemo(() => ["places"], []);
+  
+  // Load Google Maps script
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-
+  
+  // Initialize usePlacesAutocomplete with manual init
   const {
     ready,
     value,
     setValue,
     suggestions: { status, data },
     clearSuggestions,
+    init,
   } = usePlacesAutocomplete({
+    initOnMount: false,
     requestOptions: {
       types: ['(cities)'],
       componentRestrictions: { country: 'us' },
     },
   });
+  
+  useEffect(() => {
+    // Manually initialize the hook when the script is ready
+    if (isLoaded) init();
+  }, [isLoaded, init]);
 
   useEffect(() => {
     if (status === "OK") {
@@ -60,7 +65,7 @@ export default function ComboboxDemo() {
       <input
         value={inputValue}
         onChange={handleInput}
-        disabled={!isLoaded}
+        disabled={!ready}
         placeholder="Search an address"
       />
       {suggestions.length > 0 && (
