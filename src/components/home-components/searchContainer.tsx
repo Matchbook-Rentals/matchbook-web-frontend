@@ -135,7 +135,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
           className='placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
           onChange={(e) => setDestination(e.target.value)}
         /> */}
-        <LocationSuggest />
+        <LocationSuggest setDestination={setDestination} />
         <Popover>
           <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
             {moveInDate ? moveInDate.toUTCString().slice(0, 16) : "Move In:"}
