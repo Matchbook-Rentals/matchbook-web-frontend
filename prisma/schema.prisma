@@ -93,7 +93,7 @@ model Account {
 }
 
 model Listing {
-  id             String   @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id             String   @id @default(uuid())
   title          String
   description    String
   imageSrc       String
@@ -102,7 +102,7 @@ model Listing {
   roomCount      Int
   bathroomCount  Int
   guestCount     Int?
-  latLng         String // Changed from MongoDB's String array
+  latLng         String
   locationString String
   city           String
   state          String
@@ -112,12 +112,42 @@ model Listing {
   userId         String
   price          Int
 
+  // Assuming amenities are boolean fields
+  wifi            Boolean @default(false)
+  airConditioning Boolean @default(false)
+  heating         Boolean @default(false)
+  kitchen         Boolean @default(false)
+  washer          Boolean @default(false)
+  dryer           Boolean @default(false)
+  parking         Boolean @default(false)
+  pool            Boolean @default(false)
+  hotTub          Boolean @default(false)
+  gym             Boolean @default(false)
+  elevator        Boolean @default(false)
+  petsAllowed     Boolean @default(false)
+  smokingAllowed  Boolean @default(false)
+  eventsAllowed   Boolean @default(false)
+  privateEntrance Boolean @default(false)
+  secure          Boolean @default(false)
+  fireplace       Boolean @default(false)
+  waterfront      Boolean @default(false)
+  beachfront      Boolean @default(false)
+  mountainView    Boolean @default(false)
+
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations    Reservation[]
   housingRequests HousingRequest[]
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
+  images          ListingImage[] // Relation to multiple images
+}
+
+model ListingImage {
+  id        String  @id @default(uuid())
+  url       String
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model HousingRequest {

@@ -5,7 +5,7 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocom
 import { useLoadScript } from '@react-google-maps/api';
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
-export default function LocationSuggest({setDestination}) {
+export default function LocationSuggest({ setDestination }) {
   const [inputValue, setInputValue] = useState(""); // State for input field value
   const [displayValue, setDisplayValue] = useState(""); // Separate state for display value in the "Where to?" section
   const [suggestions, setSuggestions] = useState([]);
@@ -69,30 +69,30 @@ export default function LocationSuggest({setDestination}) {
   };
 
   return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
-            {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
-          </button>
-        </PopoverTrigger>
-        <PopoverContent className="rounded-2xl">
-          <input
-            value={inputValue}
-            onChange={handleInput}
-            disabled={!ready}
-            placeholder="Where's the party?"
-            type="text"
-            className="w-full h-full text-2xl focus:outline-none" />
-          {suggestions.length > 0 && (
-            <ul className="mt-5">
-              {suggestions.map(({ place_id, description }) => (
-                <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
-                  {description?.slice(0, -5)}
-                </li>
-              ))}
-            </ul>
-          )}
-        </PopoverContent>
-      </Popover>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
+          {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="rounded-2xl">
+        <input
+          value={inputValue}
+          onChange={handleInput}
+          disabled={!ready}
+          placeholder="Where's the party?"
+          type="text"
+          className="w-full h-full text-2xl focus:outline-none" />
+        {suggestions.length > 0 && (
+          <ul className="mt-5">
+            {suggestions.map(({ place_id, description }) => (
+              <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
+                {description?.slice(0, -5)}
+              </li>
+            ))}
+          </ul>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 }

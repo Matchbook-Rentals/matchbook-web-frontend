@@ -187,7 +187,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
         </Popover>
         <div onClick={pushToPreferenceView} className="p-2 bg-primaryBrand rounded-full text-white">
           <BiSearch className='text-4xl' />
-        {/* <Dialog>
+          {/* <Dialog>
 
           <DialogTrigger className='bg-primaryBrand rounded-full text-white p-2'>
           </DialogTrigger>
