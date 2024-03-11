@@ -28,6 +28,22 @@ const pullMockListings = async () => {
   }
 }
 
+const addListingToFavorites = async (listingId, tripId) => {
+  'use server';
+
+  try {
+    const favorite = await prisma.favorite.create({
+      data: {
+        tripId: tripId,
+        favId: listingId,
+      },
+    });
+    console.log('Listing added to favorites successfully:', favorite);
+  } catch (error) {
+    console.error('Failed to add listing to favorites:', error);
+    throw error; // Or handle the error as needed
+  }
+};
 
 
 export default async function TripsPage({ params, searchParams }: TripsPageProps) {
@@ -37,7 +53,7 @@ export default async function TripsPage({ params, searchParams }: TripsPageProps
   console.log('listings', listings);
   return (
     <>
-      <TripIdPageClient listings={listings} />
+      <TripIdPageClient listings={listings} addListingToFavorites={addListingToFavorites} tripId={params.tripId} />
     </>
   );
 }

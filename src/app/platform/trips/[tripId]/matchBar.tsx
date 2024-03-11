@@ -1,9 +1,11 @@
+'use client'
+
 import React from 'react'
 import { Listing } from '@/types'
 
-export default function MatchBar({currListing}: {currListing: Listing}) {
+export default function MatchBar({currListing, handleLike}: {currListing: Listing, handleLike: Function}) {
   return (
-    <div className='flex w-3/4 mx-auto border px-2 py-3 mt-3 border-black rounded-3xl '>
+    <div onClick={handleLike} className='flex w-3/4 mx-auto border px-2 py-3 mt-3 border-black rounded-3xl '>
 
       <div className='flex justify-between items-center w-1/2 px-2 border-r-[1px] border-gray-400'>
         <div className='text-center text-2xl font-semibold'>{currListing.title}</div>
