@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useMemo } from "react";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
@@ -6,7 +6,8 @@ import { useLoadScript } from '@react-google-maps/api';
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
 export default function LocationSuggest() {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(""); // State for input field value
+  const [displayValue, setDisplayValue] = useState(""); // Separate state for display value in the "Where to?" section
   const [suggestions, setSuggestions] = useState([]);
   const [open, setOpen] = useState(false);
   const libraries = useMemo(() => ["places"], []);
@@ -52,61 +53,45 @@ export default function LocationSuggest() {
     setValue(newValue);
   };
 
-  const handleSelect = async (address, place_id) => {
-    setInputValue(address);
-    setValue(address, false);
-    clearSuggestions();
-    console.log('place ID', place_id)
-    console.log('address', address)
+  const handleSelect = async (description, place_id) => {
+    setDisplayValue(description); // Update the display value with the selected description
+    setInputValue(""); // Optionally clear the input value or keep it based on your needs
+    setValue(description, false); // Update the autocomplete value
+    clearSuggestions(); // Uncomment if you want to clear suggestions after selection
+    setOpen(false);
+    console.log('place ID', place_id);
+    console.log('description', description);
 
-
-    const results = await getGeocode({ address });
+    const results = await getGeocode({ address: description });
     const { lat, lng } = await getLatLng(results[0]);
     console.log("Selected location:", { lat, lng });
   };
 
   return (
-    // <div>
-      // <input
-      //   value={inputValue}
-      //   onChange={handleInput}
-      //   disabled={!ready}
-      //   placeholder="Search an address"
-      // />
-      // {suggestions.length > 0 && (
-      //   <ul>
-      //     {suggestions.map(({ place_id, description }) => (
-      //       <li key={place_id} onClick={() => handleSelect(description, place_id)}>
-      //         {description}
-      //       </li>
-      //     ))}
-      //   </ul>
-      // )}
-
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <button>{inputValue ?
-            inputValue : "Where to?"}</button>
+          <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
+            {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
+          </button>
         </PopoverTrigger>
-        <PopoverContent className="p-0">
+        <PopoverContent className="rounded-2xl">
           <input
             value={inputValue}
             onChange={handleInput}
             disabled={!ready}
-            placeholder="Search an address"
-             type="text" 
-             className="w-full h-full text-3xl" />
+            placeholder="Where's the party?"
+            type="text"
+            className="w-full h-full text-2xl focus:outline-none" />
           {suggestions.length > 0 && (
-            <ul>
+            <ul className="mt-5">
               {suggestions.map(({ place_id, description }) => (
-                <li key={place_id} onClick={() => handleSelect(description, place_id)}>
-                  {description}
+                <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
+                  {description?.slice(0, -5)}
                 </li>
               ))}
             </ul>
           )}
         </PopoverContent>
       </Popover>
-    // </div>
   );
 }

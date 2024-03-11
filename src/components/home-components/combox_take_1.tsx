@@ -95,8 +95,8 @@ export default function ComboboxDemo() {
             onChange={handleInput}
             disabled={!ready}
             placeholder="Search an address"
-             type="text" 
-             className="w-full h-full text-3xl" />
+            type="text"
+            className="w-full h-full text-3xl" />
           {suggestions.length > 0 && (
             <ul>
               {suggestions.map(({ place_id, description }) => (
