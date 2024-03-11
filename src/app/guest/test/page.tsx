@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function TestPage() {
   return (
-    <div>
+    <div className='text-white bg-black h-[100vh]'>
       <ComboboxDemo />
     </div>
   )
