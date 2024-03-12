@@ -27,7 +27,7 @@ export default function TripIdPageClient({ listings, addListingToFavorites, trip
         : <>
           {!noMoreListings ? (
             <>
-              <MatchBar currListing={listings[currIndex]} handleLike={handleLike} />
+              <MatchBar setShowRankView={setShowRankView} currListing={listings[currIndex]} handleLike={handleLike} />
               <ListingPhotos />
               <p className='text-3xl'>{listings[currIndex].description}</p>
             </>
