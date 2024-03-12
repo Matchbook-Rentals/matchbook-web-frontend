@@ -28,6 +28,14 @@ const pullMockListings = async () => {
   }
 }
 
+const pullTripFromDb = async (tripId) => {
+  'use server'
+
+  const trip = await prisma.trip.findUnique({where: {id: tripId}, include: {favoriteIds: true, matches: true, }})
+
+  return trip
+}
+
 const addListingToFavorites = async (listingId, tripId) => {
   'use server';
 
@@ -41,7 +49,7 @@ const addListingToFavorites = async (listingId, tripId) => {
     console.log('Listing added to favorites successfully:', favorite);
   } catch (error) {
     console.error('Failed to add listing to favorites:', error);
-    throw error; // Or handle the error as needed
+    // throw error; // Or handle the error as needed
   }
 };
 
@@ -49,11 +57,10 @@ const addListingToFavorites = async (listingId, tripId) => {
 export default async function TripsPage({ params, searchParams }: TripsPageProps) {
 
   const listings = await pullMockListings();
-  console.log(params)
-  console.log('listings', listings);
+  const trip = await pullTripFromDb(params.tripId);
   return (
     <>
-      <TripIdPageClient listings={listings} addListingToFavorites={addListingToFavorites} tripId={params.tripId} />
+      <TripIdPageClient listings={listings} addListingToFavorites={addListingToFavorites} tripId={params.tripId} trip={trip} />
     </>
   );
 }
