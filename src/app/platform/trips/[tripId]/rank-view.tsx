@@ -3,7 +3,7 @@ import { Listing, Trip } from '@prisma/client'
 import ListingBar from './listing-bar'
 
 export default function RankView({ listings, trip }: { listings: Listing[], trip: Trip }) {
-  const  favoriteIds  = trip.favoriteIds.map(favorite => favorite.favId);
+  const  favoriteIds  = trip.favorites.map(favorite => favorite.listingId);
 
   const favoritedListings = listings.filter(listing => favoriteIds.includes(listing.id));
   console.log(favoriteIds);

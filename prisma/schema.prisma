@@ -199,9 +199,10 @@ model Trip {
 
   // Relationships
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Listing     Listing[]
+  listings     Listing[]
   matches     Match[] // Changed to a relational model
-  favoriteIds Favorite[] // Changed to a relational model
+  // favoriteIds Favorite[] // Changed to a relational model
+  favorites Favorite[] // Changed to a relational model
 }
 
 // Additional models to support the conversion of arrays to relational models
@@ -230,12 +231,14 @@ model Match {
 }
 
 model Favorite {
-  id     String @id @default(uuid())
-  tripId String
-  favId  String // ID of the listing or another entity marked as favorite
+  id        String @id @default(uuid())
+  tripId    String
+  // favId     String // ID of the listing or another entity marked as favorite
+  listingId String? // ID of the listing or another entity marked as favorite
+  rank      Int? // Added field to store ranking
 
   trip Trip @relation(fields: [tripId], references: [id])
 
-  @@unique([tripId, favId])
+  @@unique([tripId, rank])
+  @@unique([tripId, listingId])
 }
-

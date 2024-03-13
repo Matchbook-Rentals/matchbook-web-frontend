@@ -31,7 +31,7 @@ const pullMockListings = async () => {
 const pullTripFromDb = async (tripId) => {
   'use server'
 
-  const trip = await prisma.trip.findUnique({where: {id: tripId}, include: {favoriteIds: true, matches: true, }})
+  const trip = await prisma.trip.findUnique({where: {id: tripId}, include: {favorites: true, matches: true, }})
 
   return trip
 }
@@ -43,7 +43,7 @@ const addListingToFavorites = async (listingId, tripId) => {
     const favorite = await prisma.favorite.create({
       data: {
         tripId: tripId,
-        favId: listingId,
+        listingId: listingId,
       },
     });
     console.log('Listing added to favorites successfully:', favorite);
