@@ -13,7 +13,7 @@ export default function CurrentStay() {
         <div>
           <Image src={"https://source.unsplash.com/random/500x350"} alt="logo" width={500} height={350} className='rounded-xl' />
         </div>
-        <div style={{fontSize: '1.65rem'}} className='text-3xl font-semibold flex flex-col justify-center items-center gap-2'>
+        <div style={{ fontSize: '1.65rem' }} className='text-3xl font-semibold flex flex-col justify-center items-center gap-2'>
           <p><span className='underline'>Next Payment </span><span className='font-bold'>&gt;</span></p>
           <p className=''>April 1st, 2024</p>
           <p>$1600</p>
