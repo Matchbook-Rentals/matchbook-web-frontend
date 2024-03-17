@@ -1,38 +1,58 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Listing, Trip } from '@prisma/client';
 import ListingBar from '../listing-bar';
 import TripContextProvider, { TripContext } from '@/contexts/trip-context-provider';
 import Link from 'next/link';
 
 export default function RankView() {
-  const { trip, listings } = useContext(TripContext);
+  const { trip, setTrip, listings } = useContext(TripContext);
 
-  // Sort favorites by rank
-  const sortedFavorites = [...trip.favorites].sort((a, b) => {
-    if (a.rank === null) return 1; // Move a to the end if rank is null
-    if (b.rank === null) return -1; // Move b to the end if rank is null
-    return a.rank - b.rank;
-  });
+  // State to track the order of the listings based on their favorite ranking
+  const [orderedListings, setOrderedListings] = useState(
+    [...trip.favorites]
+      .sort((a, b) => a.rank - b.rank)
+      .map(favorite => listings.find(listing => listing.id === favorite.listingId))
+      .filter(listing => listing !== undefined)
+  );
 
-  // Map over sorted favorites to get an array of listings in the order of their rank
-  const favoritedListings = sortedFavorites.map(favorite =>
-    listings.find(listing => listing.id === favorite.listingId)
-  ).filter(listing => listing !== undefined); // Filter out any undefined listings just in case
+  const handleDragStart = (idx) => (event) => {
+    event.dataTransfer.setData("text/plain", idx);
+  };
 
-  console.log('From Rank View', favoritedListings);
+  const handleDrop = (idx) => (event) => {
+    event.preventDefault();
+    const draggedIdx = event.dataTransfer.getData("text/plain");
+    const newListings = [...orderedListings];
+    const [reorderedItem] = newListings.splice(draggedIdx, 1);
+    newListings.splice(idx, 0, reorderedItem);
+    setOrderedListings(newListings);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
       <div className='flex justify-start'>
         <div className='flex flex-col gap-4 pl-5 pr-20 w-full'>
-          {favoritedListings.length > 0 ? (
-            favoritedListings.map((listing: Listing, idx) => (
-              <ListingBar listing={listing} trip={trip} idx={idx} key={listing.id} />
+          {orderedListings.length > 0 ? (
+            orderedListings.map((listing, idx) => (
+              <div 
+                key={listing.id} 
+                draggable="true" 
+                onDragStart={handleDragStart(idx)} 
+                onDrop={handleDrop(idx)} 
+                onDragOver={handleDragOver} 
+                className="draggable-listing"
+              >
+                <ListingBar listing={listing} trip={trip} idx={idx} />
+              </div>
             ))
           ) : (
             <p className="text-lg text-gray-600">
-              You haven&apos;t liked any properties for this trip yet. Check out more properties in
+              You haven't liked any properties for this trip yet. Check out more properties in
               <Link href={`/platform/trips/${trip.id}/search`}><a className="font-semibold"> New possibilities </a></Link>
               to find some you like!
             </p>
