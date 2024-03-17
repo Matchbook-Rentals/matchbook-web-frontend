@@ -3,7 +3,7 @@ import React from 'react'
 import MatchBar from './matchBar'
 import ListingPhotos from './listingPhotos'
 import { Listing } from '@/types'
-import RankView from './rank-view'
+import RankView from './favorites/page'
 import { Trip } from '@prisma/client'
 
 export default function TripIdPageClient({ listings, addListingToFavorites, tripId, trip }: { listings: Listing[], addListingToFavorites: Function, tripId: string, trip: Trip }) {
@@ -23,7 +23,7 @@ export default function TripIdPageClient({ listings, addListingToFavorites, trip
   return (
     <>
       {showRankView ?
-        <RankView listings={listings} trip={trip}  />
+        <RankView listings={listings} trip={trip} />
         : <>
           {!noMoreListings ? (
             <>
