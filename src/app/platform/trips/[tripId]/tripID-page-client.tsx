@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import MatchBar from './matchBar'
 import ListingPhotos from './listingPhotos'
 import { Listing } from '@/types'
-import RankView from './favorites/page'
+import RankView from './favorites/rank-view'
 import { Trip } from '@prisma/client'
 import { TripContext } from '@/contexts/trip-context-provider'
 import Link from 'next/link'
@@ -41,7 +41,7 @@ export default function TripIdPageClient({ addListingToFavorites }: { listings: 
           </>
         )}
       </>
-   
+
     </>
   )
 }
