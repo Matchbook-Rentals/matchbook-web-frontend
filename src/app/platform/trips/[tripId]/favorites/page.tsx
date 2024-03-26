@@ -18,9 +18,11 @@ const updateFavoriteRank = async (rankedListings: Listing[], tripId: string) => 
     let rank = 1
     for (let listing of rankedListings) {
       await tx.favorite.update({
-        where: {tripId_listingId: {
-          tripId, listingId: listing.id
-        }},
+        where: {
+          tripId_listingId: {
+            tripId, listingId: listing.id
+          }
+        },
         data: { rank }
       })
       rank++;

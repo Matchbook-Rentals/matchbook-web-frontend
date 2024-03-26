@@ -5,7 +5,7 @@ import ListingBar from '../listing-bar';
 import TripContextProvider, { TripContext } from '@/contexts/trip-context-provider';
 import Link from 'next/link';
 
-export default function RankView({updateFavoriteRank}) {
+export default function RankView({ updateFavoriteRank }) {
   const { trip, getUpdatedTrip, listings } = useContext(TripContext);
 
 
@@ -44,12 +44,12 @@ export default function RankView({updateFavoriteRank}) {
         <div className='flex flex-col gap-4 pl-5 pr-20 w-full'>
           {orderedListings.length > 0 ? (
             orderedListings.map((listing, idx) => (
-              <div 
-                key={listing.id} 
-                draggable="true" 
-                onDragStart={handleDragStart(idx)} 
-                onDrop={handleDrop(idx, listing.id, trip.id)} 
-                onDragOver={handleDragOver} 
+              <div
+                key={listing.id}
+                draggable="true"
+                onDragStart={handleDragStart(idx)}
+                onDrop={handleDrop(idx, listing.id, trip.id)}
+                onDragOver={handleDragOver}
                 className="draggable-listing"
               >
                 <ListingBar listing={listing} trip={trip} idx={idx} />
@@ -57,7 +57,7 @@ export default function RankView({updateFavoriteRank}) {
             ))
           ) : (
             <p className="text-lg text-gray-600">
-              You haven't liked any properties for this trip yet. Check out more properties in
+              You haven&apos;t liked any properties for this trip yet. Check out more properties in
               <Link href={`/platform/trips/${trip.id}/search`}><a className="font-semibold"> New possibilities </a></Link>
               to find some you like!
             </p>

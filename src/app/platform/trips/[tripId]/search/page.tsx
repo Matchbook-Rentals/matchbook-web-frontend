@@ -31,7 +31,7 @@ const pullMockListings = async () => {
 const pullTripFromDb = async (tripId) => {
   'use server'
 
-  const trip = await prisma.trip.findUnique({where: {id: tripId}, include: {favorites: true, matches: true, }})
+  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, } })
 
   return trip
 }
@@ -58,7 +58,7 @@ export default async function TripsPage({ params, searchParams }: TripsPageProps
 
   return (
     <>
-      <TripIdPageClient addListingToFavorites={addListingToFavorites}/>
+      <TripIdPageClient addListingToFavorites={addListingToFavorites} />
     </>
   );
 }
