@@ -79,7 +79,7 @@ export default async function TripLayout({ children, params }: { children: React
 
 
   return (
-    <TripContextProvider tripData={trip} listingData={listings}>
+    <TripContextProvider tripData={trip} listingData={listings} pullTripFromDb={pullTripFromDb}>
       <>
           <HeaderDisplay />
         <div className='flex'>

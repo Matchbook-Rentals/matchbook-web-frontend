@@ -5,6 +5,7 @@ import { createContext, useState } from "react";
 
 type TripContextProviderProps = {
   tripData: Trip;
+  pullTripFromDb: Function;
   listingData: Listing[];
   children: React.ReactNode;
 };
@@ -13,6 +14,7 @@ type TripContextProviderProps = {
 type TTripContext = {
   trip: Trip,
   setTrip: Function,
+  getUpdatedTrip: Function,
   headerText: string,
   setHeaderText: Function,
   listings: Listing[],
@@ -21,12 +23,17 @@ type TTripContext = {
 
 export const TripContext = createContext<TTripContext | null>(null);
 
-export default function TripContextProvider({ tripData, listingData, children }: TripContextProviderProps) {
+export default function TripContextProvider({ tripData, listingData, pullTripFromDb, children }: TripContextProviderProps) {
   const [trip, setTrip] = useState<Trip>(tripData);
   const [listings, setListings] = useState<Listing[]>(listingData);
   const [headerText, setHeaderText] = useState('');
 
   // Event handlers / actions
+
+  const getUpdatedTrip = async () => {
+    const tempTrip: Trip = await pullTripFromDb(trip.id);
+    setTrip(tempTrip)
+  }
 
   return (
     <TripContext.Provider
@@ -36,7 +43,9 @@ export default function TripContextProvider({ tripData, listingData, children }:
         headerText,
         setHeaderText,
         listings,
-        setListings
+        setListings,
+        getUpdatedTrip,
+
       }}
     >
       {children}

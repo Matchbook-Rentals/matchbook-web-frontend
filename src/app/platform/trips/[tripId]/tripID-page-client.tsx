@@ -21,8 +21,6 @@ export default function TripIdPageClient({ addListingToFavorites }: { listings: 
   // Check if there are no listings or we've gone past the last listing
   const noMoreListings = listings.length === 0 || currIndex >= listings.length;
 
-  console.log(trip);
-
   return (
     <>
       <>
