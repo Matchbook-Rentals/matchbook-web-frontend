@@ -1,68 +1,51 @@
 "use client";
 
-import { Trip } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
+import { Listing, Trip } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
 import { createContext, useState } from "react";
 
 type TripContextProviderProps = {
-  data: Trip[];
+  tripData: Trip;
+  pullTripFromDb: Function;
+  listingData: Listing[];
   children: React.ReactNode;
 };
 
-type TripEssentials = Omit<Trip, 'id'>; // Assuming all Trip fields except 'id'
-
+// Adjust Values to Provider Here
 type TTripContext = {
-  trips: Trip[];
-  selectedTripId: Trip["id"] | null;
-  selectedTrip: Trip | undefined;
-  numberOfTrips: number;
-  addTrip: (newTrip: TripEssentials) => void;
-  editTrip: (tripId: Trip["id"], newTripData: TripEssentials) => void;
-  deleteTrip: (tripId: Trip["id"]) => void;
-  selectTrip: (tripId: Trip["id"]) => void;
+  trip: Trip,
+  setTrip: Function,
+  getUpdatedTrip: Function,
+  headerText: string,
+  setHeaderText: Function,
+  listings: Listing[],
+  setListings: Function,
 };
 
 export const TripContext = createContext<TTripContext | null>(null);
 
-export default function TripContextProvider({ data, children }: TripContextProviderProps) {
-  const [trips, setTrips] = useState<Trip[]>(data);
-  const [selectedTripId, setSelectedTripId] = useState<Trip["id"] | null>(null);
-
-  // Derived state
-  const selectedTrip = trips.find((trip) => trip.id === selectedTripId);
-  const numberOfTrips = trips.length;
+export default function TripContextProvider({ tripData, listingData, pullTripFromDb, children }: TripContextProviderProps) {
+  const [trip, setTrip] = useState<Trip>(tripData);
+  const [listings, setListings] = useState<Listing[]>(listingData);
+  const [headerText, setHeaderText] = useState('');
 
   // Event handlers / actions
-  const addTrip = (newTrip: TripEssentials) => {
-    const id = Math.random().toString(); // Simple unique ID generator for example purposes
-    setTrips([...trips, { ...newTrip, id }]);
-  };
 
-  const editTrip = (tripId: Trip["id"], newTripData: TripEssentials) => {
-    setTrips(trips.map(trip => trip.id === tripId ? { ...trip, ...newTripData } : trip));
-  };
-
-  const deleteTrip = (tripId: Trip["id"]) => {
-    setTrips(trips.filter(trip => trip.id !== tripId));
-    if (selectedTripId === tripId) {
-      setSelectedTripId(null); // Deselect if the deleted trip was selected
-    }
-  };
-
-  const selectTrip = (tripId: Trip["id"]) => {
-    setSelectedTripId(tripId);
-  };
+  const getUpdatedTrip = async () => {
+    const tempTrip: Trip = await pullTripFromDb(trip.id);
+    setTrip(tempTrip)
+  }
 
   return (
     <TripContext.Provider
       value={{
-        trips,
-        selectedTripId,
-        selectedTrip,
-        numberOfTrips,
-        addTrip,
-        editTrip,
-        deleteTrip,
-        selectTrip,
+        trip,
+        setTrip,
+        headerText,
+        setHeaderText,
+        listings,
+        setListings,
+        getUpdatedTrip,
+
       }}
     >
       {children}
