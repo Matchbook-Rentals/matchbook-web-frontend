@@ -9,7 +9,7 @@ const SidebarLink = ({ link, currPath, setHeaderText }) => {
   const isActive = currPath === link.path;
 
   return (
-    <Link onClick={() => {setHeaderText(link.headerText)}} href={link.path} passHref>
+    <Link onClick={() => { setHeaderText(link.headerText) }} href={link.path} passHref>
       <p className={isActive ? 'font-bold' : ''} style={{ cursor: 'pointer' }}>
         {link.displayText}
       </p>
