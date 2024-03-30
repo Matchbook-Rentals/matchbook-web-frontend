@@ -1,0 +1,656 @@
+.web-landlord {
+  background-color: #ffffff;
+  height: 1080px;
+  width: 1920px;
+}
+
+.web-landlord .overlap {
+  height: 973px;
+  position: relative;
+  top: 107px;
+}
+
+.web-landlord .path {
+  height: 854px;
+  left: 0;
+  position: absolute;
+  top: 119px;
+  width: 1920px;
+}
+
+.web-landlord .img {
+  height: 123px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1920px;
+}
+
+.web-landlord .profile-menu {
+  height: 56px;
+  left: 1676px;
+  position: absolute;
+  top: 50px;
+  width: 96px;
+}
+
+.web-landlord .drop-down-menu {
+  height: 23px;
+  left: 0;
+  position: absolute;
+  top: 16px;
+  width: 33px;
+}
+
+.web-landlord .group {
+  height: 23px;
+  position: relative;
+}
+
+.web-landlord .drop-shadow-botton {
+  height: 1px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 22px;
+  width: 32px;
+}
+
+.web-landlord .line {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 21px;
+  width: 32px;
+}
+
+.web-landlord .drop-shadow-middle {
+  height: 1px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 11px;
+  width: 32px;
+}
+
+.web-landlord .line-2 {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 10px;
+  width: 32px;
+}
+
+.web-landlord .drop-shadow-top {
+  height: 1px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 32px;
+}
+
+.web-landlord .line-3 {
+  height: 1px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: -1px;
+  width: 32px;
+}
+
+.web-landlord .profile-icon {
+  height: 56px;
+  left: 42px;
+  position: absolute;
+  top: 0;
+  width: 54px;
+}
+
+.web-landlord .drop-shadow-profile {
+  height: 52px;
+  left: -12152px;
+  position: absolute;
+  top: -1152px;
+  width: 52px;
+}
+
+.web-landlord .overlap-group {
+  height: 54px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 54px;
+}
+
+.web-landlord .ellipse {
+  background-color: #ffffff;
+  border-radius: 26px/25px;
+  height: 50px;
+  left: 1px;
+  position: absolute;
+  top: 2px;
+  width: 52px;
+}
+
+.web-landlord .drop-shadow-box {
+  height: 86px;
+  left: 126px;
+  position: absolute;
+  top: 176px;
+  width: 2px;
+}
+
+.web-landlord .group-wrapper {
+  height: 63px;
+  left: 23px;
+  position: absolute;
+  top: 46px;
+  width: 324px;
+}
+
+.web-landlord .div {
+  height: 63px;
+  position: relative;
+  width: 328px;
+}
+
+.web-landlord .overlap-group-2 {
+  height: 63px;
+  left: 45px;
+  position: absolute;
+  top: 0;
+  width: 279px;
+}
+
+.web-landlord .text-wrapper {
+  color: #869a7d;
+  font-family: "Inter", Helvetica;
+  font-size: 1px;
+  font-weight: 400;
+  left: 0;
+  letter-spacing: 0;
+  line-height: 1px;
+  position: absolute;
+  top: 50px;
+  white-space: nowrap;
+}
+
+.web-landlord .match-book {
+  color: #869a7d;
+  font-family: "Inter", Helvetica;
+  font-size: 52px;
+  font-weight: 400;
+  left: 1px;
+  line-height: 63px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.web-landlord .span {
+  letter-spacing: 0;
+}
+
+.web-landlord .text-wrapper-2 {
+  letter-spacing: -0.16px;
+}
+
+.web-landlord .path-2 {
+  height: 46px;
+  left: 0;
+  position: absolute;
+  top: 8px;
+  width: 39px;
+}
+
+.web-landlord .heart-lines {
+  height: 459px;
+  left: 0;
+  position: absolute;
+  top: 73px;
+  width: 1920px;
+}
+
+.web-landlord .line-4 {
+  height: 3px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 42px;
+  width: 904px;
+}
+
+.web-landlord .line-5 {
+  height: 3px;
+  left: 1012px;
+  object-fit: cover;
+  position: absolute;
+  top: 42px;
+  width: 908px;
+}
+
+.web-landlord .group-2 {
+  height: 80px;
+  left: 928px;
+  position: absolute;
+  top: 0;
+  width: 62px;
+}
+
+.web-landlord .path-3 {
+  border: 1px solid;
+  border-color: #707070;
+  height: 102px;
+  left: 481px;
+  opacity: 0.25;
+  position: absolute;
+  top: 358px;
+  width: 102px;
+}
+
+.web-landlord .drop-shadow-box-2 {
+  height: 86px;
+  left: 22px;
+  position: absolute;
+  top: 4px;
+  width: 2px;
+}
+
+.web-landlord .your-properties {
+  -webkit-text-stroke: 1px #5a6754;
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 43px;
+  font-weight: 400;
+  left: 802px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 174px;
+}
+
+.web-landlord .text-wrapper-3 {
+  color: #000000;
+}
+
+.web-landlord .text-wrapper-4 {
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 43px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.web-landlord .path-4 {
+  height: 1px;
+  left: 500px;
+  object-fit: cover;
+  position: absolute;
+  top: 948px;
+  width: 919px;
+}
+
+.web-landlord .rectangle {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #707070;
+  border-radius: 10px;
+  height: 101px;
+  left: 165px;
+  position: absolute;
+  top: 272px;
+  width: 1591px;
+}
+
+.web-landlord .text-wrapper-5 {
+  -webkit-text-stroke: 1px #5a6754;
+  color: #000000;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  left: 230px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 298px;
+}
+
+.web-landlord .for-rent {
+  -webkit-text-stroke: 1px #5a6754;
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  left: 390px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 298px;
+}
+
+.web-landlord .text-wrapper-6 {
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.web-landlord .text-wrapper-7 {
+  -webkit-text-stroke: 1px #5a6754;
+  color: #000000;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  left: 617px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 298px;
+}
+
+.web-landlord .rectangle-2 {
+  background-color: var(--rgb134-154-125);
+  border: 1px solid;
+  border-color: #707070;
+  border-radius: 0px 10px 0px 10px;
+  height: 72px;
+  left: 1654px;
+  position: absolute;
+  top: 286px;
+  width: 82px;
+}
+
+.web-landlord .rectangle-3 {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #707070;
+  border-radius: 10px 0px 10px 0px;
+  box-shadow: 0px 3px 3px #00000029;
+  height: 72px;
+  left: 1572px;
+  position: absolute;
+  top: 286px;
+  width: 82px;
+}
+
+.web-landlord .group-3 {
+  height: 30px;
+  left: 1680px;
+  position: absolute;
+  top: 308px;
+  width: 30px;
+}
+
+.web-landlord .rectangle-4 {
+  background-color: #ffffff;
+  border: 1px solid;
+  height: 13px;
+  left: 17px;
+  position: absolute;
+  top: 0;
+  width: 13px;
+}
+
+.web-landlord .rectangle-5 {
+  background-color: #ffffff;
+  border: 1px solid;
+  height: 13px;
+  left: 17px;
+  position: absolute;
+  top: 17px;
+  width: 13px;
+}
+
+.web-landlord .rectangle-6 {
+  background-color: #ffffff;
+  border: 1px solid;
+  height: 13px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 13px;
+}
+
+.web-landlord .rectangle-7 {
+  background-color: #ffffff;
+  border: 1px solid;
+  height: 13px;
+  left: 0;
+  position: absolute;
+  top: 17px;
+  width: 13px;
+}
+
+.web-landlord .group-4 {
+  height: 28px;
+  left: 1591px;
+  position: absolute;
+  top: 308px;
+  width: 44px;
+}
+
+.web-landlord .rectangle-8 {
+  background-color: #5a6754;
+  border: 1px solid;
+  height: 8px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 8px;
+}
+
+.web-landlord .rectangle-9 {
+  background-color: #5a6754;
+  border: 1px solid;
+  height: 8px;
+  left: 0;
+  position: absolute;
+  top: 10px;
+  width: 8px;
+}
+
+.web-landlord .rectangle-10 {
+  background-color: #5a6754;
+  border: 1px solid;
+  height: 8px;
+  left: 0;
+  position: absolute;
+  top: 20px;
+  width: 8px;
+}
+
+.web-landlord .line-6 {
+  height: 1px;
+  left: 16px;
+  object-fit: cover;
+  position: absolute;
+  top: 4px;
+  width: 29px;
+}
+
+.web-landlord .line-7 {
+  height: 1px;
+  left: 16px;
+  object-fit: cover;
+  position: absolute;
+  top: 13px;
+  width: 29px;
+}
+
+.web-landlord .line-8 {
+  height: 1px;
+  left: 16px;
+  object-fit: cover;
+  position: absolute;
+  top: 22px;
+  width: 29px;
+}
+
+.web-landlord .overlap-wrapper {
+  height: 337px;
+  left: 164px;
+  position: absolute;
+  top: 433px;
+  width: 511px;
+}
+
+.web-landlord .overlap-2 {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 3px 3px #00000029;
+  height: 337px;
+  position: relative;
+  width: 505px;
+}
+
+.web-landlord .overlap-group-3 {
+  height: 70px;
+  left: 14px;
+  position: absolute;
+  top: 240px;
+  width: 294px;
+}
+
+.web-landlord .ogden-mountain-home {
+  -webkit-text-stroke: 1px #5a6754;
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 27px;
+  font-weight: 400;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 0;
+}
+
+.web-landlord .text-wrapper-8 {
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 27px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.web-landlord .element-quincy-ave {
+  -webkit-text-stroke: 1px #5a6754;
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 19px;
+  font-weight: 400;
+  left: 5px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 39px;
+}
+
+.web-landlord .text-wrapper-9 {
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.web-landlord .screenshot {
+  height: 224px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 504px;
+}
+
+.web-landlord .div-wrapper {
+  background-color: #869a7d80;
+  height: 42px;
+  left: 345px;
+  position: absolute;
+  top: 271px;
+  width: 148px;
+}
+
+.web-landlord .text-wrapper-10 {
+  -webkit-text-stroke: 1px #5a6754;
+  color: #000000;
+  font-family: "Lora", Helvetica;
+  font-size: 19px;
+  font-weight: 400;
+  left: 27px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-shadow: 0px 3px 3px #00000029;
+  top: 8px;
+}
+
+.web-landlord .overlap-group-wrapper {
+  height: 337px;
+  left: 708px;
+  position: absolute;
+  top: 433px;
+  width: 511px;
+}
+
+.web-landlord .text-wrapper-11 {
+  -webkit-text-stroke: 1px #5a6754;
+  color: #000000;
+  font-family: "Lora", Helvetica;
+  font-size: 19px;
+  font-weight: 400;
+  left: 35px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-shadow: 0px 3px 3px #00000029;
+  top: 8px;
+}
+
+.web-landlord .group-5 {
+  height: 337px;
+  left: 1251px;
+  position: absolute;
+  top: 433px;
+  width: 511px;
+}
+
+.web-landlord .add-a-property {
+  -webkit-text-stroke: 1px #5a6754;
+  color: transparent;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  left: 1506px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 213px;
+}
+
+.web-landlord .ellipse-2 {
+  background-color: var(--rgb134-154-125);
+  border-radius: 17px;
+  height: 34px;
+  left: 1461px;
+  position: absolute;
+  top: 222px;
+  width: 34px;
+}
+
+.web-landlord .text-wrapper-12 {
+  -webkit-text-stroke: 1px #5a6754;
+  color: #000000;
+  font-family: "Lora", Helvetica;
+  font-size: 35px;
+  font-weight: 400;
+  left: 1468px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 213px;
+}
