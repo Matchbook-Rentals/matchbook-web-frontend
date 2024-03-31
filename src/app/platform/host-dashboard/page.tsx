@@ -31,16 +31,8 @@ export default async function HostDashboard() {
   const listings = await pullMockListingsFromDb();
 
   return (
-    <div className='w-4/5 mx-auto'>
-      <div className=' add-property-box w-fit flex ml-auto '>
-        <div className='bg-primaryBrand rounded-full mr-2 p-0'>
-
-          {/* <PlusIcon size={6} color='black' /> */}
-          <span className='text-2xl font-bold rounded-full px-2 '>+</span>
-        </div>
-        <p className='font-semibold text-2xl'>Add a property</p>
-      </div>
-      <Button className='w-fit text-2xl  flex ml-auto' variant='ghost'>
+    <div className='md:w-4/5 w-[95%] mx-auto'>
+      <Button className='w-fit text-2xl  flex md:ml-auto md:mr-0 mx-auto' variant='ghost'>
         <Link className='flex' href='/platform/host-dashboard/add-property' >
 
           <div className='bg-primaryBrand rounded-full mr-2 p-0'>
