@@ -25,7 +25,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               <Image src={`/svg/${color}-hamburger.svg`} alt='person icon' width={50} height={50} className='' />
             </PopoverTrigger>
             <PopoverContent>
-              <Link href={'/platform/dashboard'}>Dashboard</Link>
+              <div className='flex flex-col'>
+                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all  duration-300' href={'/platform/dashboard'}>Dashboard</Link>
+                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href={'/platform/hostDashboard'}> Host Dashboard</Link>
+              </div>
             </PopoverContent>
 
           </Popover>

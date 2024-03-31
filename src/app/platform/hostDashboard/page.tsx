@@ -29,7 +29,7 @@ export default async function HostDashboard() {
   const listings = await pullMockListingsFromDb();
 
   return (
-    <div className='px-20'>
+    <div className='w-4/5 mx-auto'>
       <div className=' add-property-box w-fit flex ml-auto '>
         <div className='bg-primaryBrand rounded-full mr-2 p-0'>
 
@@ -38,7 +38,7 @@ export default async function HostDashboard() {
         </div>
         <p className='font-semibold text-2xl'>Add a property</p>
       </div>
-      <PropertyHeader />
+    <PropertyHeader />  
       <PropertyList properties={listings} />
 
     </div>

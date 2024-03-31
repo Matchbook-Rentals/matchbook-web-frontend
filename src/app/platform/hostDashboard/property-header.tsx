@@ -1,22 +1,33 @@
 import React from 'react';
-// Assuming ListIcon and WindowIcon are your custom components
-// If they come from a library, adjust the import statement accordingly
-import ListIcon from '@/components/ui/list-icon'
-import PlusIcon from '@/components/ui/plus-icon'
-import WindowIcon from '@/components/ui/window-icon'
+import ListIcon from '@/components/ui/list-icon';
+import WindowIcon from '@/components/ui/window-icon';
+import { Button } from '@/components/ui/button';
+import { Tabs } from '@/components/ui/tabs';
 
 const PropertyHeader = () => {
   return (
-    <div className='role:propertyCounter border-2 border-black rounded-lg my-2 py-2'>
-      <div className='flex ml-10 justify-between mr-10'>
-        <div className='flex gap-3'>
-          <p className='font-semibold text-2xl'>All (m)</p>
-          <p className='font-semibold text-2xl'>For rent (m)</p>
-          <p className='font-semibold text-2xl'>Rented (m)</p>
+    <div className='border border-gray-500 rounded-lg my-2 py-2'>
+      <div className='flex flex-col lg:flex-row sm:justify-between px-4 sm:px-10 py-2'>
+        <div className='flex flex-wrap gap-3 justify-center sm:justify-start'>
+          <Tabs>
+        <div className="flex space-x-4">
+          <Button className="text-2xl font-semibold" variant="ghost">
+            All (3)
+          </Button>
+          <Button className="text-2xl" variant="ghost">
+            For rent (1)
+          </Button>
+          <Button className="text-2xl" variant="ghost">
+            Rented (2)
+          </Button>
         </div>
-        <div className='flex rounded-lg border border-slate-600'>
-          <div className='p-1'><ListIcon size={{ height: 35, width: 35 }} borderRight /></div>
-          <div className='bg-primaryBrand py-1 px-3 rounded-r-lg'><WindowIcon width={22} height={35} /></div>
+      </Tabs>
+        </div>
+        <div className='flex mt-4 sm:mt-0 justify-center sm:justify-end'>
+          <div className='flex rounded-lg border border-slate-600 items-center'>
+            <div className='p-1'><ListIcon size={{ height: 35, width: 35 }} /></div>
+            <div className='bg-primaryBrand py-1 px-3 rounded-r-lg'><WindowIcon width={22} height={35} /></div>
+          </div>
         </div>
       </div>
     </div>
