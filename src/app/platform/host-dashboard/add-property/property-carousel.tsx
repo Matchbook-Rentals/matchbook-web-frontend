@@ -11,50 +11,36 @@ import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import prisma from '@/lib/prismadb'
 import PropertyTypeRadio from './property-type-radio';
+import { Button } from '@/components/ui/button';
 
 
-export default function PropertyCarousel({ updateUserPreferences }) {
+export default function PropertyCarousel({ handleListingCreation, setCurrStep }) {
   const { isSignedIn, user } = useUser();
 
   // State to keep track of the current index
   const [api, setApi] = useState<CarouselApi>();
-  const [userPreferences, setUserPreferences] = useState({ userId: user?.id });
+  const [propertyDetails, setPropertyDetails] = useState({ userId: user?.id });
   const router = useRouter();
 
   // Function to go to the next question/component
   const goToNext = () => {
-    console.log(userPreferences);
+    console.log(propertyDetails);
+    setCurrStep(prev => prev + 1)
     api?.scrollNext();
 
   };
 
   // Function to go to the previous question/component
   const goToPrevious = () => {
+    setCurrStep(prev => prev - 1)
     api?.scrollPrev()
   };
 
 
   const handleFinish = (amenities) => {
-    const tempPreferences = { ...userPreferences, amenities }
-    if (!isSignedIn) {
-      let stringifiedPreferences = JSON.stringify(tempPreferences);
-      localStorage.setItem('matchbookUserPreferences', stringifiedPreferences);
-      let queryString = localStorage.getItem('tripQueryString');
-      router.push(`/guest/trips/${queryString}`)
-      return null;
-    }
-
-    updateUserPreferences(userPreferences, amenities);
-
-    let tripId = localStorage.getItem('matchbookTripId');
-
-    router.push(`/platform/trips/${tripId}`)
-
-
-
-
-
-
+    const tempPreferences = { ...propertyDetails, amenities }
+    handleListingCreation();
+    router.push(`/platform/host-dashboard`)
   }
 
   return (
@@ -62,10 +48,13 @@ export default function PropertyCarousel({ updateUserPreferences }) {
       <CarouselContent>
         <CarouselItem>
           {/* <ListingTypeRadio goToNext={goToNext} setUserPreferences={setUserPreferences} /> */}
-          <PropertyTypeRadio />
+          <PropertyTypeRadio setPropertyDetails={setPropertyDetails} goToNext={goToNext} />
         </CarouselItem>
         <CarouselItem>
           {/* <RoomsCounter goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} /> */}
+          <p>DETAILS</p>
+          <Button onClick={goToPrevious}>GO BACK</Button>
+          <Button>GO BACK</Button>
         </CarouselItem>
         <CarouselItem>
           {/* <FurnishedSelect goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} /> */}

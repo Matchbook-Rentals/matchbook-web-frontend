@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import React, { useState, Dispatch, SetStateAction } from 'react';
 
@@ -17,7 +18,6 @@ const housingOptions = [
 
 const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
   goToNext,
-  goToPrev, // Note: Consider implementing or removing goToPrev as it's provided but not currently used.
   setPropertyDetails,
 }) => {
   const [selectedType, setSelectedType] = useState<string>('');
