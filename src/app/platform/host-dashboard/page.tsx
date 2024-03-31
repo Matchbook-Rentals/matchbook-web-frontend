@@ -6,6 +6,8 @@ import React from 'react'
 import prisma from '@/lib/prismadb'
 import PropertyList from './property-list'
 import PropertyHeader from './property-header'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 const pullMockListingsFromDb = async () => {
   'use server';
@@ -38,7 +40,18 @@ export default async function HostDashboard() {
         </div>
         <p className='font-semibold text-2xl'>Add a property</p>
       </div>
-    <PropertyHeader />  
+      <Button className='w-fit text-2xl  flex ml-auto' variant='ghost'>
+        <Link className='flex' href='/platform/host-dashboard/add-property' >
+
+          <div className='bg-primaryBrand rounded-full mr-2 p-0'>
+
+            {/* <PlusIcon size={6} color='black' /> */}
+            <span className='text-2xl font-bold rounded-full px-2 '>+</span>
+          </div>
+          Add a property
+        </Link>
+      </Button>
+      <PropertyHeader />
       <PropertyList properties={listings} />
 
     </div>

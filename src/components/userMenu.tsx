@@ -27,7 +27,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             <PopoverContent>
               <div className='flex flex-col'>
                 <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all  duration-300' href={'/platform/dashboard'}>Dashboard</Link>
-                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href={'/platform/hostDashboard'}> Host Dashboard</Link>
+                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href={'/platform/host-dashboard'}> Host Dashboard</Link>
               </div>
             </PopoverContent>
 
