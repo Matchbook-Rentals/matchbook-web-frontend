@@ -96,13 +96,13 @@ model Listing {
   id             String   @id @default(uuid())
   title          String
   description    String
-  imageSrc       String
+  imageSrc       String?
   createdAt      DateTime @default(now())
   category       String?
   roomCount      Int
   bathroomCount  Int
   guestCount     Int?
-  latLng         String
+  latLng         String?
   locationString String
   city           String
   state          String

@@ -12,6 +12,9 @@ import { useRouter } from 'next/navigation';
 import prisma from '@/lib/prismadb'
 import PropertyTypeRadio from './property-type-radio';
 import { Button } from '@/components/ui/button';
+import DetailsForm from './details-form';
+import ImageUploadForm from './image-upload';
+import LeaseTermsForm from './lease-terms-form';
 
 
 export default function PropertyCarousel({ handleListingCreation, setCurrStep }) {
@@ -53,14 +56,17 @@ export default function PropertyCarousel({ handleListingCreation, setCurrStep })
         <CarouselItem>
           {/* <RoomsCounter goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} /> */}
           <p>DETAILS</p>
+          <DetailsForm setPropertyDetails={setPropertyDetails} goToNext={goToNext}  />
           <Button onClick={goToPrevious}>GO BACK</Button>
           <Button>GO BACK</Button>
         </CarouselItem>
         <CarouselItem>
           {/* <FurnishedSelect goToNext={goToNext} goToPrev={goToPrevious} setUserPreferences={setUserPreferences} /> */}
+          <ImageUploadForm setPropertyDetails={setPropertyDetails} onNext={goToNext} propertyDetails={propertyDetails} />
         </CarouselItem>
         <CarouselItem>
           {/* <AmenitiesSelect goToPrev={goToPrevious} setUserPreferences={setUserPreferences} handleFinish={handleFinish} /> */}
+          <LeaseTermsForm goToNext={goToNext} goToPrevious={goToPrevious} setPropertyDetails={setPropertyDetails} />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}
