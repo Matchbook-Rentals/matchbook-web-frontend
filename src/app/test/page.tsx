@@ -1,152 +1,174 @@
 import React from 'react'
 import prisma from '@/lib/prismadb'
 
-const mockListings = [
-  // Sample Listing 1
-  {
-    id: "1",
-    title: "Cozy Downtown Loft",
-    description: "A spacious and modern loft located in the heart of the city. Perfect for weekend getaways and business trips.",
-    imageSrc: "image-source-url-1",
-    createdAt: "2023-03-10T10:00:00Z",
-    category: "Loft",
-    roomCount: 1,
-    bathroomCount: 1,
-    guestCount: 2,
-    latLng: "40.712776,-74.005974",
-    locationString: "New York, NY, USA",
-    city: "New York",
-    state: "NY",
-    streetAddress1: "123 Main St",
-    streetAddress2: null,
-    postalCode: "10001",
-    userId: "user-id-1",
-    price: 150,
-    wifi: true,
-    airConditioning: true,
-    heating: true,
-    kitchen: true,
-    washer: true,
-    dryer: true,
-    parking: false,
-    pool: false,
-    hotTub: false,
-    gym: true,
-    elevator: true,
-    petsAllowed: false,
-    smokingAllowed: false,
-    eventsAllowed: false,
-    privateEntrance: true,
-    secure: true,
-    fireplace: false,
-    waterfront: false,
-    beachfront: false,
-    mountainView: false,
-    tripId: null
-  },
+// import React from "react";
+import "./styles.css";
+import ProgressBar from './progress-bar';
 
-  // Sample Listing 2
-  {
-    id: "2",
-    title: "Beachfront Villa",
-    description: "Experience the ultimate relaxation in our beachfront villa, featuring stunning ocean views and private beach access.",
-    imageSrc: "image-source-url-2",
-    createdAt: "2023-03-15T15:00:00Z",
-    category: "Villa",
-    roomCount: 3,
-    bathroomCount: 2,
-    guestCount: 6,
-    latLng: "26.122439,-80.137317",
-    locationString: "Fort Lauderdale, FL, USA",
-    city: "Fort Lauderdale",
-    state: "FL",
-    streetAddress1: "456 Ocean Blvd",
-    streetAddress2: null,
-    postalCode: "33301",
-    userId: "user-id-2",
-    price: 300,
-    wifi: true,
-    airConditioning: true,
-    heating: false,
-    kitchen: true,
-    washer: true,
-    dryer: true,
-    parking: true,
-    pool: true,
-    hotTub: true,
-    gym: false,
-    elevator: false,
-    petsAllowed: true,
-    smokingAllowed: false,
-    eventsAllowed: true,
-    privateEntrance: true,
-    secure: true,
-    fireplace: false,
-    waterfront: true,
-    beachfront: true,
-    mountainView: false,
-    tripId: null
-  },
-
-  // Sample Listing 3
-  {
-    id: "3",
-    title: "Mountain Cabin Retreat",
-    description: "Escape to our cozy cabin in the mountains for a peaceful retreat. Enjoy hiking, skiing, and breathtaking views.",
-    imageSrc: "image-source-url-3",
-    createdAt: "2023-03-20T20:00:00Z",
-    category: "Cabin",
-    roomCount: 2,
-    bathroomCount: 1,
-    guestCount: 4,
-    latLng: "39.739235,-104.990250",
-    locationString: "Denver, CO, USA",
-    city: "Denver",
-    state: "CO",
-    streetAddress1: "789 Mountain Rd",
-    streetAddress2: "Unit 2",
-    postalCode: "80202",
-    userId: "user-id-3",
-    price: 200,
-    wifi: true,
-    airConditioning: false,
-    heating: true,
-    kitchen: true,
-    washer: false,
-    dryer: false,
-    parking: true,
-    pool: false,
-    hotTub: true,
-    gym: false,
-    elevator: false,
-    petsAllowed: true,
-    smokingAllowed: false,
-    eventsAllowed: false,
-    privateEntrance: true,
-    secure: true,
-    fireplace: true,
-    waterfront: false,
-    beachfront: false,
-    mountainView: true,
-    tripId: null
-  }
-
-]
-
-const addListings = async () => {
-  'use server';
-
-
-  for (let listing of mockListings) {
-  let db_listing = await prisma.listing.create({ data: listing })
-  }
-}
-export default function TestPage() {
+export default async function HostDashboard() {
   return (
-    <div className='text-white bg-black h-[100vh]'>
-      {/* Create button or form to execute addListings */}
-      <form action={addListings}><button type="submit">Submit</button></form>
-
+    <div className="web-landlord">
+      <div className="overlap">
+        <img className="path" alt="Path" src="/img/path-28.svg" />
+        <img className="img" alt="Path" src="/img/path-29.svg" />
+        <div className="profile-menu">
+          <div className="drop-down-menu">
+            <div className="group">
+              <img className="drop-shadow-botton" alt="Drop shadow botton" src="/img/drop-shadow-botton.svg" />
+              <img className="line" alt="Line" src="/img/line-6.svg" />
+              <img className="drop-shadow-middle" alt="Drop shadow middle" src="/img/drop-shadow-botton.svg" />
+              <img className="line-2" alt="Line" src="/img/line-6.svg" />
+              <img className="drop-shadow-top" alt="Drop shadow top" src="/img/drop-shadow-botton.svg" />
+              <img className="line-3" alt="Line" src="/img/line-6.svg" />
+            </div>
+          </div>
+          <div className="profile-icon">
+            <ProgressBar steps={5} currentStep={2} />
+            <img className="drop-shadow-profile" alt="Drop shadow profile" src="/img/drop-shadow-profile.png" />
+            <div className="overlap-group">
+              <div className="ellipse" />
+              <img className="overlap-group" alt="Group" src="/img/group-3.png" />
+            </div>
+          </div>
+        </div>
+        <img className="drop-shadow-box" alt="Drop shadow box" src="/img/drop-shadow-box.png" />
+        <div className="profile-menu">
+          <div className="drop-down-menu">
+            <div className="group">
+              <img className="drop-shadow-botton" alt="Drop shadow botton" src="/img/drop-shadow-botton-1.svg" />
+              <img className="line" alt="Line" src="public/img/line-6-1.svg" />
+              <img className="drop-shadow-middle" alt="Drop shadow middle" src="/img/drop-shadow-botton-1.svg" />
+              <img className="line-2" alt="Line" src="/img/line-6-1.svg" />
+              <img className="drop-shadow-top" alt="Drop shadow top" src="/img/drop-shadow-botton-1.svg" />
+              <img className="line-3" alt="Line" src="/img/line-6-1.svg" />
+            </div>
+          </div>
+          <div className="profile-icon">
+            <img className="drop-shadow-profile" alt="Drop shadow profile" src="/img/drop-shadow-profile.png" />
+            <div className="overlap-group">
+              <div className="ellipse" />
+              <img className="overlap-group" alt="Group" src="/img/group-3.png" />
+            </div>
+          </div>
+        </div>
+        <div className="group-wrapper">
+          <div className="div">
+            <div className="overlap-group-2">
+              <div className="text-wrapper">{""}</div>
+              <p className="match-book">
+                <span className="span">M</span>
+                <span className="text-wrapper-2">a</span>
+                <span className="span">tchBook</span>
+              </p>
+            </div>
+            <img className="path-2" alt="Path" src="/img/path-5.svg" />
+          </div>
+        </div>
+        <div className="heart-lines">
+          <img className="line-4" alt="Line" src="/img/line-7.svg" />
+          <img className="line-5" alt="Line" src="/img/line-8.svg" />
+          <img className="group-2" alt="Group" src="/img/group-48.png" />
+          <div className="path-3" />
+        </div>
+        <img className="drop-shadow-box-2" alt="Drop shadow box" src="/img/drop-shadow-box-1.png" />
+        <p className="your-properties">
+          <span className="text-wrapper-3">Your Proper</span>
+          <span className="text-wrapper-4">ties</span>
+        </p>
+        <img className="path-4" alt="Path" src="/img/path-63.svg" />
+        <div className="rectangle" />
+        <div className="text-wrapper-5">All (3)</div>
+        <p className="for-rent">
+          <span className="text-wrapper-3">For rent (1</span>
+          <span className="text-wrapper-6">)</span>
+        </p>
+        <div className="text-wrapper-7">Rented (2)</div>
+        <div className="rectangle-2" />
+        <div className="rectangle-3" />
+        <div className="group-3">
+          <div className="rectangle-4" />
+          <div className="rectangle-5" />
+          <div className="rectangle-6" />
+          <div className="rectangle-7" />
+        </div>
+        <div className="group-4">
+          <div className="rectangle-8" />
+          <div className="rectangle-9" />
+          <div className="rectangle-10" />
+          <img className="line-6" alt="Line1" src="/img/line-21.svg" />
+          <img className="line-7" alt="Line" src="/img/line-22.svg" />
+          <img className="line-8" alt="Line" src="/img/line-21.svg" />
+        </div>
+        <div className="overlap-wrapper">
+          <div className="overlap-2">
+            <div className="overlap-group-3">
+              <p className="ogden-mountain-home">
+                <span className="text-wrapper-3">Ogden Mount</span>
+                <span className="text-wrapper-8">
+                  ain Home
+                  <br />
+                </span>
+              </p>
+              <p className="element-quincy-ave">
+                <span className="text-wrapper-3">2155 Quincy</span>
+                <span className="text-wrapper-9"> Ave</span>
+              </p>
+            </div>
+            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <div className="div-wrapper">
+              <div className="text-wrapper-10">FOR RENT</div>
+            </div>
+          </div>
+        </div>
+        <div className="overlap-group-wrapper">
+          <div className="overlap-2">
+            <div className="overlap-group-3">
+              <p className="ogden-mountain-home">
+                <span className="text-wrapper-3">Ogden Mount</span>
+                <span className="text-wrapper-8">
+                  ain Home
+                  <br />
+                </span>
+              </p>
+              <p className="element-quincy-ave">
+                <span className="text-wrapper-3">2155 Quincy</span>
+                <span className="text-wrapper-9"> Ave</span>
+              </p>
+            </div>
+            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <div className="div-wrapper">
+              <div className="text-wrapper-11">RENTED</div>
+            </div>
+          </div>
+        </div>
+        <div className="group-5">
+          <div className="overlap-2">
+            <div className="overlap-group-3">
+              <p className="ogden-mountain-home">
+                <span className="text-wrapper-3">Ogden Mount</span>
+                <span className="text-wrapper-8">
+                  ain Home
+                  <br />
+                </span>
+              </p>
+              <p className="element-quincy-ave">
+                <span className="text-wrapper-3">2155 Quincy</span>
+                <span className="text-wrapper-9"> Ave</span>
+              </p>
+            </div>
+            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <div className="div-wrapper">
+              <div className="text-wrapper-11">RENTED</div>
+            </div>
+          </div>
+        </div>
+        <p className="add-a-property">
+          <span className="text-wrapper-3">Add a prope</span>
+          <span className="text-wrapper-6">rty</span>
+        </p>
+        <div className="ellipse-2" />
+        <div className="text-wrapper-12">+</div>
+      </div>
     </div>
-  )
-}
+  );
+};

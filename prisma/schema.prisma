@@ -96,13 +96,13 @@ model Listing {
   id             String   @id @default(uuid())
   title          String
   description    String
-  imageSrc       String
+  imageSrc       String?
   createdAt      DateTime @default(now())
   category       String?
   roomCount      Int
   bathroomCount  Int
   guestCount     Int?
-  latLng         String
+  latLng         String?
   locationString String
   city           String
   state          String
@@ -198,9 +198,9 @@ model Trip {
   tripStatus     TripStatus @default(searching)
 
   // Relationships
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listings     Listing[]
-  matches     Match[] // Changed to a relational model
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listings  Listing[]
+  matches   Match[] // Changed to a relational model
   // favoriteIds Favorite[] // Changed to a relational model
   favorites Favorite[] // Changed to a relational model
 }
@@ -231,7 +231,7 @@ model Match {
 }
 
 model Favorite {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   tripId    String
   // favId     String // ID of the listing or another entity marked as favorite
   listingId String? // ID of the listing or another entity marked as favorite
