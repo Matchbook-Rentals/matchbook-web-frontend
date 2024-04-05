@@ -45,43 +45,43 @@ export default async function TripLayout({ children, params }: { children: React
   const listings = await pullMockListingsFromDb();
 
   const links = [
-  { 
-    displayText: 'New possibilities', 
-    path: `/platform/trips/${params.tripId}/search`,
-    headerText: `Explore New Possibilities in `
-  },
-  { 
-    displayText: 'Properties you love', 
-    path: `/platform/trips/${params.tripId}/favorites`,
-    headerText: `Places You Love in `
-  },
-  { 
-    displayText: 'Already applied', 
-    path: `/platform/trips/${params.tripId}/applied`,
-    headerText: `Applications You've Submitted in `
-  },
-  { 
-    displayText: 'Matches', 
-    path: `/platform/trips/${params.tripId}/matches`,
-    headerText: `Your Matches in `
-  },
-  { 
-    displayText: 'Rebounds', 
-    path: `/platform/trips/${params.tripId}/rebounds`,
-    headerText: `Rebounds in `
-  },
-  { 
-    displayText: 'Rejected', 
-    path: `/platform/trips/${params.tripId}/rejected`,
-    headerText: `Rejected Applications in `
-  },
-];
+    {
+      displayText: 'New possibilities',
+      path: `/platform/trips/${params.tripId}/search`,
+      headerText: `Explore New Possibilities in `
+    },
+    {
+      displayText: 'Properties you love',
+      path: `/platform/trips/${params.tripId}/favorites`,
+      headerText: `Places You Love in `
+    },
+    {
+      displayText: 'Already applied',
+      path: `/platform/trips/${params.tripId}/applied`,
+      headerText: `Applications You've Submitted in `
+    },
+    {
+      displayText: 'Matches',
+      path: `/platform/trips/${params.tripId}/matches`,
+      headerText: `Your Matches in `
+    },
+    {
+      displayText: 'Rebounds',
+      path: `/platform/trips/${params.tripId}/rebounds`,
+      headerText: `Rebounds in `
+    },
+    {
+      displayText: 'Rejected',
+      path: `/platform/trips/${params.tripId}/rejected`,
+      headerText: `Rejected Applications in `
+    },
+  ];
 
 
   return (
     <TripContextProvider tripData={trip} listingData={listings} pullTripFromDb={pullTripFromDb}>
       <>
-          <HeaderDisplay />
+        <HeaderDisplay />
         <div className='flex'>
 
           <Sidebar links={links} />

@@ -68,6 +68,7 @@ export default function PropertyCarousel({
         <CarouselItem>
           <PropertyTypeRadio
             setPropertyDetails={setPropertyDetails}
+            propertyDetails={propertyDetails}
             goToNext={goToNext}
           />
         </CarouselItem>

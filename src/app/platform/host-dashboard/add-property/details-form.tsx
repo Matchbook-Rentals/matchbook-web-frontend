@@ -65,7 +65,7 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
   const handleNext = () => {
     if (validateFields()) {
       setPropertyDetails(prev => ({
-        ...prev, title, description, street: street, city, city, state: state, postalCode: postalCode, bathroomCount: bathroomCount, bedroomCount: bedroomCount, pricePerMonth: pricePerMonth
+        ...prev, title, description, streetAddress1: street, city, city, state: state, postalCode: postalCode, bathroomCount: bathroomCount, roomCount: bedroomCount, price: pricePerMonth, locationString: `${street}, ${city}, ${state}, ${postalCode}`
       }));
       goToNext();
     }

@@ -19,6 +19,7 @@ const housingOptions = [
 const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
   goToNext,
   setPropertyDetails,
+  propertyDetails,
 }) => {
   const [selectedType, setSelectedType] = useState<string>('');
   const [validationError, setValidationError] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
     setValidationError(false); // Reset validation error state on selection
     setPropertyDetails(prevDetails => ({
       ...prevDetails,
-      type: optionId, // Ensure this matches the expected key in your property details object
+      category: optionId, // Ensure this matches the expected key in your property details object
     }));
   };
 
@@ -38,6 +39,7 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
       setValidationError(true);
       return;
     }
+    console.log('From radio', propertyDetails)
     goToNext();
   };
 

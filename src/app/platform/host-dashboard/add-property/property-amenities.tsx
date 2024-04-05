@@ -2,6 +2,7 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { CheckboxDemo } from "../../preferences/custom-checkbox";
 import { Listing } from "@prisma/client";
+import { useUser } from "@clerk/nextjs";
 
 interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
@@ -38,6 +39,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   ];
 
   const [amenities, setAmenities] = useState(initAmenities);
+  const { user } = useUser();
 
   const handleFinish = (amenities) => {
     console.log('CURR Details -->', propertyDetails)
@@ -45,11 +47,19 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
   const handleSubmit = () => {
     console.log(amenities);
-    setPropertyDetails((prev) => {
-      // Updated method name
-      return { ...prev, amenities };
-    });
-    handleFinish(amenities);
+    // setPropertyDetails((prev) => {
+    //   // Updated method name
+    //   return { ...prev,  };
+    // });
+    
+    const tempAmenities = amenities.map(amenity => {
+      return {[amenity.id]: amenity.isRequired}
+    })
+    
+    const tempDetails = {...propertyDetails, 
+      userId: user?.id
+    }
+    handleListingCreation(tempDetails);
   };
 
   const handleCheck = (id: string) => {
@@ -90,7 +100,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         </button>
         <button
           className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black "
-          onClick={handleFinish}
+          onClick={handleSubmit}
         >
           SUBMIT
         </button>
