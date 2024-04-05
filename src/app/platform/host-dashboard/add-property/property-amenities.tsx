@@ -31,11 +31,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "kitchen", label: "Kitchen", isRequired: false },
     { id: "inUnitWasher", label: "In Unit Washer", isRequired: false },
     { id: "inUnitDryer", label: "In Unit Dryer", isRequired: false },
-    {
-      id: "dedicatedWorkspace",
-      label: "Dedicated Workspace",
-      isRequired: false,
-    },
+    { id: "dedicatedWorkspace", label: "Dedicated Workspace", isRequired: false},
     { id: "tv", label: "TV", isRequired: false },
     { id: "hairDryer", label: "Hair Dryer", isRequired: false },
     { id: "iron", label: "Iron", isRequired: false },

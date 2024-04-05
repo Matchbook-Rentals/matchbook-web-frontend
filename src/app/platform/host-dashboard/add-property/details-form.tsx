@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import StateSelect from '@/components/ui/state-select';
 
 interface ComponentProps {
   goToNext: () => void;
@@ -32,21 +33,43 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
   const [bathroomCount, setBathroomCount] = useState(0);
   const [bedroomCount, setBedroomCount] = useState(0);
   const [pricePerMonth, setPricePerMonth] = useState(0);
+  const [invalidFields, setInvalidFields] = useState({
+    title: false,
+    description: false,
+    street: false,
+    city: false,
+    state: false,
+    postalCode: false,
+    bathroomCount: false,
+    bedroomCount: false,
+    pricePerMonth: false,
+  });
 
-  const handleDecrease = (setter: React.Dispatch<React.SetStateAction<number>>) => () => {
-    setter(prev => prev > 0 ? prev - 1 : 0);
-  };
+  const validateFields = () => {
+    const newInvalidFields = {
+      title: !title,
+      description: !description,
+      street: !street,
+      city: !city,
+      state: !state,
+      postalCode: !postalCode,
+      bathroomCount: bathroomCount <= 0,
+      bedroomCount: bedroomCount <= 0,
+      pricePerMonth: pricePerMonth <= 0,
+    };
+    setInvalidFields(newInvalidFields);
 
-  const handleIncrease = (setter: React.Dispatch<React.SetStateAction<number>>) => () => {
-    setter(prev => prev + 1);
+    return Object.values(newInvalidFields).every((isValid) => !isValid);
   };
 
   const handleNext = () => {
-    setPropertyDetails(prev => {
-      return {...prev, title, description, streetAdress: street, city, state, postalCode, bathroomCount, bedroomCount, price: pricePerMonth}
-    })
-    goToNext();
-  }
+    if (validateFields()) {
+      setPropertyDetails(prev => ({
+        ...prev, title, description, street: street, city, city, state: state, postalCode: postalCode, bathroomCount: bathroomCount, bedroomCount: bedroomCount, pricePerMonth: pricePerMonth
+      }));
+      goToNext();
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -59,47 +82,44 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" placeholder="Enter property title" value={title} onChange={e => setTitle(e.target.value)} />
+            <Input id="title" placeholder="Enter property title" value={title} onChange={e => setTitle(e.target.value)} className={invalidFields.title ? 'border-2 border-red-500' : ''} />
           </div>
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea className="min-h-[100px]" id="description" placeholder="Enter property description" value={description} onChange={e => setDescription(e.target.value)} />
+            <Textarea id="description" placeholder="Enter property description" value={description} onChange={e => setDescription(e.target.value)} className={invalidFields.description ? 'border-2 border-red-500' : ''} />
           </div>
           {/* Street */}
           <div className="space-y-2">
             <Label htmlFor="street">Street</Label>
-            <Input id="street" placeholder="Enter street" value={street} onChange={e => setStreet(e.target.value)} />
+            <Input id="street" placeholder="Enter street" value={street} onChange={e => setStreet(e.target.value)} className={invalidFields.street ? 'border-2 border-red-500' : ''} />
           </div>
           {/* City */}
           <div className="space-y-2">
             <Label htmlFor="city">City</Label>
-            <Input id="city" placeholder="Enter city" value={city} onChange={e => setCity(e.target.value)} />
+            <Input id="city" placeholder="Enter city" value={city} onChange={e => setCity(e.target.value)} className={invalidFields.city ? 'border-2 border-red-500' : ''} />
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
           {/* State */}
           <div className="space-y-2">
             <Label htmlFor="state">State</Label>
-            <Input id="state" placeholder="Enter state" value={state} onChange={e => setState(e.target.value)} />
+            {/* <Input id="state" placeholder="Enter state" value={state} onChange={e => setState(e.target.value)} className={invalidFields.state ? 'border-2 border-red-500' : ''} /> */}
+            <StateSelect id='state' value={state} setState={setState} invalidFields={invalidFields}  />
           </div>
           {/* Postal Code */}
           <div className="space-y-2">
             <Label htmlFor="postal-code">Postal Code</Label>
-            <Input id="postal-code" placeholder="Enter postal code" value={postalCode} onChange={e => setPostalCode(e.target.value)} />
+            <Input id="postal-code" placeholder="Enter postal code" value={postalCode} onChange={e => setPostalCode(e.target.value)} className={invalidFields.postalCode ? 'border-2 border-red-500' : ''} />
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
           {/* Bathroom Count */}
           <div className="space-y-2">
             <Label htmlFor="bathroom-count">Bathroom Count</Label>
             <div className="flex items-center gap-2">
-              <Button size="icon" variant="outline" onClick={handleDecrease(setBathroomCount)}>
-                <MinusIcon className="w-4 h-4" />
+              <Button size="icon" variant="outline" onClick={() => setBathroomCount(prev => prev > 0 ? prev - 1 : 0)}>
+                <MinusIcon />
               </Button>
-              <Input id="bathroom-count" placeholder="Enter bathroom count" type="number" value={bathroomCount.toString()} onChange={e => setBathroomCount(parseInt(e.target.value) || 0)} />
-              <Button size="icon" variant="outline" onClick={handleIncrease(setBathroomCount)}>
-                <PlusIcon className="w-4 h-4" />
+              <Input id="bathroom-count" placeholder="Enter bathroom count" type="number" value={bathroomCount.toString()} onChange={e => setBathroomCount(parseInt(e.target.value) || 0)} className={invalidFields.bathroomCount ? 'border-2 border-red-500' : ''} />
+              <Button size="icon" variant="outline" onClick={() => setBathroomCount(prev => prev + 1)}>
+                <PlusIcon />
               </Button>
             </div>
           </div>
@@ -107,29 +127,29 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
           <div className="space-y-2">
             <Label htmlFor="bedroom-count">Bedroom Count</Label>
             <div className="flex items-center gap-2">
-              <Button size="icon" variant="outline" onClick={handleDecrease(setBedroomCount)}>
-                <MinusIcon className="w-4 h-4" />
+              <Button size="icon" variant="outline" onClick={() => setBedroomCount(prev => prev > 0 ? prev - 1 : 0)}>
+                <MinusIcon />
               </Button>
-              <Input id="bedroom-count" placeholder="Enter bedroom count" type="number" value={bedroomCount.toString()} onChange={e => setBedroomCount(parseInt(e.target.value) || 0)} />
-              <Button size="icon" variant="outline" onClick={handleIncrease(setBedroomCount)}>
-                <PlusIcon className="w-4 h-4" />
+              <Input id="bedroom-count" placeholder="Enter bedroom count" type="number" value={bedroomCount.toString()} onChange={e => setBedroomCount(parseInt(e.target.value) || 0)} className={invalidFields.bedroomCount ? 'border-2 border-red-500' : ''} />
+              <Button size="icon" variant="outline" onClick={() => setBedroomCount(prev => prev + 1)}>
+                <PlusIcon />
               </Button>
             </div>
           </div>
+          {/* Price Per Month */}
+          <div className="space-y-2">
+            <Label htmlFor="price-per-month">Price Per Month</Label>
+            <Input id="price-per-month" placeholder="Enter price per month" type="number" value={pricePerMonth.toString()} onChange={e => setPricePerMonth(parseFloat(e.target.value) || 0)} className={invalidFields.pricePerMonth ? 'border-2 border-red-500' : ''} />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="price-per-month">Price Per Month</Label>
-          <Input id="price-per-month" placeholder="Enter price per month" type="number" value={pricePerMonth.toString()} onChange={e => setPricePerMonth(parseFloat(e.target.value) || 0)} />
+        <div className="flex justify-between">
+          <Button onClick={goToPrevious} type="button">Back</Button>
+          <Button onClick={handleNext} type="button">Next</Button>
         </div>
-        <Button onClick={goToPrevious} type="submit">BACK</Button>
-        <Button onClick={handleNext} type="submit">Next</Button>
       </form>
     </div>
   );
 }
-
-// MinusIcon and PlusIcon components remain unchanged
-
 
 function MinusIcon(props) {
   return (
@@ -150,7 +170,6 @@ function MinusIcon(props) {
   )
 }
 
-
 function PlusIcon(props) {
   return (
     <svg
@@ -170,4 +189,3 @@ function PlusIcon(props) {
     </svg>
   )
 }
-

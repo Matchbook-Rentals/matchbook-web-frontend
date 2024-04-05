@@ -21,18 +21,23 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
   setPropertyDetails,
 }) => {
   const [selectedType, setSelectedType] = useState<string>('');
+  const [validationError, setValidationError] = useState<boolean>(false);
 
   const handleSelectionChange = (optionId: string) => {
     setSelectedType(optionId);
-    // Now using setPropertyDetails to update the property's details
+    setValidationError(false); // Reset validation error state on selection
     setPropertyDetails(prevDetails => ({
       ...prevDetails,
-      propertyType: optionId,
+      type: optionId, // Ensure this matches the expected key in your property details object
     }));
   };
 
   const handleNext = () => {
-    // This could potentially be a place to validate selection before moving on
+    if (!selectedType) {
+      // If no type is selected, trigger validation error and do not proceed
+      setValidationError(true);
+      return;
+    }
     goToNext();
   };
 
@@ -44,20 +49,14 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
           <div className='flex flex-col items-center justify-end cursor-pointer' key={option.id} onClick={() => handleSelectionChange(option.id)}>
             <Image alt={option.label} src={option.src} width={100} height={100} />
             <p className='text-xl font-semibold'>{option.label}</p>
-            <input
-              type="radio"
-              className='sr-only'
-              name="propertyType"
-              value={option.id}
-              checked={selectedType === option.id}
-              onChange={() => handleSelectionChange(option.id)}
-            />
+            {/* Removed redundant input element to simplify the UI */}
             <div
               className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selectedType === option.id ? 'bg-primaryBrand' : ''}`}
             ></div>
           </div>
         ))}
       </div>
+      {validationError && <p className="text-red-500 mt-2">Please select a property type to continue.</p>}
       <div className="flex justify-center mt-5">
         <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
       </div>
