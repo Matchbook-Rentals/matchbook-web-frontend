@@ -14,12 +14,12 @@ declare global {
 interface InfoFormProps {
   propertyDetails: Object;
   setPropertyDetails: (details: Object) => void;
-  onNext: () => void;
-  onBack: () => void;
+  goToNext: () => void;
+  goToPrevious: () => void;
 }
 
 
-const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, onNext, onBack }) => {
+const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
 
   const handleUpload = useCallback((result: any) => {
     setPropertyDetails(prev => ({ ...prev, imageSrc: result.info.secure_url }))
@@ -51,8 +51,8 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
           )
         }}
       </CldUploadWidget>
-      <Button className="m-1" onClick={onBack}>Back</Button>
-      <Button className="m-2" onClick={onNext}>Next</Button>
+      <Button className="m-1" onClick={goToPrevious}>Back</Button>
+      <Button className="m-2" onClick={goToNext}>Next</Button>
     </>
   )
 }

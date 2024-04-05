@@ -82,7 +82,8 @@ export default function PropertyCarousel({
         <CarouselItem>
           <ImageUploadForm
             setPropertyDetails={setPropertyDetails}
-            onNext={goToNext}
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
             propertyDetails={propertyDetails}
           />
         </CarouselItem>
@@ -98,6 +99,7 @@ export default function PropertyCarousel({
             handleListingCreation={handleListingCreation}
             goToPrevious={goToPrevious}
             setPropertyDetails={setPropertyDetails}
+            propertyDetails={propertyDetails}
           />
         </CarouselItem>
       </CarouselContent>

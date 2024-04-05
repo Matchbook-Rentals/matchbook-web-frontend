@@ -1,17 +1,20 @@
 "use client";
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { CheckboxDemo } from "../../preferences/custom-checkbox";
+import { Listing } from "@prisma/client";
 
 interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
   goToPrevious: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
+  propertyDetails: Listing
 }
 
 const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   handleListingCreation,
   goToPrevious,
   setPropertyDetails, // Updated prop name
+  propertyDetails
 }) => {
   const initAmenities = [
     { id: "airConditioning", label: "Air Conditioning", isRequired: false },
@@ -40,7 +43,9 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
   const [amenities, setAmenities] = useState(initAmenities);
 
-  const handleFinish = (amenities) => {};
+  const handleFinish = (amenities) => {
+    console.log('CURR Details -->', propertyDetails)
+  };
 
   const handleSubmit = () => {
     console.log(amenities);
@@ -89,7 +94,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         </button>
         <button
           className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black "
-          onClick={handleSubmit}
+          onClick={handleFinish}
         >
           SUBMIT
         </button>
