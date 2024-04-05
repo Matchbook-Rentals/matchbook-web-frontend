@@ -1,6 +1,6 @@
-'use client';
-import React from 'react';
-import PropertyCard from './property-card';
+"use client";
+import React from "react";
+import PropertyCard from "./property-card";
 // Assume you have an array of properties, each with imageSrc, title, address, and status
 
 const PropertyList = ({ properties }) => {
@@ -14,6 +14,7 @@ const PropertyList = ({ properties }) => {
             title={property.title}
             address={property.address}
             status={property.status}
+            type={property.type}
           />
         ))}
       </div>
