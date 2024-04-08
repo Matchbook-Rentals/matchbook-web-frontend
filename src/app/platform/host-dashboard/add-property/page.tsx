@@ -1,5 +1,5 @@
 import React from "react";
-import prisma from '@/lib/prismadb'
+import prisma from "@/lib/prismadb";
 import ProgressBar from "./progress-bar";
 import AddPropertyClient from "./app-property-client";
 import { type Listing } from "@prisma/client";
@@ -12,6 +12,7 @@ const handleListingCreation = async (propertyDetails: Listing) => {
       ...propertyDetails,
     },
   });
+  console.log(listing);
   return listing;
 };
 

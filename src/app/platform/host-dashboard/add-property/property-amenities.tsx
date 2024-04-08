@@ -8,14 +8,14 @@ interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
   goToPrevious: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
-  propertyDetails: Listing
+  propertyDetails: Listing;
 }
 
 const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   handleListingCreation,
   goToPrevious,
   setPropertyDetails, // Updated prop name
-  propertyDetails
+  propertyDetails,
 }) => {
   const initAmenities = [
     { id: "airConditioning", label: "Air Conditioning", isRequired: false },
@@ -32,7 +32,11 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "kitchen", label: "Kitchen", isRequired: false },
     { id: "inUnitWasher", label: "In Unit Washer", isRequired: false },
     { id: "inUnitDryer", label: "In Unit Dryer", isRequired: false },
-    { id: "dedicatedWorkspace", label: "Dedicated Workspace", isRequired: false},
+    {
+      id: "dedicatedWorkspace",
+      label: "Dedicated Workspace",
+      isRequired: false,
+    },
     { id: "tv", label: "TV", isRequired: false },
     { id: "hairDryer", label: "Hair Dryer", isRequired: false },
     { id: "iron", label: "Iron", isRequired: false },
@@ -42,7 +46,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   const { user } = useUser();
 
   const handleFinish = (amenities) => {
-    console.log('CURR Details -->', propertyDetails)
+    console.log("CURR Details -->", propertyDetails);
   };
 
   const handleSubmit = () => {
@@ -51,14 +55,19 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     //   // Updated method name
     //   return { ...prev,  };
     // });
-    
-    const tempAmenities = amenities.map(amenity => {
-      return {[amenity.id]: amenity.isRequired}
-    })
-    
-    const tempDetails = {...propertyDetails, 
-      userId: user?.id
-    }
+
+    const trueAmenities = amenities.filter((item) => item.isRequired);
+    const tempAmenities = {};
+
+    trueAmenities.forEach((item) => {
+      tempAmenities[item.id] = item.isRequired;
+    });
+
+    const tempDetails = {
+      ...propertyDetails,
+      ...tempAmenities,
+      userId: user?.id,
+    };
     handleListingCreation(tempDetails);
   };
 
