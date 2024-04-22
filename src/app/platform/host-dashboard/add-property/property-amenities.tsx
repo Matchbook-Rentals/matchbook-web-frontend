@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
   goToPrevious: () => void;
+  goToNext: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
   propertyDetails: Listing;
 }
@@ -14,6 +15,7 @@ interface PropertyAmenitySelectProps {
 const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   handleListingCreation,
   goToPrevious,
+  goToNext,
   setPropertyDetails, // Updated prop name
   propertyDetails,
 }) => {
@@ -32,11 +34,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "kitchen", label: "Kitchen", isRequired: false },
     { id: "inUnitWasher", label: "In Unit Washer", isRequired: false },
     { id: "inUnitDryer", label: "In Unit Dryer", isRequired: false },
-    {
-      id: "dedicatedWorkspace",
-      label: "Dedicated Workspace",
-      isRequired: false,
-    },
+    { id: "dedicatedWorkspace", label: "Dedicated Workspace", isRequired: false },
     { id: "tv", label: "TV", isRequired: false },
     { id: "hairDryer", label: "Hair Dryer", isRequired: false },
     { id: "iron", label: "Iron", isRequired: false },
@@ -56,19 +54,30 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     //   return { ...prev,  };
     // });
 
-    const trueAmenities = amenities.filter((item) => item.isRequired);
-    const tempAmenities = {};
+    for (let item of amenities) {
+      setPropertyDetails((prev) => {
+        if (item.isRequired) {
+          return { ...prev, [item.id]: item.isRequired }
+        }
+        return {...prev}
+      })
+    }
 
-    trueAmenities.forEach((item) => {
-      tempAmenities[item.id] = item.isRequired;
-    });
+    goToNext();
 
-    const tempDetails = {
-      ...propertyDetails,
-      ...tempAmenities,
-      userId: user?.id,
-    };
-    handleListingCreation(tempDetails);
+    // const trueAmenities = amenities.filter((item) => item.isRequired);
+    // const tempAmenities = {};
+
+    // trueAmenities.forEach((item) => {
+    //   tempAmenities[item.id] = item.isRequired;
+    // });
+
+    // const tempDetails = {
+    //   ...propertyDetails,
+    //   ...tempAmenities,
+    //   userId: user?.id,
+    // };
+    // handleListingCreation(tempDetails);
   };
 
   const handleCheck = (id: string) => {

@@ -22,6 +22,7 @@ import DetailsForm from "./details-form";
 import ImageUploadForm from "./image-upload";
 import LeaseTermsForm from "./lease-terms-form";
 import PropertyAmenitySelect from "./property-amenities";
+import Summary from "./summary";
 
 interface PropertyCarouselProps {
   handleListingCreation: () => void;
@@ -99,9 +100,16 @@ export default function PropertyCarousel({
           <PropertyAmenitySelect
             handleListingCreation={handleListingCreation}
             goToPrevious={goToPrevious}
+            goToNext={goToNext}
             setPropertyDetails={setPropertyDetails}
             propertyDetails={propertyDetails}
           />
+        </CarouselItem>
+        <CarouselItem>
+          <Summary 
+          propertyDetails={propertyDetails}
+          handleListingCreation={handleListingCreation}
+           />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}
