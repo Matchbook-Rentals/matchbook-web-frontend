@@ -73,11 +73,6 @@ export default function AddressSuggest({ setPropertyDetails }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
-          {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="rounded-2xl">
         <input
           value={inputValue}
           onChange={handleInput}
@@ -85,6 +80,8 @@ export default function AddressSuggest({ setPropertyDetails }) {
           placeholder="Where's the party?"
           type="text"
           className="w-full h-full text-2xl focus:outline-none" />
+      </PopoverTrigger>
+      <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
         {suggestions.length > 0 && (
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (

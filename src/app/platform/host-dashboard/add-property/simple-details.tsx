@@ -25,14 +25,19 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
           <Label className="mb-2" htmlFor="property-address">
             Property Address
           </Label>
-          <Input
+          {/* <Input
             className="w-full max-w-lg"
             id="property-address"
             placeholder="Enter the property address"
             value={propertyDetails.locationString || ''}
             onChange={(e) => handleChange(e, 'locationString')}
-          />
+          /> */}
+          <div 
+          id='property-address'
+          className='w-full max-w-lg border'
+          >
           <AddressSuggest setPropertyDetails={setPropertyDetails} />
+          </div>
           
         </div>
         <div className="grid grid-cols-3 gap-8">
