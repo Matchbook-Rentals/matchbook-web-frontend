@@ -29,8 +29,8 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             className="w-full max-w-lg"
             id="property-address"
             placeholder="Enter the property address"
-            value={propertyDetails.address || ''}
-            onChange={(e) => handleChange(e, 'address')}
+            value={propertyDetails.locationString || ''}
+            onChange={(e) => handleChange(e, 'locationString')}
           />
           <AddressSuggest setPropertyDetails={setPropertyDetails} />
           

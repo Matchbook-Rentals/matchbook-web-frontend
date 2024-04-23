@@ -65,9 +65,9 @@ export default function AddressSuggest({ setPropertyDetails }) {
     const results = await getGeocode({ address: description });
     const { lat, lng } = await getLatLng(results[0]);
     setPropertyDetails((prev => {
-      return {...prev, locationString: description,}
+      return {...prev, locationString: description, latitude: lat, longitude: lng}
     }));
-    console.log("Selected location:", { lat, lng });
+    console.log("Selected location:", { lat, lng, results });
   };
 
   return (

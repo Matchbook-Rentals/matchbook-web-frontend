@@ -117,6 +117,7 @@ export default function PropertyCarousel({
           <Summary 
           propertyDetails={propertyDetails}
           handleListingCreation={handleListingCreation}
+          goToPrev={goToPrevious}
            />
         </CarouselItem>
       </CarouselContent>
