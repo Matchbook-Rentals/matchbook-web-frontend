@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -54,8 +53,7 @@ export default function AddressSuggest({ setPropertyDetails }) {
   };
 
   const handleSelect = async (description, place_id) => {
-    setDisplayValue(description); // Update the display value with the selected description
-    setInputValue(""); // Optionally clear the input value or keep it based on your needs
+    setInputValue(description); // Optionally clear the input value or keep it based on your needs
     setValue(description, false); // Update the autocomplete value
     clearSuggestions(); // Uncomment if you want to clear suggestions after selection
     setOpen(false);
@@ -71,7 +69,7 @@ export default function AddressSuggest({ setPropertyDetails }) {
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open && suggestions.length > 0} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <input
           value={inputValue}
@@ -81,8 +79,8 @@ export default function AddressSuggest({ setPropertyDetails }) {
           type="text"
           className="w-full h-full text-2xl focus:outline-none" />
       </PopoverTrigger>
-      <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
-        {suggestions.length > 0 && (
+      {suggestions.length > 0 && (
+        <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (
               <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
@@ -90,8 +88,8 @@ export default function AddressSuggest({ setPropertyDetails }) {
               </li>
             ))}
           </ul>
-        )}
-      </PopoverContent>
+        </PopoverContent>
+      )}
     </Popover>
   );
 }
