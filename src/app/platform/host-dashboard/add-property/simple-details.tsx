@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 
 import { Listing } from '@prisma/client';
 import AddressSuggest from './address-suggest';
+import BedTypeSelect from './bed-type-select';
 
 interface SimpleDetailsProps {
   propertyDetails: Listing;
@@ -25,20 +26,9 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
           <Label className="mb-2" htmlFor="property-address">
             Property Address
           </Label>
-          {/* <Input
-            className="w-full max-w-lg"
-            id="property-address"
-            placeholder="Enter the property address"
-            value={propertyDetails.locationString || ''}
-            onChange={(e) => handleChange(e, 'locationString')}
-          /> */}
-          <div 
-          id='property-address'
-          className='w-full max-w-lg border'
-          >
-          <AddressSuggest setPropertyDetails={setPropertyDetails} />
+          <div id='property-address' className='w-full max-w-lg border'>
+            <AddressSuggest setPropertyDetails={setPropertyDetails} />
           </div>
-          
         </div>
         <div className="grid grid-cols-3 gap-8">
           <div className="flex flex-col items-center">
@@ -48,6 +38,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             <Input
               className="w-full max-w-xs"
               id="bedrooms"
+              type='number'
               placeholder="Number of bedrooms"
               value={propertyDetails.roomCount || ''}
               onChange={(e) => handleChange(e, 'roomCount')}
@@ -60,6 +51,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             <Input
               className="w-full max-w-xs"
               id="bathrooms"
+              type='number'
               placeholder="Number of bathrooms"
               value={propertyDetails.bathroomCount || ''}
               onChange={(e) => handleChange(e, 'bathroomCount')}
@@ -72,17 +64,29 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             <Input
               className="w-full max-w-xs"
               id="square-footage"
+              type='number'
               placeholder="Total square footage"
               value={propertyDetails.squareFootage || ''}
               onChange={(e) => handleChange(e, 'squareFootage')}
             />
           </div>
         </div>
+        {propertyDetails.roomCount > 0 && (
+          <div className="mt-4">
+            {/* Generate a BedTypeSelect component for each bedroom */}
+            {Array.from({ length: propertyDetails.roomCount }, (_, index) => (
+              <div key={index} className="mb-2">
+                <BedTypeSelect bedroomIndex={index + 1} />
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
-      
-      <div className="flex gap-2  justify-center mt-5 p-1">
+
+      <div className="flex gap-2 justify-center mt-5 p-1">
         <button
-          className="bg-primaryBrand px-5 py-2 text-2xl shadow-md shadow-slate-500 hover:shadow-none text-white  rounded-lg"
+          className="bg-primaryBrand px-5 py-2 text-2xl shadow-md shadow-slate-500 hover:shadow-none text-white rounded-lg"
           onClick={goToPrevious}
         >
           BACK

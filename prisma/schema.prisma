@@ -102,8 +102,8 @@ model Listing {
   roomCount              Int
   bathroomCount          Int
   guestCount             Int?
-  latitude               Float @default(0)
-  longitude              Float @default(0)
+  latitude               Float    @default(0)
+  longitude              Float    @default(0)
   locationString         String?
   city                   String
   state                  String
@@ -157,6 +157,7 @@ model Listing {
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
   images          ListingImage[] // Relation to multiple images
+  bedrooms        Bedroom[]
 }
 
 model ListingImage {
@@ -165,6 +166,18 @@ model ListingImage {
   listingId String
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
+
+model Bedroom {
+  id            String   @id @default(uuid())
+  listingId     String   @map("listing_id")
+  bedroomNumber Int      // Bedroom number within the listing
+  bedType       String   // Possible values: 'Full', 'Queen', 'King', etc.
+  listing       Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId]) // Optional: Improve query performance on bedroom retrieval by listing
+  @@unique([listingId, bedroomNumber]) // Ensures unique bedroom numbers within the same listing
+}
+
 
 model HousingRequest {
   id        String   @id @default(uuid()) // Added ID field for MySQL
