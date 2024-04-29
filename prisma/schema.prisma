@@ -102,8 +102,8 @@ model Listing {
   roomCount              Int
   bathroomCount          Int
   guestCount             Int?
-  latitude               Float
-  longitude              Float
+  latitude               Float @default(0)
+  longitude              Float @default(0)
   locationString         String?
   city                   String
   state                  String
