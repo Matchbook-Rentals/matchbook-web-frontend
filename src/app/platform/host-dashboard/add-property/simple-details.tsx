@@ -37,6 +37,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
           className='w-full max-w-lg border'
           >
           <AddressSuggest setPropertyDetails={setPropertyDetails} />
+          {propertyDetails.lat }
           </div>
           
         </div>
