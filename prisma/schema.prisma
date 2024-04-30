@@ -118,6 +118,7 @@ model Listing {
   minimumLeaseLength     Int      @default(1)
 
   // Assuming amenities are boolean fields
+  furnished          Boolean @default(false)
   airConditioning    Boolean @default(false)
   laundryFacilities  Boolean @default(false)
   fitnessCenter      Boolean @default(false)
@@ -168,16 +169,15 @@ model ListingImage {
 }
 
 model Bedroom {
-  id            String   @id @default(uuid())
-  listingId     String   @map("listing_id")
-  bedroomNumber Int      // Bedroom number within the listing
-  bedType       String   // Possible values: 'Full', 'Queen', 'King', etc.
-  listing       Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  id            String  @id @default(uuid())
+  listingId     String  @map("listing_id")
+  bedroomNumber Int // Bedroom number within the listing
+  bedType       String // Possible values: 'Full', 'Queen', 'King', etc.
+  listing       Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
-  @@index([listingId]) // Optional: Improve query performance on bedroom retrieval by listing
   @@unique([listingId, bedroomNumber]) // Ensures unique bedroom numbers within the same listing
+  @@index([listingId]) // Optional: Improve query performance on bedroom retrieval by listing
 }
-
 
 model HousingRequest {
   id        String   @id @default(uuid()) // Added ID field for MySQL

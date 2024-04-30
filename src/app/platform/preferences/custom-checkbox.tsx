@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 // Define the interface for the CheckboxDemo props
 interface CheckboxDemoProps {
-  key: string
+  key?: string;
   label: string;
   isChecked: boolean;
   hasBorder?: boolean;

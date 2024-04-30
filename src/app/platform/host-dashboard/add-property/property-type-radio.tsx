@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { useState, Dispatch, SetStateAction } from 'react';
+import PropertyFurnishedCheckbox from './property-furnished-checkbox';
 
 interface PropertyTypeRadioProps {
   goToNext: () => void;
@@ -45,7 +46,7 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2 className='text-2xl my-5 font-semibold'>What kind of place are you looking for?</h2>
+      <h2 className='text-2xl my-5 font-semibold'>What type of home is this?</h2>
       <div className="flex justify-between">
         {housingOptions.map((option) => (
           <div className='flex flex-col items-center justify-end cursor-pointer' key={option.id} onClick={() => handleSelectionChange(option.id)}>
@@ -59,6 +60,7 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
         ))}
       </div>
       {validationError && <p className="text-red-500 mt-2">Please select a property type to continue.</p>}
+      <PropertyFurnishedCheckbox setPropertyDetails={setPropertyDetails} />
       <div className="flex justify-center mt-5">
         <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
       </div>
