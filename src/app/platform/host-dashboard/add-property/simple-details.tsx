@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
@@ -14,8 +14,29 @@ interface SimpleDetailsProps {
 }
 
 export default function SimpleDetails({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }: SimpleDetailsProps) {
+  const [errors, setErrors] = useState({
+    roomCount: false,
+    bathroomCount: false,
+    squareFootage: false
+  });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: keyof Listing) => {
-    setPropertyDetails(prev => ({ ...prev, [field]: event.target.value }));
+    const value = event.target.value;
+    setPropertyDetails(prev => ({ ...prev, [field]: Number(value) }));
+    setErrors(prev => ({ ...prev, [field]: value === '' }));
+  };
+
+  const handleNext = () => {
+    const newErrors = {
+      roomCount: propertyDetails.roomCount === null || propertyDetails.roomCount === undefined,
+      bathroomCount: propertyDetails.bathroomCount === null || propertyDetails.bathroomCount === undefined,
+      squareFootage: propertyDetails.squareFootage === null || propertyDetails.squareFootage === undefined
+    };
+    setErrors(newErrors);
+    const isValid = !Object.values(newErrors).includes(true); // Check if all errors are false
+    if (isValid) {
+      goToNext();
+    }
   };
 
   return (
@@ -23,79 +44,43 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
       <h1 className="text-4xl font-bold text-center mb-8">Property Details</h1>
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col items-center">
-          <Label className="mb-2" htmlFor="property-address">
-            Property Address
-          </Label>
+          <Label htmlFor="property-address" className='mb-1'>Property Address</Label>
           <div id='property-address' className='w-full max-w-lg border'>
             <AddressSuggest setPropertyDetails={setPropertyDetails} />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-8">
-          <div className="flex flex-col items-center">
-            <Label className="mb-2" htmlFor="bedrooms">
-              Bedrooms?
-            </Label>
-            <Input
-              className="w-full max-w-xs"
-              id="bedrooms"
-              type='number'
-              placeholder="Number of bedrooms"
-              value={propertyDetails.roomCount || ''}
-              onChange={(e) => handleChange(e, 'roomCount')}
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <Label className="mb-2" htmlFor="bathrooms">
-              Bathrooms?
-            </Label>
-            <Input
-              className="w-full max-w-xs"
-              id="bathrooms"
-              type='number'
-              placeholder="Number of bathrooms"
-              value={propertyDetails.bathroomCount || ''}
-              onChange={(e) => handleChange(e, 'bathroomCount')}
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <Label className="mb-2" htmlFor="square-footage">
-              Square Footage
-            </Label>
-            <Input
-              className="w-full max-w-xs"
-              id="square-footage"
-              type='number'
-              placeholder="Total square footage"
-              value={propertyDetails.squareFootage || ''}
-              onChange={(e) => handleChange(e, 'squareFootage')}
-            />
-          </div>
+          {[
+            { field: 'roomCount', label: 'Bedrooms', placeholder: 'Number of bedrooms' },
+            { field: 'bathroomCount', label: 'Bathrooms', placeholder: 'Number of bathrooms' },
+            { field: 'squareFootage', label: 'Square Footage', placeholder: 'Square footage' }
+          ].map((input) => (
+            <div key={input.field} className="flex flex-col items-center">
+              <Label htmlFor={input.field}>{input.label}?</Label>
+              <Input
+                id={input.field}
+                type='number'
+                min={0}
+                placeholder={input.placeholder}
+                value={propertyDetails[input.field] !== undefined ? propertyDetails[input.field] : ''}
+                onChange={e => handleChange(e, input.field as keyof Listing)}
+                className="w-full max-w-xs"
+              />
+              {errors[input.field] && <p className="text-red-500 mt-1">Please enter a valid {input.placeholder.toLowerCase()}.</p>}
+            </div>
+          ))}
         </div>
         {propertyDetails.furnished && propertyDetails.roomCount > 0 && (
           <div className="mt-4">
-            {/* Generate a BedTypeSelect component for each bedroom only if the property is furnished */}
             {Array.from({ length: propertyDetails.roomCount }, (_, index) => (
-              <div key={index} className="mb-2">
-                <BedTypeSelect bedroomIndex={index + 1} />
-              </div>
+              <BedTypeSelect key={index} bedroomIndex={index + 1} />
             ))}
           </div>
         )}
       </div>
-
       <div className="flex gap-2 justify-center mt-5 p-1">
-        <button
-          className="bg-primaryBrand px-5 py-2 text-2xl shadow-md shadow-slate-500 hover:shadow-none text-white rounded-lg"
-          onClick={goToPrevious}
-        >
-          BACK
-        </button>
-        <button
-          className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black "
-          onClick={goToNext}
-        >
-          NEXT
-        </button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={handleNext}>NEXT</button>
       </div>
     </div>
   );

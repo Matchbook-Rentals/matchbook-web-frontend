@@ -75,7 +75,6 @@ export default function PropertyCarousel({
           />
         </CarouselItem>
         <CarouselItem>
-          <p>DETAILS</p>
           {/* <DetailsForm
             setPropertyDetails={setPropertyDetails}
             goToNext={goToNext}
