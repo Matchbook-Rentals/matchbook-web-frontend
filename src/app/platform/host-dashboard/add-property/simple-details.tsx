@@ -71,9 +71,9 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             />
           </div>
         </div>
-        {propertyDetails.roomCount > 0 && (
+        {propertyDetails.furnished && propertyDetails.roomCount > 0 && (
           <div className="mt-4">
-            {/* Generate a BedTypeSelect component for each bedroom */}
+            {/* Generate a BedTypeSelect component for each bedroom only if the property is furnished */}
             {Array.from({ length: propertyDetails.roomCount }, (_, index) => (
               <div key={index} className="mb-2">
                 <BedTypeSelect bedroomIndex={index + 1} />
@@ -81,7 +81,6 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             ))}
           </div>
         )}
-
       </div>
 
       <div className="flex gap-2 justify-center mt-5 p-1">
