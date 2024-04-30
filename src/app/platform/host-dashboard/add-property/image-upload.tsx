@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import React, { useCallback } from "react";
-import { CldUploadWidget } from 'next-cloudinary';
+import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import { TbPhotoPlus } from 'react-icons/tb';
+import { TbPhotoPlus } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
-
+import { UploadButton } from "@/app/utils/uploadthing";
 
 declare global {
   var cloudinary: any;
@@ -18,12 +18,21 @@ interface InfoFormProps {
   goToPrevious: () => void;
 }
 
-
-const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
-
-  const handleUpload = useCallback((result: any) => {
-    setPropertyDetails(prev => ({ ...prev, imageSrc: result.info.secure_url }))
-  }, [setPropertyDetails]);
+const ImageUploadForm: React.FC<InfoFormProps> = ({
+  propertyDetails,
+  setPropertyDetails,
+  goToNext,
+  goToPrevious,
+}) => {
+  const handleUpload = useCallback(
+    (result: any) => {
+      setPropertyDetails((prev) => ({
+        ...prev,
+        imageSrc: result.info.secure_url,
+      }));
+    },
+    [setPropertyDetails],
+  );
 
   return (
     <>
@@ -34,27 +43,35 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
       >
         {({ open }) => {
           return (
-            <div onClick={() => open()} className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600">
+            <div
+              onClick={() => open()}
+              className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600"
+            >
               <TbPhotoPlus size={50} />
               <div className="font-semibold text-lg">Click to upload</div>
               {propertyDetails.imageSrc && (
                 <div className="absolute inset-0 w-full h-full">
                   <Image
-                    alt='upload'
+                    alt="upload"
                     src={propertyDetails.imageSrc}
                     fill
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: "contain" }}
                   />
                 </div>
               )}
             </div>
-          )
+          );
         }}
       </CldUploadWidget>
-      <Button className="m-1" onClick={goToPrevious}>Back</Button>
-      <Button className="m-2" onClick={goToNext}>Next</Button>
+      <UploadButton endpoint="imageUploader" />
+      <Button className="m-1" onClick={goToPrevious}>
+        Back
+      </Button>
+      <Button className="m-2" onClick={goToNext}>
+        Next
+      </Button>
     </>
-  )
-}
+  );
+};
 
 export default ImageUploadForm;
