@@ -7,6 +7,7 @@ interface PropertyTypeRadioProps {
   goToNext: () => void;
   goToPrev: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Consider specifying the actual type instead of 'any'
+  propertyDetails: any;
 }
 
 const housingOptions = [
@@ -24,6 +25,7 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
 }) => {
   const [selectedType, setSelectedType] = useState<string>('');
   const [validationError, setValidationError] = useState<boolean>(false);
+  const [furnishedValidationError, setFurnishedValidationError] = useState<boolean>(false);
 
   const handleSelectionChange = (optionId: string) => {
     setSelectedType(optionId);
@@ -38,6 +40,10 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
     if (!selectedType) {
       // If no type is selected, trigger validation error and do not proceed
       setValidationError(true);
+      return;
+    }
+    if (propertyDetails.furnished === undefined) {
+      setFurnishedValidationError(true);
       return;
     }
     console.log('From radio', propertyDetails)
@@ -60,7 +66,8 @@ const PropertyTypeRadio: React.FC<PropertyTypeRadioProps> = ({
         ))}
       </div>
       {validationError && <p className="text-red-500 mt-2">Please select a property type to continue.</p>}
-      <PropertyFurnishedCheckbox setPropertyDetails={setPropertyDetails} />
+      <PropertyFurnishedCheckbox setPropertyDetails={setPropertyDetails} setFurnishedValidationError={setFurnishedValidationError}/>
+      {furnishedValidationError && <p className="text-red-500 mt-2">Please select furnished/unfurnished to continue.</p>}
       <div className="flex justify-center mt-5">
         <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
       </div>

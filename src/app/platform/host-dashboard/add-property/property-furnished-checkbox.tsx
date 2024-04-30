@@ -4,14 +4,16 @@ import { CheckboxDemo } from '../../preferences/custom-checkbox';
 
 interface PropertyFurnishedCheckboxProps {
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual property details type you expect
+  setFurnishedValidationError: Dispatch<SetStateAction<any>>;
 }
 
-const PropertyFurnishedCheckbox: React.FC<PropertyFurnishedCheckboxProps> = ({ setPropertyDetails }) => {
+const PropertyFurnishedCheckbox: React.FC<PropertyFurnishedCheckboxProps> = ({ setPropertyDetails, setFurnishedValidationError }) => {
 
   const [isFurnished, setIsFurnished] = useState<string>(); // Assuming string type to match 'Furnished' or 'Unfurnished'
 
   const handleChange = (value: string) => {
     setIsFurnished(value);
+    setFurnishedValidationError(false);
     setPropertyDetails(prev => ({
       ...prev,
       furnished: value === 'Furnished'
