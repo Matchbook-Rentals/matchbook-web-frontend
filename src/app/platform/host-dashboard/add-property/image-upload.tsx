@@ -24,6 +24,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
   goToNext,
   goToPrevious,
 }) => {
+  const [imageSrc, setImageSrc] = React.useState(null);
   const handleUpload = useCallback(
     (result: any) => {
       setPropertyDetails((prev) => ({
@@ -65,8 +66,10 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
       </CldUploadWidget>
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={() => alert("Done!")}
+        onClientUploadComplete={( res ) => setImageSrc(res[0].url)}
       />
+
+      {imageSrc && <p>{imageSrc}</p>}
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
