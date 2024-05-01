@@ -63,7 +63,10 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
           );
         }}
       </CldUploadWidget>
-      <UploadButton endpoint="imageUploader" />
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={() => alert("Done!")}
+      />
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
