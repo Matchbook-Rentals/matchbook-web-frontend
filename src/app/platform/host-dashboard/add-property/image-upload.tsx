@@ -5,7 +5,7 @@ import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import { TbPhotoPlus } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
-import { UploadButton } from "@/app/utils/uploadthing";
+import { UploadButton, UploadDropzone } from "@/app/utils/uploadthing";
 
 declare global {
   var cloudinary: any;
@@ -37,39 +37,16 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
 
   return (
     <>
-      <CldUploadWidget
-        onUpload={handleUpload}
-        uploadPreset="nx5qs1lt"
-        options={{ maxFiles: 1 }}
-      >
-        {({ open }) => {
-          return (
-            <div
-              onClick={() => open()}
-              className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600"
-            >
-              <TbPhotoPlus size={50} />
-              <div className="font-semibold text-lg">Click to upload</div>
-              {propertyDetails.imageSrc && (
-                <div className="absolute inset-0 w-full h-full">
-                  <Image
-                    alt="upload"
-                    src={propertyDetails.imageSrc}
-                    fill
-                    style={{ objectFit: "contain" }}
-                  />
-                </div>
-              )}
-            </div>
-          );
-        }}
-      </CldUploadWidget>
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={( res ) => setImageSrc(res[0].url)}
+        onClientUploadComplete={(res) => setImageSrc(res[0].url)}
+        className="p-0 mt-5 "
+        appearance={{ button: 'bg-parent text-black border-black border-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
       />
 
       {imageSrc && <img src={imageSrc} />}
+
+      <UploadDropzone endpoint="imageUploader" />
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
