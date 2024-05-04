@@ -9,9 +9,10 @@ interface ImageGroupingProps {
   listingImages: ListingImage[];
   onDragStart: (id: string) => void;
   groupingCategory?: string;
+  handleDrop: (category: string) => void;
 }
 
-const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory }) => {
+const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory, handleDrop }) => {
   // Filter images based on the groupingCategory
   const filteredImages = listingImages.filter(img =>
     groupingCategory ? img.category === groupingCategory : img.category === null
@@ -20,14 +21,13 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
   return (
     <div>
       {groupingCategory && <h3>{groupingCategory}</h3>}
-      <div onDrop={() => alert(groupingCategory)} onDragOver={e => e.preventDefault()} className="grid grid-cols-5 gap-4 mb-5 border-2 border-gray-500 min-h-16">
+      <div onDrop={() => handleDrop(groupingCategory)} onDragOver={e => e.preventDefault()} className="grid grid-cols-5 gap-4 mb-5 border-2 border-gray-500 min-h-16">
         {filteredImages.map((img) => (
           <div
             key={img.id}
             draggable="true"
             onDragStart={() => onDragStart(img)}
             className="relative w-full pb-[100%] cursor-grab active:cursor-grabbing border-2 border-black"
-            onDrop={() => console.log('AHHHHHH')}
             onDragOver={(e) => e.preventDefault()}
 
           >

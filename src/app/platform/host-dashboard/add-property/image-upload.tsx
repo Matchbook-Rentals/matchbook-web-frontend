@@ -29,7 +29,7 @@ interface UploadData {
 
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
-  const [dragging, setDragging] = React.useState();
+  const [dragging, setDragging] = React.useState('');
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
@@ -43,13 +43,17 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
   const handleDrop = (category) => {
     const tempListingImages = listingImages.map(img => {
-      if (img.id !== dragging.id) return img;
+      if (img.id !== dragging) {
+        return img;
+      }
 
       img.category = category;
       return img;
     })
     setListingImages(tempListingImages);
     setDragging(null);
+    console.log('listing images', tempListingImages)
+    console.log('dragging', dragging);
 
   }
 
@@ -75,7 +79,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
           listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
           onDragStart={handleDragStart}
           groupingCategory={`Bedroom ${idx + 1}`}
-          onDrop={handleDrop}
+          handleDrop={handleDrop}
         />
       ))}
 
