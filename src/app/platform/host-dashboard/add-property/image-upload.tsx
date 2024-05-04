@@ -1,65 +1,85 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React from 'react';
 import Image from "next/image";
-import { TbPhotoPlus } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
-import { UploadButton, UploadDropzone } from "@/app/utils/uploadthing";
-import { ClientUploadedFileData } from "uploadthing/types";
+import { UploadButton } from "@/app/utils/uploadthing";
 import { ListingImage } from "@prisma/client";
+import ImageGrouping from "./image-grouping";
 
 interface InfoFormProps {
-  propertyDetails: Object;
-  setPropertyDetails: (details: Object) => void;
+  propertyDetails: { roomCount: number };
+  setPropertyDetails: (details: { roomCount: number }) => void;
   goToNext: () => void;
   goToPrevious: () => void;
 }
 
 interface UploadData {
-  name: string;             // Stores the file name
-  size: number;             // Stores the file size
-  key: string;              // Unique key for the file
-  serverData: {             // Nested object for additional server-related data
-    uploadedBy: string;   // Identifier of the user who uploaded the file
-    fileUrl: string;      // URL where the file is accessible
+  name: string;
+  size: number;
+  key: string;
+  serverData: {
+    uploadedBy: string;
+    fileUrl: string;
   };
-  url: string;              // Direct URL to access the file
-  customId: string | null;  // Custom identifier for the file, nullable
-  type: string;             // MIME type of the file
+  url: string;
+  customId: string | null;
+  type: string;
 }
 
-const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious, }) => {
-
-  const [imageSrc, setImageSrc] = React.useState('');
+const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
-
+  const [dragging, setDragging] = React.useState();
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    let listingImage: ListingImage;
-    const tempImageArray = res.map((upload) => ({ url: upload.url, id: upload.key }))
-    setListingImages(prev => [...prev, ...tempImageArray])
+    const tempImageArray = res.map((upload) => ({ url: upload.url, id: upload.key, category: null }));
+    setListingImages(prev => [...prev, ...tempImageArray]);
   }
+
+  const handleDragStart = (img: ListingImage) => {
+    setDragging(img.id);
+  }
+
+  const handleDrop = (category) => {
+    const tempListingImages = listingImages.map(img => {
+      if (img.id !== dragging.id) return img;
+
+      img.category = category;
+      return img;
+    })
+    setListingImages(tempListingImages);
+    setDragging(null);
+
+  }
+
+
 
   return (
     <>
       <h2 className="text-center text-xl font-semibold mt-5">Add Photos</h2>
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={(res) => handleUploadFinish(res)}
-        className="p-0 mt-5 "
+        onClientUploadComplete={handleUploadFinish}
+        className="p-0 mt-5"
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
       />
-      <div className="grid grid-cols-5 gap-4 mt-5">
-        {listingImages.map((img) => (
-          <div key={img.id} className="relative w-full pb-[100%] cursor-grab active:cursor-grabbing border-2 border-black" >
-            <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
-          </div>
-        ))}
-      </div>
+
+      <button onClick={() => console.log(listingImages)}>LOG</button>
+
+      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} />
+
+      {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
+        <ImageGrouping
+          key={idx}
+          listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
+          onDragStart={handleDragStart}
+          groupingCategory={`Bedroom ${idx + 1}`}
+          onDrop={handleDrop}
+        />
+      ))}
 
       <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
-{/* DROP ZONES WITH TITLE BEDROOM ONE */}
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
