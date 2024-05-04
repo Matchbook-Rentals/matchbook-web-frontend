@@ -81,10 +81,10 @@ export default function PropertyCarousel({
             goToPrevious={goToPrevious}
           /> */}
           <SimpleDetails
-          propertyDetails={propertyDetails} 
-          setPropertyDetails={setPropertyDetails}
-          goToNext={goToNext}
-          goToPrevious={goToPrevious}
+            propertyDetails={propertyDetails}
+            setPropertyDetails={setPropertyDetails}
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
           />
 
         </CarouselItem>
@@ -113,11 +113,11 @@ export default function PropertyCarousel({
           />
         </CarouselItem>
         <CarouselItem>
-          <Summary 
-          propertyDetails={propertyDetails}
-          handleListingCreation={handleListingCreation}
-          goToPrevious={goToPrevious}
-           />
+          <Summary
+            propertyDetails={propertyDetails}
+            handleListingCreation={handleListingCreation}
+            goToPrevious={goToPrevious}
+          />
         </CarouselItem>
       </CarouselContent>
       {/* <CarouselPrevious /> */}

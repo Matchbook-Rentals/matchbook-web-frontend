@@ -166,6 +166,8 @@ model ListingImage {
   url       String
   listingId String
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  category  String?
+  rank      Int?
 }
 
 model Bedroom {
