@@ -69,7 +69,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
         onClientUploadComplete={( res ) => setImageSrc(res[0].url)}
       />
 
-      {imageSrc && <p>{imageSrc}</p>}
+      {imageSrc && <img src={imageSrc} />}
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
