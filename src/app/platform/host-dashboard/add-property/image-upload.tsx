@@ -16,16 +16,16 @@ interface InfoFormProps {
 }
 
 interface UploadData {
-    name: string;             // Stores the file name
-    size: number;             // Stores the file size
-    key: string;              // Unique key for the file
-    serverData: {             // Nested object for additional server-related data
-        uploadedBy: string;   // Identifier of the user who uploaded the file
-        fileUrl: string;      // URL where the file is accessible
-    };
-    url: string;              // Direct URL to access the file
-    customId: string | null;  // Custom identifier for the file, nullable
-    type: string;             // MIME type of the file
+  name: string;             // Stores the file name
+  size: number;             // Stores the file size
+  key: string;              // Unique key for the file
+  serverData: {             // Nested object for additional server-related data
+    uploadedBy: string;   // Identifier of the user who uploaded the file
+    fileUrl: string;      // URL where the file is accessible
+  };
+  url: string;              // Direct URL to access the file
+  customId: string | null;  // Custom identifier for the file, nullable
+  type: string;             // MIME type of the file
 }
 
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious, }) => {
@@ -35,11 +35,10 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
 
   const handleUploadFinish = (res: UploadData[]) => {
+    console.log(res);
     let listingImage: ListingImage;
-    for (let upload of res) {
-      listingImage = {url: upload.url, id: upload.key}
-      setListingImages(prev => [...prev, listingImage])
-    }
+    const tempImageArray = res.map((upload) => ({ url: upload.url, id: upload.key }))
+    setListingImages(prev => [...prev, ...tempImageArray])
   }
 
   return (
@@ -51,11 +50,16 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         className="p-0 mt-5 "
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
       />
+      <div className="grid grid-cols-5 gap-4 mt-5">
+        {listingImages.map((img) => (
+          <div key={img.id} className="relative w-full pb-[100%] cursor-grab active:cursor-grabbing border-2 border-black" >
+            <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
+          </div>
+        ))}
+      </div>
 
-{listingImages.length > 0 && listingImages.map((img, idx) => (
-  <p key={img.id}>URL - {img.url}, ID - {img.id}</p>
-))}
-
+      <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
+{/* DROP ZONES WITH TITLE BEDROOM ONE */}
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
@@ -67,20 +71,3 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 };
 
 export default ImageUploadForm;
-
-
-
-let response = [
-    {
-        "name": "ViewSelector.png",
-        "size": 1869,
-        "key": "a24bc5bb-2ee7-464e-bb02-a6305da3d0a2-hipm10.png",
-        "serverData": {
-            "uploadedBy": "user_2c0LbFPaCf57fWzesmSpfC3Zg96",
-            "fileUrl": "https://utfs.io/f/a24bc5bb-2ee7-464e-bb02-a6305da3d0a2-hipm10.png"
-        },
-        "url": "https://utfs.io/f/a24bc5bb-2ee7-464e-bb02-a6305da3d0a2-hipm10.png",
-        "customId": null,
-        "type": "image/png"
-    }
-]
