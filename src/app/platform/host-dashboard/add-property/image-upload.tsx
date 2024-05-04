@@ -24,7 +24,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
   goToNext,
   goToPrevious,
 }) => {
-  const [imageSrc, setImageSrc] = React.useState(null);
+  const [imageSrc, setImageSrc] = React.useState('');
   const handleUpload = useCallback(
     (result: any) => {
       setPropertyDetails((prev) => ({
@@ -37,16 +37,16 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({
 
   return (
     <>
+    <h2 className="text-center text-xl font-semibold mt-5">Add Photos</h2>
       <UploadButton
         endpoint="imageUploader"
-        onClientUploadComplete={(res) => setImageSrc(res[0].url)}
+        onClientUploadComplete={(res) => console.log(res)}
         className="p-0 mt-5 "
-        appearance={{ button: 'bg-parent text-black border-black border-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
+        appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
       />
 
       {imageSrc && <img src={imageSrc} />}
 
-      <UploadDropzone endpoint="imageUploader" />
       <Button className="m-1" onClick={goToPrevious}>
         Back
       </Button>
