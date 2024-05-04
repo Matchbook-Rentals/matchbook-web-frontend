@@ -71,7 +71,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
       <button onClick={() => console.log(listingImages)}>LOG</button>
 
-      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} />
+      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} />
 
       {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
         <ImageGrouping

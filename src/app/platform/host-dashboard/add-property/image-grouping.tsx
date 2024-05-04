@@ -12,7 +12,7 @@ interface ImageGroupingProps {
   handleDrop: (category: string) => void;
 }
 
-const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory, handleDrop }) => {
+const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory=null, handleDrop }) => {
   // Filter images based on the groupingCategory
   const filteredImages = listingImages.filter(img =>
     groupingCategory ? img.category === groupingCategory : img.category === null
