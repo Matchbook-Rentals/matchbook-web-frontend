@@ -21,13 +21,13 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
   return (
     <div>
       {groupingCategory && <h3>{groupingCategory}</h3>}
-      <div onDrop={() => handleDrop(groupingCategory)} onDragOver={e => e.preventDefault()} className="grid grid-cols-5 gap-4 mb-5 border-2 border-gray-500 min-h-16">
+      <div onDrop={() => handleDrop(groupingCategory)} onDragOver={e => e.preventDefault()} className="grid grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32">
         {filteredImages.map((img) => (
           <div
             key={img.id}
             draggable="true"
             onDragStart={() => onDragStart(img)}
-            className="relative w-full pb-[100%] cursor-grab active:cursor-grabbing border-2 border-black"
+            className="relative w-full pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black"
             onDragOver={(e) => e.preventDefault()}
 
           >
