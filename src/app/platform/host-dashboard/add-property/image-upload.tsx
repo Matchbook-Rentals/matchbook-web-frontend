@@ -37,25 +37,47 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     setListingImages(prev => [...prev, ...tempImageArray]);
   }
 
-  const handleDragStart = (img: ListingImage) => {
-    setDragging(img.id);
+  const handleDragStart = (id: string) => {
+    setDragging(id);
   }
 
-  const handleDrop = (category) => {
-    const tempListingImages = listingImages.map(img => {
-      if (img.id !== dragging) {
-        return img;
-      }
+const handleDrop = (category) => {
 
-      img.category = category;
+  // Update category for the dragged image
+  const tempListingImages = listingImages.map(img => {
+    if (img.id !== dragging) {
       return img;
-    })
-    setListingImages(tempListingImages);
-    setDragging(null);
-    console.log('listing images', tempListingImages)
-    console.log('dragging', dragging);
+    }
 
-  }
+    img.category = category
+    return {
+      ...img,
+      category: category
+    };
+  });
+
+  console.log(tempListingImages)
+
+  // Assign ranks within the new category
+  const maxRank = tempListingImages.reduce((max, img) => (img.category === category ? Math.max(max, img.rank || 0) : max), 0);
+  
+  const updatedListingImages = tempListingImages.map(img => {
+    if (img.id === dragging) {
+      return {
+        ...img,
+        rank: maxRank + 1 // Increment the max rank found in the category
+      };
+    }
+    return img;
+  });
+  
+  console.log(updatedListingImages)
+  console.log(category)
+
+  setListingImages(updatedListingImages);
+  setDragging(null);
+
+};
 
 
 
