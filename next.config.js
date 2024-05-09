@@ -17,6 +17,11 @@ const nextConfig = {
         hostname: 'placehold.co',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        pathname: '**',
+      },
     ],
   },
   typescript: {

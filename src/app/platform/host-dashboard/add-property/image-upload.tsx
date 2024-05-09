@@ -1,60 +1,117 @@
-'use client';
+"use client";
 
-import React, { useCallback } from "react";
-import { CldUploadWidget } from 'next-cloudinary';
+import React from 'react';
 import Image from "next/image";
-import { TbPhotoPlus } from 'react-icons/tb';
 import { Button } from "@/components/ui/button";
-
-
-declare global {
-  var cloudinary: any;
-}
+import { UploadButton } from "@/app/utils/uploadthing";
+import { ListingImage } from "@prisma/client";
+import ImageGrouping from "./image-grouping";
 
 interface InfoFormProps {
-  propertyDetails: Object;
-  setPropertyDetails: (details: Object) => void;
-  onNext: () => void;
-  onBack: () => void;
+  propertyDetails: { roomCount: number };
+  setPropertyDetails: (details: { roomCount: number }) => void;
+  goToNext: () => void;
+  goToPrevious: () => void;
 }
 
+interface UploadData {
+  name: string;
+  size: number;
+  key: string;
+  serverData: {
+    uploadedBy: string;
+    fileUrl: string;
+  };
+  url: string;
+  customId: string | null;
+  type: string;
+}
 
-const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, onNext, onBack }) => {
+const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
+  const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
+  const [dragging, setDragging] = React.useState('');
 
-  const handleUpload = useCallback((result: any) => {
-    setPropertyDetails(prev => ({ ...prev, imageSrc: result.info.secure_url }))
-  }, [setPropertyDetails]);
+  const handleUploadFinish = (res: UploadData[]) => {
+    console.log(res);
+    const tempImageArray = res.map((upload) => ({ url: upload.url, id: upload.key, category: null }));
+    setListingImages(prev => [...prev, ...tempImageArray]);
+  }
+
+  const handleDragStart = (id: string) => {
+    setDragging(id);
+  }
+
+const handleDrop = (category) => {
+
+  // Update category for the dragged image
+  const tempListingImages = listingImages.map(img => {
+    if (img.id !== dragging) {
+      return img;
+    }
+
+    img.category = category
+    return {
+      ...img,
+      category: category
+    };
+  });
+
+  console.log(tempListingImages)
+
+  // Assign ranks within the new category
+  const maxRank = tempListingImages.reduce((max, img) => (img.category === category ? Math.max(max, img.rank || 0) : max), 0);
+  
+  const updatedListingImages = tempListingImages.map(img => {
+    if (img.id === dragging) {
+      return {
+        ...img,
+        rank: maxRank + 1 // Increment the max rank found in the category
+      };
+    }
+    return img;
+  });
+  
+  console.log(updatedListingImages)
+  console.log(category)
+
+  setListingImages(updatedListingImages);
+  setDragging(null);
+
+};
+
+
 
   return (
     <>
-      <CldUploadWidget
-        onUpload={handleUpload}
-        uploadPreset="nx5qs1lt"
-        options={{ maxFiles: 1 }}
-      >
-        {({ open }) => {
-          return (
-            <div onClick={() => open()} className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600">
-              <TbPhotoPlus size={50} />
-              <div className="font-semibold text-lg">Click to upload</div>
-              {propertyDetails.imageSrc && (
-                <div className="absolute inset-0 w-full h-full">
-                  <Image
-                    alt='upload'
-                    src={propertyDetails.imageSrc}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                  />
-                </div>
-              )}
-            </div>
-          )
-        }}
-      </CldUploadWidget>
-      <Button className="m-1" onClick={onBack}>Back</Button>
-      <Button className="m-2" onClick={onNext}>Next</Button>
+      <h2 className="text-center text-xl font-semibold mt-5">Add Photos</h2>
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={handleUploadFinish}
+        className="p-0 mt-5"
+        appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
+      />
+
+      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} />
+
+      {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
+        <ImageGrouping
+          key={idx}
+          listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
+          onDragStart={handleDragStart}
+          groupingCategory={`Bedroom ${idx + 1}`}
+          handleDrop={handleDrop}
+        />
+      ))}
+
+      <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
+      <Button className="m-1" onClick={goToPrevious}>
+        Back
+      </Button>
+      <Button className="m-2" onClick={goToNext}>
+        Next
+      </Button>
     </>
-  )
-}
+  );
+};
 
 export default ImageUploadForm;

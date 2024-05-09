@@ -4,14 +4,14 @@ import ProgressBar from './progress-bar'
 import PropertyCard from '../property-card';
 import PropertyCarousel from './property-carousel';
 
-export default function AddPropertyClient() {
-  const steps = ['Property Type', 'Details', 'Photos', 'Lease Terms', 'Amenities']
+export default function AddPropertyClient({handleListingCreation}) {
+  const steps = ['Property Type', 'Details', 'Photos', 'Lease Terms', 'Amenities', 'Summary']
   const [currStep, setCurrstep] = useState(1);
 
-  const handleListingCreation = () => {
-    alert('Finish this function in add-property-client')
-    // Probably this function should be a server action passed from page.tsx
-  }
+  // const handleListingCreation = () => {
+  //   alert('Finish this function in add-property-client')
+  //   // Probably this function should be a server action passed from page.tsx
+  // }
 
   return (
     <div>

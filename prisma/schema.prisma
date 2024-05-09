@@ -93,46 +93,63 @@ model Account {
 }
 
 model Listing {
-  id             String   @id @default(uuid())
-  title          String
-  description    String
-  imageSrc       String?
-  createdAt      DateTime @default(now())
-  category       String?
-  roomCount      Int
-  bathroomCount  Int
-  guestCount     Int?
-  latLng         String?
-  locationString String
-  city           String
-  state          String
-  streetAddress1 String
-  streetAddress2 String?
-  postalCode     String?
-  userId         String
-  price          Int
+  id                     String   @id @default(uuid())
+  title                  String
+  description            String
+  imageSrc               String?
+  createdAt              DateTime @default(now())
+  category               String?
+  roomCount              Int
+  bathroomCount          Int
+  guestCount             Int?
+  latitude               Float    @default(0)
+  longitude              Float    @default(0)
+  locationString         String?
+  city                   String
+  state                  String
+  streetAddress1         String
+  streetAddress2         String?
+  postalCode             String?
+  userId                 String
+  price                  Int
+  squareFootage          Int      @default(0)
+  depositSize            Int?
+  requireBackgroundCheck Boolean  @default(false)
+  minimumLeaseLength     Int      @default(1)
 
   // Assuming amenities are boolean fields
-  wifi            Boolean @default(false)
-  airConditioning Boolean @default(false)
-  heating         Boolean @default(false)
-  kitchen         Boolean @default(false)
-  washer          Boolean @default(false)
-  dryer           Boolean @default(false)
-  parking         Boolean @default(false)
-  pool            Boolean @default(false)
-  hotTub          Boolean @default(false)
-  gym             Boolean @default(false)
-  elevator        Boolean @default(false)
-  petsAllowed     Boolean @default(false)
-  smokingAllowed  Boolean @default(false)
-  eventsAllowed   Boolean @default(false)
-  privateEntrance Boolean @default(false)
-  secure          Boolean @default(false)
-  fireplace       Boolean @default(false)
-  waterfront      Boolean @default(false)
-  beachfront      Boolean @default(false)
-  mountainView    Boolean @default(false)
+  furnished          Boolean @default(false)
+  airConditioning    Boolean @default(false)
+  laundryFacilities  Boolean @default(false)
+  fitnessCenter      Boolean @default(false)
+  pool               Boolean @default(false)
+  dishwasher         Boolean @default(false)
+  elevator           Boolean @default(false)
+  wheelchairAccess   Boolean @default(false)
+  doorman            Boolean @default(false)
+  parking            Boolean @default(false)
+  fireplace          Boolean @default(false)
+  wifi               Boolean @default(false)
+  kitchen            Boolean @default(false)
+  inUnitWasher       Boolean @default(false)
+  inUnitDryer        Boolean @default(false)
+  dedicatedWorkspace Boolean @default(false)
+  tv                 Boolean @default(false)
+  hairDryer          Boolean @default(false)
+  iron               Boolean @default(false)
+  heating            Boolean @default(false)
+  washer             Boolean @default(false)
+  dryer              Boolean @default(false)
+  hotTub             Boolean @default(false)
+  gym                Boolean @default(false)
+  petsAllowed        Boolean @default(false)
+  smokingAllowed     Boolean @default(false)
+  eventsAllowed      Boolean @default(false)
+  privateEntrance    Boolean @default(false)
+  secure             Boolean @default(false)
+  waterfront         Boolean @default(false)
+  beachfront         Boolean @default(false)
+  mountainView       Boolean @default(false)
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -141,6 +158,7 @@ model Listing {
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
   images          ListingImage[] // Relation to multiple images
+  bedrooms        Bedroom[]
 }
 
 model ListingImage {
@@ -148,6 +166,19 @@ model ListingImage {
   url       String
   listingId String
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  category  String?
+  rank      Int?
+}
+
+model Bedroom {
+  id            String  @id @default(uuid())
+  listingId     String  @map("listing_id")
+  bedroomNumber Int // Bedroom number within the listing
+  bedType       String // Possible values: 'Full', 'Queen', 'King', etc.
+  listing       Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, bedroomNumber]) // Ensures unique bedroom numbers within the same listing
+  @@index([listingId]) // Optional: Improve query performance on bedroom retrieval by listing
 }
 
 model HousingRequest {

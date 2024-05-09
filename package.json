@@ -10,16 +10,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.29.9",
+    "@clerk/nextjs": "^5.0.3",
     "@prisma/client": "^5.9.1",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@react-google-maps/api": "^2.19.3",
+    "@uploadthing/react": "^6.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
@@ -36,6 +38,7 @@
     "sharp": "^0.33.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^6.10.0",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {

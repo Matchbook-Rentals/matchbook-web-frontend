@@ -1,16 +1,14 @@
-import React from 'react'
+import React from "react";
 import Image from "next/image";
-import Container from '../container';
-import SearchContainer from './searchContainer';
-import prisma from '@/lib/prismadb'
-import { Trip } from '@/types';
-import { currentUser } from '@clerk/nextjs';
-
+import Container from "../container";
+import SearchContainer from "./searchContainer";
+import prisma from "@/lib/prismadb";
+import { Trip } from "@/types";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function Hero() {
-
-  const createTrip = async (trip: Trip,) => {
-    'use server';
+  const createTrip = async (trip: Trip) => {
+    "use server";
 
     // Check if there is a user with the provided userId
     const userExists = await prisma.user.findUnique({
@@ -57,5 +55,5 @@ export default async function Hero() {
         <SearchContainer createTrip={createTrip} />
       </div>
     </div>
-  )
+  );
 }

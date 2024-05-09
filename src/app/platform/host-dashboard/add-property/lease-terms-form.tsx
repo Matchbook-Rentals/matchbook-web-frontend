@@ -23,11 +23,7 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
   const [minimumLeaseLength, setMinimumLeaseLength] = useState(0);
 
   const handleNext = () => {
-    setPropertyDetails({
-      requireBackgroundCheck,
-      depositSize,
-      minimumLeaseLength,
-    });
+    setPropertyDetails(prev => ({...prev, depositSize, minimumLeaseLength, requireBackgroundCheck}))
     goToNext();
   }
 
