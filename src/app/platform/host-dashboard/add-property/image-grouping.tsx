@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ListingImage } from "@prisma/client";
+import { motion } from 'framer-motion'
 
 interface ImageGroupingProps {
   listingImages: ListingImage[];
@@ -22,7 +23,9 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
       {groupingCategory && <h3>{groupingCategory}</h3>}
       <div onDrop={() => handleDrop(groupingCategory)} onDragOver={e => e.preventDefault()} className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32">
         {filteredAndSortedImages.map((img) => (
-          <div
+          <motion.div
+            layout
+            layoutId={img.id}
             key={img.id}
             draggable="true"
             onDragStart={() => onDragStart(img.id)} // Pass img.id to ensure it's correctly used in the drag start event
@@ -30,7 +33,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
             onDragOver={(e) => e.preventDefault()}
           >
             <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
