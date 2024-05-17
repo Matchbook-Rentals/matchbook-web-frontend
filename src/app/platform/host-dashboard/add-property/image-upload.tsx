@@ -30,6 +30,7 @@ interface UploadData {
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
   const [dragging, setDragging] = React.useState('');
+  
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
@@ -88,7 +89,7 @@ const handleDrop = (category) => {
         endpoint="imageUploader"
         onClientUploadComplete={handleUploadFinish}
         className="p-0 mt-5"
-        appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand ut-ready:bg-red-500  data-[state="uploading"]:after:bg-primaryBrand' }}
+        appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
 
       <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} />
