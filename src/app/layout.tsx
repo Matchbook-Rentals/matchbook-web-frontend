@@ -1,7 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
-import "@uploadthing/react/styles.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
