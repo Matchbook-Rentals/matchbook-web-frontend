@@ -30,6 +30,7 @@ interface UploadData {
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
   const [dragging, setDragging] = React.useState('');
+  const [over, setOver] = React.useState('');
   
 
   const handleUploadFinish = (res: UploadData[]) => {
@@ -45,6 +46,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 const handleDrop = (category) => {
 
   // Update category for the dragged image
+  setOver('');
   const tempListingImages = listingImages.map(img => {
     if (img.id !== dragging) {
       return img;
@@ -92,7 +94,7 @@ const handleDrop = (category) => {
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
 
-      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} />
+      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging}/>
 
       {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
         <ImageGrouping
@@ -101,6 +103,9 @@ const handleDrop = (category) => {
           onDragStart={handleDragStart}
           groupingCategory={`Bedroom ${idx + 1}`}
           handleDrop={handleDrop}
+          over={over}
+          setOver={setOver}
+          dragging={dragging}
         />
       ))}
 

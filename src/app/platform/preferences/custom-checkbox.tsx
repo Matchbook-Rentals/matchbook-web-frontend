@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 // Define the interface for the CheckboxDemo props
 interface CheckboxDemoProps {
-  key?: string;
+  id?: string;
   label: string;
   isChecked: boolean;
   hasBorder?: boolean;
@@ -16,19 +16,19 @@ interface CheckboxDemoProps {
   justifyDirection: string;
 }
 
-export function CheckboxDemo({ key, label, isChecked, handleChange, hasBorder, checkOnLeft, details, justifyDirection }: CheckboxDemoProps) {
+export function CheckboxDemo({ id, label, isChecked, handleChange, hasBorder, checkOnLeft, details, justifyDirection }: CheckboxDemoProps) {
 
   return (
     <div className={`flex items-center justify-${justifyDirection} cursor-pointer  space-x-2 pl-5 py-2 ${hasBorder ? 'border-b-2' : ''}`} onClick={() => handleChange(details.id)}>
       {!checkOnLeft && <label
-        htmlFor={key}
+        htmlFor={id}
         className="text-xl font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {label}
       </label>}
       <Checkbox id="terms" checked={isChecked} className='shadow-sm shadow-slate-600' />
       {checkOnLeft && <label
-        htmlFor={key}
+        htmlFor={id}
         className="text-xl font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {label}
