@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { UploadButton } from "@/app/utils/uploadthing";
 import { ListingImage } from "@prisma/client";
 import ImageGrouping from "./image-grouping";
+import { motion } from 'framer-motion';
 
 interface InfoFormProps {
   propertyDetails: { roomCount: number };
@@ -31,11 +32,11 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
   const [dragging, setDragging] = React.useState('');
   const [over, setOver] = React.useState('');
-  
+
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const tempImageArray = res.map((upload, idx) => ({ url: upload.url, id: upload.key, category: null, rank: idx }));
+    const tempImageArray = res.map((upload, idx) => ({ url: upload.url, id: upload.key, category: 'unassigned', rank: idx }));
     setListingImages(prev => [...prev, ...tempImageArray]);
   }
 
@@ -43,44 +44,44 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     setDragging(id);
   }
 
-const handleDrop = (category) => {
+  const handleDrop = (category) => {
 
-  // Update category for the dragged image
-  setOver('');
-  const tempListingImages = listingImages.map(img => {
-    if (img.id !== dragging) {
-      return img;
-    }
+    // Update category for the dragged image
+    setOver('');
+    const tempListingImages = listingImages.map(img => {
+      if (img.id !== dragging) {
+        return img;
+      }
 
-    img.category = category
-    return {
-      ...img,
-      category: category
-    };
-  });
-
-  console.log(tempListingImages)
-
-  // Assign ranks within the new category
-  const maxRank = tempListingImages.reduce((max, img) => (img.category === category ? Math.max(max, img.rank || 0) : max), 0);
-  
-  const updatedListingImages = tempListingImages.map(img => {
-    if (img.id === dragging) {
+      img.category = category
       return {
         ...img,
-        rank: maxRank + 1 // Increment the max rank found in the category
+        category: category
       };
-    }
-    return img;
-  });
-  
-  console.log(updatedListingImages)
-  console.log(category)
+    });
 
-  setListingImages(updatedListingImages);
-  setDragging(null);
+    console.log(tempListingImages)
 
-};
+    // Assign ranks within the new category
+    const maxRank = tempListingImages.reduce((max, img) => (img.category === category ? Math.max(max, img.rank || 0) : max), 0);
+
+    const updatedListingImages = tempListingImages.map(img => {
+      if (img.id === dragging) {
+        return {
+          ...img,
+          rank: maxRank + 1 // Increment the max rank found in the category
+        };
+      }
+      return img;
+    });
+
+    console.log(updatedListingImages)
+    console.log(category)
+
+    setListingImages(updatedListingImages);
+    setDragging(null);
+
+  };
 
 
 
@@ -93,21 +94,22 @@ const handleDrop = (category) => {
         className="p-0 mt-5"
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
+      <motion.div layout layoutRoot>      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging} />
 
-      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging}/>
+        {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
+          <ImageGrouping
+            key={idx}
+            listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
+            onDragStart={handleDragStart}
+            groupingCategory={`Bedroom ${idx + 1}`}
+            handleDrop={handleDrop}
+            over={over}
+            setOver={setOver}
+            dragging={dragging}
+          />
+        ))}
+      </motion.div>
 
-      {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
-        <ImageGrouping
-          key={idx}
-          listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
-          onDragStart={handleDragStart}
-          groupingCategory={`Bedroom ${idx + 1}`}
-          handleDrop={handleDrop}
-          over={over}
-          setOver={setOver}
-          dragging={dragging}
-        />
-      ))}
 
       <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
       <Button className="m-1" onClick={goToPrevious}>
