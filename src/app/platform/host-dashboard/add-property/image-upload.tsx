@@ -99,15 +99,13 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     // Condition occurs when dragged into new category without contacting another image
     if (over.img.id === dragging.id && newCategory !== dragging?.category) {
       insertionRank = listingImages.filter(img => img.category === newCategory).length + 1;
-      if (activeHalf === 'right') {
-        insertionRank--;
-      }
-
     }
     if (!insertionRank) {
       insertionRank = 1;
     }
-    activeHalf === 'right' && insertionRank++;
+    if (activeHalf === 'right' && over.img.id !== dragging.id) {
+      insertionRank++;
+    }
     setOver({ img: '', activeHalf: '' });
     let removedFromOldCategory = removeImgFromOldCategory(dragging);
     let insertedAtNewCategory = insertToNewCategory(removedFromOldCategory, newCategory, insertionRank);
