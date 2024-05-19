@@ -98,7 +98,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
         {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
           <ImageGrouping
-            key={idx}
+            key={`Bedroom ${idx + 1}`}
             listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
             onDragStart={handleDragStart}
             groupingCategory={`Bedroom ${idx + 1}`}

@@ -45,55 +45,53 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
   }, [dragCounter, setOver]);
 
   return (
-    <div onDragLeave={handleDragLeave} className=''>
-      {groupingCategory && (
-        <h3 className="flex items-center justify-between cursor-pointer" onClick={toggleOpen}>
-          {groupingCategory}
+    <div onDragLeave={handleDragLeave} className='my-5'>
+      <h3 className="flex items-center justify-between cursor-pointer bg-primaryBrand" onClick={toggleOpen}>
+        {groupingCategory}
+        <button className='hover:bg-slate-300 px-3 transition transition-duration-400 text-xl'>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
           >
             ^
           </motion.div>
+        </button>
+      </h3>
 
-        </h3>
-      )}
-      {isOpen && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+      <motion.div
+        initial={false} // Avoid setting initial state conditionally
+        animate={{ height: isOpen ? 'auto' : 3, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ overflow: isOpen ? 'visible' : 'hidden' }} // Dynamically change overflow
+      >
+        <div
+          onDrop={() => handleDrop(groupingCategory)}
+          onDragOver={(e) => e.preventDefault()}
+          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32"
         >
-          <div
-            onDrop={() => handleDrop(groupingCategory)}
-            onDragOver={e => e.preventDefault()}
-            className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32"
-          >
-            {filteredAndSortedImages.map((img) => (
-              <div key={img.id}>
-                {img.id === over && over !== dragging && (
-                  <div className='relative w-full pb-50% border-2 border-black'></div>
-                )}
-                <motion.div
-                  layout
-                  layoutId={img.id}
-                  draggable="true"
-                  onDragStart={() => onDragStart(img.id)}
-                  className="relative w-full pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black"
-                  onDragOver={(e) => e.preventDefault()}
-                  onDragEnter={() => handleDragEnter(img.id)}
-                  onClick={() => alert('click not drag')}
-                  onDragEnd={() => setOver('')}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+          {filteredAndSortedImages.map((img) => (
+            <div key={img.id}>
+              {img.id === over && over !== dragging && (
+                <div className='relative w-full pb-[50%] border-2 border-black'></div>
+              )}
+              <motion.div
+                layout
+                layoutId={img.id}
+                draggable="true"
+                onDragStart={() => onDragStart(img.id)}
+                className="relative w-full pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black"
+                onDragOver={(e) => e.preventDefault()}
+                onDragEnter={() => handleDragEnter(img.id)}
+                onClick={() => alert('click not drag')}
+                onDragEnd={() => setOver('')}
+                transition={{ duration: 0.3 }}
+              >
+                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
+              </motion.div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 };
