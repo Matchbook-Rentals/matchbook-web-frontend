@@ -30,9 +30,17 @@ interface UploadData {
 
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
-  const [dragging, setDragging] = React.useState('');
-  const [over, setOver] = React.useState('');
+  const [dragging, setDragging] = React.useState<ListingImage | null>(null);
+  // const [over, setOver] = React.useState('');
+  const [over, setOver] = React.useState({ img: '', activeHalf: '' });
 
+  const defaultListingImage: ListingImage = {
+    id: '',
+    url: '',
+    category: 'unassigned',
+    rank: 0,
+    // Add default values for other properties if needed
+  };
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
@@ -40,46 +48,105 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     setListingImages(prev => [...prev, ...tempImageArray]);
   }
 
-  const handleDragStart = (id: string) => {
-    setDragging(id);
+  const handleDragStart = (img: ListingImage) => {
+    setDragging(img);
   }
 
-  const handleDrop = (category) => {
+  const removeImgFromOldCategory = (draggedImage: ListingImage) => {
+    let removedDraggedArray = listingImages.filter(img => img.id !== draggedImage.id);
+    console.log(removedDraggedArray);
+    let oldCategoryArray = removedDraggedArray.filter(img => img.category === draggedImage.category);
+    let restOfArray = listingImages.filter(img => img.category !== draggedImage.category);
+    let sortedOldCategoryArray = oldCategoryArray.sort((a, b) => a.rank - b.rank);
+    let updatedOldCategoryArray = sortedOldCategoryArray.map((img, idx) => {
+      img.rank = idx + 1;
+      return img;
+    })
+    let updatedArray = [...updatedOldCategoryArray, ...restOfArray]
+    return updatedArray;
+  }
 
-    // Update category for the dragged image
-    setOver('');
-    const tempListingImages = listingImages.map(img => {
-      if (img.id !== dragging) {
-        return img;
-      }
-
-      img.category = category
-      return {
-        ...img,
-        category: category
-      };
-    });
-
-    console.log(tempListingImages)
-
-    // Assign ranks within the new category
-    const maxRank = tempListingImages.reduce((max, img) => (img.category === category ? Math.max(max, img.rank || 0) : max), 0);
-
-    const updatedListingImages = tempListingImages.map(img => {
-      if (img.id === dragging) {
-        return {
-          ...img,
-          rank: maxRank + 1 // Increment the max rank found in the category
-        };
+  const insertToNewCategory = (arr: ListingImage, newCategory: string, insertionRank: number) => {
+    let newCategoryArray = arr.filter(img => img.category === newCategory);
+    let restOfArray = arr.filter(img => img.category !== newCategory);
+    let arrayWithSpaceAtRank = newCategoryArray.map((img: ListingImage, idx: number) => {
+      if (img.rank >= insertionRank) {
+        img.rank++
       }
       return img;
-    });
+    })
 
-    console.log(updatedListingImages)
-    console.log(category)
+    let tempImage = { ...dragging };
+    tempImage.rank = insertionRank
+    tempImage.category = newCategory;
+    arrayWithSpaceAtRank.push(tempImage);
 
-    setListingImages(updatedListingImages);
-    setDragging(null);
+    let updatedArray = [...arrayWithSpaceAtRank, ...restOfArray];
+
+    return updatedArray;
+
+  }
+
+  const handleDrop = (newCategory: string) => {
+    // Condition occurs when ????
+    if (!over.img) return;
+    // Condition occurs when image is dropped onto itself
+    if (over.img.id === dragging.id && newCategory === dragging?.category) return;
+    const overImage = over.img;
+    const activeHalf = over.activeHalf;
+    let insertionRank = overImage.rank;
+
+    // Condition occurs when dragged into new category without contacting another image
+    if (over.img.id === dragging.id && newCategory !== dragging?.category) {
+      insertionRank = listingImages.filter(img => img.category === newCategory).length + 1;
+      if (activeHalf === 'right') {
+        insertionRank--;
+      }
+
+    }
+    if (!insertionRank) {
+      insertionRank = 1;
+    }
+    activeHalf === 'right' && insertionRank++;
+    setOver({ img: '', activeHalf: '' });
+    let removedFromOldCategory = removeImgFromOldCategory(dragging);
+    let insertedAtNewCategory = insertToNewCategory(removedFromOldCategory, newCategory, insertionRank);
+
+
+    setListingImages(insertedAtNewCategory);
+    setDragging({ id: null, rank: null, category: null, url: null, listingId: null });
+
+
+
+    // // Update category for the dragged image
+    // const tempListingImages = listingImages.map(img => {
+    //   if (img.id !== dragging.id) {
+    //     return img;
+    //   }
+
+    //   img.category = newCategory
+    //   return {
+    //     ...img,
+    //     category: newCategory
+    //   };
+    // });
+
+    // console.log(tempListingImages)
+
+    // // Assign ranks within the new category
+    // const maxRank = tempListingImages.reduce((max, img) => (img.category === newCategory ? Math.max(max, img.rank || 0) : max), 0);
+
+    // const updatedListingImages = tempListingImages.map(img => {
+    //   if (img.id === dragging.id) {
+    //     return {
+    //       ...img,
+    //       rank: maxRank + 1 // Increment the max rank found in the category
+    //     };
+    //   }
+    //   return img;
+    // });
+    // setListingImages(updatedListingImages);
+    // setDragging({ id: null, rank: null, category: null, url: null, listingId: null });
 
   };
 
@@ -94,21 +161,20 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         className="p-0 mt-5"
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
-      <motion.div layout layoutRoot>      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging} />
+      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging} />
 
-        {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
-          <ImageGrouping
-            key={`Bedroom ${idx + 1}`}
-            listingImages={listingImages.filter(img => img.category === `Bedroom ${idx + 1}`)}
-            onDragStart={handleDragStart}
-            groupingCategory={`Bedroom ${idx + 1}`}
-            handleDrop={handleDrop}
-            over={over}
-            setOver={setOver}
-            dragging={dragging}
-          />
-        ))}
-      </motion.div>
+      {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
+        <ImageGrouping
+          key={`Bedroom ${idx + 1}`}
+          listingImages={listingImages.filter(img => img?.category === `Bedroom ${idx + 1}`)}
+          onDragStart={handleDragStart}
+          groupingCategory={`Bedroom ${idx + 1}`}
+          handleDrop={handleDrop}
+          over={over}
+          setOver={setOver}
+          dragging={dragging}
+        />
+      ))}
 
 
       <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
 import { ListingImage } from "@prisma/client";
 import { motion } from 'framer-motion';
@@ -11,43 +10,47 @@ interface ImageGroupingProps {
   onDragStart: (id: string) => void;
   groupingCategory?: string;
   handleDrop: (category: string) => void;
-  over: string;
-  setOver: (id: string) => void;
-  dragging: string;
+  over: { id: string, activeHalf: string };
+  setOver: (over: { img: ListingImage, activeHalf: string } | null) => void;
+  dragging: ListingImage;
 }
 
 const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging }) => {
   const [dragCounter, setDragCounter] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
 
-  // Toggle the collapsible section
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
 
-  // Filter images based on the groupingCategory and sort them by rank
   const filteredAndSortedImages = listingImages
     .filter(img => groupingCategory ? img.category === groupingCategory : img.category === 'unassigned')
-    .sort((a, b) => (a.rank || 0) - (b.rank || 0)); // Ensure undefined ranks are treated as 0
+    .sort((a, b) => (a.rank || 0) - (b.rank || 0));
 
-  // Handle drag enter event
-  const handleDragEnter = useCallback((id: string) => {
+  const handleDragEnter = useCallback((img: ListingImage) => {
     setDragCounter(prev => prev + 1);
-    setOver(id);
+    setOver({ img, activeHalf: 'left' });
   }, [setOver]);
 
-  // Handle drag leave event
   const handleDragLeave = useCallback(() => {
     setDragCounter(prev => prev - 1);
     if (dragCounter === 1) {
-      setOver(null);
+      setOver({ img: '', activeHalf: '' });
     }
   }, [dragCounter, setOver]);
+
+  const handleDragOver = useCallback((e, img: ListingImage) => {
+    const { offsetX, target } = e.nativeEvent;
+    const half = offsetX < (target as HTMLElement).offsetWidth / 2 ? 'left' : 'right';
+    setOver({ img, activeHalf: half });
+  }, [setOver]);
+
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
       <h3 className="flex items-center justify-between cursor-pointer bg-primaryBrand" onClick={toggleOpen}>
         {groupingCategory}
+        {over.img?.id}, {over.activeHalf}, {over.img?.rank}
         <button className='hover:bg-slate-300 px-3 transition transition-duration-400 text-xl'>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
@@ -59,10 +62,10 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
       </h3>
 
       <motion.div
-        initial={false} // Avoid setting initial state conditionally
-        animate={{ height: isOpen ? 'auto' : 3, opacity: isOpen ? 1 : 0 }}
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.3 }}
-        style={{ overflow: isOpen ? 'visible' : 'hidden' }} // Dynamically change overflow
+        style={{ overflow: isOpen ? 'visible' : 'hidden' }}
       >
         <div
           onDrop={() => handleDrop(groupingCategory)}
@@ -70,23 +73,21 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
           className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32"
         >
           {filteredAndSortedImages.map((img) => (
-            <div key={img.id}>
-              {img.id === over && over !== dragging && (
-                <div className='relative w-full pb-[50%] border-2 border-black'></div>
-              )}
+            // COnditionally render a placeholder element if over.id !== dragging and over.id === img.id
+            <div key={img.id} className="relative w-full items-center flex">
               <motion.div
                 layout
                 layoutId={img.id}
-                draggable="true"
-                onDragStart={() => onDragStart(img.id)}
-                className="relative w-full pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black"
-                onDragOver={(e) => e.preventDefault()}
-                onDragEnter={() => handleDragEnter(img.id)}
+                draggable
+                onDragStart={() => onDragStart(img)}
+                className={`relative w-full h-0 pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black ${dragging?.id === img?.id && 'opacity-50'}`}
+                onDragOver={(e) => handleDragOver(e, img)}
+                onDragEnter={() => handleDragEnter(img)}
                 onClick={() => alert('click not drag')}
-                onDragEnd={() => setOver('')}
+                onDragEnd={() => setOver({ img, activeHalf: '' })}
                 transition={{ duration: 0.3 }}
               >
-                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" />
+                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-500 ${dragging?.id === img?.id && 'opacity-50'}`} />
               </motion.div>
             </div>
           ))}
