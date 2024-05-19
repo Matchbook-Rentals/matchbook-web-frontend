@@ -35,7 +35,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const tempImageArray = res.map((upload) => ({ url: upload.url, id: upload.key, category: null }));
+    const tempImageArray = res.map((upload, idx) => ({ url: upload.url, id: upload.key, category: null, rank: idx }));
     setListingImages(prev => [...prev, ...tempImageArray]);
   }
 
