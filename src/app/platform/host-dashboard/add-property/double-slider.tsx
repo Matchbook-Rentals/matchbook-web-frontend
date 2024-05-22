@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 
 const DualThumbSlider = () => {
-  const [values, setValues] = useState([3, 9]); // Initial values for the thumbs
+  const [values, setValues] = useState([1, 12]); // Initial values for the thumbs
 
   const handleChange = (newValues) => {
     setValues(newValues);
   };
+
+  const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
 
   return (
     <div className="w-4/5 mx-auto mt-12">
@@ -22,6 +24,17 @@ const DualThumbSlider = () => {
       >
         <Slider.Track className="relative bg-gray-300 rounded-full flex-grow h-1">
           <Slider.Range className="absolute bg-primaryBrand rounded-full h-full" />
+          {steps.map((step) => (
+            <div
+              key={step}
+              className="absolute w-px bg-gray-600"
+              style={{
+                left: `${((step - 1) / 11) * 100}%`, // Position notches evenly
+                top: '-8px', // Adjust this value as needed
+                height: '8px',
+              }}
+            />
+          ))}
         </Slider.Track>
         <Slider.Thumb className="block w-5 h-5 bg-primaryBrand rounded-full outline-none border-2 border-white shadow-md" />
         <Slider.Thumb className="block w-5 h-5 bg-primaryBrand rounded-full outline-none border-2 border-white shadow-md" />
