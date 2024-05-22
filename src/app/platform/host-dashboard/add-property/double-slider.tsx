@@ -36,8 +36,8 @@ const DualThumbSlider = () => {
             />
           ))}
         </Slider.Track>
-        <Slider.Thumb className="block w-5 h-5 bg-primaryBrand rounded-full outline-none border-2 border-white shadow-md" />
-        <Slider.Thumb className="block w-5 h-5 bg-primaryBrand rounded-full outline-none border-2 border-white shadow-md" />
+        <Slider.Thumb className="block w-5 h-5 bg-gray-300 rounded-full outline-none border-2 border-white shadow-md" />
+        <Slider.Thumb className="block w-5 h-5 bg-gray-300 rounded-full outline-none border-2 border-white shadow-md" />
       </Slider.Root>
       <div className="mt-6 text-center">
         <span>Minimum: {values[0]}</span>

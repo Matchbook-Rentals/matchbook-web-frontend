@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch'; // Assuming you have a Switch component
 import { Slider } from '@/components/ui/slider';
 import DualThumbSlider from './double-slider';
+import RentBarChart from './rent-bar-chart';
 
 interface ComponentProps {
   goToNext: () => void;
@@ -22,7 +23,7 @@ interface PropertyDetails {
 export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDetails }: ComponentProps) {
   const [requireBackgroundCheck, setRequireBackgroundCheck] = useState(false);
   const [depositSize, setDepositSize] = useState(0);
-  const [minimumLeaseLength, setMinimumLeaseLength] = useState(0);
+  const [minimumLeaseTerms, setMinimumLeaseTerms] = useState({ length: 1, price: 2000 });
 
   const handleNext = () => {
     setPropertyDetails(prev => ({ ...prev, depositSize, minimumLeaseLength, requireBackgroundCheck }))
@@ -36,6 +37,9 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
         <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
         <DualThumbSlider />
       </div>
+
+      <RentBarChart />
+
       <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
         {/* Require Background Check */}
         <div className="space-y-2">
@@ -46,11 +50,6 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
         <div className="space-y-2">
           <Label htmlFor="deposit-size">Deposit Size ($)</Label>
           <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={depositSize.toString()} onChange={e => setDepositSize(parseFloat(e.target.value) || 0)} />
-        </div>
-        {/* Minimum Lease Length */}
-        <div className="space-y-2">
-          <Label htmlFor="lease-length">Minimum Lease Length (Months)</Label>
-          <Input id="lease-length" placeholder="Enter minimum lease length" type="number" value={minimumLeaseLength.toString()} onChange={e => setMinimumLeaseLength(parseInt(e.target.value) || 0)} />
         </div>
         <div className="flex justify-between">
           <Button onClick={goToPrevious}>Back</Button>
