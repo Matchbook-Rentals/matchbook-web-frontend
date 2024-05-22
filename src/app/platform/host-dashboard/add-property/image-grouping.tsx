@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { ListingImage } from "@prisma/client";
 import { motion } from 'framer-motion';
+import { FaPencilAlt } from 'react-icons/fa';
 
 interface ImageGroupingProps {
   listingImages: ListingImage[];
@@ -48,10 +49,14 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
-      <h3 className="flex items-center justify-between cursor-pointer bg-primaryBrand" onClick={toggleOpen}>
-        {groupingCategory}
-        {over.img?.id}, {over.activeHalf}, {over.img?.rank}
-        <button className='hover:bg-slate-300 px-3 transition transition-duration-400 text-xl'>
+      <h3 className="flex text-xl items-center justify-between cursor-pointer" >
+        <div className='flex gap-2'>
+
+          {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
+          <FaPencilAlt className='text-sm' onClick={() => alert('PENCIL')} />
+        </div>
+        {/* {over.img?.id}, {over.activeHalf}, {over.img?.rank} */}
+        <button onClick={toggleOpen} className='hover:bg-slate-300 px-3 transition transition-duration-400 font-bold text-2xl'>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3 }}
@@ -80,7 +85,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 layoutId={img.id}
                 draggable
                 onDragStart={() => onDragStart(img)}
-                className={`relative w-full h-0 pb-[50%] cursor-grab active:cursor-grabbing border-2 border-black ${dragging?.id === img?.id && 'opacity-50'}`}
+                className={`relative w-full h-0 pb-[50%] cursor-grab active:cursor-grabbing border border-black ${dragging?.id === img?.id && 'opacity-50'}`}
                 onDragOver={(e) => handleDragOver(e, img)}
                 onDragEnter={() => handleDragEnter(img)}
                 onClick={() => alert('click not drag')}

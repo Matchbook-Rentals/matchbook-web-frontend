@@ -176,12 +176,10 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
 
       <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
-      <Button className="m-1" onClick={goToPrevious}>
-        Back
-      </Button>
-      <Button className="m-2" onClick={goToNext}>
-        Next
-      </Button>
+      <div className="flex gap-2 justify-center mt-5 p-1">
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToNext}>NEXT</button>
+      </div>
     </>
   );
 };
