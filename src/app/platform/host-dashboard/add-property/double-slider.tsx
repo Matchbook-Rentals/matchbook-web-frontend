@@ -2,11 +2,32 @@
 import React, { useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 
-const DualThumbSlider = () => {
+const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
   const [values, setValues] = useState([1, 12]); // Initial values for the thumbs
+  const [minValue, setMinValue] = useState(2000); // Initial minimum value
+  const [maxValue, setMaxValue] = useState(3000); // Initial maximum value
 
-  const handleChange = (newValues) => {
+  const handleSliderChange = (newValues) => {
+    let oldValues = [...values];
     setValues(newValues);
+    if (oldValues[0] !== newValues[0]) {
+      setMinimumLeaseTerms((prev) => ({ ...prev, length: newValues[0] }));
+    }
+    if (oldValues[1] !== newValues[1]) {
+      setMaximumLeaseTerms((prev) => ({ ...prev, length: newValues[1] }));
+    }
+  };
+
+  const handleMinValueChange = (e) => {
+    const newValue = Math.round(e.target.value / 5) * 5; // Round to nearest 5
+    setMinValue(newValue);
+    setMinimumLeaseTerms((prev) => ({ ...prev, price: newValue }));
+  };
+
+  const handleMaxValueChange = (e) => {
+    const newValue = Math.round(e.target.value / 5) * 5; // Round to nearest 5
+    setMaxValue(newValue);
+    setMaximumLeaseTerms((prev) => ({ ...prev, price: newValue }));
   };
 
   const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
@@ -15,7 +36,7 @@ const DualThumbSlider = () => {
     <div className="w-4/5 mx-auto mt-12">
       <Slider.Root
         value={values}
-        onValueChange={handleChange}
+        onValueChange={handleSliderChange}
         min={1}
         max={12}
         step={1}
@@ -40,9 +61,26 @@ const DualThumbSlider = () => {
         <Slider.Thumb className="block w-5 h-5 bg-gray-300 rounded-full outline-none border-2 border-white shadow-md" />
       </Slider.Root>
       <div className="mt-6 text-center">
-        <span>Minimum: {values[0]}</span>
-        <span className="mx-4">|</span>
-        <span>Maximum: {values[1]}</span>
+        <div className="flex justify-center items-center">
+          <span>Minimum: {values[0]}</span>
+          <input
+            type="number"
+            value={minValue}
+            onChange={handleMinValueChange}
+            step="5"
+            className="ml-2 w-24 border-6 border-gray-300 rounded-md text-center"
+
+          />
+          <span className="mx-4">|</span>
+          <span>Maximum: {values[1]}</span>
+          <input
+            type="number"
+            value={maxValue}
+            onChange={handleMaxValueChange}
+            step="5"
+            className="ml-2 w-24 border border-gray-300 rounded-md text-center"
+          />
+        </div>
       </div>
     </div>
   );

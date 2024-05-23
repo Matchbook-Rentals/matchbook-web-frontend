@@ -23,7 +23,8 @@ interface PropertyDetails {
 export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDetails }: ComponentProps) {
   const [requireBackgroundCheck, setRequireBackgroundCheck] = useState(false);
   const [depositSize, setDepositSize] = useState(0);
-  const [minimumLeaseTerms, setMinimumLeaseTerms] = useState({ length: 1, price: 2000 });
+  const [minimumLeaseTerms, setMinimumLeaseTerms] = useState({ length: null, price: null });
+  const [maximumLeaseTerms, setMaximumLeaseTerms] = useState({ length: null, price: null })
 
   const handleNext = () => {
     setPropertyDetails(prev => ({ ...prev, depositSize, minimumLeaseLength, requireBackgroundCheck }))
@@ -35,10 +36,25 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
       <div className="space-y-2">
         <h2 className="text-3xl font-bold text-center">Lease Terms</h2>
         <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
-        <DualThumbSlider />
+        <p>{minimumLeaseTerms.length}, {minimumLeaseTerms.price}</p>
+        <p>{maximumLeaseTerms.length}, {maximumLeaseTerms.price}</p>
+        <DualThumbSlider setMinimumLeaseTerms={setMinimumLeaseTerms} setMaximumLeaseTerms={setMaximumLeaseTerms} />
       </div>
 
-      <RentBarChart />
+      {
+        !maximumLeaseTerms.length || !maximumLeaseTerms.price || !minimumLeaseTerms.length || !minimumLeaseTerms.length ? (
+          <div className="flex items-center justify-center h-64 text-xl text-red-600">
+            Please provide information about your desired lease terms to see a visualization.
+          </div>
+        ) : (
+          <RentBarChart
+            maxLength={maximumLeaseTerms.length}
+            maxValue={maximumLeaseTerms.price}
+            minLength={minimumLeaseTerms.length}
+            minValue={minimumLeaseTerms.price}
+          />
+        )
+      }
 
       <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
         {/* Require Background Check */}
@@ -58,4 +74,5 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
       </form>
     </div>
   );
+
 }
