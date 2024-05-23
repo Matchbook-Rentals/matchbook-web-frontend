@@ -2,10 +2,10 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface RentBarChartProps {
-  minValue: number | null;
-  maxValue: number | null;
-  minLength: number | null;
-  maxLength: number | null;
+  minValue: number;
+  maxValue: number;
+  minLength: number;
+  maxLength: number;
 }
 
 const generateData = (minValue: number, maxValue: number, minLength: number, maxLength: number) => {
@@ -34,7 +34,7 @@ const RentBarChart: React.FC<RentBarChartProps> = ({ minValue, maxValue, minLeng
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
+          <XAxis dataKey="month" interval={maxLength - minLength > 6 ? 1 : 0} />
           <YAxis />
           <Tooltip />
           <Legend />
