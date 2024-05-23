@@ -19,15 +19,25 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
   };
 
   const handleMinValueChange = (e) => {
-    const newValue = Math.round(e.target.value / 5) * 5; // Round to nearest 5
+    const newValue = e.target.value;
     setMinValue(newValue);
-    setMinimumLeaseTerms((prev) => ({ ...prev, price: newValue }));
+  };
+
+  const handleMinValueBlur = () => {
+    const roundedValue = Math.round(minValue / 5) * 5;
+    setMinValue(roundedValue);
+    setMinimumLeaseTerms((prev) => ({ ...prev, price: roundedValue }));
   };
 
   const handleMaxValueChange = (e) => {
-    const newValue = Math.round(e.target.value / 5) * 5; // Round to nearest 5
+    const newValue = e.target.value;
     setMaxValue(newValue);
-    setMaximumLeaseTerms((prev) => ({ ...prev, price: newValue }));
+  };
+
+  const handleMaxValueBlur = () => {
+    const roundedValue = Math.round(maxValue / 5) * 5;
+    setMaxValue(roundedValue);
+    setMaximumLeaseTerms((prev) => ({ ...prev, price: roundedValue }));
   };
 
   const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
@@ -67,9 +77,9 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
             type="number"
             value={minValue}
             onChange={handleMinValueChange}
+            onBlur={handleMinValueBlur}
             step="5"
             className="ml-2 w-24 border-6 border-gray-300 rounded-md text-center"
-
           />
           <span className="mx-4">|</span>
           <span>Maximum: {values[1]}</span>
@@ -77,6 +87,7 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
             type="number"
             value={maxValue}
             onChange={handleMaxValueChange}
+            onBlur={handleMaxValueBlur}
             step="5"
             className="ml-2 w-24 border border-gray-300 rounded-md text-center"
           />
