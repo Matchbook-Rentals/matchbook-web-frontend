@@ -11,13 +11,15 @@ interface RentBarChartProps {
 const generateData = (minValue: number, maxValue: number, minLength: number, maxLength: number) => {
   const data = [];
   const stepValue = (maxValue - minValue) / (maxLength - minLength);
+  let currMonth = 1
 
   for (let i = minLength; i <= maxLength; i++) {
     const value = minValue + stepValue * (i - minLength);
     data.push({
-      month: `Month ${i}`,
+      month: `Month ${currMonth}`,
       price: value.toFixed(2),
     });
+    currMonth++;
   }
 
   return data;
