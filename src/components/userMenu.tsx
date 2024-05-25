@@ -5,10 +5,6 @@ import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popove
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
-
-
-
-
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   return (
     <div className="flex items-center scale-125">

@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 
