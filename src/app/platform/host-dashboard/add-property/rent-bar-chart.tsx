@@ -11,13 +11,13 @@ interface RentBarChartProps {
 const generateData = (minValue: number, maxValue: number, minLength: number, maxLength: number) => {
   const data = [];
   const stepValue = (maxValue - minValue) / (maxLength - minLength);
-  let currMonth = 1
+  let currMonth = 1;
 
   for (let i = minLength; i <= maxLength; i++) {
     const value = minValue + stepValue * (i - minLength);
     data.push({
       month: `Month ${currMonth}`,
-      price: value.toFixed(2),
+      price: parseFloat(value.toFixed(2)), // Changed this to return a number instead of a string
     });
     currMonth++;
   }
@@ -25,9 +25,14 @@ const generateData = (minValue: number, maxValue: number, minLength: number, max
   return data;
 };
 
+const roundUpToNearestHundred = (value: number) => {
+  return Math.ceil(value / 100) * 100;
+};
+
 const RentBarChart: React.FC<RentBarChartProps> = ({ minValue, maxValue, minLength, maxLength }) => {
 
   const data = generateData(minValue, maxValue, minLength, maxLength);
+  const roundedMaxValue = roundUpToNearestHundred(maxValue * 1.2);
 
   return (
     <div className="w-full h-96">
@@ -35,7 +40,7 @@ const RentBarChart: React.FC<RentBarChartProps> = ({ minValue, maxValue, minLeng
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" interval={maxLength - minLength > 6 ? 1 : 0} />
-          <YAxis />
+          <YAxis domain={[0, roundedMaxValue]} /> {/* Add 10% buffer above maxValue and round to the nearest hundred */}
           <Tooltip />
           <Legend />
           <Bar dataKey="price" fill="#a3b899" />
