@@ -49,7 +49,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
-      <h3 className="flex text-xl items-center justify-between cursor-pointer" >
+      <div className="flex text-xl items-center justify-between cursor-pointer" >
         <div className='flex gap-2'>
 
           {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
@@ -64,7 +64,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
             ^
           </motion.div>
         </button>
-      </h3>
+      </div>
 
       <motion.div
         initial={false}
