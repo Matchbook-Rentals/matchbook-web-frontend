@@ -49,7 +49,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
-      <div className="flex text-xl items-center justify-between cursor-pointer" >
+      <div className="flex text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer" >
         <div className='flex gap-2'>
 
           {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
@@ -75,7 +75,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
         <div
           onDrop={() => handleDrop(groupingCategory)}
           onDragOver={(e) => e.preventDefault()}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32"
+          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-300 min-h-32"
         >
           {filteredAndSortedImages.map((img) => (
             // COnditionally render a placeholder element if over.id !== dragging and over.id === img.id
