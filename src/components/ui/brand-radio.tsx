@@ -38,26 +38,28 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
       <div className={`flex ${vertical ? 'flex-col' : ''} justify-between`}>
         {options.map((option) => (
           <div
-            className={`flex ${vertical ? 'flex-row' : 'flex-col'} m-1 justify-evenly items-center`}
+            className={`flex ${vertical ? 'flex-row items-center justify-end' : 'flex-col items-start'} m-1 `}
             key={option.id}
             onClick={() => setSelectedValue(option.id)}
           >
             {option.imageUrl && (
               <Image alt={option.label} src={option.imageUrl} width={100} height={100} />
             )}
-            <p className='text-xl font-semibold'>{option.label}</p>
-            <div className='flex items-center'>
-              <input
-                type="radio"
-                className='sr-only'
-                name={name}
-                value={option.id}
-                checked={selectedValue === option.id}
-                onChange={handleSelectionChange}
-              />
-              <div
-                className={`w-6 h-6 rounded-full border-2 border-gray-400 ml-2 ${selectedValue === option.id ? 'bg-primaryBrand' : ''}`}
-              ></div>
+            <div className={`flex ${vertical ? 'flex-row items-center justify-end' : 'flex-col items-start mt-2'}`}>
+              <p className='text-xl font-semibold'>{option.label}</p>
+              <div className='flex items-center ml-2'>
+                <input
+                  type="radio"
+                  className='sr-only'
+                  name={name}
+                  value={option.id}
+                  checked={selectedValue === option.id}
+                  onChange={handleSelectionChange}
+                />
+                <div
+                  className={`w-6 h-6 rounded-full border-2 border-gray-400 ml-2 ${selectedValue === option.id ? 'bg-primaryBrand' : ''}`}
+                ></div>
+              </div>
             </div>
           </div>
         ))}
