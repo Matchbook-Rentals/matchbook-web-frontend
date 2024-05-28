@@ -67,11 +67,11 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
           <Label htmlFor="deposit-size">Deposit Size ($)</Label>
           <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={depositSize.toString()} onChange={e => setDepositSize(parseFloat(e.target.value) || 0)} />
         </div>
-        <div className="flex justify-between">
-          <Button onClick={goToPrevious}>Back</Button>
-          <Button onClick={handleNext}>Next</Button>
-        </div>
       </form>
+      <div className="flex gap-2 justify-center mt-5 p-1">
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToNext}>NEXT</button>
+      </div>
     </div>
   );
 
