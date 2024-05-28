@@ -3,6 +3,8 @@ import React, { useState, Dispatch, SetStateAction } from "react";
 import { CheckboxDemo } from "../../preferences/custom-checkbox";
 import { Listing } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
+import BrandRadio from "@/components/ui/brand-radio";
+import { Label } from "recharts";
 
 interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
@@ -19,6 +21,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   setPropertyDetails, // Updated prop name
   propertyDetails,
 }) => {
+
   const initAmenities = [
     { id: "airConditioning", label: "Air Conditioning", isRequired: false },
     { id: "laundryFacilities", label: "Laundry Facilities", isRequired: false },
@@ -40,8 +43,22 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "iron", label: "Iron", isRequired: false },
   ];
 
+  const laundryOptions = [
+    { id: 'inUnit', label: 'In-Unit' },
+    { id: 'hookup', label: 'Hookup' },
+    { id: 'notAvailable', label: 'Not available' },
+    { id: 'In complex', label: 'In complex' },
+
+  ]
+
   const [amenities, setAmenities] = useState(initAmenities);
+  const [allowDogs, setAllowDogs] = useState(false);
+  const [allowCats, setAllowCats] = useState(false);
   const { user } = useUser();
+
+
+
+
 
   const handleFinish = (amenities) => {
     console.log("CURR Details -->", propertyDetails);
@@ -59,7 +76,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         if (item.isRequired) {
           return { ...prev, [item.id]: item.isRequired }
         }
-        return {...prev}
+        return { ...prev }
       })
     }
 
@@ -94,8 +111,24 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   return (
     <>
       <h2 className=" text-center text-2xl my-10 font-semibold">
-        Which amenities are you interested in?
+        Tell us more about your properties features
       </h2>
+
+      <h3 className="text-center text-2xl mb-5 border-b-2">Pets welcome?</h3>
+      <div className="flex w-4/5  mx-auto justify-evenly">
+
+        <CheckboxDemo label="Dogs Allowed" handleChange={() => setAllowDogs(prev => !prev)} isChecked={allowDogs} details={{ id: 'dogs', label: 'dogs', isRequired: allowDogs }} />
+        <CheckboxDemo label="Cats Allowed" checkOnLeft handleChange={() => setAllowCats(prev => !prev)} details={{ id: 'cats', label: 'cats', isRequired: allowCats }} />
+      </div>
+
+
+      <h3 className="text-center text-2xl mb-5 border-b-2">Laundry</h3>
+      <div className="flex justify-evenly">
+        <BrandRadio options={laundryOptions} radioLabel="Washer" vertical />
+        <BrandRadio options={laundryOptions} radioLabel="Dryer" vertical />
+
+      </div>
+
       <div className="card  grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5">
         {amenities.map((item, idx) => (
           <CheckboxDemo
