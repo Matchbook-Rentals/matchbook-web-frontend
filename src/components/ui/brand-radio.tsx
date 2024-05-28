@@ -31,7 +31,7 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
   return (
     <div>
       {radioLabel && (
-        <div className="text-xl text-center font-semibold mb-2 border-b border-black pb-1">
+        <div className="text-xl text-center font-semibold mb-2 border-b pb-1">
           {radioLabel}
         </div>
       )}
@@ -46,17 +46,19 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
               <Image alt={option.label} src={option.imageUrl} width={100} height={100} />
             )}
             <p className='text-xl font-semibold'>{option.label}</p>
-            <input
-              type="radio"
-              className='sr-only'
-              name={name}
-              value={option.id}
-              checked={selectedValue === option.id}
-              onChange={handleSelectionChange}
-            />
-            <div
-              className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selectedValue === option.id ? 'bg-primaryBrand' : ''}`}
-            ></div>
+            <div className='flex items-center'>
+              <input
+                type="radio"
+                className='sr-only'
+                name={name}
+                value={option.id}
+                checked={selectedValue === option.id}
+                onChange={handleSelectionChange}
+              />
+              <div
+                className={`w-6 h-6 rounded-full border-2 border-gray-400 ml-2 ${selectedValue === option.id ? 'bg-primaryBrand' : ''}`}
+              ></div>
+            </div>
           </div>
         ))}
       </div>

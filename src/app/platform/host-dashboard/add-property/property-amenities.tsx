@@ -115,7 +115,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
       </h2>
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Pets welcome?</h3>
-      <div className="flex w-4/5  mx-auto justify-evenly">
+      <div className="flex w-4/5 mb-2  mx-auto justify-evenly">
 
         <CheckboxDemo label="Dogs Allowed" handleChange={() => setAllowDogs(prev => !prev)} isChecked={allowDogs} details={{ id: 'dogs', label: 'dogs', isRequired: allowDogs }} />
         <CheckboxDemo label="Cats Allowed" checkOnLeft handleChange={() => setAllowCats(prev => !prev)} details={{ id: 'cats', label: 'cats', isRequired: allowCats }} />
