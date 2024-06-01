@@ -24,8 +24,8 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
   vertical = false,
   radioLabel,
 }) => {
-  const handleSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
+  const handleSelectionChange = (id: string) => {
+    setSelectedValue(id);
   };
 
   return (
@@ -40,7 +40,7 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
           <div
             className={`flex ${vertical ? 'flex-row items-center justify-end' : 'flex-col items-start'} m-1 `}
             key={option.id}
-            onClick={() => setSelectedValue(option.id)}
+            onClick={() => handleSelectionChange(option.id)}
           >
             {option.imageUrl && (
               <Image alt={option.label} src={option.imageUrl} width={100} height={100} />
@@ -54,7 +54,7 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
                   name={name}
                   value={option.id}
                   checked={selectedValue === option.id}
-                  onChange={handleSelectionChange}
+                  onChange={() => handleSelectionChange(option.id)}
                 />
                 <div
                   className={`w-6 h-6 rounded-full border-2 border-gray-400 ml-2 ${selectedValue === option.id ? 'bg-primaryBrand' : ''}`}

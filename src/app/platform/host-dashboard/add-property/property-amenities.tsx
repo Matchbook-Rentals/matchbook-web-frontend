@@ -4,7 +4,6 @@ import { CheckboxDemo } from "../../preferences/custom-checkbox";
 import { Listing } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
 import BrandRadio from "@/components/ui/brand-radio";
-import { Label } from "recharts";
 
 interface PropertyAmenitySelectProps {
   handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
@@ -24,19 +23,15 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
   const initAmenities = [
     { id: "airConditioning", label: "Air Conditioning", isRequired: false },
-    { id: "laundryFacilities", label: "Laundry Facilities", isRequired: false },
     { id: "fitnessCenter", label: "Fitness Center", isRequired: false },
     { id: "pool", label: "Pool", isRequired: false },
     { id: "dishwasher", label: "Dishwasher", isRequired: false },
     { id: "elevator", label: "Elevator", isRequired: false },
     { id: "wheelchairAccess", label: "Wheelchair Access", isRequired: false },
     { id: "doorman", label: "Doorman", isRequired: false },
-    { id: "parking", label: "Parking", isRequired: false },
     { id: "fireplace", label: "Fireplace", isRequired: false },
     { id: "wifi", label: "Wifi", isRequired: false },
     { id: "kitchen", label: "Kitchen", isRequired: false },
-    { id: "inUnitWasher", label: "In Unit Washer", isRequired: false },
-    { id: "inUnitDryer", label: "In Unit Dryer", isRequired: false },
     { id: "dedicatedWorkspace", label: "Dedicated Workspace", isRequired: false },
     { id: "tv", label: "TV", isRequired: false },
     { id: "hairDryer", label: "Hair Dryer", isRequired: false },
@@ -51,9 +46,27 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
   ]
 
+  const parkingOptions = [
+    { id: 'street', label: 'Street' },
+    { id: 'uncovered', label: 'Uncovered' },
+    { id: 'Covered', label: 'Covered' },
+    { id: 'Garage', label: 'Garage' },
+  ]
+
+  const parkingFreeOptions = [
+    { id: 'street', label: '' },
+    { id: 'uncovered', label: '' },
+    { id: 'Covered', label: '' },
+    { id: 'Garage', label: '' },
+  ]
+
   const [amenities, setAmenities] = useState(initAmenities);
   const [allowDogs, setAllowDogs] = useState(false);
   const [allowCats, setAllowCats] = useState(false);
+  const [washerType, setWasherType] = useState('');
+  const [dryerType, setDryerType] = useState('');
+  const [parkingType, setParkingType] = useState([]);
+  const [parkingIsFree, setParkingIsFree] = useState([]);
   const { user } = useUser();
 
 
@@ -95,6 +108,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     //   userId: user?.id,
     // };
     // handleListingCreation(tempDetails);
+
   };
 
   const handleCheck = (id: string) => {
@@ -107,6 +121,31 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
       return tempArray;
     });
   };
+
+  const handleParkingSelection = (id: string) => {
+    setParkingType((prevParkingType) => {
+      if (prevParkingType.includes(id)) {
+        // If the id exists, remove it from the array
+        return prevParkingType.filter((type) => type !== id);
+      } else {
+        // If the id does not exist, add it to the array
+        return [...prevParkingType, id];
+      }
+    });
+  };
+
+  const handleParkingIsFreeSelection = (id: string) => {
+    setParkingIsFree((prevParkingIsFree) => {
+      if (prevParkingIsFree.includes(id)) {
+        // If the id exists, remove it from the array
+        return prevParkingIsFree.filter((type) => type !== id);
+      } else {
+        // If the id does not exist, add it to the array
+        return [...prevParkingIsFree, id];
+      }
+    });
+  };
+
 
   return (
     <>
@@ -123,10 +162,79 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Laundry</h3>
-      <div className="flex justify-evenly">
-        <BrandRadio options={laundryOptions} radioLabel="Washer" vertical />
-        <BrandRadio options={laundryOptions} radioLabel="Dryer" vertical />
+      <div className="flex justify-evenly mb-5">
+        <BrandRadio options={laundryOptions} setSelectedValue={setWasherType} selectedValue={washerType} radioLabel="Washer" vertical />
+        <BrandRadio options={laundryOptions} setSelectedValue={setDryerType} selectedValue={dryerType} radioLabel="Dryer" vertical />
+      </div>
 
+      <h3 className="text-center text-2xl mb-5 border-b-2">Parking</h3>
+      <div className="flex w-4/5 mb-2  mx-auto justify-evenly">
+        <div className="flex-col">
+          <h4 className="text-center text-xl font-semibold border-b-2">Type</h4>
+          <CheckboxDemo
+            isChecked={parkingType.includes('streetParking')}
+            justifyDirection="end"
+            label="Street"
+            handleChange={handleParkingSelection}
+            details={{ id: 'streetParking', label: 'Street', isRequired: parkingType.includes('streetParking') }}
+          />
+          <CheckboxDemo
+            isChecked={parkingType.includes('coveredParking')}
+            justifyDirection="end"
+            label="Covered"
+            handleChange={handleParkingSelection}
+            details={{ id: 'coveredParking', label: 'Covered', isRequired: parkingType.includes('coveredParking') }}
+          />
+          <CheckboxDemo
+            isChecked={parkingType.includes('uncoveredParking')}
+            justifyDirection="end"
+            label="Uncovered"
+            handleChange={handleParkingSelection}
+            details={{ id: 'uncoveredParking', label: 'Uncovered', isRequired: parkingType.includes('uncoveredParking') }}
+          />
+          <CheckboxDemo
+            isChecked={parkingType.includes('garageParking')}
+            justifyDirection="end"
+            label="Garage"
+            handleChange={handleParkingSelection}
+            details={{ id: 'garageParking', label: 'Garage', isRequired: parkingType.includes('garageParking') }}
+          />
+        </div>
+        <div className="flex-col">
+          <h4 className="text-center text-xl font-semibold border-b-2">Free?</h4>
+          <CheckboxDemo
+            label="Street Free"
+            checkOnLeft
+            isChecked={parkingIsFree.includes('streetFree')}
+            handleChange={handleParkingIsFreeSelection}
+            details={{ id: 'streetFree', label: 'Street Free', isRequired: parkingFreeOptions.includes('streetFree') }}
+            disabled={!parkingType.includes('streetParking')}
+          />
+          <CheckboxDemo
+            label="Covered Free"
+            checkOnLeft
+            isChecked={parkingIsFree.includes('coveredFree')}
+            handleChange={handleParkingIsFreeSelection}
+            details={{ id: 'coveredFree', label: 'Covered Free', isRequired: parkingFreeOptions.includes('coveredFree') }}
+            disabled={!parkingType.includes('coveredParking')}
+          />
+          <CheckboxDemo
+            label="Uncovered Free"
+            checkOnLeft
+            isChecked={parkingIsFree.includes('uncoveredFree')}
+            handleChange={handleParkingIsFreeSelection}
+            details={{ id: 'uncoveredFree', label: 'Uncovered Free', isRequired: parkingFreeOptions.includes('uncoveredFree') }}
+            disabled={!parkingType.includes('uncoveredParking')}
+          />
+          <CheckboxDemo
+            label="Garage Free"
+            checkOnLeft
+            isChecked={parkingIsFree.includes('garageFree')}
+            handleChange={handleParkingIsFreeSelection}
+            details={{ id: 'garageFree', label: 'Garage Free', isRequired: parkingFreeOptions.includes('garageFree') }}
+            disabled={!parkingType.includes('garageParking')}
+          />
+        </div>
       </div>
 
       <div className="card  grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5">

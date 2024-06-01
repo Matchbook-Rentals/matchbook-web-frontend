@@ -65,6 +65,7 @@ export default function PropertyCarousel({
       className="w-1/2 h-1/2 m-auto"
       opts={{ watchDrag: false }}
       setApi={setApi}
+    // keyboardControls={false}
     >
       <CarouselContent>
         <CarouselItem>

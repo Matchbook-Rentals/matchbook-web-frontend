@@ -19,6 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
+  keyboardControls?: boolean
 }
 
 type CarouselContextProps = {
@@ -54,6 +55,7 @@ const Carousel = React.forwardRef<
       plugins,
       className,
       children,
+      keyboardControls = true, // default to true
       ...props
     },
     ref
@@ -87,6 +89,9 @@ const Carousel = React.forwardRef<
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (!keyboardControls) {
+          return
+        }
         if (event.key === "ArrowLeft") {
           event.preventDefault()
           scrollPrev()
@@ -95,7 +100,7 @@ const Carousel = React.forwardRef<
           scrollNext()
         }
       },
-      [scrollPrev, scrollNext]
+      [scrollPrev, scrollNext, keyboardControls]
     )
 
     React.useEffect(() => {
