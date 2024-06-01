@@ -77,7 +77,22 @@ const Carousel = React.forwardRef<
 
       setCanScrollPrev(api.canScrollPrev())
       setCanScrollNext(api.canScrollNext())
+      manageFocus(api)
     }, [])
+
+    const manageFocus = (api: CarouselApi) => {
+      const slides = api.slideNodes()
+      const currentSlide = api.selectedScrollSnap()
+
+      slides.forEach((slide, index) => {
+        const focusableElements = slide.querySelectorAll(
+          'a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+        )
+        focusableElements.forEach(el => {
+          el.setAttribute("tabindex", index === currentSlide ? "0" : "-1")
+        })
+      })
+    }
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev()
