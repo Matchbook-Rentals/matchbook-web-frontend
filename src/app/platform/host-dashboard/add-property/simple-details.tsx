@@ -20,10 +20,18 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
     squareFootage: false
   });
 
+  const [bedTypes, setBedTypes] = useState<Array<string>>(Array(propertyDetails.roomCount).fill(''));
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: keyof Listing) => {
     const value = event.target.value;
     setPropertyDetails(prev => ({ ...prev, [field]: Number(value) }));
     setErrors(prev => ({ ...prev, [field]: value === '' }));
+  };
+
+  const handleBedTypeChange = (index: number, value: string) => {
+    const newBedTypes = [...bedTypes];
+    newBedTypes[index] = value;
+    setBedTypes(newBedTypes);
   };
 
   const handleNext = () => {
@@ -35,6 +43,8 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
     setErrors(newErrors);
     const isValid = !Object.values(newErrors).includes(true); // Check if all errors are false
     if (isValid) {
+      // Optionally, you could add the bed types to the propertyDetails here before proceeding
+      setPropertyDetails(prev => ({ ...prev, bedTypes }));
       goToNext();
     }
   };
@@ -72,11 +82,20 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
         </div>
         {propertyDetails.furnished && propertyDetails.roomCount > 0 && (
           <div className="mt-4">
-            {Array.from({ length: propertyDetails.roomCount }, (_, index) => (
-              <BedTypeSelect key={index} bedroomIndex={index + 1} />
-            ))}
+            <h2 className="text-lg font-semibold text-center border-b pb-2 mb-4">Bed Types</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Array.from({ length: propertyDetails.roomCount }, (_, index) => (
+                <BedTypeSelect
+                  key={index}
+                  bedroomIndex={index + 1}
+                  selectedBedType={bedTypes[index]}
+                  setSelectedBedType={(value) => handleBedTypeChange(index, value)}
+                />
+              ))}
+            </div>
           </div>
         )}
+
       </div>
       <div className="flex gap-2 justify-center mt-5 p-1">
         <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
