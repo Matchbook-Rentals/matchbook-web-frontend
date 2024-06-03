@@ -62,7 +62,7 @@ export default function PropertyCarousel({
 
   return (
     <Carousel
-      className="w-1/2 h-1/2 m-auto"
+      className="lg:w-1/2 h-1/2 m-auto"
       opts={{ watchDrag: false }}
       setApi={setApi}
     // keyboardControls={false}
@@ -116,6 +116,7 @@ export default function PropertyCarousel({
         <CarouselItem>
           <Summary
             propertyDetails={propertyDetails}
+            setPropertyDetails={setPropertyDetails}
             handleListingCreation={handleListingCreation}
             goToPrevious={goToPrevious}
           />
