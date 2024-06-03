@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from "@/app/utils/uploadthing";
@@ -32,6 +32,15 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
   const [dragging, setDragging] = React.useState<ListingImage | null>(null);
   const [over, setOver] = React.useState({ img: '', activeHalf: '' });
+  const [groupingCategories, setGroupingCategories] = React.useState<string[]>([]);
+
+  useEffect(() => {
+    const initialCategories = ['unassigned'];
+    for (let i = 1; i <= propertyDetails.roomCount; i++) {
+      initialCategories.push(`Bedroom ${i}`);
+    }
+    setGroupingCategories(initialCategories);
+  }, [propertyDetails.roomCount]);
 
   const defaultListingImage: ListingImage = {
     id: '',
@@ -126,14 +135,14 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         className="p-0 mt-5"
         appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
-      <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging} />
+      {/* <ImageGrouping listingImages={listingImages} onDragStart={handleDragStart} handleDrop={handleDrop} over={over} setOver={setOver} dragging={dragging} /> */}
 
-      {Array.from({ length: propertyDetails.roomCount }).map((_, idx) => (
+      {groupingCategories.map((category, idx) => (
         <ImageGrouping
-          key={`Bedroom ${idx + 1}`}
-          listingImages={listingImages.filter(img => img?.category === `Bedroom ${idx + 1}`)}
+          key={category}
+          listingImages={listingImages.filter(img => img?.category === category)}
           onDragStart={handleDragStart}
-          groupingCategory={`Bedroom ${idx + 1}`}
+          groupingCategory={category}
           handleDrop={handleDrop}
           over={over}
           setOver={setOver}
