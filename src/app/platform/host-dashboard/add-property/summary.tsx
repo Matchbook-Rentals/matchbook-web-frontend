@@ -3,7 +3,7 @@ import React from 'react';
 import { CheckboxDemo } from '../../preferences/custom-checkbox';
 
 interface PropertyDetails {
-    [key: string]: string | number | null | undefined;  // Allowing for null or undefined to handle them explicitly
+    [key: string]: string | number | null | undefined | boolean;  // Allowing for null or undefined to handle them explicitly
 }
 
 interface SummaryProps {
@@ -35,6 +35,11 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
                 <CheckboxDemo label="Townhouse" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, category: 'townhouse' })} isChecked={propertyDetails.category === 'townhouse'} details={{ id: 'townhouse' }} />
                 <CheckboxDemo label="Apartment" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, category: 'apartment' })} isChecked={propertyDetails.category === 'apartment'} details={{ id: 'apartment' }} />
                 <CheckboxDemo label="Single Room" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, category: 'single_room' })} isChecked={propertyDetails.category === 'single_room'} details={{ id: 'singleRoom' }} />
+            </div>
+            <h3 className='text-lg text-center'>Furnished?</h3>
+            <div className="flex scale-75 justify-center  w-full">
+                <CheckboxDemo label="Furnished" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, furnished: !propertyDetails.furnished })} isChecked={propertyDetails.furnished} details={{ id: 'apartment' }} />
+                <CheckboxDemo label="Unfurnished" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, furnished: !propertyDetails.furnished })} isChecked={!propertyDetails.furnished} details={{ id: 'singleRoom' }} />
             </div>
             {isEmpty ? (
                 <p className="text-gray-500">No property details available.</p>
