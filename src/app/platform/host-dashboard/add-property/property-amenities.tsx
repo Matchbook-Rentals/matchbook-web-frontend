@@ -77,38 +77,45 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     console.log("CURR Details -->", propertyDetails);
   };
 
-  const handleSubmit = () => {
+  const handleNext = () => {
     console.log(amenities);
-    // setPropertyDetails((prev) => {
-    //   // Updated method name
-    //   return { ...prev,  };
-    // });
+    setPropertyDetails(prev => {
+      const newState = { ...prev };
 
-    for (let item of amenities) {
-      setPropertyDetails((prev) => {
+      if (washerType) {
+        newState[washerType] = true;
+      }
+      if (dryerType) {
+        newState[dryerType] = true;
+      }
+      if (allowDogs) {
+        newState['allowDogs'] = true;
+      }
+      if (allowCats) {
+        newState['allowCats'] = true;
+      }
+
+
+      amenities.forEach(item => {
         if (item.isRequired) {
-          return { ...prev, [item.id]: item.isRequired }
+          newState[item.id] = item.isRequired;
         }
-        return { ...prev }
-      })
-    }
+      });
+
+      // Add each parking type to the newState object with a value of true
+      parkingType.forEach(type => {
+        newState[type] = true;
+      });
+
+      // Add each free parking type to the newState object with a value of true
+      parkingIsFree.forEach(type => {
+        newState[type] = true;
+      });
+
+      return newState;
+    });
 
     goToNext();
-
-    // const trueAmenities = amenities.filter((item) => item.isRequired);
-    // const tempAmenities = {};
-
-    // trueAmenities.forEach((item) => {
-    //   tempAmenities[item.id] = item.isRequired;
-    // });
-
-    // const tempDetails = {
-    //   ...propertyDetails,
-    //   ...tempAmenities,
-    //   userId: user?.id,
-    // };
-    // handleListingCreation(tempDetails);
-
   };
 
   const handleCheck = (id: string) => {
@@ -259,9 +266,9 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         </button>
         <button
           className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black "
-          onClick={handleSubmit}
+          onClick={handleNext}
         >
-          SUBMIT
+          NEXT
         </button>
       </div>
     </>
