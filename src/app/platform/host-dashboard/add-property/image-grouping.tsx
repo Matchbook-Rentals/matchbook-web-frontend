@@ -76,9 +76,9 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
               autoFocus
             />
           ) : (
-            <div>
+            <div className='flex justify-between'>
               {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
-              <FaPencilAlt className='text-sm' onClick={handlePencilClick} />
+              <FaPencilAlt className='text-sm ml-2' onClick={handlePencilClick} />
             </div>
           )}
         </div>
