@@ -9,8 +9,8 @@ import ImageGrouping from "./image-grouping";
 import { motion } from 'framer-motion';
 
 interface InfoFormProps {
-  propertyDetails: { roomCount: number };
-  setPropertyDetails: (details: { roomCount: number }) => void;
+  propertyDetails: any; // Adjusted to any to include images
+  setPropertyDetails: (details: any) => void;
   goToNext: () => void;
   goToPrevious: () => void;
 }
@@ -31,7 +31,6 @@ interface UploadData {
 const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setPropertyDetails, goToNext, goToPrevious }) => {
   const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
   const [dragging, setDragging] = React.useState<ListingImage | null>(null);
-  // const [over, setOver] = React.useState('');
   const [over, setOver] = React.useState({ img: '', activeHalf: '' });
 
   const defaultListingImage: ListingImage = {
@@ -39,7 +38,6 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     url: '',
     category: 'unassigned',
     rank: 0,
-    // Add default values for other properties if needed
   };
 
   const handleUploadFinish = (res: UploadData[]) => {
@@ -66,7 +64,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     return updatedArray;
   }
 
-  const insertToNewCategory = (arr: ListingImage, newCategory: string, insertionRank: number) => {
+  const insertToNewCategory = (arr: ListingImage[], newCategory: string, insertionRank: number) => {
     let newCategoryArray = arr.filter(img => img.category === newCategory);
     let restOfArray = arr.filter(img => img.category !== newCategory);
     let arrayWithSpaceAtRank = newCategoryArray.map((img: ListingImage, idx: number) => {
@@ -88,15 +86,12 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
   }
 
   const handleDrop = (newCategory: string) => {
-    // Condition occurs when ????
     if (!over.img) return;
-    // Condition occurs when image is dropped onto itself
     if (over.img.id === dragging.id && newCategory === dragging?.category) return;
     const overImage = over.img;
     const activeHalf = over.activeHalf;
     let insertionRank = overImage.rank;
 
-    // Condition occurs when dragged into new category without contacting another image
     if (over.img.id === dragging.id && newCategory !== dragging?.category) {
       insertionRank = listingImages.filter(img => img.category === newCategory).length + 1;
     }
@@ -110,45 +105,17 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     let removedFromOldCategory = removeImgFromOldCategory(dragging);
     let insertedAtNewCategory = insertToNewCategory(removedFromOldCategory, newCategory, insertionRank);
 
-
     setListingImages(insertedAtNewCategory);
     setDragging({ id: null, rank: null, category: null, url: null, listingId: null });
-
-
-
-    // // Update category for the dragged image
-    // const tempListingImages = listingImages.map(img => {
-    //   if (img.id !== dragging.id) {
-    //     return img;
-    //   }
-
-    //   img.category = newCategory
-    //   return {
-    //     ...img,
-    //     category: newCategory
-    //   };
-    // });
-
-    // console.log(tempListingImages)
-
-    // // Assign ranks within the new category
-    // const maxRank = tempListingImages.reduce((max, img) => (img.category === newCategory ? Math.max(max, img.rank || 0) : max), 0);
-
-    // const updatedListingImages = tempListingImages.map(img => {
-    //   if (img.id === dragging.id) {
-    //     return {
-    //       ...img,
-    //       rank: maxRank + 1 // Increment the max rank found in the category
-    //     };
-    //   }
-    //   return img;
-    // });
-    // setListingImages(updatedListingImages);
-    // setDragging({ id: null, rank: null, category: null, url: null, listingId: null });
-
   };
 
-
+  const handleNext = () => {
+    setPropertyDetails({
+      ...propertyDetails,
+      listingImages
+    });
+    goToNext();
+  };
 
   return (
     <>
@@ -174,11 +141,10 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         />
       ))}
 
-
       <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
       <div className="flex gap-2 justify-center mt-5 p-1">
         <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
-        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToNext}>NEXT</button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={handleNext}>NEXT</button>
       </div>
     </>
   );
