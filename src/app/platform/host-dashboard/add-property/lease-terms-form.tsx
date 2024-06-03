@@ -18,6 +18,9 @@ interface PropertyDetails {
   requireBackgroundCheck: boolean;
   depositSize: number;
   minimumLeaseLength: number;
+  maximumLeaseLength: number;
+  minimumLeasePrice: number;
+  maximumLeasePrice: number;
 }
 
 export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDetails }: ComponentProps) {
@@ -27,7 +30,15 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
   const [maximumLeaseTerms, setMaximumLeaseTerms] = useState({ length: null, price: null })
 
   const handleNext = () => {
-    setPropertyDetails(prev => ({ ...prev, depositSize, minimumLeaseLength, requireBackgroundCheck }))
+    setPropertyDetails(prev => ({
+      ...prev,
+      depositSize,
+      minimumLeaseLength: minimumLeaseTerms.length,
+      maximumLeaseLength: maximumLeaseTerms.length,
+      minimumLeasePrice: minimumLeaseTerms.price,
+      maximumLeasePrice: maximumLeaseTerms.price,
+      requireBackgroundCheck
+    }));
     goToNext();
   }
 
@@ -70,9 +81,10 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
       </form>
       <div className="flex gap-2 justify-center mt-5 p-1">
         <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
-        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToNext}>NEXT</button>
+        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={handleNext}>NEXT</button>
       </div>
     </div>
   );
 
 }
+
