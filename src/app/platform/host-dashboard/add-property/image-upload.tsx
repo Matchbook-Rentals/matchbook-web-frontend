@@ -51,7 +51,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const tempImageArray = res.map((upload, idx) => ({ url: upload.url, id: upload.key, category: 'unassigned', rank: idx }));
+    const tempImageArray = res.map((upload, idx) => ({ url: upload.url, id: upload.key, category: groupingCategories[0], rank: idx }));
     setListingImages(prev => [...prev, ...tempImageArray]);
   }
 
@@ -118,6 +118,25 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
     setDragging({ id: null, rank: null, category: null, url: null, listingId: null });
   };
 
+  const handleChangeCategory = (idx: number, newCategory: string) => {
+    // Update the groupingCategories array
+    setGroupingCategories(prev => {
+      const updatedCategory = [...prev];
+      updatedCategory[idx] = newCategory;
+      return updatedCategory;
+    });
+
+    // Update the listingImages array
+    setListingImages(prevImages => {
+      return prevImages.map(img => {
+        if (img.category === groupingCategories[idx]) {
+          return { ...img, category: newCategory };
+        }
+        return img;
+      });
+    });
+  };
+
   const handleNext = () => {
     setPropertyDetails({
       ...propertyDetails,
@@ -147,6 +166,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
           over={over}
           setOver={setOver}
           dragging={dragging}
+          handleChangeCategory={(newCategory: string) => handleChangeCategory(idx, newCategory)}
         />
       ))}
 
@@ -160,3 +180,4 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
 };
 
 export default ImageUploadForm;
+

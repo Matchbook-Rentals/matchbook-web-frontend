@@ -14,11 +14,14 @@ interface ImageGroupingProps {
   over: { id: string, activeHalf: string };
   setOver: (over: { img: ListingImage, activeHalf: string } | null) => void;
   dragging: ListingImage;
+  handleChangeCategory: (newCategory: string) => void;
 }
 
-const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging }) => {
+const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging, handleChangeCategory }) => {
   const [dragCounter, setDragCounter] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState(groupingCategory);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -46,16 +49,39 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     setOver({ img, activeHalf: half });
   }, [setOver]);
 
+  const handlePencilClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategoryName(e.target.value);
+  };
+
+  const handleCategoryBlur = () => {
+    setIsEditing(false);
+    handleChangeCategory(newCategoryName); // Assuming idx is the first image in the list
+  };
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
       <div className="flex text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer" >
         <div className='flex gap-2'>
-
-          {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
-          <FaPencilAlt className='text-sm' onClick={() => alert('PENCIL')} />
+          {isEditing ? (
+            <input
+              type="text"
+              value={newCategoryName}
+              onChange={handleCategoryChange}
+              onBlur={handleCategoryBlur}
+              className="border-b-2 border-gray-400 outline-none"
+              autoFocus
+            />
+          ) : (
+            <div>
+              {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
+              <FaPencilAlt className='text-sm' onClick={handlePencilClick} />
+            </div>
+          )}
         </div>
-        {/* {over.img?.id}, {over.activeHalf}, {over.img?.rank} */}
         <button onClick={toggleOpen} className='hover:bg-slate-300 px-3 transition transition-duration-400 font-bold text-2xl'>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
@@ -78,7 +104,6 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
           className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-300 min-h-32"
         >
           {filteredAndSortedImages.map((img) => (
-            // COnditionally render a placeholder element if over.id !== dragging and over.id === img.id
             <div key={img.id} className="relative w-full items-center flex">
               <motion.div
                 layout
