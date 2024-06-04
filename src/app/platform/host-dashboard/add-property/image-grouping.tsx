@@ -64,7 +64,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
-      <div className="flex text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer" >
+      <div className="flex rounded-lg  text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer" >
         <div className='flex gap-2'>
           {isEditing ? (
             <input
@@ -101,7 +101,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
         <div
           onDrop={() => handleDrop(groupingCategory)}
           onDragOver={(e) => e.preventDefault()}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-300 min-h-32"
+          className="grid grid-cols-2 rounded-lg lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-300 min-h-32"
         >
           {filteredAndSortedImages.map((img) => (
             <div key={img.id} className="relative w-full items-center flex">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListingImage } from "@prisma/client";
 import ImageGrouping from '../image-grouping';
+import { Button } from '@/components/ui/button';
 
 interface ImageDragDropProps {
   listingImages: ListingImage[];
@@ -108,6 +109,7 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ listingImages, setListing
           handleChangeCategory={(newCategory: string) => handleChangeCategory(idx, newCategory)}
         />
       ))}
+      <Button onClick={() => setGroupingCategories([...groupingCategories, `Room ${groupingCategories.length + 1}`])}>Add Room</Button>
     </>
   );
 };
