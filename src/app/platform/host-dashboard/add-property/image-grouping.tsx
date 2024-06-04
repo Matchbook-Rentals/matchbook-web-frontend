@@ -23,6 +23,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
   const [isOpen, setIsOpen] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState(groupingCategory);
+  const [dropPosition, setDropPosition] = useState<{ img: ListingImage, half: string } | null>(null);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -48,13 +49,14 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     const { offsetX, target } = e.nativeEvent;
     const half = offsetX < (target as HTMLElement).offsetWidth / 2 ? 'left' : 'right';
     setOver({ img, activeHalf: half });
+    setDropPosition({ img, half });
   }, [setOver]);
 
   const handleDragEnd = useCallback(() => {
     setOver({ img: '', activeHalf: '' });
     setDragging(null);
+    setDropPosition(null);
   }, [setOver, setDragging]);
-
 
   const handleDragLeaveImage = useCallback(() => {
     const lastImage = filteredAndSortedImages[filteredAndSortedImages.length - 1];
@@ -130,7 +132,12 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 onDragLeave={handleDragLeaveImage}
                 transition={{ duration: 0.3 }}
               >
-                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-500 ${dragging?.id === img?.id && 'opacity-50'}`} />
+                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-400 ${over?.img?.id === img.id && over?.activeHalf === 'left' ? 'border-l-4 border-blue-500' : ''} ${over?.img?.id === img.id && over?.activeHalf === 'right' ? 'border-r-4 border-blue-500' : ''}`} />
+                {dropPosition?.img?.id === img?.id && (
+                  <div className={`drop-indicator ${dropPosition?.half}`} style={{ borderColor: 'purple', borderWidth: '2px', [dropPosition?.half]: 0 }}>
+                    <div className="drop-indicator-line" />
+                  </div>
+                )}
               </motion.div>
             </div>
           ))}
