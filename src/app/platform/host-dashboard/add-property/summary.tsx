@@ -1,14 +1,16 @@
 // components/Summary.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropertyTypeCheckboxes from './(summary-components)/property-type-checkboxes';
 import FurnishedCheckboxes from './(summary-components)/furnished-checkboxes';
 import AddressInput from './(summary-components)/address-input';
 import InputFields from './(summary-components)/input-fields';
-import ImageGrouping from './image-grouping';
+import ImageDragDrop from './(image-components)/image-drag-drop';
+import { ListingImage } from '@prisma/client';
 
 interface PropertyDetails {
     locationString: string | null;
-    [key: string]: string | number | null | undefined | boolean;  // Allowing for null or undefined to handle them explicitly
+    listingImages?: ListingImage[];
+    [key: string]: string | number | null | undefined | boolean | ListingImage[];  // Allowing for null or undefined to handle them explicitly
 }
 
 interface SummaryProps {
@@ -19,6 +21,20 @@ interface SummaryProps {
 }
 
 const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, handleListingCreation, goToPrevious }) => {
+    const [groupingCategories, setGroupingCategories] = React.useState<string[]>([]); // Initialize state
+    const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
+
+    useEffect(() => {
+        setListingImages(propertyDetails.listingImages || []);
+        const initialCategories: string[] = [];
+        propertyDetails.listingImages?.forEach(image => {
+            if (image.category && !initialCategories.includes(image.category)) {
+                initialCategories.push(image.category);
+            }
+        });
+        setGroupingCategories(initialCategories);
+    }, [propertyDetails.listingImages]);
+
     // Check if propertyDetails is empty
     const isEmpty = Object.keys(propertyDetails).length === 0;
 
@@ -37,26 +53,17 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
             <PropertyTypeCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center'>Furnished?</h3>
             <FurnishedCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
-            <h3 className='text-lg text-center'>Furnished?</h3>
+            <h3 className='text-lg text-center'>Address</h3>
             <AddressInput propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <InputFields propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center'>Photos</h3>
             {propertyDetails.listingImages && propertyDetails.listingImages.length > 0 && (
-                <div>
-                    {Array.from(new Set(propertyDetails.listingImages.map(img => img.category))).map((category, idx) => (
-                        <ImageGrouping
-                            key={idx}
-                            listingImages={propertyDetails.listingImages.filter(img => img.category === category)}
-                            onDragStart={(id) => console.log(`Drag start: ${id}`)}
-                            handleDrop={(category) => console.log(`Dropped in category: ${category}`)}
-                            over={{ id: '', activeHalf: '' }}
-                            setOver={(over) => console.log(`Set over: ${over}`)}
-                            dragging={null}
-                            handleChangeCategory={(newCategory) => console.log(`Change category to: ${newCategory}`)}
-                            groupingCategory={category}
-                        />
-                    ))}
-                </div>
+                <ImageDragDrop
+                    listingImages={listingImages}
+                    setListingImages={setListingImages}
+                    groupingCategories={groupingCategories} // Pass state
+                    setGroupingCategories={setGroupingCategories}
+                />
             )}
             {isEmpty ? (
                 <p className="text-gray-500">No property details available.</p>
