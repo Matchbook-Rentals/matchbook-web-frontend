@@ -49,14 +49,14 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
     return (
         <div className="bg-white shadow-md rounded-lg p-5 my-5">
             <h2 className="text-lg font-semibold text-gray-700 mb-4">Property Details</h2>
-            <h3 className='text-lg text-center'>Property Type</h3>
+            <h3 className='text-lg text-center mb-2'>Property Type</h3>
             <PropertyTypeCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
-            <h3 className='text-lg text-center'>Furnished?</h3>
+            <h3 className='text-lg text-center my-2'>Furnished?</h3>
             <FurnishedCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
-            <h3 className='text-lg text-center'>Address</h3>
+            <h3 className='text-lg text-center my-2'>Address</h3>
             <AddressInput propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <InputFields propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
-            <h3 className='text-lg text-center'>Photos</h3>
+            <h3 className='text-lg text-center my-2'>Photos</h3>
             {propertyDetails.listingImages && propertyDetails.listingImages.length > 0 && (
                 <ImageDragDrop
                     listingImages={listingImages}
