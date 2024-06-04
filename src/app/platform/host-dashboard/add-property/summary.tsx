@@ -1,6 +1,8 @@
 // components/Summary.tsx
 import React from 'react';
+
 import { CheckboxDemo } from '../../preferences/custom-checkbox';
+import AddressSuggest from './address-suggest';
 
 interface PropertyDetails {
     [key: string]: string | number | null | undefined | boolean;  // Allowing for null or undefined to handle them explicitly
@@ -40,6 +42,30 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
             <div className="flex scale-75 justify-center  w-full">
                 <CheckboxDemo label="Furnished" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, furnished: !propertyDetails.furnished })} isChecked={propertyDetails.furnished} details={{ id: 'apartment' }} />
                 <CheckboxDemo label="Unfurnished" checkOnLeft handleChange={() => setPropertyDetails({ ...propertyDetails, furnished: !propertyDetails.furnished })} isChecked={!propertyDetails.furnished} details={{ id: 'singleRoom' }} />
+            </div>
+            <h3 className='text-lg text-center'>Furnished?</h3>
+            <div className='scale-75 flex justify-center mx-auto'>
+                <div id='property-address' className='w-full flex justify-center border-2 rounded-full py-3 px-6'>
+                    <AddressSuggest initialValue={propertyDetails.locationString} setPropertyDetails={setPropertyDetails} />
+                </div>
+            </div>
+            <div className="flex justify-between">
+                {/* Redo these inputs using ShadCN */}
+                <div className="flex flex-col items-center mb-4">
+                    <label htmlFor="bedrooms" className="font-medium">Bedrooms:</label>
+                    <input id="bedrooms" type="number" placeholder="Bedrooms" value={propertyDetails.roomCount} onChange={(e) => setPropertyDetails({ ...propertyDetails, roomCount: e.target.value })} className="rounded-full text-center" />
+                </div>
+                <div className="flex flex-col items-center mb-4">
+                    <label htmlFor="bathrooms" className="font-medium">Bathrooms:</label>
+                    <input id="bathrooms" type="number" placeholder="Bathrooms" value={propertyDetails.bathroomCount} onChange={(e) => setPropertyDetails({ ...propertyDetails, bathroomCount: e.target.value })} className="rounded-full text-center" />
+                </div>
+                <div className="flex flex-col items-center mb-4">
+                    <label htmlFor="squareFootage" className="font-medium">Square Footage:</label>
+                    <input id="squareFootage" type="number" placeholder="1000 sq ft." value={propertyDetails.squareFootage} onChange={(e) => setPropertyDetails({ ...propertyDetails, squareFootage: e.target.value })} className="rounded-full text-center" />
+                </div>
+                {/* <input type="number" placeholder="Bedrooms" value={propertyDetails.roomCount} onChange={(e) => setPropertyDetails({ ...propertyDetails, roomCount: e.target.value })} />
+                <input type="number" placeholder="Bathrooms" value={propertyDetails.bathroomCount} onChange={(e) => setPropertyDetails({ ...propertyDetails, bathroomCount: e.target.value })} />
+                <input type="number" placeholder="1000 sq ft." value={propertyDetails.squareFootage} onChange={(e) => setPropertyDetails({ ...propertyDetails, squareFootage: e.target.value })} /> */}
             </div>
             {isEmpty ? (
                 <p className="text-gray-500">No property details available.</p>
