@@ -55,6 +55,12 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     setDragging(null);
   }, [setOver, setDragging]);
 
+
+  const handleDragLeaveImage = useCallback(() => {
+    const lastImage = filteredAndSortedImages[filteredAndSortedImages.length - 1];
+    setOver({ img: lastImage, activeHalf: 'right' });
+  }, [filteredAndSortedImages, setOver]);
+
   const handlePencilClick = () => {
     setIsEditing(true);
   };
@@ -121,6 +127,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 onDragEnter={() => handleDragEnter(img)}
                 onClick={() => alert('click not drag')}
                 onDragEnd={handleDragEnd}
+                onDragLeave={handleDragLeaveImage}
                 transition={{ duration: 0.3 }}
               >
                 <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-500 ${dragging?.id === img?.id && 'opacity-50'}`} />
