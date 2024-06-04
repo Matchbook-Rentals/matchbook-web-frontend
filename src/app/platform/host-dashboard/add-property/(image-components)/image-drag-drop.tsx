@@ -52,21 +52,27 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ listingImages, setListing
   };
 
   const handleDrop = (newCategory: string) => {
-    if (!over.img) return;
-    if (over.img.id === dragging.id && newCategory === dragging?.category) return;
-    const overImage = over.img;
-    const activeHalf = over.activeHalf;
-    let insertionRank = overImage.rank;
+    if (!dragging) return;
 
-    if (over.img.id === dragging.id && newCategory !== dragging?.category) {
+    let insertionRank = 1; // Default rank for empty category
+
+    if (over.img) {
+      if (over.img.id === dragging.id && newCategory === dragging?.category) return;
+      const overImage = over.img;
+      const activeHalf = over.activeHalf;
+      insertionRank = overImage.rank;
+
+      if (over.img.id === dragging.id && newCategory !== dragging?.category) {
+        insertionRank = listingImages.filter(img => img.category === newCategory).length + 1;
+      }
+      if (activeHalf === 'right' && over.img.id !== dragging.id) {
+        insertionRank++;
+      }
+    } else {
+      // If dropping into an empty category, set the rank to the next available position
       insertionRank = listingImages.filter(img => img.category === newCategory).length + 1;
     }
-    if (!insertionRank) {
-      insertionRank = 1;
-    }
-    if (activeHalf === 'right' && over.img.id !== dragging.id) {
-      insertionRank++;
-    }
+
     setOver({ img: '', activeHalf: '' });
     let removedFromOldCategory = removeImgFromOldCategory(dragging);
     let insertedAtNewCategory = insertToNewCategory(removedFromOldCategory, newCategory, insertionRank);
@@ -96,6 +102,8 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ listingImages, setListing
 
   return (
     <>
+      <p>{dragging?.id}</p>
+      <p>{over.img?.id}, {over.activeHalf}</p>
       {groupingCategories.map((category, idx) => (
         <ImageGrouping
           key={category}
@@ -106,10 +114,11 @@ const ImageDragDrop: React.FC<ImageDragDropProps> = ({ listingImages, setListing
           over={over}
           setOver={setOver}
           dragging={dragging}
+          setDragging={setDragging}
           handleChangeCategory={(newCategory: string) => handleChangeCategory(idx, newCategory)}
         />
       ))}
-      <Button onClick={() => setGroupingCategories([...groupingCategories, `Room ${groupingCategories.length + 1}`])}>Add Room</Button>
+      <Button variant="ghost" onClick={() => setGroupingCategories([...groupingCategories, `Room ${groupingCategories.length + 1}`])}>Add Room</Button>
     </>
   );
 };

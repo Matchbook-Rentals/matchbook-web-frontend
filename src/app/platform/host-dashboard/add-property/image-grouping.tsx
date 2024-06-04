@@ -14,10 +14,11 @@ interface ImageGroupingProps {
   over: { id: string, activeHalf: string };
   setOver: (over: { img: ListingImage, activeHalf: string } | null) => void;
   dragging: ListingImage;
+  setDragging: (dragging: ListingImage | null) => void;
   handleChangeCategory: (newCategory: string) => void;
 }
 
-const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging, handleChangeCategory }) => {
+const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging, setDragging, handleChangeCategory }) => {
   const [dragCounter, setDragCounter] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -48,6 +49,11 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     const half = offsetX < (target as HTMLElement).offsetWidth / 2 ? 'left' : 'right';
     setOver({ img, activeHalf: half });
   }, [setOver]);
+
+  const handleDragEnd = useCallback(() => {
+    setOver({ img: '', activeHalf: '' });
+    setDragging(null);
+  }, [setOver, setDragging]);
 
   const handlePencilClick = () => {
     setIsEditing(true);
@@ -114,7 +120,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 onDragOver={(e) => handleDragOver(e, img)}
                 onDragEnter={() => handleDragEnter(img)}
                 onClick={() => alert('click not drag')}
-                onDragEnd={() => setOver({ img, activeHalf: '' })}
+                onDragEnd={handleDragEnd}
                 transition={{ duration: 0.3 }}
               >
                 <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-500 ${dragging?.id === img?.id && 'opacity-50'}`} />
