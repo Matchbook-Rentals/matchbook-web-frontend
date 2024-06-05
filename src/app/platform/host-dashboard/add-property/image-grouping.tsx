@@ -49,7 +49,11 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     const { offsetX, target } = e.nativeEvent;
     const half = offsetX < (target as HTMLElement).offsetWidth / 2 ? 'left' : 'right';
     setOver({ img, activeHalf: half });
-    setDropPosition({ img, half });
+    if (dragging?.id === img.id) {
+      setDropPosition(null);
+    } else {
+      setDropPosition({ img, half });
+    }
   }, [setOver]);
 
   const handleDragEnd = useCallback(() => {
@@ -61,6 +65,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
   const handleDragLeaveImage = useCallback(() => {
     const lastImage = filteredAndSortedImages[filteredAndSortedImages.length - 1];
     setOver({ img: lastImage, activeHalf: 'right' });
+    setDropPosition({ img: lastImage, half: 'right' });
   }, [filteredAndSortedImages, setOver]);
 
   const handlePencilClick = () => {
@@ -132,7 +137,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 onDragLeave={handleDragLeaveImage}
                 transition={{ duration: 0.3 }}
               >
-                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-400 ${over?.img?.id === img.id && over?.activeHalf === 'left' ? 'border-l-4 border-blue-500' : ''} ${over?.img?.id === img.id && over?.activeHalf === 'right' ? 'border-r-4 border-blue-500' : ''}`} />
+                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-400 ${dropPosition?.img?.id === img.id && dropPosition?.half === 'left' ? 'border-l-4 border-blue-500' : ''} ${dropPosition?.img?.id === img.id && dropPosition?.half === 'right' ? 'border-r-4 border-blue-500' : ''}`} />
                 {dropPosition?.img?.id === img?.id && (
                   <div className={`drop-indicator ${dropPosition?.half}`} style={{ borderColor: 'purple', borderWidth: '2px', [dropPosition?.half]: 0 }}>
                     <div className="drop-indicator-line" />
