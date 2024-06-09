@@ -38,7 +38,51 @@ export default function PropertyCarousel({
 
   // State to keep track of the current index
   const [api, setApi] = useState<CarouselApi>();
-  const [propertyDetails, setPropertyDetails] = useState({ userId: user?.id });
+  const [propertyDetails, setPropertyDetails] = useState({
+    userId: user?.id,
+    furnished: false,
+    airConditioning: false,
+    laundryFacilities: false,
+    fitnessCenter: false,
+    pool: false,
+    dishwasher: false,
+    elevator: false,
+    wheelchairAccess: false,
+    doorman: false,
+    parking: false,
+    fireplace: false,
+    wifi: false,
+    kitchen: false,
+    inUnitWasher: false,
+    inUnitDryer: false,
+    dedicatedWorkspace: false,
+    tv: false,
+    hairDryer: false,
+    iron: false,
+    heating: false,
+    washer: false,
+    dryer: false,
+    hotTub: false,
+    gym: false,
+    petsAllowed: false,
+    smokingAllowed: false,
+    eventsAllowed: false,
+    privateEntrance: false,
+    secure: false,
+    waterfront: false,
+    beachfront: false,
+    mountainView: false,
+    streetParking: false,
+    streetParkingFree: false,
+    coveredParking: false,
+    coveredParkingFree: false,
+    uncoveredParking: false,
+    uncoveredParkingFree: false,
+    garageParking: false,
+    garageParkingFree: false,
+    allowDogs: false,
+    allowCats: false,
+  });
   const router = useRouter();
 
   // Function to go to the next question/component
@@ -105,6 +149,9 @@ export default function PropertyCarousel({
           />
         </CarouselItem>
         <CarouselItem>
+          <h2 className=" text-center text-2xl my-10 font-semibold">
+            Tell us more about your properties features
+          </h2>
           <PropertyAmenitySelect
             handleListingCreation={handleListingCreation}
             goToPrevious={goToPrevious}
