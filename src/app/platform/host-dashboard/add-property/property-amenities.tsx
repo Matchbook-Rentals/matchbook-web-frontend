@@ -36,6 +36,34 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "iron", label: "Iron", isRequired: false },
   ];
 
+  const amenitiesOptions = [
+    { id: 'airConditioning', label: 'Air Conditioning', isRequired: propertyDetails.airConditioning },
+    { id: 'fitnessCenter', label: 'Fitness Center', isRequired: propertyDetails.fitnessCenter },
+    { id: 'pool', label: 'Pool', isRequired: propertyDetails.pool },
+    { id: 'dishwasher', label: 'Dishwasher', isRequired: propertyDetails.dishwasher },
+    { id: 'elevator', label: 'Elevator', isRequired: propertyDetails.elevator },
+    { id: 'wheelchairAccess', label: 'Wheelchair Access', isRequired: propertyDetails.wheelchairAccess },
+    { id: 'doorman', label: 'Doorman', isRequired: propertyDetails.doorman },
+    { id: 'parking', label: 'Parking', isRequired: propertyDetails.parking },
+    { id: 'fireplace', label: 'Fireplace', isRequired: propertyDetails.fireplace },
+    { id: 'wifi', label: 'Wifi', isRequired: propertyDetails.wifi },
+    { id: 'kitchen', label: 'Kitchen', isRequired: propertyDetails.kitchen },
+    { id: 'dedicatedWorkspace', label: 'Dedicated Workspace', isRequired: propertyDetails.dedicatedWorkspace },
+    { id: 'tv', label: 'TV', isRequired: propertyDetails.tv },
+    { id: 'hairDryer', label: 'Hair Dryer', isRequired: propertyDetails.hairDryer },
+    { id: 'iron', label: 'Iron', isRequired: propertyDetails.iron },
+    { id: 'heating', label: 'Heating', isRequired: propertyDetails.heating },
+    { id: 'hotTub', label: 'Hot Tub', isRequired: propertyDetails.hotTub },
+    { id: 'gym', label: 'Gym', isRequired: propertyDetails.gym },
+    { id: 'smokingAllowed', label: 'Smoking Allowed', isRequired: propertyDetails.smokingAllowed },
+    { id: 'eventsAllowed', label: 'Events Allowed', isRequired: propertyDetails.eventsAllowed },
+    { id: 'privateEntrance', label: 'Private Entrance', isRequired: propertyDetails.privateEntrance },
+    { id: 'secure', label: 'Secure', isRequired: propertyDetails.secure },
+    { id: 'waterfront', label: 'Waterfront', isRequired: propertyDetails.waterfront },
+    { id: 'beachfront', label: 'Beachfront', isRequired: propertyDetails.beachfront },
+    { id: 'mountainView', label: 'Mountain View', isRequired: propertyDetails.mountainView },
+  ]
+
   const washerOptions = [
     { id: 'washerInUnit', label: 'In-Unit' },
     { id: 'washerHookup', label: 'Hookup' },
@@ -69,17 +97,31 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   const [allowCats, setAllowCats] = useState(false);
   const [washerType, setWasherType] = useState('');
   const [dryerType, setDryerType] = useState('');
-  const [parkingType, setParkingType] = useState([]);
-  const [parkingIsFree, setParkingIsFree] = useState([]);
+  const [parkingType, setParkingType] = useState<string[]>([]);
+  const [parkingIsFree, setParkingIsFree] = useState<string[]>([]);
   const { user } = useUser();
 
+  const setWasherDetails: Dispatch<SetStateAction<string>> = (washerType: string) => {
+    setPropertyDetails(prev => ({
+      ...prev,
+      washerInUnit: false,
+      washerHookup: false,
+      washerNotAvailable: false,
+      washerInComplex: false,
+      [washerType]: true
+    }));
+  }
 
-
-
-
-  const handleFinish = (amenities) => {
-    console.log("CURR Details -->", propertyDetails);
-  };
+  const setDryerDetails: Dispatch<SetStateAction<string>> = (dryerType: string) => {
+    setPropertyDetails(prev => ({
+      ...prev,
+      dryerInUnit: false,
+      dryerHookup: false,
+      dryerNotAvailable: false,
+      dryerInComplex: false,
+      [dryerType]: true
+    }));
+  }
 
   const handleNext = () => {
     console.log(amenities);
@@ -123,14 +165,10 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   };
 
   const handleCheck = (id: string) => {
-    setAmenities((prev) => {
-      let tempArray = prev.map((item) => {
-        if (item.id !== id) return item;
-        item = { ...item, isRequired: !item.isRequired };
-        return item;
-      });
-      return tempArray;
-    });
+    setPropertyDetails(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
   const handleParkingSelection = (id: string) => {
@@ -157,29 +195,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     });
   };
 
-  const setWasherDetails = (washerType: string) => {
-    setPropertyDetails(prev => ({
-      ...prev,
-      washerInUnit: false,
-      washerHookup: false,
-      washerNotAvailable: false,
-      washerInComplex: false,
-      [washerType]: true
-    }));
-  }
-
-  const setDryerDetails = (dryerType: string) => {
-    setPropertyDetails(prev => ({
-      ...prev,
-      dryerInUnit: false,
-      dryerHookup: false,
-      dryerNotAvailable: false,
-      dryerInComplex: false,
-      [dryerType]: true
-    }));
-  }
-
-
   return (
     <>
 
@@ -193,8 +208,8 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Laundry</h3>
       <div className="flex justify-evenly mb-5">
-        <BrandRadio options={washerOptions} setSelectedValue={setWasherDetails} selectedValue={propertyDetails.washerInUnit ? 'washerInUnit' : propertyDetails.washerHookup ? 'washerHookup' : propertyDetails.washerNotAvailable ? 'washerNotAvailable' : propertyDetails.washerInComplex ? 'washerInComplex' : ''} radioLabel="Washer" vertical />
-        <BrandRadio options={dryerOptions} setSelectedValue={setDryerDetails} selectedValue={propertyDetails.dryerInUnit ? 'dryerInUnit' : propertyDetails.dryerHookup ? 'dryerHookup' : propertyDetails.dryerNotAvailable ? 'dryerNotAvailable' : propertyDetails.dryerInComplex ? 'dryerInComplex' : ''} radioLabel="Dryer" vertical />
+        <BrandRadio name="washer" options={washerOptions} setSelectedValue={setWasherDetails} selectedValue={propertyDetails.washerInUnit ? 'washerInUnit' : propertyDetails.washerHookup ? 'washerHookup' : propertyDetails.washerNotAvailable ? 'washerNotAvailable' : propertyDetails.washerInComplex ? 'washerInComplex' : ''} radioLabel="Washer" vertical />
+        <BrandRadio name="dryer" options={dryerOptions} setSelectedValue={setDryerDetails} selectedValue={propertyDetails.dryerInUnit ? 'dryerInUnit' : propertyDetails.dryerHookup ? 'dryerHookup' : propertyDetails.dryerNotAvailable ? 'dryerNotAvailable' : propertyDetails.dryerInComplex ? 'dryerInComplex' : ''} radioLabel="Dryer" vertical />
       </div>
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Parking</h3>
@@ -267,8 +282,9 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         </div>
       </div>
 
-      <div className="card  grid grid-cols-2 w-full mx-auto mt-5 rounded-2xl py-5 pl-5">
-        {amenities.map((item, idx) => (
+      <h3 className="text-center text-2xl my-5 border-b-2">Other Amenities</h3>
+      <div className="card  grid grid-cols-2 w-full mx-auto rounded-2xl py-2 pl-5">
+        {amenitiesOptions.map((item, idx) => (
           <CheckboxDemo
             justifyDirection="left"
             label={item.label}
@@ -299,3 +315,4 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 };
 
 export default PropertyAmenitySelect;
+

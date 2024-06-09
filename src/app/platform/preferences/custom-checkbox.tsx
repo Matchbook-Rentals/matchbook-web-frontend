@@ -11,8 +11,8 @@ interface CheckboxDemoProps {
   hasBorder?: boolean;
   checkOnLeft?: boolean;
   handleChange: Dispatch<SetStateAction<any>>; // Replace 'any' with the specific type for amenities state
-  details: { id: string }; // Specify the structure of details
-  justifyDirection: string;
+  details: { id: string, label?: string, isRequired?: boolean }; // Specify the structure of details
+  justifyDirection?: string;
   disabled?: boolean; // Add disabled prop
 }
 
