@@ -29,7 +29,7 @@ const BrandRadio: React.FC<BrandRadioProps> = ({
   };
 
   return (
-    <div>
+    <div className='cursor-pointer'>
       {radioLabel && (
         <div className="text-xl text-center font-semibold mb-2 border-b pb-1">
           {radioLabel}
