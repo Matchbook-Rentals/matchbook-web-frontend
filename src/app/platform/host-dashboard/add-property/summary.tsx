@@ -58,27 +58,20 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
             <AddressInput propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <InputFields propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center my-2'>Photos</h3>
-            {propertyDetails.listingImages && propertyDetails.listingImages.length > 0 && (
-                <ImageDragDrop
-                    listingImages={listingImages}
-                    setListingImages={setListingImages}
-                    groupingCategories={groupingCategories} // Pass state
-                    setGroupingCategories={setGroupingCategories}
-                />
-            )}
+            <div className="scale-75 transform origin-top p-0 m-0">
+                {propertyDetails.listingImages && propertyDetails.listingImages.length > 0 && (
+                    <ImageDragDrop
+                        listingImages={listingImages}
+                        setListingImages={setListingImages}
+                        groupingCategories={groupingCategories} // Pass state
+                        setGroupingCategories={setGroupingCategories}
+                    />
+                )}
+            </div>
             <h3 className='text-lg text-center my-2'>Amenities</h3>
-            <PropertyAmenitySelect propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
-            {isEmpty ? (
-                <p className="text-gray-500">No property details available.</p>
-            ) : (
-                <ul>
-                    {Object.entries(propertyDetails).map(([key, value], index) => (
-                        <li key={index} className="mb-2">
-                            <strong className="font-medium">{key}:</strong> {renderValue(value)}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <div className="scale-[85%] transform origin-top">
+                <PropertyAmenitySelect propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
+            </div>
             <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={goToPrevious}>Previous</button>
             <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={() => handleListingCreation(propertyDetails)}>NEXT</button>
         </div>
