@@ -103,7 +103,7 @@ export default function DetailsForm({ goToNext, goToPrevious, setPropertyDetails
           <div className="space-y-2">
             <Label htmlFor="state">State</Label>
             {/* <Input id="state" placeholder="Enter state" value={state} onChange={e => setState(e.target.value)} className={invalidFields.state ? 'border-2 border-red-500' : ''} /> */}
-            <StateSelect id='state' value={state} setState={setState} invalidFields={invalidFields}  />
+            <StateSelect id='state' value={state} setState={setState} invalidFields={invalidFields} />
           </div>
           {/* Postal Code */}
           <div className="space-y-2">

@@ -31,6 +31,7 @@ const BedTypeSelect: React.FC<BedTypeSelectProps> = ({ bedroomIndex, selectedBed
             <SelectItem className='cursor-pointer' value="queen">Queen</SelectItem>
             <SelectItem className='cursor-pointer' value="king">King</SelectItem>
             <SelectItem className='cursor-pointer' value="caking">California King</SelectItem>
+            <SelectItem className='cursor-pointer' value="bunk">Bunk Bed</SelectItem>
             <SelectItem className='cursor-pointer' value="none">No Bed</SelectItem>
           </SelectGroup>
         </SelectContent>
