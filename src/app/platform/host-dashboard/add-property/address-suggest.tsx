@@ -93,7 +93,7 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
           disabled={!ready}
           placeholder="Where's the party?"
           type="text"
-          className="w-full h-full text-2xl focus:outline-none" />
+          className="w-full h-full text-2xl focus:outline-none text-center" />
       </PopoverTrigger>
       {suggestions.length > 0 && (
         <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
