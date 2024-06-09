@@ -7,39 +7,56 @@ import { Switch } from '@/components/ui/switch'; // Assuming you have a Switch c
 import { Slider } from '@/components/ui/slider';
 import DualThumbSlider from './double-slider';
 import RentBarChart from './rent-bar-chart';
+import CarouselButtonControls from './carousel-button-controls'; // Import CarouselButtonControls component
 
 interface ComponentProps {
   goToNext: () => void;
   goToPrevious: () => void;
+  propertyDetails: PropertyDetails;
   setPropertyDetails: (details: PropertyDetails) => void;
+  withButtons?: boolean; // Add withButtons prop
 }
 
 interface PropertyDetails {
   requireBackgroundCheck: boolean;
   depositSize: number;
-  minimumLeaseLength: number;
-  maximumLeaseLength: number;
-  minimumLeasePrice: number;
+  minimumLeaseLength: number | null;
+  maximumLeaseLength: number | null;
+  minimumLeasePrice: number | null;
   maximumLeasePrice: number;
 }
 
-export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDetails }: ComponentProps) {
+export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails, setPropertyDetails, withButtons = true }: ComponentProps) {
   const [requireBackgroundCheck, setRequireBackgroundCheck] = useState(false);
   const [depositSize, setDepositSize] = useState(0);
-  const [minimumLeaseTerms, setMinimumLeaseTerms] = useState({ length: null, price: null });
-  const [maximumLeaseTerms, setMaximumLeaseTerms] = useState({ length: null, price: null })
 
   const handleNext = () => {
-    setPropertyDetails(prev => ({
-      ...prev,
-      depositSize,
-      minimumLeaseLength: minimumLeaseTerms.length,
-      maximumLeaseLength: maximumLeaseTerms.length,
-      minimumLeasePrice: minimumLeaseTerms.price,
-      maximumLeasePrice: maximumLeaseTerms.price,
-      requireBackgroundCheck
-    }));
+    // setPropertyDetails(prev => ({
+    //   ...prev,
+    //   depositSize,
+    //   minimumLeaseLength: propertyDetails.minimumLeaseLength,
+    //   maximumLeaseLength: propertyDetails.maximumLeaseLength,
+    //   minimumLeasePrice: propertyDetails.minimumLeasePrice,
+    //   maximumLeasePrice: propertyDetails.maximumLeasePrice,
+    //   requireBackgroundCheck
+    // }));
     goToNext();
+  }
+
+  const handleSetMinimumLeaseTerms = (length: number, price: number) => {
+    setPropertyDetails({
+      ...propertyDetails,
+      minimumLeaseLength: length,
+      minimumLeasePrice: price
+    });
+  }
+
+  const handleSetMaximumLeaseTerms = (length: number, price: number) => {
+    setPropertyDetails({
+      ...propertyDetails,
+      maximumLeaseLength: length,
+      maximumLeasePrice: price
+    });
   }
 
   return (
@@ -47,22 +64,20 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
       <div className="space-y-2">
         <h2 className="text-3xl font-bold text-center">Lease Terms</h2>
         <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
-        <p>{minimumLeaseTerms.length}, {minimumLeaseTerms.price}</p>
-        <p>{maximumLeaseTerms.length}, {maximumLeaseTerms.price}</p>
-        <DualThumbSlider setMinimumLeaseTerms={setMinimumLeaseTerms} setMaximumLeaseTerms={setMaximumLeaseTerms} />
+        <DualThumbSlider setMinimumLeaseTerms={handleSetMinimumLeaseTerms} setMaximumLeaseTerms={handleSetMaximumLeaseTerms} />
       </div>
 
       {
-        !maximumLeaseTerms.length || !maximumLeaseTerms.price || !minimumLeaseTerms.length || !minimumLeaseTerms.length ? (
+        !propertyDetails?.maximumLeaseLength || !propertyDetails.maximumLeasePrice || !propertyDetails.minimumLeaseLength || !propertyDetails.minimumLeasePrice ? (
           <div className="flex items-center justify-center h-64 text-xl text-red-600">
             Please provide information about your desired lease terms to see a visualization.
           </div>
         ) : (
           <RentBarChart
-            maxLength={maximumLeaseTerms.length}
-            maxValue={maximumLeaseTerms.price}
-            minLength={minimumLeaseTerms.length}
-            minValue={minimumLeaseTerms.price}
+            maxLength={propertyDetails.maximumLeaseLength}
+            maxValue={propertyDetails.maximumLeasePrice}
+            minLength={propertyDetails.minimumLeaseLength}
+            minValue={propertyDetails.minimumLeasePrice}
           />
         )
       }
@@ -79,12 +94,8 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, setPropertyDeta
           <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={depositSize.toString()} onChange={e => setDepositSize(parseFloat(e.target.value) || 0)} />
         </div>
       </form>
-      <div className="flex gap-2 justify-center mt-5 p-1">
-        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
-        <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={handleNext}>NEXT</button>
-      </div>
+
+      {withButtons && <CarouselButtonControls onBack={goToPrevious} onNext={handleNext} backLabel="BACK" nextLabel="NEXT" />}
     </div>
   );
-
 }
-

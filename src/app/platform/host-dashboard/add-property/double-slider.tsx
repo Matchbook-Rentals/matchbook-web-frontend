@@ -3,7 +3,13 @@
 import React, { useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 
-const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
+
+interface DualThumbSliderProps {
+  setMinimumLeaseTerms: (length: number, price: number) => void;
+  setMaximumLeaseTerms: (length: number, price: number) => void;
+}
+
+const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }: DualThumbSliderProps) => {
   const [values, setValues] = useState([1, 12]); // Initial values for the thumbs
   const [minValue, setMinValue] = useState(2000); // Initial minimum value
   const [maxValue, setMaxValue] = useState(3000); // Initial maximum value
@@ -12,10 +18,10 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
     let oldValues = [...values];
     setValues(newValues);
     if (oldValues[0] !== newValues[0]) {
-      setMinimumLeaseTerms((prev) => ({ ...prev, length: newValues[0] }));
+      setMinimumLeaseTerms(newValues[0], minValue);
     }
     if (oldValues[1] !== newValues[1]) {
-      setMaximumLeaseTerms((prev) => ({ ...prev, length: newValues[1] }));
+      setMaximumLeaseTerms(newValues[1], maxValue);
     }
   };
 
@@ -27,7 +33,7 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
   const handleMinValueBlur = () => {
     const roundedValue = Math.round(minValue / 5) * 5;
     setMinValue(roundedValue);
-    setMinimumLeaseTerms((prev) => ({ ...prev, price: roundedValue }));
+    setMinimumLeaseTerms(values[0], roundedValue);
   };
 
   const handleMaxValueChange = (e) => {
@@ -38,7 +44,7 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms }) => {
   const handleMaxValueBlur = () => {
     const roundedValue = Math.round(maxValue / 5) * 5;
     setMaxValue(roundedValue);
-    setMaximumLeaseTerms((prev) => ({ ...prev, price: roundedValue }));
+    setMaximumLeaseTerms(values[1], roundedValue);
   };
 
   const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
