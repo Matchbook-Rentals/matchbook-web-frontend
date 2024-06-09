@@ -64,7 +64,7 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails
       <div className="space-y-2">
         <h2 className="text-3xl font-bold text-center">Lease Terms</h2>
         <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
-        <DualThumbSlider setMinimumLeaseTerms={handleSetMinimumLeaseTerms} setMaximumLeaseTerms={handleSetMaximumLeaseTerms} />
+        <DualThumbSlider setMinimumLeaseTerms={handleSetMinimumLeaseTerms} setMaximumLeaseTerms={handleSetMaximumLeaseTerms} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
       </div>
 
       {
