@@ -9,10 +9,6 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-// import ListingTypeRadio from './listing-type-radio';
-// import RoomsCounter from './rooms-counter';
-// import FurnishedSelect from './furnished-select';
-// import AmenitiesSelect from './amenties-select';
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import prisma from "@/lib/prismadb";
@@ -39,7 +35,22 @@ export default function PropertyCarousel({
   // State to keep track of the current index
   const [api, setApi] = useState<CarouselApi>();
   const [propertyDetails, setPropertyDetails] = useState({
+    // User (must get from server instead later)
     userId: user?.id,
+
+    propertyType: "",
+    bathroomCount: 0,
+    bedroomCount: 0,
+    roomCount: 0,
+    guestCount: 0,
+
+    // Lease Terms
+    minimumLeaseLength: null,
+    maximumLeaseLength: null,
+    minimumLeasePrice: null,
+    maximumLeasePrice: null,
+
+    // Amenities
     furnished: false,
     airConditioning: false,
     laundryFacilities: false,
@@ -146,6 +157,7 @@ export default function PropertyCarousel({
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             setPropertyDetails={setPropertyDetails}
+            propertyDetails={propertyDetails}
           />
         </CarouselItem>
         <CarouselItem>
