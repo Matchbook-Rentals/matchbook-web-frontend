@@ -6,6 +6,7 @@ import AddressInput from './(summary-components)/address-input';
 import InputFields from './(summary-components)/input-fields';
 import ImageDragDrop from './(image-components)/image-drag-drop';
 import { ListingImage } from '@prisma/client';
+import PropertyAmenitySelect from './property-amenities';
 
 interface PropertyDetails {
     locationString: string | null;
@@ -65,6 +66,8 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
                     setGroupingCategories={setGroupingCategories}
                 />
             )}
+            <h3 className='text-lg text-center my-2'>Amenities</h3>
+            <PropertyAmenitySelect propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             {isEmpty ? (
                 <p className="text-gray-500">No property details available.</p>
             ) : (

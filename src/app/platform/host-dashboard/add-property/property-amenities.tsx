@@ -6,7 +6,6 @@ import { useUser } from "@clerk/nextjs";
 import BrandRadio from "@/components/ui/brand-radio";
 
 interface PropertyAmenitySelectProps {
-  handleListingCreation: (amenities: any) => void; // Consider defining a more specific type for amenities
   goToPrevious: () => void;
   goToNext: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
@@ -14,7 +13,6 @@ interface PropertyAmenitySelectProps {
 }
 
 const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
-  handleListingCreation,
   goToPrevious,
   goToNext,
   setPropertyDetails, // Updated prop name
@@ -38,12 +36,18 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: "iron", label: "Iron", isRequired: false },
   ];
 
-  const laundryOptions = [
-    { id: 'inUnit', label: 'In-Unit' },
-    { id: 'hookup', label: 'Hookup' },
-    { id: 'notAvailable', label: 'Not available' },
-    { id: 'In complex', label: 'In complex' },
+  const washerOptions = [
+    { id: 'washerInUnit', label: 'In-Unit' },
+    { id: 'washerHookup', label: 'Hookup' },
+    { id: 'washerNotAvailable', label: 'Not available' },
+    { id: 'washerInComplex', label: 'In complex' },
+  ]
 
+  const dryerOptions = [
+    { id: 'dryerInUnit', label: 'In-Unit' },
+    { id: 'dryerHookup', label: 'Hookup' },
+    { id: 'dryerNotAvailable', label: 'Not available' },
+    { id: 'dryerInComplex', label: 'In complex' },
   ]
 
   const parkingOptions = [
@@ -153,25 +157,44 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     });
   };
 
+  const setWasherDetails = (washerType: string) => {
+    setPropertyDetails(prev => ({
+      ...prev,
+      washerInUnit: false,
+      washerHookup: false,
+      washerNotAvailable: false,
+      washerInComplex: false,
+      [washerType]: true
+    }));
+  }
+
+  const setDryerDetails = (dryerType: string) => {
+    setPropertyDetails(prev => ({
+      ...prev,
+      dryerInUnit: false,
+      dryerHookup: false,
+      dryerNotAvailable: false,
+      dryerInComplex: false,
+      [dryerType]: true
+    }));
+  }
+
 
   return (
     <>
-      <h2 className=" text-center text-2xl my-10 font-semibold">
-        Tell us more about your properties features
-      </h2>
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Pets welcome?</h3>
       <div className="flex w-4/5 mb-2  mx-auto justify-evenly">
 
-        <CheckboxDemo label="Dogs Allowed" handleChange={() => setAllowDogs(prev => !prev)} isChecked={allowDogs} details={{ id: 'dogs', label: 'dogs', isRequired: allowDogs }} />
-        <CheckboxDemo label="Cats Allowed" checkOnLeft handleChange={() => setAllowCats(prev => !prev)} details={{ id: 'cats', label: 'cats', isRequired: allowCats }} />
+        <CheckboxDemo label="Dogs Allowed" handleChange={() => setPropertyDetails(prev => ({ ...prev, allowDogs: !prev.allowDogs }))} isChecked={propertyDetails.allowDogs} details={{ id: 'dogs', label: 'dogs', isRequired: propertyDetails.allowDogs }} />
+        <CheckboxDemo label="Cats Allowed" checkOnLeft handleChange={() => setPropertyDetails(prev => ({ ...prev, allowCats: !prev.allowCats }))} details={{ id: 'cats', label: 'cats', isRequired: propertyDetails.allowCats }} />
       </div>
 
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Laundry</h3>
       <div className="flex justify-evenly mb-5">
-        <BrandRadio options={laundryOptions} setSelectedValue={setWasherType} selectedValue={washerType} radioLabel="Washer" vertical />
-        <BrandRadio options={laundryOptions} setSelectedValue={setDryerType} selectedValue={dryerType} radioLabel="Dryer" vertical />
+        <BrandRadio options={washerOptions} setSelectedValue={setWasherDetails} selectedValue={propertyDetails.washerInUnit ? 'washerInUnit' : propertyDetails.washerHookup ? 'washerHookup' : propertyDetails.washerNotAvailable ? 'washerNotAvailable' : propertyDetails.washerInComplex ? 'washerInComplex' : ''} radioLabel="Washer" vertical />
+        <BrandRadio options={dryerOptions} setSelectedValue={setDryerDetails} selectedValue={propertyDetails.dryerInUnit ? 'dryerInUnit' : propertyDetails.dryerHookup ? 'dryerHookup' : propertyDetails.dryerNotAvailable ? 'dryerNotAvailable' : propertyDetails.dryerInComplex ? 'dryerInComplex' : ''} radioLabel="Dryer" vertical />
       </div>
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Parking</h3>
