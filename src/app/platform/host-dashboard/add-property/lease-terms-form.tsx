@@ -80,7 +80,7 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails
         )
       }
 
-      <div className="flex justify-evenly items-center space-y-2">
+      <div className="flex justify-evenly items-center ">
         <div>
           <CheckboxDemo label="Require Background Check" isChecked={propertyDetails.requireBackgroundCheck} handleChange={() => setPropertyDetails({ ...propertyDetails, requireBackgroundCheck: !propertyDetails.requireBackgroundCheck })} details={{ id: 'requireBackgroundCheck' }} />
         </div>

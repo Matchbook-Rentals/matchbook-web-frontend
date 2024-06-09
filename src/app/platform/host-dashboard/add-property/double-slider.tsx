@@ -67,7 +67,7 @@ const DualThumbSlider = ({ setMinimumLeaseTerms, setMaximumLeaseTerms, propertyD
   const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
 
   return (
-    <div className="w-4/5 mx-auto mt-12">
+    <div className="w-4/5 mx-auto mt-6">
       <Slider.Root
         value={values}
         onValueChange={handleSliderChange}
