@@ -8,6 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import DualThumbSlider from './double-slider';
 import RentBarChart from './rent-bar-chart';
 import CarouselButtonControls from './carousel-button-controls'; // Import CarouselButtonControls component
+import { CheckboxDemo } from '../../preferences/custom-checkbox';
 
 interface ComponentProps {
   goToNext: () => void;
@@ -27,7 +28,6 @@ interface PropertyDetails {
 }
 
 export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails, setPropertyDetails, withButtons = true }: ComponentProps) {
-  const [requireBackgroundCheck, setRequireBackgroundCheck] = useState(false);
   const [depositSize, setDepositSize] = useState(0);
 
   const handleNext = () => {
@@ -62,8 +62,6 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold text-center">Lease Terms</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
         <DualThumbSlider setMinimumLeaseTerms={handleSetMinimumLeaseTerms} setMaximumLeaseTerms={handleSetMaximumLeaseTerms} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
       </div>
 
@@ -82,18 +80,15 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails
         )
       }
 
-      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-        {/* Require Background Check */}
-        <div className="space-y-2">
-          <Label htmlFor="background-check">Require Background Check</Label>
-          <Switch id="background-check" checked={requireBackgroundCheck} onClick={() => setRequireBackgroundCheck(prev => !prev)} />
+      <div className="flex justify-evenly items-center space-y-2">
+        <div>
+          <CheckboxDemo label="Require Background Check" isChecked={propertyDetails.requireBackgroundCheck} handleChange={() => setPropertyDetails({ ...propertyDetails, requireBackgroundCheck: !propertyDetails.requireBackgroundCheck })} details={{ id: 'requireBackgroundCheck' }} />
         </div>
-        {/* Deposit Size */}
-        <div className="space-y-2">
+        <div>
           <Label htmlFor="deposit-size">Deposit Size ($)</Label>
-          <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={depositSize.toString()} onChange={e => setDepositSize(parseFloat(e.target.value) || 0)} />
+          <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={propertyDetails.depositSize?.toString() || ''} onChange={e => setPropertyDetails({ ...propertyDetails, depositSize: parseFloat(e.target.value) || 0 })} />
         </div>
-      </form>
+      </div>
 
       {withButtons && <CarouselButtonControls onBack={goToPrevious} onNext={handleNext} backLabel="BACK" nextLabel="NEXT" />}
     </div>
