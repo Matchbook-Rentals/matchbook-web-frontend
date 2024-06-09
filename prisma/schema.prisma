@@ -116,6 +116,9 @@ model Listing {
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
   minimumLeaseLength     Int      @default(1)
+  maximumLeaseLength     Int      @default(12)
+  minimumLeasePrice      Int      @default(4000)
+  maximumLeasePrice      Int      @default(3500)
 
   // Assuming amenities are boolean fields
   furnished            Boolean @default(false)
