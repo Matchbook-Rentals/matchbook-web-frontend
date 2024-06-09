@@ -4,12 +4,14 @@ import { CheckboxDemo } from "../../preferences/custom-checkbox";
 import { Listing } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
 import BrandRadio from "@/components/ui/brand-radio";
+import CarouselButtonControls from "./carousel-button-controls";
 
 interface PropertyAmenitySelectProps {
   goToPrevious: () => void;
   goToNext: () => void;
   setPropertyDetails: Dispatch<SetStateAction<any>>; // Replace 'any' with the actual preference type you expect
   propertyDetails: Listing;
+  withButton?: boolean; // New optional prop
 }
 
 const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
@@ -17,6 +19,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   goToNext,
   setPropertyDetails, // Updated prop name
   propertyDetails,
+  withButton = true, // Default value set to true
 }) => {
 
   const initAmenities = [
@@ -303,20 +306,14 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
           />
         ))}
       </div>
-      <div className="flex gap-2  justify-center mt-5 p-1">
-        <button
-          className="bg-primaryBrand px-5 py-2 text-2xl shadow-md shadow-slate-500 hover:shadow-none text-white  rounded-lg"
-          onClick={goToPrevious}
-        >
-          BACK
-        </button>
-        <button
-          className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg shadow-sm hover:shadow-none shadow-black "
-          onClick={handleNext}
-        >
-          NEXT
-        </button>
-      </div>
+      {withButton && (
+        <CarouselButtonControls
+          onBack={goToPrevious}
+          onNext={handleNext}
+          backLabel="BACK"
+          nextLabel="NEXT"
+        />
+      )}
     </>
   );
 };
