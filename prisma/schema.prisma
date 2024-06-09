@@ -174,7 +174,7 @@ model Listing {
   housingRequests HousingRequest[]
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
-  images          ListingImage[] // Relation to multiple images
+  listingImages   ListingImage[] // Relation to multiple images
   bedrooms        Bedroom[]
 }
 
