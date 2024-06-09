@@ -49,6 +49,11 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
         return value.toString();
     };
 
+    const handleBack = () => {
+        goToPrevious();
+        window.scrollTo(0, 0);
+    };
+
     return (
         <div className="bg-white shadow-md rounded-lg p-5 my-5 ">
             <h2 className="text-2xl text-center border font-semibold text-gray-700 mb-4">Property Details</h2>
@@ -80,7 +85,7 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
                 <LeaseTermsForm withButtons={false} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             </div>
             <CarouselButtonControls
-                onBack={goToPrevious}
+                onBack={handleBack}
                 onNext={() => handleListingCreation(propertyDetails)}
                 backLabel="BACK"
                 nextLabel="FINISH"
