@@ -124,42 +124,41 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   }
 
   const handleNext = () => {
-    console.log(amenities);
-    setPropertyDetails(prev => {
-      const newState = { ...prev };
+    // setPropertyDetails(prev => {
+    //   const newState = { ...prev };
 
-      if (washerType) {
-        newState[washerType] = true;
-      }
-      if (dryerType) {
-        newState[dryerType] = true;
-      }
-      if (allowDogs) {
-        newState['allowDogs'] = true;
-      }
-      if (allowCats) {
-        newState['allowCats'] = true;
-      }
+    //   if (washerType) {
+    //     newState[washerType] = true;
+    //   }
+    //   if (dryerType) {
+    //     newState[dryerType] = true;
+    //   }
+    //   if (allowDogs) {
+    //     newState['allowDogs'] = true;
+    //   }
+    //   if (allowCats) {
+    //     newState['allowCats'] = true;
+    //   }
 
 
-      amenities.forEach(item => {
-        if (item.isRequired) {
-          newState[item.id] = item.isRequired;
-        }
-      });
+    //   amenities.forEach(item => {
+    //     if (item.isRequired) {
+    //       newState[item.id] = item.isRequired;
+    //     }
+    //   });
 
-      // Add each parking type to the newState object with a value of true
-      parkingType.forEach(type => {
-        newState[type] = true;
-      });
+    //   // Add each parking type to the newState object with a value of true
+    //   parkingType.forEach(type => {
+    //     newState[type] = true;
+    //   });
 
-      // Add each free parking type to the newState object with a value of true
-      parkingIsFree.forEach(type => {
-        newState[type] = true;
-      });
+    //   // Add each free parking type to the newState object with a value of true
+    //   parkingIsFree.forEach(type => {
+    //     newState[type] = true;
+    //   });
 
-      return newState;
-    });
+    //   return newState;
+    // });
 
     goToNext();
   };
@@ -181,6 +180,10 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         return [...prevParkingType, id];
       }
     });
+    setPropertyDetails(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
   const handleParkingIsFreeSelection = (id: string) => {
@@ -217,32 +220,32 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
         <div className="flex-col">
           <h4 className="text-center text-xl font-semibold border-b-2">Type</h4>
           <CheckboxDemo
-            isChecked={parkingType.includes('streetParking')}
+            isChecked={propertyDetails.streetParking}
             justifyDirection="end"
             label="Street"
             handleChange={handleParkingSelection}
-            details={{ id: 'streetParking', label: 'Street', isRequired: parkingType.includes('streetParking') }}
+            details={{ id: 'streetParking', label: 'Street', isRequired: propertyDetails.streetParking }}
           />
           <CheckboxDemo
-            isChecked={parkingType.includes('coveredParking')}
+            isChecked={propertyDetails.coveredParking}
             justifyDirection="end"
             label="Covered"
             handleChange={handleParkingSelection}
-            details={{ id: 'coveredParking', label: 'Covered', isRequired: parkingType.includes('coveredParking') }}
+            details={{ id: 'coveredParking', label: 'Covered', isRequired: propertyDetails.coveredParking }}
           />
           <CheckboxDemo
-            isChecked={parkingType.includes('uncoveredParking')}
+            isChecked={propertyDetails.uncoveredParking}
             justifyDirection="end"
             label="Uncovered"
             handleChange={handleParkingSelection}
-            details={{ id: 'uncoveredParking', label: 'Uncovered', isRequired: parkingType.includes('uncoveredParking') }}
+            details={{ id: 'uncoveredParking', label: 'Uncovered', isRequired: propertyDetails.uncoveredParking }}
           />
           <CheckboxDemo
-            isChecked={parkingType.includes('garageParking')}
+            isChecked={propertyDetails.garageParking}
             justifyDirection="end"
             label="Garage"
             handleChange={handleParkingSelection}
-            details={{ id: 'garageParking', label: 'Garage', isRequired: parkingType.includes('garageParking') }}
+            details={{ id: 'garageParking', label: 'Garage', isRequired: propertyDetails.garageParking }}
           />
         </div>
         <div className="flex-col">
