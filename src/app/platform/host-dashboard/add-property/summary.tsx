@@ -7,6 +7,8 @@ import InputFields from './(summary-components)/input-fields';
 import ImageDragDrop from './(image-components)/image-drag-drop';
 import { ListingImage } from '@prisma/client';
 import PropertyAmenitySelect from './property-amenities';
+import CarouselButtonControls from './carousel-button-controls';
+import LeaseTermsForm from './lease-terms-form';
 
 interface PropertyDetails {
     locationString: string | null;
@@ -48,8 +50,8 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-5 my-5">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Property Details</h2>
+        <div className="bg-white shadow-md rounded-lg p-5 my-5 ">
+            <h2 className="text-2xl text-center border font-semibold text-gray-700 mb-4">Property Details</h2>
             <h3 className='text-lg text-center mb-2'>Property Type</h3>
             <PropertyTypeCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center my-2'>Furnished?</h3>
@@ -69,11 +71,20 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
                 )}
             </div>
             <h3 className='text-lg text-center my-2'>Amenities</h3>
-            <div className="scale-[85%] transform origin-top">
-                <PropertyAmenitySelect propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
+            <div className="scale-[90%] transform origin-top -mb-24">
+                <PropertyAmenitySelect withButton={false} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             </div>
-            <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={goToPrevious}>Previous</button>
-            <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={() => handleListingCreation(propertyDetails)}>NEXT</button>
+
+            <h3 className='text-lg text-center my-2'>Lease Terms</h3>
+            <div className="scale-[90%] transform origin-top -mb-20">
+                <LeaseTermsForm withButtons={false} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
+            </div>
+            <CarouselButtonControls
+                onBack={goToPrevious}
+                onNext={() => handleListingCreation(propertyDetails)}
+                backLabel="BACK"
+                nextLabel="FINISH"
+            />
         </div>
     );
 };
