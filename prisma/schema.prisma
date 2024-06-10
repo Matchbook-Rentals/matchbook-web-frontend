@@ -105,9 +105,9 @@ model Listing {
   latitude               Float    @default(0)
   longitude              Float    @default(0)
   locationString         String?
-  city                   String
-  state                  String
-  streetAddress1         String
+  city                   String?
+  state                  String?
+  streetAddress1         String?
   streetAddress2         String?
   postalCode             String?
   userId                 String
