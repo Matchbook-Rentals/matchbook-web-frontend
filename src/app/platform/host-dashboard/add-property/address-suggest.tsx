@@ -91,6 +91,7 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
           value={inputValue}
           onChange={handleInput}
           disabled={!ready}
+          id="property-address"
           placeholder="Where's the party?"
           type="text"
           className="w-full h-full text-2xl focus:outline-none text-center" />
