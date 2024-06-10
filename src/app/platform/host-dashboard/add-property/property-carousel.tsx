@@ -39,6 +39,8 @@ export default function PropertyCarousel({
     userId: user?.id,
 
     propertyType: "",
+    title: "",
+    description: "",
     bathroomCount: 0,
     bedroomCount: 0,
     roomCount: 0,
@@ -96,16 +98,15 @@ export default function PropertyCarousel({
   });
   const router = useRouter();
 
-  // Function to go to the next question/component
   const goToNext = () => {
     console.log(propertyDetails);
     setCurrStep((prev) => prev + 1);
     api?.scrollNext();
   };
 
-  // Function to go to the previous question/component
   const goToPrevious = () => {
-    setCurrStep((prev) => prev - 1);
+    // Ensure that currStep does not go below 1
+    setCurrStep((prev) => Math.max(1, prev - 1));
     api?.scrollPrev();
   };
 

@@ -41,13 +41,6 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
     // Check if propertyDetails is empty
     const isEmpty = Object.keys(propertyDetails).length === 0;
 
-    // Function to handle outputting values with checks
-    const renderValue = (value: string | number | null | undefined) => {
-        if (value === null || value === undefined) {
-            return <span className="text-gray-500">Not specified</span>;
-        }
-        return value.toString();
-    };
 
     const handleBack = () => {
         goToPrevious();
@@ -56,7 +49,7 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
 
     return (
         <div className="bg-white shadow-md rounded-lg p-5 my-5 ">
-            <h2 className="text-2xl text-center border font-semibold text-gray-700 mb-4">Property Details</h2>
+            <h2 onClick={() => console.log(propertyDetails)} className="text-2xl text-center border font-semibold text-gray-700 mb-4">Property Details</h2>
             <h3 className='text-lg text-center mb-2'>Property Type</h3>
             <PropertyTypeCheckboxes propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center my-2'>Furnished?</h3>
