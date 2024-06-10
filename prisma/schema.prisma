@@ -111,7 +111,6 @@ model Listing {
   streetAddress2         String?
   postalCode             String?
   userId                 String
-  price                  Int
   squareFootage          Int      @default(0)
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
