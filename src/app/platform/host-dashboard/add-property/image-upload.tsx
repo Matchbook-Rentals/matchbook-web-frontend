@@ -33,7 +33,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
   const [groupingCategories, setGroupingCategories] = React.useState<string[]>([]);
 
   useEffect(() => {
-    const initialCategories = ['unassigned'];
+    const initialCategories = ['General'];
     for (let i = 1; i <= propertyDetails.roomCount; i++) {
       initialCategories.push(`Bedroom ${i}`);
     }
