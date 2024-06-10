@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -35,24 +35,29 @@ export default function PropertyCarousel({
   // State to keep track of the current index
   const [api, setApi] = useState<CarouselApi>();
   const [propertyDetails, setPropertyDetails] = useState({
-    // User (must get from server instead later)
     userId: user?.id,
-
-    propertyType: "",
     title: "",
     description: "",
-    bathroomCount: 0,
-    bedroomCount: 0,
+    imageSrc: "",
+    category: "",
     roomCount: 0,
+    bathroomCount: 0,
     guestCount: 0,
-
-    // Lease Terms
+    latitude: 0,
+    longitude: 0,
+    locationString: "",
+    city: "",
+    state: "",
+    streetAddress1: "",
+    streetAddress2: "",
+    postalCode: "",
+    squareFootage: 0,
+    depositSize: 0,
+    requireBackgroundCheck: false,
     minimumLeaseLength: null,
     maximumLeaseLength: null,
     minimumLeasePrice: null,
     maximumLeasePrice: null,
-
-    // Amenities
     furnished: false,
     airConditioning: false,
     laundryFacilities: false,
@@ -66,15 +71,19 @@ export default function PropertyCarousel({
     fireplace: false,
     wifi: false,
     kitchen: false,
-    inUnitWasher: false,
-    inUnitDryer: false,
+    washerInUnit: false,
+    washerHookup: false,
+    washerNotAvailable: false,
+    washerInComplex: false,
+    dryerInUnit: false,
+    dryerHookup: false,
+    dryerNotAvailable: false,
+    dryerInComplex: false,
     dedicatedWorkspace: false,
     tv: false,
     hairDryer: false,
     iron: false,
     heating: false,
-    washer: false,
-    dryer: false,
     hotTub: false,
     gym: false,
     petsAllowed: false,
@@ -98,16 +107,26 @@ export default function PropertyCarousel({
   });
   const router = useRouter();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const goToNext = () => {
     console.log(propertyDetails);
     setCurrStep((prev) => prev + 1);
     api?.scrollNext();
+    if (window.scrollY > 50) {
+      window.scrollTo(0, 51);
+    }
   };
 
   const goToPrevious = () => {
     // Ensure that currStep does not go below 1
     setCurrStep((prev) => Math.max(1, prev - 1));
     api?.scrollPrev();
+    if (window.scrollY > 50) {
+      window.scrollTo(0, 51);
+    }
   };
 
   const handleFinish = (amenities) => {
