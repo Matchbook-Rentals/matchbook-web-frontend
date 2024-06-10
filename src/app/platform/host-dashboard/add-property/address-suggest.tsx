@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript } from '@react-google-maps/api';
+import { useLoadScript, useJsApiLoader, Libraries } from '@react-google-maps/api';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 interface AddressSuggestProps {
@@ -20,10 +20,10 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
   const [displayValue, setDisplayValue] = useState<string>(""); // Separate state for display value in the "Where to?" section
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const libraries = useMemo(() => ["places"], []);
+  const libraries: Libraries = useMemo(() => ["places"], []);
 
   // Load Google Maps script
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries,
   });
@@ -94,6 +94,7 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
           id="property-address"
           placeholder="Where's the party?"
           type="text"
+          autoComplete="off"
           className="w-full h-full text-2xl focus:outline-none text-center" />
       </PopoverTrigger>
       {suggestions.length > 0 && (
