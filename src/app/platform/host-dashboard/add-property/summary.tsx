@@ -1,5 +1,6 @@
 // components/Summary.tsx
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import PropertyTypeCheckboxes from './(summary-components)/property-type-checkboxes';
 import FurnishedCheckboxes from './(summary-components)/furnished-checkboxes';
 import AddressInput from './(summary-components)/address-input';
@@ -19,13 +20,14 @@ interface PropertyDetails {
 interface SummaryProps {
     propertyDetails: PropertyDetails;
     setPropertyDetails: (propertyDetails: PropertyDetails) => void;
-    handleListingCreation: (propertyDetails: PropertyDetails) => void; // Typing the argument
+    handleListingCreation: (propertyDetails: PropertyDetails) => string; // Typing the argument
     goToPrevious: () => void;
 }
 
 const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, handleListingCreation, goToPrevious }) => {
     const [groupingCategories, setGroupingCategories] = React.useState<string[]>([]); // Initialize state
     const [listingImages, setListingImages] = React.useState<ListingImage[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         setListingImages(propertyDetails.listingImages || []);
@@ -46,6 +48,15 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
         goToPrevious();
         window.scrollTo(0, 0);
     };
+
+    const handleSubmit = async () => {
+        console.log('SUBMITTING');
+        let isSuccessful = await handleListingCreation(propertyDetails);
+        console.log('IS SUCCESSFUL', isSuccessful);
+        if (isSuccessful === 'true') {
+            // router.push('/platform/host-dashboard');
+        }
+    }
 
     return (
         <div className="bg-white shadow-md rounded-lg p-5 my-5 ">
@@ -74,12 +85,12 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
             </div>
 
             <h3 className='text-lg text-center my-2'>Lease Terms</h3>
-            <div className="scale-[90%] transform origin-top -mb-20">
+            <div className="scale-[90%] transform origin-top -mb-16">
                 <LeaseTermsForm withButtons={false} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             </div>
             <CarouselButtonControls
                 onBack={handleBack}
-                onNext={() => handleListingCreation(propertyDetails)}
+                onNext={handleSubmit}
                 backLabel="BACK"
                 nextLabel="FINISH"
             />
