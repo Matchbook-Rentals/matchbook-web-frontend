@@ -94,6 +94,7 @@ model Account {
 
 model Listing {
   id                     String   @id @default(uuid())
+  status                 String   @default("available")
   title                  String
   description            String
   imageSrc               String?
