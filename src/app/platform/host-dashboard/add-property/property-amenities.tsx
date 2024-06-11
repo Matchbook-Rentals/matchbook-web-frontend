@@ -102,7 +102,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   const [dryerType, setDryerType] = useState('');
   const [parkingType, setParkingType] = useState<string[]>([]);
   const [parkingIsFree, setParkingIsFree] = useState<string[]>([]);
-  const { user } = useUser();
 
   const setWasherDetails: Dispatch<SetStateAction<string>> = (washerType: string) => {
     setPropertyDetails(prev => ({
@@ -260,33 +259,33 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
           <CheckboxDemo
             label="Street Free"
             checkOnLeft
-            isChecked={propertyDetails.streetFree}
+            isChecked={propertyDetails.streetParkingFree}
             handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'streetFree', label: 'Street Free', isRequired: propertyDetails.streetFree }}
+            details={{ id: 'streetParkingFree', label: 'Street Free', isRequired: propertyDetails.streetParkingFree }}
             disabled={!propertyDetails.streetParking}
           />
           <CheckboxDemo
             label="Covered Free"
             checkOnLeft
-            isChecked={propertyDetails.coveredFree}
+            isChecked={propertyDetails.coveredParkingFree}
             handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'coveredFree', label: 'Covered Free', isRequired: propertyDetails.coveredFree }}
+            details={{ id: 'coveredParkingFree', label: 'Covered Free', isRequired: propertyDetails.coveredParkingFree }}
             disabled={!propertyDetails.coveredParking}
           />
           <CheckboxDemo
             label="Uncovered Free"
             checkOnLeft
-            isChecked={propertyDetails.uncoveredFree}
+            isChecked={propertyDetails.uncoveredParkingFree}
             handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'uncoveredFree', label: 'Uncovered Free', isRequired: propertyDetails.uncoveredFree }}
+            details={{ id: 'uncoveredParkingFree', label: 'Uncovered Free', isRequired: propertyDetails.uncoveredParkingFree }}
             disabled={!propertyDetails.uncoveredParking}
           />
           <CheckboxDemo
             label="Garage Free"
             checkOnLeft
-            isChecked={propertyDetails.garageFree}
+            isChecked={propertyDetails.garageParkingFree}
             handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'garageFree', label: 'Garage Free', isRequired: propertyDetails.garageFree }}
+            details={{ id: 'garageParkingFree', label: 'Garage Free', isRequired: propertyDetails.garageParkingFree }}
             disabled={!propertyDetails.garageParking}
           />
         </div>

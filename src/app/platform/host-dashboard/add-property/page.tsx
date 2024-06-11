@@ -2,10 +2,10 @@ import React from "react";
 import prisma from "@/lib/prismadb";
 import ProgressBar from "./progress-bar";
 import AddPropertyClient from "./app-property-client";
-import { type Listing } from "@prisma/client";
+import { type Listing, type Bedroom } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 
-const handleListingCreation = async (propertyDetails: Listing) => {
+const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedroom[], listingImages: { url: string }[] }) => {
   "use server";
 
   try {
@@ -13,23 +13,21 @@ const handleListingCreation = async (propertyDetails: Listing) => {
     if (!user) {
       throw new Error("User not authenticated");
     }
-    // Fetch user data from Clerk
 
     const listing = await prisma.listing.create({
       data: {
         ...propertyDetails,
         userId: user.id, // Associate the listing with the user
+        bedrooms: {
+          create: propertyDetails.bedrooms,
+        },
+        listingImages: {
+          create: propertyDetails.listingImages,
+        },
       },
     });
     console.log('TRUE', listing);
 
-    // Temporary code to automatically delete the created listing
-    await prisma.listing.delete({
-      where: {
-        id: listing.id,
-      },
-    });
-    console.log('Listing deleted:', listing.id);
 
     return 'true';
   } catch (error: any) {

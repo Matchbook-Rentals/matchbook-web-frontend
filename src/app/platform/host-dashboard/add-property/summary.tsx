@@ -54,7 +54,7 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
         let isSuccessful = await handleListingCreation(propertyDetails);
         console.log('IS SUCCESSFUL', isSuccessful);
         if (isSuccessful === 'true') {
-            // router.push('/platform/host-dashboard');
+            router.push('/platform/host-dashboard');
         }
     }
 
@@ -69,7 +69,7 @@ const Summary: React.FC<SummaryProps> = ({ propertyDetails, setPropertyDetails, 
             <AddressInput propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <InputFields propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
             <h3 className='text-lg text-center my-2'>Photos</h3>
-            <div className="scale-75 transform origin-top p-0 m-0">
+            <div className="scale-75 transform origin-top p-0 m-0 -mb-16">
                 {propertyDetails.listingImages && propertyDetails.listingImages.length > 0 && (
                     <ImageDragDrop
                         listingImages={listingImages}
