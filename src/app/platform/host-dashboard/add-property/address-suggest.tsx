@@ -1,20 +1,30 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript } from '@react-google-maps/api';
+import { useLoadScript, useJsApiLoader, Libraries } from '@react-google-maps/api';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
-export default function AddressSuggest({ setPropertyDetails }) {
-  const [inputValue, setInputValue] = useState(""); // State for input field value
-  const [displayValue, setDisplayValue] = useState(""); // Separate state for display value in the "Where to?" section
-  const [suggestions, setSuggestions] = useState([]);
-  const [open, setOpen] = useState(false);
-  const libraries = useMemo(() => ["places"], []);
+interface AddressSuggestProps {
+  setPropertyDetails: (details: { locationString: string; latitude: number; longitude: number }) => void;
+  initialValue?: string;
+}
+
+interface Suggestion {
+  place_id: string;
+  description: string;
+}
+
+export default function AddressSuggest({ setPropertyDetails, initialValue = '' }: AddressSuggestProps) {
+  const [inputValue, setInputValue] = useState<string>(initialValue); // State for input field value
+  const [displayValue, setDisplayValue] = useState<string>(""); // Separate state for display value in the "Where to?" section
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const libraries: Libraries = useMemo(() => ["places"], []);
 
   // Load Google Maps script
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries,
   });
 
@@ -46,24 +56,30 @@ export default function AddressSuggest({ setPropertyDetails }) {
     }
   }, [status, data]);
 
-  const handleInput = (e) => {
+  // Effect to update inputValue when initialValue changes
+  useEffect(() => {
+    setInputValue(initialValue);
+    setValue(initialValue);
+  }, [initialValue, setValue]);
+
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     setValue(newValue);
   };
 
-  const handleSelect = async (description, place_id) => {
+  const handleSelect = async (description: string, place_id: string) => {
     setInputValue(description); // Optionally clear the input value or keep it based on your needs
     setValue(description, false); // Update the autocomplete value
     clearSuggestions(); // Uncomment if you want to clear suggestions after selection
     setOpen(false);
     console.log('place ID', place_id);
     console.log('description', description);
-    
+
     const results = await getGeocode({ address: description });
     const { lat, lng } = await getLatLng(results[0]);
     setPropertyDetails((prev => {
-      return {...prev, locationString: description, latitude: lat, longitude: lng}
+      return { ...prev, locationString: description, latitude: lat, longitude: lng }
     }));
     console.log("Selected location:", { lat, lng, results });
   };
@@ -75,9 +91,11 @@ export default function AddressSuggest({ setPropertyDetails }) {
           value={inputValue}
           onChange={handleInput}
           disabled={!ready}
+          id="property-address"
           placeholder="Where's the party?"
           type="text"
-          className="w-full h-full text-2xl focus:outline-none" />
+          autoComplete="off"
+          className="w-full h-full text-2xl focus:outline-none text-center" />
       </PopoverTrigger>
       {suggestions.length > 0 && (
         <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>

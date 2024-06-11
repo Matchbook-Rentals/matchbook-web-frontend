@@ -5,20 +5,30 @@ import Image from "next/image";
 import React from "react";
 import prisma from "@/lib/prismadb";
 import PropertyList from "./property-list";
-import PropertyHeader from "./property-header";
+import HostDashboardHeader from "./host-dashboard-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { type Listing } from "@prisma/client";
+import { currentUser } from "@clerk/nextjs/server";
+import HostDashboardClient from "./host-dashboard-client";
 
-const pullMockListingsFromDb = async () => {
+
+const fetchListingsFromDb = async () => {
   "use server";
 
   try {
+    const user = await currentUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
     const listings = await prisma.listing.findMany({
       where: {
-        id: {
-          in: ["1", "2", "3"], // Looks for listings where the value field is either "1", "2", or "3"
-        },
+        userId: user.id,
+      },
+      include: {
+        bedrooms: true,
+        listingImages: true,
       },
     });
     return listings;
@@ -26,10 +36,11 @@ const pullMockListingsFromDb = async () => {
     console.error("Error fetching listings:", error);
     throw error; // Re-throw the error for further handling
   }
+  return [];
 };
 
 export default async function HostDashboard() {
-  const listings = await pullMockListingsFromDb();
+  const listings = await fetchListingsFromDb();
 
   return (
     <div className="md:w-4/5 w-[95%] mx-auto">
@@ -39,14 +50,12 @@ export default async function HostDashboard() {
       >
         <Link className="flex" href="/platform/host-dashboard/add-property">
           <div className="bg-primaryBrand rounded-full mr-2 p-0">
-            {/* <PlusIcon size={6} color='black' /> */}
             <span className="text-2xl font-bold rounded-full px-2 ">+</span>
           </div>
           Add a property
         </Link>
       </Button>
-      <PropertyHeader />
-      <PropertyList properties={listings} />
+      <HostDashboardClient properties={listings} />
     </div>
   );
 }

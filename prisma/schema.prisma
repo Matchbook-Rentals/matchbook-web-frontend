@@ -94,6 +94,7 @@ model Account {
 
 model Listing {
   id                     String   @id @default(uuid())
+  status                 String   @default("available")
   title                  String
   description            String
   imageSrc               String?
@@ -105,51 +106,67 @@ model Listing {
   latitude               Float    @default(0)
   longitude              Float    @default(0)
   locationString         String?
-  city                   String
-  state                  String
-  streetAddress1         String
+  city                   String?
+  state                  String?
+  streetAddress1         String?
   streetAddress2         String?
   postalCode             String?
   userId                 String
-  price                  Int
   squareFootage          Int      @default(0)
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
   minimumLeaseLength     Int      @default(1)
+  maximumLeaseLength     Int      @default(12)
+  minimumLeasePrice      Int      @default(4000)
+  maximumLeasePrice      Int      @default(3500)
 
   // Assuming amenities are boolean fields
-  furnished          Boolean @default(false)
-  airConditioning    Boolean @default(false)
-  laundryFacilities  Boolean @default(false)
-  fitnessCenter      Boolean @default(false)
-  pool               Boolean @default(false)
-  dishwasher         Boolean @default(false)
-  elevator           Boolean @default(false)
-  wheelchairAccess   Boolean @default(false)
-  doorman            Boolean @default(false)
-  parking            Boolean @default(false)
-  fireplace          Boolean @default(false)
-  wifi               Boolean @default(false)
-  kitchen            Boolean @default(false)
-  inUnitWasher       Boolean @default(false)
-  inUnitDryer        Boolean @default(false)
-  dedicatedWorkspace Boolean @default(false)
-  tv                 Boolean @default(false)
-  hairDryer          Boolean @default(false)
-  iron               Boolean @default(false)
-  heating            Boolean @default(false)
-  washer             Boolean @default(false)
-  dryer              Boolean @default(false)
-  hotTub             Boolean @default(false)
-  gym                Boolean @default(false)
-  petsAllowed        Boolean @default(false)
-  smokingAllowed     Boolean @default(false)
-  eventsAllowed      Boolean @default(false)
-  privateEntrance    Boolean @default(false)
-  secure             Boolean @default(false)
-  waterfront         Boolean @default(false)
-  beachfront         Boolean @default(false)
-  mountainView       Boolean @default(false)
+  furnished            Boolean @default(false)
+  airConditioning      Boolean @default(false)
+  laundryFacilities    Boolean @default(false)
+  fitnessCenter        Boolean @default(false)
+  pool                 Boolean @default(false)
+  dishwasher           Boolean @default(false)
+  elevator             Boolean @default(false)
+  wheelchairAccess     Boolean @default(false)
+  doorman              Boolean @default(false)
+  parking              Boolean @default(false)
+  fireplace            Boolean @default(false)
+  wifi                 Boolean @default(false)
+  kitchen              Boolean @default(false)
+  washerInUnit         Boolean @default(false)
+  washerHookup         Boolean @default(false)
+  washerNotAvailable   Boolean @default(false)
+  washerInComplex      Boolean @default(false)
+  dryerInUnit          Boolean @default(false)
+  dryerHookup          Boolean @default(false)
+  dryerNotAvailable    Boolean @default(false)
+  dryerInComplex       Boolean @default(false)
+  dedicatedWorkspace   Boolean @default(false)
+  tv                   Boolean @default(false)
+  hairDryer            Boolean @default(false)
+  iron                 Boolean @default(false)
+  heating              Boolean @default(false)
+  hotTub               Boolean @default(false)
+  gym                  Boolean @default(false)
+  petsAllowed          Boolean @default(false)
+  smokingAllowed       Boolean @default(false)
+  eventsAllowed        Boolean @default(false)
+  privateEntrance      Boolean @default(false)
+  secure               Boolean @default(false)
+  waterfront           Boolean @default(false)
+  beachfront           Boolean @default(false)
+  mountainView         Boolean @default(false)
+  streetParking        Boolean @default(false)
+  streetParkingFree    Boolean @default(false)
+  coveredParking       Boolean @default(false)
+  coveredParkingFree   Boolean @default(false)
+  uncoveredParking     Boolean @default(false)
+  uncoveredParkingFree Boolean @default(false)
+  garageParking        Boolean @default(false)
+  garageParkingFree    Boolean @default(false)
+  allowDogs            Boolean @default(false)
+  allowCats            Boolean @default(false)
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -157,7 +174,7 @@ model Listing {
   housingRequests HousingRequest[]
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
-  images          ListingImage[] // Relation to multiple images
+  listingImages   ListingImage[] // Relation to multiple images
   bedrooms        Bedroom[]
 }
 

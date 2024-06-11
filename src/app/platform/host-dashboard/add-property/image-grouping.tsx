@@ -14,11 +14,16 @@ interface ImageGroupingProps {
   over: { id: string, activeHalf: string };
   setOver: (over: { img: ListingImage, activeHalf: string } | null) => void;
   dragging: ListingImage;
+  setDragging: (dragging: ListingImage | null) => void;
+  handleChangeCategory: (newCategory: string) => void;
 }
 
-const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging }) => {
+const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStart, groupingCategory = 'unassigned', handleDrop, over, setOver, dragging, setDragging, handleChangeCategory }) => {
   const [dragCounter, setDragCounter] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState(groupingCategory);
+  const [dropPosition, setDropPosition] = useState<{ img: ListingImage, half: string } | null>(null);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -44,18 +49,58 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
     const { offsetX, target } = e.nativeEvent;
     const half = offsetX < (target as HTMLElement).offsetWidth / 2 ? 'left' : 'right';
     setOver({ img, activeHalf: half });
+    if (dragging?.id === img.id) {
+      setDropPosition(null);
+    } else {
+      setDropPosition({ img, half });
+    }
   }, [setOver]);
 
+  const handleDragEnd = useCallback(() => {
+    setOver({ img: '', activeHalf: '' });
+    setDragging(null);
+    setDropPosition(null);
+  }, [setOver, setDragging]);
+
+  const handleDragLeaveImage = useCallback(() => {
+    const lastImage = filteredAndSortedImages[filteredAndSortedImages.length - 1];
+    setOver({ img: lastImage, activeHalf: 'right' });
+    setDropPosition({ img: lastImage, half: 'right' });
+  }, [filteredAndSortedImages, setOver]);
+
+  const handlePencilClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategoryName(e.target.value);
+  };
+
+  const handleCategoryBlur = () => {
+    setIsEditing(false);
+    handleChangeCategory(newCategoryName); // Assuming idx is the first image in the list
+  };
 
   return (
     <div onDragLeave={handleDragLeave} className='my-5'>
-      <h3 className="flex text-xl items-center justify-between cursor-pointer" >
+      <div className="flex rounded-lg  text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer" >
         <div className='flex gap-2'>
-
-          {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
-          <FaPencilAlt className='text-sm' onClick={() => alert('PENCIL')} />
+          {isEditing ? (
+            <input
+              type="text"
+              value={newCategoryName}
+              onChange={handleCategoryChange}
+              onBlur={handleCategoryBlur}
+              className="border-b-2 border-gray-400 outline-none"
+              autoFocus
+            />
+          ) : (
+            <div className='flex justify-between'>
+              {groupingCategory[0].toUpperCase() + groupingCategory.slice(1)}
+              <FaPencilAlt className='text-sm ml-2' onClick={handlePencilClick} />
+            </div>
+          )}
         </div>
-        {/* {over.img?.id}, {over.activeHalf}, {over.img?.rank} */}
         <button onClick={toggleOpen} className='hover:bg-slate-300 px-3 transition transition-duration-400 font-bold text-2xl'>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
@@ -64,7 +109,7 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
             ^
           </motion.div>
         </button>
-      </h3>
+      </div>
 
       <motion.div
         initial={false}
@@ -75,10 +120,9 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
         <div
           onDrop={() => handleDrop(groupingCategory)}
           onDragOver={(e) => e.preventDefault()}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-500 min-h-32"
+          className="grid grid-cols-2 rounded-lg lg:grid-cols-3 gap-4 mb-5 border-2 border-gray-300 min-h-32"
         >
           {filteredAndSortedImages.map((img) => (
-            // COnditionally render a placeholder element if over.id !== dragging and over.id === img.id
             <div key={img.id} className="relative w-full items-center flex">
               <motion.div
                 layout
@@ -89,10 +133,16 @@ const ImageGrouping: React.FC<ImageGroupingProps> = ({ listingImages, onDragStar
                 onDragOver={(e) => handleDragOver(e, img)}
                 onDragEnter={() => handleDragEnter(img)}
                 onClick={() => alert('click not drag')}
-                onDragEnd={() => setOver({ img, activeHalf: '' })}
+                onDragEnd={handleDragEnd}
+                onDragLeave={handleDragLeaveImage}
                 transition={{ duration: 0.3 }}
               >
-                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-500 ${dragging?.id === img?.id && 'opacity-50'}`} />
+                <Image src={img.url} alt={`Uploaded image ${img.id}`} layout="fill" objectFit="cover" className={`transition transition-duration-400 ${dropPosition?.img?.id === img.id && dropPosition?.half === 'left' ? 'border-l-4 border-blue-500' : ''} ${dropPosition?.img?.id === img.id && dropPosition?.half === 'right' ? 'border-r-4 border-blue-500' : ''}`} />
+                {dropPosition?.img?.id === img?.id && (
+                  <div className={`drop-indicator ${dropPosition?.half}`} style={{ borderColor: 'purple', borderWidth: '2px', [dropPosition?.half]: 0 }}>
+                    <div className="drop-indicator-line" />
+                  </div>
+                )}
               </motion.div>
             </div>
           ))}

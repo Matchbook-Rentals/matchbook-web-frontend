@@ -2,18 +2,38 @@ import React from "react";
 import prisma from "@/lib/prismadb";
 import ProgressBar from "./progress-bar";
 import AddPropertyClient from "./app-property-client";
-import { type Listing } from "@prisma/client";
+import { type Listing, type Bedroom } from "@prisma/client";
+import { currentUser } from "@clerk/nextjs/server";
 
-const handleListingCreation = async (propertyDetails: Listing) => {
+const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedroom[], listingImages: { url: string }[] }) => {
   "use server";
 
-  const listing = await prisma.listing.create({
-    data: {
-      ...propertyDetails,
-    },
-  });
-  console.log(listing);
-  return listing;
+  try {
+    const user = await currentUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const listing = await prisma.listing.create({
+      data: {
+        ...propertyDetails,
+        userId: user.id, // Associate the listing with the user
+        bedrooms: {
+          create: propertyDetails.bedrooms,
+        },
+        listingImages: {
+          create: propertyDetails.listingImages,
+        },
+      },
+    });
+    console.log('TRUE', listing);
+
+
+    return 'true';
+  } catch (error: any) {
+    return error.message;
+    throw error; // Re-throw the error if you want to propagate it further
+  }
 };
 
 export default function AddPropertyPage() {

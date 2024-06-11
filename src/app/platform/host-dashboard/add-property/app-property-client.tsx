@@ -4,7 +4,11 @@ import ProgressBar from './progress-bar'
 import PropertyCard from '../property-card';
 import PropertyCarousel from './property-carousel';
 
-export default function AddPropertyClient({handleListingCreation}) {
+interface AddPropertyClientProps {
+  handleListingCreation: () => void;
+}
+
+export default function AddPropertyClient({ handleListingCreation }: AddPropertyClientProps) {
   const steps = ['Property Type', 'Details', 'Photos', 'Lease Terms', 'Amenities', 'Summary']
   const [currStep, setCurrstep] = useState(1);
 
@@ -15,7 +19,6 @@ export default function AddPropertyClient({handleListingCreation}) {
 
   return (
     <div>
-
       <ProgressBar steps={steps} currStep={currStep} size={8} />
       <PropertyCarousel handleListingCreation={handleListingCreation} setCurrStep={setCurrstep} />
     </div>
