@@ -67,7 +67,7 @@ export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails
         <div onClick={() => console.log(propertyDetails.depositSize)}>
           {/* <Label htmlFor="deposit-size">Deposit Size ($)</Label>
           <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={propertyDetails.depositSize?.toString() || ''} onChange={e => setPropertyDetails({ ...propertyDetails, depositSize: parseFloat(e.target.value) || 0 })} /> */}
-          <CurrencyInput id="deposit-size" label='Deposit Size ($)' value={propertyDetails.depositSize} onChange={number => setPropertyDetails({ ...propertyDetails, depositSize: number || 0 })} />
+          <CurrencyInput className='rounded-full' id="deposit-size" label='Deposit Size' value={propertyDetails.depositSize} onChange={number => setPropertyDetails({ ...propertyDetails, depositSize: number || 0 })} />
         </div>
       </div>
 

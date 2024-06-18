@@ -88,7 +88,7 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
             id="max-value"
             label={`Longest: ${values[1]} months`}
             onChange={setMaxValue}
-            className="rounded-full mt-1"
+            className="rounded-full w-24 mt-1 ml-4"
             onBlur={() => setLongestLeaseTerms(values[1], maxValue)}
           />
         </div>

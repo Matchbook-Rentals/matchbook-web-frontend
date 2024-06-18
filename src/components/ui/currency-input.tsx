@@ -45,8 +45,8 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5
   };
 
   return (
-    <div className="">
-      {label && <Label htmlFor={id}>{label}</Label>}
+    <div className="flex flex-col justify-center">
+      {label && <Label className='text-center' htmlFor={id}>{label}</Label>}
       <Input
         ref={inputRef}
         id={id}
