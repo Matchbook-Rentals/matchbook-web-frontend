@@ -12,7 +12,6 @@ interface PropertyTypeRadioProps {
 
 const housingOptions = [
   { id: 'single_family', label: 'Single Family', src: '/img/listing-type/Single Family.png' },
-  { id: 'multi_family', label: 'Multi Family', src: '/img/listing-type/Multi Family.png' },
   { id: 'townhouse', label: 'Townhouse', src: '/img/listing-type/Townhouse.png' },
   { id: 'apartment', label: 'Apartment', src: '/img/listing-type/Apartment.png' },
   { id: 'single_room', label: 'Single Room', src: '/img/listing-type/Single Room.png' },
