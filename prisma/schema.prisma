@@ -119,9 +119,9 @@ model Listing {
   longestLeaseLength     Int      @default(12) // Renamed from maximumLeaseLength
   shortestLeasePrice     Int      @default(4000)
   longestLeasePrice      Int      @default(3500)
+  furnished              Boolean  @default(false)
 
   // General Amenities
-  furnished          Boolean @default(false)
   airConditioning    Boolean @default(false)
   laundryFacilities  Boolean @default(false)
   fitnessCenter      Boolean @default(false)

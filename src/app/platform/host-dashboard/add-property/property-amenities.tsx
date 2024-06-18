@@ -22,32 +22,14 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   withButton = true, // Default value set to true
 }) => {
 
-  const initAmenities = [
-    { id: "airConditioning", label: "Air Conditioning", isRequired: false },
-    { id: "fitnessCenter", label: "Fitness Center", isRequired: false },
-    { id: "pool", label: "Pool", isRequired: false },
-    { id: "dishwasher", label: "Dishwasher", isRequired: false },
-    { id: "elevator", label: "Elevator", isRequired: false },
-    { id: "wheelchairAccess", label: "Wheelchair Access", isRequired: false },
-    { id: "doorman", label: "Doorman", isRequired: false },
-    { id: "fireplace", label: "Fireplace", isRequired: false },
-    { id: "wifi", label: "Wifi", isRequired: false },
-    { id: "kitchen", label: "Kitchen", isRequired: false },
-    { id: "dedicatedWorkspace", label: "Dedicated Workspace", isRequired: false },
-    { id: "tv", label: "TV", isRequired: false },
-    { id: "hairDryer", label: "Hair Dryer", isRequired: false },
-    { id: "iron", label: "Iron", isRequired: false },
-  ];
-
   const amenitiesOptions = [
     { id: 'airConditioning', label: 'Air Conditioning', isRequired: propertyDetails.airConditioning },
     { id: 'fitnessCenter', label: 'Fitness Center', isRequired: propertyDetails.fitnessCenter },
-    { id: 'pool', label: 'Pool', isRequired: propertyDetails.pool },
     { id: 'dishwasher', label: 'Dishwasher', isRequired: propertyDetails.dishwasher },
+    { id: 'pool', label: 'Pool', isRequired: propertyDetails.pool },
     { id: 'elevator', label: 'Elevator', isRequired: propertyDetails.elevator },
     { id: 'wheelchairAccess', label: 'Wheelchair Access', isRequired: propertyDetails.wheelchairAccess },
     { id: 'doorman', label: 'Doorman', isRequired: propertyDetails.doorman },
-    { id: 'parking', label: 'Parking', isRequired: propertyDetails.parking },
     { id: 'fireplace', label: 'Fireplace', isRequired: propertyDetails.fireplace },
     { id: 'wifi', label: 'Wifi', isRequired: propertyDetails.wifi },
     { id: 'kitchen', label: 'Kitchen', isRequired: propertyDetails.kitchen },
@@ -66,6 +48,83 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: 'beachfront', label: 'Beachfront', isRequired: propertyDetails.beachfront },
     { id: 'mountainView', label: 'Mountain View', isRequired: propertyDetails.mountainView },
   ]
+
+  const structuralOptions = [
+    { id: 'balcony', label: 'Balcony', isRequired: propertyDetails.balcony },
+    { id: 'patio', label: 'Patio', isRequired: propertyDetails.patio },
+    { id: 'sunroom', label: 'Sunroom', isRequired: propertyDetails.sunroom },
+    { id: 'firepit', label: 'Firepit', isRequired: propertyDetails.firepit },
+    { id: 'fireplace', label: 'Fireplace', isRequired: propertyDetails.fireplace },
+    { id: 'pool', label: 'Pool', isRequired: propertyDetails.pool },
+    { id: 'jacuzzi', label: 'Jacuzzi', isRequired: propertyDetails.jacuzzi },
+    { id: 'grill', label: 'Grill', isRequired: propertyDetails.grill },
+    { id: 'wifi', label: 'Wifi', isRequired: propertyDetails.wifi },
+    { id: 'oven', label: 'Oven', isRequired: propertyDetails.oven },
+    { id: 'stove', label: 'Stove', isRequired: propertyDetails.stove },
+    { id: 'gym', label: 'Gym', isRequired: propertyDetails.gym },
+    { id: 'wheelAccessible', label: 'Wheel Accessible', isRequired: propertyDetails.wheelAccessible },
+    { id: 'fencedInYard', label: 'Fenced in yard', isRequired: propertyDetails.fencedInYard },
+    { id: 'doorman', label: 'Doorman', isRequired: propertyDetails.doorman },
+    { id: 'secureLobby', label: 'Secure lobby', isRequired: propertyDetails.secureLobby },
+    { id: 'keylessEntry', label: 'Keyless entry', isRequired: propertyDetails.keylessEntry },
+    { id: 'alarmSystem', label: 'Alarm system', isRequired: propertyDetails.alarmSystem },
+    { id: 'storageShed', label: 'Storage Shed', isRequired: propertyDetails.storageShed },
+    { id: 'airConditioning', label: 'Air conditioning', isRequired: propertyDetails.airConditioning },
+    { id: 'heating', label: 'Heating', isRequired: propertyDetails.heating },
+    { id: 'evCharging', label: 'EV Charging', isRequired: propertyDetails.evCharging },
+  ]
+
+  const kitchenOptions = [
+    { id: 'kitchen', label: 'Kitchen', isRequired: propertyDetails.kitchen },
+    { id: 'garbageDisposal', label: 'Garbage disposal', isRequired: propertyDetails.garbageDisposal },
+    { id: 'dishwasher', label: 'Dishwasher', isRequired: propertyDetails.dishwasher },
+  ]
+
+  const furnishedOptions = [
+    { id: 'tv', label: 'TV', isRequired: propertyDetails.tv },
+    { id: 'workstation', label: 'Workstation', isRequired: propertyDetails.workstation },
+    { id: 'microwave', label: 'Microwave', isRequired: propertyDetails.microwave },
+    { id: 'kitchenEssentails', label: 'Kitchen essentails', isRequired: propertyDetails.kitchenEssentails },
+    { id: 'linens', label: 'Linens', isRequired: propertyDetails.linens },
+  ]
+
+  let generalAmenities = [
+
+    // Utilities and Comfort
+    { id: 'airConditioning', label: 'Air Conditioning', isRequired: propertyDetails.airConditioning },
+    { id: 'evCharging', label: 'EV Charging', isRequired: propertyDetails.evCharging },
+    { id: 'heating', label: 'Heating', isRequired: propertyDetails.heating },
+    { id: 'gym', label: 'Gym', isRequired: propertyDetails.gym },
+    { id: 'privateBathroom', label: 'Private Bathroom', isRequired: propertyDetails.privateBathroom },
+    { id: 'wifi', label: 'Wifi', isRequired: propertyDetails.wifi },
+
+    // Security and Accessibility
+    { id: 'alarmSystem', label: 'Alarm System', isRequired: propertyDetails.alarmSystem },
+    { id: 'doorman', label: 'Doorman', isRequired: propertyDetails.doorman },
+    { id: 'keylessEntry', label: 'Keyless Entry', isRequired: propertyDetails.keylessEntry },
+    { id: 'secureLobby', label: 'Secure Lobby', isRequired: propertyDetails.secureLobby },
+    { id: 'wheelAccessible', label: 'Wheel Accessible', isRequired: propertyDetails.wheelAccessible },
+
+    // Kitchen Appliances
+    { id: 'dishwasher', label: 'Dishwasher', isRequired: propertyDetails.dishwasher },
+    { id: 'garbageDisposal', label: 'Garbage Disposal', isRequired: propertyDetails.garbageDisposal },
+    { id: 'oven', label: 'Oven', isRequired: propertyDetails.oven },
+    { id: 'stove', label: 'Stove', isRequired: propertyDetails.stove },
+
+    // Structural Amenities
+    { id: 'balcony', label: 'Balcony', isRequired: propertyDetails.balcony },
+    { id: 'fencedInYard', label: 'Fenced In Yard', isRequired: propertyDetails.fencedInYard },
+    { id: 'firepit', label: 'Firepit', isRequired: propertyDetails.firepit },
+    { id: 'fireplace', label: 'Fireplace', isRequired: propertyDetails.fireplace },
+    { id: 'grill', label: 'Grill', isRequired: propertyDetails.grill },
+    { id: 'jacuzzi', label: 'Jacuzzi', isRequired: propertyDetails.jacuzzi },
+    { id: 'patio', label: 'Patio', isRequired: propertyDetails.patio },
+    { id: 'pool', label: 'Pool', isRequired: propertyDetails.pool },
+    { id: 'storageShed', label: 'Storage Shed', isRequired: propertyDetails.storageShed },
+    { id: 'sunroom', label: 'Sunroom', isRequired: propertyDetails.sunroom },
+  ];
+
+  let generalPlusFurnished = [...generalAmenities, ...furnishedOptions];
 
   const washerOptions = [
     { id: 'washerInUnit', label: 'In-Unit' },
@@ -132,15 +191,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   };
 
   const handleParkingSelection = (id: string) => {
-    setParkingType((prevParkingType) => {
-      if (prevParkingType.includes(id)) {
-        // If the id exists, remove it from the array
-        return prevParkingType.filter((type) => type !== id);
-      } else {
-        // If the id does not exist, add it to the array
-        return [...prevParkingType, id];
-      }
-    });
     setPropertyDetails(prev => ({
       ...prev,
       [id]: !prev[id]
@@ -148,15 +198,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   };
 
   const handleParkingIsFreeSelection = (id: string) => {
-    setParkingIsFree((prevParkingIsFree) => {
-      if (prevParkingIsFree.includes(id)) {
-        // If the id exists, remove it from the array
-        return prevParkingIsFree.filter((type) => type !== id);
-      } else {
-        // If the id does not exist, add it to the array
-        return [...prevParkingIsFree, id];
-      }
-    });
     setPropertyDetails(prev => ({
       ...prev,
       [id]: !prev[id]
@@ -213,7 +254,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
 
       <h3 className="text-center text-2xl my-5 border-b-2">Other Amenities</h3>
       <div className=" grid grid-cols-2 gap-x-20 gap-y-1 w-full mx-auto rounded-2xl py-2 pl-5">
-        {amenitiesOptions.map((item, idx) => (
+        {(propertyDetails.furnished ? generalPlusFurnished : generalAmenities).map((item, idx) => (
           <CheckboxDemo
             justifyDirection={idx % 2 === 0 ? "end" : "left"}
             label={item.label}
@@ -222,7 +263,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
             details={item}
             handleChange={handleCheck}
             checkOnLeft={idx % 2 !== 0}
-
           />
         ))}
       </div>
