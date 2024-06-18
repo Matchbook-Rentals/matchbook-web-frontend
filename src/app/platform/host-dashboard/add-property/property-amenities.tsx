@@ -177,7 +177,7 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
       <h3 className="text-center text-2xl mb-5 border-b-2">Laundry</h3>
       <div className="flex justify-evenly mb-5">
         <BrandRadio name="washer" options={washerOptions} setSelectedValue={setWasherDetails} selectedValue={propertyDetails.washerInUnit ? 'washerInUnit' : propertyDetails.washerHookup ? 'washerHookup' : propertyDetails.washerNotAvailable ? 'washerNotAvailable' : propertyDetails.washerInComplex ? 'washerInComplex' : ''} radioLabel="Washer" vertical />
-        <BrandRadio name="dryer" options={dryerOptions} setSelectedValue={setDryerDetails} selectedValue={propertyDetails.dryerInUnit ? 'dryerInUnit' : propertyDetails.dryerHookup ? 'dryerHookup' : propertyDetails.dryerNotAvailable ? 'dryerNotAvailable' : propertyDetails.dryerInComplex ? 'dryerInComplex' : ''} radioLabel="Dryer" vertical />
+        <BrandRadio name="dryer" options={dryerOptions} circleOnLeft setSelectedValue={setDryerDetails} selectedValue={propertyDetails.dryerInUnit ? 'dryerInUnit' : propertyDetails.dryerHookup ? 'dryerHookup' : propertyDetails.dryerNotAvailable ? 'dryerNotAvailable' : propertyDetails.dryerInComplex ? 'dryerInComplex' : ''} radioLabel="Dryer" vertical />
       </div>
 
       <h3 className="text-center text-2xl mb-5 border-b-2">Parking</h3>
