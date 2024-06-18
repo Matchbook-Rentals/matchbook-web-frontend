@@ -81,25 +81,20 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
     { id: 'dryerInComplex', label: 'In complex' },
   ]
 
-  const parkingOptions = [
-    { id: 'street', label: 'Street' },
-    { id: 'uncovered', label: 'Uncovered' },
-    { id: 'Covered', label: 'Covered' },
-    { id: 'Garage', label: 'Garage' },
+  const parkingCheckboxes = [
+    { id: 'streetParking', label: 'Street' },
+    { id: 'uncoveredParking', label: 'Uncovered' },
+    { id: 'coveredParking', label: 'Covered' },
+    { id: 'garageParking', label: 'Garage' },
   ]
 
-  const parkingFreeOptions = [
-    { id: 'street', label: '' },
-    { id: 'uncovered', label: '' },
-    { id: 'Covered', label: '' },
-    { id: 'Garage', label: '' },
+  const parkingFreeCheckboxes = [
+    { id: 'streetParkingFree', label: 'Street' },
+    { id: 'uncoveredParkingFree', label: 'Uncovered' },
+    { id: 'coveredParkingFree', label: 'Covered' },
+    { id: 'garageParkingFree', label: 'Garage' },
   ]
 
-  const [amenities, setAmenities] = useState(initAmenities);
-  const [allowDogs, setAllowDogs] = useState(false);
-  const [allowCats, setAllowCats] = useState(false);
-  const [washerType, setWasherType] = useState('');
-  const [dryerType, setDryerType] = useState('');
   const [parkingType, setParkingType] = useState<string[]>([]);
   const [parkingIsFree, setParkingIsFree] = useState<string[]>([]);
 
@@ -126,42 +121,6 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
   }
 
   const handleNext = () => {
-    // setPropertyDetails(prev => {
-    //   const newState = { ...prev };
-
-    //   if (washerType) {
-    //     newState[washerType] = true;
-    //   }
-    //   if (dryerType) {
-    //     newState[dryerType] = true;
-    //   }
-    //   if (allowDogs) {
-    //     newState['allowDogs'] = true;
-    //   }
-    //   if (allowCats) {
-    //     newState['allowCats'] = true;
-    //   }
-
-
-    //   amenities.forEach(item => {
-    //     if (item.isRequired) {
-    //       newState[item.id] = item.isRequired;
-    //     }
-    //   });
-
-    //   // Add each parking type to the newState object with a value of true
-    //   parkingType.forEach(type => {
-    //     newState[type] = true;
-    //   });
-
-    //   // Add each free parking type to the newState object with a value of true
-    //   parkingIsFree.forEach(type => {
-    //     newState[type] = true;
-    //   });
-
-    //   return newState;
-    // });
-
     goToNext();
   };
 
@@ -225,83 +184,45 @@ const PropertyAmenitySelect: React.FC<PropertyAmenitySelectProps> = ({
       <div className="flex w-4/5 mb-2  mx-auto justify-evenly">
         <div className="flex-col">
           <h4 className="text-center text-xl font-semibold border-b-2">Type</h4>
-          <CheckboxDemo
-            isChecked={propertyDetails.streetParking}
-            justifyDirection="end"
-            label="Street"
-            handleChange={handleParkingSelection}
-            details={{ id: 'streetParking', label: 'Street', isRequired: propertyDetails.streetParking }}
-          />
-          <CheckboxDemo
-            isChecked={propertyDetails.coveredParking}
-            justifyDirection="end"
-            label="Covered"
-            handleChange={handleParkingSelection}
-            details={{ id: 'coveredParking', label: 'Covered', isRequired: propertyDetails.coveredParking }}
-          />
-          <CheckboxDemo
-            isChecked={propertyDetails.uncoveredParking}
-            justifyDirection="end"
-            label="Uncovered"
-            handleChange={handleParkingSelection}
-            details={{ id: 'uncoveredParking', label: 'Uncovered', isRequired: propertyDetails.uncoveredParking }}
-          />
-          <CheckboxDemo
-            isChecked={propertyDetails.garageParking}
-            justifyDirection="end"
-            label="Garage"
-            handleChange={handleParkingSelection}
-            details={{ id: 'garageParking', label: 'Garage', isRequired: propertyDetails.garageParking }}
-          />
+          {parkingCheckboxes.map((checkbox) => (
+            <CheckboxDemo
+              key={checkbox.id}
+              isChecked={propertyDetails[checkbox.id]}
+              label={checkbox.label}
+              justifyDirection="end"
+              handleChange={handleParkingSelection}
+              details={checkbox}
+            />
+          ))}
         </div>
         <div className="flex-col">
           <h4 className="text-center text-xl font-semibold border-b-2">Free?</h4>
-          <CheckboxDemo
-            label="Street Free"
-            checkOnLeft
-            isChecked={propertyDetails.streetParkingFree}
-            handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'streetParkingFree', label: 'Street Free', isRequired: propertyDetails.streetParkingFree }}
-            disabled={!propertyDetails.streetParking}
-          />
-          <CheckboxDemo
-            label="Covered Free"
-            checkOnLeft
-            isChecked={propertyDetails.coveredParkingFree}
-            handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'coveredParkingFree', label: 'Covered Free', isRequired: propertyDetails.coveredParkingFree }}
-            disabled={!propertyDetails.coveredParking}
-          />
-          <CheckboxDemo
-            label="Uncovered Free"
-            checkOnLeft
-            isChecked={propertyDetails.uncoveredParkingFree}
-            handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'uncoveredParkingFree', label: 'Uncovered Free', isRequired: propertyDetails.uncoveredParkingFree }}
-            disabled={!propertyDetails.uncoveredParking}
-          />
-          <CheckboxDemo
-            label="Garage Free"
-            checkOnLeft
-            isChecked={propertyDetails.garageParkingFree}
-            handleChange={handleParkingIsFreeSelection}
-            details={{ id: 'garageParkingFree', label: 'Garage Free', isRequired: propertyDetails.garageParkingFree }}
-            disabled={!propertyDetails.garageParking}
-          />
+          {parkingFreeCheckboxes.map((checkbox) => (
+            <CheckboxDemo
+              key={checkbox.id}
+              checkOnLeft
+              disabled={!propertyDetails[checkbox.id.slice(0, -4)]}
+              isChecked={propertyDetails[checkbox.id]}
+              label={checkbox.label}
+              handleChange={handleParkingIsFreeSelection}
+              details={checkbox}
+            />
+          ))}
         </div>
       </div>
 
       <h3 className="text-center text-2xl my-5 border-b-2">Other Amenities</h3>
-      <div className="card  grid grid-cols-2 w-full mx-auto rounded-2xl py-2 pl-5">
+      <div className=" grid grid-cols-2 gap-x-20 gap-y-1 w-full mx-auto rounded-2xl py-2 pl-5">
         {amenitiesOptions.map((item, idx) => (
           <CheckboxDemo
-            justifyDirection="left"
+            justifyDirection={idx % 2 === 0 ? "end" : "left"}
             label={item.label}
             key={item.id}
             isChecked={item.isRequired}
             details={item}
             handleChange={handleCheck}
-            checkOnLeft
+            checkOnLeft={idx % 2 !== 0}
+
           />
         ))}
       </div>
