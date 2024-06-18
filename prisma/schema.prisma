@@ -117,8 +117,8 @@ model Listing {
   requireBackgroundCheck Boolean  @default(false)
   shortestLeaseLength    Int      @default(1) // Renamed from minimumLeaseLength
   longestLeaseLength     Int      @default(12) // Renamed from maximumLeaseLength
-  minimumLeasePrice      Int      @default(4000)
-  maximumLeasePrice      Int      @default(3500)
+  shortestLeasePrice     Int      @default(4000)
+  longestLeasePrice      Int      @default(3500)
 
   // Assuming amenities are boolean fields
   furnished            Boolean @default(false)
