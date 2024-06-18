@@ -40,7 +40,7 @@ const fetchListingsFromDb = async () => {
 };
 
 export default async function HostDashboard() {
-  const listings = await fetchListingsFromDb();
+  const userDbProperties = await fetchListingsFromDb();
 
   return (
     <div className="md:w-4/5 w-[95%] mx-auto">
@@ -55,7 +55,7 @@ export default async function HostDashboard() {
           Add a property
         </Link>
       </Button>
-      <HostDashboardClient properties={listings} />
+      <HostDashboardClient properties={userDbProperties} />
     </div>
   );
 }

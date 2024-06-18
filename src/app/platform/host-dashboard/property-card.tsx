@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Listing, ListingImage } from "@prisma/client";
+import Link from "next/link";
 
 const IMAGE_HEIGHT = 250;
 const LOCATION_STRING_MAX_LENGTH = 25;
@@ -13,7 +14,7 @@ interface PropertyCardProps {
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
-    <div className="max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-white">
+    <Link href={`/platform/host-dashboard/${property.id}`} className="max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-white">
       <img
         className="w-full"
         style={{ height: `${IMAGE_HEIGHT}px` }}
@@ -33,7 +34,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
