@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import * as Slider from '@radix-ui/react-slider';
+import CurrencyInput from '@/components/ui/currency-input';
 
 interface DualThumbSliderProps {
   setShortestLeaseTerms: (length: number, price: number) => void;
@@ -21,18 +22,12 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
   const [values, setValues] = useState([1, 12]); // Initial values for the thumbs
   const [minValue, setMinValue] = useState(3000); // Initial minimum value
   const [maxValue, setMaxValue] = useState(2500); // Initial maximum value
-  const [minValueRaw, setMinValueRaw] = useState('3000'); // Raw input for min value
-  const [maxValueRaw, setMaxValueRaw] = useState('2500'); // Raw input for max value
-  const [minValueIsFocus, setMinValueIsFocus] = useState(false); // Focus state for min value
-  const [maxValueIsFocus, setMaxValueIsFocus] = useState(false); // Focus state for max value
 
   useEffect(() => {
     if (propertyDetails) {
       setValues([propertyDetails.shortestLeaseLength || 1, propertyDetails.longestLeaseLength || 12]);
       setMinValue(propertyDetails.shortestLeasePrice || 3000);
       setMaxValue(propertyDetails.longestLeasePrice || 2500);
-      setMinValueRaw((propertyDetails.shortestLeasePrice || 3000).toString());
-      setMaxValueRaw((propertyDetails.longestLeasePrice || 2500).toString());
     }
   }, [propertyDetails]);
 
@@ -45,38 +40,6 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
     if (oldValues[1] !== newValues[1]) {
       setLongestLeaseTerms(newValues[1], maxValue);
     }
-  };
-
-  const handleMinValueChange = (e) => {
-    const newValue = e.target.value.replace(/[^0-9.-]+/g, "");
-    setMinValueRaw(newValue);
-    setMinValue(parseFloat(newValue) || 0);
-  };
-
-  const handleMinValueBlur = () => {
-    const roundedValue = Math.round(minValue / 5) * 5;
-    setMinValue(roundedValue);
-    setMinValueRaw(roundedValue.toString());
-    setShortestLeaseTerms(values[0], roundedValue);
-    setMinValueIsFocus(false);
-  };
-
-  const handleMaxValueChange = (e) => {
-    const newValue = e.target.value.replace(/[^0-9.-]+/g, "");
-    setMaxValueRaw(newValue);
-    setMaxValue(parseFloat(newValue) || 0);
-  };
-
-  const handleMaxValueBlur = () => {
-    const roundedValue = Math.round(maxValue / 5) * 5;
-    setMaxValue(roundedValue);
-    setMaxValueRaw(roundedValue.toString());
-    setLongestLeaseTerms(values[1], roundedValue);
-    setMaxValueIsFocus(false);
-  };
-
-  const formatCurrency = (value: number) => {
-    return `$${value.toFixed(2)}`;
   };
 
   const steps = Array.from({ length: 12 }, (_, i) => i + 1); // Create an array of step values from 1 to 12
@@ -109,28 +72,24 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
         <Slider.Thumb className="block w-5 h-5 bg-gray-300 rounded-full outline-none border-2 border-white shadow-md" />
         <Slider.Thumb className="block w-5 h-5 bg-gray-300 rounded-full outline-none border-2 border-white shadow-md" />
       </Slider.Root>
-      <div className="mt-6 text-center">
+      <div className="mt-6 text-center justify-evenly  flex w-full  items-center">
         <div className="flex justify-center items-center">
-          <span>Shortest: {values[0]}</span>
-          <input
-            type="text"
-            value={minValueIsFocus ? minValueRaw : formatCurrency(minValue)}
-            onChange={handleMinValueChange}
-            onBlur={handleMinValueBlur}
-            onFocus={() => setMinValueIsFocus(true)}
-            step="5"
-            className="ml-2 w-24 border-6 border-gray-300 rounded-md text-center"
+          <CurrencyInput
+            value={minValue}
+            id="min-value"
+            label={`Shortest: ${values[0]} months`}
+            onChange={setMinValue}
+            className="rounded-full w-24 mt-1"
+            onBlur={() => setShortestLeaseTerms(values[0], minValue)}
           />
-          <span className="mx-4">|</span>
-          <span>Longest: {values[1]}</span>
-          <input
-            type="text"
-            value={maxValueIsFocus ? maxValueRaw : formatCurrency(maxValue)}
-            onChange={handleMaxValueChange}
-            onBlur={handleMaxValueBlur}
-            onFocus={() => setMaxValueIsFocus(true)}
-            step="5"
-            className="ml-2 w-24 border border-gray-300 rounded-md text-center"
+          <span className="mx-4 text-xl text-gray-600">|</span>
+          <CurrencyInput
+            value={maxValue}
+            id="max-value"
+            label={`Longest: ${values[1]} months`}
+            onChange={setMaxValue}
+            className="rounded-full mt-1"
+            onBlur={() => setLongestLeaseTerms(values[1], maxValue)}
           />
         </div>
       </div>

@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Input } from './input';
+import { cn } from '@/lib/utils';
+import { Label } from './label';
 
 interface CurrencyInputProps {
   value: number;
   onChange: (value: number) => void;
   step?: number;
   onBlur?: () => void;
+  className?: string;
+  id: string;
+  label?: string;
 }
 
-const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5, onBlur }) => {
+const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5, onBlur, className, id, label }) => {
   const [rawValue, setRawValue] = useState(value.toString());
   const [isFocus, setIsFocus] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e) => {
     const newValue = e.target.value.replace(/[^0-9.-]+/g, "");
@@ -26,20 +32,33 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5
     if (onBlur) onBlur();
   };
 
+  const handleFocus = () => {
+    setIsFocus(true);
+    if (inputRef.current) {
+      const length = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(length, length);
+    }
+  };
+
   const formatCurrency = (value: number) => {
     return `$${value.toFixed(2)}`;
   };
 
   return (
-    <Input
-      type="text"
-      value={isFocus ? rawValue : formatCurrency(value)}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      onFocus={() => setIsFocus(true)}
-      step={step}
-      className="ml-2 w-24 border border-gray-300 rounded-md text-center"
-    />
+    <div className="">
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Input
+        ref={inputRef}
+        id={id}
+        type="text"
+        value={isFocus ? rawValue : formatCurrency(value)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        step={step}
+        className={cn("ml-2 w-24 border border-gray-300 text-center", className)}
+      />
+    </div>
   );
 };
 
