@@ -67,7 +67,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
     <div className="max-w-4xl mx-auto p-8">
       <h1 onClick={() => console.log(propertyDetails)} className="text-4xl font-bold text-center mb-8">Property Details</h1>
       <div className="flex flex-col space-y-6">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+        <div className="flex flex-col gap-2">
           <div className="flex flex-col items-center">
             <Label htmlFor="title">Listing Title</Label>
             <Input
@@ -76,7 +76,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
               placeholder="Enter listing title"
               value={propertyDetails.title !== undefined ? propertyDetails.title : ''}
               onChange={e => handleChange(e, 'title', 'text')}
-              className="w-full max-w-xs"
+              className="w-full max-w-md"
             />
             {errors.title && <p className="text-red-500 mt-1">Please enter a valid listing title.</p>}
           </div>
@@ -87,7 +87,7 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
               placeholder="Enter description"
               value={propertyDetails.description !== undefined ? propertyDetails.description : ''}
               onChange={e => handleChange(e, 'description', 'textarea')}
-              className="w-full max-w-xs"
+              className="w-full max-w-lg"
             />
             {errors.description && <p className="text-red-500 mt-1">Please enter a valid description.</p>}
           </div>
