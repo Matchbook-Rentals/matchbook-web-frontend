@@ -18,9 +18,9 @@ export default function TabSelector({ tabs }: TabSelectorProps) {
   const [activeTab, setActiveTab] = useState(tabs[0]?.value);
 
   return (
-    <div className="flex border-2 border-red-500 justify-start space-x-2 py-4 border-b">
-      <Tabs defaultValue={tabs[0]?.value}>
-        <TabsList className="flex mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2">
+    <div className="flex justify-start space-x-2 py-4 border-b">
+      <Tabs className=" w-full" defaultValue={tabs[0]?.value}>
+        <TabsList className="flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value} className="flex flex-col items-center hover:bg-gray-300" onClick={() => setActiveTab(tab.value)}>
               <div className="h-8 w-8 flex items-center justify-center">
@@ -28,7 +28,7 @@ export default function TabSelector({ tabs }: TabSelectorProps) {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm">{tab.label}</span>
-                {activeTab === tab.value && <motion.div className="h-1 w-full bg-black rounded-full" layout layoutId="underline"></motion.div>}
+                {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-black rounded-full" layout layoutId="underline"></motion.div>}
               </div>
             </TabsTrigger>
           ))}
