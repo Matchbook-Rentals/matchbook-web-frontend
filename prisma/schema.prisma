@@ -251,6 +251,7 @@ model Booking {
   endDate    DateTime
   totalPrice Int
   createdAt  DateTime @default(now())
+  status     String   @default("reserved")
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
