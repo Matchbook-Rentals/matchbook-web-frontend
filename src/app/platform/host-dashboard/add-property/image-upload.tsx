@@ -69,8 +69,6 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         groupingCategories={groupingCategories}
         setGroupingCategories={setGroupingCategories}
       />
-
-      <h3 className="text-left text-lg font-semibold mt-5">Categories</h3>
       <div className="flex gap-2 justify-center mt-5 p-1">
         <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={goToPrevious}>BACK</button>
         <button className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg" onClick={handleNext}>NEXT</button>

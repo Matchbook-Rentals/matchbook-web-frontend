@@ -79,16 +79,18 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
             id="min-value"
             label={`Shortest: ${values[0]} months`}
             onChange={setMinValue}
-            className="rounded-full w-24 mt-1"
+            className="rounded-full w-40 mt-1"
+            styleWithLabel="text-lg"
             onBlur={() => setShortestLeaseTerms(values[0], minValue)}
           />
-          <span className="mx-4 text-xl text-gray-600">|</span>
+          <span className="mx-4 text-2xl text-gray-600">|</span>
           <CurrencyInput
             value={maxValue}
             id="max-value"
             label={`Longest: ${values[1]} months`}
             onChange={setMaxValue}
-            className="rounded-full w-24 mt-1 ml-4"
+            className="rounded-full w-40 mt-1"
+            styleWithLabel="text-lg"
             onBlur={() => setLongestLeaseTerms(values[1], maxValue)}
           />
         </div>

@@ -80,6 +80,12 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
             />
             {errors.title && <p className="text-red-500 mt-1">Please enter a valid listing title.</p>}
           </div>
+          <div id='property-address-container' className='w-full col-span-2 flex items-center justify-center'>
+            <div className='w-full max-w-lg flex flex-col justify-center p-4'>
+              <Label htmlFor="property-address" className='text-center'>Property Address</Label>
+              <AddressSuggest setPropertyDetails={setPropertyDetails} />
+            </div>
+          </div>
           <div className="flex flex-col items-center">
             <Label htmlFor="description">Description</Label>
             <Textarea
@@ -90,12 +96,6 @@ export default function SimpleDetails({ propertyDetails, setPropertyDetails, goT
               className="w-full max-w-lg"
             />
             {errors.description && <p className="text-red-500 mt-1">Please enter a valid description.</p>}
-          </div>
-          <div id='property-address-container' className='w-full col-span-2 flex items-center justify-center'>
-            <div className='w-full max-w-lg flex flex-col justify-center p-4'>
-              <Label htmlFor="property-address" className='text-center'>Property Address</Label>
-              <AddressSuggest setPropertyDetails={setPropertyDetails} />
-            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

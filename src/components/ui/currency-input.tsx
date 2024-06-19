@@ -11,9 +11,10 @@ interface CurrencyInputProps {
   className?: string;
   id: string;
   label?: string;
+  styleWithLabel?: string; // New prop
 }
 
-const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5, onBlur, className, id, label }) => {
+const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5, onBlur, className, id, label, styleWithLabel }) => {
   const [rawValue, setRawValue] = useState(value.toString());
   const [isFocus, setIsFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,7 +47,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5
 
   return (
     <div className="flex flex-col justify-center">
-      {label && <Label className='text-center' htmlFor={id}>{label}</Label>}
+      {label && <Label className={cn('text-center', styleWithLabel)} htmlFor={id}>{label}</Label>}
       <Input
         ref={inputRef}
         id={id}
@@ -56,7 +57,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5
         onBlur={handleBlur}
         onFocus={handleFocus}
         step={step}
-        className={cn("ml-2 w-24 border border-gray-300 text-center", className)}
+        className={cn("ml-2 w-24 border border-gray-300 text-center", className, styleWithLabel)}
       />
     </div>
   );
