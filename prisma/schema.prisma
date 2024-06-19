@@ -34,7 +34,7 @@ model User {
   trips          Trip[]
   accounts       Account[]
   listings       Listing[]
-  reservations   Reservation[]
+  bookings       Booking[]
   notifications  Notification[] // Changed from MongoDB's String array
   messages       Message[] // Changed from MongoDB's String array
   HousingRequest HousingRequest[]
@@ -203,7 +203,7 @@ model Listing {
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reservations    Reservation[]
+  bookings        Booking[]
   housingRequests HousingRequest[]
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
@@ -243,7 +243,7 @@ model HousingRequest {
   listingId String?
 }
 
-model Reservation {
+model Booking {
   id         String   @id @default(uuid()) // Changed from MongoDB's ObjectId
   userId     String
   listingId  String
