@@ -15,7 +15,7 @@ export default function ListingHorizontalCard({ imgSrc, title, status, address }
         <h2 className="text-3xl text-center ">{address.slice(0, address.indexOf(','))}</h2>
         {/* <p className="mt-2 text-center">{address}</p> */}
         <div className="mt-4 flex justify-end">
-          <Badge className="bg-primaryBrand text-black text-md font-bold rounded-none px-2 py-1">{status.toUpperCase()}</Badge>
+          <Badge className="bg-primaryBrand text-black text-md font-bold rounded-none hover:bg-primaryBrand px-2 py-1">{status.toUpperCase()}</Badge>
         </div>
       </div>
     </div>
