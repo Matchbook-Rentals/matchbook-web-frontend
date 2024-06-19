@@ -7,7 +7,7 @@ import { useHostProperties } from '../../../../contexts/host-properties-provider
 import { OverviewIcon, ListingIcon, ApplicationsIcon, PaymentsIcon, BookingsIcon, AnalyticsIcon } from '@/components/svgs/svg-components';
 import OverviewTab from './(tabs)/overview-tab';
 import BookingsTab from './(tabs)/bookings-tab';
-
+import PaymentsTab from './(tabs)/payments-tab';
 
 const PropertyDetails: React.FC = ({ params }) => {
   const { listings } = useHostProperties();
@@ -24,7 +24,7 @@ const PropertyDetails: React.FC = ({ params }) => {
     { value: "overview", label: "Overview", icon: OverviewIcon, content: <OverviewTab /> },
     { value: "listing", label: "Listing", icon: ListingIcon, content: <CardWithHeader title="Listing" content={<div>Listing content goes here.</div>} /> },
     { value: "applications", label: "Applications", icon: ApplicationsIcon, content: <CardWithHeader title="Applications" content={<div>Applications content goes here.</div>} /> },
-    { value: "payments", label: "Payments", icon: PaymentsIcon, content: <CardWithHeader title="Payments" content={<div>Payments content goes here.</div>} /> },
+    { value: "payments", label: "Payments", icon: PaymentsIcon, content: <PaymentsTab /> },
     { value: "analytics", label: "Analytics", icon: AnalyticsIcon, content: <CardWithHeader title="Analytics" content={<div>Analytics content goes here.</div>} /> },
     { value: "bookings", label: "Bookings", icon: BookingsIcon, content: <BookingsTab /> },
   ]

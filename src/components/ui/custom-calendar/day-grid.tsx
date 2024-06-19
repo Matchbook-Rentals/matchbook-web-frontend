@@ -4,7 +4,7 @@ interface DaysProps {
   currentDate: Date;
 }
 
-const Days: React.FC<DaysProps> = ({ currentDate }) => {
+const DayGrid: React.FC<DaysProps> = ({ currentDate }) => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -25,4 +25,4 @@ const Days: React.FC<DaysProps> = ({ currentDate }) => {
   return <div className="grid grid-cols-7 gap-1 p-2">{days}</div>;
 };
 
-export default Days;
+export default DayGrid;

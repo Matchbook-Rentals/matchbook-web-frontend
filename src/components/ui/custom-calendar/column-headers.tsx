@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DaysOfWeek = () => {
+const ColumnHeaders = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
@@ -14,4 +14,4 @@ const DaysOfWeek = () => {
   );
 };
 
-export default DaysOfWeek;
+export default ColumnHeaders;
