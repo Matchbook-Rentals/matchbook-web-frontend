@@ -15,15 +15,19 @@ const DayGrid: React.FC<DayGridProps> = ({ currentDate, bookings }) => {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const isDateInRange = (date: Date, bookings: Booking[]) => {
+    const normalizeDate = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    const normalizedDate = normalizeDate(date);
+
     for (const booking of bookings) {
-      const startDate = new Date(booking.startDate);
-      const endDate = new Date(booking.endDate);
-      if (date >= startDate && date <= endDate) {
-        console.log('date in range', date, startDate, endDate);
+      const startDate = normalizeDate(new Date(booking.startDate));
+      const endDate = normalizeDate(new Date(booking.endDate));
+      if (normalizedDate >= startDate && normalizedDate <= endDate) {
+        console.log('date in range', normalizedDate, startDate, endDate);
         return booking;
       }
     }
-    console.log('date not in range', date, bookings);
+    console.log('date not in range', normalizedDate, bookings);
     return null;
   };
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-const ColumnHeaders = () => {
+const GenericColumnHeaders = () => {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="grid grid-cols-7  py-2">
+    <div className="grid grid-cols-7 bg-gray-100 py-2">
       {daysOfWeek.map(day => (
         <div key={day} className="text-center font-semibold">
           {day}
@@ -14,4 +14,4 @@ const ColumnHeaders = () => {
   );
 };
 
-export default ColumnHeaders;
+export default GenericColumnHeaders;
