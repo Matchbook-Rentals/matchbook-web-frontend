@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="custom-scrollbar">
+      <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <body className={lora.className}>{children}</body>
       </html>
     </ClerkProvider>
