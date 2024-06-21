@@ -117,3 +117,21 @@
 .cl-userButtonPopoverActions *:hover {
   background-color: #a3b899;
 }
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: black transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 10px;
+}
