@@ -12,7 +12,7 @@ const DisplayCalendar: React.FC<DisplayCalendarProps> = ({ bookings }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   return (
-    <div className="w-[95%] max-w-[800px] mx-auto border-2 border-gray-300 p-1 shadow-lg rounded-lg overflow-hidden">
+    <div className="w-[95%] max-w-[800px]  mx-auto border-2 border-gray-300 p-1 shadow-lg rounded-lg overflow-hidden">
       <Header currentDate={currentDate} setCurrentDate={setCurrentDate} />
       <ColumnHeaders />
       <DayGrid currentDate={currentDate} bookings={bookings} />
