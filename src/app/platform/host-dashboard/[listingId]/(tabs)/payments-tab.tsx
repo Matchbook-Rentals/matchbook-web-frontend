@@ -2,8 +2,6 @@
 
 import React from "react";
 import CardWithHeader from "@/components/ui/card-with-header";
-import 'react-calendar/dist/Calendar.css';
-import DisplayCalendar from "@/components/ui/custom-calendar/display-only-calendar";
 
 export default function PaymentsTab() {
   return (
