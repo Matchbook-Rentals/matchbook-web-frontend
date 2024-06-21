@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch'; // Assuming you have a Switch component
-import { Slider } from '@/components/ui/slider';
 import DualThumbSlider from './double-slider';
 import RentBarChart from './rent-bar-chart';
 import CarouselButtonControls from './carousel-button-controls'; // Import CarouselButtonControls component
 import { CheckboxDemo } from '../../preferences/custom-checkbox';
+import CurrencyInput from '@/components/ui/currency-input';
 
 interface ComponentProps {
   goToNext: () => void;
@@ -21,72 +18,63 @@ interface ComponentProps {
 interface PropertyDetails {
   requireBackgroundCheck: boolean;
   depositSize: number;
-  minimumLeaseLength: number | null;
-  maximumLeaseLength: number | null;
-  minimumLeasePrice: number | null;
-  maximumLeasePrice: number;
+  shortestLeaseLength: number | null;
+  longestLeaseLength: number | null;
+  shortestLeasePrice: number | null;
+  longestLeasePrice: number;
 }
 
 export default function LeaseTermsForm({ goToNext, goToPrevious, propertyDetails, setPropertyDetails, withButtons = true }: ComponentProps) {
   const [depositSize, setDepositSize] = useState(0);
 
   const handleNext = () => {
-    // setPropertyDetails(prev => ({
-    //   ...prev,
-    //   depositSize,
-    //   minimumLeaseLength: propertyDetails.minimumLeaseLength,
-    //   maximumLeaseLength: propertyDetails.maximumLeaseLength,
-    //   minimumLeasePrice: propertyDetails.minimumLeasePrice,
-    //   maximumLeasePrice: propertyDetails.maximumLeasePrice,
-    //   requireBackgroundCheck
-    // }));
     goToNext();
   }
 
-  const handleSetMinimumLeaseTerms = (length: number, price: number) => {
+  const handleSetShortestLeaseTerms = (length: number, price: number) => {
     setPropertyDetails({
       ...propertyDetails,
-      minimumLeaseLength: length,
-      minimumLeasePrice: price
+      shortestLeaseLength: length,
+      shortestLeasePrice: price
     });
   }
 
-  const handleSetMaximumLeaseTerms = (length: number, price: number) => {
+  const handleSetLongestLeaseTerms = (length: number, price: number) => {
     setPropertyDetails({
       ...propertyDetails,
-      maximumLeaseLength: length,
-      maximumLeasePrice: price
+      longestLeaseLength: length,
+      longestLeasePrice: price
     });
   }
 
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <DualThumbSlider setMinimumLeaseTerms={handleSetMinimumLeaseTerms} setMaximumLeaseTerms={handleSetMaximumLeaseTerms} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
+        <DualThumbSlider setShortestLeaseTerms={handleSetShortestLeaseTerms} setLongestLeaseTerms={handleSetLongestLeaseTerms} propertyDetails={propertyDetails} setPropertyDetails={setPropertyDetails} />
       </div>
 
-      {
-        !propertyDetails?.maximumLeaseLength || !propertyDetails.maximumLeasePrice || !propertyDetails.minimumLeaseLength || !propertyDetails.minimumLeasePrice ? (
-          <div className="flex items-center justify-center h-64 text-xl text-red-600">
-            Please provide information about your desired lease terms to see a visualization.
-          </div>
-        ) : (
-          <RentBarChart
-            maxLength={propertyDetails.maximumLeaseLength}
-            maxValue={propertyDetails.maximumLeasePrice}
-            minLength={propertyDetails.minimumLeaseLength}
-            minValue={propertyDetails.minimumLeasePrice}
-          />
-        )
-      }
+      <RentBarChart
+        maxLength={propertyDetails.longestLeaseLength || 12}
+        maxValue={propertyDetails.longestLeasePrice || 2500}
+        minLength={propertyDetails.shortestLeaseLength || 1}
+        minValue={propertyDetails.shortestLeasePrice || 3000}
+      />
 
       <div className="flex justify-evenly items-center ">
-        <div>
+        <div className='scale-90'>
           <CheckboxDemo label="Require Background Check" isChecked={propertyDetails.requireBackgroundCheck} handleChange={() => setPropertyDetails({ ...propertyDetails, requireBackgroundCheck: !propertyDetails.requireBackgroundCheck })} details={{ id: 'requireBackgroundCheck' }} />
         </div>
-        <div>
-          <Label htmlFor="deposit-size">Deposit Size ($)</Label>
-          <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={propertyDetails.depositSize?.toString() || ''} onChange={e => setPropertyDetails({ ...propertyDetails, depositSize: parseFloat(e.target.value) || 0 })} />
+        <div onClick={() => console.log(propertyDetails.depositSize)}>
+          {/* <Label htmlFor="deposit-size">Deposit Size ($)</Label>
+          <Input id="deposit-size" placeholder="Enter deposit size" type="number" value={propertyDetails.depositSize?.toString() || ''} onChange={e => setPropertyDetails({ ...propertyDetails, depositSize: parseFloat(e.target.value) || 0 })} /> */}
+          <CurrencyInput
+            className='rounded-full w-4/5 mx-auto'
+            id="deposit-size"
+            label='Deposit Size ($)'
+            styleWithLabel='text-lg'
+            value={propertyDetails.depositSize}
+            onChange={number => setPropertyDetails({ ...propertyDetails, depositSize: number || 0 })}
+          />
         </div>
       </div>
 

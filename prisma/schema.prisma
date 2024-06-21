@@ -34,7 +34,7 @@ model User {
   trips          Trip[]
   accounts       Account[]
   listings       Listing[]
-  reservations   Reservation[]
+  bookings       Booking[]
   notifications  Notification[] // Changed from MongoDB's String array
   messages       Message[] // Changed from MongoDB's String array
   HousingRequest HousingRequest[]
@@ -115,48 +115,47 @@ model Listing {
   squareFootage          Int      @default(0)
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
-  minimumLeaseLength     Int      @default(1)
-  maximumLeaseLength     Int      @default(12)
-  minimumLeasePrice      Int      @default(4000)
-  maximumLeasePrice      Int      @default(3500)
+  shortestLeaseLength    Int      @default(1) // Renamed from minimumLeaseLength
+  longestLeaseLength     Int      @default(12) // Renamed from maximumLeaseLength
+  shortestLeasePrice     Int      @default(4000)
+  longestLeasePrice      Int      @default(3500)
+  furnished              Boolean  @default(false)
 
-  // Assuming amenities are boolean fields
-  furnished            Boolean @default(false)
-  airConditioning      Boolean @default(false)
-  laundryFacilities    Boolean @default(false)
-  fitnessCenter        Boolean @default(false)
-  pool                 Boolean @default(false)
-  dishwasher           Boolean @default(false)
-  elevator             Boolean @default(false)
-  wheelchairAccess     Boolean @default(false)
-  doorman              Boolean @default(false)
-  parking              Boolean @default(false)
-  fireplace            Boolean @default(false)
-  wifi                 Boolean @default(false)
-  kitchen              Boolean @default(false)
-  washerInUnit         Boolean @default(false)
-  washerHookup         Boolean @default(false)
-  washerNotAvailable   Boolean @default(false)
-  washerInComplex      Boolean @default(false)
-  dryerInUnit          Boolean @default(false)
-  dryerHookup          Boolean @default(false)
-  dryerNotAvailable    Boolean @default(false)
-  dryerInComplex       Boolean @default(false)
-  dedicatedWorkspace   Boolean @default(false)
-  tv                   Boolean @default(false)
-  hairDryer            Boolean @default(false)
-  iron                 Boolean @default(false)
-  heating              Boolean @default(false)
-  hotTub               Boolean @default(false)
-  gym                  Boolean @default(false)
-  petsAllowed          Boolean @default(false)
-  smokingAllowed       Boolean @default(false)
-  eventsAllowed        Boolean @default(false)
-  privateEntrance      Boolean @default(false)
-  secure               Boolean @default(false)
-  waterfront           Boolean @default(false)
-  beachfront           Boolean @default(false)
-  mountainView         Boolean @default(false)
+  // General Amenities
+  airConditioning    Boolean @default(false)
+  laundryFacilities  Boolean @default(false)
+  fitnessCenter      Boolean @default(false)
+  elevator           Boolean @default(false)
+  wheelchairAccess   Boolean @default(false)
+  doorman            Boolean @default(false)
+  parking            Boolean @default(false)
+  wifi               Boolean @default(false)
+  kitchen            Boolean @default(false)
+  dedicatedWorkspace Boolean @default(false)
+  hairDryer          Boolean @default(false)
+  iron               Boolean @default(false)
+  heating            Boolean @default(false)
+  hotTub             Boolean @default(false)
+  petsAllowed        Boolean @default(false)
+  smokingAllowed     Boolean @default(false)
+  eventsAllowed      Boolean @default(false)
+  privateEntrance    Boolean @default(false)
+  secure             Boolean @default(false)
+  waterfront         Boolean @default(false)
+  beachfront         Boolean @default(false)
+  mountainView       Boolean @default(false)
+
+  // Washer and Dryer Options
+  washerInUnit       Boolean @default(false)
+  washerHookup       Boolean @default(false)
+  washerNotAvailable Boolean @default(false)
+  washerInComplex    Boolean @default(false)
+  dryerInUnit        Boolean @default(false)
+  dryerHookup        Boolean @default(false)
+  dryerNotAvailable  Boolean @default(false)
+  dryerInComplex     Boolean @default(false)
+
+  // Parking Options
   streetParking        Boolean @default(false)
   streetParkingFree    Boolean @default(false)
   coveredParking       Boolean @default(false)
@@ -165,12 +164,46 @@ model Listing {
   uncoveredParkingFree Boolean @default(false)
   garageParking        Boolean @default(false)
   garageParkingFree    Boolean @default(false)
-  allowDogs            Boolean @default(false)
-  allowCats            Boolean @default(false)
+  evCharging           Boolean @default(false)
+
+  // Pet Policies
+  allowDogs Boolean @default(false)
+  allowCats Boolean @default(false)
+
+  // Structural Amenities
+  gym             Boolean @default(false)
+  balcony         Boolean @default(false)
+  patio           Boolean @default(false)
+  sunroom         Boolean @default(false)
+  fireplace       Boolean @default(false)
+  firepit         Boolean @default(false)
+  pool            Boolean @default(false)
+  jacuzzi         Boolean @default(false)
+  grill           Boolean @default(false)
+  oven            Boolean @default(false)
+  stove           Boolean @default(false)
+  wheelAccessible Boolean @default(false)
+  fencedInYard    Boolean @default(false)
+  secureLobby     Boolean @default(false)
+  keylessEntry    Boolean @default(false)
+  alarmSystem     Boolean @default(false)
+  storageShed     Boolean @default(false)
+
+  // Kitchen
+  garbageDisposal Boolean @default(false)
+  dishwasher      Boolean @default(false)
+
+  //Furnished
+  tv                Boolean @default(false)
+  workstation       Boolean @default(false)
+  microwave         Boolean @default(false)
+  kitchenEssentails Boolean @default(false)
+  linens            Boolean @default(false)
+  privateBathroom   Boolean @default(false)
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reservations    Reservation[]
+  bookings        Booking[]
   housingRequests HousingRequest[]
   Trip            Trip?            @relation(fields: [tripId], references: [id])
   tripId          String?
@@ -210,7 +243,7 @@ model HousingRequest {
   listingId String?
 }
 
-model Reservation {
+model Booking {
   id         String   @id @default(uuid()) // Changed from MongoDB's ObjectId
   userId     String
   listingId  String
@@ -218,6 +251,7 @@ model Reservation {
   endDate    DateTime
   totalPrice Int
   createdAt  DateTime @default(now())
+  status     String   @default("reserved")
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)

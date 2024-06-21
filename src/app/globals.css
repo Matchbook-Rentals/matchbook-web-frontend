@@ -117,3 +117,35 @@
 .cl-userButtonPopoverActions *:hover {
   background-color: #a3b899;
 }
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  /* For Firefox */
+  scrollbar-color: #a3b899 transparent;
+  scroll-behavior: smooth;
+  /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  /* Background of the scrollbar track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a3b899;
+  /* Color of the scrollbar thumb */
+  border-radius: 2px;
+  /* Completely rounded corners for the scrollbar thumb */
+}
+
+.custom-scrollbar::-moz-scrollbar-thumb {
+  background-color: #a3b899;
+  /* Color of the scrollbar thumb */
+  border-radius: 2px;
+  /* Completely rounded corners for the scrollbar thumb */
+}

@@ -84,6 +84,10 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
     console.log("Selected location:", { lat, lng, results });
   };
 
+  const removeCountry = (address: string) => {
+    return address.replace(', USA', '');
+  }
+
   return (
     <Popover open={open && suggestions.length > 0} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -92,7 +96,7 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
           onChange={handleInput}
           disabled={!ready}
           id="property-address"
-          placeholder="Where's the party?"
+          placeholder="0 Hassle Drive, Salt Lake City, UT"
           type="text"
           autoComplete="off"
           className="w-full h-full text-2xl focus:outline-none text-center" />
@@ -101,8 +105,8 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
         <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (
-              <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
-                {description?.slice(0, -5)}
+              <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(removeCountry(description), place_id)}>
+                {removeCountry(description)}
               </li>
             ))}
           </ul>

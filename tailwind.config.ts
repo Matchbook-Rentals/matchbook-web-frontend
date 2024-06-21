@@ -54,7 +54,20 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         primaryBrand: {
-          DEFAULT: '#a3b899',
+          // DEFAULT: '#a3b899',
+          DEFAULT: '#a4b99a',
+        },
+        secondaryBrand: {
+          DEFAULT: '#85997d',
+        },
+        blueBrand: {
+          DEFAULT: '#5c9ac5',
+        },
+        pinkBrand: {
+          DEFAULT: '#c68087',
+        },
+        darkBrand: {
+          DEFAULT: '#f2df2e',
         },
       },
       borderRadius: {
