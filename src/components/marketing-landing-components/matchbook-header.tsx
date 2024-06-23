@@ -1,6 +1,5 @@
 import React from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
-import Hero from "../home-components/hero";
 
 export default function MatchbookHeader() {
   return (
@@ -38,7 +37,6 @@ export default function MatchbookHeader() {
           }
         `}</style>
       </header>
-      <Hero />
     </div>
   )
 }

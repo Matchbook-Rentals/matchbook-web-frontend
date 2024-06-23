@@ -4,31 +4,39 @@ import React, { useState, useEffect } from 'react';
 // Add className to the component props
 const Countdown: React.FC<{ className?: string }> = ({ className }) => {
   const targetDate = new Date('2025-02-01T00:00:00');
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  function calculateTimeLeft() {
-    const difference = +targetDate - +new Date();
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-
-    return timeLeft;
-  }
+  const [timeLeft, setTimeLeft] = useState<Record<string, number | string>>({
+    days: '??',
+    hours: '??',
+    minutes: '??',
+    seconds: '??'
+  });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    function calculateTimeLeft() {
+      const difference = +targetDate - +new Date();
+      let newTimeLeft: Record<string, number | string> = {};
 
-    return () => clearTimeout(timer);
-  });
+      if (difference > 0) {
+        newTimeLeft = {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      }
+
+      return newTimeLeft;
+    }
+
+    function updateTimeLeft() {
+      setTimeLeft(calculateTimeLeft());
+    }
+
+    updateTimeLeft(); // Initial calculation
+    const timer = setInterval(updateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const timeComponents = Object.keys(timeLeft).map((interval) => {
     if (!timeLeft[interval]) {
