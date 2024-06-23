@@ -33,7 +33,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
           disabled
           className="w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none disabled:bg-transparent cursor-not-allowed"
         />
-        <button className="p-3 bg-primaryBrand rounded-full">
+        <button className="p-3 cursor-not-allowed bg-primaryBrand rounded-full">
           <FaSearch className="text-white" size={20} />
         </button>
       </div>
