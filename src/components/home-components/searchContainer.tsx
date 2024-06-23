@@ -1,9 +1,13 @@
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-const SearchContainer: React.FC = () => {
+interface SearchContainerProps {
+  className?: string;
+}
+
+const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
   return (
-    <div className="mx-auto p-2">
+    <div className={`mx-auto p-2 ${className || ''}`}>
       <div className="flex p-3 items-center bg-white rounded-full shadow-md overflow-hidden">
         <input
           type="text"
