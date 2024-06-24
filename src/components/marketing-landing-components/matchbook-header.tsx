@@ -3,7 +3,7 @@ import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 
 export default function MatchbookHeader() {
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 bg-white">
       <header className="relative flex mb-6 justify-between px-4 pt-4 pb-12 items-start border-b-0 bg-white">
         <div className="flex">
           <img src="logo-nav-new.png" alt="MatchBook Logo" />

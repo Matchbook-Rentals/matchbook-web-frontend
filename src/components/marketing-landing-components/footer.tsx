@@ -1,12 +1,13 @@
 import Link from "next/link"
+import { ApartmentIcon } from "../svgs/svg-components"
 
 export default function Footer() {
   return (
-    <footer className="bg-muted py-8 md:py-12">
+    <footer className="bg-muted border-t-2 border-gray-200 py-8 md:py-12">
       <div className="container max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <div className="grid gap-4">
           <div className="flex items-center gap-2">
-            <MountainIcon className="h-6 w-6" />
+            <ApartmentIcon className="h-6 w-6" />
             <span className="text-lg font-bold">Matchbook Rentals, LLC.</span>
           </div>
           <p className="text-muted-foreground">Your place, all in one place</p>
