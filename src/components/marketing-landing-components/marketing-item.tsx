@@ -17,7 +17,7 @@ export default function MarketingItem({ number, title, description, brandColor }
       </div>
       <div>
         <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-gray-700">{description}</p>
+        <p className="text-gray-700 font-semibold">{description}</p>
       </div>
     </div>
   );

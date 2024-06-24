@@ -7,12 +7,12 @@ const AnalyticsIcon = () => (
 );
 const OverviewIcon = () => (
   <svg width="65" height="71" viewBox="0 0 65 71" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M57.6605 50.5163V12.2325C57.6605 7.25894 53.5241 3.23047 48.4252 3.23047H11.7978C6.69537 3.23047 2.5625 7.26234 2.5625 12.2325V57.1168C2.5625 62.0903 6.69886 67.8905 11.7978 67.8905H48.4252" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
+    <path d="M57.6605 50.5163V12.2325C57.6605 7.25894 53.5241 3.23047 48.4252 3.23047H11.7978C6.69537 3.23047 2.5625 7.26234 2.5625 12.2325V57.1168C2.5625 62.0903 6.69886 67.8905 11.7978 67.8905H48.4252" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
     <path d="M12.3291 20.0089H47.8962C50.1387 20.0089 50.1457 16.6094 47.8962 16.6094H12.3291C10.0865 16.6094 10.0795 20.0089 12.3291 20.0089Z" fill="black" />
     <path d="M12.3291 30.8878H47.8962C50.1387 30.8878 50.1457 27.4883 47.8962 27.4883H12.3291C10.0865 27.4883 10.0795 30.8878 12.3291 30.8878Z" fill="black" />
     <path d="M12.3291 41.7687H47.8962C50.1387 41.7687 50.1457 38.3691 47.8962 38.3691H12.3291C10.0865 38.3691 10.0795 41.7687 12.3291 41.7687Z" fill="black" />
     <path d="M12.3291 52.6456H32.2087C34.4513 52.6456 34.4583 49.2461 32.2087 49.2461H12.3291C10.0865 49.2461 10.0795 52.6456 12.3291 52.6456Z" fill="black" />
-    <path d="M45.1466 60.2997C49.2398 60.2997 52.5579 57.0653 52.5579 53.0756C52.5579 49.0859 49.2398 45.8516 45.1466 45.8516C41.0535 45.8516 37.7354 49.0859 37.7354 53.0756C37.7354 57.0653 41.0535 60.2997 45.1466 60.2997Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
+    <path d="M45.1466 60.2997C49.2398 60.2997 52.5579 57.0653 52.5579 53.0756C52.5579 49.0859 49.2398 45.8516 45.1466 45.8516C41.0535 45.8516 37.7354 49.0859 37.7354 53.0756C37.7354 57.0653 41.0535 60.2997 45.1466 60.2997Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
     <path d="M50.6914 59.7806C54.2561 62.5533 57.8169 65.323 61.3817 68.0957C63.1466 69.4704 65.2631 66.7845 63.4986 65.4131C59.9339 62.6404 56.3731 59.8707 52.8083 57.0981C51.0434 55.7233 48.9269 58.4093 50.6914 59.7806Z" fill="black" />
   </svg>
 
@@ -33,30 +33,30 @@ const ApplicationsIcon = () => (
 )
 const PaymentsIcon = () => (
   <svg width="79" height="71" viewBox="0 0 79 71" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M39.1546 68.3416C59.3131 68.3416 75.6548 53.7022 75.6548 35.6435C75.6548 17.5848 59.3131 2.94531 39.1546 2.94531C18.996 2.94531 2.6543 17.5848 2.6543 35.6435C2.6543 53.7022 18.996 68.3416 39.1546 68.3416Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
+    <path d="M39.1546 68.3416C59.3131 68.3416 75.6548 53.7022 75.6548 35.6435C75.6548 17.5848 59.3131 2.94531 39.1546 2.94531C18.996 2.94531 2.6543 17.5848 2.6543 35.6435C2.6543 53.7022 18.996 68.3416 39.1546 68.3416Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
     <path d="M46.2735 33.5243C39.4808 29.8834 32.2429 28.9512 30.5292 25.7231C30.4671 25.6072 30.4153 25.5005 30.3739 25.417C30.3117 25.2222 30.2703 25.0228 30.2444 24.8233C30.2444 24.7306 30.2548 24.6146 30.2703 24.494C30.3221 24.3317 30.3842 24.1694 30.4619 24.0163C30.5499 23.8957 30.6638 23.7334 30.7829 23.5896C30.9693 23.4273 31.2954 23.1444 31.5181 23.0145C32.0358 22.6713 33.6667 21.8967 36.4003 21.6973C38.0053 21.6185 39.6154 21.7251 41.1945 21.9988C42.5303 22.2771 43.8401 22.6713 45.0827 23.1954C45.1707 23.2325 45.238 23.265 45.3053 23.2928C45.5021 23.3855 45.6988 23.4783 45.8904 23.5803C48.7431 25.2547 51.5803 21.5674 48.8363 19.7632C46.3667 18.4831 43.5502 17.5973 40.6613 17.2216C40.7907 16.9758 40.8891 16.7021 40.9253 16.3821C41.0081 15.2643 41.4275 13.9796 40.4801 13.0613C39.4342 11.9157 37.3063 12.0316 36.3848 13.2514C35.7583 14.0585 35.924 15.102 35.7635 16.0296C35.7428 16.4331 35.8101 16.7856 35.9447 17.0917C33.7133 17.2633 31.5232 17.7735 29.5144 18.6965C23.5916 21.6277 23.8556 27.583 29.0226 31.0615C33.7184 34.1968 40.2937 35.3517 43.4984 37.4388C49.9857 41.5064 48.9657 46.5525 43.8298 48.0042C38.8647 49.2287 35.225 47.2946 29.9027 44.5721C28.0441 43.3801 25.4243 44.9292 25.8903 46.9236C26.0612 47.508 26.3821 48.0506 26.9568 48.3846C28.5929 49.2565 30.2496 50.096 31.9581 50.852C33.4596 51.5199 35.0438 52.0904 36.6799 52.48C36.5712 52.7026 36.4987 52.953 36.478 53.2267C36.6126 54.5392 36.3951 56.2275 36.742 57.4427C37.063 58.5604 38.4505 59.1912 39.6724 58.9871C40.7855 58.8016 41.6864 57.8972 41.7589 56.8861C41.6346 55.6895 41.8003 54.1821 41.5725 53.0041C41.8572 52.9948 42.142 52.9809 42.4319 52.953C46.3512 52.6191 50.3636 50.736 52.1653 47.4987C55.1889 42.3551 51.2748 36.3628 46.289 33.5243H46.2735Z" fill="black" />
   </svg>
 
 )
 const BookingsIcon = () => (
   <svg width="79" height="72" viewBox="0 0 79 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M73.5365 5.29297H5.79137C4.24003 5.29297 2.98242 6.48659 2.98242 7.959V66.298C2.98242 67.7704 4.24003 68.964 5.79137 68.964H73.5365C75.0878 68.964 76.3454 67.7704 76.3454 66.298V7.959C76.3454 6.48659 75.0878 5.29297 73.5365 5.29297Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
+    <path d="M73.5365 5.29297H5.79137C4.24003 5.29297 2.98242 6.48659 2.98242 7.959V66.298C2.98242 67.7704 4.24003 68.964 5.79137 68.964H73.5365C75.0878 68.964 76.3454 67.7704 76.3454 66.298V7.959C76.3454 6.48659 75.0878 5.29297 73.5365 5.29297Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
     <path d="M17.9948 1.50318C18.3087 4.91884 18.6194 8.33449 18.9333 11.7501C19.1151 13.745 22.423 13.7638 22.2379 11.7501C21.924 8.33449 21.6134 4.91884 21.2994 1.50318C21.1177 -0.491639 17.8097 -0.510458 17.9948 1.50318Z" fill="black" />
     <path d="M55.6676 1.50318C55.9816 4.91884 56.2922 8.33449 56.6062 11.7501C56.7879 13.745 60.0959 13.7638 59.9108 11.7501C59.5969 8.33449 59.2862 4.91884 58.9723 1.50318C58.7905 -0.491639 55.4826 -0.510458 55.6676 1.50318Z" fill="black" />
     <path d="M6.50115 21.9314C29.0355 21.9534 51.5665 21.9722 74.1009 21.9942C76.2257 21.9942 76.229 18.8608 74.1009 18.8577C51.5665 18.8357 29.0355 18.8169 6.50115 18.7949C4.37627 18.7949 4.37296 21.9283 6.50115 21.9314Z" fill="black" />
-    <path d="M22.9696 29.7227H13.0557V39.1322H22.9696V29.7227Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
-    <path d="M45.2596 29.7227H35.3457V39.1322H45.2596V29.7227Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
-    <path d="M22.9696 49.6387H13.0557V59.0482H22.9696V49.6387Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
-    <path d="M66.9022 29.7227H56.9883V39.1322H66.9022V29.7227Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
-    <path d="M44.621 49.6387H34.707V59.0482H44.621V49.6387Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
-    <path d="M66.9022 49.6387H56.9883V59.0482H66.9022V49.6387Z" stroke="black" stroke-width="4.7561" stroke-miterlimit="10" />
+    <path d="M22.9696 29.7227H13.0557V39.1322H22.9696V29.7227Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
+    <path d="M45.2596 29.7227H35.3457V39.1322H45.2596V29.7227Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
+    <path d="M22.9696 49.6387H13.0557V59.0482H22.9696V49.6387Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
+    <path d="M66.9022 29.7227H56.9883V39.1322H66.9022V29.7227Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
+    <path d="M44.621 49.6387H34.707V59.0482H44.621V49.6387Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
+    <path d="M66.9022 49.6387H56.9883V59.0482H66.9022V49.6387Z" stroke="black" strokeWidth="4.7561" strokeMiterlimit="10" />
   </svg>
 
 )
 const UserIcon = (props) => (
   <svg {...props} width="164" height="160" viewBox="0 0 164 160" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M97.4878 33.5769C88.1797 27.6536 75.8082 26.6037 65.9517 31.814C54.5674 37.5963 46.5443 50.0462 47.1006 62.9427C47.4688 72.7443 52.734 81.9192 60.4202 87.9052C54.6222 90.4829 49.6313 94.9254 46.2701 100.285C40.3076 109.929 39.2577 121.619 39.2028 132.714C39.1558 137.587 38.9208 143.268 40.2214 148.212C41.5063 148.204 42.7913 148.196 44.0762 148.212C45.5727 148.235 47.0692 148.266 48.5657 148.306C47.0536 145.336 46.9517 141.082 46.9674 137.188C47.0222 121.823 47.602 109.491 56.1109 100.332C59.4094 96.9311 64.8861 93.4837 70.5979 93.374C72.4313 93.9773 74.3274 94.4161 76.2626 94.6668C79.6239 95.5522 82.7501 92.7942 81.4416 89.3782C80.7129 87.6153 78.8639 86.9806 77.1558 86.5105C75.5496 86.0091 73.8808 85.727 72.2041 85.6252C64.7059 82.9456 58.7356 76.8734 55.8758 68.3646C51.3942 55.4054 62.136 37.2986 78.6445 36.2878C92.6692 35.3711 106.866 48.2676 105.628 62.4099C104.727 73.2223 98.5612 81.8095 89.1121 85.5311C84.3954 87.6623 87.3492 94.612 92.1521 92.7551C104.351 88.0854 112.797 75.612 113.44 62.6763C114.223 50.9316 107.47 39.5551 97.4956 33.5926L97.4878 33.5769Z" fill="black" />
-    <path d="M81.567 156C124.406 156 159.134 121.974 159.134 80C159.134 38.0264 124.406 4 81.567 4C38.7279 4 4 38.0264 4 80C4 121.974 38.7279 156 81.567 156Z" stroke="black" stroke-width="8" stroke-miterlimit="10" />
+    <path d="M81.567 156C124.406 156 159.134 121.974 159.134 80C159.134 38.0264 124.406 4 81.567 4C38.7279 4 4 38.0264 4 80C4 121.974 38.7279 156 81.567 156Z" stroke="black" strokeWidth="8" strokeMiterlimit="10" />
     <path d="M98.8975 97.3549C107.751 112.218 110.352 129.949 106.059 146.716C104.805 151.605 112.358 153.689 113.612 148.8C118.422 130.043 115.578 110.04 105.667 93.406C103.089 89.0811 96.3119 93.0143 98.9053 97.3627L98.8975 97.3549Z" fill="black" />
   </svg>
 
@@ -87,41 +87,91 @@ function ApartmentIcon(props) {
     <svg {...props} width="163" height="164" viewBox="0 0 163 164" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g opacity="0.75">
         <path opacity="0.5" d="M135.469 10H94.1289V160.79H135.469V10Z" fill="#D8D9D8" />
-        <path d="M30.5186 10L30.0586 161.53" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M93.0293 13L94.2093 161.53" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M79.4102 108.83H42.6602V161.12H79.4102V108.83Z" fill="#D8D9D8" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M30.5195 10H133.61" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M27.2285 3L30.1285 9.42" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M139.089 3L134.529 9.85" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M27.2285 2H139.089" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M133.769 161.12L133.619 10" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M61.2291 110.83L61.0391 157.71" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M42.6602 128.561H76.7902" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M53.5392 23.75H40.4492V39.75H53.5392V23.75Z" fill="#D8D9D8" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M80.7287 23.75H67.6387V39.75H80.7287V23.75Z" fill="#D8D9D8" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M53.9787 62.5H40.8887V78.5H53.9787V62.5Z" fill="#D8D9D8" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M81.1603 62.5H68.0703V78.5H81.1603V62.5Z" fill="#D8D9D8" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M108.2 24.5H98.5098V40.5H108.2V24.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M128.319 24.5H118.629V40.5H128.319V24.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M108.45 62.5H98.7598V78.5H108.45V62.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M128.569 62.5H118.879V78.5H128.569V62.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M108.45 103.5H98.7598V119.5H108.45V103.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M128.569 103.5H118.879V119.5H128.569V103.5Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M98.0502 2.80078L93.4902 9.65078" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M23.9395 98.8304L38.7895 88.4004" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M71.3594 98.67L86.2094 88.25" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M73.2793 98.5391H87.3093" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M23.9395 98.8301H72.1895" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M39.2891 87.8301H85.3491" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M87.5502 97.8293L87.4902 88.0293" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
+        <path d="M30.5186 10L30.0586 161.53" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M93.0293 13L94.2093 161.53" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M79.4102 108.83H42.6602V161.12H79.4102V108.83Z" fill="#D8D9D8" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M30.5195 10H133.61" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M27.2285 3L30.1285 9.42" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M139.089 3L134.529 9.85" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M27.2285 2H139.089" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M133.769 161.12L133.619 10" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M61.2291 110.83L61.0391 157.71" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M42.6602 128.561H76.7902" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M53.5392 23.75H40.4492V39.75H53.5392V23.75Z" fill="#D8D9D8" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M80.7287 23.75H67.6387V39.75H80.7287V23.75Z" fill="#D8D9D8" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M53.9787 62.5H40.8887V78.5H53.9787V62.5Z" fill="#D8D9D8" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M81.1603 62.5H68.0703V78.5H81.1603V62.5Z" fill="#D8D9D8" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M108.2 24.5H98.5098V40.5H108.2V24.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M128.319 24.5H118.629V40.5H128.319V24.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M108.45 62.5H98.7598V78.5H108.45V62.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M128.569 62.5H118.879V78.5H128.569V62.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M108.45 103.5H98.7598V119.5H108.45V103.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M128.569 103.5H118.879V119.5H128.569V103.5Z" fill="#D8D9D8" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M98.0502 2.80078L93.4902 9.65078" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M23.9395 98.8304L38.7895 88.4004" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M71.3594 98.67L86.2094 88.24" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M23.9395 98.8301L2.00977 113.83" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M71.3594 98.6699L93.2894 113.67" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M2.00977 113.83L93.2898 113.67" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M47.6494 113.75L47.6494 161.53" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
       </g>
-      <path opacity="0.75" d="M2 161.829L160.69 161.789" stroke="black" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M37.0998 101.821C37.0998 105.161 33.9098 107.871 29.9698 107.871C26.0298 107.871 22.8398 105.161 22.8398 101.821C22.8398 98.4809 26.2598 98.8909 30.1998 98.8909C34.1398 98.8909 37.0998 98.4809 37.0998 101.821Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M54.6392 101.821C54.6392 105.161 51.4092 107.871 47.4192 107.871C43.4292 107.871 40.1992 105.161 40.1992 101.821C40.1992 98.4809 43.6592 98.8909 47.6492 98.8909C51.6392 98.8909 54.6292 98.4809 54.6292 101.821H54.6392Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M72.0198 101.821C72.0198 105.161 68.6198 107.871 64.4298 107.871C60.2398 107.871 56.8398 105.161 56.8398 101.821C56.8398 98.4809 60.4798 98.8909 64.6698 98.8909C68.8598 98.8909 72.0098 98.4809 72.0098 101.821H72.0198Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
     </svg>
-
-  )
+  );
 }
+const SingleHomeIcon = (props: any) => {
+  return (
+    <svg {...props} width="160" height="144" viewBox="0 0 160 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g filter="url(#filter0_d_567_323)">
+        <path opacity="0.5" d="M139.26 33.25L135.299 62.8743L146.347 62.2875L139.26 33.25Z" fill="#D9D9D9" />
+        <path opacity="0.5" d="M99.7494 49.3555H85.6426V131.739H99.7494V49.3555Z" fill="#D9D9D9" />
+        <path opacity="0.5" d="M142.182 62.8398H130.896V132.482H142.182V62.8398Z" fill="#D9D9D9" />
+        <path d="M148.672 64.4414H143.029" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M6.46484 133.68H154" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M19.7715 54.2617V133.689" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M83.5234 54.2617V133.689" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M55.5921 14.0977L18.1582 51.9829" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M138.831 26.9883H90.9922" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M70.5559 75.5234H32.7383V133.339H70.5559V75.5234Z" fill="#D9D9D9" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M51.6534 64.2169C58.4097 64.2169 63.8868 58.7398 63.8868 51.9834C63.8868 45.2271 58.4097 39.75 51.6534 39.75C44.897 39.75 39.4199 45.2271 39.4199 51.9834C39.4199 58.7398 44.897 64.2169 51.6534 64.2169Z" fill="#D9D9D9" stroke="black" strokeWidth="4" strokeMiterlimit="10" />
+        <path d="M55.5905 2L6.16016 51.9833" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M55.5918 2L90.9943 51.9833" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M96.6582 2L116.306 26.986" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M139.668 28.1367L148.662 64.2163" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M139.668 54.2617L143.042 64.6782" stroke="black" strokeWidth="3" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M19.8381 53.125H6.46484" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M56.6738 2H97.1209" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M90.9922 51.9805H106.476" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M90.9922 26.9883L106.476 51.9856" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M138.832 26.9883L133.787 64.4673" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M101.082 53.125L97.1211 64.7152" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M133.787 64.4648H97.1094" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M101.883 126.042V65.9805" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M128.756 133.332V65.9805" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M143.492 133.687V64.9023" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M51.6523 78.8867V130.371" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M32.7383 101.559H67.8586" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+        <path d="M115.448 91.922C119.175 91.922 122.197 88.4155 122.197 84.0899C122.197 79.7644 119.175 76.2578 115.448 76.2578C111.721 76.2578 108.699 79.7644 108.699 84.0899C108.699 88.4155 111.721 91.922 115.448 91.922Z" fill="#D9D9D9" stroke="black" strokeWidth="4" strokeMiterlimit="10" strokeLinecap="round" />
+      </g>
+      <defs>
+        <filter id="filter0_d_567_323" x="0.160156" y="0" width="159.84" height="143.688" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+          <feOffset dy="4" />
+          <feGaussianBlur stdDeviation="2" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_567_323" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_567_323" result="shape" />
+        </filter>
+      </defs>
+    </svg>
+  );
+};
 
-export { AnalyticsIcon, OverviewIcon, PaymentsIcon, BookingsIcon, ListingIcon, ApplicationsIcon, UserIcon, MenuIcon, ApartmentIcon };
+export default SingleHomeIcon;
+
+
+
+export { AnalyticsIcon, OverviewIcon, PaymentsIcon, BookingsIcon, ListingIcon, ApplicationsIcon, UserIcon, MenuIcon, ApartmentIcon, SingleHomeIcon };
+
+

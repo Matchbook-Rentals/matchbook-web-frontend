@@ -6,9 +6,9 @@ import Hero from "@/components/home-components/hero";
 import AdCopy from "@/components/home-components/adCopy";
 import MarketingList from "@/components/marketing-landing-components/marketing-list";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
-import { ApartmentIcon } from "@/components/svgs/svg-components";
+import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 
-const marketingItems = [
+const rentMarketingItems = [
   {
     number: 1,
     title: "Find a place, all in one place.",
@@ -36,14 +36,44 @@ const marketingItems = [
   }
 ];
 
+
+const listMarketingItems = [
+  {
+    number: 1,
+    title: "Manage your place, all in once place.",
+    description: "No more listing on 4 different sites with the hopes of finding a good tenant. ON Matchbook, list your property, match with renters, view applications, and manage your place all on a singular website."
+  },
+  {
+    number: 2,
+    title: "List for free.",
+    description: "List your property for free and pay only after your first booking. The fee? Only 1.5% of the first month's rent."
+  },
+  {
+    number: 3,
+    title: "Connect with Matchbook Verified Tenants.",
+    description: "Matchbook Verified tenants are pre-screened and ready to match! Matching with unverified tenants? Don't worry. Enjoy seamless in-app screening."
+  },
+  {
+    number: 4,
+    title: "Rent automatically collected.",
+    description: "No more sending awkward texts. Rent is automatically collected each month from your tenant's bank and transferred to yours, at no cost."
+  },
+  {
+    number: 5,
+    title: "Transform your business.",
+    description: "With Matchbook, you have access to data-driven Property Insights. See how your property is performing in your dedicated analytics dashboard."
+  }
+];
+
 const WebHomePage = () => {
   return (
     <>
       <MatchbookHeader />
       <Hero />
       <AdCopy />
-      <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={marketingItems} brandColor="primary" />
+      <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={rentMarketingItems} brandColor="primary" />
       <RentEasyCopy />
+      <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={rentMarketingItems} brandColor="secondary" />
     </>
   );
 };
