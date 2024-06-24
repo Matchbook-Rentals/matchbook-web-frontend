@@ -6,6 +6,7 @@ import Hero from "@/components/home-components/hero";
 import AdCopy from "@/components/home-components/adCopy";
 import MarketingList from "@/components/marketing-landing-components/marketing-list";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
+import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 
 const rentMarketingItems = [
@@ -74,6 +75,7 @@ const WebHomePage = () => {
       <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={rentMarketingItems} brandColor="primary" />
       <RentEasyCopy />
       <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={rentMarketingItems} brandColor="secondary" />
+      <Footer />
     </>
   );
 };
