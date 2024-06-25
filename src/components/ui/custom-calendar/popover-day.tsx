@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { Popover, PopoverTrigger, PopoverContent } from '../popover';
 import { Booking } from '@prisma/client';
@@ -11,20 +12,22 @@ const PopoverDay: React.FC<PopoverDayProps> = ({ day, booking }) => {
   const getStatusClass = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-primaryBrand';
+        return 'bg-primaryBrand/80 hover:bg-primaryBrand/100';
       case 'finished':
-        return 'bg-pinkBrand';
+        return 'bg-pinkBrand/80 hover:bg-pinkBrand/100';
       case 'reserved':
-        return 'bg-blueBrand';
+        return 'bg-blueBrand/80 hover:bg-blueBrand/100';
       default:
         return '';
     }
   };
 
+  const bgColor = getStatusClass(booking.status);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className={`h-12 flex items-center justify-center border transition  cursor-pointer ${getStatusClass(booking.status)} hover:${getStatusClass(booking.status)}/60`}>
+        <div onClick={() => alert(bgColor + "/80")} className={`h-12 flex items-center justify-center border transition ${bgColor}  cursor-pointer`}>
           {day}
         </div>
       </PopoverTrigger>
