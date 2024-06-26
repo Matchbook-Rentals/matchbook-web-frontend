@@ -3,7 +3,7 @@ import { ApartmentIcon } from "../svgs/svg-components"
 
 export default function Footer() {
   return (
-    <footer className="bg-muted border-t-2 border-gray-200 py-8 md:py-12">
+    <footer className=" border-t-4 border-gray-200 pt-4 pb-8 md:pb-10">
       <div className="container max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <div className="grid gap-4">
           <div className="flex items-center gap-2">

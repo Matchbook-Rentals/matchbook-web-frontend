@@ -3,17 +3,17 @@ import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 
 export default function MatchbookHeader() {
   return (
-    <div className="sticky top-0 bg-white z-30">
-      <header className="relative flex mb-6 justify-between px-4 pt-4 pb-12 items-start border-b-0">
+    <div className="sticky top-0 bg-white z-30 ">
+      <header className="relative flex mb-6 justify-between px-4 pt-4 pb-8 items-start border-b-0">
         <div className="flex">
-          <img src="logo-nav-new.png" alt="MatchBook Logo" />
+          <img src="logo-nav-new.png" alt="MatchBook Logo" className="w-full h-14" />
         </div>
-        <div className="absolute inset-x-0 bottom-0 flex justify-center w-[100px] mx-auto bg-white">
-          <img src="/svg/heart-header.svg" className="h-16 w-16 heart" alt="MatchBook Heart" />
+        <div className="absolute inset-x-0 bottom-2 flex justify-center w-[100px] mx-auto bg-white">
+          <img src="/svg/heart-header.svg" className="h-14 w-14  heart" alt="MatchBook Heart" />
         </div>
         <div className="flex space-x-4">
-          <MenuIcon className="h-16 w-16" />
-          <UserIcon className="h-16 w-16" />
+          <MenuIcon className="h-14 w-14" />
+          <UserIcon className="h-14 w-14" />
         </div>
         <style jsx>{`
           header::before {
