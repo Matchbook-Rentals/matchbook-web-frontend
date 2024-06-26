@@ -71,7 +71,9 @@ const WebHomePage = () => {
     <>
       <MatchbookHeader />
       <Hero />
-      <AdCopy />
+      <div className="scale-75 mb-12">
+        <AdCopy />
+      </div>
       <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={rentMarketingItems} brandColor="primary" />
       <RentEasyCopy />
       <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={rentMarketingItems} brandColor="secondary" />
