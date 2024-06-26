@@ -76,7 +76,7 @@ const WebHomePage = () => {
       </div>
       <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={rentMarketingItems} brandColor="primary" />
       <RentEasyCopy />
-      <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={rentMarketingItems} brandColor="secondary" />
+      <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={listMarketingItems} brandColor="secondary" />
       <Footer />
     </>
   );
