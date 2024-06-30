@@ -1,45 +1,47 @@
 'use client'
-import React, { useContext } from 'react'
-import MatchBar from './matchBar'
-import ListingPhotos from './listingPhotos'
-import { Listing } from '@/types'
-import RankView from './favorites/rank-view'
-import { Trip } from '@prisma/client'
-import { TripContext } from '@/contexts/trip-context-provider'
-import Link from 'next/link'
+import React from 'react';
+import ListingHorizontalCard from '@/components/ui/listing-horizontal-card';
+import TabSelector from '@/components/ui/tab-selector';
+import CardWithHeader from '@/components/ui/card-with-header';
+import { useHostProperties } from '../../../../contexts/host-properties-provider';
+import { OverviewIcon, ListingIcon, ApplicationsIcon, PaymentsIcon, BookingsIcon, AnalyticsIcon } from '@/components/svgs/svg-components';
+import TripCardSmall from '../(trips-components)/trip-card-small';
+import {Trip} from '@prisma/client';
 
-export default function TripIdPageClient({ addListingToFavorites }: { listings: Listing[], addListingToFavorites: Function, tripId: string, trip: Trip }) {
-  const [currIndex, setCurrIndex] = React.useState(0);
-  const [showRankView, setShowRankView] = React.useState(false);
-  const { trip, listings } = useContext(TripContext);
+const TripIdClient: React.FC = ({ params }) => {
+  //const { listings } = useHostProperties();
+  //const { listingId } = params;
+  //
+  //const listing = listings.find(listing => listing.id === listingId);
+  //
+  //if (!listing) {
+  //  return <div>Property not found</div>;
+  //}
 
-  const handleLike = async () => {
-    await addListingToFavorites(listings[currIndex]?.id, trip.Id);
-    setCurrIndex(prev => prev + 1);
-  }
+const placeholderTrip: Trip = {
+  id: "1",
+  cityState: "New York, NY",
+  numChildrenPets: "2 children, 1 pet",
+  dateRange: "Jan 15 - Mar 20",
+  // Add other required fields from the Trip type
+};
 
-  // Check if there are no listings or we've gone past the last listing
-  const noMoreListings = listings.length === 0 || currIndex >= listings.length;
+const tabs = [
+  { value: "new-possibilities", label: "New Possibilities", content: <CardWithHeader title="New Possibilities" content={<div>New Possibilities content goes here.</div>} /> },
+  { value: "properties-you-love", label: "Properties You Love", content: <CardWithHeader title="Properties You Love" content={<div>Properties You Love content goes here.</div>} /> },
+  { value: "matches", label: "Matches", content: <CardWithHeader title="Matches" content={<div>Matches content goes here.</div>} /> },
+  { value: "trip-editor", label: "Trip Editor", content: <CardWithHeader title="Trip Editor" content={<div>Trip Editor content goes here.</div>} /> },
+  { value: "application-for-now", label: "Application for Now", content: <CardWithHeader title="Application for Now" content={<div>Application for Now content goes here.</div>} /> },
+  { value: "analytics", label: "Analytics", content: <CardWithHeader title="Analytics" content={<div>Analytics content goes here.</div>} /> }
+]
 
   return (
-    <>
-      <>
-        {!noMoreListings ? (
-          <>
-            <MatchBar setShowRankView={setShowRankView} currListing={listings[currIndex]} handleLike={handleLike} />
-            <ListingPhotos />
-            <p className='text-3xl'>{listings[currIndex].description}</p>
-          </>
-        ) : (
-          // Display a message or any other component when there are no more listings
-          <>
-            <p className="text-xl text-center">No more listings available.</p>
-            <button className='bg-primaryBrand py-1 px-2 m-2  border-black text-center text-xl' onClick={() => setCurrIndex(0)}>Start again?</button>
-            <Link href={`platform/trips/${trip.id}/favorites`}><button className='bg-primaryBrand py-1 px-2 m-2  border-black text-center text-xl' >Rank your favorites</button></Link>
-          </>
-        )}
-      </>
+    <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8'>
+    <TripCardSmall trip={placeholderTrip} stateCode='ut' />
+      <TabSelector tabs={tabs} />
+      {/* Add more details as needed */}
+    </div>
+  );
+};
 
-    </>
-  )
-}
+export default TripIdClient;

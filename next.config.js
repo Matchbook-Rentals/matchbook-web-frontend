@@ -1,28 +1,34 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'utfs.io',
-        pathname: '**',
-      },
-    ],
+// Here's the rewritten code including Wikipedia Commons:
+remotePatterns: [
+  {
+    protocol: 'https',
+    hostname: 'res.cloudinary.com',
+    pathname: '**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'source.unsplash.com',
+    pathname: '**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'placehold.co',
+    pathname: '**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'utfs.io',
+    pathname: '**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'upload.wikimedia.org',
+    pathname: '/wikipedia/commons/**',
+  },
+],
   },
   typescript: {
     // !! WARN !!
