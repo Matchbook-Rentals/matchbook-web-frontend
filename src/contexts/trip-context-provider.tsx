@@ -2,6 +2,7 @@
 
 import { Listing, Trip } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
 import { createContext, useState } from "react";
+import { Dispatch, SetStateAction } from 'react';
 
 type TripContextProviderProps = {
   tripData: Trip;
@@ -12,13 +13,13 @@ type TripContextProviderProps = {
 
 // Adjust Values to Provider Here
 type TTripContext = {
-  trip: Trip,
-  setTrip: Function,
-  getUpdatedTrip: Function,
-  headerText: string,
-  setHeaderText: Function,
-  listings: Listing[],
-  setListings: Function,
+  trip: Trip;
+  setTrip: Dispatch<SetStateAction<Trip>>;
+  getUpdatedTrip: () => Promise<Trip>;
+  headerText: string;
+  setHeaderText: Dispatch<SetStateAction<string>>;
+  listings: Listing[];
+  setListings: Dispatch<SetStateAction<Listing[]>>;
 };
 
 export const TripContext = createContext<TTripContext | null>(null);

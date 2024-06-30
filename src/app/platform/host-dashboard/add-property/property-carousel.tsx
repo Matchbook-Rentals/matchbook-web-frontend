@@ -5,9 +5,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
+  CarouselApi,
 } from "@/components/ui/carousel";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";

@@ -5,7 +5,17 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocom
 import { useLoadScript } from '@react-google-maps/api';
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
-export default function LocationSuggest({ setDestination }) {
+
+interface LocationSuggestProps {
+  setDestination: (destination: {
+    locationString: string;
+    latitude: number;
+    longitude: number;
+  }) => void;
+}
+
+
+export default function LocationSuggest({ setDestination }: LocationSuggestProps) {
   const [inputValue, setInputValue] = useState(""); // State for input field value
   const [displayValue, setDisplayValue] = useState(""); // Separate state for display value in the "Where to?" section
   const [suggestions, setSuggestions] = useState([]);
@@ -54,7 +64,6 @@ export default function LocationSuggest({ setDestination }) {
   };
 
   const handleSelect = async (description, place_id) => {
-    setDestination(description);
     setDisplayValue(description); // Update the display value with the selected description
     setInputValue(""); // Optionally clear the input value or keep it based on your needs
     setValue(description, false); // Update the autocomplete value
@@ -64,8 +73,11 @@ export default function LocationSuggest({ setDestination }) {
     console.log('description', description);
 
     const results = await getGeocode({ address: description });
+    console.log(results);
     const { lat, lng } = await getLatLng(results[0]);
     console.log("Selected location:", { lat, lng });
+
+    setDestination({ locationString: description, latitude: lat, longitude: lng });
   };
 
   return (

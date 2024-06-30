@@ -261,10 +261,11 @@ model Booking {
 model Trip {
   id             String     @id @default(uuid()) // Changed from MongoDB's ObjectId
   locationString String
+  latitude       Float      @default(0)
+  longitude      Float      @default(0)
   city           String?
   state          String?
   postalCode     String?
-  locationLatLng String?
   createdAt      DateTime   @default(now())
   startDate      DateTime?
   endDate        DateTime?

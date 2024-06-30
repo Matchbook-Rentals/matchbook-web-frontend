@@ -31,7 +31,8 @@ function getStateFlagUrl(stateCode: string): string {
 
   // Check if the state code is valid
   if (!stateNames.hasOwnProperty(upperStateCode)) {
-    throw new Error("Invalid state code");
+    console.log("Invalid state code");
+    return `https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_United_States.svg`;
   }
 
   // Get the full state name
@@ -49,8 +50,8 @@ const TripCardSmall: React.FC<TripCardSmallProps> = ({ trip, stateCode }) => {
 
 
   return (
-    <Card className="flex overflow-hidden w-1/3">
-      <div className="w-1/3 relative">
+    <Card className="flex overflow-hidden w-2/5 border-2">
+      <div className="w-1/2 relative">
         <Image
           src={stateFlagURL}
           alt={`Flag of ${stateCode}`}
@@ -61,7 +62,7 @@ const TripCardSmall: React.FC<TripCardSmallProps> = ({ trip, stateCode }) => {
       <CardContent className="w-2/3 p-4">
         <div className="flex flex-col space-y-2 text-center">
           <div className="text-lg font-semibold">{trip.locationString}</div>
-          <div className="text-sm text-gray-600">{`${trip.numAdults} Adults, ${trip.numChildren || 0} Children, ${trip.numPets || 0} Pets`}</div>
+          <div className="text-sm text-gray-600">{`${trip.numAdults || 0} Adults, ${trip.numChildren || 0} Children, ${trip.numPets || 0} Pets`}</div>
           <div className="text-sm text-gray-600">{`${trip.startDate?.toDateString()} - ${trip.endDate?.toDateString()}`}</div>
         </div>
       </CardContent>

@@ -16,7 +16,8 @@ type SearchContainerProps = {
 
 export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
-  const [destination, setDestination] = useState('');
+  // is there a better way to establish this state
+  const [destination, setDestination] = useState({ locationString: '', latitude: 0, longitude: 0 });
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
@@ -53,7 +54,9 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
     if (isSignedIn) {
       const trip: Trip = {
-        locationString: destination,
+        locationString: destination.locationString,
+        latitude: destination.latitude,
+        longitude: destination.longitude,
         userId: user.id,
         ...(moveOutDate && { endDate: moveOutDate }), // Add endDate only if moveOutDate is truthy
         ...(moveInDate && { startDate: moveInDate }), // Add startDate only if moveInDate is truthy
