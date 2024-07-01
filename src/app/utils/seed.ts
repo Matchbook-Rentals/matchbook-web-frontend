@@ -63,10 +63,6 @@ function generateRandomListings(count = 200) {
       squareFootage: getRandomInt(500, 3000),
       depositSize: getRandomInt(500, 5000),
       requireBackgroundCheck: Math.random() < 0.7,
-      minimumLeaseLength: getRandomInt(1, 6),
-      maximumLeaseLength: getRandomInt(6, 24),
-      minimumLeasePrice: getRandomInt(500, 2000),
-      maximumLeasePrice: getRandomInt(2000, 5000),
       furnished: Math.random() < 0.3,
       airConditioning: Math.random() < 0.8,
       laundryFacilities: Math.random() < 0.6,
@@ -164,7 +160,7 @@ function generateRandomDescription() {
 function generateRandomAddress() {
   const streetNumbers = ["123", "456", "789", "1010", "2222"];
   const streetNames = ["Main St", "Oak Ave", "Maple Rd", "Broadway", "Park Ln"];
-  const cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
+  const cities = ["New York"];
   const states = ["NY", "CA", "IL", "TX", "AZ"];
   return `${getRandomElement(streetNumbers)} ${getRandomElement(streetNames)}, ${getRandomElement(cities)}, ${getRandomElement(states)}`;
 }
@@ -197,7 +193,6 @@ function generateRandomListingImages() {
   for (let i = 0; i < imageCount; i++) {
     images.push({
       url: `/placeholderImages/image_${i + 1}.jpg`,
-      id: `image${i + 1}`,
       category: generateRandomCategory(),
       rank: i
     });
