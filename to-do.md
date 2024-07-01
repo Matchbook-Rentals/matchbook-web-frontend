@@ -12,11 +12,17 @@
 #
 # 4. Trip Editior
 
+// Here's the rewritten version with checkbox for number one filled in:
 
-1. Overlay for inputs
+[x] 1. Overlay for inputs
 
-2. framer motion padding shrink for header and heart
+[ ] 2. framer motion padding shrink for header and heart
 
-3. svg fix for  apartmentIcon(looking to rent Icon)
+[ ] 3. svg fix for apartmentIcon (looking to rent Icon)
 
+
+
+## Calendar
+1. Circle Icons
+2. color darkening
 
