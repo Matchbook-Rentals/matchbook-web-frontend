@@ -11,7 +11,11 @@ interface ListingImageCarouselProps {
 const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({listingImages}) => {
 
   const [api, setApi] = React.useState<CarouselApi>();
+  
 
+if (listingImages.length === 0) {
+  return <p>No listing Images</p>;
+}
   return (
     <div className="w-full">
       <Carousel onClick={() => console.log('ListingImages', listingImages)} className="w-full mx-auto" opts={{ loop: true }}>

@@ -32,7 +32,7 @@ const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = ({ listings, set
           Latitude: {trip?.latitude}, Longitude: {trip?.longitude}
         </p>
       )}
-      <ImageCarousel listingImages={listings[currListing].listingImages} />
+      <ImageCarousel listingImages={listings[currListing]?.listingImages || []} />
 
 
     </div>
