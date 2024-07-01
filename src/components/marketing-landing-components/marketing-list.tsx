@@ -11,7 +11,7 @@ interface MarketingListProps {
   title: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   marketingItems: MarketingItem[];
-  brandColor: 'primary' | 'blue';
+  brandColor: 'primary' | 'secondary';
 }
 
 export default function MarketingList({ title, Icon, marketingItems, brandColor }: MarketingListProps) {

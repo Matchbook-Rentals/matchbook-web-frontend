@@ -8,6 +8,7 @@ import MarketingList from "@/components/marketing-landing-components/marketing-l
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
 import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
+import TabSelector from "@/components/ui/tab-selector";
 
 const rentMarketingItems = [
   {
@@ -66,6 +67,39 @@ const listMarketingItems = [
   }
 ];
 
+interface Tab {
+  value: string;
+  label: string;
+  icon?: React.ElementType;
+  content: React.ReactNode;
+  className?: string
+  textSize?: string
+}
+
+const tabs: Tab[] = [
+  {
+    value: "rent", label: "For Renters", className: 'bg-primaryBrand/80 hover:bg-primaryBrand hover:text-black  w-1/2', textSize: 'text-lg', content: 
+      <MarketingList
+        title="Looking to rent?"
+        Icon={ApartmentIcon}
+        marketingItems={rentMarketingItems}
+        brandColor="primary"
+      />
+    ,
+  },
+  {
+    value: 'list', label: 'For Owners', className: 'bg-blueBrand/80 hover:bg-blueBrand hover:text-black w-1/2', textSize: 'text-lg', content: 
+      <MarketingList
+        title="Looking to list?"
+        Icon={SingleHomeIcon}
+        marketingItems={listMarketingItems}
+        brandColor="secondary"
+      />
+    
+  }
+
+]
+
 const WebHomePage = () => {
   return (
     <>
@@ -74,9 +108,8 @@ const WebHomePage = () => {
       <div className="scale-75 mb-12">
         <AdCopy />
       </div>
-      <MarketingList title="Looking to rent?" Icon={ApartmentIcon} marketingItems={rentMarketingItems} brandColor="primary" />
+      <TabSelector tabs={tabs} className="max-w-[700px] mx-auto" tabsListClassName="justify-between" />
       <RentEasyCopy />
-      <MarketingList title="Looking to list?" Icon={SingleHomeIcon} marketingItems={listMarketingItems} brandColor="secondary" />
       <Footer />
     </>
   );

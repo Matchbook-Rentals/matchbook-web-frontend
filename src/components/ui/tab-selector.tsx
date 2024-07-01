@@ -1,33 +1,48 @@
+
+// The CN function is a utility for conditionally joining Tailwind CSS classes together.
+// It helps in dynamically applying classes based on conditions or combining multiple class strings.
+
 'use client'
 import { useState } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface Tab {
   value: string;
   label: string;
-  icon?: React.ElementType;
+  Icon?: React.ElementType;
   content: React.ReactNode;
+  className?: string;
+  textSize?: string;
 }
 
 interface TabSelectorProps {
   tabs: Tab[];
+  className?: string;
+  tabsClassName?: string;
+  tabsListClassName?: string;
 }
 
-export default function TabSelector({ tabs }: TabSelectorProps) {
+export default function TabSelector({ tabs, className, tabsListClassName, tabsClassName }: TabSelectorProps) {
   const [activeTab, setActiveTab] = useState(tabs[0]?.value);
 
   return (
-    <div className="flex justify-start space-x-2 py-4 border-b">
-      <Tabs className=" w-full" defaultValue={tabs[0]?.value}>
-        <TabsList className="flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2">
+    <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
+      <Tabs className={cn("w-full", tabsClassName)} defaultValue={tabs[0]?.value}>
+        <TabsList className={cn("flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2", tabsListClassName)}>
           {tabs.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value} className="flex flex-col items-center hover:bg-gray-300" onClick={() => setActiveTab(tab.value)}>
-              <div className={`flex items-center justify-center ${tab.icon ? 'h-8 w-8' : ''}`}>
-                {tab.icon && <tab.icon className="h-2 w-2 text-sm" />}
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className={cn("flex flex-col items-center hover:bg-gray-300", tab.className)}
+              onClick={() => setActiveTab(tab.value)}
+            >
+              <div className={cn("flex items-center justify-center", tab.Icon ? 'h-8 w-8' : '')}>
+                {tab.Icon && <tab.Icon className="h-2 w-2 text-sm" />}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm">{tab.label}</span>
+                <span className={cn("text-sm",tab.textSize )}>{tab.label}</span>
                 {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-black rounded-full" layout layoutId="underline"></motion.div>}
               </div>
             </TabsTrigger>

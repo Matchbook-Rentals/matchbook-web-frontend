@@ -4,7 +4,7 @@ interface MarketingItemProps {
   number: number;
   title: string;
   description: string;
-  brandColor: 'primary' | 'blue';
+  brandColor: 'primary' | 'secondary';
 }
 
 export default function MarketingItem({ number, title, description, brandColor }: MarketingItemProps) {
