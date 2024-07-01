@@ -161,7 +161,7 @@ function generateRandomAddress() {
   const streetNumbers = ["123", "456", "789", "1010", "2222"];
   const streetNames = ["Main St", "Oak Ave", "Maple Rd", "Broadway", "Park Ln"];
   const cities = ["New York"];
-  const states = ["NY", "CA", "IL", "TX", "AZ"];
+  const states = ["NY"];
   return `${getRandomElement(streetNumbers)} ${getRandomElement(streetNames)}, ${getRandomElement(cities)}, ${getRandomElement(states)}`;
 }
 
@@ -181,18 +181,27 @@ function generateRandomBedrooms() {
 }
 
 function generateRandomCategory() {
-    const categories = ['General', 'Bedroom 1', 'Miscellaneous'];
-    const randomIndex = Math.floor(Math.random() * categories.length);
-    return categories[randomIndex];
+  const categories = ['General', 'Bedroom 1', 'Miscellaneous'];
+  const randomIndex = Math.floor(Math.random() * categories.length);
+  return categories[randomIndex];
 }
 
 function generateRandomListingImages() {
-  const imageCount = getRandomInt(1, 5);
+  const imageNumbers = [];
+  const availableNumbers = Array.from({ length: 30 }, (_, i) => i + 1);
+
+  while (imageNumbers.length < 30) {
+    const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+    const selectedNumber = availableNumbers[randomIndex];
+    imageNumbers.push(selectedNumber);
+    availableNumbers.splice(randomIndex, 1);
+  }
+
   const images = [];
 
-  for (let i = 0; i < imageCount; i++) {
+  for (let i = 0; i < imageNumbers.length; i++) {
     images.push({
-      url: `/placeholderImages/image_${i + 1}.jpg`,
+      url: `/placeholderImages/image_${imageNumbers[i]}.jpg`,
       category: generateRandomCategory(),
       rank: i
     });

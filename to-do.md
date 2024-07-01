@@ -33,3 +33,16 @@
 [ ] 1. Circle Icons
 
 [ ] 2. Color darkening
+
+
+## Test Listings
+
+
+[x] 1. Get it working
+
+[x] 2. Fix Image allocation
+
+[x] 3. Fix State
+
+[ ] 4. Finish match view
+        Fix height issue between carousel and lead image on diff screen sizes (Kill me)

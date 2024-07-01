@@ -1,79 +1,74 @@
-
-import React from 'react';
-import { Carousel, CarouselContent, CarouselItem, CarouselApi, CarouselPrevious, CarouselNext, } from "@/components/ui/carousel";
-import { Listing, ListingImage } from '@prisma/client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi, } from "@/components/ui/carousel";
+import { ListingImage } from '@prisma/client';
+import { Button } from '@/components/ui/button';
 
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
 }
 
+const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages }) => {
+  const [activeImage, setActiveImage] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
 
-const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({listingImages}) => {
+  if (listingImages.length === 0) {
+    return <p>No listing Images</p>;
+  }
 
-  const [api, setApi] = React.useState<CarouselApi>();
-  
+  const handleImageClick = (index: number) => {
+    console.log(`Clicked image index: ${index}`);
+    setActiveImage(index);
+  };
 
-if (listingImages.length === 0) {
-  return <p>No listing Images</p>;
-}
+  const chunkedImages = listingImages.reduce((resultArray, item, index) => {
+    const chunkIndex = Math.floor(index / 4);
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = [];
+    }
+    resultArray[chunkIndex].push(item);
+    return resultArray;
+  }, [] as ListingImage[][]);
+
   return (
-    <div className="w-full">
-      <Carousel onClick={() => console.log('ListingImages', listingImages)} className="w-full mx-auto" opts={{ loop: true }}>
-        <CarouselContent>
-          <CarouselItem className="flex items-center justify-center">
-            <div className="w-full h-96 relative overflow-hidden">
-              {listingImages.length === 1 && (
-                <img
-                  src={listingImages[0].url}
-                  alt="Listing"
-                  className="w-full h-full object-cover"
-                />
-              )}
-
-              {listingImages.length === 2 && (
-                <div className="flex h-full">
-                  <img
-                    src={listingImages[0.].url}
-                    alt="Listing 1"
-                    className="w-1/2 h-full object-cover"
-                  />
-                  <img
-                    src={listingImages[1].url}
-                    alt="Listing 2"
-                    className="w-1/2 h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {listingImages?.length > 2 && (
-                <div className="flex h-full">
-                  <img
-                    src={listingImages[0].url}
-                    alt="Main Listing"
-                    className="w-1/2 h-full object-cover"
-                  />
-                  <div className="w-1/2 grid grid-cols-2 grid-rows-2 gap-1">
-                    {listingImages.slice(1, 5).map((image, index) => (
-                      <img
-                        key={index}
+    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-6 xl:space-x-8 h-[600px] md:h-[400px] lg:h-[500px] xl:h-[600px]">
+      <div className="w-full md:w-1/2 h-1/2 md:h-full relative">
+        <Image
+          src={listingImages[activeImage].url}
+          alt={`${listingImages[activeImage].category} image ${listingImages[activeImage].rank}`}
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </div>
+      <div className="w-full md:w-1/2 h-1/2 md:h-full relative">
+        <Carousel opts={{loop: true}} setApi={setApi} className="h-full">
+          <CarouselContent className="h-full">
+            {chunkedImages.map((chunk, chunkIndex) => (
+              <CarouselItem key={chunkIndex} className="h-full pt-1 pb-1">
+                <div className="grid grid-cols-2 gap-2 h-full">
+                  {chunk.map((image, imageIndex) => (
+                    <div
+                      key={image.id}
+                      className="relative aspect-[4/3] cursor-pointer"
+                      onClick={() => handleImageClick(chunkIndex * 4 + imageIndex)}
+                    >
+                      <Image
                         src={image.url}
-                        alt={`Listing ${index + 2}`}
-                        className="w-full h-full object-cover"
+                        alt={`${image.category} image ${image.rank}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        style={{ objectFit: 'cover' }}
                       />
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
-
-          </CarouselItem>
-          <CarouselItem className="flex items-center justify-center">
-            <div>LISTINGIMAGE</div>
-          </CarouselItem>
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute -left-4 md:-left-5 lg:-left-6 text-white bg-black/50 hover:bg-black/70" />
+          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-6 text-white bg-black/50 hover:bg-black/70" />
+        </Carousel>
+      </div>
     </div>
   );
 };

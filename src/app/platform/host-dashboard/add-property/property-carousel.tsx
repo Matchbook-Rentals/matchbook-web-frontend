@@ -5,7 +5,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselApi,
+   CarouselApi,
 } from "@/components/ui/carousel";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -29,9 +29,8 @@ export default function PropertyCarousel({
   setCurrStep,
 }: PropertyCarouselProps) {
   const { isSignedIn, user } = useUser();
-
-  // State to keep track of the current index
   const [api, setApi] = useState<CarouselApi>();
+  const router = useRouter();
   const [propertyDetails, setPropertyDetails] = useState({
     userId: user?.id,
     title: "",
@@ -52,10 +51,6 @@ export default function PropertyCarousel({
     squareFootage: 0,
     depositSize: 0,
     requireBackgroundCheck: false,
-    minimumLeaseLength: null,
-    maximumLeaseLength: null,
-    minimumLeasePrice: null,
-    maximumLeasePrice: null,
     furnished: false,
     airConditioning: false,
     laundryFacilities: false,
@@ -103,7 +98,6 @@ export default function PropertyCarousel({
     allowDogs: false,
     allowCats: false,
   });
-  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -149,11 +143,6 @@ export default function PropertyCarousel({
           />
         </CarouselItem>
         <CarouselItem>
-          {/* <DetailsForm
-            setPropertyDetails={setPropertyDetails}
-            goToNext={goToNext}
-            goToPrevious={goToPrevious}
-          /> */}
           <SimpleDetails
             propertyDetails={propertyDetails}
             setPropertyDetails={setPropertyDetails}
@@ -201,8 +190,6 @@ export default function PropertyCarousel({
           />
         </CarouselItem>
       </CarouselContent>
-      {/* <CarouselPrevious /> */}
-      {/* <CarouselNext /> */}
     </Carousel>
   );
 }
