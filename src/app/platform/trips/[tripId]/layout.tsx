@@ -1,16 +1,11 @@
 import React from 'react'
 import prisma from '@/lib/prismadb'
+import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
 import { Trip, Listing } from '@prisma/client';
 
-type TripsPageProps = {
-  params: { tripId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-
-//For this fx where will my console logs show up
-const pullTripFromDb = async (tripId) => {
+// Update this fx so that it includes favorites (a relation to the trip model)
+const pullTripFromDb = async (tripId: string) => {
   'use server'
 
   console.log("IM HERE")
@@ -48,9 +43,7 @@ const pullTripFromDb = async (tripId) => {
   }
 }
 
-// Here's the rewritten function with error handling:
-
-const pullMockListingsFromDb = async (lat: number, lng: number, radiusMiles: number) => {
+const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number) => {
   'use server';
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
@@ -97,20 +90,67 @@ const pullMockListingsFromDb = async (lat: number, lng: number, radiusMiles: num
 
     return listings;
   } catch (error) {
-    console.error('Error in pullMockListingsFromDb:', error);
+    console.error('Error in pullListingsFromDb:', error);
     throw error; // Re-throw the error for the caller to handle
   }
 }
+const createDbFavorite = async (tripId: string, listingId: string) => {
+  'use server'
+  console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
+  try {
+    // Check if a favorite with the same tripId and listingId already exists
+    const existingFavorite = await prisma.favorite.findFirst({
+      where: {
+        tripId,
+        listingId,
+      },
+    });
 
-export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: number } }) {
+    if (existingFavorite) {
+      throw new Error('Favorite already exists for this trip and listing');
+    }
+
+    // Get the highest rank for the current trip
+    const highestRank = await prisma.favorite.findFirst({
+      where: { tripId },
+      orderBy: { rank: 'desc' },
+      select: { rank: true },
+    });
+
+    const newRank = (highestRank?.rank || 0) + 1;
+
+    // Create the new favorite
+    const newFavorite = await prisma.favorite.create({
+      data: {
+        tripId,
+        listingId,
+        rank: newRank,
+      },
+    });
+
+    console.log('Favorite Created', newFavorite)
+
+    // Revalidate the favorites page or any other relevant pages
+    revalidatePath('/favorites');
+
+    return newFavorite;
+  } catch (error) {
+    console.error('Error creating favorite:', error);
+    throw error;
+  }
+}
+
+export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
   const trip = await pullTripFromDb(params.tripId) as Trip;
-  const listings = await pullMockListingsFromDb(trip.latitude, trip.longitude, 100);
-  console.log(listings);
-
+  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
 
   return (
-    <TripContextProvider tripData={trip} listingData={listings} pullTripFromDb={pullTripFromDb}>
-      {/* Main content will be rendered here */}
+    <TripContextProvider
+      tripData={trip}
+      listingData={listings}
+      pullTripFromDb={pullTripFromDb}
+      createDbFavorite={createDbFavorite}
+    >
       {children}
     </TripContextProvider>
   );

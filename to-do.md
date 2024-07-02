@@ -5,8 +5,8 @@
 [x] 1. Photo display left, 4x4 grid on right - New component
    - [ ] Grid needs special handling for 1, 2, 3, 4+ images - New component, child of carousel (tabled for now)
 
-[ ] 2. Layout other details below carousel
-        - [ ] Almost there need tiles
+[x] 2. Layout other details below carousel
+        - [x] Almost there need tiles
 
 [ ] 3. Like/Dislike - Pass to Properties you love
    - [ ] Create housingRequest (needs new name, maybe heart, maybe favorites)
@@ -16,9 +16,7 @@
 
 [ ] 5. Trip location Properties update (state, city, etc..) via locationIq at tripCreation/trip View
 
-[ ] 6. Create Favorite in DB on Like Press.  
-
-[ ] 7. Create rating property in listing model, Decimal (4.9) or string (?.?)
+[ ] 6. Create rating property in listing model, Decimal (4.9) or string (?.?)
 ## Coming Soon (marketing page)
 
 [x] 0. Tab view for marketing branch (main/comingSoon)
