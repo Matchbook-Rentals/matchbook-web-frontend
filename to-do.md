@@ -52,3 +52,7 @@
 
 [ ] 5. Finish match view
         Fix height issue between carousel and lead image on diff screen sizes (Kill me)
+
+## Refactors
+
+[ ] 1. Move amenities to their own model

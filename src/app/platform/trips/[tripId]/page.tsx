@@ -32,13 +32,14 @@ const TripIdPage: React.FC = ({ params }) => {
     // Add other required fields from the Trip type
   };
 
-  const tabs = [
-    { value: "new-possibilities", label: "New Possibilities", content: <NewPossibilitiesTab trip={trip} listings={listings} setListings={setListings} />},
-    { value: "properties-you-love", label: "Properties You Love", content: <CardWithHeader title="Properties You Love" content={<div>Properties You Love content goes here.</div>} /> },
-    { value: "matches", label: "Matches", content: <CardWithHeader title="Matches" content={<div>Matches content goes here.</div>} /> },
-    { value: "trip-editor", label: "Trip Editor", content: <CardWithHeader title="Trip Editor" content={<div>Trip Editor content goes here.</div>} /> },
-    { value: "applications", label: "Applications", content: <CardWithHeader title="Application for Now" content={<div>Application for Now content goes here.</div>} /> },
-  ]
+  let tabTextSize = 'text-lg'
+const tabs = [
+  { value: "new-possibilities", label: "New Possibilities", content: <NewPossibilitiesTab trip={trip} listings={listings} setListings={setListings} />, textSize: tabTextSize },
+  { value: "properties-you-love", label: "Properties You Love", content: <CardWithHeader title="Properties You Love" content={<div>Properties You Love content goes here.</div>} />, textSize: tabTextSize },
+  { value: "matches", label: "Matches", content: <CardWithHeader title="Matches" content={<div>Matches content goes here.</div>} />, textSize: tabTextSize },
+  { value: "trip-editor", label: "Trip Editor", content: <CardWithHeader title="Trip Editor" content={<div>Trip Editor content goes here.</div>} />, textSize: tabTextSize },
+  { value: "applications", label: "Applications", content: <CardWithHeader title="Application for Now" content={<div>Application for Now content goes here.</div>} />, textSize: tabTextSize },
+]
 
   return (
     <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 w-[90%] mx-auto'>

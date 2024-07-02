@@ -149,3 +149,29 @@
   border-radius: 2px;
   /* Completely rounded corners for the scrollbar thumb */
 }
+
+
+.test {
+  border-width: 2px;
+  border-color: #ef4444; /* red-500 */
+}
+
+.test-yellow {
+  border-width: 2px;
+  border-color: #eab308; /* yellow-500 */
+}
+.test-green {
+  border-width: 2px;
+  border-color: green;
+}
+
+.test-blue {
+  border-width: 2px;
+  border-color: blue;
+}
+
+.test-black {
+  border-width: 2px;
+  border-color: black;
+}
+

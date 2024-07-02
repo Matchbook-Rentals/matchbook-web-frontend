@@ -61,7 +61,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
             ))}
           </CarouselContent>
           <CarouselPrevious className="absolute -left-4 md:-left-5 lg:-left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-0 bottom-6  h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
         </Carousel>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import RatingStar from '@/components/ui/rating-star';
 import React from 'react';
 
 interface TitleAndStatsProps {
@@ -20,18 +21,28 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   distance,
 }) => {
   return (
-// Fixed syntax errors and formatting
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-  {title && <h2 style={{ margin: 0 }}>{title}</h2>}
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-    {rating !== undefined && <span>⭐ {rating}</span>}
-    {numStays !== undefined && <span>🏠 {numStays} stays</span>}
-    {rentPerMonth !== undefined && <span>💰 ${rentPerMonth}/month</span>}
-    {numBeds !== undefined && <span>🛏️ {numBeds} beds</span>}
-    {numBath !== undefined && <span>🚿 {numBath} baths</span>}
-    {distance !== undefined && <span>📍 {distance} miles away</span>}
-  </div>
-</div>
+    <div className="flex flex-wrap w-full justify-between items-start my-3">
+      <div className='flex w-1/2 justify-start gap-x-6'>
+        {title && <h2 className="text-3xl font-semibold">{title}</h2>}
+        {rating !== undefined && (
+          <div className='flex gap-x-2 items-center'>
+            <RatingStar size={35} rating={rating} />
+            <span className='text-xl'>{rating}</span>
+          </div>
+        )}
+        {numStays !== undefined && <span className='text-xl flex items-center'>{numStays} stays</span>}
+      </div>
+
+      <div className='flex flex-col items-end'>
+        {rentPerMonth !== undefined && <span className="text-3xl">${rentPerMonth}/month</span>}
+        {numBeds !== undefined && numBath !== undefined && (
+          <span className="text-xl">
+            {numBeds} beds, {numBath} baths
+          </span>
+        )}
+        {distance !== undefined && <span className="text-md">{distance} mock miles</span>}
+      </div>
+    </div>
   );
 };
 
