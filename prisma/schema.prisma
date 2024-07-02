@@ -326,13 +326,3 @@ model Favorite {
   @@unique([tripId, listingId])
 }
 
-
-model Dislike {
-  id        String  @id @default(uuid())
-  tripId    String
-  listingId String? // ID of the listing or another entity marked as favorite
-
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
-
-  @@unique([tripId, listingId])
-}
