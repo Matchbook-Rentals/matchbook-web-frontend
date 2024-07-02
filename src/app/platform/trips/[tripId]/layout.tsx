@@ -1,97 +1,157 @@
 import React from 'react'
 import prisma from '@/lib/prismadb'
-import Link from 'next/link';
-import Sidebar from '@/components/platform-components/sidebar';
-import HeaderDisplay from './header-display';
+import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
-import { TripHeaderProvider } from '@/contexts/trip-header-provider';
-import { Trip } from '@prisma/client';
+import { Trip, Listing } from '@prisma/client';
 
-type TripsPageProps = {
-  params: { tripId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-const pullTripFromDb = async (tripId) => {
+// Update this fx so that it includes favorites (a relation to the trip model)
+const pullTripFromDb = async (tripId: string) => {
   'use server'
 
+  console.log("IM HERE")
   const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, } })
 
   if (trip) {
-    return trip
+    if (!trip.latitude || !trip.longitude) {
+      const locationIQApiKey = process.env.LOCATIONIQ_API_KEY;
+      const locationString = encodeURIComponent(trip.locationString);
+      const url = `https://us1.locationiq.com/v1/search.php?key=${locationIQApiKey}&q=${locationString}&format=json`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+          const { lat, lon } = data[0];
+
+          await prisma.trip.update({
+            where: { id: tripId },
+            data: {
+              latitude: parseFloat(lat),
+              longitude: parseFloat(lon),
+            },
+          });
+
+          trip.latitude = parseFloat(lat);
+          trip.longitude = parseFloat(lon);
+        }
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    }
+    return trip;
   }
 }
 
-const pullMockListingsFromDb = async () => {
+const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number) => {
   'use server';
 
+  const earthRadiusMiles = 3959; // Earth's radius in miles
+
   try {
+    // Input validation
+    if (typeof lat !== 'number' || isNaN(lat) || lat < -90 || lat > 90) {
+      throw new Error('Invalid latitude. Must be a number between -90 and 90.');
+    }
+    if (typeof lng !== 'number' || isNaN(lng) || lng < -180 || lng > 180) {
+      throw new Error('Invalid longitude. Must be a number between -180 and 180.');
+    }
+    if (typeof radiusMiles !== 'number' || isNaN(radiusMiles) || radiusMiles <= 0) {
+      throw new Error('Invalid radius. Must be a positive number.');
+    }
+
+    const listingIds = await prisma.$queryRaw<{ id: number }[]>`
+    SELECT id, 
+    (${earthRadiusMiles} * acos(
+      cos(radians(${lat})) * cos(radians(latitude)) *
+      cos(radians(longitude) - radians(${lng})) +
+      sin(radians(${lat})) * sin(radians(latitude))
+    )) AS distance
+    FROM Listing
+    HAVING distance <= ${radiusMiles}
+    ORDER BY distance
+  `;
+
     const listings = await prisma.listing.findMany({
       where: {
         id: {
-          in: ["1", "2", "3"], // Looks for listings where the value field is either "1", "2", or "3"
-        },
+          in: listingIds.map(item => item.id)
+        }
       },
+      include: {
+        listingImages: true
+      },
+      orderBy: {
+        // You might want to preserve the original distance-based ordering
+        id: 'asc' // This assumes IDs were returned in the correct order
+      }
     });
+
+
     return listings;
   } catch (error) {
-    console.error('Error fetching listings:', error);
-    throw error; // Re-throw the error for further handling
+    console.error('Error in pullListingsFromDb:', error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+}
+const createDbFavorite = async (tripId: string, listingId: string) => {
+  'use server'
+  console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
+  try {
+    // Check if a favorite with the same tripId and listingId already exists
+    const existingFavorite = await prisma.favorite.findFirst({
+      where: {
+        tripId,
+        listingId,
+      },
+    });
+
+    if (existingFavorite) {
+      throw new Error('Favorite already exists for this trip and listing');
+    }
+
+    // Get the highest rank for the current trip
+    const highestRank = await prisma.favorite.findFirst({
+      where: { tripId },
+      orderBy: { rank: 'desc' },
+      select: { rank: true },
+    });
+
+    const newRank = (highestRank?.rank || 0) + 1;
+
+    // Create the new favorite
+    const newFavorite = await prisma.favorite.create({
+      data: {
+        tripId,
+        listingId,
+        rank: newRank,
+      },
+    });
+
+    console.log('Favorite Created', newFavorite)
+
+    // Revalidate the favorites page or any other relevant pages
+    revalidatePath('/favorites');
+
+    return newFavorite;
+  } catch (error) {
+    console.error('Error creating favorite:', error);
+    throw error;
   }
 }
 
-export default async function TripLayout({ children, params }: { children: React.ReactNode }) {
+export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
   const trip = await pullTripFromDb(params.tripId) as Trip;
-  const listings = await pullMockListingsFromDb();
-
-  const links = [
-    {
-      displayText: 'New possibilities',
-      path: `/platform/trips/${params.tripId}/search`,
-      headerText: `Explore New Possibilities in `
-    },
-    {
-      displayText: 'Properties you love',
-      path: `/platform/trips/${params.tripId}/favorites`,
-      headerText: `Places You Love in `
-    },
-    {
-      displayText: 'Already applied',
-      path: `/platform/trips/${params.tripId}/applied`,
-      headerText: `Applications You've Submitted in `
-    },
-    {
-      displayText: 'Matches',
-      path: `/platform/trips/${params.tripId}/matches`,
-      headerText: `Your Matches in `
-    },
-    {
-      displayText: 'Rebounds',
-      path: `/platform/trips/${params.tripId}/rebounds`,
-      headerText: `Rebounds in `
-    },
-    {
-      displayText: 'Rejected',
-      path: `/platform/trips/${params.tripId}/rejected`,
-      headerText: `Rejected Applications in `
-    },
-  ];
-
+  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
 
   return (
-    <TripContextProvider tripData={trip} listingData={listings} pullTripFromDb={pullTripFromDb}>
-      <>
-        <HeaderDisplay />
-        <div className='flex'>
-
-          <Sidebar links={links} />
-
-          <main style={{ flexGrow: 1, padding: '20px' }}>
-            {/* Main content will be rendered here */}
-            {children}
-          </main>
-        </div>
-      </>
+    <TripContextProvider
+      tripData={trip}
+      listingData={listings}
+      pullTripFromDb={pullTripFromDb}
+      createDbFavorite={createDbFavorite}
+    >
+      {children}
     </TripContextProvider>
   );
 }

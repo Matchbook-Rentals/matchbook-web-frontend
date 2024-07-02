@@ -1,17 +1,9 @@
-import ListIcon from "@/components/ui/list-icon";
-import PlusIcon from "@/components/ui/plus-icon";
-import WindowIcon from "@/components/ui/window-icon";
-import Image from "next/image";
 import React from "react";
 import prisma from "@/lib/prismadb";
-import PropertyList from "./property-list";
-import HostDashboardHeader from "./host-dashboard-header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { type Listing } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 import HostDashboardClient from "./host-dashboard-client";
-
 
 const fetchListingsFromDb = async () => {
   "use server";

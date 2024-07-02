@@ -215,6 +215,7 @@ model ListingImage {
   id        String  @id @default(uuid())
   url       String
   listingId String
+  // Explain this line to me. If I delete a listing Image will it delete it's attached lisitng? or the other way around
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   category  String?
   rank      Int?
@@ -261,10 +262,11 @@ model Booking {
 model Trip {
   id             String     @id @default(uuid()) // Changed from MongoDB's ObjectId
   locationString String
+  latitude       Float      @default(0)
+  longitude      Float      @default(0)
   city           String?
   state          String?
   postalCode     String?
-  locationLatLng String?
   createdAt      DateTime   @default(now())
   startDate      DateTime?
   endDate        DateTime?
@@ -314,13 +316,13 @@ model Match {
 
 model Favorite {
   id        String  @id @default(uuid())
-  tripId    String
-  // favId     String // ID of the listing or another entity marked as favorite
+  tripId    String 
   listingId String? // ID of the listing or another entity marked as favorite
   rank      Int? // Added field to store ranking
 
-  trip Trip @relation(fields: [tripId], references: [id])
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@unique([tripId, rank])
   @@unique([tripId, listingId])
 }
+

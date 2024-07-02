@@ -1,29 +1,32 @@
 "use client";
 
-import { Listing, Trip } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
+import { Listing, Trip, Favorite } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
 import { createContext, useState } from "react";
+import { Dispatch, SetStateAction } from 'react';
 
 type TripContextProviderProps = {
   tripData: Trip;
   pullTripFromDb: Function;
+  createDbFavorite: Function;
   listingData: Listing[];
   children: React.ReactNode;
 };
 
 // Adjust Values to Provider Here
 type TTripContext = {
-  trip: Trip,
-  setTrip: Function,
-  getUpdatedTrip: Function,
-  headerText: string,
-  setHeaderText: Function,
-  listings: Listing[],
-  setListings: Function,
+  trip: Trip;
+  setTrip: Dispatch<SetStateAction<Trip>>;
+  getUpdatedTrip: Function;
+  createDbFavorite: Function;
+  headerText: string;
+  setHeaderText: Dispatch<SetStateAction<string>>;
+  listings: Listing[];
+  setListings: Dispatch<SetStateAction<Listing[]>>;
 };
 
 export const TripContext = createContext<TTripContext | null>(null);
 
-export default function TripContextProvider({ tripData, listingData, pullTripFromDb, children }: TripContextProviderProps) {
+export default function TripContextProvider({ tripData, listingData, pullTripFromDb, createDbFavorite, children }: TripContextProviderProps) {
   const [trip, setTrip] = useState<Trip>(tripData);
   const [listings, setListings] = useState<Listing[]>(listingData);
   const [headerText, setHeaderText] = useState('');
@@ -45,6 +48,7 @@ export default function TripContextProvider({ tripData, listingData, pullTripFro
         listings,
         setListings,
         getUpdatedTrip,
+        createDbFavorite,
 
       }}
     >
