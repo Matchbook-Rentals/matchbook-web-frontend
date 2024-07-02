@@ -53,5 +53,23 @@ const BookingsIcon = () => (
   </svg>
 
 )
+const HeartIcon = (props) => (
+  <svg  viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor" />
+  </svg>
+)
 
-export { AnalyticsIcon, OverviewIcon, PaymentsIcon, BookingsIcon, ListingIcon, ApplicationsIcon };
+const BackIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor" />
+  </svg>
+)
+
+const CrossIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" fill="currentColor" />
+  </svg>
+)
+
+export { AnalyticsIcon, OverviewIcon, PaymentsIcon, BookingsIcon, ListingIcon, ApplicationsIcon, HeartIcon, CrossIcon, BackIcon };
+
