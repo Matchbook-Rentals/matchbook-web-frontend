@@ -1,0 +1,94 @@
+.matchbook-header {
+  height: 146px;
+  width: 2277px;
+}
+
+.matchbook-header .overlap-group {
+  height: 146px;
+  position: relative;
+}
+
+.matchbook-header .profile-menu {
+  height: 29px;
+  left: 1991px;
+  position: absolute;
+  top: 35px;
+  width: 39px;
+}
+
+.matchbook-header .heart-lines {
+  height: 96px;
+  left: 0;
+  position: absolute;
+  top: 50px;
+  width: 2277px;
+}
+
+.matchbook-header .group {
+  height: 75px;
+  left: 168px;
+  position: absolute;
+  top: 0;
+  width: 380px;
+}
+
+.matchbook-header .div {
+  height: 75px;
+  position: relative;
+  width: 384px;
+}
+
+.matchbook-header .text-wrapper {
+  color: #869a7d;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 1.2px;
+  font-weight: 400;
+  left: 53px;
+  letter-spacing: 0;
+  line-height: 1.2px;
+  position: absolute;
+  top: 60px;
+}
+
+.matchbook-header .match-book {
+  color: #869a7d;
+  font-family: "Lora-Regular", Helvetica;
+  font-size: 52px;
+  font-weight: 400;
+  left: 54px;
+  line-height: 52px;
+  position: absolute;
+  top: 0;
+}
+
+.matchbook-header .span {
+  letter-spacing: 0;
+  line-height: 63px;
+}
+
+.matchbook-header .text-wrapper-2 {
+  letter-spacing: -0.16px;
+  line-height: 63px;
+}
+
+.matchbook-header .text-wrapper-3 {
+  font-size: 61.8px;
+  letter-spacing: 0;
+  line-height: 74.9px;
+}
+
+.matchbook-header .path {
+  height: 54px;
+  left: 0;
+  position: absolute;
+  top: 9px;
+  width: 46px;
+}
+
+.matchbook-header .user-icon {
+  height: 87px;
+  left: 2046px;
+  position: absolute;
+  top: 7px;
+  width: 80px;
+}

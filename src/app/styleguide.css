@@ -1,0 +1,16 @@
+:root {
+  --baskerville-regular-38px-font-family: "Baskerville", Helvetica;
+  --baskerville-regular-38px-font-size: 38px;
+  --baskerville-regular-38px-font-style: normal;
+  --baskerville-regular-38px-font-weight: 400;
+  --baskerville-regular-38px-letter-spacing: 0px;
+  --baskerville-regular-38px-line-height: normal;
+  --bodoni-72-smallcaps-book-38px-font-family: "Bodoni 72 Smallcaps", Helvetica;
+  --bodoni-72-smallcaps-book-38px-font-size: 38px;
+  --bodoni-72-smallcaps-book-38px-font-style: normal;
+  --bodoni-72-smallcaps-book-38px-font-weight: 400;
+  --bodoni-72-smallcaps-book-38px-letter-spacing: 0px;
+  --bodoni-72-smallcaps-book-38px-line-height: normal;
+  --rgb0-0-0: rgba(149, 137, 137, 0);
+  --rgb134-154-125: rgba(134, 154, 125, 1);
+}
