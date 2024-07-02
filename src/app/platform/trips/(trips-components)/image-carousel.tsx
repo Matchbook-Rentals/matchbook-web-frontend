@@ -29,7 +29,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   }, [] as ListingImage[][]);
 
   return (
-    <div className="flex flex-col md:flex-row md:space-x-4 w-full h-[50vh]">
+    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[50vh]">
       <div className="w-full md:w-1/2  md:h-full relative">
         <img
           src={listingImages[activeImage].url}
@@ -60,8 +60,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute -left-4 md:-left-5 lg:-left-8 text-white bg-black/50 hover:bg-black/70" />
-          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-6 text-white bg-black/50 hover:bg-black/70" />
+          <CarouselPrevious className="absolute -left-4 md:-left-5 lg:-left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
         </Carousel>
       </div>
     </div>
