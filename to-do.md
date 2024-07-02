@@ -2,7 +2,6 @@
 
 ## Matching (Trip View)
 
-
 [ ] 1. Photo display left, 4x4 grid on right - New component
    - [ ] Grid needs special handling for 1, 2, 3, 4+ images - New component, child of carousel
 
@@ -15,8 +14,6 @@
 [ ] 4. Trip Editor
 
 [ ] 5. Trip location Properties update via locationIq at tripCreation/trip View
-
-
 
 ## Coming Soon (marketing page)
 
@@ -34,9 +31,13 @@
 
 [ ] 2. Color darkening
 
+## Image Upload 
+
+1. Better Drag and Drop
+
+2. Image compression/sharpening
 
 ## Test Listings
-
 
 [x] 1. Get it working
 

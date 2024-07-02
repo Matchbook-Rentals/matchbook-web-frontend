@@ -27,11 +27,6 @@ const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = ({ listings, set
 
   return (
     <div className="w-full">
-      {trip?.latitude && (
-        <p onClick={() => console.log(listings[currListing].listingImages)}>
-          Latitude: {trip?.latitude}, Longitude: {trip?.longitude}
-        </p>
-      )}
       <ImageCarousel listingImages={listings[currListing]?.listingImages || []} />
 
 
