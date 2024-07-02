@@ -6,6 +6,7 @@
    - [ ] Grid needs special handling for 1, 2, 3, 4+ images - New component, child of carousel (tabled for now)
 
 [ ] 2. Layout other details below carousel
+        - [ ] Almost there need tiles
 
 [ ] 3. Like/Dislike - Pass to Properties you love
    - [ ] Create housingRequest (needs new name, maybe heart, maybe favorites)
