@@ -1,5 +1,3 @@
-//Please set this component up with CarouselButtonControls included. It's a shadcn carousel which expects the onback and onprevious fxs to come from the api
-
 import React from 'react';
 import { Trip, Listing } from '@prisma/client';
 import ImageCarousel from '../../(trips-components)/image-carousel';
@@ -18,14 +16,22 @@ interface NewPossibilitiesTabProps {
 }
 
 
-const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = ({ listings, setListings }) => {
+const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = () => {
   //State Items
   const [currListing, setCurrlisting] = React.useState(0);
-  const { trip, createDbFavorite } = React.useContext(TripContext);
+  const { trip, setTrip, headerText, setHeaderText, listings, setListings, getUpdatedTrip, createDbFavorite } = React.useContext(TripContext);
+   //The below state item should be all listings that do not have their id in trip.favorites[listingid]
+  //const [showLisings, setShowListings] = React.useState([])
 
   //Functions
   const handleLike = () => {
     createDbFavorite(trip.id, listings[currListing].id);
+
+    setTrip(prev => {
+     const updatedTrip = {...prev};
+      updatedTrip.favorites.push({tripId: trip.id, listingId: listings[currListing].id, rank: prev.favorites.length + 1})
+      return updatedTrip;
+    })
 
     setListings(prevListings => {
       const updatedListings = [...prevListings];
@@ -35,9 +41,6 @@ const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = ({ listings, set
 
     setCurrlisting(prev => prev + 1)
   };
-
-  // Note: This assumes that 'listings' is managed by a state hook.
-  // If it's not, you may need to adjust the logic accordingly.
 
   const handleReject = () => {
     setCurrlisting(prev => prev + 1)
