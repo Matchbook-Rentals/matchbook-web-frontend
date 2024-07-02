@@ -121,7 +121,6 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
     router.push('/platform/preferences');
   }
 
-=======
 const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
 
   return (
