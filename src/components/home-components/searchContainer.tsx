@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useRef, FormEvent } from 'react';
 import { BiSearch, BiPlus, BiMinus } from 'react-icons/bi';
@@ -11,6 +12,7 @@ import LocationSuggest from './location-suggest';
 type SearchContainerProps = {
   createTrip: Function
 }
+
 
 export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
@@ -126,82 +128,4 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
     console.log(tripDetails);
     router.push('/platform/preferences');
   }
-
-  return (
-    <div className="border border-gray-500 w-full md:w-auto rounded-full bg-white text-gray-500 shadow-sm hover:shadow-md transition cursor-pointer">
-      <form className="flex flex-row items-center justify-between pr-4" onSubmit={handleSubmit}>
-        {/* <input
-          type="text"
-          placeholder='Where to?'
-          className='placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
-          onChange={(e) => setDestination(e.target.value)}
-        /> */}
-        <LocationSuggest setDestination={setDestination} />
-        <Popover>
-          <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
-            {moveInDate ? moveInDate.toUTCString().slice(0, 16) : "Move In:"}
-            {/* <p>date picker</p> */}
-          </PopoverTrigger>
-          <PopoverContent className='mt-5'>
-            <Calendar
-              mode="single"
-              selected={moveInDate}
-              onSelect={setMoveInDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger className="hidden text-left md:block text-lg py-2 pl-6 lg:border-r-[1px] border-gray-500 flex-1 cursor-pointer" onClick={() => moveOutRef.current?.focus()}>
-            {moveOutDate ? moveOutDate.toUTCString().slice(0, 16) : "Move Out:"}
-          </PopoverTrigger>
-          <PopoverContent className='mt-5'>
-            <Calendar
-              mode="single"
-              selected={moveOutDate}
-              onSelect={setMoveOutDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger className="hidden xl:block text-lg pl-6 pr-8">
-            <p>Who?</p>
-          </PopoverTrigger>
-          <PopoverContent className='mt-8'>
-            <div className='flex items-center justify-between my-2'>
-              <BiMinus onClick={() => decrementCount('adults')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-              <span className='text-xl'>Adults: {adults}</span>
-              <BiPlus onClick={() => incrementCount('adults')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-            </div>
-            <div className='flex items-center justify-between my-2'>
-              <BiMinus onClick={() => decrementCount('children')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-              <span className='text-xl'>Children: {children}</span>
-              <BiPlus onClick={() => incrementCount('children')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-            </div>
-            <div className='flex items-center justify-between my-2'>
-              <BiMinus onClick={() => decrementCount('pets')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-              <span className='text-xl'>Pets: {pets}</span>
-              <BiPlus onClick={() => incrementCount('pets')} className='cursor-pointer text-3xl border border-black  rounded-full' />
-            </div>
-          </PopoverContent>
-        </Popover>
-        <div onClick={pushToPreferenceView} className="p-2 bg-primaryBrand rounded-full text-white">
-          <BiSearch className='text-4xl' />
-          {/* <Dialog>
-
-          <DialogTrigger className='bg-primaryBrand rounded-full text-white p-2'>
-          </DialogTrigger>
-          <DialogContent>
-            <p>Would you like to refine your search by telling us more about what you are looking for?</p>
-
-            <button onClick={pushToPreferenceView} className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
-            <button onClick={pushToTripView} className='bg-primaryBrand rounded-full text-white p-2'>no</button>
-
-          </DialogContent>
-        </Dialog> */}
-        </div>
-      </form>
-    </div>
-  );
 }
