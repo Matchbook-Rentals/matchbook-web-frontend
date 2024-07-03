@@ -6,8 +6,6 @@ import { Calendar } from "@/components/ui/calendar"
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { Prisma, Trip } from '@prisma/client';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import { quartersToYears } from 'date-fns';
 import LocationSuggest from './location-suggest';
 
 type SearchContainerProps = {

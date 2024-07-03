@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 

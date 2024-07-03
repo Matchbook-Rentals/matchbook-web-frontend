@@ -9,8 +9,11 @@
         - [x] Almost there need tiles
 
 [ ] 3. Like/Dislike - Pass to Properties you love
-   - [ ] Create housingRequest (needs new name, maybe heart, maybe favorites)
-   - [ ] Create message, notification, email alert, host side interaction
+   - [x] Create housingRequest (needs new name, maybe heart, maybe favorites)
+
+   - [ ] shown listings does not include matches
+
+   - [ ] 
 
 [ ] 4. Trip Editor
 

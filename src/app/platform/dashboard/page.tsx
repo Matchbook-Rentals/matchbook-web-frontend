@@ -20,9 +20,7 @@ export default async function DashboardPage() {
   const upcomingBookings = trips.filter(
     (trip) => trip?.tripStatus === "reserved",
   );
-
-  console.log("RESERVED", upcomingBookings);
-
+   
   return (
     <div>
       <h2 className="text-center text-4xl font-semibold pb-3 mb-10">
