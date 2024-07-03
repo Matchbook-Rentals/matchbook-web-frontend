@@ -55,3 +55,22 @@
 ## Refactors
 
 [ ] 1. Move amenities to their own model
+
+
+## Host View
+
+[ ] 1. Add listing preview
+
+[ ] 2. Utilities Included 
+
+[ ] 3. House Rules 
+
+[ ] 4. Counters in Add property bathroom or bedroom count quare footabe 50
+
+
+## Third Party
+
+[ ] 1. Retool
+
+[ ] 2. Bold Desk
+
