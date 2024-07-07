@@ -81,7 +81,7 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
       const queryParams = [];
 
       // For each state, check if it has a truthy value and add to queryParams
-      if (destination.locationString) queryParams.push(`destination=${encodeURIComponent(destination)}`);
+      if (destination.locationString) queryParams.push(`destination=${encodeURIComponent(destination.locationString)}`);
       if (adults) queryParams.push(`adults=${adults}`);
       if (children) queryParams.push(`children=${children}`);
       if (pets) queryParams.push(`pets=${pets}`);
@@ -126,12 +126,6 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
   return (
     <div className="border border-gray-500 w-full md:w-auto rounded-full bg-white text-gray-500 shadow-sm hover:shadow-md transition cursor-pointer">
       <form className="flex flex-row items-center justify-between pr-4" onSubmit={handleSubmit}>
-        {/* <input
-          type="text"
-          placeholder='Where to?'
-          className='placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer'
-          onChange={(e) => setDestination(e.target.value)}
-        /> */}
         <LocationSuggest setDestination={setDestination} />
         <Popover>
           <PopoverTrigger className="hidden text-left sm:block text-lg py-2 pl-6 sm:border-l-[1px] md:border-x-[1px] border-gray-500 flex-1" onClick={() => moveInRef.current?.focus()}>
@@ -184,18 +178,6 @@ export default function SearchContainer({ createTrip }: SearchContainerProps) {
         </Popover>
         <div onClick={pushToPreferenceView} className="p-2 bg-primaryBrand rounded-full text-white">
           <BiSearch className='text-4xl' />
-          {/* <Dialog>
-
-          <DialogTrigger className='bg-primaryBrand rounded-full text-white p-2'>
-          </DialogTrigger>
-          <DialogContent>
-            <p>Would you like to refine your search by telling us more about what you are looking for?</p>
-
-            <button onClick={pushToPreferenceView} className='bg-primaryBrand rounded-full text-white p-2'>yes</button>
-            <button onClick={pushToTripView} className='bg-primaryBrand rounded-full text-white p-2'>no</button>
-
-          </DialogContent>
-        </Dialog> */}
         </div>
       </form>
     </div>

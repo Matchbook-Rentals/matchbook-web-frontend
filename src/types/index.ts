@@ -1,13 +1,14 @@
 import { SetStateAction, Dispatch } from "react";
-import { HousingRequest, ListingImage, Match, Favorite, Reservation, User } from "@prisma/client";
+import { HousingRequest, ListingImage, Match, Favorite, Trip, User } from "@prisma/client";
 
-export type Trip = {
+export type TripAndMatches = {
   id: string;
   locationString: string;
   city: string | null;
   state: string | null;
   postalCode: string | null;
-  locationLatLng: string | null; // Assuming string, adjust if it's a more complex type
+  latitude: number;
+  longitude: number;
   createdAt: Date | string; // Date object or ISO string representation
   startDate: Date | string | null;
   endDate: Date | string | null;
@@ -21,9 +22,11 @@ export type Trip = {
   sponsorID: string | null;
   userId: string;
   tripStatus: string;
+  favorites: Favorite[];
+  matches: Match[];
 };
 
-export type Listing = {
+export type ListingAndImages = {
   id: string;
   title: string;
   description: string;
@@ -33,6 +36,10 @@ export type Listing = {
   roomCount: number;
   bathroomCount: number;
   guestCount?: number | null;
+  shortestLeasePrice: number;
+  shortestLeaseLength: number;
+  longestLeasePrice: number;
+  longestLeaseLength: number;
   latLng: string;
   locationString: string;
   city: string;
@@ -63,22 +70,10 @@ export type Listing = {
   beachfront: boolean;
   mountainView: boolean;
   user: User; // Placeholder for actual User type
-  reservations: Reservation[]; // Placeholder for actual Reservation type array
   housingRequests: HousingRequest[]; // Placeholder for actual HousingRequest type array
   Trip?: Trip | null; // Placeholder for actual Trip type, optional
   tripId?: string | null;
-  images: ListingImage[]; // Placeholder for actual ListingImage type array
+  listingImages: ListingImage[]; // Placeholder for actual ListingImage type array
 };
 
-
-export type TTripContext = {
-  trip: Trip;
-  setTrip: Dispatch<SetStateAction<Trip>>;
-  getUpdatedTrip: Function;
-  createDbFavorite: Function;
-  headerText: string;
-  setHeaderText: Dispatch<SetStateAction<string>>;
-  listings: Listing[];
-  setListings: Dispatch<SetStateAction<Listing[]>>;
-};
 

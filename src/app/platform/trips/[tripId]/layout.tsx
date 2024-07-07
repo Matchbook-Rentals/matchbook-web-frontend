@@ -3,12 +3,12 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
 import { Trip, Listing } from '@prisma/client';
+import { ListingAndImages, TripAndMatches } from '@/types';
 
 // Update this fx so that it includes favorites (a relation to the trip model)
-const pullTripFromDb = async (tripId: string) => {
+const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
   'use server'
 
-  console.log("IM HERE")
   const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, } })
 
   if (trip) {
@@ -43,7 +43,7 @@ const pullTripFromDb = async (tripId: string) => {
   }
 }
 
-const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number) => {
+const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number): Promise<ListingAndImages[]> => {
   'use server';
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
@@ -60,7 +60,7 @@ const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number)
       throw new Error('Invalid radius. Must be a positive number.');
     }
 
-    const listingIds = await prisma.$queryRaw<{ id: number }[]>`
+    const listingIds = await prisma.$queryRaw<{ id: string }[]>`
     SELECT id, 
     (${earthRadiusMiles} * acos(
       cos(radians(${lat})) * cos(radians(latitude)) *
@@ -94,6 +94,7 @@ const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number)
     throw error; // Re-throw the error for the caller to handle
   }
 }
+
 const createDbFavorite = async (tripId: string, listingId: string) => {
   'use server'
   console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
@@ -141,8 +142,11 @@ const createDbFavorite = async (tripId: string, listingId: string) => {
 }
 
 export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
-  const trip = await pullTripFromDb(params.tripId) as Trip;
+  const trip = await pullTripFromDb(params.tripId);
+  if (!trip) { return <p> NO TRIP FOUND </p> }
+
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
+
 
   return (
     <TripContextProvider

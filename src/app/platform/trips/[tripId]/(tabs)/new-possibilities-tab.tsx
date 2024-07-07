@@ -9,36 +9,27 @@ import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../(trips-components)/description-and-amenities';
 import { TripContext } from '@/contexts/trip-context-provider';
 
-interface NewPossibilitiesTabProps {
-  listings: Listing[]; // Replace 'any' with the actual type of your listings
-  setListings: React.Dispatch<React.SetStateAction<any[]>>; // Replace 'any' with the actual type of your listings
-  trip?: Trip;
-}
-
-
-const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = () => {
-  //State Items
+const NewPossibilitiesTab: React.FC = () => {
+  const tripContext = React.useContext(TripContext);
+  if (!tripContext) {
+    throw new Error('TripContext must be used within a TripContextProvider');
+  }
+  // State Items
   const [currListing, setCurrlisting] = React.useState(0);
-  const { trip, setTrip, headerText, setHeaderText, listings, setListings, getUpdatedTrip, createDbFavorite } = React.useContext(TripContext);
-   //The below state item should be all listings that do not have their id in trip.favorites[listingid]
-  //const [showLisings, setShowListings] = React.useState([])
+  const { trip, setTrip, showListings, setListings, createDbFavorite } = tripContext;
 
-  //Functions
+  // Functions
   const handleLike = () => {
-    createDbFavorite(trip.id, listings[currListing].id);
-
+    createDbFavorite(trip.id, showListings[currListing].id);
     setTrip(prev => {
-     const updatedTrip = {...prev};
-      updatedTrip.favorites.push({tripId: trip.id, listingId: listings[currListing].id, rank: prev.favorites.length + 1})
+      const updatedTrip = { ...prev };
+      updatedTrip.favorites.push({ tripId: trip.id, listingId: showListings[currListing].id, rank: prev.favorites.length + 1 })
       return updatedTrip;
     })
-
     setListings(prevListings => {
-      const updatedListings = [...prevListings];
-      updatedListings.splice(currListing, 1);
+      const updatedListings = prevListings.filter(listing => listing.id !== showListings[currListing].id);
       return updatedListings;
     });
-
     setCurrlisting(prev => prev + 1)
   };
 
@@ -61,22 +52,20 @@ const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = () => {
   };
 
   // Early returns for edge cases
-  if (listings === undefined) {
+  if (showListings === undefined) {
     return null;
   }
-
-  if (listings.length === 0) {
+  if (showListings.length === 0) {
     return <div>No listings available.</div>;
   }
-
-  if (currListing >= listings.length) {
+  if (currListing >= showListings.length) {
     return <div>No more listings to display.</div>;
   }
 
   // Main component render
   return (
     <div className="w-full">
-      <ImageCarousel listingImages={listings[currListing]?.listingImages || []} />
+      <ImageCarousel listingImages={showListings[currListing]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
         <ButtonControl
           handleClick={handleReject}
@@ -102,21 +91,20 @@ const NewPossibilitiesTab: React.FC<NewPossibilitiesTabProps> = () => {
         />
       </div>
       <TitleAndStats
-        title={listings[currListing]?.title}
+        title={showListings[currListing]?.title}
         rating={3.5}
         numStays={0}
-        numBath={listings[currListing]?.bathroomCount}
-        numBeds={listings[currListing]?.roomCount}
-        rentPerMonth={listings[currListing]?.shortestLeasePrice}
+        numBath={showListings[currListing]?.bathroomCount}
+        numBeds={showListings[currListing]?.roomCount}
+        rentPerMonth={showListings[currListing]?.shortestLeasePrice}
         distance={2.9}
       />
       <DescriptionAndAmenities
-        description={listings[currListing]?.description}
-        amenities={getListingAmenities(listings[currListing])}
+        description={showListings[currListing]?.description}
+        amenities={getListingAmenities(showListings[currListing])}
       />
     </div>
   );
 };
 
 export default NewPossibilitiesTab;
-

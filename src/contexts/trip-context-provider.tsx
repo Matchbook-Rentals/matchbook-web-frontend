@@ -1,40 +1,45 @@
 "use client";
 
+import React from "react";
+import { ListingAndImages, TripAndMatches } from "@/types";
 import { Listing, Trip, Favorite } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
 import { createContext, useState } from "react";
 import { Dispatch, SetStateAction } from 'react';
+//import { TTripContext } from "@/types";
 
 type TripContextProviderProps = {
-  tripData: Trip;
+  tripData: TripAndMatches;
   pullTripFromDb: Function;
   createDbFavorite: Function;
-  listingData: Listing[];
+  listingData: ListingAndImages[];
   children: React.ReactNode;
 };
 
-// Adjust Values to Provider Here
+// convert this to an interace
 type TTripContext = {
-  trip: Trip;
-  setTrip: Dispatch<SetStateAction<Trip>>;
+  trip: TripAndMatches;
+  setTrip: Dispatch<SetStateAction<TripAndMatches>>;
   getUpdatedTrip: Function;
   createDbFavorite: Function;
-  headerText: string;
-  setHeaderText: Dispatch<SetStateAction<string>>;
-  listings: Listing[];
-  setListings: Dispatch<SetStateAction<Listing[]>>;
+  listings: ListingAndImages[];
+  showListings: ListingAndImages[];
+  setListings: Dispatch<SetStateAction<ListingAndImages[]>>;
 };
 
 export const TripContext = createContext<TTripContext | null>(null);
 
 export default function TripContextProvider({ tripData, listingData, pullTripFromDb, createDbFavorite, children }: TripContextProviderProps) {
-  const [trip, setTrip] = useState<Trip>(tripData);
-  const [listings, setListings] = useState<Listing[]>(listingData);
-  const [headerText, setHeaderText] = useState('');
+  const [trip, setTrip] = useState(tripData);
+  const [listings, setListings] = useState(listingData);
+  const showListings = React.useMemo(() => {
+    const favoriteListingIds = new Set(trip.favorites.map(favorite => favorite.listingId));
+    return listings.filter(listing => !favoriteListingIds.has(listing.id));
+  }, [trip.favorites, listings]);
+
 
   // Event handlers / actions
-
   const getUpdatedTrip = async () => {
-    const tempTrip: Trip = await pullTripFromDb(trip.id);
+    const tempTrip = await pullTripFromDb(trip.id);
     setTrip(tempTrip)
   }
 
@@ -43,10 +48,9 @@ export default function TripContextProvider({ tripData, listingData, pullTripFro
       value={{
         trip,
         setTrip,
-        headerText,
-        setHeaderText,
         listings,
         setListings,
+        showListings,
         getUpdatedTrip,
         createDbFavorite,
 

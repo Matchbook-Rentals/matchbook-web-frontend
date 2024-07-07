@@ -15,7 +15,7 @@ const TripIdPage: React.FC = ({ params }) => {
     throw new Error('TripContext must be used within a TripContextProvider');
   }
 
-  const { trip, setTrip, headerText, setHeaderText, listings, setListings, getUpdatedTrip } = tripContext;
+  const { trip, listings, setListings,} = tripContext;
 
 
   const placeholderTrip: Trip = {
