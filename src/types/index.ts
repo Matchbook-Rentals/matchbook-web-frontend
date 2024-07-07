@@ -1,3 +1,6 @@
+import { SetStateAction, Dispatch } from "react";
+import { HousingRequest, ListingImage, Match, Favorite, Reservation, User } from "@prisma/client";
+
 export type Trip = {
   id: string;
   locationString: string;
@@ -66,3 +69,16 @@ export type Listing = {
   tripId?: string | null;
   images: ListingImage[]; // Placeholder for actual ListingImage type array
 };
+
+
+export type TTripContext = {
+  trip: Trip;
+  setTrip: Dispatch<SetStateAction<Trip>>;
+  getUpdatedTrip: Function;
+  createDbFavorite: Function;
+  headerText: string;
+  setHeaderText: Dispatch<SetStateAction<string>>;
+  listings: Listing[];
+  setListings: Dispatch<SetStateAction<Listing[]>>;
+};
+
