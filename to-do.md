@@ -5,8 +5,10 @@
 [x] 1. Photo display left, 4x4 grid on right - New component
    - [ ] Grid needs special handling for 1, 2, 3, 4+ images - New component, child of carousel (tabled for now)
 
-[x] 2. Layout other details below carousel
+[ ] 2. Layout other details below carousel
         - [x] Almost there need tiles
+        - [ ] Replace Amenities
+        - [ ] Add whitespace to lower layout
 
 [ ] 3. Like/Dislike - Pass to Properties you love
    - [x] Create housingRequest (needs new name, maybe heart, maybe favorites)
@@ -50,7 +52,7 @@
 
 [x] 3. Fix State
 
-[ ] 4. Lower resolution of test photos
+[x] 4. Lower resolution of test photos
 
 [ ] 5. Finish match view
         Fix height issue between carousel and lead image on diff screen sizes (Kill me)

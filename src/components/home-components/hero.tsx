@@ -1,16 +1,16 @@
 import React from 'react'
 import Image from "next/image";
-import Container from '../container';
 import SearchContainer from './searchContainer';
 import prisma from '@/lib/prismadb'
-import { Trip } from '@/types';
-import { currentUser } from '@clerk/nextjs';
-
+import { currentUser } from '@clerk/nextjs/server';
+import { Trip } from '@prisma/client';
 
 export default async function Hero() {
 
   const createTrip = async (trip: Trip,) => {
     'use server';
+
+    const clerkUser = await currentUser();
 
     // Check if there is a user with the provided userId
     const userExists = await prisma.user.findUnique({
@@ -18,15 +18,13 @@ export default async function Hero() {
     });
 
     // If the user does not exist, create a new user
-
     if (!userExists) {
-      const clerkUser = await currentUser();
       await prisma.user.create({
         data: {
           id: trip.userId,
-          firstName: clerkUser.firstName,
-          lastName: clerkUser.lastName,
-          email: clerkUser.emailAddresses[0].emailAddress,
+          firstName: clerkUser?.firstName,
+          lastName: clerkUser?.lastName,
+          email: clerkUser?.emailAddresses[0].emailAddress,
 
           // You need to provide additional required fields for the User model here
         },
