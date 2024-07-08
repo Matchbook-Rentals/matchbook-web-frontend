@@ -13,9 +13,9 @@
 [ ] 3. Like/Dislike - Pass to Properties you love
    - [x] Create housingRequest (needs new name, maybe heart, maybe favorites)
 
-   - [ ] shown listings does not include matches
+   - [x] shown listings does not include matches
 
-   - [ ] 
+   - [ ] Handle backing up by removing from relevant array
 
 [ ] 4. Trip Editor
 

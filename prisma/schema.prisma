@@ -235,7 +235,7 @@ model HousingRequest {
   id        String   @id @default(uuid())
   userId    String
   listingId String
-  tripId    String?
+  tripId    String
   startDate DateTime
   endDate   DateTime
   createdAt DateTime @default(now())
@@ -244,7 +244,7 @@ model HousingRequest {
   // Relationships
   user    User     @relation(fields: [userId], references: [id])
   listing Listing  @relation(fields: [listingId], references: [id])
-  trip    Trip?    @relation(fields: [tripId], references: [id])
+  trip    Trip    @relation(fields: [tripId], references: [id])
 }
 
 model Booking {
@@ -328,4 +328,12 @@ model Favorite {
   @@unique([tripId, listingId])
 }
 
-// Coming Soon (Amenities table (listing table is way too long) and Dislikes Table for similar purpose to favorites (not showing users the same listing again on a per-trip basis))
+model Dislike {
+  tripId    String 
+  listingId String? 
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, rank])
+  @@unique([tripId, listingId])
+}
