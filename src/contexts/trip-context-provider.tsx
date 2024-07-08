@@ -22,8 +22,9 @@ type TTripContext = {
   getUpdatedTrip: Function;
   createDbFavorite: Function;
   listings: ListingAndImages[];
-  showListings: ListingAndImages[];
+  //showListings: ListingAndImages[];
   setListings: Dispatch<SetStateAction<ListingAndImages[]>>;
+  favoriteListingIds: Set<string | null>;
 };
 
 export const TripContext = createContext<TTripContext | null>(null);
@@ -31,11 +32,7 @@ export const TripContext = createContext<TTripContext | null>(null);
 export default function TripContextProvider({ tripData, listingData, pullTripFromDb, createDbFavorite, children }: TripContextProviderProps) {
   const [trip, setTrip] = useState(tripData);
   const [listings, setListings] = useState(listingData);
-  const showListings = React.useMemo(() => {
-    const favoriteListingIds = new Set(trip.favorites.map(favorite => favorite.listingId));
-    return listings.filter(listing => !favoriteListingIds.has(listing.id));
-  }, [trip.favorites, listings]);
-
+  const favoriteListingIds = new Set(trip.favorites.map(favorite => favorite.listingId));
 
   // Event handlers / actions
   const getUpdatedTrip = async () => {
@@ -50,7 +47,7 @@ export default function TripContextProvider({ tripData, listingData, pullTripFro
         setTrip,
         listings,
         setListings,
-        showListings,
+        favoriteListingIds,
         getUpdatedTrip,
         createDbFavorite,
 

@@ -16,20 +16,21 @@ const NewPossibilitiesTab: React.FC = () => {
   }
   // State Items
   const [currListing, setCurrlisting] = React.useState(0);
-  const { trip, setTrip, showListings, setListings, createDbFavorite } = tripContext;
+  const { trip, setTrip, listings, setListings, favoriteListingIds, createDbFavorite } = tripContext;
+  const [showListings, setShowListings] = React.useState(listings.filter(listing => !favoriteListingIds.has(listing.id)))
 
   // Functions
-  const handleLike = () => {
-    createDbFavorite(trip.id, showListings[currListing].id);
+  const handleLike = async () => {
+    await createDbFavorite(trip.id, showListings[currListing].id);
+    let tempfavIds = new Set(favoriteListingIds);
     setTrip(prev => {
       const updatedTrip = { ...prev };
-      updatedTrip.favorites.push({ tripId: trip.id, listingId: showListings[currListing].id, rank: prev.favorites.length + 1 })
+      if (!tempfavIds.has(showListings[currListing].id)) {
+        updatedTrip.favorites.push({ tripId: trip.id, listingId: showListings[currListing].id, rank: prev.favorites.length + 1 })
+        tempfavIds.add(showListings[currListing].id)
+      }
       return updatedTrip;
     })
-    setListings(prevListings => {
-      const updatedListings = prevListings.filter(listing => listing.id !== showListings[currListing].id);
-      return updatedListings;
-    });
     setCurrlisting(prev => prev + 1)
   };
 
