@@ -12,6 +12,7 @@ type TripContextProviderProps = {
   createDbDislike: Function;
   deleteDbDislike: Function;
   createDbHousingRequest: Function;
+  deleteDbHousingRequest: Function;
   listingData: ListingAndImages[];
   children: React.ReactNode;
 };
@@ -47,6 +48,7 @@ interface TTripContext {
     createDbDislike: Function;
     deleteDbDislike: Function;
     createDbHousingRequest: Function;
+    deleteDbHousingRequest: Function;
   };
 }
 
@@ -61,6 +63,7 @@ export default function TripContextProvider({
   createDbDislike,
   deleteDbDislike,
   createDbHousingRequest,
+  deleteDbHousingRequest,
   children,
 }: TripContextProviderProps) {
   const [trip, setTrip] = useState(tripData);
@@ -109,6 +112,7 @@ export default function TripContextProvider({
     createDbDislike,
     deleteDbDislike,
     createDbHousingRequest,
+    deleteDbHousingRequest,
   };
 
   return (

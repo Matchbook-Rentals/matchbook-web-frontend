@@ -208,7 +208,7 @@ const deleteDbDislike = async (dislikeId: string) => {
   }
 }
 
-const createDbHousingRequest = async ( userId: string, listingId: string, tripId: string, startDate: Date, endDate: Date): Promise<HousingRequest> => {
+const createDbHousingRequest = async (userId: string, listingId: string, tripId: string, startDate: Date, endDate: Date): Promise<HousingRequest> => {
   'use server'
 
   try {
@@ -222,12 +222,42 @@ const createDbHousingRequest = async ( userId: string, listingId: string, tripId
       },
     });
 
+    // Create Notification
+
     return newHousingRequest;
   } catch (error) {
     console.error('Error creating housing request:', error);
     throw new Error('Failed to create housing request');
   }
+
 };
+
+const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
+  'use server'
+
+  console.log(`Deleting HousingRequest with trip ${tripId} and listing ${listingId}`);
+  try {
+    // Delete the favorite
+    const deletedRequest = await prisma.housingRequest.delete({
+  where: { 
+    listingId_tripId: {
+      tripId,
+      listingId
+    }
+  }
+    });
+
+    console.log('Request Delete', deletedRequest)
+
+    // Revalidate the favorites page or any other relevant pages
+    revalidatePath('/housingRequests');
+
+    return deletedRequest;
+  } catch (error) {
+    console.error('Error deleting favorite:', error);
+    throw error;
+  }
+}
 
 
 export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
@@ -247,6 +277,7 @@ export default async function TripLayout({ children, params }: { children: React
       createDbDislike={createDbDislike}
       deleteDbDislike={deleteDbDislike}
       createDbHousingRequest={createDbHousingRequest}
+      deleteDbHousingRequest={deleteDbHousingRequest}
     >
       {children}
     </TripContextProvider>

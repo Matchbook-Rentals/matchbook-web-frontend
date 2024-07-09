@@ -21,11 +21,25 @@ export default function PropertiesYouLoveTab() {
       newReqs.add(listing.id)
       return { ...prev, requestedIds: newReqs }
     })
-
-    
     await actions.createDbHousingRequest(trip.userId, listing.id, trip.id, trip.startDate, trip.endDate)
-    
+  }
 
+  const handleUnapply = async (listing: ListingAndImages) => {
+    setLookup(prev => {
+      const newReqs = new Set(prev.requestedIds)
+      newReqs.delete(listing.id)
+      return { ...prev, requestedIds: newReqs }
+    })
+    await actions.deleteDbHousingRequest(trip.id, listing.id);
+  }
+
+  const generateLikedCardActions = (listing: ListingAndImages) => {
+    return [{ label: 'Apply Now', action: () => handleApply(listing) }]
+  }
+
+  const generateRequestedCardActions = (listing: ListingAndImages) => {
+
+    return [{ label: 'Unapply', action: () => handleUnapply(listing) }]
   }
 
   if (likedListings.length === 0 && requestedListings.length === 0) {
@@ -35,7 +49,6 @@ export default function PropertiesYouLoveTab() {
   return (
     <>
       {requestedListings.length > 0 &&
-        // Here's the formatted version of the specified line using Prettier:
         <CustomAccordion
           title="Submitted Applications"
           labelClassName="bg-primaryBrand/80 pl-5 rounded-none"
@@ -49,8 +62,7 @@ export default function PropertiesYouLoveTab() {
                 <TripListingCard
                   key={index}
                   listing={listing}
-                  handleClick={() => alert('Clicked')}
-                  label='Applied'
+                  actions={generateRequestedCardActions(listing)}
                 />
               ))}
             </div>
@@ -60,12 +72,15 @@ export default function PropertiesYouLoveTab() {
       {likedListings.length === 0 ? (
         <>
           <h3 className='text-center text-xl'>Applied for all liked listing, please return to new possibilites tab to find more listings!</h3>
-          <Button
-            className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center text-black block mt-5 mx-auto"
-            onClick={() => console.log(likedListings.length)}
-          >
-            Back to New Possibilites
-          </Button>
+          {/* Comment this button out in jsx */}
+          {/*
+      <Button
+          className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center text-black block mt-5 mx-auto"
+              onClick={() => console.log(likedListings.length)}
+                  >
+           Back to New Possibilites
+                </Button>
+                */}
         </>
       ) : (
         <div className="flex justify-center mx-auto w-full  px-2 py-8 border">
@@ -74,7 +89,7 @@ export default function PropertiesYouLoveTab() {
               <TripListingCard
                 key={index}
                 listing={listing}
-                handleClick={() => handleApply(listing)}
+                actions={generateLikedCardActions(listing)}
               />
             ))}
           </div>

@@ -10,7 +10,7 @@
         - [ ] Replace Amenities
         - [ ] Add whitespace to lower layout
 
-[ ] 3. Like/Dislike - Pass to Properties you love
+[X] 3. Like/Dislike - Pass to Properties you love
    - [x] Create housingRequest (needs new name, maybe heart, maybe favorites)
 
    - [x] shown listings does not include matches
@@ -24,6 +24,10 @@
 [ ] 6. Create rating property in listing model, Decimal (4.9) or string (?.?)
 
 [ ] 7. Update listing card to allow onclick and button label, rename to TripListingCard
+
+[ ] 8. Add notification on apply, add circle to userMenu, when click notification send to property dashboard, implemennt params routing to go right to applications
+
+[ ] 9. Update Sets to Maps to allow for sorting by created at
 ## Coming Soon (marketing page)
 
 [x] 0. Tab view for marketing branch (main/comingSoon)
@@ -75,7 +79,7 @@
 [ ] 4. Counters in Add property bathroom or bedroom count quare footabe 50
 
 
-## Third Party
+## Third Part
 
 [ ] 1. Retool
 
