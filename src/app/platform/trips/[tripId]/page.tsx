@@ -8,6 +8,7 @@ import { TripContext } from '@/contexts/trip-context-provider';
 import { Trip } from '@prisma/client';
 import NewPossibilitiesTab from './(tabs)/new-possibilities-tab';
 import PropertiesYouLoveTab from './(tabs)/properties-you-love';
+import DislikedProperties from './(tabs)/disliked-properties';
 
 const TripIdPage: React.FC = ({ params }) => {
   const tripContext = useContext(TripContext);
@@ -31,7 +32,7 @@ const TripIdPage: React.FC = ({ params }) => {
     { value: "new-possibilities", label: "New Possibilities", content: <NewPossibilitiesTab trip={trip} listings={listings} setListings={setListings} />, textSize: tabTextSize },
     { value: "properties-you-love", label: "Properties You Love", content: <PropertiesYouLoveTab /> , textSize: tabTextSize },
     { value: "matches", label: "Matches", content: <CardWithHeader title="Matches" content={<div>Matches content goes here.</div>} />, textSize: tabTextSize },
-    { value: "dislikes", label: "Dislikes", content: <CardWithHeader title="Dislikes" content={<div>Dislikes content goes here.</div>} />, textSize: tabTextSize },
+    { value: "dislikes", label: "Dislikes", content: <DislikedProperties />, textSize: tabTextSize },
     { value: "trip-editor", label: "Trip Editor", content: <CardWithHeader title="Trip Editor" content={<div>Trip Editor content goes here.</div>} />, textSize: tabTextSize },
     { value: "applications", label: "Applications", content: <CardWithHeader title="Application for Now" content={<div>Application for Now content goes here.</div>} />, textSize: tabTextSize },
   ]

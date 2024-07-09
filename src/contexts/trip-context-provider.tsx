@@ -36,6 +36,8 @@ interface TTripContext {
   setShowListings: Dispatch<SetStateAction<ListingAndImages[]>>;
   likedListings: ListingAndImages[];
   //setLikedListings: Dispatch<SetStateAction<ListingAndImages[]>>;
+  requestedListings: ListingAndImages[];
+  dislikedListings: ListingAndImages[];
   lookup: TripLookup;
   setLookup: Dispatch<SetStateAction<TripLookup>>;
   actions: {
@@ -60,13 +62,13 @@ export default function TripContextProvider({
 }: TripContextProviderProps) {
   const [trip, setTrip] = useState(tripData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
-  
+
   const initialLookup: TripLookup = {
     favMap: new Map(trip.favorites.map(favorite => [favorite.listingId, favorite.rank])),
     dislikedIds: new Set(trip.dislikes.map(dislike => dislike.listingId)),
     requestedIds: new Set(trip.housingRequests.map(request => request.listingId))
   };
-  
+
   const [lookup, setLookup] = useState<TripLookup>(initialLookup);
 
   const getRank = (listingId: string) => lookup.favMap.get(listingId) ?? Infinity;
@@ -75,17 +77,23 @@ export default function TripContextProvider({
     listingData.filter((listing) => !lookup.favMap.has(listing.id))
   );
 
-const likedListings = React.useMemo(() => {
-  return listingData
-    .filter((listing) => lookup.favMap.has(listing.id))
-    .sort((a, b) => getRank(a.id) - getRank(b.id));
-}, [lookup.favMap, listingData, getRank]);
+  const likedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => lookup.favMap.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.favMap, listingData, getRank]);
 
-  //const [likedListings, setLikedListings] = useState<ListingAndImages[]>(
-  //  listingData
-  //    .filter((listing) => lookup.favMap.has(listing.id))
-  //    .sort((a, b) => getRank(a.id) - getRank(b.id))
-  //);
+  const dislikedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => lookup.dislikedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.dislikedIds, listingData]);
+
+  const requestedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => lookup.requestedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.requestedIds, listingData]);
 
   const actions = {
     getUpdatedTrip: async () => {
@@ -108,6 +116,8 @@ const likedListings = React.useMemo(() => {
         showListings,
         setShowListings,
         likedListings,
+        requestedListings,
+        dislikedListings,
         //setLikedListings,
         lookup,
         setLookup,

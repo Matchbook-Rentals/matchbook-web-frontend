@@ -31,24 +31,35 @@ const NewPossibilitiesTab: React.FC = () => {
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
+    setShowListings(prev => prev.slice(1));
+
     setLookup(prev => {
       const newFavs = new Map(prev.favMap)
       newFavs.set(listing.id, prev.favMap.size + 1)
       return { ...prev, favMap: newFavs }
     })
 
-    setShowListings(prev => prev.slice(1));
     let favId = await actions.createDbFavorite(trip.id, listing.id);
     setViewedListings(prev => [...prev, { listing: listing, action: 'favorite', actionId: favId }]);
 
   };
 
   const handleReject = async (listing: ListingAndImages) => {
+    setShowListings(prev => prev.slice(1));
+
+    setLookup(prev => {
+      const newDislikes = new Set(prev.dislikedIds)
+      newDislikes.add(listing.id)
+      return { ...prev, dislikedIds: newDislikes }
+    })
+
+    let dislikeId = await actions.createDbDislike(trip.id, listing.id);
+    setViewedListings(prev => [...prev, { listing: listing, action: 'dislike', actionId: dislikeId }]);
   };
 
   const handleBack = async () => {
     let lastAction = viewedListings[viewedListings.length - 1];
-    setViewedListings(prev => prev.slice(1));
+    setViewedListings(prev => prev.slice(0, -1));
 
     setShowListings(prev => [lastAction.listing, ...prev])
     if (lastAction.action === 'favorite') {
@@ -59,7 +70,14 @@ const NewPossibilitiesTab: React.FC = () => {
         return {...prev, favMap: newFavs}
       })
     }
-    if (lastAction.action === 'dislike') { await actions.deleteDbDislike(lastAction.actionId) }
+    if (lastAction.action === 'dislike') {
+      await actions.deleteDbDislike(lastAction.actionId)
+      setLookup(prev => {
+        let newDislikes = new Set(prev.dislikedIds);
+        newDislikes.delete(lastAction.listing.id)
+        return {...prev, dislikedIds: newDislikes}
+      })
+    }
   };
 
   const getListingAmenities = (listing: any) => {
