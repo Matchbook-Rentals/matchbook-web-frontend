@@ -3,6 +3,7 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
 import { ListingAndImages, TripAndMatches } from '@/types';
+import { HousingRequest } from '@prisma/client';
 
 // Update this fx so that it includes favorites (a relation to the trip model)
 const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
@@ -207,6 +208,28 @@ const deleteDbDislike = async (dislikeId: string) => {
   }
 }
 
+const createDbHousingRequest = async ( userId: string, listingId: string, tripId: string, startDate: Date, endDate: Date): Promise<HousingRequest> => {
+  'use server'
+
+  try {
+    const newHousingRequest = await prisma.housingRequest.create({
+      data: {
+        userId,
+        listingId,
+        tripId,
+        startDate,
+        endDate,
+      },
+    });
+
+    return newHousingRequest;
+  } catch (error) {
+    console.error('Error creating housing request:', error);
+    throw new Error('Failed to create housing request');
+  }
+};
+
+
 export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
   const trip = await pullTripFromDb(params.tripId);
   if (!trip) { return <p> NO TRIP FOUND </p> }
@@ -223,6 +246,7 @@ export default async function TripLayout({ children, params }: { children: React
       deleteDbFavorite={deleteDbFavorite}
       createDbDislike={createDbDislike}
       deleteDbDislike={deleteDbDislike}
+      createDbHousingRequest={createDbHousingRequest}
     >
       {children}
     </TripContextProvider>

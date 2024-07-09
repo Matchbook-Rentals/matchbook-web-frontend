@@ -12,15 +12,19 @@ export default function PropertiesYouLoveTab() {
   if (tripContext === undefined) {
     throw new Error("useTrip must be used within a TripProvider");
   }
-  const { likedListings, requestedListings, setLookup } = tripContext!;
+  const { likedListings, requestedListings, setLookup, actions, trip } = tripContext!;
 
 
-  const handleApply = (listing: ListingAndImages) => {
+  const handleApply = async (listing: ListingAndImages) => {
     setLookup(prev => {
       const newReqs = new Set(prev.requestedIds)
       newReqs.add(listing.id)
       return { ...prev, requestedIds: newReqs }
     })
+
+    
+    await actions.createDbHousingRequest(trip.userId, listing.id, trip.id, trip.startDate, trip.endDate)
+    
 
   }
 
