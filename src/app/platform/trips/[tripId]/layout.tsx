@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
 import { ListingAndImages, TripAndMatches } from '@/types';
 import { HousingRequest } from '@prisma/client';
+import { createNotification } from '@/app/actions/notifications';
 
 // Update this fx so that it includes favorites (a relation to the trip model)
 const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
@@ -208,21 +209,43 @@ const deleteDbDislike = async (dislikeId: string) => {
   }
 }
 
-const createDbHousingRequest = async (userId: string, listingId: string, tripId: string, startDate: Date, endDate: Date): Promise<HousingRequest> => {
+const createDbHousingRequest = async (trip: TripAndMatches, listing: ListingAndImages): Promise<HousingRequest> => {
   'use server'
+
+  // NEED TO ENFORCE DATE ADDITION AT APPLICATION LEVEL
+  if (!trip.startDate || !trip.endDate) {
+    throw new Error(`Need start and end date (both)`);
+  }
 
   try {
     const newHousingRequest = await prisma.housingRequest.create({
       data: {
-        userId,
-        listingId,
-        tripId,
-        startDate,
-        endDate,
+        userId: trip.userId,
+        listingId: listing.id,
+        tripId: trip.id,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
       },
     });
 
-    // Create Notification
+
+    const requester = await prisma.user.findUnique({
+      where: {
+        id: trip.userId
+      }
+    });
+
+    let requesterName = ''
+
+    // Add the space to the end of firstname rather than beginning of lastName
+    requester?.firstName && (requesterName += requester.firstName + ' ');
+    requester?.lastName && (requesterName += requester.lastName);
+    !requesterName && (requesterName += requester?.email)
+
+
+    const messageContent = `${requesterName.trim()} wants to stay at your property ${listing.title}`;
+
+    createNotification(listing.userId, messageContent, `/platform/host-dashboard/${listing.id}?tab=applications`)
 
     return newHousingRequest;
   } catch (error) {
@@ -239,12 +262,12 @@ const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
   try {
     // Delete the favorite
     const deletedRequest = await prisma.housingRequest.delete({
-  where: { 
-    listingId_tripId: {
-      tripId,
-      listingId
-    }
-  }
+      where: {
+        listingId_tripId: {
+          tripId,
+          listingId
+        }
+      }
     });
 
     console.log('Request Delete', deletedRequest)

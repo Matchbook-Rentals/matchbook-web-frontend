@@ -3,7 +3,7 @@ import { TripContext } from '@/contexts/trip-context-provider';
 import TripListingCard from '../../(trips-components)/trip-listing-card';
 import { ListingAndImages } from '@/types';
 import CustomAccordion from '@/components/ui/custom-accordion';
-import { Button } from '@/components/ui/button';
+//import { Button } from '@/components/ui/button';
 
 export default function PropertiesYouLoveTab() {
   const tripContext = useContext(TripContext);
@@ -21,7 +21,7 @@ export default function PropertiesYouLoveTab() {
       newReqs.add(listing.id)
       return { ...prev, requestedIds: newReqs }
     })
-    await actions.createDbHousingRequest(trip.userId, listing.id, trip.id, trip.startDate, trip.endDate)
+    await actions.createDbHousingRequest(trip, listing)
   }
 
   const handleUnapply = async (listing: ListingAndImages) => {
