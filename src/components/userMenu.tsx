@@ -6,7 +6,12 @@ import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { getNotifications } from '@/app/actions/notifications';
 import { Notification } from '@prisma/client';
-
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -35,16 +40,34 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             <PopoverTrigger className="relative">
               <Image src={`/svg/${color}-hamburger.svg`} alt='menu icon' width={50} height={50} />
               {hasUnread && (
-                <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full" />
+                <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-red-500 rounded-full" />
+
               )}
             </PopoverTrigger>
             <PopoverContent>
               <div className='flex flex-col'>
                 <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link>
                 <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
-                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/notifications'>
-                  Notifications {hasUnread && <span className="text-red-500">•</span>}
-                </Link>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="notifications">
+                    <AccordionTrigger className="flex justify-between">
+                      <div>
+                        Notifications
+                        {hasUnread && <span className="text-red-500 ml-2">•</span>}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="max-h-60 overflow-y-auto">
+                        {notifications.map((notification, index) => (
+                          <div key={index} className="flex items-center py-2">
+                            {notification.unread && <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />}
+                            <p>{notification.content}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </div>
             </PopoverContent>
           </Popover>
@@ -67,3 +90,4 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     </div>
   )
 }
+
