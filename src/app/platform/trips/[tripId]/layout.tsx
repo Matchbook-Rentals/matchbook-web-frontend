@@ -2,14 +2,13 @@ import React from 'react'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
-import { Trip, Listing } from '@prisma/client';
 import { ListingAndImages, TripAndMatches } from '@/types';
 
 // Update this fx so that it includes favorites (a relation to the trip model)
 const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
   'use server'
 
-  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, } })
+  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, housingRequests: true, dislikes: true } })
 
   if (trip) {
     if (!trip.latitude || !trip.longitude) {
@@ -95,7 +94,7 @@ const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number)
   }
 }
 
-const createDbFavorite = async (tripId: string, listingId: string) => {
+const createDbFavorite = async (tripId: string, listingId: string): Promise<string> => {
   'use server'
   console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
   try {
@@ -134,9 +133,76 @@ const createDbFavorite = async (tripId: string, listingId: string) => {
     // Revalidate the favorites page or any other relevant pages
     revalidatePath('/favorites');
 
-    return newFavorite;
+    return newFavorite.id;
   } catch (error) {
     console.error('Error creating favorite:', error);
+    throw error;
+  }
+}
+
+
+const deleteDbFavorite = async (favoriteId: string) => {
+  'use server'
+  console.log('Deleting favorite with ID ->', favoriteId)
+  try {
+    // Delete the favorite
+    const deletedFavorite = await prisma.favorite.delete({
+      where: { id: favoriteId },
+    });
+
+    console.log('Favorite Deleted', deletedFavorite)
+
+    // Revalidate the favorites page or any other relevant pages
+    revalidatePath('/favorites');
+
+    return deletedFavorite;
+  } catch (error) {
+    console.error('Error deleting favorite:', error);
+    throw error;
+  }
+}
+
+const createDbDislike = async (tripId: string, listingId: string): Promise<string> => {
+  'use server'
+  console.log('Creating new dislike with trip and listing ->', tripId, listingId)
+  try {
+    // Create the new dislike
+    const newDislike = await prisma.dislike.create({
+      data: {
+        tripId,
+        listingId,
+      },
+    });
+
+    console.log('Dislike Created', newDislike)
+
+    // Revalidate the dislikes page or any other relevant pages
+    revalidatePath('/dislikes');
+
+    return newDislike.id;
+  } catch (error) {
+    console.error('Error creating dislike:', error);
+    throw error;
+  }
+}
+
+const deleteDbDislike = async (dislikeId: string) => {
+  'use server'
+  console.log('Deleting favorite with ID ->', dislikeId)
+  try {
+    // Delete the favorite
+    const deletedDislike = await prisma.dislike.delete({
+      where: { id: dislikeId },
+    });
+
+    console.log('Favorite Deleted', deletedDislike)
+
+    // Revalidate the favorites page or any other relevant pages
+    revalidatePath('/favorites');
+
+    return deletedDislike;
+  } catch (error) {
+    console.error('Error deleting favorite:', error);
     throw error;
   }
 }
@@ -154,6 +220,9 @@ export default async function TripLayout({ children, params }: { children: React
       listingData={listings}
       pullTripFromDb={pullTripFromDb}
       createDbFavorite={createDbFavorite}
+      deleteDbFavorite={deleteDbFavorite}
+      createDbDislike={createDbDislike}
+      deleteDbDislike={deleteDbDislike}
     >
       {children}
     </TripContextProvider>

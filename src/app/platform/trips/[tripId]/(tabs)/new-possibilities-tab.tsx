@@ -1,5 +1,4 @@
 import React from 'react';
-import { Trip, Listing } from '@prisma/client';
 import ImageCarousel from '../../(trips-components)/image-carousel';
 import ButtonControl from '../../(trips-components)/button-controls';
 import { HeartIcon } from '@/components/svgs/svg-components';
@@ -8,6 +7,10 @@ import TitleAndStats from '../../(trips-components)/title-and-stats';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../(trips-components)/description-and-amenities';
 import { TripContext } from '@/contexts/trip-context-provider';
+import { ListingAndImages } from '@/types';
+import { lastDayOfWeek } from 'date-fns';
+import { Button } from '@/components/ui/button';
+
 
 const NewPossibilitiesTab: React.FC = () => {
   const tripContext = React.useContext(TripContext);
@@ -15,32 +18,49 @@ const NewPossibilitiesTab: React.FC = () => {
     throw new Error('TripContext must be used within a TripContextProvider');
   }
   // State Items
-  const [currListing, setCurrlisting] = React.useState(0);
-  const { trip, setTrip, listings, setListings, favoriteListingIds, createDbFavorite } = tripContext;
-  const [showListings, setShowListings] = React.useState(listings.filter(listing => !favoriteListingIds.has(listing.id)))
+  const {
+    trip,
+    actions,
+    lookup,
+    setLookup,
+    showListings,
+    setShowListings,
+    viewedListings,
+    setViewedListings
+  } = tripContext;
 
   // Functions
-  const handleLike = async () => {
-    await createDbFavorite(trip.id, showListings[currListing].id);
-    let tempfavIds = new Set(favoriteListingIds);
-    setTrip(prev => {
-      const updatedTrip = { ...prev };
-      if (!tempfavIds.has(showListings[currListing].id)) {
-        updatedTrip.favorites.push({ tripId: trip.id, listingId: showListings[currListing].id, rank: prev.favorites.length + 1 })
-        tempfavIds.add(showListings[currListing].id)
-      }
-      return updatedTrip;
+  const handleLike = async (listing: ListingAndImages) => {
+    setLookup(prev => {
+      const newFavs = new Map(prev.favMap)
+      newFavs.set(listing.id, prev.favMap.size + 1)
+      return { ...prev, favMap: newFavs }
     })
-    setCurrlisting(prev => prev + 1)
+
+    setShowListings(prev => prev.slice(1));
+    let favId = await actions.createDbFavorite(trip.id, listing.id);
+    setViewedListings(prev => [...prev, { listing: listing, action: 'favorite', actionId: favId }]);
+
   };
 
-  const handleReject = () => {
-    setCurrlisting(prev => prev + 1)
+  const handleReject = async (listing: ListingAndImages) => {
   };
 
-  const handleBack = () => {
-    setCurrlisting(prev => prev - 1);
-  }
+  const handleBack = async () => {
+    let lastAction = viewedListings[viewedListings.length - 1];
+    setViewedListings(prev => prev.slice(1));
+
+    setShowListings(prev => [lastAction.listing, ...prev])
+    if (lastAction.action === 'favorite') {
+      await actions.deleteDbFavorite(lastAction.actionId)
+      setLookup(prev => {
+        let newFavs = new Map(prev.favMap);
+        newFavs.delete(lastAction.listing.id)
+        return {...prev, favMap: newFavs}
+      })
+    }
+    if (lastAction.action === 'dislike') { await actions.deleteDbDislike(lastAction.actionId) }
+  };
 
   const getListingAmenities = (listing: any) => {
     const listingAmenities = [];
@@ -59,17 +79,14 @@ const NewPossibilitiesTab: React.FC = () => {
   if (showListings.length === 0) {
     return <div>No listings available.</div>;
   }
-  if (currListing >= showListings.length) {
-    return <div>No more listings to display.</div>;
-  }
 
   // Main component render
   return (
     <div className="w-full">
-      <ImageCarousel listingImages={showListings[currListing]?.listingImages || []} />
+      <ImageCarousel listingImages={showListings[0]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
         <ButtonControl
-          handleClick={handleReject}
+          handleClick={() => handleReject(showListings[0])}
           Icon={
             <div className="transform rotate-45">
               <CrossIcon height={50} width={50} />
@@ -78,32 +95,32 @@ const NewPossibilitiesTab: React.FC = () => {
           className="bg-red-800/80 w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm hover:bg-red-800 transition-all duration-200"
         />
         <ButtonControl
-          handleClick={currListing === 0 ? () => console.log('No previous listing') : handleBack}
+          handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
           Icon={<RewindIcon height={50} width={50} />}
-          className={`${currListing === 0
+          className={`${viewedListings.length === 0
             ? 'bg-black/10 cursor-default transition-all duration-500'
             : 'bg-black/50 hover:bg-black/70 cursor-pointer transition-all duration-300'
             } w-[10%] py-2 rounded-lg text-center flex justify-center text-white text-sm`}
         />
         <ButtonControl
-          handleClick={handleLike}
+          handleClick={() => handleLike(showListings[0])}
           Icon={<HeartIcon height={50} width={50} />}
           className="bg-primaryBrand/80 hover:bg-primaryBrand w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm transition-all duration-200"
         />
       </div>
       <TitleAndStats
-        title={showListings[currListing]?.title}
+        title={showListings[0]?.title}
         rating={3.5}
         numStays={0}
-        numBath={showListings[currListing]?.bathroomCount}
-        numBeds={showListings[currListing]?.roomCount}
-        rentPerMonth={showListings[currListing]?.shortestLeasePrice}
+        numBath={showListings[0]?.bathroomCount}
+        numBeds={showListings[0]?.roomCount}
+        rentPerMonth={showListings[0]?.shortestLeasePrice}
         distance={2.9}
       />
-      <DescriptionAndAmenities
-        description={showListings[currListing]?.description}
-        amenities={getListingAmenities(showListings[currListing])}
-      />
+       <DescriptionAndAmenities
+        description={showListings[0]?.description}
+        amenities={getListingAmenities(showListings[0])}
+      /> 
     </div>
   );
 };

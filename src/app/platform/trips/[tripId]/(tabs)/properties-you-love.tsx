@@ -12,19 +12,19 @@ export default function PropertiesYouLoveTab() {
     throw new Error("useTrip must be used within a TripProvider");
   }
 
-  const { trip, listings } = tripContext;
+  const { likedListings } = tripContext!;
 
-  if (!trip || !trip.favorites || trip.favorites.length === 0) {
+  if (likedListings.length === 0) {
     return <div>No favorites found for this trip.</div>;
   }
 
   return (
     <div className="flex justify-center mx-auto w-full  px-2 py-8 border">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4 w-full sm:grid-cols-1 gap-2 lg:gap-5 border">
-        {trip.favorites.map((favorite, index) => (
+        {likedListings.map((listing, index) => (
           <ListingCard
             key={index}
-            listing={listings.find(listing => listing.id === favorite.listingId)}
+            listing={listing}
           />
         ))}
       </div>
