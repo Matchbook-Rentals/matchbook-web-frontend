@@ -246,6 +246,9 @@ model HousingRequest {
   user    User     @relation(fields: [userId], references: [id])
   listing Listing  @relation(fields: [listingId], references: [id])
   trip    Trip    @relation(fields: [tripId], references: [id])
+
+// Contraints
+  @@unique([listingId, tripId])
 }
 
 model Booking {
