@@ -1,55 +1,136 @@
 "use client";
-
-import { Listing, Trip, Favorite } from "@prisma/client"; // Assuming Trip is a model in your Prisma schema
+import React from "react";
+import { ListingAndImages, TripAndMatches } from "@/types";
 import { createContext, useState } from "react";
 import { Dispatch, SetStateAction } from 'react';
 
 type TripContextProviderProps = {
-  tripData: Trip;
+  tripData: TripAndMatches;
   pullTripFromDb: Function;
   createDbFavorite: Function;
-  listingData: Listing[];
+  deleteDbFavorite: Function;
+  createDbDislike: Function;
+  deleteDbDislike: Function;
+  createDbHousingRequest: Function;
+  deleteDbHousingRequest: Function;
+  listingData: ListingAndImages[];
   children: React.ReactNode;
 };
 
-// Adjust Values to Provider Here
-type TTripContext = {
-  trip: Trip;
-  setTrip: Dispatch<SetStateAction<Trip>>;
-  getUpdatedTrip: Function;
-  createDbFavorite: Function;
-  headerText: string;
-  setHeaderText: Dispatch<SetStateAction<string>>;
-  listings: Listing[];
-  setListings: Dispatch<SetStateAction<Listing[]>>;
-};
+interface ViewedListing {
+  listing: ListingAndImages;
+  action: 'favorite' | 'dislike';
+  actionId: string;
+}
+
+interface TripLookup {
+  favMap: Map<string | null, number | null>;
+  dislikedIds: Set<string | null>;
+  requestedIds: Set<string | null>;
+}
+
+interface TTripContext {
+  trip: TripAndMatches;
+  setTrip: Dispatch<SetStateAction<TripAndMatches>>;
+  viewedListings: ViewedListing[];
+  setViewedListings: Dispatch<SetStateAction<ViewedListing[]>>;
+  showListings: ListingAndImages[];
+  setShowListings: Dispatch<SetStateAction<ListingAndImages[]>>;
+  likedListings: ListingAndImages[];
+  //setLikedListings: Dispatch<SetStateAction<ListingAndImages[]>>;
+  requestedListings: ListingAndImages[];
+  dislikedListings: ListingAndImages[];
+  lookup: TripLookup;
+  setLookup: Dispatch<SetStateAction<TripLookup>>;
+  actions: {
+    createDbFavorite: Function;
+    deleteDbFavorite: Function;
+    createDbDislike: Function;
+    deleteDbDislike: Function;
+    createDbHousingRequest: Function;
+    deleteDbHousingRequest: Function;
+  };
+}
 
 export const TripContext = createContext<TTripContext | null>(null);
 
-export default function TripContextProvider({ tripData, listingData, pullTripFromDb, createDbFavorite, children }: TripContextProviderProps) {
-  const [trip, setTrip] = useState<Trip>(tripData);
-  const [listings, setListings] = useState<Listing[]>(listingData);
-  const [headerText, setHeaderText] = useState('');
+export default function TripContextProvider({
+  tripData,
+  listingData,
+  pullTripFromDb,
+  createDbFavorite,
+  deleteDbFavorite,
+  createDbDislike,
+  deleteDbDislike,
+  createDbHousingRequest,
+  deleteDbHousingRequest,
+  children,
+}: TripContextProviderProps) {
+  const [trip, setTrip] = useState(tripData);
+  const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
 
-  // Event handlers / actions
+  const initialLookup: TripLookup = {
+    favMap: new Map(trip.favorites.map(favorite => [favorite.listingId, favorite.rank])),
+    dislikedIds: new Set(trip.dislikes.map(dislike => dislike.listingId)),
+    requestedIds: new Set(trip.housingRequests.map(request => request.listingId))
+  };
 
-  const getUpdatedTrip = async () => {
-    const tempTrip: Trip = await pullTripFromDb(trip.id);
-    setTrip(tempTrip)
-  }
+  const [lookup, setLookup] = useState<TripLookup>(initialLookup);
+
+  const getRank = (listingId: string) => lookup.favMap.get(listingId) ?? Infinity;
+
+  const [showListings, setShowListings] = useState<ListingAndImages[]>(
+    listingData.filter((listing) => !lookup.favMap.has(listing.id))
+  );
+
+  const likedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => !lookup.requestedIds.has(listing.id))
+      .filter((listing) => lookup.favMap.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.favMap, lookup.requestedIds, listingData, getRank]);
+
+  const dislikedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => lookup.dislikedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.dislikedIds, listingData]);
+
+  const requestedListings = React.useMemo(() => {
+    return listingData
+      .filter((listing) => lookup.requestedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id));
+  }, [lookup.requestedIds, listingData]);
+
+  const actions = {
+    //getUpdatedTrip: async () => {
+    //  const tempTrip = await pullTripFromDb(trip.id);
+    //  setTrip(tempTrip);
+    //},
+    createDbFavorite,
+    deleteDbFavorite,
+    createDbDislike,
+    deleteDbDislike,
+    createDbHousingRequest,
+    deleteDbHousingRequest,
+  };
 
   return (
     <TripContext.Provider
       value={{
         trip,
         setTrip,
-        headerText,
-        setHeaderText,
-        listings,
-        setListings,
-        getUpdatedTrip,
-        createDbFavorite,
-
+        viewedListings,
+        setViewedListings,
+        showListings,
+        setShowListings,
+        likedListings,
+        requestedListings,
+        dislikedListings,
+        //setLikedListings,
+        lookup,
+        setLookup,
+        actions,
       }}
     >
       {children}

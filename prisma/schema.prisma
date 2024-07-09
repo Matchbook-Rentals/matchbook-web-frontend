@@ -19,7 +19,7 @@ enum TripStatus {
 }
 
 model User {
-  id             String    @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id             String    @id @default(uuid()) 
   firstName      String?
   lastName       String?
   fullName       String?
@@ -35,8 +35,8 @@ model User {
   accounts       Account[]
   listings       Listing[]
   bookings       Booking[]
-  notifications  Notification[] // Changed from MongoDB's String array
-  messages       Message[] // Changed from MongoDB's String array
+  notifications  Notification[] 
+  messages       Message[] 
   HousingRequest HousingRequest[]
   preferences    UserPreferences?
 }
@@ -74,7 +74,7 @@ model UserPreferences {
 }
 
 model Account {
-  id                String  @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id                String  @id @default(uuid()) 
   userId            String
   type              String
   provider          String
@@ -115,8 +115,8 @@ model Listing {
   squareFootage          Int      @default(0)
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
-  shortestLeaseLength    Int      @default(1) // Renamed from minimumLeaseLength
-  longestLeaseLength     Int      @default(12) // Renamed from maximumLeaseLength
+  shortestLeaseLength    Int      @default(1) 
+  longestLeaseLength     Int      @default(12) 
   shortestLeasePrice     Int      @default(4000)
   longestLeasePrice      Int      @default(3500)
   furnished              Boolean  @default(false)
@@ -209,13 +209,13 @@ model Listing {
   tripId          String?
   listingImages   ListingImage[] // Relation to multiple images
   bedrooms        Bedroom[]
+  dislikes         Dislike[]
 }
 
 model ListingImage {
   id        String  @id @default(uuid())
   url       String
   listingId String
-  // Explain this line to me. If I delete a listing Image will it delete it's attached lisitng? or the other way around
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   category  String?
   rank      Int?
@@ -224,28 +224,35 @@ model ListingImage {
 model Bedroom {
   id            String  @id @default(uuid())
   listingId     String  @map("listing_id")
-  bedroomNumber Int // Bedroom number within the listing
-  bedType       String // Possible values: 'Full', 'Queen', 'King', etc.
+  bedroomNumber Int 
+  bedType       String 
   listing       Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
-  @@unique([listingId, bedroomNumber]) // Ensures unique bedroom numbers within the same listing
-  @@index([listingId]) // Optional: Improve query performance on bedroom retrieval by listing
+  @@unique([listingId, bedroomNumber]) 
+  @@index([listingId]) 
 }
 
 model HousingRequest {
-  id        String   @id @default(uuid()) // Added ID field for MySQL
+  id        String   @id @default(uuid())
   userId    String
+  listingId String
+  tripId    String
   startDate DateTime
   endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relationships
-  user      User     @relation(fields: [userId], references: [id]) // Added to maintain relationship
-  Listing   Listing? @relation(fields: [listingId], references: [id])
-  listingId String?
+  user    User     @relation(fields: [userId], references: [id])
+  listing Listing  @relation(fields: [listingId], references: [id])
+  trip    Trip    @relation(fields: [tripId], references: [id])
+
+// Contraints
+  @@unique([listingId, tripId])
 }
 
 model Booking {
-  id         String   @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id         String   @id @default(uuid()) 
   userId     String
   listingId  String
   startDate  DateTime
@@ -260,7 +267,7 @@ model Booking {
 }
 
 model Trip {
-  id             String     @id @default(uuid()) // Changed from MongoDB's ObjectId
+  id             String     @id @default(uuid()) 
   locationString String
   latitude       Float      @default(0)
   longitude      Float      @default(0)
@@ -282,20 +289,23 @@ model Trip {
   tripStatus     TripStatus @default(searching)
 
   // Relationships
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listings  Listing[]
-  matches   Match[] // Changed to a relational model
-  // favoriteIds Favorite[] // Changed to a relational model
-  favorites Favorite[] // Changed to a relational model
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listings          Listing[]
+  matches           Match[] 
+  favorites         Favorite[] 
+  housingRequests   HousingRequest[] 
+  dislikes          Dislike[]
 }
 
-// Additional models to support the conversion of arrays to relational models
 model Notification {
-  id      String @id @default(uuid())
-  userId  String
-  content String
+  id        String   @id @default(uuid())
+  userId    String
+  content   String
+  url       String
+  createdAt DateTime @default(now())
+  unread    Boolean  @default(true)
 
-  user User @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Message {
@@ -303,13 +313,13 @@ model Message {
   userId  String
   content String
 
-  user User @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
 }
 
 model Match {
   id      String @id @default(uuid())
   tripId  String
-  matchId String // ID of the listing or another entity being matched
+  matchId String 
 
   trip Trip @relation(fields: [tripId], references: [id])
 }
@@ -317,12 +327,27 @@ model Match {
 model Favorite {
   id        String  @id @default(uuid())
   tripId    String 
-  listingId String? // ID of the listing or another entity marked as favorite
-  rank      Int? // Added field to store ranking
+  listingId String? 
+  rank      Int? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@unique([tripId, rank])
+  @@unique([tripId, listingId])
+}
+
+model Dislike {
+  id        String   @id @default(uuid())
+  tripId    String
+  listingId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trip    Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id])
+
   @@unique([tripId, listingId])
 }
 
