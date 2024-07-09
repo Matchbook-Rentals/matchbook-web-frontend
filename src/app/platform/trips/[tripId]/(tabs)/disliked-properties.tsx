@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TripContext } from '@/contexts/trip-context-provider';
-import ListingCard from '../../(trips-components)/listing-card';
+import TripListingCard from '../../(trips-components)/trip-listing-card';
 
 export default function DislikedProperties() {
   const tripContext = useContext(TripContext);
@@ -19,9 +19,11 @@ export default function DislikedProperties() {
     <div className="flex justify-center mx-auto w-full  px-2 py-8 border">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 2xl:grid-cols-4 w-full sm:grid-cols-1 gap-2 lg:gap-5 border">
         {dislikedListings.map((listing, index) => (
-          <ListingCard
+          <TripListingCard
             key={index}
             listing={listing}
+            handleClick={() => alert('Move to Likes???')}
+            label='Like'
           />
         ))}
       </div>

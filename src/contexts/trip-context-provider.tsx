@@ -79,9 +79,10 @@ export default function TripContextProvider({
 
   const likedListings = React.useMemo(() => {
     return listingData
+      .filter((listing) => !lookup.requestedIds.has(listing.id))
       .filter((listing) => lookup.favMap.has(listing.id))
       .sort((a, b) => getRank(a.id) - getRank(b.id));
-  }, [lookup.favMap, listingData, getRank]);
+  }, [lookup.favMap, lookup.requestedIds, listingData, getRank]);
 
   const dislikedListings = React.useMemo(() => {
     return listingData

@@ -15,13 +15,15 @@
 
    - [x] shown listings does not include matches
 
-   - [ ] Handle backing up by removing from relevant array
+   - [x] Handle backing up by removing from relevant array
 
 [ ] 4. Trip Editor
 
 [ ] 5. Trip location Properties update (state, city, etc..) via locationIq at tripCreation/trip View
 
 [ ] 6. Create rating property in listing model, Decimal (4.9) or string (?.?)
+
+[ ] 7. Update listing card to allow onclick and button label, rename to TripListingCard
 ## Coming Soon (marketing page)
 
 [x] 0. Tab view for marketing branch (main/comingSoon)

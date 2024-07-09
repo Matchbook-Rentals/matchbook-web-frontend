@@ -12,9 +12,11 @@ const DEFAULT_IMAGE_URL = "default-image-url.jpg";
 
 interface ListingCardProps {
   listing: Listing & { listingImages: ListingImage[] };
+  handleClick: Function;
+  label?: string;
 }
 
-const ListingCard = ({ listing }: ListingCardProps) => {
+const TripListingCard = ({ listing, handleClick, label='Apply now' }: ListingCardProps) => {
   if (!listing) {
     return null;
   }
@@ -48,8 +50,8 @@ const ListingCard = ({ listing }: ListingCardProps) => {
               ? listing.locationString.slice(0, LOCATION_STRING_TRIM_LENGTH) + '...'
               : listing.locationString}
           </p>
-          <span onClick={() => console.log(listing)} className="bg-blueBrand/60 cursor-pointer px-2 py-1 text-md font-semibold h-fit text-green-800 whitespace-nowrap">
-            Apply now
+          <span onClick={handleClick} className="bg-blueBrand/60 cursor-pointer px-2 py-1 text-md font-semibold h-fit text-green-800 whitespace-nowrap">
+            {label}
           </span>
         </div>
       </div>
@@ -57,4 +59,4 @@ const ListingCard = ({ listing }: ListingCardProps) => {
   );
 };
 
-export default ListingCard;
+export default TripListingCard;

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { SetStateAction, useState, Dispatch } from 'react';
 import { motion } from 'framer-motion';
 import { FaPencilAlt } from 'react-icons/fa';
 import { cn } from '@/lib/utils'; // Assuming you have a utility function for classnames
@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'; // Assuming you have a utility function for cl
 interface CustomAccordionProps {
   title: string;
   isOpen: boolean;
-  toggleOpen: () => void;
+  toggleOpen: Dispatch<SetStateAction<boolean>>;
   onChangeCategory?: (newCategory: string) => void;
   children: React.ReactNode;
   labelClassName?: string;
@@ -44,7 +44,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({
 
   return (
     <div className='my-5'>
-      <div className={cn("LABEL flex rounded-lg text-xl border-2 border-gray-300 p-1 items-center justify-between cursor-pointer", labelClassName)}>
+      <div className={cn("flex rounded-lg text-xl p-1 items-center justify-between cursor-pointer", labelClassName)}>
         <div className='flex gap-2'>
           {isEditing && onChangeCategory ? (
             <input
