@@ -22,8 +22,7 @@ export default function DislikedProperties() {
           <TripListingCard
             key={index}
             listing={listing}
-            handleClick={() => alert('Move to Likes???')}
-            label='Like'
+            actions={[{ label: 'Move to likes', action: () => alert('not yet pal') }]}
           />
         ))}
       </div>
