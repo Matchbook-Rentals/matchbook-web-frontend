@@ -12,10 +12,10 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
   return (
     <div className="w-full p-5">
       <div className="flex gap-x-4">
-        <div className="w-1/5 max-w-[500px]">
+        <div className="w-[25%]">
           <ApplicationsSidebar housingRequests={housingRequests} />
         </div>
-        <div className="w-4/5 h-[200vh]">
+        <div className="w-[70%] h-[200vh]">
           {/* Content area */}
         </div>
       </div>

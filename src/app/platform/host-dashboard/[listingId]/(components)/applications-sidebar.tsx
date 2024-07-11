@@ -15,27 +15,34 @@ const ApplicationCard: React.FC<{ request: RequestWithUser }> = ({ request }) =>
   request.user.lastName && (requesterName += request.user.lastName);
   requesterName = requesterName || request.user.email || '';
 
+  // Restructured code as per instructions
   return (
-    <Card className="mb-2">
-      <CardContent className="p-4" onClick={() => console.log(request.user.image)}>
-        <h3 className="font-semibold text-xs">{requesterName.trim()}</h3>
-        <p className="text-sm text-gray-500">Move in: {request.startDate.toLocaleDateString()}</p>
-        <p className="text-sm text-gray-500">Move out: {request.endDate.toLocaleDateString()}</p>
-      </CardContent>
+    <Card className="mb-2 bg-gray-300 border flex py-3">
+        <div className="w-[15%] flex justify-center items-center">
+          <img alt='user-image' src={`${request.user.imageUrl}`} className='rounded-full w-8 h-8 ' />
+        </div>
+        <div className="w-4/5 flex  flex-col">
+          <div className="flex justify-between mb-2">
+            <h3 className="font-semibold text-xs">{requesterName.trim().slice(0, 18) + '...'}</h3>
+            <p className="text-xs ">Move in: {request.startDate.toLocaleDateString()}</p>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-sm">5 adults, 2 children, 2 pets</p>
+            <p className="text-sm text-gray-500">12m</p>
+          </div>
+        </div>
     </Card>
   );
-};
+}
 
 const ApplicationsSidebar: React.FC<ApplicationsSidebarProps> = ({ housingRequests }) => {
   return (
     <div className="w-full md:sticky md:top-40">
-        <h2 className="text-xl font-semibold text-center pb-2">Applications</h2>
-      <ScrollArea className="h-[70vh] border border-grey-400 shadow-lg rounded-xl">
-        <div className="p-4">
+      <h2 className="text-xl font-semibold text-center pb-2">Applications</h2>
+      <ScrollArea className="h-[70vh] w-full border-2 border-grey-500 p-1 shadow-lg rounded-xl">
           {housingRequests.map((request) => (
             <ApplicationCard key={request.id} request={request} />
           ))}
-        </div>
       </ScrollArea>
     </div>
   );

@@ -1,21 +1,17 @@
 
 'use client'
 import React, { createContext, useContext } from "react";
-import { type Listing, ListingImage, Bedroom, HousingRequest } from "@prisma/client";
+import { ListingAndImages } from "@/types";
 
-interface ListingsWithImagesAndBedrooms extends Listing {
-  listingImages: ListingImage[];
-  bedrooms: Bedroom[];
-}
 
 interface HostPropertiesContextProps {
-  listings: ListingsWithImagesAndBedrooms[];
-  getListingHousingRequests: HousingRequest[];
+  listings: ListingAndImages[];
+  getListingHousingRequests: Function;
 }
 
 interface HostPropertiesProviderProps {
-  listings: ListingsWithImagesAndBedrooms[];
-  getListingHousingRequests: HousingRequest[];
+  listings: ListingAndImages[];
+  getListingHousingRequests: Function;
   children: React.ReactNode;
 }
 
