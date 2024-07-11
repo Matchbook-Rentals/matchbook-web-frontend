@@ -33,7 +33,7 @@ const PropertyDetails: React.FC = ({ params }) => {
     <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8'>
       <h1 className="text-3xl my-3 font-semibold text-center">Property Dashboard</h1>
       <ListingHorizontalCard imgSrc={listing.listingImages[0].url} title={listing.title} status={listing.status} address={listing.locationString} />
-      <TabSelector tabs={tabs} />
+      <TabSelector tabs={tabs} useUrlParams />
       {/* Add more details as needed */}
     </div>
   );

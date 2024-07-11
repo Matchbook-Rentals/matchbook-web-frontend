@@ -1,8 +1,9 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface Tab {
   value: string;
@@ -18,21 +19,53 @@ interface TabSelectorProps {
   className?: string;
   tabsClassName?: string;
   tabsListClassName?: string;
+  useUrlParams?: boolean;
+  defaultTab?: string;
 }
 
-export default function TabSelector({ tabs, className, tabsListClassName, tabsClassName }: TabSelectorProps) {
-  const [activeTab, setActiveTab] = useState(tabs[0]?.value);
+export default function TabSelector({ 
+  tabs, 
+  className, 
+  tabsListClassName, 
+  tabsClassName, 
+  useUrlParams = false,
+  defaultTab
+}: TabSelectorProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.value)
+
+  useEffect(() => {
+    if (useUrlParams) {
+      const tabFromUrl = searchParams.get('tab')
+      if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
+        setActiveTab(tabFromUrl)
+      } else if (activeTab) {
+        router.push(`?tab=${activeTab}`, { scroll: false })
+      }
+    }
+  }, [useUrlParams, searchParams, activeTab, tabs, router])
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+    if (useUrlParams) {
+      router.push(`?tab=${value}`, { scroll: false })
+    }
+  }
 
   return (
     <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
-      <Tabs className={cn("w-full", tabsClassName)} defaultValue={tabs[0]?.value}>
+      <Tabs 
+        className={cn("w-full", tabsClassName)} 
+        value={activeTab} 
+        onValueChange={handleTabChange}
+      >
         <TabsList className={cn("flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2", tabsListClassName)}>
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
               className={cn("flex flex-col items-center hover:bg-gray-300", tab.className)}
-              onClick={() => setActiveTab(tab.value)}
             >
               <div className={cn("flex items-center justify-center", tab.Icon ? 'h-8 w-8' : '')}>
                 {tab.Icon && <tab.Icon className="h-2 w-2 text-sm" />}
