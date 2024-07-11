@@ -1,33 +1,21 @@
-
 import React, { useEffect, useState } from 'react';
-import { useHostProperties } from '@/contexts/host-properties-provider';
 import ApplicationsSidebar from '../(components)/applications-sidebar';
+import { ListingAndImages, RequestWithUser } from '@/types';
 
-const ApplicationsTab: React.FC = () => {
-  const { getListingHousingRequests } = useHostProperties();
-  const [housingRequests, setHousingRequests] = useState([]);
+interface ApplicationsTabProps {
+  listing: ListingAndImages; // Replace 'any' with the actual type of listing
+  housingRequests: RequestWithUser[]; // Replace 'any[]' with the actual type of housingRequests
+  setHousingRequests: React.Dispatch<React.SetStateAction<RequestWithUser[]>>; // Replace 'any[]' with the actual type of housingRequests
+}
 
-  useEffect(() => {
-    const fetchHousingRequests = async () => {
-      try {
-        const requests = await getListingHousingRequests('asdf');
-        setHousingRequests(requests);
-      } catch (error) {
-        console.error('Error fetching housing requests:', error);
-      }
-    };
-
-    fetchHousingRequests();
-  }, [getListingHousingRequests]);
-
-  // Removing the map and keeping only one sidebar
+const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests, setHousingRequests }) => {
   return (
     <div className="w-full p-5">
-      <div className="grid grid-cols-12 gap-2.5">
-        <div className=" text-center col-span-2">
+      <div className="flex gap-x-4">
+        <div className="w-1/5 max-w-[500px]">
           <ApplicationsSidebar housingRequests={housingRequests} />
         </div>
-        <div className="col-span-6 h-[200vh]">
+        <div className="w-4/5 h-[200vh]">
           {/* Content area */}
         </div>
       </div>
@@ -36,3 +24,4 @@ const ApplicationsTab: React.FC = () => {
 }
 
 export default ApplicationsTab;
+

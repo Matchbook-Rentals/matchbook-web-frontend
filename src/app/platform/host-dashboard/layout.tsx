@@ -1,10 +1,10 @@
 import React from "react";
 import prisma from "@/lib/prismadb";
-import { HousingRequest, type Listing } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { HostPropertiesProvider } from "@/contexts/host-properties-provider";
+import { ListingAndImages, RequestWithUser } from "@/types";
 
-const fetchListingsFromDb = async (): Promise<Listing[]> => {
+const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
   'use server';
 
   try {
@@ -30,7 +30,7 @@ const fetchListingsFromDb = async (): Promise<Listing[]> => {
   }
 };
 
-export async function getListingHousingRequests(listingId: string): Promise<HousingRequest[]> {
+export async function getListingHousingRequests(listingId: string): Promise<RequestWithUser[]> {
   'use server'
 
   try {

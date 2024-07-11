@@ -9,6 +9,7 @@
    [ ] 2.2 ApplicationsSidebar component
    [ ] 2.3 ApplicationCard component
    [ ] 2.4 ApplicationDisplay component
+   [ ] 2.5 Move reqs GET to a server component/ or just higher component to persist through tab switch
 
 [ ] 3. GRid of tiles
 
