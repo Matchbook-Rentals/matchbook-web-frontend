@@ -2,11 +2,15 @@
 
 ## TONIGHT
 
-[x] 1. URL TO TAB
+[X] 1. URL TO TAB
 
-[x] 2. Applications Tab
+[ ] 2. Applications Tab
+   [ ] 2.1 getHousingRequests server action
+   [ ] 2.2 ApplicationsSidebar component
+   [ ] 2.3 ApplicationCard component
+   [ ] 2.4 ApplicationDisplay component
 
-[x] 3. GRid of tiles
+[ ] 3. GRid of tiles
 
 ## Matching (Trip View)
 

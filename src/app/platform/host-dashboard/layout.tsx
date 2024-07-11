@@ -1,11 +1,11 @@
 import React from "react";
 import prisma from "@/lib/prismadb";
-import { type Listing } from "@prisma/client";
+import { HousingRequest, type Listing } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { HostPropertiesProvider } from "@/contexts/host-properties-provider";
 
 const fetchListingsFromDb = async (): Promise<Listing[]> => {
-  "use server";
+  'use server';
 
   try {
     const user = await currentUser();
@@ -20,6 +20,7 @@ const fetchListingsFromDb = async (): Promise<Listing[]> => {
       include: {
         bedrooms: true,
         listingImages: true,
+        housingRequests: true,
       },
     });
     return listings;
@@ -29,11 +30,32 @@ const fetchListingsFromDb = async (): Promise<Listing[]> => {
   }
 };
 
+export async function getListingHousingRequests(listingId: string): Promise<HousingRequest[]> {
+  'use server'
+
+  try {
+    const housingRequests = await prisma.housingRequest.findMany({
+      where: {
+        listingId: listingId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return housingRequests;
+  } catch (error) {
+    console.error('Error fetching housing requests:', error);
+    throw new Error('Failed to fetch housing requests');
+  }
+}
+
+
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const listings = await fetchListingsFromDb();
 
   return (
-    <HostPropertiesProvider listings={listings}>
+    <HostPropertiesProvider listings={listings} getListingHousingRequests={getListingHousingRequests}>
       {children}
     </HostPropertiesProvider>
   );

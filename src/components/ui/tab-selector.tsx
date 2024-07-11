@@ -44,7 +44,7 @@ export default function TabSelector({
         router.push(`?tab=${activeTab}`, { scroll: false })
       }
     }
-  }, [useUrlParams, searchParams, activeTab, tabs, router])
+  }, [useUrlParams, searchParams, tabs, router])
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
