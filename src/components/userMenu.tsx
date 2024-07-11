@@ -59,10 +59,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     <AccordionContent>
                       <div className="max-h-60 overflow-y-auto">
                         {notifications.map((notification, index) => (
-                          <div key={index} className="flex items-center py-2">
+                          <Link href={notification.url} key={index} className="flex items-center py-2">
                             {notification.unread && <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />}
                             <p>{notification.content}</p>
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     </AccordionContent>
