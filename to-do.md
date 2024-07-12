@@ -1,5 +1,18 @@
 # TO DOs
 
+## TONIGHT
+
+[X] 1. URL TO TAB
+
+[ ] 2. Applications Tab
+   [ ] 2.1 getHousingRequests server action
+   [ ] 2.2 ApplicationsSidebar component
+   [ ] 2.3 ApplicationCard component
+   [ ] 2.4 ApplicationDisplay component
+   [ ] 2.5 Move reqs GET to a server component/ or just higher component to persist through tab switch
+
+[ ] 3. GRid of tiles
+
 ## Matching (Trip View)
 
 [x] 1. Photo display left, 4x4 grid on right - New component

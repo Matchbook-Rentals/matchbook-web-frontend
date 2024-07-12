@@ -1,4 +1,4 @@
-import { HousingRequest, Dislike, ListingImage, Match, Favorite, Trip, User, Listing } from "@prisma/client";
+import { HousingRequest, Dislike, ListingImage, Match, Favorite, Trip, User, Listing, Bedroom } from "@prisma/client";
 
 export interface TripAndMatches extends Trip {
   favorites: Favorite[]
@@ -9,6 +9,9 @@ export interface TripAndMatches extends Trip {
 
 export interface ListingAndImages extends Listing {
   listingImages: ListingImage[]
+  bedrooms?: Bedroom[]
 };
 
-
+export interface RequestWithUser extends HousingRequest {
+  user: User
+}

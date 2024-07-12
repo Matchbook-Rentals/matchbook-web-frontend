@@ -32,7 +32,7 @@ const TripIdPage: React.FC = ({ params }) => {
   return (
     <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto'>
       <TripCardSmall trip={trip} stateCode={(trip?.locationString && trip.locationString.slice(-2)) || 'ut'} />
-      <TabSelector tabs={tabs} className='' />
+      <TabSelector tabs={tabs} className='' useUrlParams />
       {/* Add more details as needed */}
     </div>
   );

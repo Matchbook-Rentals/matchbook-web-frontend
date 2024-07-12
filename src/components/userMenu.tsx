@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { getNotifications } from '@/app/actions/notifications';
 import { Notification } from '@prisma/client';
@@ -13,9 +13,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
+const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
+
+export default function UserMenu({ isSignedIn, color, updateUserImage }: { isSignedIn: boolean, color: string, updateUserImage?: Function }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
+  const [lastUpdateTime, setLastUpdateTime] = useState(0);
+  const [canUpdate, setCanUpdate] = useState(true);
 
   useEffect(() => {
     async function fetchNotifications() {
@@ -32,16 +36,27 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     fetchNotifications();
   }, [isSignedIn]);
 
+  const handleImageUpdate = useCallback(() => {
+    const currentTime = Date.now();
+    if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) { // 60000 ms = 1 minute
+      if (updateUserImage) {
+        updateUserImage();
+      }
+      setLastUpdateTime(currentTime);
+      setCanUpdate(false);
+      setTimeout(() => setCanUpdate(true), 60000); // Reset after 1 minute
+    }
+  }, [canUpdate, lastUpdateTime, updateUserImage]);
+
   return (
     <div className="flex items-center scale-125">
       {isSignedIn ? (
         <>
           <Popover>
-            <PopoverTrigger className="relative">
+            <PopoverTrigger className="relative" onClick={handleImageUpdate}>
               <Image src={`/svg/${color}-hamburger.svg`} alt='menu icon' width={50} height={50} />
               {hasUnread && (
                 <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-red-500 rounded-full" />
-
               )}
             </PopoverTrigger>
             <PopoverContent>
@@ -59,10 +74,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     <AccordionContent>
                       <div className="max-h-60 overflow-y-auto">
                         {notifications.map((notification, index) => (
-                          <div key={index} className="flex items-center py-2">
+                          <Link href={notification.url} key={index} className="flex items-center py-2">
                             {notification.unread && <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />}
                             <p>{notification.content}</p>
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     </AccordionContent>
@@ -90,4 +105,3 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     </div>
   )
 }
-
