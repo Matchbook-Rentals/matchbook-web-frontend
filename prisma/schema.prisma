@@ -309,6 +309,7 @@ model Notification {
 
   user            User     @relation(fields: [userId], references: [id])
 
+  @@unique([actionType, actionId])
   @@index([actionType, actionId])
 }
 model Message {
