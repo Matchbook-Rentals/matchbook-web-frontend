@@ -4,6 +4,7 @@ import { AmenityCards } from './amenity-cards';
 import Tile from '@/components/ui/tile';
 import { ApartmentIcon, SingleHomeIcon } from '@/components/svgs/svg-components';
 import { CrossIcon } from 'lucide-react';
+import { AmenityTiles } from './amenity-tiles';
 
 interface ComponentProps {
   description: string;
@@ -28,7 +29,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
       </div>
       <div className="w-1/2">
         <h2 className="text-2xl text-center font-bold mb-4">Amenities</h2>
-        <AmenityCards amenities={amenities} />
+        <AmenityTiles amenities={amenities} />
       </div>
     </div>
   );

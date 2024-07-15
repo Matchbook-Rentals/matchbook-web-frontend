@@ -41,7 +41,7 @@ export default function TabSelector({
       if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
         setActiveTab(tabFromUrl)
       } else if (activeTab) {
-        router.push(`?tab=${activeTab}`, { scroll: false })
+        router.replace(`?tab=${activeTab}`, { scroll: false })
       }
     }
   }, [useUrlParams, searchParams, tabs, router])
@@ -49,7 +49,7 @@ export default function TabSelector({
   const handleTabChange = (value: string) => {
     setActiveTab(value)
     if (useUrlParams) {
-      router.push(`?tab=${value}`, { scroll: false })
+      router.replace(`?tab=${value}`, { scroll: false })
     }
   }
 

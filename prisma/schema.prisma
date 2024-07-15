@@ -233,21 +233,21 @@ model Bedroom {
 }
 
 model HousingRequest {
-  id        String   @id @default(uuid())
-  userId    String
-  listingId String
-  tripId    String
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  userId         String
+  listingId      String
+  tripId         String
+  startDate      DateTime
+  endDate        DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relationships
-  user    User     @relation(fields: [userId], references: [id])
-  listing Listing  @relation(fields: [listingId], references: [id])
-  trip    Trip    @relation(fields: [tripId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+  listing        Listing  @relation(fields: [listingId], references: [id])
+  trip           Trip     @relation(fields: [tripId], references: [id])
 
-// Contraints
+  // Constraints
   @@unique([listingId, tripId])
 }
 
@@ -298,16 +298,20 @@ model Trip {
 }
 
 model Notification {
-  id        String   @id @default(uuid())
-  userId    String
-  content   String
-  url       String
-  createdAt DateTime @default(now())
-  unread    Boolean  @default(true)
+  id              String   @id @default(uuid())
+  userId          String
+  content         String
+  url             String
+  createdAt       DateTime @default(now())
+  unread          Boolean  @default(true)
+  actionType      String   // This will store the type of action (e.g., "HousingRequest", "Payment", "Booking", "Review")
+  actionId        String   // This will store the ID of the related action
 
-  user      User     @relation(fields: [userId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@unique([actionType, actionId])
+  @@index([actionType, actionId])
 }
-
 model Message {
   id      String @id @default(uuid())
   userId  String

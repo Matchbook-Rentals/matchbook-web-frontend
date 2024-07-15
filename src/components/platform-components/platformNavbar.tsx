@@ -39,9 +39,6 @@ export default async function PlatformNavbar() {
     }
   }
 
-  if (isSignedIn) {
-  }
-
   return (
     <nav className="bg-white flex items-center justify-between pt-2 pr-9 w-full border-b sticky top-0 border-black mb-9 z-50">
       <div className="w-1/3">

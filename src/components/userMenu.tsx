@@ -2,51 +2,78 @@
 import Image from 'next/image';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { UserButton, useUser } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { getNotifications } from '@/app/actions/notifications';
+import NotificationItem from './platform-components/notification-item';
+import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
+import { updateUserImage } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
+const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
 
-export default function UserMenu({ isSignedIn, color, updateUserImage }: { isSignedIn: boolean, color: string, updateUserImage?: Function }) {
+export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(0);
   const [canUpdate, setCanUpdate] = useState(true);
 
-  useEffect(() => {
-    async function fetchNotifications() {
-      if (isSignedIn) {
-        const result = await getNotifications();
-        if (result.success && result.notifications) {
-          setNotifications(result.notifications);
-          setHasUnread(result.notifications.some(notification => notification.unread));
-        } else if (!result.success) {
-          console.error('Failed to fetch notifications:', result.error);
-        }
+  const fetchNotifications = useCallback(async () => {
+    if (isSignedIn) {
+
+      const result = await getNotifications();
+      if (result.success && result.notifications) {
+        setNotifications(result.notifications);
+        setHasUnread(result.notifications.some(notification => notification.unread));
+      } else if (!result.success) {
+        console.error('Failed to fetch notifications:', result.error);
       }
+
     }
-    fetchNotifications();
   }, [isSignedIn]);
+
+  useEffect(() => {
+    fetchNotifications();
+
+    const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, [fetchNotifications]);
 
   const handleImageUpdate = useCallback(() => {
     const currentTime = Date.now();
-    if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) { // 60000 ms = 1 minute
+    if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
       if (updateUserImage) {
         updateUserImage();
       }
       setLastUpdateTime(currentTime);
       setCanUpdate(false);
-      setTimeout(() => setCanUpdate(true), 60000); // Reset after 1 minute
+      setTimeout(() => setCanUpdate(true), 60000);
     }
   }, [canUpdate, lastUpdateTime, updateUserImage]);
+
+  const handleNotificationClick = async (notificationId: string) => {
+    const result = await updateNotification(notificationId, { unread: false });
+    if (result.success) {
+      setNotifications(prevNotifications =>
+        prevNotifications.map(notification =>
+          notification.id === notificationId ? { ...notification, unread: false } : notification
+        )
+      );
+      setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
+    }
+  }
+
+  const handleNotificationDelete = async (notificationId: string) => {
+    const result = await deleteNotification(notificationId);
+    if (result.success) {
+      setNotifications(prevNotifications =>
+        prevNotifications.filter(notification => notification.id !== notificationId)
+      );
+      setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
+    }
+  }
 
   return (
     <div className="flex items-center scale-125">
@@ -73,11 +100,13 @@ export default function UserMenu({ isSignedIn, color, updateUserImage }: { isSig
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="max-h-60 overflow-y-auto">
-                        {notifications.map((notification, index) => (
-                          <Link href={notification.url} key={index} className="flex items-center py-2">
-                            {notification.unread && <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />}
-                            <p>{notification.content}</p>
-                          </Link>
+                        {notifications.map((notification) => (
+                          <NotificationItem
+                            key={notification.id}
+                            notification={notification}
+                            onClick={handleNotificationClick}
+                            onDelete={handleNotificationDelete}
+                          />
                         ))}
                       </div>
                     </AccordionContent>
