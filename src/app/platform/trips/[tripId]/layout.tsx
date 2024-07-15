@@ -237,15 +237,24 @@ const createDbHousingRequest = async (trip: TripAndMatches, listing: ListingAndI
 
     let requesterName = ''
 
-    // Add the space to the end of firstname rather than beginning of lastName
     requester?.firstName && (requesterName += requester.firstName + ' ');
     requester?.lastName && (requesterName += requester.lastName);
     !requesterName && (requesterName += requester?.email)
+    if (requesterName.length > 28) {
+      requesterName = requesterName.slice(0, 25) + '...'
+    }
 
 
     const messageContent = `${requesterName.trim()} wants to stay at your property ${listing.title}`;
 
-    createNotification(listing.userId, messageContent, `/platform/host-dashboard/${listing.id}?tab=applications`, 'housingRequest', newHousingRequest.id)
+
+    createNotification(
+      listing.userId,
+      messageContent,
+      `/platform/host-dashboard/${listing.id}?tab=applications`,
+      "housingRequest",
+      newHousingRequest.id
+    );
 
     return newHousingRequest;
   } catch (error) {
@@ -270,12 +279,14 @@ const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
       }
     });
 
-    prisma.notification.deleteMany({
+   let deleted = await prisma.notification.delete({
       where: {
         actionType: 'housingRequest',
         actionId: deletedRequest.id
       }
     })
+
+    console.log(deleted);
 
     console.log('Request Delete', deletedRequest)
 
