@@ -27,8 +27,8 @@ const schema = z.object({
   monthlyPayment: z.string().min(1, "Monthly payment is required"),
   durationOfTenancy: z.string().min(1, "Duration of tenancy is required"),
   landlord: z.object({
-    firstName: z.string().min(1, "Landlord's first name is required"),
-    lastName: z.string().min(1, "Landlord's last name is required"),
+    firstName: z.string().min(1, "Landlords first name is required"),
+    lastName: z.string().min(1, "Landlords last name is required"),
   }),
   income: z.object({
     source: z.string().min(1, "Income source is required"),
@@ -79,7 +79,7 @@ const ApplicationTab: React.FC = () => {
                     <SelectValue placeholder="Select ID type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem className='cursor-pointer' value="driversLicense">Driver's License</SelectItem>
+                    <SelectItem className='cursor-pointer' value="driversLicense">Drivers License</SelectItem>
                     <SelectItem className='cursor-pointer' value="passport">Passport</SelectItem>
                   </SelectContent>
                 </Select>
