@@ -233,24 +233,25 @@ model Bedroom {
 }
 
 model HousingRequest {
-  id        String   @id @default(uuid())
-  userId    String
-  listingId String
-  tripId    String
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  userId         String
+  listingId      String
+  tripId         String
+  notificationId String
+  startDate      DateTime
+  endDate        DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relationships
-  user    User     @relation(fields: [userId], references: [id])
-  listing Listing  @relation(fields: [listingId], references: [id])
-  trip    Trip    @relation(fields: [tripId], references: [id])
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  listing        Listing      @relation(fields: [listingId], references: [id])
+  trip           Trip         @relation(fields: [tripId], references: [id])
 
-// Contraints
+  // Constraints
   @@unique([listingId, tripId])
 }
-
 model Booking {
   id         String   @id @default(uuid()) 
   userId     String
