@@ -2,18 +2,8 @@
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
+import { Notification, Prisma } from '@prisma/client'
 
-// Assuming Notification type is defined elsewhere
-// If not, you should define it here
-
-type Notification = {
-  id: string;
-  userId: string;
-  content: string;
-  url: string;
-  createdAt: Date;
-  // Add other fields as necessary
-}
 
 type GetNotificationsResponse = 
   | { success: true; notifications: Notification[] }
@@ -23,13 +13,15 @@ type CreateNotificationResponse =
   | { success: true; notification: Notification }
   | { success: false; error: string };
 
-export async function createNotification(userId: string, content: string, url: string): Promise<CreateNotificationResponse> {
+export async function createNotification(userId: string, content: string, url: string, actionType: string, actionId: string): Promise<CreateNotificationResponse> {
   try {
     const notification = await prisma.notification.create({
       data: {
         userId,
         content,
         url,
+        actionType,
+        actionId,
       },
     })
     revalidatePath('/notifications') // Adjust the path as needed
@@ -39,6 +31,7 @@ export async function createNotification(userId: string, content: string, url: s
     return { success: false, error: 'Failed to create notification' }
   }
 }
+
 
 export async function getNotifications(): Promise<GetNotificationsResponse> {
   try {
@@ -58,5 +51,49 @@ export async function getNotifications(): Promise<GetNotificationsResponse> {
   } catch (error) {
     console.error('Failed to fetch notifications:', error)
     return { success: false, error: 'Failed to fetch notifications' }
+  }
+}
+
+export async function updateNotification(
+  notificationId: string,
+  data: Partial<Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>>
+): Promise<Notification> {
+  try {
+    const updatedNotification = await prisma.notification.update({
+      where: {
+        id: notificationId,
+      },
+      data: data,
+    });
+    return updatedNotification;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // Handle Prisma-specific errors
+      if (error.code === 'P2025') {
+        throw new Error('Notification not found');
+      }
+    }
+    // Handle any other errors
+    console.error('Error updating notification:', error);
+    throw new Error('Failed to update notification');
+  }
+}
+
+export async function deleteNotification(notificationId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    await prisma.notification.delete({
+      where: {
+        id: notificationId,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        return { success: false, error: 'Notification not found' };
+      }
+    }
+    console.error('Error deleting notification:', error);
+    return { success: false, error: 'Failed to delete notification' };
   }
 }

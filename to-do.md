@@ -2,14 +2,15 @@
 
 ## TONIGHT
 
+// Add subgoals to this markdwown to onmouseenter mark as read, onClick delete notification
 [X] 1. URL TO TAB
-
+1.1 on mouseenter mark as read
 [ ] 2. Applications Tab
-   [ ] 2.1 getHousingRequests server action
-   [ ] 2.2 ApplicationsSidebar component
-   [ ] 2.3 ApplicationCard component
+   [X] 2.1 getHousingRequests server action
+   [X] 2.2 ApplicationsSidebar component
+   [X] 2.3 ApplicationCard component
    [ ] 2.4 ApplicationDisplay component
-   [ ] 2.5 Move reqs GET to a server component/ or just higher component to persist through tab switch
+   [X] 2.5 Move reqs GET to a server component/ or just higher component to persist through tab switch
 
 [ ] 3. GRid of tiles
 
@@ -63,6 +64,8 @@
 
 2. Image compression/sharpening
 
+3. Image Cropping
+
 ## Test Listings
 
 [x] 1. Get it working
@@ -99,6 +102,9 @@
 [ ] 2. Bold Desk
 
 
+## Auth 
+
+1. Create user in platform layout page load
 
 ## ROUTING ERROR
 Error: Clerk: The "/platform/trips/e0366d74-2974-403a-bc35-d453a073b94e" route is not a catch-all route. It is recommended to convert this route to a catch-all route, eg: "/platform/trips/e0366d74-2974-403a-bc35-d453a073b94e/[[...rest]]/page.tsx". Alternatively, update the SignIn component to use hash-based routing by setting the "routing" prop to "hash".
