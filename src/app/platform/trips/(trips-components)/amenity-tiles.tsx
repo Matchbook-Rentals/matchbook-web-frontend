@@ -23,7 +23,7 @@ const AmenityTiles: React.FC<AmenityCardsProps> = ({ amenities }) => {
     const cardTiles = amenities.slice(i, i + tilesPerCard);
     const card = (
       <CarouselItem key={`amenity-card-${i}`}>
-        <div className="grid grid-cols-3 gap-4 justify-center mx-auto test">
+        <div className="grid grid-cols-3 gap-4 justify-center mx-auto">
           {cardTiles.map((label, idx) => (
             <Tile key={`amenity-tile-${i}-${idx}`} label={label} icon={<CrossIcon />} />
           ))}
@@ -34,17 +34,13 @@ const AmenityTiles: React.FC<AmenityCardsProps> = ({ amenities }) => {
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Carousel>
+        <Carousel opts={{loop: true}}>
           <CarouselContent>
             {cards}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-      </CardContent>
-    </Card>
   );
 };
 
