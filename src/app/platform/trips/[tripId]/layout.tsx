@@ -281,14 +281,13 @@ const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
 
    let deleted = await prisma.notification.delete({
       where: {
-        actionType: 'housingRequest',
-        actionId: deletedRequest.id
+        actionType_actionId: {
+          actionType: 'housingRequest',
+          actionId: deletedRequest.id
+        }
       }
     })
 
-    console.log(deleted);
-
-    console.log('Request Delete', deletedRequest)
 
     // Revalidate the favorites page or any other relevant pages
     revalidatePath('/housingRequests');
