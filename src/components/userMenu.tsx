@@ -53,16 +53,15 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }, [canUpdate, lastUpdateTime, updateUserImage]);
 
+
   const handleNotificationClick = async (notificationId: string) => {
-    const result = await updateNotification(notificationId, { unread: false });
-    if (result.success) {
       setNotifications(prevNotifications =>
         prevNotifications.map(notification =>
           notification.id === notificationId ? { ...notification, unread: false } : notification
         )
       );
       setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
-    }
+    const result = await updateNotification(notificationId, { unread: false });
   }
 
   const handleNotificationDelete = async (notificationId: string) => {
