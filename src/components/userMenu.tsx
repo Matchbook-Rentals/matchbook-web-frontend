@@ -55,12 +55,12 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
 
   const handleNotificationClick = async (notificationId: string) => {
-      setNotifications(prevNotifications =>
-        prevNotifications.map(notification =>
-          notification.id === notificationId ? { ...notification, unread: false } : notification
-        )
-      );
-      setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
+    setNotifications(prevNotifications =>
+      prevNotifications.map(notification =>
+        notification.id === notificationId ? { ...notification, unread: false } : notification
+      )
+    );
+    setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
     const result = await updateNotification(notificationId, { unread: false });
   }
 
