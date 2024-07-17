@@ -64,7 +64,7 @@ const tabs = [
   },
   {
     value: "applications",
-    label: "Applications",
+    label: "Application",
     content: (
     <ApplicationTab />
     ),

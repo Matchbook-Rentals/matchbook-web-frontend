@@ -34,7 +34,7 @@ return (
             <ResidentialHistory />
             <LandlordInfo />
             <Income />
-            <Button type="submit" className="w-full">Submit Application</Button>
+            <Button type="submit" className="w-full">Save Application</Button>
           </form>
         </CardContent>
       </Card>
