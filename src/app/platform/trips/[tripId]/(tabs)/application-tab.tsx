@@ -9,7 +9,6 @@ import { LandlordInfo } from '../../(trips-components)/application-landlord-info
 import { Income } from '../../(trips-components)/application-income';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// Import other components
 
 const ApplicationForm: React.FC = () => {
   const methods = useForm<ApplicationFormData>({
@@ -17,8 +16,8 @@ const ApplicationForm: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<ApplicationFormData> = (data) => {
+    alert('Made it')
     console.log(data);
-    // Handle form submission
   };
 
 return (
@@ -35,6 +34,7 @@ return (
             <LandlordInfo />
             <Income />
             <Button type="submit" className="w-full">Save Application</Button>
+            <button type='submit'> LETS GOOOO </button>
           </form>
         </CardContent>
       </Card>

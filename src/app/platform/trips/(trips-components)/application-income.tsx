@@ -59,7 +59,7 @@ export const Income: React.FC = () => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="monthlyAmount">Monthly Amount</Label>
-          <Input id="monthlyAmount" {...register("income.monthlyAmount")} />
+          <Input type='number' id="monthlyAmount" {...register("income.monthlyAmount")} />
           {errors.income?.monthlyAmount && <p className="text-red-500">{(errors.income.monthlyAmount as { message: string }).message}</p>}
         </div>
       </div>

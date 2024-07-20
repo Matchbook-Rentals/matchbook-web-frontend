@@ -295,6 +295,7 @@ model Trip {
   favorites         Favorite[] 
   housingRequests   HousingRequest[] 
   dislikes          Dislike[]
+  applications      Application[]
 }
 
 model Notification {
@@ -353,5 +354,70 @@ model Dislike {
   listing Listing @relation(fields: [listingId], references: [id])
 
   @@unique([tripId, listingId])
+}
+
+model Application {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  isDefault         Boolean  @default(false)
+  tripId            String?
+  trip              Trip?    @relation(fields: [tripId], references: [id])
+
+  // Personal Info
+  firstName         String
+  lastName          String
+
+  // Residential History
+  currentStreet     String
+  currentApt        String?
+  currentCity       String
+  currentState      String
+  currentZipCode    String
+  housingStatus     String
+  monthlyPayment    String
+  durationOfTenancy String
+
+  // Landlord Info
+  landlordFirstName String
+  landlordLastName  String
+
+  // Relationships
+  identifications   Identification[]
+  incomes           Income[]
+}
+
+model Identification {
+  id                String   @id @default(cuid())
+  application       Application @relation(fields: [applicationId], references: [id])
+  applicationId     String
+  idType            String
+  idNumber          String
+  verificationImages VerificationImage[]
+
+  @@index([applicationId])
+}
+
+model Income {
+  id                String   @id @default(cuid())
+  application       Application @relation(fields: [applicationId], references: [id])
+  applicationId     String
+  source            String
+  monthlyAmount     String
+  verificationImages VerificationImage[]
+
+  @@index([applicationId])
+}
+
+model VerificationImage {
+  id                String   @id @default(cuid())
+  url               String
+  identification    Identification? @relation(fields: [identificationId], references: [id])
+  identificationId  String?
+  income            Income?  @relation(fields: [incomeId], references: [id])
+  incomeId          String?
+
+  @@index([identificationId])
+  @@index([incomeId])
 }
 
