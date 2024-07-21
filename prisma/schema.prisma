@@ -381,10 +381,12 @@ model Application {
   // Landlord Info
   landlordFirstName String
   landlordLastName  String
+  landlordEmail     String
 
   // Relationships
   identifications   Identification[]
   incomes           Income[]
+  verificationImages VerificationImage[]
 }
 
 model Identification {
@@ -393,7 +395,6 @@ model Identification {
   applicationId     String
   idType            String
   idNumber          String
-  verificationImages VerificationImage[]
 
   @@index([applicationId])
 }
@@ -404,20 +405,22 @@ model Income {
   applicationId     String
   source            String
   monthlyAmount     String
-  verificationImages VerificationImage[]
 
   @@index([applicationId])
+}
+
+enum ImageCategory {
+  Income
+  Identification
 }
 
 model VerificationImage {
   id                String   @id @default(cuid())
   url               String
-  identification    Identification? @relation(fields: [identificationId], references: [id])
-  identificationId  String?
-  income            Income?  @relation(fields: [incomeId], references: [id])
-  incomeId          String?
+  category          ImageCategory
+  application       Application @relation(fields: [applicationId], references: [id])
+  applicationId     String
 
-  @@index([identificationId])
-  @@index([incomeId])
+  @@index([applicationId])
 }
 

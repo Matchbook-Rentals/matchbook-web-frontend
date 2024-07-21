@@ -20,8 +20,18 @@ export const LandlordInfo: React.FC = () => {
           <Input id="landlordLastName" {...register("landlord.lastName")} />
           {errors.landlord?.lastName && <p className="text-red-500">{errors.landlord.lastName.message}</p>}
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="landlordEmailAddress">Email Address</Label>
+          <Input id="landlordEmailAddress" {...register("landlord.emailAddress")} />
+          {errors.landlord?.emailAddress && <p className="text-red-500">{errors.landlord.emailAddress.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="landlordPhoneNumber">Phone Number</Label>
+          <Input id="landlordPhoneNumber" {...register("landlord.phoneNumber")} />
+          {errors.landlord?.phoneNumber && <p className="text-red-500">{errors.landlord.phoneNumber.message}</p>}
+        </div>
       </div>
     </div>
   );
-};
+}
 

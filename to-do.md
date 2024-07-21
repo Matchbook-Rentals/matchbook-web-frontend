@@ -1,9 +1,14 @@
 # TO DOs
 
 ## TONIGHT
+fix not submitting issue with schema expecting register in incomes
+
+change id state to parent controlled pattern like incomes
+
+finish modeling to sample from claude
 
 // Add subgoals to this markdwown to onmouseenter mark as read, onClick delete notification
-Notification handle state locally
+# Notification handle state locally
 Finish application form (explain yes answers)
 use finisehd to build application model
 store in db, fetch on host side

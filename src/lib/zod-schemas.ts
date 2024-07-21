@@ -31,6 +31,8 @@ export const residentialHistorySchema = z.object({
 export const landlordSchema = z.object({
   firstName: z.string().min(1, "Landlord's first name is required"),
   lastName: z.string().min(1, "Landlord's last name is required"),
+  emailAddress: z.string().email().optional(),
+  phoneNumber: z.string().optional(),
 });
 
 export const incomeSchema = z.object({
@@ -43,7 +45,7 @@ export const applicationSchema = z.object({
   identification: identificationSchema,
   residentialHistory: residentialHistorySchema,
   landlord: landlordSchema,
-  income: incomeSchema,
+  //income: incomeSchema,
 });
 
 export type ApplicationFormData = z.infer<typeof applicationSchema>;
