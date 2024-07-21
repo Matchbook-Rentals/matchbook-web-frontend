@@ -19,7 +19,7 @@ enum TripStatus {
 }
 
 model User {
-  id             String    @id @default(uuid()) 
+  id             String    @id @default(uuid())
   firstName      String?
   lastName       String?
   fullName       String?
@@ -34,8 +34,8 @@ model User {
   accounts       Account[]
   listings       Listing[]
   bookings       Booking[]
-  notifications  Notification[] 
-  messages       Message[] 
+  notifications  Notification[]
+  messages       Message[]
   HousingRequest HousingRequest[]
   trips          Trip[]
   preferences    UserPreferences?
@@ -74,7 +74,7 @@ model UserPreferences {
 }
 
 model Account {
-  id                String  @id @default(uuid()) 
+  id                String  @id @default(uuid())
   userId            String
   type              String
   provider          String
@@ -115,8 +115,8 @@ model Listing {
   squareFootage          Int      @default(0)
   depositSize            Int?
   requireBackgroundCheck Boolean  @default(false)
-  shortestLeaseLength    Int      @default(1) 
-  longestLeaseLength     Int      @default(12) 
+  shortestLeaseLength    Int      @default(1)
+  longestLeaseLength     Int      @default(12)
   shortestLeasePrice     Int      @default(4000)
   longestLeasePrice      Int      @default(3500)
   furnished              Boolean  @default(false)
@@ -209,7 +209,7 @@ model Listing {
   tripId          String?
   listingImages   ListingImage[] // Relation to multiple images
   bedrooms        Bedroom[]
-  dislikes         Dislike[]
+  dislikes        Dislike[]
 }
 
 model ListingImage {
@@ -224,35 +224,35 @@ model ListingImage {
 model Bedroom {
   id            String  @id @default(uuid())
   listingId     String  @map("listing_id")
-  bedroomNumber Int 
-  bedType       String 
+  bedroomNumber Int
+  bedType       String
   listing       Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
-  @@unique([listingId, bedroomNumber]) 
-  @@index([listingId]) 
+  @@unique([listingId, bedroomNumber])
+  @@index([listingId])
 }
 
 model HousingRequest {
-  id             String   @id @default(uuid())
-  userId         String
-  listingId      String
-  tripId         String
-  startDate      DateTime
-  endDate        DateTime
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id        String   @id @default(uuid())
+  userId    String
+  listingId String
+  tripId    String
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relationships
-  user           User     @relation(fields: [userId], references: [id])
-  listing        Listing  @relation(fields: [listingId], references: [id])
-  trip           Trip     @relation(fields: [tripId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id])
+  trip    Trip    @relation(fields: [tripId], references: [id])
 
   // Constraints
   @@unique([listingId, tripId])
 }
 
 model Booking {
-  id         String   @id @default(uuid()) 
+  id         String   @id @default(uuid())
   userId     String
   listingId  String
   startDate  DateTime
@@ -267,7 +267,7 @@ model Booking {
 }
 
 model Trip {
-  id             String     @id @default(uuid()) 
+  id             String     @id @default(uuid())
   locationString String
   latitude       Float      @default(0)
   longitude      Float      @default(0)
@@ -289,51 +289,52 @@ model Trip {
   tripStatus     TripStatus @default(searching)
 
   // Relationships
-  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listings          Listing[]
-  matches           Match[] 
-  favorites         Favorite[] 
-  housingRequests   HousingRequest[] 
-  dislikes          Dislike[]
-  applications      Application[]
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listings        Listing[]
+  matches         Match[]
+  favorites       Favorite[]
+  housingRequests HousingRequest[]
+  dislikes        Dislike[]
+  applications    Application[]
 }
 
 model Notification {
-  id              String   @id @default(uuid())
-  userId          String
-  content         String
-  url             String
-  createdAt       DateTime @default(now())
-  unread          Boolean  @default(true)
-  actionType      String   // This will store the type of action (e.g., "HousingRequest", "Payment", "Booking", "Review")
-  actionId        String   // This will store the ID of the related action
+  id         String   @id @default(uuid())
+  userId     String
+  content    String
+  url        String
+  createdAt  DateTime @default(now())
+  unread     Boolean  @default(true)
+  actionType String // This will store the type of action (e.g., "HousingRequest", "Payment", "Booking", "Review")
+  actionId   String // This will store the ID of the related action
 
-  user            User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@unique([actionType, actionId])
   @@index([actionType, actionId])
 }
+
 model Message {
   id      String @id @default(uuid())
   userId  String
   content String
 
-  user    User   @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Match {
   id      String @id @default(uuid())
   tripId  String
-  matchId String 
+  matchId String
 
   trip Trip @relation(fields: [tripId], references: [id])
 }
 
 model Favorite {
-  id        String  @id @default(uuid())
-  tripId    String 
-  listingId String? 
-  rank      Int? 
+  id        String   @id @default(uuid())
+  tripId    String
+  listingId String?
+  rank      Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -357,16 +358,16 @@ model Dislike {
 }
 
 model Application {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  isDefault         Boolean  @default(false)
-  tripId            String?
-  trip              Trip?    @relation(fields: [tripId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDefault Boolean  @default(false)
+  tripId    String?
+  trip      Trip?    @relation(fields: [tripId], references: [id])
 
   // Personal Info
-  firstName         String
-  lastName          String
+  firstName String
+  lastName  String
 
   // Residential History
   currentStreet     String
@@ -379,33 +380,33 @@ model Application {
   durationOfTenancy String
 
   // Landlord Info
-  landlordFirstName    String?
-  landlordLastName     String?
-  landlordEmail        String?
-  landlordPhoneNumber  String?
+  landlordFirstName   String?
+  landlordLastName    String?
+  landlordEmail       String?
+  landlordPhoneNumber String?
 
   // Relationships
-  identifications      Identification[]
-  incomes              Income[]
-  verificationImages   VerificationImage[]
+  identifications    Identification[]
+  incomes            Income[]
+  verificationImages VerificationImage[]
 }
 
 model Identification {
-  id                String   @id @default(cuid())
-  application       Application @relation(fields: [applicationId], references: [id])
-  applicationId     String
-  idType            String
-  idNumber          String
+  id            String      @id @default(cuid())
+  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  idType        String
+  idNumber      String
 
   @@index([applicationId])
 }
 
 model Income {
-  id                String   @id @default(cuid())
-  application       Application @relation(fields: [applicationId], references: [id])
-  applicationId     String
-  source            String
-  monthlyAmount     String
+  id            String      @id @default(cuid())
+  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  source        String
+  monthlyAmount String
 
   @@index([applicationId])
 }
@@ -416,12 +417,11 @@ enum ImageCategory {
 }
 
 model VerificationImage {
-  id                String   @id @default(cuid())
-  url               String
-  category          ImageCategory
-  application       Application @relation(fields: [applicationId], references: [id])
-  applicationId     String
+  id            String        @id @default(cuid())
+  url           String
+  category      ImageCategory
+  application   Application   @relation(fields: [applicationId], references: [id])
+  applicationId String
 
   @@index([applicationId])
 }
-

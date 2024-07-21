@@ -64,7 +64,6 @@ const ApplicationForm: React.FC = () => {
 
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({ firstName: '', lastName: '' })
   const [ids, setIds] = React.useState<IdentificationItem>({ idType: '', idNumber: '', verificationImages: [] })
-  //
   const [residentialHistory, setResidentialHistory] = React.useState({
     currentStreet: '',
     currentApt: '',
@@ -78,8 +77,9 @@ const ApplicationForm: React.FC = () => {
   const [landlordInfo, setLandlordInfo] = React.useState<Landlord>({})
   const [incomes, setIncomes] = React.useState<IncomeItem[]>([])
 
-  const onSubmit = async () => {
-    alert('you made it')
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(incomes)
     let application = {
       ...personalInfo,
       ...residentialHistory,
@@ -87,28 +87,28 @@ const ApplicationForm: React.FC = () => {
       verificationImages: [...ids.verificationImages, ...incomes[0].verificationImages]
     }
     if (residentialHistory.housingStatus === 'rent') {
-      application = {...application, ...landlordInfo}
+      application = { ...application, ...landlordInfo }
     }
     console.log('application', application)
+    createApplication(application)
   };
 
   return (
-      <Card className="w-full max-w-3xl mx-auto">
-        <CardHeader>
-          <CardTitle>Application Form</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form  onSubmit={() => alert('you did it')} className="space-y-6">
-            <PersonalInfo personalInfo={personalInfo} setPersonalInfo={setPersonalInfo} />
-            <Identification setIds={setIds} ids={ids} />
-            <ResidentialHistory residentialHistory={residentialHistory} setResidentialHistory={setResidentialHistory} />
-            <LandlordInfo landlordInfo={landlordInfo} setLandlordInfo={setLandlordInfo} isRenter={residentialHistory.housingStatus === 'rent'} />
-            <Income setIncomes={setIncomes} />
-            <Button type="submit"  className="w-full">Save Application</Button>
-            <button> LETS GOOOO </button>
-          </form>
-        </CardContent>
-      </Card>
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardHeader>
+        <CardTitle>Application Form</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={(e) => onSubmit(e)} className="space-y-6">
+          <PersonalInfo personalInfo={personalInfo} setPersonalInfo={setPersonalInfo} />
+          <Identification setIds={setIds} ids={ids} />
+          <ResidentialHistory residentialHistory={residentialHistory} setResidentialHistory={setResidentialHistory} />
+          <LandlordInfo landlordInfo={landlordInfo} setLandlordInfo={setLandlordInfo} isRenter={residentialHistory.housingStatus === 'rent'} />
+          <Income setIncomes={setIncomes} />
+          <Button type="submit" className="w-full">Save Application</Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

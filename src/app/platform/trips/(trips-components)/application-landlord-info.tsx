@@ -3,10 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface LandlordInfo {
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
-  phoneNumber: string;
+  landlordFirstName: string;
+  landlordLastName: string;
+  landlordEmail: string;
+  landlordPhoneNumber: string;
 }
 
 interface LandlordInfoProps {
@@ -15,7 +15,7 @@ interface LandlordInfoProps {
   isRenter?: boolean;
 }
 
-export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLandlordInfo, isRenter=true }) => {
+export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLandlordInfo, isRenter = true }) => {
   if (!isRenter) {
     return null;
   }
@@ -36,8 +36,8 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           <Label htmlFor="landlordFirstName">First Name</Label>
           <Input
             id="landlordFirstName"
-            name="firstName"
-            value={landlordInfo.firstName}
+            name="landlordFirstName"
+            value={landlordInfo.landlordFirstName}
             onChange={handleInputChange}
           />
         </div>
@@ -45,17 +45,17 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           <Label htmlFor="landlordLastName">Last Name</Label>
           <Input
             id="landlordLastName"
-            name="lastName"
-            value={landlordInfo.lastName}
+            name="landlordLastName"
+            value={landlordInfo.landlordLastName}
             onChange={handleInputChange}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="landlordEmailAddress">Email Address</Label>
+          <Label htmlFor="landlordEmail">Email Address</Label>
           <Input
-            id="landlordEmailAddress"
-            name="emailAddress"
-            value={landlordInfo.emailAddress}
+            id="landlordEmail"
+            name="landlordEmail"
+            value={landlordInfo.landlordEmail}
             onChange={handleInputChange}
           />
         </div>
@@ -63,8 +63,8 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           <Label htmlFor="landlordPhoneNumber">Phone Number</Label>
           <Input
             id="landlordPhoneNumber"
-            name="phoneNumber"
-            value={landlordInfo.phoneNumber}
+            name="landlordPhoneNumber"
+            value={landlordInfo.landlordPhoneNumber}
             onChange={handleInputChange}
           />
         </div>
