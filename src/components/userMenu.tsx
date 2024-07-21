@@ -12,7 +12,7 @@ import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
-const NOTIFICATION_REFRESH_INTERVAL = 300 // five minutes
+const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);

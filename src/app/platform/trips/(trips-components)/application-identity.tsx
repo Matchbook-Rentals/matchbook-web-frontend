@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useFormContext, Controller } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,15 +33,37 @@ interface UploadData {
   type: string;
 }
 
-export const Identification: React.FC = () => {
-  const { register, control, formState: { errors } } = useFormContext();
-  const [idImages, setIdImages] = useState([]);
+interface VerificationImage {
+  url: string;
+  key: string;
+}
+
+interface IdentificationItem {
+  idType: string;
+  idNumber: string;
+  verificationImages: VerificationImage[];
+}
+
+interface IdentificationProps {
+  ids: IdentificationItem;
+  setIds: React.Dispatch<React.SetStateAction<IdentificationItem>>;
+}
+
+const ID_TYPES = [
+  { value: "driversLicense", label: "Driver&apos;s License" },
+  { value: "passport", label: "Passport" }
+];
+
+export const Identification: React.FC<IdentificationProps> = ({ ids, setIds }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const tempImageArray = res.map((upload) => ({ url: upload.url, key: upload.key }));
-    setIdImages(prev => [...prev, ...tempImageArray]);
+    const newImages = res.map((upload) => ({ url: upload.url, key: upload.key }));
+    setIds(prev => ({
+      ...prev,
+      verificationImages: [...prev.verificationImages, ...newImages]
+    }));
   };
 
   const handleImageClick = (index: number) => {
@@ -55,27 +76,29 @@ export const Identification: React.FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="idType">Select ID type</Label>
-          <Controller
-            name="identification.idType"
-            control={control}
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select ID type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem className='cursor-pointer' value="driversLicense">Driver's License</SelectItem>
-                  <SelectItem className='cursor-pointer' value="passport">Passport</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
-          {errors.identification?.idType && <p className="text-red-500">{errors.identification.idType.message}</p>}
+          <Select
+            value={ids?.idType || ''}
+            onValueChange={(value) => setIds(prev => ({ ...prev, idType: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select ID type" />
+            </SelectTrigger>
+            <SelectContent>
+              {ID_TYPES.map((type) => (
+                <SelectItem key={type.value} className='cursor-pointer' value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="idNumber">ID Number</Label>
-          <Input id="idNumber" {...register("identification.idNumber")} />
-          {errors.identification?.idNumber && <p className="text-red-500">{errors.identification.idNumber.message}</p>}
+          <Input
+            id="idNumber"
+            value={ids.idNumber}
+            onChange={(e) => setIds(prev => ({ ...prev, idNumber: e.target.value }))}
+          />
         </div>
       </div>
       <div className="mt-2">
@@ -83,15 +106,16 @@ export const Identification: React.FC = () => {
         <UploadButton
           endpoint="idUploader"
           onClientUploadComplete={handleUploadFinish}
+          onUploadError={(error) => alert(error.message)}
           className="p-0 mt-5"
           appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
         />
       </div>
-      {idImages.length > 0 && (
+      {ids.verificationImages.length > 0 && (
         <>
           <Label className="mt-4">ID image uploads</Label>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            {idImages.map((img, idx) => (
+            {ids.verificationImages.map((img, idx) => (
               <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
                 <DialogTrigger asChild>
                   <img
@@ -108,7 +132,7 @@ export const Identification: React.FC = () => {
                   </DialogHeader>
                   <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
                     <CarouselContent>
-                      {idImages.map((image, index) => (
+                      {ids.verificationImages.map((image, index) => (
                         <CarouselItem key={index}>
                           <Card>
                             <CardContent className="flex aspect-square items-center justify-center p-6">

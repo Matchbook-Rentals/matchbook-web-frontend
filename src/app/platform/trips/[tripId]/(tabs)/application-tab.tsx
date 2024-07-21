@@ -64,7 +64,11 @@ interface IncomeItem {
 
 const ApplicationForm: React.FC = () => {
   const [incomes, setIncomes] = React.useState<IncomeItem[]>([])
-  const [ids, setIds] = React.useState<IdentificationItem[]>([])
+  const [ids, setIds] = React.useState<IdentificationItem>({
+    idType: '',
+    idNumber: '',
+    verificationImages: []
+  })
 
   const methods = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
@@ -85,7 +89,7 @@ return (
         <CardContent>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
             <PersonalInfo />
-            <Identification setIds={setIds} />
+            <Identification setIds={setIds} ids={ids} />
             <ResidentialHistory />
             <LandlordInfo />
             <Income setIncomes={setIncomes} />  

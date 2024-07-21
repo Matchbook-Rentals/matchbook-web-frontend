@@ -119,6 +119,7 @@ export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<
         <Label>Please upload proof of income</Label>
         <UploadButton
           endpoint="incomeUploader"
+          onUploadError={(error) => alert(error.message)}
           onClientUploadComplete={(res) => handleUploadFinish(res)}
           className="p-0 mt-5"
           appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
