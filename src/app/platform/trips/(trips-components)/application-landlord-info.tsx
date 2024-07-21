@@ -1,10 +1,32 @@
 import React from 'react';
-import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const LandlordInfo: React.FC = () => {
-  const { register, formState: { errors } } = useFormContext();
+interface LandlordInfo {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  phoneNumber: string;
+}
+
+interface LandlordInfoProps {
+  landlordInfo: LandlordInfo;
+  setLandlordInfo: React.Dispatch<React.SetStateAction<LandlordInfo>>;
+  isRenter?: boolean;
+}
+
+export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLandlordInfo, isRenter=true }) => {
+  if (!isRenter) {
+    return null;
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLandlordInfo(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
 
   return (
     <div>
@@ -12,26 +34,41 @@ export const LandlordInfo: React.FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="landlordFirstName">First Name</Label>
-          <Input id="landlordFirstName" {...register("landlord.firstName")} />
-          {errors.landlord?.firstName && <p className="text-red-500">{errors.landlord.firstName.message}</p>}
+          <Input
+            id="landlordFirstName"
+            name="firstName"
+            value={landlordInfo.firstName}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="landlordLastName">Last Name</Label>
-          <Input id="landlordLastName" {...register("landlord.lastName")} />
-          {errors.landlord?.lastName && <p className="text-red-500">{errors.landlord.lastName.message}</p>}
+          <Input
+            id="landlordLastName"
+            name="lastName"
+            value={landlordInfo.lastName}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="landlordEmailAddress">Email Address</Label>
-          <Input id="landlordEmailAddress" {...register("landlord.emailAddress")} />
-          {errors.landlord?.emailAddress && <p className="text-red-500">{errors.landlord.emailAddress.message}</p>}
+          <Input
+            id="landlordEmailAddress"
+            name="emailAddress"
+            value={landlordInfo.emailAddress}
+            onChange={handleInputChange}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="landlordPhoneNumber">Phone Number</Label>
-          <Input id="landlordPhoneNumber" {...register("landlord.phoneNumber")} />
-          {errors.landlord?.phoneNumber && <p className="text-red-500">{errors.landlord.phoneNumber.message}</p>}
+          <Input
+            id="landlordPhoneNumber"
+            name="phoneNumber"
+            value={landlordInfo.phoneNumber}
+            onChange={handleInputChange}
+          />
         </div>
       </div>
     </div>
   );
 }
-

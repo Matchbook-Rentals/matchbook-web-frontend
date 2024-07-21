@@ -19,6 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ImageCategory } from '@prisma/client';
 
 interface UploadData {
   name: string;
@@ -35,7 +36,7 @@ interface UploadData {
 
 interface VerificationImage {
   url: string;
-  key: string;
+  category: ImageCategory
 }
 
 interface IdentificationItem {
@@ -50,16 +51,16 @@ interface IdentificationProps {
 }
 
 const ID_TYPES = [
-  { value: "driversLicense", label: "Driver&apos;s License" },
+  { value: "driversLicense", label: "Driver\'s License" },
   { value: "passport", label: "Passport" }
 ];
 
 export const Identification: React.FC<IdentificationProps> = ({ ids, setIds }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<VerificationImage | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const newImages = res.map((upload) => ({ url: upload.url, key: upload.key }));
+    const newImages = res.map((upload) => ({ url: upload.url, category: 'Identification' }));
     setIds(prev => ({
       ...prev,
       verificationImages: [...prev.verificationImages, ...newImages]

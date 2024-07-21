@@ -1,62 +1,121 @@
 import React from 'react';
-import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export const ResidentialHistory: React.FC = () => {
-  const { register, control, formState: { errors } } = useFormContext();
+interface ResidentialHistoryProps {
+  residentialHistory: {
+    currentStreet: string;
+    currentApt?: string;
+    currentCity: string;
+    currentState: string;
+    currentZipCode: string;
+    housingStatus: 'rent' | 'own';
+    monthlyPayment: string;
+    durationOfTenancy: string;
+  };
+  setResidentialHistory: React.Dispatch<React.SetStateAction<ResidentialHistoryProps['residentialHistory']>>;
+}
+
+const emptyResidentialHistory: ResidentialHistoryProps['residentialHistory'] = {
+  currentStreet: '',
+  currentApt: '',
+  currentCity: '',
+  currentState: '',
+  currentZipCode: '',
+  housingStatus: 'rent',
+  monthlyPayment: '',
+  durationOfTenancy: '',
+};
+
+export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ residentialHistory, setResidentialHistory }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setResidentialHistory(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleRadioChange = (value: 'rent' | 'own') => {
+    setResidentialHistory(prevState => ({
+      ...prevState,
+      housingStatus: value
+    }));
+  };
 
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">Residential History</h3>
       <div className="space-y-2">
         <Label>Current Address</Label>
-        <Input {...register("residentialHistory.currentAddress.street")} placeholder="Street Address Ex: 123 Main St" />
-        {errors.residentialHistory?.currentAddress?.street && <p className="text-red-500">{errors.residentialHistory.currentAddress.street.message}</p>}
-        <Input {...register("residentialHistory.currentAddress.apt")} placeholder="apt, suite, bldg (optional)" />
-        <Input {...register("residentialHistory.currentAddress.city")} placeholder="City" />
-        {errors.residentialHistory?.currentAddress?.city && <p className="text-red-500">{errors.residentialHistory.currentAddress.city.message}</p>}
+        <Input 
+          name="currentStreet"
+          value={residentialHistory.currentStreet}
+          onChange={handleInputChange}
+          placeholder="Street Address Ex: 123 Main St"
+        />
+        <Input 
+          name="currentApt"
+          value={residentialHistory.currentApt}
+          onChange={handleInputChange}
+          placeholder="apt, suite, bldg (optional)"
+        />
+        <Input 
+          name="currentCity"
+          value={residentialHistory.currentCity}
+          onChange={handleInputChange}
+          placeholder="City"
+        />
         <div className="grid grid-cols-2 gap-4">
-          <Input {...register("residentialHistory.currentAddress.state")} placeholder="State" />
-          {errors.residentialHistory?.currentAddress?.state && <p className="text-red-500">{errors.residentialHistory.currentAddress.state.message}</p>}
-          <Input {...register("residentialHistory.currentAddress.zipCode")} placeholder="ZIP Code" />
-          {errors.residentialHistory?.currentAddress?.zipCode && <p className="text-red-500">{errors.residentialHistory.currentAddress.zipCode.message}</p>}
+          <Input 
+            name="currentState"
+            value={residentialHistory.currentState}
+            onChange={handleInputChange}
+            placeholder="State"
+          />
+          <Input 
+            name="currentZipCode"
+            value={residentialHistory.currentZipCode}
+            onChange={handleInputChange}
+            placeholder="ZIP Code"
+          />
         </div>
       </div>
       <div className="mt-2">
         <Label>Do you rent or own?</Label>
-        <Controller
-          name="residentialHistory.housingStatus"
-          control={control}
-          render={({ field }) => (
-            <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              className="flex space-x-4 mt-1"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="rent" id="rent" />
-                <Label htmlFor="rent">Rent</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="own" id="own" />
-                <Label htmlFor="own">Own</Label>
-              </div>
-            </RadioGroup>
-          )}
-        />
-        {errors.residentialHistory?.housingStatus && <p className="text-red-500">{errors.residentialHistory.housingStatus.message}</p>}
+        <RadioGroup
+          value={residentialHistory.housingStatus}
+          onValueChange={handleRadioChange}
+          className="flex space-x-4 mt-1"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="rent" id="rent" />
+            <Label htmlFor="rent">Rent</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="own" id="own" />
+            <Label htmlFor="own">Own</Label>
+          </div>
+        </RadioGroup>
       </div>
       <div className="space-y-2 mt-2">
         <Label htmlFor="monthlyPayment">Monthly Payment</Label>
-        <Input id="monthlyPayment" {...register("residentialHistory.monthlyPayment")} />
-        {errors.residentialHistory?.monthlyPayment && <p className="text-red-500">{errors.residentialHistory.monthlyPayment.message}</p>}
+        <Input
+          id="monthlyPayment"
+          name="monthlyPayment"
+          value={residentialHistory.monthlyPayment}
+          onChange={handleInputChange}
+        />
       </div>
       <div className="space-y-2 mt-2">
         <Label htmlFor="durationOfTenancy">How long have you lived here?</Label>
-        <Input id="durationOfTenancy" {...register("residentialHistory.durationOfTenancy")} />
-        {errors.residentialHistory?.durationOfTenancy && <p className="text-red-500">{errors.residentialHistory.durationOfTenancy.message}</p>}
+        <Input
+          id="durationOfTenancy"
+          name="durationOfTenancy"
+          value={residentialHistory.durationOfTenancy}
+          onChange={handleInputChange}
+        />
       </div>
     </div>
   );

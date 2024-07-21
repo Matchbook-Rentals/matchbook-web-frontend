@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -51,11 +50,8 @@ interface Incomes {
 }
 
 export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<Incomes>> }> = ({ setIncomes }) => {
-  const { register, formState: { errors }, watch } = useFormContext();
   const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([{ source: '', monthlyAmount: '', verificationImages: [] }]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-
-  const watchIncomes = watch('income');
 
   useEffect(() => {
     setIncomes({ income: incomeItems });
@@ -99,7 +95,6 @@ export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<
                 onChange={(e) => handleInputChange(index, 'source', e.target.value)}
                 //{...register(`income.${index}.source`)}
               />
-              {errors.income?.[index]?.source && <p className="text-red-500">{(errors.income[index].source as { message: string }).message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor={`monthlyAmount-${index}`}>Monthly Amount {index + 1}</Label>
@@ -108,9 +103,7 @@ export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<
                 id={`monthlyAmount-${index}`}
                 value={item.monthlyAmount}
                 onChange={(e) => handleInputChange(index, 'monthlyAmount', e.target.value)}
-                //{...register(`income.${index}.monthlyAmount`)}
               />
-              {errors.income?.[index]?.monthlyAmount && <p className="text-red-500">{(errors.income[index].monthlyAmount as { message: string }).message}</p>}
             </div>
           </div>
         </div>

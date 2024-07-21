@@ -37,9 +37,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   useEffect(() => {
     fetchNotifications();
 
-    const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
+    //const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
 
-    return () => clearInterval(intervalId);
+    //return () => clearInterval(intervalId);
   }, [fetchNotifications]);
 
   const handleImageUpdate = useCallback(() => {

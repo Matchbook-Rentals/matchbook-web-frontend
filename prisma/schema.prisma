@@ -379,14 +379,15 @@ model Application {
   durationOfTenancy String
 
   // Landlord Info
-  landlordFirstName String
-  landlordLastName  String
-  landlordEmail     String
+  landlordFirstName    String?
+  landlordLastName     String?
+  landlordEmail        String?
+  landlordPhoneNumber  String?
 
   // Relationships
-  identifications   Identification[]
-  incomes           Income[]
-  verificationImages VerificationImage[]
+  identifications      Identification[]
+  incomes              Income[]
+  verificationImages   VerificationImage[]
 }
 
 model Identification {

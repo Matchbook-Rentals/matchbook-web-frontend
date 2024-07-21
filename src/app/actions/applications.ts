@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prismadb'
 import { ApplicationFormData } from '@/lib/zod-schemas';
 
 export async function createApplication(data: ApplicationFormData) {
@@ -20,26 +20,26 @@ export async function createApplication(data: ApplicationFormData) {
         landlordFirstName: data.landlord.firstName,
         landlordLastName: data.landlord.lastName,
         identifications: {
-          create: data.identification.map(id => ({
+          create: data.identifications.map(id => ({
             idType: id.idType,
             idNumber: id.idNumber,
           }))
         },
         incomes: {
-          create: data.income.map(inc => ({
+          create: data.incomes.map(inc => ({
             source: inc.source,
             monthlyAmount: inc.monthlyAmount,
           }))
         },
         verificationImages: {
           create: [
-            ...data.identification.flatMap(id => 
+            ...data.identifications.flatMap(id => 
               id.verificationImages.map(img => ({
                 url: img.url,
                 category: 'Identification',
               }))
             ),
-            ...data.income.flatMap(inc => 
+            ...data.incomes.flatMap(inc => 
               inc.verificationImages.map(img => ({
                 url: img.url,
                 category: 'Income',

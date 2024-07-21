@@ -42,7 +42,7 @@ export const incomeSchema = z.object({
 
 export const applicationSchema = z.object({
   personalInfo: personalInfoSchema,
-  identification: identificationSchema,
+  //identification: identificationSchema,
   residentialHistory: residentialHistorySchema,
   landlord: landlordSchema,
   //income: incomeSchema,
