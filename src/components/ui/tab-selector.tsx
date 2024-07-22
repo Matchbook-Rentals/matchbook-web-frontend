@@ -23,11 +23,11 @@ interface TabSelectorProps {
   defaultTab?: string;
 }
 
-export default function TabSelector({ 
-  tabs, 
-  className, 
-  tabsListClassName, 
-  tabsClassName, 
+export default function TabSelector({
+  tabs,
+  className,
+  tabsListClassName,
+  tabsClassName,
   useUrlParams = false,
   defaultTab
 }: TabSelectorProps) {
@@ -55,9 +55,9 @@ export default function TabSelector({
 
   return (
     <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
-      <Tabs 
-        className={cn("w-full", tabsClassName)} 
-        value={activeTab} 
+      <Tabs
+        className={cn("w-full", tabsClassName)}
+        value={activeTab}
         onValueChange={handleTabChange}
       >
         <TabsList className={cn("flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2", tabsListClassName)}>
@@ -71,7 +71,7 @@ export default function TabSelector({
                 {tab.Icon && <tab.Icon className="h-2 w-2 text-sm" />}
               </div>
               <div className="flex flex-col">
-                <span className={cn("text-sm",tab.textSize )}>{tab.label}</span>
+                <span className={cn("text-sm", tab.textSize)}>{tab.label}</span>
                 {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-black rounded-full" layout layoutId="underline"></motion.div>}
               </div>
             </TabsTrigger>

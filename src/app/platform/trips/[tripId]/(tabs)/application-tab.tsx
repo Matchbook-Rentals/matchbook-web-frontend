@@ -67,7 +67,7 @@ interface QuestionnaireAnswers {
 }
 
 const ApplicationForm: React.FC = () => {
-  const { hasApplication, application } = useTripContext();
+  const { hasApplication, setHasApplication, application } = useTripContext();
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
     firstName: application?.firstName || '',
     lastName: application?.lastName || ''
@@ -88,7 +88,7 @@ const ApplicationForm: React.FC = () => {
     landlordEmail: application?.landlordEmail || '',
     landlordPhoneNumber: application?.landlordPhoneNumber || '',
   });
-  const [incomes, setIncomes] = React.useState<IncomeItem[]>(application?.incomes || []);
+  const [incomes, setIncomes] = React.useState<IncomeItem[]>(application?.incomes || [{ source: '', monthlyAmount: '' }]);
   const [answers, setAnswers] = React.useState<QuestionnaireAnswers>({
     evicted: application?.evicted ?? null,
     brokenLease: application?.brokenLease ?? null,
@@ -123,6 +123,7 @@ const ApplicationForm: React.FC = () => {
           title: "Success",
           description: "Application updated successfully",
         });
+        setHasApplication(true);
       }
     } catch (error) {
       console.error('Error creating application', error)
@@ -148,8 +149,6 @@ const ApplicationForm: React.FC = () => {
             verificationImages={verificationImages.filter(img => img.category === 'Identification')}
             setVerificationImages={setVerificationImages}
           />
-          <Card onClick={() => console.log(application)}>LOG APPLICATION</Card>
-          <Card onClick={() => console.log(ids)}>IDS</Card>
           <ResidentialHistory residentialHistory={residentialHistory} setResidentialHistory={setResidentialHistory} />
           <LandlordInfo landlordInfo={landlordInfo} setLandlordInfo={setLandlordInfo} isRenter={residentialHistory.housingStatus === 'rent'} />
           <Income
