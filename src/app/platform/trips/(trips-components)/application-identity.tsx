@@ -76,7 +76,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
         <div className="space-y-2">
           <Label htmlFor="idType">Select ID type</Label>
           <Select
-            value={ids?.idType || ''}
+            value={ids?.idType}
             onValueChange={(value) => setIds(prev => ({ ...prev, idType: value }))}
           >
             <SelectTrigger>

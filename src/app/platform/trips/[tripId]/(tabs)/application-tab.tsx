@@ -47,14 +47,17 @@ interface Landlord {
 interface IdentificationItem {
   idType: string;
   idNumber: string;
+  id?: string;
 }
 interface VerificationImage {
   url: string;
   category: 'Identification' | 'Income';
+  id?: string;
 }
 interface IncomeItem {
   source: string;
   monthlyAmount: string;
+  id?: string;
 }
 interface QuestionnaireAnswers {
   evicted: boolean | null;
@@ -65,7 +68,6 @@ interface QuestionnaireAnswers {
 
 const ApplicationForm: React.FC = () => {
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({ firstName: '', lastName: '' })
-  const [ids, setIds] = React.useState<IdentificationItem>({ idType: '', idNumber: '' })
   const [residentialHistory, setResidentialHistory] = React.useState({
     currentStreet: '',
     currentApt: '',
@@ -86,6 +88,7 @@ const ApplicationForm: React.FC = () => {
   });
   const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>([]);
   const { hasApplication, application } = useTripContext();
+  const [ids, setIds] = React.useState<IdentificationItem>(application?.identifications[0] || { idType: '', idNumber: '' })
   const params = useParams()
   const { toast } = useToast();
 
@@ -95,6 +98,10 @@ const ApplicationForm: React.FC = () => {
         if (hasApplication && application) {
           const app = application;
 
+          if (app.identifications && app.identifications[0]) {
+            setIds(app.identifications[0]);
+          }
+
           if (app.verificationImages) {
             setVerificationImages(app.verificationImages);
 
@@ -103,10 +110,6 @@ const ApplicationForm: React.FC = () => {
                 firstName: app.firstName || '',
                 lastName: app.lastName || ''
               });
-            }
-
-            if (app.identifications && app.identifications[0]) {
-              setIds({ idType: app.identifications[0].idType, idNumber: app.identifications[0].idNumber });
             }
 
             if (app.currentStreet || app.currentApt || app.currentCity || app.currentState || app.currentZipCode ||
@@ -152,7 +155,7 @@ const ApplicationForm: React.FC = () => {
     };
 
     fetchTripApplication();
-  }, [params.tripId]);
+  }, [params.tripId, hasApplication, application]); // Added missing comma here
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -201,6 +204,8 @@ const ApplicationForm: React.FC = () => {
             verificationImages={verificationImages.filter(img => img.category === 'Identification')}
             setVerificationImages={setVerificationImages}
           />
+          <Card onClick={() => console.log(application)}>LOG APPLICATION</Card>
+          <Card onClick={() => console.log(ids)}>IDS</Card>
           <ResidentialHistory residentialHistory={residentialHistory} setResidentialHistory={setResidentialHistory} />
           <LandlordInfo landlordInfo={landlordInfo} setLandlordInfo={setLandlordInfo} isRenter={residentialHistory.housingStatus === 'rent'} />
           <Income
@@ -212,7 +217,6 @@ const ApplicationForm: React.FC = () => {
           <Questionnaire answers={answers} setAnswers={setAnswers} />
           <Button type="submit" className="w-full">Save Application</Button>
         </form>
-        <Button onClick={() => console.log(incomes)}>LOG APPLICATION</Button>
       </CardContent>
     </Card>
 
