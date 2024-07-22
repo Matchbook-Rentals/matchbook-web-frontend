@@ -38,6 +38,7 @@ model User {
   messages       Message[]
   HousingRequest HousingRequest[]
   trips          Trip[]
+  applications   Application[]
   preferences    UserPreferences?
 }
 
@@ -363,7 +364,7 @@ model Application {
   updatedAt DateTime @updatedAt
   isDefault Boolean  @default(false)
   tripId    String?
-  trip      Trip?    @relation(fields: [tripId], references: [id])
+  userId    String
 
   // Personal Info
   firstName String
@@ -385,10 +386,21 @@ model Application {
   landlordEmail       String?
   landlordPhoneNumber String?
 
+  // Comments to explain Yes answeres
+  evicted         Boolean?
+  brokenLease     Boolean?
+  landlordDispute Boolean?
+  explanation     String?
+
   // Relationships
+  user               User                @relation(fields: [userId], references: [id])
+  trip               Trip?               @relation(fields: [tripId], references: [id])
   identifications    Identification[]
   incomes            Income[]
   verificationImages VerificationImage[]
+
+  @@unique([userId, tripId])
+  @@unique([userId, isDefault])
 }
 
 model Identification {
