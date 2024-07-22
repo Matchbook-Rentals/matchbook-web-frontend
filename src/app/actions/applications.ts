@@ -8,32 +8,51 @@ export async function createApplication(data: any) {
     const { userId } = auth();
     if (!userId) return { success: false, error: 'Unauthorized' };
 
-    // Check for existing default
-    const existingDefaultApplication = await prisma.application.findFirst({
-      where: { isDefault: true }
-    });
-    const application = await prisma.application.create({
-      data: {
+    const application = await prisma.application.upsert({
+      where: {
+        userId_isDefault: {
+          userId,
+          isDefault: true,
+        },
+      },
+      update: {
         ...data,
-        userId: userId, // Changed from user.id to userId
         identifications: {
-          create: data.identifications
+          upsert: data.identifications.map((id: any) => ({
+            where: { id: id.id || 'new' },
+            update: id,
+            create: id
+          }))
         },
         incomes: {
-          create: data.incomes
+          upsert: data.incomes.map((income: any) => ({
+            where: { id: income.id || 'new' },
+            update: income,
+            create: income
+          }))
         },
         verificationImages: {
-          create: data.verificationImages,
+          upsert: data.verificationImages.map((img: any) => ({
+            where: { id: img.id || 'new' },
+            update: img,
+            create: img
+          }))
         },
-        isDefault: !existingDefaultApplication,
-        // tripId: someTrip.id, // if you have a trip to associate
+      },
+      create: {
+        ...data,
+        userId,
+        identifications: { create: data.identifications },
+        incomes: { create: data.incomes },
+        verificationImages: { create: data.verificationImages },
+        isDefault: true,
       },
     });
 
     return { success: true, application };
   } catch (error) {
-    console.error('Failed to create application:', error);
-    return { success: false, error: 'Failed to create application' };
+    console.error('Failed to create/update application:', error);
+    return { success: false, error: 'Failed to create/update application' };
   }
 }
 
@@ -103,32 +122,6 @@ export async function upsertNonDefaultApplication(data: any) {
   } catch (error) {
     console.error('Failed to upsert non-default application:', error);
     return { success: false, error: 'Failed to upsert non-default application' };
-  }
-}
-
-export async function updateDefaultApplication(data: any) {
-  const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
-
-  try {
-    const application = await prisma.application.update({
-      where: {
-        userId_isDefault: {
-          userId,
-          isDefault: true,
-        },
-      },
-      data: {
-        ...data,
-        identifications: { upsert: data.identifications.map((id: any) => ({ where: { id: id.id }, update: id, create: id })) },
-        incomes: { upsert: data.incomes.map((income: any) => ({ where: { id: income.id }, update: income, create: income })) },
-        verificationImages: { upsert: data.verificationImages.map((img: any) => ({ where: { id: img.id }, update: img, create: img })) },
-      },
-    });
-    return { success: true, data: application };
-  } catch (error) {
-    console.error('Failed to update default application:', error);
-    return { success: false, error: 'Failed to update default application' };
   }
 }
 

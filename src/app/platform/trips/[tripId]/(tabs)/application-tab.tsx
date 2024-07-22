@@ -38,15 +38,14 @@ interface Address {
   zipCode: string;
 }
 interface Landlord {
-  firstName: string;
-  lastName: string;
-  emailAddress?: string;
-  phoneNumber?: string;
+  landlordFirstName: string;
+  landlordLastName: string;
+  landlordEmail?: string;
+  landlordPhoneNumber?: string;
 }
 interface IdentificationItem {
   idType: string;
   idNumber: string;
-  verificationImages: VerificationImage[]
 }
 interface VerificationImage {
   url: string;
@@ -55,7 +54,6 @@ interface VerificationImage {
 interface IncomeItem {
   source: string;
   monthlyAmount: string;
-  verificationImages: VerificationImage[]
 }
 interface QuestionnaireAnswers {
   evicted: boolean | null;
@@ -66,7 +64,7 @@ interface QuestionnaireAnswers {
 
 const ApplicationForm: React.FC = () => {
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({ firstName: '', lastName: '' })
-  const [ids, setIds] = React.useState<IdentificationItem>({ idType: '', idNumber: '', verificationImages: [] })
+  const [ids, setIds] = React.useState<IdentificationItem>({ idType: '', idNumber: '' })
   const [residentialHistory, setResidentialHistory] = React.useState({
     currentStreet: '',
     currentApt: '',
@@ -85,6 +83,7 @@ const ApplicationForm: React.FC = () => {
     landlordDispute: null,
     explanation: ''
   });
+  const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>([]);
   const params = useParams()
   const { toast } = useToast();
 
@@ -92,11 +91,59 @@ const ApplicationForm: React.FC = () => {
     const fetchTripApplication = async () => {
       try {
         const response = await getTripApplication(params.tripId as string);
-        if (response.success) {
-          setPersonalInfo({
-            firstName: response?.application?.firstName || '',
-            lastName: response?.application?.lastName || ''
-          });
+        if (response.success && response.application) {
+          const app = response.application;
+
+          if (app.verificationImages) {
+            setVerificationImages(app.verificationImages);
+
+            if (app.firstName || app.lastName) {
+              setPersonalInfo({
+                firstName: app.firstName || '',
+                lastName: app.lastName || ''
+              });
+            }
+
+            if (app.identifications && app.identifications[0]) {
+              setIds({ idType: app.identifications[0].idType, idNumber: app.identifications[0].idNumber });
+            }
+
+            if (app.currentStreet || app.currentApt || app.currentCity || app.currentState || app.currentZipCode ||
+              app.housingStatus || app.monthlyPayment || app.durationOfTenancy) {
+              setResidentialHistory({
+                currentStreet: app.currentStreet || '',
+                currentApt: app.currentApt || '',
+                currentCity: app.currentCity || '',
+                currentState: app.currentState || '',
+                currentZipCode: app.currentZipCode || '',
+                housingStatus: app.housingStatus || 'rent',
+                monthlyPayment: app.monthlyPayment || '',
+                durationOfTenancy: app.durationOfTenancy || '',
+              });
+            }
+
+            if (app.landlordFirstName || app.landlordLastName || app.landlordEmail || app.landlordPhoneNumber) {
+              setLandlordInfo({
+                landlordFirstName: app.landlordFirstName || '',
+                landlordLastName: app.landlordLastName || '',
+                landlordEmail: app.landlordEmail || '',
+                landlordPhoneNumber: app.landlordPhoneNumber || '',
+              });
+            }
+
+            if (app.incomes) {
+              setIncomes(app.incomes.map(({ source, monthlyAmount }) => ({ source, monthlyAmount })));
+            }
+
+            if (app.evicted !== undefined || app.brokenLease !== undefined || app.landlordDispute !== undefined || app.explanation) {
+              setAnswers({
+                evicted: app.evicted ?? null,
+                brokenLease: app.brokenLease ?? null,
+                landlordDispute: app.landlordDispute ?? null,
+                explanation: app.explanation || '',
+              });
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching trip application:', error);
@@ -112,8 +159,9 @@ const ApplicationForm: React.FC = () => {
       ...personalInfo,
       ...residentialHistory,
       ...answers,
+      incomes,
       identifications: [{ idType: ids.idType, idNumber: ids.idNumber }],
-      verificationImages: [...ids.verificationImages, ...incomes[0].verificationImages]
+      verificationImages: verificationImages.map(img => ({ url: img.url, category: img.category, id: img.id }))
     }
     if (residentialHistory.housingStatus === 'rent') {
       application = { ...application, ...landlordInfo }
@@ -121,7 +169,7 @@ const ApplicationForm: React.FC = () => {
     console.log('application', application)
     try {
       let result = await createApplication(application)
-      console.log('applicationId', result.applicationId)
+      console.log('applicationId', result.application)
       if (result.success) {
         toast({
           title: "Success",
@@ -146,15 +194,26 @@ const ApplicationForm: React.FC = () => {
       <CardContent>
         <form onSubmit={(e) => onSubmit(e)} className="space-y-6">
           <PersonalInfo personalInfo={personalInfo} setPersonalInfo={setPersonalInfo} />
-          <Identification setIds={setIds} ids={ids} />
+          <Identification
+            setIds={setIds}
+            ids={ids}
+            verificationImages={verificationImages.filter(img => img.category === 'Identification')}
+            setVerificationImages={setVerificationImages}
+          />
           <ResidentialHistory residentialHistory={residentialHistory} setResidentialHistory={setResidentialHistory} />
           <LandlordInfo landlordInfo={landlordInfo} setLandlordInfo={setLandlordInfo} isRenter={residentialHistory.housingStatus === 'rent'} />
-          <Income setIncomes={setIncomes} />
+          <Income
+            setIncomes={setIncomes}
+            incomes={incomes}
+            verificationImages={verificationImages.filter(img => img.category === 'Income')}
+            setVerificationImages={setVerificationImages}
+          />
           <Questionnaire answers={answers} setAnswers={setAnswers} />
           <Button type="submit" className="w-full">Save Application</Button>
         </form>
       </CardContent>
     </Card>
+
   );
 };
 

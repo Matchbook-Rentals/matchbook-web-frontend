@@ -37,18 +37,21 @@ interface UploadData {
 
 interface VerificationImage {
   url: string;
+  category: string;
 }
 
 interface IncomeItem {
   source: string;
   monthlyAmount: string;
-  verificationImages: VerificationImage[];
 }
 
-export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<IncomeItem[]>> }> = ({ setIncomes }) => {
-  const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([{ source: '', monthlyAmount: '', verificationImages: [] }]);
+export const Income: React.FC<{
+  setIncomes: React.Dispatch<React.SetStateAction<IncomeItem[]>>,
+  verificationImages: VerificationImage[],
+  setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>
+}> = ({ setIncomes, verificationImages, setVerificationImages }) => {
+  const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([{ source: '', monthlyAmount: '' }]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-  const [selectedIncomeIndex, setSelectedIncomeIndex] = useState<number>(0);
 
   const handleInputChange = (index: number, field: keyof IncomeItem, value: string) => {
     const updatedIncomes = incomeItems.map((item, i) => {
@@ -61,26 +64,18 @@ export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<
     setIncomes(updatedIncomes);
   };
 
-  const handleUploadFinish = (res: UploadData[], incomeIndex: number) => {
-    const tempImageArray = res.map((upload) => ({ url: upload.url, category: 'Income' }));
-    const updatedIncomes = incomeItems.map((item, index) => {
-      if (index === incomeIndex) {
-        return { ...item, verificationImages: [...item.verificationImages, ...tempImageArray] };
-      }
-      return item;
-    });
-    setIncomeItems(updatedIncomes);
-    setIncomes(updatedIncomes);
+  const handleUploadFinish = (res: UploadData[]) => {
+    const newImages = res.map((upload) => ({ url: upload.url, category: 'Income' }));
+    setVerificationImages([...verificationImages, ...newImages]);
   };
 
-  const handleImageClick = (incomeIndex: number, imageIndex: number) => {
-    setSelectedIncomeIndex(incomeIndex);
+  const handleImageClick = (imageIndex: number) => {
     setSelectedImageIndex(imageIndex);
   };
 
   const addIncome = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newIncomes = [...incomeItems, { source: '', monthlyAmount: '', verificationImages: [] }];
+    const newIncomes = [...incomeItems, { source: '', monthlyAmount: '' }];
     setIncomeItems(newIncomes);
     setIncomes(newIncomes);
   };
@@ -110,60 +105,60 @@ export const Income: React.FC<{ setIncomes: React.Dispatch<React.SetStateAction<
             </div>
           </div>
           <div className="mt-2">
-            <Label>Please upload proof of income</Label>
+            <Button onClick={(e) => addIncome(e)} className="mt-4 w-full">
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Another Income
+            </Button>
+            <Label className='text-lg text-center'>Please upload proof of income</Label>
             <UploadButton
               endpoint="incomeUploader"
               onUploadError={(error) => alert(error.message)}
-              onClientUploadComplete={(res) => handleUploadFinish(res, index)}
+              onClientUploadComplete={(res) => handleUploadFinish(res)}
               className="p-0 mt-5"
               appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
             />
-            {item.verificationImages.length > 0 && (
-              <>
-                <Label>Proof of Income uploads</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  {item.verificationImages.map((img, imgIdx) => (
-                    <Dialog key={imgIdx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
-                      <DialogTrigger asChild>
-                        <img
-                          src={img.url}
-                          alt={`Income proof ${imgIdx + 1}`}
-                          className="w-full h-auto cursor-pointer"
-                          onClick={() => handleImageClick(index, imgIdx)}
-                        />
-                      </DialogTrigger>
-                      <DialogContent className="max-w-3xl">
-                        <DialogHeader>
-                          <DialogTitle>Income Proof Images</DialogTitle>
-                          <DialogDescription>Use arrows to navigate between images</DialogDescription>
-                        </DialogHeader>
-                        <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
-                          <CarouselContent>
-                            {item.verificationImages.map((image, carouselIndex) => (
-                              <CarouselItem key={carouselIndex}>
-                                <Card>
-                                  <CardContent className="flex aspect-square items-center justify-center p-6">
-                                    <img src={image.url} alt={`Income proof ${carouselIndex + 1}`} className="w-full h-auto" />
-                                  </CardContent>
-                                </Card>
-                              </CarouselItem>
-                            ))}
-                          </CarouselContent>
-                          <CarouselPrevious />
-                          <CarouselNext />
-                        </Carousel>
-                      </DialogContent>
-                    </Dialog>
-                  ))}
-                </div>
-              </>
-            )}
           </div>
         </div>
       ))}
-      <Button onClick={(e) => addIncome(e)} className="mt-4">
-        <PlusCircle className="mr-2 h-4 w-4" /> Add Another Income
-      </Button>
+      {verificationImages.length > 0 && (
+        <>
+          <Label>Proof of Income uploads</Label>
+          <div className="grid grid-cols-2 gap-4">
+            {verificationImages.filter(img => img.category === 'Income').map((img, imgIdx) => (
+              <Dialog key={imgIdx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
+                <DialogTrigger asChild>
+                  <img
+                    src={img.url}
+                    alt={`Income proof ${imgIdx + 1}`}
+                    className="w-full h-auto cursor-pointer"
+                    onClick={() => handleImageClick(imgIdx)}
+                  />
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl">
+                  <DialogHeader>
+                    <DialogTitle>Income Proof Images</DialogTitle>
+                    <DialogDescription>Use arrows to navigate between images</DialogDescription>
+                  </DialogHeader>
+                  <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
+                    <CarouselContent>
+                      {verificationImages.filter(img => img.category === 'Income').map((image, carouselIndex) => (
+                        <CarouselItem key={carouselIndex}>
+                          <Card>
+                            <CardContent className="flex aspect-square items-center justify-center p-6">
+                              <img src={image.url} alt={`Income proof ${carouselIndex + 1}`} className="w-full h-auto" />
+                            </CardContent>
+                          </Card>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
+                </DialogContent>
+              </Dialog>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

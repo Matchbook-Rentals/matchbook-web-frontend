@@ -42,12 +42,13 @@ interface VerificationImage {
 interface IdentificationItem {
   idType: string;
   idNumber: string;
-  verificationImages: VerificationImage[];
 }
 
 interface IdentificationProps {
   ids: IdentificationItem;
   setIds: React.Dispatch<React.SetStateAction<IdentificationItem>>;
+  verificationImages: VerificationImage[];
+  setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>;
 }
 
 const ID_TYPES = [
@@ -55,16 +56,13 @@ const ID_TYPES = [
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC<IdentificationProps> = ({ ids, setIds }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<VerificationImage | null>(null);
+export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, verificationImages, setVerificationImages }) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log(res);
-    const newImages = res.map((upload) => ({ url: upload.url, category: 'Identification' }));
-    setIds(prev => ({
-      ...prev,
-      verificationImages: [...prev.verificationImages, ...newImages]
-    }));
+    const newImages = res.map((upload) => ({ url: upload.url, category: 'Identification' as ImageCategory }));
+    setVerificationImages(prev => [...prev, ...newImages]);
   };
 
   const handleImageClick = (index: number) => {
@@ -112,16 +110,16 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds }) =
           appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
         />
       </div>
-      {ids.verificationImages.length > 0 && (
+      {verificationImages.length > 0 && (
         <>
           <Label className="mt-4">ID image uploads</Label>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            {ids.verificationImages.map((img, idx) => (
+            {verificationImages.map((img, idx) => (
               <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
                 <DialogTrigger asChild>
                   <img
                     src={img.url}
-                    alt={img.key}
+                    alt={`ID image ${idx + 1}`}
                     className="w-full h-auto cursor-pointer"
                     onClick={() => handleImageClick(idx)}
                   />
@@ -133,11 +131,11 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds }) =
                   </DialogHeader>
                   <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
                     <CarouselContent>
-                      {ids.verificationImages.map((image, index) => (
+                      {verificationImages.map((image, index) => (
                         <CarouselItem key={index}>
                           <Card>
                             <CardContent className="flex aspect-square items-center justify-center p-6">
-                              <img src={image.url} alt={image.key} className="w-full h-auto" />
+                              <img src={image.url} alt={`ID image ${index + 1}`} className="w-full h-auto" />
                             </CardContent>
                           </Card>
                         </CarouselItem>
