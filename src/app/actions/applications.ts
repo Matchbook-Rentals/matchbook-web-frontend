@@ -147,6 +147,11 @@ export async function getTripApplication(tripId?: string) {
             tripId,
           },
         },
+        include: {
+          incomes: true,
+          verificationImages: true,
+          identifications: true,
+        },
       });
     }
 
@@ -157,6 +162,11 @@ export async function getTripApplication(tripId?: string) {
             userId,
             isDefault: true,
           },
+        },
+        include: {
+          incomes: true,
+          verificationImages: true,
+          identifications: true,
         },
       });
     }
