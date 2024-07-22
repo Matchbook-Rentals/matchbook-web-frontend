@@ -67,95 +67,39 @@ interface QuestionnaireAnswers {
 }
 
 const ApplicationForm: React.FC = () => {
-  const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({ firstName: '', lastName: '' })
-  const [residentialHistory, setResidentialHistory] = React.useState({
-    currentStreet: '',
-    currentApt: '',
-    currentCity: '',
-    currentState: '',
-    currentZipCode: '',
-    housingStatus: 'rent',
-    monthlyPayment: '',
-    durationOfTenancy: '',
-  })
-  const [landlordInfo, setLandlordInfo] = React.useState<Landlord>({})
-  const [incomes, setIncomes] = React.useState<IncomeItem[]>([])
-  const [answers, setAnswers] = React.useState<QuestionnaireAnswers>({
-    evicted: null,
-    brokenLease: null,
-    landlordDispute: null,
-    explanation: ''
-  });
-  const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>([]);
   const { hasApplication, application } = useTripContext();
-  const [ids, setIds] = React.useState<IdentificationItem>(application?.identifications[0] || { idType: '', idNumber: '' })
-  const params = useParams()
+  const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
+    firstName: application?.firstName || '',
+    lastName: application?.lastName || ''
+  });
+  const [residentialHistory, setResidentialHistory] = React.useState({
+    currentStreet: application?.currentStreet || '',
+    currentApt: application?.currentApt || '',
+    currentCity: application?.currentCity || '',
+    currentState: application?.currentState || '',
+    currentZipCode: application?.currentZipCode || '',
+    housingStatus: application?.housingStatus || 'rent',
+    monthlyPayment: application?.monthlyPayment || '',
+    durationOfTenancy: application?.durationOfTenancy || '',
+  });
+  const [landlordInfo, setLandlordInfo] = React.useState<Landlord>({
+    landlordFirstName: application?.landlordFirstName || '',
+    landlordLastName: application?.landlordLastName || '',
+    landlordEmail: application?.landlordEmail || '',
+    landlordPhoneNumber: application?.landlordPhoneNumber || '',
+  });
+  const [incomes, setIncomes] = React.useState<IncomeItem[]>(application?.incomes || []);
+  const [answers, setAnswers] = React.useState<QuestionnaireAnswers>({
+    evicted: application?.evicted ?? null,
+    brokenLease: application?.brokenLease ?? null,
+    landlordDispute: application?.landlordDispute ?? null,
+    explanation: application?.explanation || ''
+  });
+  const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>(application?.verificationImages || []);
+  const [ids, setIds] = React.useState<IdentificationItem>(application?.identifications?.[0] || { idType: '', idNumber: '' });
+
+  const params = useParams();
   const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchTripApplication = async () => {
-      try {
-        if (hasApplication && application) {
-          const app = application;
-
-          if (app.identifications && app.identifications[0]) {
-            setIds(app.identifications[0]);
-          }
-
-          if (app.verificationImages) {
-            setVerificationImages(app.verificationImages);
-
-            if (app.firstName || app.lastName) {
-              setPersonalInfo({
-                firstName: app.firstName || '',
-                lastName: app.lastName || ''
-              });
-            }
-
-            if (app.currentStreet || app.currentApt || app.currentCity || app.currentState || app.currentZipCode ||
-              app.housingStatus || app.monthlyPayment || app.durationOfTenancy) {
-              setResidentialHistory({
-                currentStreet: app.currentStreet || '',
-                currentApt: app.currentApt || '',
-                currentCity: app.currentCity || '',
-                currentState: app.currentState || '',
-                currentZipCode: app.currentZipCode || '',
-                housingStatus: app.housingStatus || 'rent',
-                monthlyPayment: app.monthlyPayment || '',
-                durationOfTenancy: app.durationOfTenancy || '',
-              });
-            }
-
-            if (app.landlordFirstName || app.landlordLastName || app.landlordEmail || app.landlordPhoneNumber) {
-              setLandlordInfo({
-                landlordFirstName: app.landlordFirstName || '',
-                landlordLastName: app.landlordLastName || '',
-                landlordEmail: app.landlordEmail || '',
-                landlordPhoneNumber: app.landlordPhoneNumber || '',
-              });
-            }
-
-            if (app.incomes) {
-              setIncomes(app.incomes);
-            }
-
-            if (app.evicted !== undefined || app.brokenLease !== undefined || app.landlordDispute !== undefined || app.explanation) {
-              setAnswers({
-                evicted: app.evicted ?? null,
-                brokenLease: app.brokenLease ?? null,
-                landlordDispute: app.landlordDispute ?? null,
-                explanation: app.explanation || '',
-              });
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching trip application:', error);
-      }
-    };
-
-    fetchTripApplication();
-  }, [params.tripId, hasApplication, application]); // Added missing comma here
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
