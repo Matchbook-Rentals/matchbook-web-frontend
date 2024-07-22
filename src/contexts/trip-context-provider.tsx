@@ -3,6 +3,8 @@ import React from "react";
 import { ListingAndImages, TripAndMatches } from "@/types";
 import { createContext, useState } from "react";
 import { Dispatch, SetStateAction } from 'react';
+import { useContext } from 'react';
+import { Application } from "@prisma/client";
 
 type TripContextProviderProps = {
   tripData: TripAndMatches;
@@ -15,6 +17,8 @@ type TripContextProviderProps = {
   deleteDbHousingRequest: Function;
   listingData: ListingAndImages[];
   children: React.ReactNode;
+  hasApplication: boolean;
+  application: Application | null;
 };
 
 interface ViewedListing {
@@ -50,6 +54,8 @@ interface TTripContext {
     createDbHousingRequest: Function;
     deleteDbHousingRequest: Function;
   };
+  application: Application | null; // Add this property
+  hasApplication: boolean; // Add this property
 }
 
 export const TripContext = createContext<TTripContext | null>(null);
@@ -64,6 +70,8 @@ export default function TripContextProvider({
   deleteDbDislike,
   createDbHousingRequest,
   deleteDbHousingRequest,
+  application,
+  hasApplication,
   children,
 }: TripContextProviderProps) {
   const [trip, setTrip] = useState(tripData);
@@ -131,9 +139,20 @@ export default function TripContextProvider({
         lookup,
         setLookup,
         actions,
+        application,
+        hasApplication,
       }}
     >
       {children}
     </TripContext.Provider>
   );
+}
+
+// Add this custom hook at the end of the file
+export function useTripContext() {
+  const context = useContext(TripContext);
+  if (context === null) {
+    throw new Error('useTripContext must be used within a TripContextProvider');
+  }
+  return context;
 }

@@ -165,7 +165,7 @@ export async function getTripApplication(tripId?: string) {
     }
 
     if (!application) {
-      return { success: false, data: null };
+      return { success: false, application: null };
     }
 
     return { success: true, application };

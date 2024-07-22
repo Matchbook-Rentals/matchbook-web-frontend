@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { createApplication, getTripApplication } from '@/app/actions/applications';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import { useToast } from "@/components/ui/use-toast";
+import { useTripContext } from '@/contexts/trip-context-provider';
 
 interface ApplicationFormData {
   personalInfo: PersonalInfo;
@@ -84,15 +85,15 @@ const ApplicationForm: React.FC = () => {
     explanation: ''
   });
   const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>([]);
+  const { hasApplication, application } = useTripContext();
   const params = useParams()
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchTripApplication = async () => {
       try {
-        const response = await getTripApplication(params.tripId as string);
-        if (response.success && response.application) {
-          const app = response.application;
+        if (hasApplication && application) {
+          const app = application;
 
           if (app.verificationImages) {
             setVerificationImages(app.verificationImages);
@@ -132,7 +133,7 @@ const ApplicationForm: React.FC = () => {
             }
 
             if (app.incomes) {
-              setIncomes(app.incomes.map(({ source, monthlyAmount }) => ({ source, monthlyAmount })));
+              setIncomes(app.incomes);
             }
 
             if (app.evicted !== undefined || app.brokenLease !== undefined || app.landlordDispute !== undefined || app.explanation) {
@@ -159,8 +160,8 @@ const ApplicationForm: React.FC = () => {
       ...personalInfo,
       ...residentialHistory,
       ...answers,
-      incomes,
-      identifications: [{ idType: ids.idType, idNumber: ids.idNumber }],
+      incomes: incomes.map(income => ({ source: income.source, monthlyAmount: income.monthlyAmount, id: income.id })),
+      identifications: [{ idType: ids.idType, idNumber: ids.idNumber, id: ids.id }],
       verificationImages: verificationImages.map(img => ({ url: img.url, category: img.category, id: img.id }))
     }
     if (residentialHistory.housingStatus === 'rent') {
@@ -211,6 +212,7 @@ const ApplicationForm: React.FC = () => {
           <Questionnaire answers={answers} setAnswers={setAnswers} />
           <Button type="submit" className="w-full">Save Application</Button>
         </form>
+        <Button onClick={() => console.log(incomes)}>LOG APPLICATION</Button>
       </CardContent>
     </Card>
 

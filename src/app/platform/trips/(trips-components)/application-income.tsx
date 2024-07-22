@@ -41,26 +41,27 @@ interface VerificationImage {
 }
 
 interface IncomeItem {
+  id?: string;
+  applicationId?: string;
   source: string;
   monthlyAmount: string;
 }
 
 export const Income: React.FC<{
+  incomes: IncomeItem[],
   setIncomes: React.Dispatch<React.SetStateAction<IncomeItem[]>>,
   verificationImages: VerificationImage[],
   setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>
-}> = ({ setIncomes, verificationImages, setVerificationImages }) => {
-  const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([{ source: '', monthlyAmount: '' }]);
+}> = ({ incomes, setIncomes, verificationImages, setVerificationImages }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleInputChange = (index: number, field: keyof IncomeItem, value: string) => {
-    const updatedIncomes = incomeItems.map((item, i) => {
+    const updatedIncomes = incomes.map((item, i) => {
       if (i === index) {
         return { ...item, [field]: value };
       }
       return item;
     });
-    setIncomeItems(updatedIncomes);
     setIncomes(updatedIncomes);
   };
 
@@ -75,15 +76,14 @@ export const Income: React.FC<{
 
   const addIncome = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newIncomes = [...incomeItems, { source: '', monthlyAmount: '' }];
-    setIncomeItems(newIncomes);
-    setIncomes(newIncomes);
+    const newIncome: IncomeItem = { source: '', monthlyAmount: '' };
+    setIncomes([...incomes, newIncome]);
   };
 
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">Income</h3>
-      {incomeItems.map((item, index) => (
+      {incomes.map((item, index) => (
         <div key={index} className="mb-4 p-4 border rounded">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -104,21 +104,23 @@ export const Income: React.FC<{
               />
             </div>
           </div>
-          <div className="mt-2">
-            <Button onClick={(e) => addIncome(e)} className="mt-4 w-full">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Another Income
-            </Button>
-            <Label className='text-lg text-center'>Please upload proof of income</Label>
-            <UploadButton
-              endpoint="incomeUploader"
-              onUploadError={(error) => alert(error.message)}
-              onClientUploadComplete={(res) => handleUploadFinish(res)}
-              className="p-0 mt-5"
-              appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
-            />
-          </div>
         </div>
       ))}
+
+      <div className="mt-4">
+        <Button onClick={(e) => addIncome(e)} className="w-full mb-4">
+          <PlusCircle className="mr-2 h-4 w-4" /> Add Another Income
+        </Button>
+        <Label className='text-lg text-center block mb-2'>Please upload proof of income</Label>
+        <UploadButton
+          endpoint="incomeUploader"
+          onUploadError={(error) => alert(error.message)}
+          onClientUploadComplete={(res) => handleUploadFinish(res)}
+          className="p-0 mt-2"
+          appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
+        />
+      </div>
+
       {verificationImages.length > 0 && (
         <>
           <Label>Proof of Income uploads</Label>
