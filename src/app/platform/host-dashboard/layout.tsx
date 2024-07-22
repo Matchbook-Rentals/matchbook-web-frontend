@@ -39,7 +39,11 @@ export async function getListingHousingRequests(listingId: string): Promise<Requ
         listingId: listingId,
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            applications: true,
+          }
+        },
       },
     });
 

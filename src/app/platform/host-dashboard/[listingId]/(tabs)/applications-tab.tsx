@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ApplicationsSidebar from '../(components)/applications-sidebar';
 import { ListingAndImages, RequestWithUser } from '@/types';
+import ApplicationSummary from '../(components)/applications-summary';
 
 interface ApplicationsTabProps {
   listing: ListingAndImages; // Replace 'any' with the actual type of listing
@@ -16,7 +17,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
           <ApplicationsSidebar housingRequests={housingRequests} />
         </div>
         <div className="w-[70%] h-[200vh]">
-          {/* Content area */}
+          <ApplicationSummary />
         </div>
       </div>
     </div>

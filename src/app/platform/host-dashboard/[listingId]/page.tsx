@@ -17,7 +17,7 @@ const PropertyDetails: React.FC = ({ params }) => {
 
   const listing = listings.find(listing => listing.id === listingId);
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     const fetchHousingRequests = async () => {
       try {
         const requests = await getListingHousingRequests(listing.id);
@@ -35,60 +35,60 @@ const PropertyDetails: React.FC = ({ params }) => {
     return <div>Property not found</div>;
   }
 
-const tabs = [
-  {
-    value: "overview",
-    label: "Overview",
-    Icon: OverviewIcon,
-    content: <OverviewTab />,
-  },
-  {
-    value: "listing",
-    label: "Listing",
-    Icon: ListingIcon,
-    content: (
-      <CardWithHeader
-        title="Listing"
-        content={<div>Listing content goes here.</div>}
-      />
-    ),
-  },
-  {
-    value: "applications",
-    label: "Applications",
-    Icon: ApplicationsIcon,
-    content: (
-      <ApplicationsTab
-        listing={listing}
-        housingRequests={housingRequests}
-        setHousingRequests={setHousingRequests}
-      />
-    ),
-  },
-  {
-    value: "payments",
-    label: "Payments",
-    Icon: PaymentsIcon,
-    content: <PaymentsTab />,
-  },
-  {
-    value: "analytics",
-    label: "Analytics",
-    Icon: AnalyticsIcon,
-    content: (
-      <CardWithHeader
-        title="Analytics"
-        content={<div>Analytics content goes here.</div>}
-      />
-    ),
-  },
-  {
-    value: "bookings",
-    label: "Bookings",
-    Icon: BookingsIcon,
-    content: <BookingsTab />,
-  },
-];
+  const tabs = [
+    {
+      value: "overview",
+      label: "Overview",
+      Icon: OverviewIcon,
+      content: <OverviewTab />,
+    },
+    {
+      value: "listing",
+      label: "Listing",
+      Icon: ListingIcon,
+      content: (
+        <CardWithHeader
+          title="Listing"
+          content={<div>Listing content goes here.</div>}
+        />
+      ),
+    },
+    {
+      value: "applications",
+      label: "Applications",
+      Icon: ApplicationsIcon,
+      content: (
+        <ApplicationsTab
+          listing={listing}
+          housingRequests={housingRequests}
+          setHousingRequests={setHousingRequests}
+        />
+      ),
+    },
+    {
+      value: "payments",
+      label: "Payments",
+      Icon: PaymentsIcon,
+      content: <PaymentsTab />,
+    },
+    {
+      value: "analytics",
+      label: "Analytics",
+      Icon: AnalyticsIcon,
+      content: (
+        <CardWithHeader
+          title="Analytics"
+          content={<div>Analytics content goes here.</div>}
+        />
+      ),
+    },
+    {
+      value: "bookings",
+      label: "Bookings",
+      Icon: BookingsIcon,
+      content: <BookingsTab />,
+    },
+  ];
 
   return (
     <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8'>
