@@ -2,18 +2,23 @@
 
 ## TONIGHT
 
+[] 1. Finish application summary
+-- pass application to summary
+-- allow sidebar to select application
+
+[] 2. Trip Editor
+
+[] 3. New Dashboard
+
+[] 4. Add other users&application to housingRequest
 
 
-Finish application form (explain yes answers)
 store in db, fetch on host side
 
 Check for trip specific application
         Check for default application
 If application load to application tab
 If no leave blank
-
-
-add toast or sonnet 
 
 ## Matching (Trip View)
 

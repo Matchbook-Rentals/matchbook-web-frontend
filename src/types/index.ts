@@ -13,7 +13,8 @@ export interface ListingAndImages extends Listing {
 };
 
 export interface RequestWithUser extends HousingRequest {
-  user: User
+  user?: User
+  trip?: Trip
 }
 
 export interface ApplicationWithArrays extends Application {
