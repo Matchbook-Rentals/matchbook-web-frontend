@@ -12,7 +12,7 @@
 
 [] 4. Add other users&application to housingRequest
 
-[] 5. Properites you love error red 
+[x] 5. Properites you love error red 
 
 
 store in db, fetch on host side

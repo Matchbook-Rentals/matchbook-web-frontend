@@ -42,6 +42,9 @@ export async function getListingHousingRequests(listingId: string): Promise<Requ
         user: {
           include: {
             applications: {
+              where: {
+                isDefault: true,
+              },
               include: {
                 verificationImages: true,
                 incomes: true,
