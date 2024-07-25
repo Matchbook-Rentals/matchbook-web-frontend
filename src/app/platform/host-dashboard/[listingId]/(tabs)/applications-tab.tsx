@@ -22,8 +22,8 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
 
   return (
     <div className="w-full p-5">
-      <button onClick={() => console.log(housingRequests)}>LOG SELECTED APPLICATION</button>
-      <button onClick={() => console.log(selectedApplication)}>LOG SELECTED APPLICATION</button>
+      {/* <button onClick={() => console.log(housingRequests)}>LOG SELECTED APPLICATION</button> */}
+      {/* <button onClick={() => console.log(selectedApplication)}>LOG SELECTED APPLICATION</button> */}
       <div className="flex gap-x-4">
         <div className="w-[25%]">
           <ApplicationsSidebar housingRequests={housingRequests} setSelectedApplication={setSelectedApplication} />
