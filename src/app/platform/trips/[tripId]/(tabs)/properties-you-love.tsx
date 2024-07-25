@@ -20,6 +20,7 @@ export default function PropertiesYouLoveTab() {
       toast({
         title: "No Application Found",
         description: "You need to complete your application before applying to properties.",
+        variant: "destructive",
         action: (
           <ToastAction altText="Go to Application" onClick={() => router.push(`${pathname}?tab=applications`, { scroll: true })}>
             Go to Application
@@ -74,6 +75,8 @@ export default function PropertiesYouLoveTab() {
 
   return (
     <>
+      <button onClick={() => setHasApplication(false)}>SET NO APP</button>
+      {hasApplication.toString()}
       {requestedListings.length > 0 &&
         <CustomAccordion
           title="Submitted Applications"
