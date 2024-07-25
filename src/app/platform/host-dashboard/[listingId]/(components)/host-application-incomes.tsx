@@ -37,7 +37,7 @@ const ApplicationIncomes: React.FC<ApplicationIncomesProps> = ({ incomes, verifi
 
   return (
     <>
-      <h3 className="text-xl font-semibold mb-4">Employment and Income</h3>
+      <h3 className="text-2xl text-center font-semibold mb-4">Employment and Income</h3>
       {incomes.map((income, i) => (
         <Card key={i} className="mb-4">
           <CardContent className="flex justify-between items-center p-4">

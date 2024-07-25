@@ -50,7 +50,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Summary {application?.firstName || 'N/A'}</CardTitle>
+        <CardTitle className="text-2xl text-center font-bold ">Summary </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-4 mb-4">

@@ -37,7 +37,7 @@ const ApplicationIdentity: React.FC<ApplicationIdentityProps> = ({ identificatio
 
   return (
     <>
-      <h3 className="text-xl font-semibold mb-4">Identity Verification</h3>
+      <h3 className="text-2xl text-center font-semibold mb-4">Identity Verification</h3>
       {identifications.length > 0 && (
         <Card className="mb-4">
           <CardContent className="flex justify-between items-center p-4">
