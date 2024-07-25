@@ -85,13 +85,13 @@ const ApplicationResidentHistory: React.FC<ApplicationResidentHistoryProps> = ({
 
             <div>
               <span className="font-semibold">Length of Tenancy: </span>
-              {application.durationOfTenancy} months
+              {application.durationOfTenancy}
             </div>
 
             <div>
               <span className="font-semibold">Dates of Tenancy: </span>
               {calculateDatesOfTenancy(parseInt(application.durationOfTenancy))}
-              {' '} (calculated not input by user)
+              {' '} (calculated not input by user needs either dates or more refined duration input)
             </div>
           </div>
         </div>

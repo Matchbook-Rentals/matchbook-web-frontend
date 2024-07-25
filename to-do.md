@@ -2,9 +2,7 @@
 
 ## TONIGHT
 
-[] 1. Finish application summary
--- pass application to summary
--- allow sidebar to select application
+[X] 1. Finish application summary
 
 [] 2. Trip Editor
 
