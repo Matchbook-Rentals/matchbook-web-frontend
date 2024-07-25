@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { RequestWithUser } from "@/types/";
-import ApplicationSummary from './applications-summary';
-import ApplicantCard from './applicant-card';
-import ApplicationIdentity from './application-identity';
-import ApplicationIncomes from './application-incomes';
+import ApplicationSummary from './host-applications-summary';
+import ApplicantCard from './host-applicant-card';
+import ApplicationIdentity from './host-application-identity';
+import ApplicationIncomes from './host-application-incomes';
 
 const ApplicationDetails = ({ selectedApplication }: { selectedApplication: RequestWithUser }) => {
   const application = selectedApplication?.user?.applications[0];

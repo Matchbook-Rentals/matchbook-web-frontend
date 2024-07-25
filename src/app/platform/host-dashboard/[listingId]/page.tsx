@@ -8,7 +8,7 @@ import { OverviewIcon, ListingIcon, ApplicationsIcon, PaymentsIcon, BookingsIcon
 import OverviewTab from './(tabs)/overview-tab';
 import BookingsTab from './(tabs)/bookings-tab';
 import PaymentsTab from './(tabs)/payments-tab';
-import ApplicationsTab from './(tabs)/applications-tab';
+import ApplicationsTab from './(tabs)/host-applications-tab';
 
 const PropertyDetails: React.FC = ({ params }) => {
   const [housingRequests, setHousingRequests] = React.useState([]);

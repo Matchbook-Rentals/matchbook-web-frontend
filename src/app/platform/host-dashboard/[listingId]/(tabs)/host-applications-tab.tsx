@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ApplicationsSidebar from '../(components)/applications-sidebar';
+import ApplicationsSidebar from '../(components)/host-applications-sidebar';
 import { ListingAndImages, RequestWithUser } from '@/types';
-import ApplicationDetails from '../(components)/application-details';
+import ApplicationDetails from '../(components)/host-application-details';
 
 interface ApplicationsTabProps {
   listing: ListingAndImages; // Replace 'any' with the actual type of listing
