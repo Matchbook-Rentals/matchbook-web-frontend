@@ -9,9 +9,13 @@ import { Income } from '../../(trips-components)/application-income';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createApplication, getTripApplication } from '@/app/actions/applications';
+import { addParticipant } from '@/app/actions/trips';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import { useToast } from "@/components/ui/use-toast";
 import { useTripContext } from '@/contexts/trip-context-provider';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ApplicationFormData {
   personalInfo: PersonalInfo;
@@ -67,7 +71,7 @@ interface QuestionnaireAnswers {
 }
 
 const ApplicationForm: React.FC = () => {
-  const { hasApplication, setHasApplication, application } = useTripContext();
+  const { hasApplication, trip, setHasApplication, application } = useTripContext();
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
     firstName: application?.firstName || '',
     lastName: application?.lastName || ''
@@ -97,6 +101,7 @@ const ApplicationForm: React.FC = () => {
   });
   const [verificationImages, setVerificationImages] = React.useState<VerificationImage[]>(application?.verificationImages || []);
   const [ids, setIds] = React.useState<IdentificationItem>(application?.identifications?.[0] || { idType: '', idNumber: '' });
+  const [email, setEmail] = React.useState('')
 
   const params = useParams();
   const { toast } = useToast();
@@ -135,10 +140,47 @@ const ApplicationForm: React.FC = () => {
     }
   };
 
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Adding user with email:', email)
+    let participant = await addParticipant(trip?.id, email)
+    console.log('participant', participant)
+    setEmail('')
+  }
+
   return (
     <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Application Form</CardTitle>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className='text-lg border-2'>Add Guest</Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <form onSubmit={handleAddUser} className="flex flex-col gap-4">
+              <Input
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Button type="submit">Add User</Button>
+            </form>
+            <div className="mt-4">
+              <h4 className="mb-2 font-medium">Current Participants:</h4>
+              <ScrollArea className="h-[100px]" onClick={() => {
+                console.log('trip', trip)
+              }}>
+                <ul className="space-y-1">
+                  {trip?.allParticipants?.length > 0 && trip?.allParticipants?.map((participant, index) => (
+                    <li key={index}>{participant.firstName} {participant.lastName}</li>
+                  ))}
+                </ul>
+              </ScrollArea>
+            </div>
+          </PopoverContent>
+        </Popover>
       </CardHeader>
       <CardContent>
         <form onSubmit={(e) => onSubmit(e)} className="space-y-6">

@@ -31,15 +31,16 @@ model User {
   updatedAt      DateTime  @updatedAt
 
   // Relationships trips          Trip[]
-  accounts       Account[]
-  listings       Listing[]
-  bookings       Booking[]
-  notifications  Notification[]
-  messages       Message[]
-  HousingRequest HousingRequest[]
-  trips          Trip[]
-  applications   Application[]
-  preferences    UserPreferences?
+  accounts           Account[]
+  listings           Listing[]
+  bookings           Booking[]
+  notifications      Notification[]
+  messages           Message[]
+  HousingRequest     HousingRequest[]
+  trips              Trip[]
+  applications       Application[]
+  preferences        UserPreferences?
+  participatingTrips Trip[]           @relation("TripParticipants")
 }
 
 model UserPreferences {
@@ -268,27 +269,28 @@ model Booking {
 }
 
 model Trip {
-  id             String     @id @default(uuid())
-  locationString String
-  latitude       Float      @default(0)
-  longitude      Float      @default(0)
-  city           String?
-  state          String?
-  postalCode     String?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @default(now()) @updatedAt
-  startDate      DateTime?
-  endDate        DateTime?
-  maxPrice       Int?
-  minBedroom     Int?
-  minBathroom    Int?
-  isSponsored    Boolean    @default(false)
-  numAdults      Int        @default(1)
-  numPets        Int        @default(0)
-  numChildren    Int        @default(0)
-  sponsorID      String?
-  userId         String
-  tripStatus     TripStatus @default(searching)
+  id              String     @id @default(uuid())
+  locationString  String
+  latitude        Float      @default(0)
+  longitude       Float      @default(0)
+  city            String?
+  state           String?
+  postalCode      String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now()) @updatedAt
+  startDate       DateTime?
+  endDate         DateTime?
+  maxPrice        Int?
+  minBedroom      Int?
+  minBathroom     Int?
+  isSponsored     Boolean    @default(false)
+  numAdults       Int        @default(1)
+  numPets         Int        @default(0)
+  numChildren     Int        @default(0)
+  sponsorID       String?
+  userId          String
+  tripStatus      TripStatus @default(searching)
+  allParticipants User[]     @relation("TripParticipants")
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)

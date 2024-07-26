@@ -11,7 +11,7 @@ import { getTripApplication } from '@/app/actions/applications';
 const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
   'use server'
 
-  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, housingRequests: true, dislikes: true } })
+  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, housingRequests: true, dislikes: true, allParticipants: true } })
 
   if (trip) {
     if (!trip.latitude || !trip.longitude) {

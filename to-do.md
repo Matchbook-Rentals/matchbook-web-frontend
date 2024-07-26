@@ -10,7 +10,7 @@
 
 [] 4. Add other users&application to housingRequest
 
-[x] 5. Properites you love error red 
+[ ] 5. Errors for client side validation 
 
 
 store in db, fetch on host side
