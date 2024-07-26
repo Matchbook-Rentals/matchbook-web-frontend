@@ -98,7 +98,7 @@ const ApplicationResidentHistory: React.FC<ApplicationResidentHistoryProps> = ({
         <div className='space-y-4'>
           <h4 className="font-semibold text-lg text-center mb-2">Tenant review from {application.landlordEmail}:</h4>
           <div className="flex flex-col items-center">
-            <span className="text-center">How would you describe the tenant's payment history?: </span>
+            <span className="text-center">How would you describe the tenant&apos;s payment history?: </span>
             <span className="font-semibold text-center">Placeholder text</span>
           </div>
           <div className="flex flex-col items-center">
