@@ -7,14 +7,14 @@ const prisma = new PrismaClient();
 
 async function generateListings(formData: FormData) {
   'use server'
-  
+
   const count = Number(formData.get('count')) || 200;
   let user = await currentUser();
-  
+
   try {
     const listings = generateRandomListings(count);
     let createdCount = 0;
-    
+
     for (const listing of listings) {
       // Ensure the listing data matches the Prisma model
       const sanitizedListing = {
@@ -42,7 +42,7 @@ async function generateListings(formData: FormData) {
       createdCount++;
       console.log(`Created listing ${createdCount} of ${listings.length}`);
     }
-    
+
     console.log(`Finished creating ${createdCount} listings`);
     revalidatePath('/listings'); // Adjust the path as needed
     return `Successfully generated and saved ${createdCount} listings!`;
@@ -53,11 +53,16 @@ async function generateListings(formData: FormData) {
 }
 
 function generateListingImages(count: number) {
-  return Array.from({ length: count }, (_, index) => ({
-    url: `/placeholderImages/image_${Math.floor(Math.random() * 30) + 1}.jpg`,
-    category: getRandomElement(['General', 'Bedroom', 'Kitchen', 'Bathroom', 'Exterior']),
-    rank: index,
-  }));
+  const availableImages = Array.from({ length: 30 }, (_, index) => index + 1);
+  return Array.from({ length: count }, () => {
+    const randomIndex = Math.floor(Math.random() * availableImages.length);
+    const selectedImage = availableImages.splice(randomIndex, 1)[0];
+    return {
+      url: `/placeholderImages/image_${selectedImage}.jpg`,
+      category: getRandomElement(['General', 'Bedroom', 'Kitchen', 'Bathroom', 'Exterior']),
+      rank: availableImages.length,
+    };
+  });
 }
 
 function generateBedrooms(count: number) {

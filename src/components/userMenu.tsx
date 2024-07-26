@@ -1,3 +1,4 @@
+// Handle setInterval crash
 'use client'
 import Image from 'next/image';
 import React, { useEffect, useState, useCallback } from 'react';
@@ -36,9 +37,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   useEffect(() => {
     fetchNotifications();
 
-    const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
+    //const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
 
-    return () => clearInterval(intervalId);
+    //return () => clearInterval(intervalId);
   }, [fetchNotifications]);
 
   const handleImageUpdate = useCallback(() => {
@@ -53,16 +54,15 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }, [canUpdate, lastUpdateTime, updateUserImage]);
 
+
   const handleNotificationClick = async (notificationId: string) => {
+    setNotifications(prevNotifications =>
+      prevNotifications.map(notification =>
+        notification.id === notificationId ? { ...notification, unread: false } : notification
+      )
+    );
+    setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
     const result = await updateNotification(notificationId, { unread: false });
-    if (result.success) {
-      setNotifications(prevNotifications =>
-        prevNotifications.map(notification =>
-          notification.id === notificationId ? { ...notification, unread: false } : notification
-        )
-      );
-      setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
-    }
   }
 
   const handleNotificationDelete = async (notificationId: string) => {
@@ -89,6 +89,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             <PopoverContent>
               <div className='flex flex-col'>
                 <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link>
+                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/searches'>Searches</Link>
+                {/* <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/bookings'>Bookings</Link> */}
                 <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="notifications">

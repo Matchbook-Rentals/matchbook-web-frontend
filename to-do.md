@@ -2,17 +2,23 @@
 
 ## TONIGHT
 
-// Add subgoals to this markdwown to onmouseenter mark as read, onClick delete notification
-[X] 1. URL TO TAB
-1.1 on mouseenter mark as read
-[ ] 2. Applications Tab
-   [X] 2.1 getHousingRequests server action
-   [X] 2.2 ApplicationsSidebar component
-   [X] 2.3 ApplicationCard component
-   [ ] 2.4 ApplicationDisplay component
-   [X] 2.5 Move reqs GET to a server component/ or just higher component to persist through tab switch
+[X] 1. Finish application summary
 
-[ ] 3. GRid of tiles
+[] 2. Trip Editor
+
+[] 3. New Dashboard
+
+[] 4. Add other users&application to housingRequest
+
+[ ] 5. Errors for client side validation 
+
+
+store in db, fetch on host side
+
+Check for trip specific application
+        Check for default application
+If application load to application tab
+If no leave blank
 
 ## Matching (Trip View)
 

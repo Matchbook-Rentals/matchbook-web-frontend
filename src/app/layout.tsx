@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
-        <body className={lora.className}>{children}</body>
+        <body className={lora.className}>
+          <Toaster />
+          <main> {children} </main>
+        </body>
       </html>
     </ClerkProvider>
   );

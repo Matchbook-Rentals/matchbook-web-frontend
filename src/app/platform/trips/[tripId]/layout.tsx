@@ -2,15 +2,16 @@ import React from 'react'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache';
 import TripContextProvider from '@/contexts/trip-context-provider';
-import { ListingAndImages, TripAndMatches } from '@/types';
+import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { HousingRequest } from '@prisma/client';
 import { createNotification, deleteNotification } from '@/app/actions/notifications';
+import { getTripApplication } from '@/app/actions/applications';
 
 // Update this fx so that it includes favorites (a relation to the trip model)
 const pullTripFromDb = async (tripId: string): Promise<TripAndMatches | undefined> => {
   'use server'
 
-  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, housingRequests: true, dislikes: true } })
+  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, housingRequests: true, dislikes: true, allParticipants: true } })
 
   if (trip) {
     if (!trip.latitude || !trip.longitude) {
@@ -141,7 +142,6 @@ const createDbFavorite = async (tripId: string, listingId: string): Promise<stri
     throw error;
   }
 }
-
 
 const deleteDbFavorite = async (favoriteId: string) => {
   'use server'
@@ -279,7 +279,7 @@ const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
       }
     });
 
-   let deleted = await prisma.notification.delete({
+    let deleted = await prisma.notification.delete({
       where: {
         actionType_actionId: {
           actionType: 'housingRequest',
@@ -303,6 +303,13 @@ const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
 export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
   const trip = await pullTripFromDb(params.tripId);
   if (!trip) { return <p> NO TRIP FOUND </p> }
+  const response = await getTripApplication(trip.id)
+  let hasApplication = false
+  let application: ApplicationWithArrays | null = null
+  if (response.success && response.application) {
+    hasApplication = true
+    application = response.application as ApplicationWithArrays
+  }
 
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
 
@@ -310,6 +317,8 @@ export default async function TripLayout({ children, params }: { children: React
   return (
     <TripContextProvider
       tripData={trip}
+      hasApplicationData={hasApplication}
+      application={application}
       listingData={listings}
       pullTripFromDb={pullTripFromDb}
       createDbFavorite={createDbFavorite}

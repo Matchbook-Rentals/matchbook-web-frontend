@@ -67,7 +67,7 @@ const NewPossibilitiesTab: React.FC = () => {
       setLookup(prev => {
         let newFavs = new Map(prev.favMap);
         newFavs.delete(lastAction.listing.id)
-        return {...prev, favMap: newFavs}
+        return { ...prev, favMap: newFavs }
       })
     }
     if (lastAction.action === 'dislike') {
@@ -75,7 +75,7 @@ const NewPossibilitiesTab: React.FC = () => {
       setLookup(prev => {
         let newDislikes = new Set(prev.dislikedIds);
         newDislikes.delete(lastAction.listing.id)
-        return {...prev, dislikedIds: newDislikes}
+        return { ...prev, dislikedIds: newDislikes }
       })
     }
   };
@@ -135,10 +135,10 @@ const NewPossibilitiesTab: React.FC = () => {
         rentPerMonth={showListings[0]?.shortestLeasePrice}
         distance={2.9}
       />
-       <DescriptionAndAmenities
+      <DescriptionAndAmenities
         description={showListings[0]?.description}
         amenities={getListingAmenities(showListings[0])}
-      /> 
+      />
     </div>
   );
 };

@@ -5,11 +5,11 @@ import { auth } from '@clerk/nextjs/server'
 import { Notification, Prisma } from '@prisma/client'
 
 
-type GetNotificationsResponse = 
+type GetNotificationsResponse =
   | { success: true; notifications: Notification[] }
   | { success: false; error: string };
 
-type CreateNotificationResponse = 
+type CreateNotificationResponse =
   | { success: true; notification: Notification }
   | { success: false; error: string };
 

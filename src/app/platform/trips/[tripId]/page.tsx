@@ -21,56 +21,56 @@ const TripIdPage: React.FC = ({ params }) => {
 
 
   let tabTextSize = 'text-lg'
-const tabs = [
-  {
-    value: "new-possibilities",
-    label: "New Possibilities",
-    content: <NewPossibilitiesTab />,
-    textSize: tabTextSize,
-  },
-  {
-    value: "properties-you-love",
-    label: "Properties You Love",
-    content: <PropertiesYouLoveTab />,
-    textSize: tabTextSize,
-  },
-  {
-    value: "matches",
-    label: "Matches",
-    content: (
-      <CardWithHeader
-        title="Matches"
-        content={<div>Matches content goes here.</div>}
-      />
-    ),
-    textSize: tabTextSize,
-  },
-  {
-    value: "dislikes",
-    label: "Dislikes",
-    content: <DislikedProperties />,
-    textSize: tabTextSize,
-  },
-  {
-    value: "trip-editor",
-    label: "Trip Editor",
-    content: (
-      <CardWithHeader
-        title="Trip Editor"
-        content={<div>Trip Editor content goes here.</div>}
-      />
-    ),
-    textSize: tabTextSize,
-  },
-  {
-    value: "applications",
-    label: "Applications",
-    content: (
-    <ApplicationTab />
-    ),
-    textSize: tabTextSize,
-  },
-];
+  const tabs = [
+    {
+      value: "new-possibilities",
+      label: "New Possibilities",
+      content: <NewPossibilitiesTab />,
+      textSize: tabTextSize,
+    },
+    {
+      value: "properties-you-love",
+      label: "Properties You Love",
+      content: <PropertiesYouLoveTab />,
+      textSize: tabTextSize,
+    },
+    {
+      value: "matches",
+      label: "Matches",
+      content: (
+        <CardWithHeader
+          title="Matches"
+          content={<div>Matches content goes here.</div>}
+        />
+      ),
+      textSize: tabTextSize,
+    },
+    {
+      value: "dislikes",
+      label: "Dislikes",
+      content: <DislikedProperties />,
+      textSize: tabTextSize,
+    },
+    {
+      value: "trip-editor",
+      label: "Trip Editor",
+      content: (
+        <CardWithHeader
+          title="Trip Editor"
+          content={<div>Trip Editor content goes here.</div>}
+        />
+      ),
+      textSize: tabTextSize,
+    },
+    {
+      value: "applications",
+      label: "Application",
+      content: (
+        <ApplicationTab />
+      ),
+      textSize: tabTextSize,
+    },
+  ];
 
   return (
     <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto'>
