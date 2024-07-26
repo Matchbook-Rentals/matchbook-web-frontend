@@ -75,8 +75,8 @@ export default function PropertiesYouLoveTab() {
 
   return (
     <>
-      {/* <button onClick={() => setHasApplication(false)}>SET NO APP</button>
-      {hasApplication.toString()} */}
+      <button onClick={() => setHasApplication(false)}>SET NO APP</button>
+      {hasApplication.toString()}
       {requestedListings.length > 0 &&
         <CustomAccordion
           title="Submitted Applications"

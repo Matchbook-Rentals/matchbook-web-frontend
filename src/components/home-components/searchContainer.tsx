@@ -16,7 +16,7 @@ type SearchContainerProps = {
 
 export default function SearchContainer({ createTrip }: SearchContainerProps) {
 
-  const [destination, setDestination] = useState( {locationString: '', latitude: 0, longitude: 0 });
+  const [destination, setDestination] = useState({ locationString: '', latitude: 0, longitude: 0 });
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
