@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchContextProvider } from '@/contexts/search-context-proivder';
+import { SearchContextProvider } from '@/contexts/search-context-provider';
 import { getTripsInSearchStatus } from '@/app/actions/trips';
 
 export default async function SearchesLayout({

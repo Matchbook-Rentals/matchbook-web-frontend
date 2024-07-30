@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchContext } from '@/contexts/search-context-proivder';
+import { useSearchContext } from '@/contexts/search-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
 
@@ -24,7 +24,7 @@ const MapView: React.FC = () => {
   const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
 
   return (
-    <div className="mx-auto px-4 flex">
+    <div className="mx-auto px-2 flex gap-x-4">
       <div className="w-1/2">
         <SearchListingsGrid
           listings={state.listings}

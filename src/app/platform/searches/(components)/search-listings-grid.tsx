@@ -1,54 +1,61 @@
-import React from 'react';
-import ListingHorizontalCard from '@/components/ui/listing-horizontal-card';
+import React, { useEffect, useRef, useState } from 'react';
 import { ListingAndImages } from '@/types';
+import { SearchListingCard } from './search-listing-card';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
-  currentPage: number;
-  setCurrentPage: (pageNumber: number) => void;
 }
 
-const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings, currentPage, setCurrentPage }) => {
-  const listingsPerPage = 8;
+const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
+  const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
+  const [page, setPage] = useState(1);
+  const loader = useRef(null);
 
-  const indexOfLastListing = currentPage * listingsPerPage;
-  const indexOfFirstListing = indexOfLastListing - listingsPerPage;
-  const currentListings = listings.slice(indexOfFirstListing, indexOfLastListing);
+  const listingsPerPage = 10;
 
-  const totalPages = Math.ceil(listings.length / listingsPerPage);
+  useEffect(() => {
+    setDisplayedListings(listings.slice(0, listingsPerPage));
+  }, [listings]);
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, { threshold: 1 });
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  const handleObserver = (entities: IntersectionObserverEntry[]) => {
+    const target = entities[0];
+    if (target.isIntersecting) {
+      loadMore();
+    }
+  };
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    const nextListings = listings.slice(0, nextPage * listingsPerPage);
+    setDisplayedListings(nextListings);
+    setPage(nextPage);
   };
 
   return (
-    <div>
+    <ScrollArea className="h-[600px] w-full rounded-md border p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {currentListings.map((listing) => (
-          <ListingHorizontalCard
+        {displayedListings.map((listing) => (
+          <SearchListingCard
             key={listing.id}
-            imgSrc={listing.listingImages[0]?.url || '/placeholder-image.jpg'}
-            title={listing.title}
-            status={listing.status}
-            address={listing.locationString}
+            listing={listing}
           />
         ))}
       </div>
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-center">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              className={`mx-1 px-3 py-1 rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                }`}
-            >
-              {pageNumber}
-            </button>
-          ))}
+      {displayedListings.length < listings.length && (
+        <div ref={loader} className="mt-4 text-center">
+          Loading more...
         </div>
       )}
-    </div>
+    </ScrollArea>
   );
 };
 

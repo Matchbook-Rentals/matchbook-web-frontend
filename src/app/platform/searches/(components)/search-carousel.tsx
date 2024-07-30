@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useSearchContext } from '@/contexts/search-context-proivder';
+import React, { useState, useEffect } from 'react';
+import { useSearchContext } from '@/contexts/search-context-provider';
 import SearchCardSmall from './search-card-small';
 import {
   Carousel,
@@ -25,6 +25,7 @@ const SearchCarousel: React.FC = () => {
   const handleClick = (search: TripAndMatches) => {
     if (state.currentSearch?.id !== search.id) {
       actions.setCurrentSearch(search);
+      actions.fetchListings(search.latitude, search.longitude, 100);
     }
     setIsOpen("");
   };

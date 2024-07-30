@@ -7,7 +7,7 @@ import { CrossIcon, RewindIcon } from 'lucide-react';
 import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
-import { useSearchContext } from '@/contexts/search-context-proivder';
+import { useSearchContext } from '@/contexts/search-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
@@ -21,7 +21,7 @@ const MatchViewTab: React.FC = () => {
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
-    const actionId = await createDbFavorite(listing.id, state.currentSearch?.id);
+    const actionId = await createDbFavorite(state.currentSearch?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'favorite', actionId }]);
     setLookup(prev => ({
       ...prev,
@@ -30,7 +30,7 @@ const MatchViewTab: React.FC = () => {
   };
 
   const handleReject = async (listing: ListingAndImages) => {
-    const actionId = await createDbDislike(listing.id);
+    const actionId = await createDbDislike(state.currentSearch?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'dislike', actionId }]);
     setLookup(prev => ({
       ...prev,
