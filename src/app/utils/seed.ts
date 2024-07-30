@@ -1,11 +1,25 @@
-
 function generateRandomListings(count = 200) {
   const listings = [];
 
+  // Function to generate random coordinates within 100 miles
+  function generateRandomCoordinates(baseLat: number, baseLon: number, radiusMiles: number) {
+    const earthRadiusMiles = 3959; // Earth's radius in miles
+    const maxAngle = radiusMiles / earthRadiusMiles;
 
+    const u = Math.random();
+    const v = Math.random();
 
-  // Please replace this logic with a fx so that I may call it in a loop and get different result. Please one for washer and one for dryer
+    const w = maxAngle * Math.sqrt(u);
+    const t = 2 * Math.PI * v;
 
+    const x = w * Math.cos(t);
+    const y = w * Math.sin(t);
+
+    const newLat = baseLat + y * (180 / Math.PI);
+    const newLon = baseLon + x * (180 / Math.PI) / Math.cos(baseLat * Math.PI / 180);
+
+    return { latitude: newLat, longitude: newLon };
+  }
 
   for (let i = 0; i < count; i++) {
 
@@ -44,6 +58,8 @@ function generateRandomListings(count = 200) {
       dryerInComplex = true;
     }
 
+    const { latitude, longitude } = generateRandomCoordinates(40.7128, -74.0060, 100);
+
     const listing = {
       title: generateRandomTitle(),
       description: generateRandomDescription(),
@@ -52,8 +68,8 @@ function generateRandomListings(count = 200) {
       roomCount: getRandomInt(1, 5),
       bathroomCount: getRandomInt(1, 4),
       guestCount: getRandomInt(0, 6),
-      latitude: 40.7128,
-      longitude: -74.0060,
+      latitude: latitude,
+      longitude: longitude,
       locationString: generateRandomAddress(),
       city: "",
       state: "",

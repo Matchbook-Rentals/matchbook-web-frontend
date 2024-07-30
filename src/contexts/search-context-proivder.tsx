@@ -1,8 +1,14 @@
 'use client';
 
-import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { ListingAndImages, TripAndMatches } from '@/types';
 import { pullListingsFromDb } from '@/app/actions/listings';
+
+interface ViewedListing {
+  listing: ListingAndImages;
+  action: 'favorite' | 'dislike';
+  actionId: string;
+}
 
 interface SearchContextType {
   state: {
@@ -10,19 +16,22 @@ interface SearchContextType {
     currentSearch: TripAndMatches | null;
     listings: ListingAndImages[];
     showListings: ListingAndImages[];
-    viewedListings: ListingAndImages[];
+    viewedListings: ViewedListing[];
     likedListings: ListingAndImages[];
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
+    isLoading: boolean;
+    lookup: {
+      favIds: Set<string>;
+      dislikedIds: Set<string>;
+      requestedIds: Set<string>;
+    };
   };
   actions: {
     setCurrentSearch: React.Dispatch<React.SetStateAction<TripAndMatches | null>>;
-    setViewedListings: React.Dispatch<React.SetStateAction<ListingAndImages[]>>;
-  };
-  lookup: {
-    favIds: Set<string>;
-    dislikedIds: Set<string>;
-    requestedIds: Set<string>;
+    setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
+    fetchListings: () => Promise<void>;
+    setLookup: React.Dispatch<React.SetStateAction<SearchContextType['state']['lookup']>>;
   };
 }
 
@@ -44,14 +53,27 @@ interface SearchContextProviderProps {
 export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches }) => {
   const [currentSearch, setCurrentSearch] = useState<TripAndMatches | null>(null);
   const [listings, setListings] = useState<ListingAndImages[]>([]);
-  const [viewedListings, setViewedListings] = useState<ListingAndImages[]>([]);
+  const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
+    favIds: new Set(),
+    dislikedIds: new Set(),
+    requestedIds: new Set()
+  });
 
-  const lookup = useMemo(() => ({
-    favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
-    dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
-    requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId))
-  }), [currentSearch]);
+  const updateLookup = useCallback(() => {
+    if (currentSearch) {
+      setLookup({
+        favIds: new Set(currentSearch.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
+        dislikedIds: new Set(currentSearch.dislikes.map(dislike => dislike.listingId)),
+        requestedIds: new Set(currentSearch.housingRequests.map(request => request.listingId))
+      });
+    }
+  }, [currentSearch]);
 
+  useEffect(() => {
+    updateLookup();
+  }, [currentSearch, updateLookup]);
 
   const showListings = useMemo(() => listings.filter((listing) => !lookup.favIds.has(listing.id)), [listings, lookup.favIds]);
 
@@ -71,15 +93,20 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       .filter((listing) => lookup.requestedIds.has(listing.id))
   }, [lookup.requestedIds, listings]);
 
-  useEffect(() => {
-    const updateListings = async () => {
-      if (currentSearch) {
+  const fetchListings = async () => {
+    if (currentSearch) {
+      setIsLoading(true);
+      try {
         const results = await pullListingsFromDb(currentSearch.latitude, currentSearch.longitude, 100);
         setListings(results);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    }
+  };
 
-    updateListings();
+  useEffect(() => {
+    fetchListings();
   }, [currentSearch]);
 
   const contextValue: SearchContextType = {
@@ -91,13 +118,16 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       likedListings,
       dislikedListings,
       requestedListings,
-      viewedListings
+      viewedListings,
+      isLoading,
+      lookup
     },
     actions: {
       setCurrentSearch,
-      setViewedListings
-    },
-    lookup
+      setViewedListings,
+      fetchListings,
+      setLookup
+    }
   };
 
   return (

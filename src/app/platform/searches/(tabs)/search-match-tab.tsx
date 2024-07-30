@@ -9,22 +9,52 @@ import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
 import { useSearchContext } from '@/contexts/search-context-proivder';
 import { ListingAndImages } from '@/types';
+import LoadingSpinner from '@/components/ui/spinner';
+import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
+import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
 
 const MatchViewTab: React.FC = () => {
-  const { state, actions, lookup } = useSearchContext();
-  const { showListings, likedListings, dislikedListings, listings, viewedListings } = state;
+  const { state, actions } = useSearchContext();
+  const { showListings, listings, viewedListings, lookup } = state;
+  const { favIds, dislikedIds } = lookup;
+  const { setViewedListings, setLookup } = actions;
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
-    // Implement like functionality using SearchContext
+    const actionId = await createDbFavorite(listing.id, state.currentSearch?.id);
+    setViewedListings(prev => [...prev, { listing, action: 'favorite', actionId }]);
+    setLookup(prev => ({
+      ...prev,
+      favIds: new Set([...prev.favIds, listing.id])
+    }));
   };
 
   const handleReject = async (listing: ListingAndImages) => {
-    // Implement reject functionality using SearchContext
+    const actionId = await createDbDislike(listing.id);
+    setViewedListings(prev => [...prev, { listing, action: 'dislike', actionId }]);
+    setLookup(prev => ({
+      ...prev,
+      dislikedIds: new Set([...prev.dislikedIds, listing.id])
+    }));
   };
 
   const handleBack = async () => {
-    // Implement back functionality using SearchContext
+    let lastAction = viewedListings[viewedListings.length - 1];
+    setViewedListings(prev => prev.slice(0, -1));
+
+    if (lastAction.action === 'favorite') {
+      await deleteDbFavorite(lastAction.actionId)
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds].filter(id => id !== lastAction.listing.id))
+      }));
+    } else if (lastAction.action === 'dislike') {
+      await deleteDbDislike(lastAction.actionId)
+      setLookup(prev => ({
+        ...prev,
+        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== lastAction.listing.id))
+      }));
+    }
   };
 
   const getListingAmenities = (listing: any) => {
@@ -38,6 +68,9 @@ const MatchViewTab: React.FC = () => {
   };
 
   // Early returns for edge cases
+  if (state.isLoading) {
+    return <LoadingSpinner />;
+  }
   if (showListings === undefined) {
     return null;
   }
@@ -80,7 +113,7 @@ const MatchViewTab: React.FC = () => {
         numBath={showListings[0]?.bathroomCount}
         numBeds={showListings[0]?.roomCount}
         rentPerMonth={showListings[0]?.shortestLeasePrice}
-        distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(2)) : undefined}
+        distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
