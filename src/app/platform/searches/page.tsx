@@ -3,6 +3,8 @@
 import React from 'react';
 import SearchCarousel from './(components)/search-carousel';
 import TabSelector from '@/components/ui/tab-selector';
+import { useSearchContext } from '@/contexts/search-context-proivder';
+import MatchViewTab from './(tabs)/search-match-tab';
 
 interface Tab {
   value: string;
@@ -14,9 +16,11 @@ interface Tab {
 }
 
 const SearchesPage: React.FC = () => {
+  const { state, actions } = useSearchContext();
+
   const tabSize = 'text-xl'
   const tabs: Tab[] = [
-    { label: 'Match View', value: 'match-view', content: <div>Match View</div>, textSize: tabSize },
+    { label: 'Match View', value: 'match-view', content: state.currentSearch ? <MatchViewTab /> : null, textSize: tabSize },
     { label: 'Map View', value: 'map-view', content: <div>Map View</div>, textSize: tabSize },
     { label: 'Short List', value: 'short-list', content: <div>Short List</div>, textSize: tabSize },
     { label: 'Matches', value: 'matches', content: <div>Matches</div>, textSize: tabSize },

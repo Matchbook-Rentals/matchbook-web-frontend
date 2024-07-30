@@ -4,7 +4,7 @@
 
 [X] 1. Finish application summary
 
-[] 2. Trip Editor
+[ ] 2. MAP VIEW
 
 [] 3. New Dashboard
 

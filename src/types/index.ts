@@ -10,6 +10,7 @@ export interface TripAndMatches extends Trip {
 export interface ListingAndImages extends Listing {
   listingImages: ListingImage[]
   bedrooms?: Bedroom[]
+  distance?: number
 };
 
 export interface RequestWithUser extends HousingRequest {
