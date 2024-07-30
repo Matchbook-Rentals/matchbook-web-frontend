@@ -9,11 +9,11 @@ interface MapMarker {
 
 interface SearchMapProps {
   center: { lat: number; lng: number };
-  markers: MapMarker[];
+  markers?: MapMarker[]; // Made optional
   zoom?: number;
 }
 
-const SearchMap: React.FC<SearchMapProps> = ({ center, markers, zoom = 1 }) => {
+const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, markers = [], zoom = 1 }) => {
   const mapContainerStyle = {
     width: '100%',
     height: '100%',
@@ -21,6 +21,7 @@ const SearchMap: React.FC<SearchMapProps> = ({ center, markers, zoom = 1 }) => {
 
   return (
     <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={center}
