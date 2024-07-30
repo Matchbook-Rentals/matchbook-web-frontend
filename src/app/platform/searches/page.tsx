@@ -27,10 +27,10 @@ const SearchesPage: React.FC = () => {
     { label: 'Application', value: 'application', content: <div>Application</div>, textSize: tabSize },
   ];
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
       <h1 className="text-2xl font-bold mb-2">Active Searches</h1>
       <SearchCarousel />
-      <TabSelector tabs={tabs} className='w-[55%]' tabsListClassName='flex justify-between' />
+      <TabSelector tabs={tabs} className='w-full' tabsListClassName='flex justify-between w-2/3 mx-auto' />
     </div>
   );
 };
