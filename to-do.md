@@ -5,8 +5,10 @@
 [X] 1. Finish application summary
 
 [ ] 2. MAP VIEW
+       Change cards to match design
+       Add actions
 
-[] 3. New Dashboard
+[ ] 3. New Dashboard
 
 [] 4. Add other users&application to housingRequest
 

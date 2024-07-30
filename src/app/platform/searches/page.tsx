@@ -23,7 +23,7 @@ const SearchesPage: React.FC = () => {
   const tabSize = 'text-xl'
   const tabs: Tab[] = [
     { label: 'Match View', value: 'match-view', content: state.currentSearch ? <MatchViewTab /> : null, textSize: tabSize },
-    { label: 'Map View', value: 'map-view', content: state.currentSearch ? <MapView /> : null, textSize: tabSize, forceMount: true },
+    { label: 'Map View', value: 'map-view', content: state.currentSearch ? <MapView /> : null, textSize: tabSize },
     { label: 'Short List', value: 'short-list', content: <div>Short List</div>, textSize: tabSize },
     { label: 'Matches', value: 'matches', content: <div>Matches</div>, textSize: tabSize },
     { label: 'Application', value: 'application', content: <div>Application</div>, textSize: tabSize },

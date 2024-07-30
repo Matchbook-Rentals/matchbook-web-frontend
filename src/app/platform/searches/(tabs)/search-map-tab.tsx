@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchContext } from '@/contexts/search-context-proivder';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
@@ -11,6 +11,8 @@ interface MapMarker {
 
 const MapView: React.FC = () => {
   const { state } = useSearchContext();
+  const [currentPage, setCurrentPage] = useState(1);
+
   const center = { lat: state.currentSearch?.latitude, lng: state.currentSearch?.longitude };
   const markers: MapMarker[] = state.listings.map((listing) => ({
     title: listing.title,
@@ -24,7 +26,11 @@ const MapView: React.FC = () => {
   return (
     <div className="mx-auto px-4 flex">
       <div className="w-1/2">
-        <SearchListingsGrid listings={state.listings} />
+        <SearchListingsGrid
+          listings={state.listings}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
       <div className="w-1/2">
         <SearchMap

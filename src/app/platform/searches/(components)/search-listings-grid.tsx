@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ListingHorizontalCard from '@/components/ui/listing-horizontal-card';
-import { Listing } from '@/types/listing'; // Assuming you have a Listing type defined
+import { ListingAndImages } from '@/types';
 
 interface SearchListingsGridProps {
-  listings: Listing[];
+  listings: ListingAndImages[];
+  currentPage: number;
+  setCurrentPage: (pageNumber: number) => void;
 }
 
-const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings, currentPage, setCurrentPage }) => {
   const listingsPerPage = 8;
 
   const indexOfLastListing = currentPage * listingsPerPage;
