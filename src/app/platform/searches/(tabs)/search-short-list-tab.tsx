@@ -51,7 +51,6 @@ export default function ShortListTab() {
         description: "There was an error sending your application. Please try again.",
         variant: "destructive",
       });
-      console.log(response.error)
     }
   }
 

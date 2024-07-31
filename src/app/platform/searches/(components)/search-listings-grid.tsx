@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ListingAndImages } from '@/types';
 import { SearchListingCard } from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSearchContext } from '@/contexts/search-context-provider';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -9,6 +10,7 @@ interface SearchListingsGridProps {
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
+  const { state } = useSearchContext();
   const [page, setPage] = useState(1);
   const loader = useRef(null);
 
@@ -40,6 +42,19 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
     setPage(nextPage);
   };
 
+  const getListingStatus = (listing: ListingAndImages) => {
+    if (state.lookup.requestedIds.has(listing.id)) {
+      return 'applied'
+    }
+    if (state.lookup.dislikedIds.has(listing.id)) {
+      return 'dislike'
+    }
+    if (state.lookup.favIds.has(listing.id)) {
+      return 'favorite'
+    }
+    return 'none'
+  }
+
   return (
     <ScrollArea className="h-[600px] w-full rounded-md border p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -47,6 +62,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
           <SearchListingCard
             key={listing.id}
             listing={listing}
+            status={getListingStatus(listing)}
           />
         ))}
       </div>

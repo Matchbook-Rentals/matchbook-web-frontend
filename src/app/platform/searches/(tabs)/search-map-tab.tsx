@@ -11,13 +11,32 @@ interface MapMarker {
 
 const MapView: React.FC = () => {
   const { state } = useSearchContext();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { listings } = state;
+
+  const getListingStatus = (listing: ListingAndImages) => {
+    if (state.lookup.requestedIds.has(listing.id)) {
+      return 'blue'
+    }
+    if (state.lookup.dislikedIds.has(listing.id)) {
+      return 'black'
+    }
+    if (state.lookup.favIds.has(listing.id)) {
+      return 'green'
+    }
+    return 'red'
+  }
+
+  const listingsWithStatus = listings.map((listing) => ({
+    ...listing,
+    status: getListingStatus(listing)
+  }));
 
   const center = { lat: state.currentSearch?.latitude, lng: state.currentSearch?.longitude };
   const markers: MapMarker[] = state.listings.map((listing) => ({
     title: listing.title,
     lat: listing.latitude,
-    lng: listing.longitude
+    lng: listing.longitude,
+    color: getListingStatus(listing)
   }));
 
   const defaultCenter = { lat: 0, lng: 0 };
@@ -28,8 +47,6 @@ const MapView: React.FC = () => {
       <div className="w-1/2">
         <SearchListingsGrid
           listings={state.listings}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
         />
       </div>
       <div className="w-1/2">
