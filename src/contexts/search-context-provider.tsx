@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages, TripAndMatches } from '@/types';
+import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { pullListingsFromDb } from '@/app/actions/listings';
 
 interface ViewedListing {
@@ -21,6 +21,8 @@ interface SearchContextType {
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
     isLoading: boolean;
+    hasApplication: boolean;
+    application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
       dislikedIds: Set<string>;
@@ -30,14 +32,17 @@ interface SearchContextType {
   actions: {
     setCurrentSearch: (search: TripAndMatches | null) => void;
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
-    fetchListings: () => Promise<void>;
-    updateLookup: () => void;
+    fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
+    setLookup: React.Dispatch<React.SetStateAction<SearchContextType['state']['lookup']>>;
+    setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 interface SearchContextProviderProps {
   children: ReactNode;
   activeSearches: TripAndMatches[];
+  hasApplicationData: boolean;
+  application: ApplicationWithArrays | null;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -50,62 +55,69 @@ export const useSearchContext = () => {
   return context;
 };
 
-export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches }) => {
+export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches, hasApplicationData, application }) => {
   const [currentSearch, setCurrentSearch] = useState<TripAndMatches | null>(null);
   const [listings, setListings] = useState<ListingAndImages[]>([]);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasApplication, setHasApplication] = useState(hasApplicationData);
   const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
     requestedIds: new Set()
   });
 
-  const updateLookup = useCallback(() => {
-    if (currentSearch) {
-      setLookup({
-        favIds: new Set(currentSearch.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
-        dislikedIds: new Set(currentSearch.dislikes.map(dislike => dislike.listingId)),
-        requestedIds: new Set(currentSearch.housingRequests.map(request => request.listingId))
-      });
-    }
-  }, [currentSearch]);
 
-  const fetchListings = useCallback(async () => {
-    if (currentSearch) {
-      setIsLoading(true);
-      try {
-        const results = await pullListingsFromDb(currentSearch.latitude, currentSearch.longitude, 100);
-        setListings(results);
-      } finally {
-        setIsLoading(false);
-      }
+  const fetchListings = async (lat: number, lng: number, radius: number) => {
+    setIsLoading(true);
+    try {
+      const results = await pullListingsFromDb(lat, lng, radius);
+      setListings(results);
+    } finally {
+      setIsLoading(false);
     }
-  }, [currentSearch]);
+  };
 
   useEffect(() => {
-    updateLookup();
-    fetchListings();
-  }, [currentSearch, updateLookup, fetchListings]);
+    setLookup({
+      favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
+      dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
+      requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId))
+    });
+  }, [currentSearch]);
+
+
+  const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
   const showListings = useMemo(() =>
-    listings.filter(listing => !lookup.favIds.has(listing.id) && !lookup.dislikedIds.has(listing.id) && !lookup.requestedIds.has(listing.id)),
+    listings.filter(listing =>
+      !lookup.favIds.has(listing.id) &&
+      !lookup.dislikedIds.has(listing.id) &&
+      !lookup.requestedIds.has(listing.id)
+    ),
     [listings, lookup]
   );
 
   const likedListings = useMemo(() =>
-    listings.filter(listing => lookup.favIds.has(listing.id)),
-    [listings, lookup.favIds]
+    listings
+      .filter(listing => !lookup.requestedIds.has(listing.id))
+      .filter(listing => lookup.favIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id)),
+    [listings, lookup.favIds, lookup.requestedIds, getRank]
   );
 
   const dislikedListings = useMemo(() =>
-    listings.filter(listing => lookup.dislikedIds.has(listing.id)),
-    [listings, lookup.dislikedIds]
+    listings
+      .filter(listing => lookup.dislikedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id)),
+    [listings, lookup.dislikedIds, getRank]
   );
 
   const requestedListings = useMemo(() =>
-    listings.filter(listing => lookup.requestedIds.has(listing.id)),
-    [listings, lookup.requestedIds]
+    listings
+      .filter(listing => lookup.requestedIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id)),
+    [listings, lookup.requestedIds, getRank]
   );
 
   const contextValue: SearchContextType = {
@@ -119,7 +131,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       requestedListings,
       viewedListings,
       isLoading,
-      lookup
+      lookup,
+      hasApplication,
+      application
     },
     actions: {
       setCurrentSearch: (search: TripAndMatches | null) => {
@@ -128,7 +142,8 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       },
       setViewedListings,
       fetchListings,
-      updateLookup
+      setLookup,
+      setHasApplication,
     }
   };
 

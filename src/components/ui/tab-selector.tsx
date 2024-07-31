@@ -12,6 +12,7 @@ interface Tab {
   content: React.ReactNode;
   className?: string;
   textSize?: string;
+  forceMount?: boolean;
 }
 
 interface TabSelectorProps {
@@ -78,7 +79,7 @@ export default function TabSelector({
           ))}
         </TabsList>
         {tabs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value}>
+          <TabsContent key={tab.value} value={tab.value} forceMount={tab.forceMount || undefined}>
             {tab.content}
           </TabsContent>
         ))}

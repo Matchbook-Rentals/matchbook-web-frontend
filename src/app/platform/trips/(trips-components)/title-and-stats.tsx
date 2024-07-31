@@ -40,7 +40,7 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
             {numBeds} beds, {numBath} baths
           </span>
         )}
-        {distance !== undefined && <span className="text-md">{distance} mock miles</span>}
+        {distance !== undefined && <span className="text-md">{distance} miles from center point</span>}
       </div>
     </div>
   );

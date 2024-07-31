@@ -317,8 +317,6 @@ export default async function TripLayout({ children, params }: { children: React
   return (
     <TripContextProvider
       tripData={trip}
-      hasApplicationData={hasApplication}
-      application={application}
       listingData={listings}
       pullTripFromDb={pullTripFromDb}
       createDbFavorite={createDbFavorite}
