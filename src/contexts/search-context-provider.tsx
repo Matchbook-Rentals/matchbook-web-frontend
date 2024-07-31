@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages, TripAndMatches } from '@/types';
+import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { pullListingsFromDb } from '@/app/actions/listings';
 
 interface ViewedListing {
@@ -21,6 +21,8 @@ interface SearchContextType {
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
     isLoading: boolean;
+    hasApplication: boolean;
+    application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
       dislikedIds: Set<string>;
@@ -32,12 +34,15 @@ interface SearchContextType {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
     fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
     setLookup: React.Dispatch<React.SetStateAction<SearchContextType['state']['lookup']>>;
+    setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 interface SearchContextProviderProps {
   children: ReactNode;
   activeSearches: TripAndMatches[];
+  hasApplicationData: boolean;
+  application: ApplicationWithArrays | null;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -50,11 +55,12 @@ export const useSearchContext = () => {
   return context;
 };
 
-export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches }) => {
+export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches, hasApplicationData, application }) => {
   const [currentSearch, setCurrentSearch] = useState<TripAndMatches | null>(null);
   const [listings, setListings] = useState<ListingAndImages[]>([]);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasApplication, setHasApplication] = useState(hasApplicationData);
   const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
@@ -67,15 +73,18 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     try {
       const results = await pullListingsFromDb(lat, lng, radius);
       setListings(results);
-      setLookup({
-        favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
-        dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
-        requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId))
-      });
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setLookup({
+      favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
+      dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
+      requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId))
+    });
+  }, [currentSearch]);
 
 
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
@@ -122,7 +131,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       requestedListings,
       viewedListings,
       isLoading,
-      lookup
+      lookup,
+      hasApplication,
+      application
     },
     actions: {
       setCurrentSearch: (search: TripAndMatches | null) => {
@@ -131,7 +142,8 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       },
       setViewedListings,
       fetchListings,
-      setLookup
+      setLookup,
+      setHasApplication,
     }
   };
 

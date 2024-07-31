@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchContext } from '@/contexts/search-context-provider';
 import SearchCardSmall from './search-card-small';
 import {
@@ -9,6 +9,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import {
   Accordion,
@@ -21,6 +22,24 @@ import { TripAndMatches } from "@/types/";
 const SearchCarousel: React.FC = () => {
   const { state, actions } = useSearchContext();
   const [isOpen, setIsOpen] = useState<string>("item-1");
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    api.on("select", () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  useEffect(() => {
+    if (api && isOpen === "item-1") {
+      api.scrollTo(currentIndex);
+    }
+  }, [api, isOpen, currentIndex]);
 
   const handleClick = (search: TripAndMatches) => {
     if (state.currentSearch?.id !== search.id) {
@@ -35,7 +54,7 @@ const SearchCarousel: React.FC = () => {
       <AccordionItem className='' value="item-1">
         <AccordionTrigger className=' w-full  text-2xl font-bold mb-2 justify-center gap-x-4'>Active Searches</AccordionTrigger>
         <AccordionContent className='flex items-center justify-center'>
-          <Carousel className="w-full max-w-5xl" opts={{ slidesToScroll: 2 }}>
+          <Carousel className="w-full max-w-5xl" opts={{ slidesToScroll: 2 }} setApi={setApi}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {state.activeSearches.map((search) => (
                 <CarouselItem onClick={() => handleClick(search)} key={search.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4">

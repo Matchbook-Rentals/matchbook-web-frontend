@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
+import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 
 export default function ShortListTab() {
   const [isOpen, setIsOpen] = useState(true);
@@ -18,7 +19,7 @@ export default function ShortListTab() {
   const pathname = usePathname();
 
   const handleApply = async (listing: ListingAndImages) => {
-    if (!hasApplication) {
+    if (!state.hasApplication) {
       toast({
         title: "No Application Found",
         description: "You need to complete your application before applying to properties.",
@@ -38,7 +39,7 @@ export default function ShortListTab() {
       return { ...prev, requestedIds: newReqs }
     })
     try {
-      let response = await actions.createDbHousingRequest(trip, listing)
+      let response = await createDbHousingRequest(state.currentSearch, listing)
       toast({
         title: "Application Sent",
         description: "Your application has been sent to the host.",
@@ -50,6 +51,7 @@ export default function ShortListTab() {
         description: "There was an error sending your application. Please try again.",
         variant: "destructive",
       });
+      console.log(response.error)
     }
   }
 
@@ -59,7 +61,7 @@ export default function ShortListTab() {
       newReqs.delete(listing.id)
       return { ...prev, requestedIds: newReqs }
     })
-    await actions.deleteDbHousingRequest(trip.id, listing.id);
+    await deleteDbHousingRequest(state.currentSearch?.id, listing.id)
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
