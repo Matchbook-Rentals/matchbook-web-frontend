@@ -7,8 +7,12 @@
 [ ] 2. MAP VIEW
        Change cards to match design
        Add actions
+       remove console log
 
 [ ] 3. New Dashboard
+        Matchmaker
+        control bar, populate old data, use popovers, create double calendar
+        Matchbook
 
 [] 4. Add other users&application to housingRequest
 

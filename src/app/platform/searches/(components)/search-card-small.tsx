@@ -48,7 +48,7 @@ const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) =>
   const [stateFlagURL, setStateFlagURL] = React.useState(getStateFlagUrl(stateCode));
 
   return (
-    <Card className="overflow-hidden w-60 cursor-pointer ">
+    <Card className="overflow-hidden border-0 w-60 cursor-pointer ">
       <div className="h-40 relative">
         <Image
           src={stateFlagURL}

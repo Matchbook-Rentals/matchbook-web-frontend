@@ -1,13 +1,6 @@
 import React from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
-enum Status {
-  Favorite = 'favorite',
-  Dislike = 'dislike',
-  Applied = 'applied',
-  None = 'none'
-}
-
 interface MapMarker {
   lat: number;
   lng: number;
@@ -36,20 +29,6 @@ const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, mark
   const onLoad = React.useCallback((map: google.maps.Map) => {
     setMap(map);
   }, []);
-
-  const getBackgroundColor = (status: Status) => {
-    switch (status) {
-      case Status.Favorite:
-        return 'bg-primaryBrand' // Placeholder for favorite color
-      case Status.Dislike:
-        return 'bg-pinkBrand' // Placeholder for dislike color
-      case Status.Applied:
-        return 'bg-blueBrand' // Placeholder for applied color
-      case Status.None:
-      default:
-        return ''
-    }
-  }
 
   const onUnmount = React.useCallback(() => {
     setMap(null);

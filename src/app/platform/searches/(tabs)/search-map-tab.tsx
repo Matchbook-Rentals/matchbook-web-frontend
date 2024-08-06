@@ -43,7 +43,7 @@ const MapView: React.FC = () => {
   const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
 
   return (
-    <div className="mx-auto px-2 flex gap-x-4">
+    <div className="mx-auto px-2 w-full flex gap-x-4">
       <div className="w-1/2">
         <SearchListingsGrid
           listings={state.listings}
