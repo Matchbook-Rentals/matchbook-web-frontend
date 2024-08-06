@@ -120,7 +120,9 @@ const MatchViewTab: React.FC = () => {
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
-        amenities={getListingAmenities(showListings[0])} />
+        amenities={getListingAmenities(showListings[0])}
+        listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
+      />
     </div>
   );
 };
