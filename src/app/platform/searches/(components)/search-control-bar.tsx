@@ -31,7 +31,7 @@ const SearchControlBar: React.FC = () => {
             </Button>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-full">
+        <PopoverContent className="w-full p-0">
           <DateRangeSelector start={state.currentSearch?.startDate} end={state.currentSearch?.endDate} handleSave={actions.setSearch} />
         </PopoverContent>
       </Popover>
