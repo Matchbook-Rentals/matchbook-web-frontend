@@ -1,46 +1,51 @@
-import RatingStar from '@/components/ui/rating-star';
+import { Bedroom } from '@prisma/client';
 import React from 'react';
 
 interface TitleAndStatsProps {
   title?: string;
-  rating?: number;
-  numStays?: number;
   rentPerMonth?: number;
   numBeds?: number;
   numBath?: number;
+  sqft?: number;
+  deposit?: number;
   distance?: number;
+  bedrooms?: Bedroom[];
 }
 
 const TitleAndStats: React.FC<TitleAndStatsProps> = ({
-  title,
-  rating,
-  numStays,
-  rentPerMonth,
-  numBeds,
-  numBath,
-  distance,
+  title = 'Placeholder Title',
+  rentPerMonth = 0,
+  numBeds = 0,
+  numBath = 0,
+  sqft = 0,
+  deposit = 0,
+  distance = 0,
+  bedrooms = [],
 }) => {
-  return (
-    <div className="flex flex-wrap w-full justify-between items-start my-3">
-      <div className='flex w-1/2 justify-start gap-x-6'>
-        {title && <h2 className="text-3xl font-semibold">{title}</h2>}
-        {rating !== undefined && (
-          <div className='flex gap-x-2 items-center'>
-            <RatingStar size={35} rating={rating} />
-            <span className='text-xl'>{rating}</span>
-          </div>
-        )}
-        {numStays !== undefined && <span className='text-xl flex items-center'>{numStays} stays</span>}
-      </div>
+  const bedTypeCounts = bedrooms.reduce((acc, bedroom) => {
+    acc[bedroom.bedType] = (acc[bedroom.bedType] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
-      <div className='flex flex-col items-end'>
-        {rentPerMonth !== undefined && <span className="text-3xl">${rentPerMonth}/month</span>}
-        {numBeds !== undefined && numBath !== undefined && (
-          <span className="text-xl">
-            {numBeds} beds, {numBath} baths
-          </span>
-        )}
-        {distance !== undefined && <span className="text-md">{distance} miles from center point</span>}
+  const bedTypeString = Object.entries(bedTypeCounts)
+    .map(([type, count]) => `${count} ${type}${count > 1 ? 's' : ''}`)
+    .join(' | ');
+
+  return (
+    <div className="flex text-center justify-between w-4/5 py-1 mx-auto border-t border-b border-gray-300">
+      <div className="flex flex-col w-1/2">
+        <h2 className="text-3xl font-semibold">{title}</h2>
+        <p onClick={() => console.log(bedrooms)} className="text-xl text-gray-600 mt-2">
+          {numBeds} Bedrooms{bedTypeString && ` | ${bedTypeString}`}
+        </p>
+        <p className="text-xl text-gray-600">
+          {numBath} Baths | {sqft.toLocaleString()} Sqft
+        </p>
+      </div>
+      <div className="flex flex-col w-1/2">
+        <p className="text-3xl font-semibold">${rentPerMonth.toLocaleString()} / Month</p>
+        <p className="text-xl text-gray-600">${deposit.toLocaleString()} /Deposit</p>
+        <p className="text-xl text-gray-600">{distance} miles away</p>
       </div>
     </div>
   );

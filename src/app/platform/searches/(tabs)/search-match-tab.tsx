@@ -114,6 +114,9 @@ const MatchViewTab: React.FC = () => {
         numBeds={showListings[0]?.roomCount}
         rentPerMonth={showListings[0]?.shortestLeasePrice}
         distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
+        deposit={showListings[0]?.depositSize}
+        sqft={showListings[0]?.squareFootage}
+        bedrooms={showListings[0]?.bedrooms}
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
