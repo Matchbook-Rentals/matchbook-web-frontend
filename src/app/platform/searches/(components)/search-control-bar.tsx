@@ -10,7 +10,7 @@ const SearchControlBar: React.FC = () => {
   const { state, actions } = useSearchContext();
 
   return (
-    <div className="flex justify-between items-center border rounded-md">
+    <div className="flex justify-between items-center border-2 shadow-lg rounded-md">
       {/* Destination trigger */}
       <LocationSuggest />
       <Separator orientation="vertical" className="h-10" />

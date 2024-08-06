@@ -79,7 +79,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
   };
 
   useEffect(() => {
-    fetchListings(currentSearch?.latitude, currentSearch?.longitude, currentSearch?.radius || 100);
+    if (currentSearch) {
+      fetchListings(currentSearch.latitude, currentSearch.longitude, currentSearch.radius || 100);
+    }
     setLookup({
       favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
       dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),

@@ -10,13 +10,13 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
   try {
     // Input validation
     if (typeof lat !== 'number' || isNaN(lat) || lat < -90 || lat > 90) {
-      throw new Error('Invalid latitude. Must be a number between -90 and 90.');
+      throw new Error(`Invalid latitude. Must be a number between -90 and 90. received ${lat}`);
     }
     if (typeof lng !== 'number' || isNaN(lng) || lng < -180 || lng > 180) {
-      throw new Error('Invalid longitude. Must be a number between -180 and 180.');
+      throw new Error(`Invalid longitude. Must be a number between -180 and 180. received ${lng}`);
     }
     if (typeof radiusMiles !== 'number' || isNaN(radiusMiles) || radiusMiles <= 0) {
-      throw new Error('Invalid radius. Must be a positive number.');
+      throw new Error(`Invalid radius. Must be a positive number. received ${radiusMiles}`);
     }
 
     const listingsWithDistance = await prisma.$queryRaw<(ListingAndImages & { distance: number })[]>`

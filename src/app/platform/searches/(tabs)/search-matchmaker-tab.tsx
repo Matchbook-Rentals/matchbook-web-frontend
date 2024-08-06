@@ -11,18 +11,18 @@ const MatchmakerTab: React.FC = () => {
     <div className="flex flex-col w-full">
       <div className="flex justify-between items-center mb-4">
         {/* View Selector */}
-        <div className="flex border rounded-lg">
-          <button
-            className={`p-2 ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('map')}
-          >
-            <MapIcon size={24} />
-          </button>
+        <div className="flex border shadow-lg rounded-lg">
           <button
             className={`p-2 ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
             onClick={() => setViewMode('swipe')}
           >
             <FilterIcon size={24} />
+          </button>
+          <button
+            className={`p-2 ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+            onClick={() => setViewMode('map')}
+          >
+            <MapIcon size={24} />
           </button>
         </div>
 

@@ -32,13 +32,13 @@ const SearchesPage: React.FC = () => {
   const tabs: Tab[] = [
     { label: 'Matchmaker', value: 'matchmaker', content: state.currentSearch ? <MatchmakerTab /> : null, textSize: tabSize },
     // { label: 'Map View', value: 'map-view', content: state.currentSearch ? <MapView /> : null, textSize: tabSize },
-    { label: 'Short List', value: 'short-list', content: <ShortListTab />, textSize: tabSize },
-    { label: 'Matches', value: 'matches', content: <div>Matches</div>, textSize: tabSize },
+    { label: 'Favorites', value: 'favorites', content: <ShortListTab />, textSize: tabSize },
+    { label: 'Matchbook', value: 'matchbook', content: <div>Matches</div>, textSize: tabSize },
     { label: 'Application', value: 'application', content: <div>Application</div>, textSize: tabSize },
   ];
   return (
     <div className="flex flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
-      <button onClick={consoleLogs}>Log State</button>
+      {/* <button onClick={consoleLogs}>Log State</button> */}
       <SearchCarousel />
       <TabSelector useUrlParams tabs={tabs} className='w-full' tabsListClassName='flex justify-between w-2/3 max-w-[1000px] mx-auto' />
     </div>
