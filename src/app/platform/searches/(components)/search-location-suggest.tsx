@@ -1,99 +1,73 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript } from '@react-google-maps/api';
+import React, { useState, useEffect } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { useSearchContext } from "@/contexts/search-context-provider"; // Import the context
+import { useSearchContext } from "@/contexts/search-context-provider";
 
-interface LocationSuggestProps {
-}
+interface LocationSuggestProps { }
 
 export default function LocationSuggest() {
-  const { state, actions } = useSearchContext(); // Use the context
+  const { state, actions } = useSearchContext();
 
-  const [inputValue, setInputValue] = useState(""); // State for input field value
-  const [displayValue, setDisplayValue] = useState(state.currentSearch?.locationString); // Initialize with destination.locationString
+  const [inputValue, setInputValue] = useState("");
+  const [displayValue, setDisplayValue] = useState(state.currentSearch?.locationString);
   const [suggestions, setSuggestions] = useState([]);
   const [open, setOpen] = useState(false);
-  const libraries = useMemo(() => ["places"], []);
-
-  // Load Google Maps script
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries,
-  });
-
-  // Initialize usePlacesAutocomplete with manual init
-  const {
-    ready,
-    value,
-    setValue,
-    suggestions: { status, data },
-    clearSuggestions,
-    init,
-  } = usePlacesAutocomplete({
-    initOnMount: false,
-    requestOptions: {
-      types: ['(cities)'],
-      componentRestrictions: { country: 'us' },
-    },
-  });
-
-  useEffect(() => {
-    // Manually initialize the hook when the script is ready
-    if (isLoaded) init();
-  }, [isLoaded, init]);
-
-  useEffect(() => {
-    if (status === "OK") {
-      setSuggestions(data);
-    } else {
-      setSuggestions([]);
-    }
-  }, [status, data]);
 
   useEffect(() => {
     setDisplayValue(state.currentSearch?.locationString);
   }, [state.currentSearch]);
 
-  const handleInput = (e) => {
+  const handleInput = async (e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    setValue(newValue);
+    if (newValue.length > 2) {
+      try {
+        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`);
+        const data = await response.json();
+        setSuggestions(data.predictions || []);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+    }
   };
 
-  const handleSelect = async (description, place_id) => {
-    setDisplayValue(description); // Update the display value with the selected description
-    setInputValue(""); // Optionally clear the input value or keep it based on your needs
-    setValue(description, false); // Update the autocomplete value
-    clearSuggestions(); // Uncomment if you want to clear suggestions after selection
+  const handleSelect = async (description: string, place_id: string) => {
+    setDisplayValue(description);
+    setInputValue("");
+    setSuggestions([]);
     setOpen(false);
-    console.log('place ID', place_id);
-    console.log('description', description);
 
-    const results = await getGeocode({ address: description });
-    console.log(results);
-    const { lat, lng } = await getLatLng(results[0]);
-    console.log("Selected location:", { lat, lng });
-    actions.setCurrentSearch(prev => ({ ...prev, locationString: description, latitude: lat, longitude: lng }))
+    try {
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(description)}`);
+      const data = await response.json();
+      if (data.results && data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry.location;
+        actions.setCurrentSearch(prev => ({ ...prev, locationString: description, latitude: lat, longitude: lng }));
+      }
+    } catch (error) {
+      console.error("Error fetching geocode:", error);
+    }
   };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
-          {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
+          {displayValue ? displayValue : "Where to?"}
         </button>
       </PopoverTrigger>
       <PopoverContent className="rounded-2xl">
         <input
           value={inputValue}
           onChange={handleInput}
-          disabled={!ready}
           placeholder="Where's the party?"
           type="text"
-          className="w-full h-full text-2xl focus:outline-none" />
+          className="w-full h-full text-2xl focus:outline-none"
+        />
         {suggestions.length > 0 && (
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (

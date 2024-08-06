@@ -5,7 +5,7 @@ import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
 
 const MatchmakerTab: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'map' | 'swipe'>('map');
+  const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
 
   return (
     <div className="flex flex-col w-full">
