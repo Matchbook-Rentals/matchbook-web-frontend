@@ -26,7 +26,6 @@ const SearchesPage: React.FC = () => {
     console.log("Favorite IDs:", state.lookup.favIds);
     console.log("Current Search:", state.currentSearch);
     console.log("Liked Listings:", state.likedListings);
-    actions.updateLookup()
   }
 
   const tabSize = 'text-xl'

@@ -1,13 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useSearchContext } from '@/contexts/search-context-provider';
+import LocationSuggest from './search-location-suggest';
+
 
 const SearchControlBar: React.FC = () => {
+  const { state, actions } = useSearchContext();
+
   return (
     <div className="flex items-center border rounded-md">
-      <SearchPopover label="Destination" placeholder="Where to?" />
+      {/* Destination trigger */}
+      <LocationSuggest />
+      {/* <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" className="h-10 px-4">
+            <div className="text-left">
+              <div className="text-sm font-semibold">Destination</div>
+              <div className="text-xs text-muted-foreground">Where to?</div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Destination</h4>
+              <p className="text-sm text-muted-foreground">
+                This is a placeholder for the destination selection content.
+              </p>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover> */}
       <Separator orientation="vertical" className="h-10" />
+
       {/* Date triggers */}
       <Popover>
         <PopoverTrigger asChild>
@@ -39,38 +66,29 @@ const SearchControlBar: React.FC = () => {
         </PopoverContent>
       </Popover>
       <Separator orientation="vertical" className="h-10" />
-      <SearchPopover label="Guests" placeholder="2 adults" />
+
+      {/* Guests trigger */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" className="h-10 px-4">
+            <div className="text-left">
+              <div className="text-sm font-semibold">Guests</div>
+              <div className="text-xs text-muted-foreground">2 adults</div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Guests</h4>
+              <p className="text-sm text-muted-foreground">
+                This is a placeholder for the guests selection content.
+              </p>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
-  );
-};
-
-interface SearchPopoverProps {
-  label: string;
-  placeholder: string;
-}
-
-const SearchPopover: React.FC<SearchPopoverProps> = ({ label, placeholder }) => {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" className="h-10 px-4">
-          <div className="text-left">
-            <div className="text-sm font-semibold">{label}</div>
-            <div className="text-xs text-muted-foreground">{placeholder}</div>
-          </div>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">{label}</h4>
-            <p className="text-sm text-muted-foreground">
-              This is a placeholder for the {label.toLowerCase()} selection content.
-            </p>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
   );
 };
 
