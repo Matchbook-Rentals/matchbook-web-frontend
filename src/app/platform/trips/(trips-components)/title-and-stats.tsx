@@ -10,6 +10,7 @@ interface TitleAndStatsProps {
   deposit?: number;
   distance?: number;
   bedrooms?: Bedroom[];
+  searchLocation?: string;
 }
 
 const TitleAndStats: React.FC<TitleAndStatsProps> = ({
@@ -21,6 +22,7 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   deposit = 0,
   distance = 0,
   bedrooms = [],
+  searchLocation = ''
 }) => {
   const bedTypeCounts = bedrooms.reduce((acc, bedroom) => {
     acc[bedroom.bedType] = (acc[bedroom.bedType] || 0) + 1;
@@ -45,10 +47,10 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
           {numBath} Baths | {sqft.toLocaleString()} Sqft
         </p>
       </div>
-      <div className="flex flex-col w-1/2">
+      <div className="flex flex-col w-1/2 py-1">
         <p className="text-3xl font-semibold">${rentPerMonth.toLocaleString()} / Month</p>
-        <p className="text-xl text-gray-600">${deposit.toLocaleString()} /Deposit</p>
-        <p className="text-xl text-gray-600">{distance} miles away</p>
+        <p className="text-xl text-gray-600 mt-2">${deposit.toLocaleString()} /Deposit</p>
+        <p className="text-xl text-gray-600">{distance} miles from {searchLocation}</p>
       </div>
     </div>
   );

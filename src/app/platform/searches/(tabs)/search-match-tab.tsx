@@ -117,11 +117,14 @@ const MatchViewTab: React.FC = () => {
         deposit={showListings[0]?.depositSize}
         sqft={showListings[0]?.squareFootage}
         bedrooms={showListings[0]?.bedrooms}
+        searchLocation={state.currentSearch?.locationString}
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
         amenities={getListingAmenities(showListings[0])}
         listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
+        user={showListings[0]?.user}
+        address={showListings[0]?.locationString}
       />
     </div>
   );
