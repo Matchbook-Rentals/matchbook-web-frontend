@@ -47,14 +47,14 @@ const ListIcon: React.FC<ListIconProps> = ({
   // Calculate border properties based on the borderRight prop
   const borderStyle = borderRight
     ? {
-        stroke: "#5a6754",
-        strokeWidth: 1,
-        strokeDasharray: "0",
-        x1: size.width - 1,
-        y1: "0",
-        x2: size.width - 1,
-        y2: size.height,
-      }
+      stroke: "#5a6754",
+      strokeWidth: 1,
+      strokeDasharray: "0",
+      x1: size.width - 1,
+      y1: "0",
+      x2: size.width - 1,
+      y2: size.height,
+    }
     : {};
 
   return (

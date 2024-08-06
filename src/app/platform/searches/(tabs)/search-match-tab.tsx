@@ -87,14 +87,14 @@ const MatchViewTab: React.FC = () => {
           handleClick={() => handleReject(showListings[0])}
           Icon={
             <div className="transform rotate-45">
-              <CrossIcon height={50} width={50} />
+              <CrossIcon height={40} width={40} />
             </div>
           }
           className="bg-red-800/80 w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm hover:bg-red-800 transition-all duration-200"
         />
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
-          Icon={<RewindIcon height={50} width={50} />}
+          Icon={<RewindIcon height={40} width={40} />}
           className={`${viewedListings.length === 0
             ? 'bg-black/10 cursor-default transition-all duration-500'
             : 'bg-black/50 hover:bg-black/70 cursor-pointer transition-all duration-300'
@@ -102,7 +102,7 @@ const MatchViewTab: React.FC = () => {
         />
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<HeartIcon height={50} width={50} />}
+          Icon={<HeartIcon height={40} width={40} />}
           className="bg-primaryBrand/80 hover:bg-primaryBrand w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm transition-all duration-200"
         />
       </div>
