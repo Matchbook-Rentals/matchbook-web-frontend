@@ -82,7 +82,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
         {/* Highlights */}
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-center">Highlights</h2>
-          <div className='mt-3 flex test w-full justify-between'>
+          <div className='mt-3 flex w-full justify-between'>
             {getIconAndLabel(propertyType)}
             <Tile icon={<CrossIcon />} label={`${bathroomCount} bathrooms`} />
             <Tile icon={<CrossIcon />} label={`${roomCount} bedrooms`} />
