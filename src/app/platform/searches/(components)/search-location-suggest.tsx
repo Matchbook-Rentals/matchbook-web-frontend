@@ -4,9 +4,12 @@ import React, { useState, useEffect } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useSearchContext } from "@/contexts/search-context-provider";
 
-interface LocationSuggestProps { }
+interface LocationSuggestProps {
+  triggerClassName?: string;
+  contentClassName?: string;
+}
 
-export default function LocationSuggest() {
+export default function LocationSuggest({ triggerClassName = "", contentClassName = "" }: LocationSuggestProps) {
   const { state, actions } = useSearchContext();
 
   const [inputValue, setInputValue] = useState("");
@@ -56,11 +59,11 @@ export default function LocationSuggest() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
+        <button className={`placeholder:text-gray-500 text-gray-500 focus:outline-none rounded-full text-lg h-full p-2 md:p-3 cursor-pointer ${triggerClassName}`}>
           {displayValue ? displayValue : "Where to?"}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="rounded-2xl">
+      <PopoverContent className={`rounded-2xl ${contentClassName}`}>
         <input
           value={inputValue}
           onChange={handleInput}

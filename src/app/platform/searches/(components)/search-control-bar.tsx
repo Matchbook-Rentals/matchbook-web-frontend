@@ -4,65 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSearchContext } from '@/contexts/search-context-provider';
 import LocationSuggest from './search-location-suggest';
-
+import DateRangeSelector from '@/components/ui/custom-calendar/date-range-selector/date-range-selector';
 
 const SearchControlBar: React.FC = () => {
   const { state, actions } = useSearchContext();
 
   return (
-    <div className="flex items-center border rounded-md">
+    <div className="flex justify-between items-center border rounded-md">
       {/* Destination trigger */}
       <LocationSuggest />
-      {/* <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="ghost" className="h-10 px-4">
-            <div className="text-left">
-              <div className="text-sm font-semibold">Destination</div>
-              <div className="text-xs text-muted-foreground">Where to?</div>
-            </div>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <div className="grid gap-4">
-            <div className="space-y-2">
-              <h4 className="font-medium leading-none">Destination</h4>
-              <p className="text-sm text-muted-foreground">
-                This is a placeholder for the destination selection content.
-              </p>
-            </div>
-          </div>
-        </PopoverContent>
-      </Popover> */}
       <Separator orientation="vertical" className="h-10" />
-
       {/* Date triggers */}
       <Popover>
         <PopoverTrigger asChild>
-          <div className="flex">
+          <div className="flex gap-x-1 px-2">
             <Button variant="ghost" className="h-10 px-2">
               <div className="text-left">
-                <div className="text-sm font-semibold">Check in</div>
-                <div className="text-xs text-muted-foreground">Add date</div>
+                <div className="text-md text-muted-foreground">{state.currentSearch?.startDate ? state.currentSearch.startDate.toLocaleDateString() : 'Add date'}</div>
               </div>
             </Button>
             <Separator orientation="vertical" className="h-10" />
             <Button variant="ghost" className="h-10 px-2">
               <div className="text-left">
-                <div className="text-sm font-semibold">Check out</div>
-                <div className="text-xs text-muted-foreground">Add date</div>
+                <div className="text-md text-muted-foreground">{state.currentSearch?.endDate ? state.currentSearch.endDate.toLocaleDateString() : 'Add date'}</div>
               </div>
             </Button>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <div className="grid gap-4">
-            <div className="space-y-2">
-              <h4 className="font-medium leading-none">Dates</h4>
-              <p className="text-sm text-muted-foreground">
-                This is a placeholder for the date selection content.
-              </p>
-            </div>
-          </div>
+        <PopoverContent className="w-full">
+          <DateRangeSelector start={state.currentSearch?.startDate} end={state.currentSearch?.endDate} handleSave={actions.setSearch} />
         </PopoverContent>
       </Popover>
       <Separator orientation="vertical" className="h-10" />
@@ -72,8 +42,7 @@ const SearchControlBar: React.FC = () => {
         <PopoverTrigger asChild>
           <Button variant="ghost" className="h-10 px-4">
             <div className="text-left">
-              <div className="text-sm font-semibold">Guests</div>
-              <div className="text-xs text-muted-foreground">2 adults</div>
+              <div className="text-md text-muted-foreground">2 adults</div>
             </div>
           </Button>
         </PopoverTrigger>
