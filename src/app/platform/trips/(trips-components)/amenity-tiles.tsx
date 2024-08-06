@@ -16,7 +16,7 @@ interface AmenityCardsProps {
 }
 
 const AmenityTiles: React.FC<AmenityCardsProps> = ({ amenities }) => {
-  const tilesPerCard = 9;
+  const tilesPerCard = 3;
   const cards = [];
 
   for (let i = 0; i < amenities.length; i += tilesPerCard) {
@@ -34,13 +34,13 @@ const AmenityTiles: React.FC<AmenityCardsProps> = ({ amenities }) => {
   }
 
   return (
-        <Carousel opts={{loop: true}}>
-          <CarouselContent>
-            {cards}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+    <Carousel opts={{ loop: true }}>
+      <CarouselContent>
+        {cards}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 };
 

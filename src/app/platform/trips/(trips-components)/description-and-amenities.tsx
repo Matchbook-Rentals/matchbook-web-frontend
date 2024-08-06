@@ -99,6 +99,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
         {/* Other Amenities */}
         <div>
           <h2 className="text-2xl font-bold">OTHER AMENITIES</h2>
+          <AmenityTiles amenities={amenities} />
         </div>
       </div>
     </div>
