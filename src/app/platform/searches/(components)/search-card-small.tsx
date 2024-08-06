@@ -11,7 +11,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -65,20 +64,33 @@ const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) =>
     setIsDialogOpen(false);
   };
 
+  const handleXClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDialogOpen(true);
+  };
+
+  const handleCancelClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDialogOpen(false);
+  };
+
+  const handleDeleteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    await handleDelete();
+  };
+
   return (
     <Card className="overflow-hidden border-0 w-60 cursor-pointer relative group">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <div
-            className="absolute top-2 left-2 z-10 p-1 rounded-full bg-black bg-opacity-50 
-                       opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <X
-              className="w-4 h-4 text-white hover:text-red-500 transition-colors duration-200"
-            />
-          </div>
-        </DialogTrigger>
+        <div
+          className="absolute top-2 left-2 z-10 p-1 rounded-full bg-black bg-opacity-50 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          onClick={handleXClick}
+        >
+          <X
+            className="w-4 h-4 text-white hover:text-red-500 transition-colors duration-200"
+          />
+        </div>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
@@ -87,8 +99,8 @@ const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) =>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+            <Button variant="outline" onClick={handleCancelClick}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDeleteClick}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
