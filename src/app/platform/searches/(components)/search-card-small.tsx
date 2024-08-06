@@ -3,6 +3,8 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Trip } from "@prisma/client";
+import { X } from "lucide-react";
+import { deleteTrip } from "@/app/actions/trips";
 
 interface SearchCardSmallProps {
   trip: Trip;
@@ -47,8 +49,22 @@ function getStateFlagUrl(stateCode: string): string {
 const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) => {
   const [stateFlagURL, setStateFlagURL] = React.useState(getStateFlagUrl(stateCode));
 
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    await deleteTrip(trip.id);
+  };
+
   return (
-    <Card className="overflow-hidden border-0 w-60 cursor-pointer ">
+    <Card className="overflow-hidden border-0 w-60 cursor-pointer relative group">
+      <div
+        className="absolute top-2 left-2 z-10 p-1 rounded-full bg-black bg-opacity-50 
+                   opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      >
+        <X
+          className="w-4 h-4 text-white hover:text-red-500 transition-colors duration-200"
+          onClick={handleDelete}
+        />
+      </div>
       <div className="h-28 relative">
         <Image
           src={stateFlagURL}

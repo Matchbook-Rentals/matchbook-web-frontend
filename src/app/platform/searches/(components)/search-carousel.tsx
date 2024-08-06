@@ -52,9 +52,9 @@ const SearchCarousel: React.FC = () => {
   return (
     <Accordion type="single" className='w-full' collapsible value={isOpen} onValueChange={setIsOpen}>
       <AccordionItem className='' value="item-1">
-        <AccordionTrigger className=' w-full  text-2xl font-bold mb-2 justify-center gap-x-4'>Active Searches</AccordionTrigger>
+        <AccordionTrigger className=' w-full py-0 text-2xl font-bold mb-2 justify-center gap-x-4'>Active Searches</AccordionTrigger>
         <AccordionContent className='flex items-center justify-center'>
-          <Carousel className="w-full max-w-5xl" opts={{ slidesToScroll: 2 }} setApi={setApi}>
+          <Carousel className="w-full pt-2 max-w-5xl" opts={{ slidesToScroll: 2 }} setApi={setApi}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {state.activeSearches.map((search) => (
                 <CarouselItem onClick={() => handleClick(search)} key={search.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4">
