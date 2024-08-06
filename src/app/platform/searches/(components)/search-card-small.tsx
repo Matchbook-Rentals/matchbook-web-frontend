@@ -49,7 +49,7 @@ const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) =>
 
   return (
     <Card className="overflow-hidden border-0 w-60 cursor-pointer ">
-      <div className="h-40 relative">
+      <div className="h-28 relative">
         <Image
           src={stateFlagURL}
           alt={`Flag of ${stateCode}`}

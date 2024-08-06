@@ -12,7 +12,7 @@ interface DateRange {
 interface DateRangeSelectorProps {
   start: Date | null;
   end: Date | null;
-  handleSave: (range: DateRange) => void;
+  handleSave: (startDate: Date, endDate: Date) => void;
 }
 
 const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({ start, end, handleSave }) => {
@@ -46,7 +46,7 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({ start, end, handl
   };
 
   const onSave = () => {
-    handleSave(dateRange);
+    handleSave(dateRange.startDate, dateRange.endDate);
   };
 
   const onClear = () => {

@@ -5,9 +5,20 @@ import { Separator } from "@/components/ui/separator";
 import { useSearchContext } from '@/contexts/search-context-provider';
 import LocationSuggest from './search-location-suggest';
 import DateRangeSelector from '@/components/ui/custom-calendar/date-range-selector/date-range-selector';
+import { updateTrip } from '@/app/actions/trips';
 
 const SearchControlBar: React.FC = () => {
   const { state, actions } = useSearchContext();
+
+  const handleSave = (newStartDate: Date, newEndDate: Date) => {
+    let newSearch = state.currentSearch;
+    if (newSearch) {
+      newSearch.startDate = newStartDate;
+      newSearch.endDate = newEndDate;
+    }
+    actions.setCurrentSearch(newSearch);
+    updateTrip(newSearch);
+  }
 
   return (
     <div className="flex justify-between items-center border-2 shadow-lg rounded-md">
@@ -32,7 +43,7 @@ const SearchControlBar: React.FC = () => {
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
-          <DateRangeSelector start={state.currentSearch?.startDate} end={state.currentSearch?.endDate} handleSave={actions.setSearch} />
+          <DateRangeSelector start={state.currentSearch?.startDate} end={state.currentSearch?.endDate} handleSave={handleSave} />
         </PopoverContent>
       </Popover>
       <Separator orientation="vertical" className="h-10" />
@@ -59,6 +70,6 @@ const SearchControlBar: React.FC = () => {
       </Popover>
     </div>
   );
-};
+}
 
 export default SearchControlBar;
