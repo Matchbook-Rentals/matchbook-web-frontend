@@ -12,6 +12,7 @@
 [ ] 3. New Dashboard
         Matchmaker
         control bar, populate old data, use popovers, create double calendar
+        fix infinite scroll
         Matchbook
 
 [] 4. Add other users&application to housingRequest

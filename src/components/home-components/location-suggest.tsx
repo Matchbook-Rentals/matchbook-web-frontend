@@ -39,7 +39,7 @@ export default function LocationSuggest({ setDestination }: LocationSuggestProps
   } = usePlacesAutocomplete({
     initOnMount: false,
     requestOptions: {
-      types: ['(cities)'],
+      types: ['(regions)'],
       componentRestrictions: { country: 'us' },
     },
   });
