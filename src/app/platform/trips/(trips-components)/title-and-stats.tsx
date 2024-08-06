@@ -28,7 +28,10 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   }, {} as Record<string, number>);
 
   const bedTypeString = Object.entries(bedTypeCounts)
-    .map(([type, count]) => `${count} ${type}${count > 1 ? 's' : ''}`)
+    .map(([type, count]) => {
+      const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1);
+      return `${count} ${capitalizedType}${count > 1 ? 's' : ''}`;
+    })
     .join(' | ');
 
   return (

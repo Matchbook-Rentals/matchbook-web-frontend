@@ -120,8 +120,7 @@ const MatchViewTab: React.FC = () => {
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
-        amenities={getListingAmenities(showListings[0])}
-      />
+        amenities={getListingAmenities(showListings[0])} />
     </div>
   );
 };
