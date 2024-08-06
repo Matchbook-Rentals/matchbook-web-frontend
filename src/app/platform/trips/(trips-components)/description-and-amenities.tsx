@@ -23,7 +23,16 @@ interface ComponentProps {
   };
 }
 
-const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenities, listingPin, user, rating = 3.5, address }) => {
+const getIconAndLabel = (amenity: string): React.ReactElement => {
+  switch (amenity) {
+    case 'single_family':
+      return <Tile icon={<SingleHomeIcon />} label="Single Family" />;
+    default:
+      return <Tile icon={<SingleHomeIcon />} label="update switch" />;
+  }
+};
+
+const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenities, listingPin, user, rating = 3.5, address, bathroomCount, roomCount, propertyType }) => {
   const getTimeOnMatchbook = (createdAt: Date | undefined) => {
     if (!createdAt) return 'Joined today';
 
@@ -51,7 +60,6 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
         <p className='text-lg text-center flex items-center justify-center pb-2 font-semibold'>{address}</p>
         <SearchMap markers={[listingPin]} center={listingPin!} zoom={15} />
       </div>
-
       {/* Right half */}
       <div className="w-1/2 flex flex-col">
         {/* Hosted by, Rating, Badges */}
@@ -73,18 +81,19 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
 
         {/* Highlights */}
         <div className="mb-4">
-          <h2 className="text-2xl font-bold">HIGHLIGHTS</h2>
+          <h2 className="text-xl font-semibold text-center">Highlights</h2>
+          <div className='mt-3 flex test w-full justify-between'>
+            {getIconAndLabel(propertyType)}
+            <Tile icon={<CrossIcon />} label={`${bathroomCount} bathrooms`} />
+            <Tile icon={<CrossIcon />} label={`${roomCount} bedrooms`} />
+            <Tile icon={<CrossIcon />} label={`${1} bedrooms`} />
+          </div>
         </div>
 
         {/* Property Description */}
         <div className="mb-4">
           <h2 className="text-2xl font-bold mb-2">Property Description</h2>
           <div className="text-gray-700">{description}</div>
-          <div className='mt-3 flex w-[60%] justify-between'>
-            <Tile icon={<SingleHomeIcon />} label={'Single Family'} />
-            <Tile icon={<CrossIcon />} label={`${1} bathrooms`} />
-            <Tile icon={<CrossIcon />} label={`${1} bedrooms`} />
-          </div>
         </div>
 
         {/* Other Amenities */}

@@ -125,6 +125,9 @@ const MatchViewTab: React.FC = () => {
         listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
         user={showListings[0]?.user}
         address={showListings[0]?.locationString}
+        bathroomCount={showListings[0]?.bathroomCount}
+        roomCount={showListings[0]?.roomCount}
+        propertyType={showListings[0]?.category}
       />
     </div>
   );
