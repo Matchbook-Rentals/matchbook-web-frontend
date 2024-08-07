@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 interface SearchCardSmallProps {
   trip: Trip;
   stateCode: string;
+  handleClientDelete: () => void;
 }
 
 // Here's a function that takes a two-letter state code and returns the URL for that state's flag from Wikipedia Commons in TypeScript:
@@ -55,13 +56,14 @@ function getStateFlagUrl(stateCode: string): string {
   return flagUrl;
 }
 
-const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode }) => {
+const SearchCardSmall: React.FC<SearchCardSmallProps> = ({ trip, stateCode, handleClientDelete }) => {
   const [stateFlagURL, setStateFlagURL] = React.useState(getStateFlagUrl(stateCode));
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const handleDelete = async () => {
     await deleteTrip(trip.id);
     setIsDialogOpen(false);
+    handleClientDelete();
   };
 
   const handleXClick = (e: React.MouseEvent) => {
