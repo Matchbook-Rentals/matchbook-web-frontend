@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -6,9 +6,15 @@ import { useSearchContext } from '@/contexts/search-context-provider';
 import LocationSuggest from './search-location-suggest';
 import DateRangeSelector from '@/components/ui/custom-calendar/date-range-selector/date-range-selector';
 import { updateTrip } from '@/app/actions/trips';
+import { Plus, Minus } from 'lucide-react';
 
 const SearchControlBar: React.FC = () => {
   const { state, actions } = useSearchContext();
+  const [localGuests, setLocalGuests] = useState({
+    numAdults: state.currentSearch?.numAdults || 1,
+    numChildren: state.currentSearch?.numChildren || 0,
+    numPets: state.currentSearch?.numPets || 0,
+  });
 
   const handleSave = (newStartDate: Date, newEndDate: Date) => {
     let newSearch = state.currentSearch;
@@ -16,9 +22,27 @@ const SearchControlBar: React.FC = () => {
       newSearch.startDate = newStartDate;
       newSearch.endDate = newEndDate;
     }
-    actions.setCurrentSearch(newSearch);
+    actions.setCurrentSearch(prev => ({ ...prev, ...newSearch }));
     updateTrip(newSearch);
   }
+
+  const handleSaveGuests = () => {
+    let newSearch = state.currentSearch;
+    if (newSearch) {
+      newSearch.numAdults = localGuests.numAdults;
+      newSearch.numChildren = localGuests.numChildren;
+      newSearch.numPets = localGuests.numPets;
+    }
+    actions.setCurrentSearch(prev => ({ ...prev, ...newSearch }));
+    updateTrip(newSearch);
+  };
+
+  const handleGuestChange = (type: 'numAdults' | 'numChildren' | 'numPets', increment: boolean) => {
+    setLocalGuests(prev => ({
+      ...prev,
+      [type]: increment ? prev[type] + 1 : Math.max(0, prev[type] - 1)
+    }));
+  };
 
   return (
     <div className="flex justify-between items-center border-2 shadow-lg rounded-md">
@@ -53,18 +77,39 @@ const SearchControlBar: React.FC = () => {
         <PopoverTrigger asChild>
           <Button variant="ghost" className="h-10 px-4">
             <div className="text-left">
-              <div className="text-md text-muted-foreground">2 adults</div>
+              <div className="text-md text-muted-foreground">
+                {localGuests.numAdults} adults, {localGuests.numChildren} children, {localGuests.numPets} pets
+              </div>
             </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80">
           <div className="grid gap-4">
-            <div className="space-y-2">
-              <h4 className="font-medium leading-none">Guests</h4>
-              <p className="text-sm text-muted-foreground">
-                This is a placeholder for the guests selection content.
-              </p>
-            </div>
+            {['numAdults', 'numChildren', 'numPets'].map((type) => (
+              <div key={type} className="flex items-center justify-between">
+                <span className="capitalize">{type.replace('num', '')}</span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleGuestChange(type as keyof typeof localGuests, false)}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span>{localGuests[type as keyof typeof localGuests]}</span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleGuestChange(type as keyof typeof localGuests, true)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <Button onClick={handleSaveGuests} className="w-full mt-2">
+              Save
+            </Button>
           </div>
         </PopoverContent>
       </Popover>

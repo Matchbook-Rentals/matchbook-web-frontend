@@ -75,7 +75,7 @@ const MatchViewTab: React.FC = () => {
     return null;
   }
   if (showListings.length === 0) {
-    return <div>No listings available. {listings.length} {state.currentSearch?.id}</div>;
+    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.currentSearch?.id}</div>;
   }
 
   // Main component render

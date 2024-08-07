@@ -72,6 +72,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     setIsLoading(true);
     try {
       const results = await pullListingsFromDb(lat, lng, radius);
+      if (results.length === 0) {
+        console.log(currentSearch);
+      }
       setListings(results);
     } finally {
       setIsLoading(false);
