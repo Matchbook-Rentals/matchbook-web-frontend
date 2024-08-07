@@ -72,6 +72,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     setIsLoading(true);
     try {
       const results = await pullListingsFromDb(lat, lng, radius);
+      if (results.length === 0) {
+        console.log(currentSearch);
+      }
       setListings(results);
     } finally {
       setIsLoading(false);
@@ -79,6 +82,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
   };
 
   useEffect(() => {
+    if (currentSearch) {
+      fetchListings(currentSearch.latitude, currentSearch.longitude, currentSearch.radius || 100);
+    }
     setLookup({
       favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
       dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),

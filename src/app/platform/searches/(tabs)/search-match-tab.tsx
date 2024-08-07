@@ -75,7 +75,7 @@ const MatchViewTab: React.FC = () => {
     return null;
   }
   if (showListings.length === 0) {
-    return <div>No listings available. {listings.length} {state.currentSearch?.id}</div>;
+    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.currentSearch?.id}</div>;
   }
 
   // Main component render
@@ -87,14 +87,14 @@ const MatchViewTab: React.FC = () => {
           handleClick={() => handleReject(showListings[0])}
           Icon={
             <div className="transform rotate-45">
-              <CrossIcon height={50} width={50} />
+              <CrossIcon height={40} width={40} />
             </div>
           }
           className="bg-red-800/80 w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm hover:bg-red-800 transition-all duration-200"
         />
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
-          Icon={<RewindIcon height={50} width={50} />}
+          Icon={<RewindIcon height={40} width={40} />}
           className={`${viewedListings.length === 0
             ? 'bg-black/10 cursor-default transition-all duration-500'
             : 'bg-black/50 hover:bg-black/70 cursor-pointer transition-all duration-300'
@@ -102,7 +102,7 @@ const MatchViewTab: React.FC = () => {
         />
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<HeartIcon height={50} width={50} />}
+          Icon={<HeartIcon height={40} width={40} />}
           className="bg-primaryBrand/80 hover:bg-primaryBrand w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm transition-all duration-200"
         />
       </div>
@@ -114,10 +114,20 @@ const MatchViewTab: React.FC = () => {
         numBeds={showListings[0]?.roomCount}
         rentPerMonth={showListings[0]?.shortestLeasePrice}
         distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
+        deposit={showListings[0]?.depositSize}
+        sqft={showListings[0]?.squareFootage}
+        bedrooms={showListings[0]?.bedrooms}
+        searchLocation={state.currentSearch?.locationString}
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}
         amenities={getListingAmenities(showListings[0])}
+        listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
+        user={showListings[0]?.user}
+        address={showListings[0]?.locationString}
+        bathroomCount={showListings[0]?.bathroomCount}
+        roomCount={showListings[0]?.roomCount}
+        propertyType={showListings[0]?.category}
       />
     </div>
   );

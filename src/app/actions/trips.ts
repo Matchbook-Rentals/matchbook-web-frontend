@@ -1,8 +1,14 @@
 'use server'
 import prisma from '@/lib/prismadb';
 import { TripAndMatches } from '@/types/';
+import { auth } from '@clerk/nextjs/server';
 
 export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
   try {
     const searchingTrips = await prisma.trip.findMany({
       where: {
@@ -24,6 +30,11 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
 }
 
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
   try {
     // First, fetch the current trip to get existing participants
     const currentTrip = await prisma.trip.findUnique({
@@ -62,5 +73,52 @@ export async function addParticipant(tripId: string, email: string): Promise<str
   } catch (error) {
     console.error('Error adding participant to trip:', error);
     throw error;
+  }
+}
+
+export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMatches> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    const { id, ...tripData } = updatedTrip;
+
+    // Remove related fields that can't be directly updated
+    const { matches, dislikes, favorites, housingRequests, allParticipants, ...updateData } = tripData;
+
+    const updated = await prisma.trip.update({
+      where: { id },
+      data: updateData,
+      include: {
+        matches: true,
+        dislikes: true,
+        favorites: true,
+        housingRequests: true,
+        allParticipants: true,
+      },
+    });
+
+    return updated;
+  } catch (error) {
+    console.error('Error updating trip:', error);
+    throw new Error('Failed to update trip');
+  }
+}
+
+export async function deleteTrip(tripId: string): Promise<void> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.trip.delete({
+      where: { id: tripId },
+    });
+  } catch (error) {
+    console.error('Error deleting trip:', error);
+    throw new Error('Failed to delete trip');
   }
 }

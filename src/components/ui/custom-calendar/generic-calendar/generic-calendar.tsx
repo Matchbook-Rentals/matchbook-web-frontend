@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import DaysOfWeek from './DaysOfWeek';
-import Days from './Days';
+import Days from '../date-range-selector/date-range-days';
 
 const GenericCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());

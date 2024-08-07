@@ -11,6 +11,7 @@ export interface ListingAndImages extends Listing {
   listingImages: ListingImage[]
   bedrooms?: Bedroom[]
   distance?: number
+  user?: User
 };
 
 export interface RequestWithUser extends HousingRequest {
