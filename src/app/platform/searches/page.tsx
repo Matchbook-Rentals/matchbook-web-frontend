@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import SearchCarousel from './(components)/search-carousel';
 import TabSelector from '@/components/ui/tab-selector';
 import { useSearchContext } from '@/contexts/search-context-provider';
 import MatchmakerTab from './(tabs)/search-matchmaker-tab';
 import MapView from './(tabs)/search-map-tab';
 import ShortListTab from './(tabs)/search-short-list-tab';
+import { Button } from '@/components/ui/button';
 
 interface Tab {
   value: string;
@@ -40,7 +42,9 @@ const SearchesPage: React.FC = () => {
     <div className="flex flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
       {/* <button onClick={consoleLogs}>Log State</button> */}
       <SearchCarousel />
-      <TabSelector useUrlParams tabs={tabs} className='w-full' tabsListClassName='flex justify-between w-2/3 max-w-[1000px] mx-auto' />
+      <div className="flex  w-full ">
+        <TabSelector useUrlParams buttonLabel='New Search' buttonAction={() => { }} tabs={tabs} className='w-full' tabsListClassName='flex justify-between w-2/3 max-w-[1000px] mx-auto' />
+      </div>
     </div>
   );
 };
