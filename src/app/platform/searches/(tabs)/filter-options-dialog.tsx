@@ -7,10 +7,13 @@ import { Label } from "@/components/ui/label"
 import PriceFilter from '../(components)/PriceFilter';
 import CategoryFilter from '../(components)/CategoryFilter';
 import FurnitureFilter from '../(components)/FurnitureFilter';
+import DateDaySelector from '@/components/ui/custom-calendar/date-day-selector/date-day-selector';
 
 interface FilterOptions {
   minPrice: number;
   maxPrice: number;
+  moveInDate: Date;
+  moveOutDate: Date;
   bedrooms: string;
   beds: string;
   baths: string;
@@ -48,7 +51,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
               <h2 className="text-3xl font-semibold">Filters</h2>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 ">
               <div className="flex justify-between w-2/3 mx-auto items-center">
                 <div className="flex flex-col items-center">
                   <Label htmlFor="flexible-move-in" className="mb-2">Flexible move in</Label>
@@ -73,6 +76,28 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <span className="text-sm text-gray-500 mt-1">
                     {filters.flexibleMoveOut ? 'On' : 'Off'}
                   </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center w-full">
+                <div className="flex justify-center w-full space-x-4">
+                  <div className="flex flex-col items-center">
+                    <Label htmlFor="move-in-date" className="mb-2">Move in date</Label>
+                    <DateDaySelector
+                      id="move-in-date"
+                      selectedDate={filters.moveInDate}
+                      onDateSelect={(date) => onFilterChange('moveInDate', date)}
+                    />
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <Label htmlFor="move-out-date" className="mb-2">Move out date</Label>
+                    <DateDaySelector
+                      id="move-out-date"
+                      selectedDate={filters.moveOutDate}
+                      onDateSelect={(date) => onFilterChange('moveOutDate', date)}
+                    />
+                  </div>
                 </div>
               </div>
 
