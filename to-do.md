@@ -3,6 +3,7 @@
 ## TONIGHT
 finish dialog (filter options, calendar, X to the left, one x, icon import)
 carousel (fix height, fix arrows)
+ALGO
 
 [X] 1. Finish application summary
 
