@@ -10,7 +10,6 @@ import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import SortableFavorites from '../(components)/sortable-favorites';
 
 export default function ShortListTab() {
@@ -89,17 +88,15 @@ export default function ShortListTab() {
           toggleOpen={() => setIsOpen((prev) => !prev)}
         >
           <div className="flex justify-center mx-auto w-full px-2 py-8">
-            <ScrollArea className="h-[400px] w-full md:w-1/2">
-              <div className="flex flex-col space-y-4 pr-4">
-                {requestedListings.map((listing, index) => (
-                  <TripListingCard
-                    key={index}
-                    listing={listing}
-                    actions={generateRequestedCardActions(listing)}
-                  />
-                ))}
-              </div>
-            </ScrollArea>
+            <div className="flex flex-col space-y-4 pr-4">
+              {requestedListings.map((listing, index) => (
+                <TripListingCard
+                  key={index}
+                  listing={listing}
+                  actions={generateRequestedCardActions(listing)}
+                />
+              ))}
+            </div>
           </div>
         </CustomAccordion>
       }
@@ -115,19 +112,10 @@ export default function ShortListTab() {
         </>
       ) : (
         <div className="flex justify-center mx-auto w-full px-2 py-8 test-blue">
-          <ScrollArea className="h-[600px] w-full md:w-1/2">
-            <div className="flex flex-col space-y-4 pr-4 test">
-              <h2 className='text-2xl font-bold text-center'>Properties You &lt;3</h2>
-              <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
-              {/* {likedListings.map((listing, index) => (
-                <TripListingCard
-                  key={index}
-                  listing={listing}
-                  actions={generateLikedCardActions(listing)}
-                />
-              ))} */}
-            </div>
-          </ScrollArea>
+          <div className="w-full md:w-2/3 pr-4 test">
+            <h2 className='text-2xl font-bold text-center'>Properties You &lt;3</h2>
+            <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
+          </div>
           <div className="w-full md:w-1/2">
             <SearchMap center={{ lat: state.currentSearch?.latitude || 0, lng: state.currentSearch?.longitude || 0 }} zoom={10} markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))} />
           </div>
