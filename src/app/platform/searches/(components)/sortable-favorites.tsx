@@ -41,22 +41,22 @@ const ScrollableTable = () => {
   const scrollableColumns = ['col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9', 'col10'];
 
   return (
-    <div className="w-full overflow-hidden border rounded-lg">
+    <div className="w-full  max-h-[400px] overflow-scroll border rounded-lg">
       <div className="flex">
         {/* Fixed left columns */}
         <div className="flex-none">
           <Table>
             <TableHeader>
               <TableRow>
-                {visibleColumns.id && <TableHead className="w-20">ID</TableHead>}
-                {visibleColumns.name && <TableHead className="w-40">Name</TableHead>}
+                {visibleColumns.id && <TableHead className="w-20 h-20 text-bold text-gray-400">ID</TableHead>}
+                {visibleColumns.name && <TableHead className="w-40 h-20 text-bold text-gray-400">Name</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.id}>
-                  {visibleColumns.id && <TableCell>{row.id}</TableCell>}
-                  {visibleColumns.name && <TableCell>{row.name}</TableCell>}
+                  {visibleColumns.id && <TableCell className='h-20 w-20'>{row.id}</TableCell>}
+                  {visibleColumns.name && <TableCell className='h-20 w-20'>{row.name}</TableCell>}
                 </TableRow>
               ))}
             </TableBody>
@@ -64,12 +64,12 @@ const ScrollableTable = () => {
         </div>
 
         {/* Scrollable middle columns */}
-        <div className="flex-grow overflow-x-auto">
+        <div className=" overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
                 {scrollableColumns.map((col) => (
-                  visibleColumns[col] && <TableHead key={col} className="w-40">Column {col.slice(3)}</TableHead>
+                  visibleColumns[col] && <TableHead key={col} className="w-20 h-20 text-bold text-gray-400">Column {col.slice(3)}</TableHead>
                 ))}
               </TableRow>
             </TableHeader>
@@ -77,7 +77,7 @@ const ScrollableTable = () => {
               {data.map((row) => (
                 <TableRow key={row.id}>
                   {scrollableColumns.map((col) => (
-                    visibleColumns[col] && <TableCell key={col}>{row[col]}</TableCell>
+                    visibleColumns[col] && <TableCell key={col} className='h-20 w-20'>{row[col]}</TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -90,7 +90,7 @@ const ScrollableTable = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-40">
+                <TableHead className="w-40 h-20 text-bold text-gray-400">
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="w-full">Edit Columns</Button>
@@ -123,8 +123,8 @@ const ScrollableTable = () => {
             </TableHeader>
             <TableBody>
               {data.map((row) => (
-                <TableRow key={row.id}>
-                  {visibleColumns.status && <TableCell>{row.status}</TableCell>}
+                <TableRow className=' flex justify-center items-center' key={row.id}>
+                  {visibleColumns.status && <TableCell className='h-20 w-20 flex justify-center items-center '><Button >Apply</Button></TableCell>}
                 </TableRow>
               ))}
             </TableBody>
