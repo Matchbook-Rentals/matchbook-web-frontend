@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 const ScrollableTable = () => {
+  const [visibleColumns, setVisibleColumns] = useState({
+    id: true,
+    name: true,
+    col3: true,
+    col4: true,
+    col5: true,
+    col6: true,
+    col7: true,
+    col8: true,
+    col9: true,
+    col10: true,
+    status: true,
+  });
+
   // Sample data
   const data = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
@@ -17,6 +34,12 @@ const ScrollableTable = () => {
     status: ['Active', 'Inactive', 'Pending'][i % 3],
   }));
 
+  const toggleColumn = (column) => {
+    setVisibleColumns(prev => ({ ...prev, [column]: !prev[column] }));
+  };
+
+  const scrollableColumns = ['col3', 'col4', 'col5', 'col6', 'col7', 'col8', 'col9', 'col10'];
+
   return (
     <div className="w-full overflow-hidden border rounded-lg">
       <div className="flex">
@@ -25,15 +48,15 @@ const ScrollableTable = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-20">ID</TableHead>
-                <TableHead className="w-40">Name</TableHead>
+                {visibleColumns.id && <TableHead className="w-20">ID</TableHead>}
+                {visibleColumns.name && <TableHead className="w-40">Name</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.name}</TableCell>
+                  {visibleColumns.id && <TableCell>{row.id}</TableCell>}
+                  {visibleColumns.name && <TableCell>{row.name}</TableCell>}
                 </TableRow>
               ))}
             </TableBody>
@@ -45,16 +68,16 @@ const ScrollableTable = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                {[3, 4, 5, 6, 7, 8, 9, 10].map((colNum) => (
-                  <TableHead key={colNum} className="w-40">Column {colNum}</TableHead>
+                {scrollableColumns.map((col) => (
+                  visibleColumns[col] && <TableHead key={col} className="w-40">Column {col.slice(3)}</TableHead>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.id}>
-                  {[3, 4, 5, 6, 7, 8, 9, 10].map((colNum) => (
-                    <TableCell key={colNum}>{row[`col${colNum}`]}</TableCell>
+                  {scrollableColumns.map((col) => (
+                    visibleColumns[col] && <TableCell key={col}>{row[col]}</TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -62,18 +85,46 @@ const ScrollableTable = () => {
           </Table>
         </div>
 
-        {/* Fixed right column */}
+        {/* Fixed right column with Popover */}
         <div className="flex-none">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-40">Status</TableHead>
+                <TableHead className="w-40">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full">Edit Columns</Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80">
+                      <div className="grid grid-cols-2 gap-4">
+                        {Object.keys(visibleColumns).map((column) => (
+                          <div key={column} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={column}
+                              checked={visibleColumns[column]}
+                              onCheckedChange={() => toggleColumn(column)}
+                            />
+                            <label
+                              htmlFor={column}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {column === 'id' ? 'ID' :
+                                column === 'name' ? 'Name' :
+                                  column === 'status' ? 'Status' :
+                                    `Column ${column.slice(3)}`}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.status}</TableCell>
+                  {visibleColumns.status && <TableCell>{row.status}</TableCell>}
                 </TableRow>
               ))}
             </TableBody>
