@@ -66,40 +66,52 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     dislikedIds: new Set(),
     requestedIds: new Set()
   });
-
   const getListingPrice = (listing: ListingAndImages) => {
     const endDate = currentSearch?.endDate;
     const startDate = currentSearch?.startDate;
-    const tripLengthInMonths = (endDate - startDate) / (1000 * 60 * 60 * 24 * 30); // Approximate days in a month
+    if (!endDate || !startDate) return listing.shortestLeasePrice;
+
+    const tripLengthInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+
     const shortestLeaseLength = listing.shortestLeaseLength;
     const shortestLeasePrice = listing.shortestLeasePrice;
     const longestLeaseLength = listing.longestLeaseLength;
     const longestLeasePrice = listing.longestLeasePrice;
 
-    if (!endDate || !startDate) return null;
+    // If the trip length is shorter than or equal to the shortest lease, return the shortest lease price
+    if (tripLengthInMonths <= shortestLeaseLength) return shortestLeasePrice;
 
-    const leaseLengthDiff = longestLeaseLength - shortestLeaseLength;
-    const leasePriceDiff = longestLeasePrice - shortestLeasePrice;
-    const stepSize = leasePriceDiff / leaseLengthDiff;
+    // If the trip length is longer than or equal to the longest lease, return the longest lease price
+    if (tripLengthInMonths >= longestLeaseLength) return longestLeasePrice;
 
-    console.log('tripLengthInMonths', tripLengthInMonths);
-    console.log('shortestLeaseLength', shortestLeaseLength);
-    console.log('stepSize', stepSize);
-    const priceAdjustment = Math.round((tripLengthInMonths - shortestLeaseLength) * stepSize);
-    console.log('priceAdjustment', priceAdjustment);
-    listing.price = shortestLeasePrice + priceAdjustment;
-    console.log('listing.price', listing.price);
-    return listing.price;
+    // Calculate the price difference and lease length difference
+    const priceDifference = longestLeasePrice - shortestLeasePrice;
+    const leaseLengthDifference = longestLeaseLength - shortestLeaseLength;
+
+    // Calculate the price change per month (can be positive or negative)
+    const priceChangePerMonth = priceDifference / leaseLengthDifference;
+
+    // Calculate the number of months beyond the shortest lease
+    const monthsBeyondShortest = tripLengthInMonths - shortestLeaseLength;
+
+    // Calculate the total price change
+    const totalPriceChange = priceChangePerMonth * monthsBeyondShortest;
+
+    // Calculate the final price
+    const finalPrice = shortestLeasePrice + totalPriceChange;
+
+    return Math.round(finalPrice);
   }
 
-  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
-    const priceScore = (listing.calculatedPrice / lowestPrice) * 10;
-    const distanceScore = ((listing.distance || 0) / highestDistance) * 9;
+  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
+    const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
+    const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
     const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
     const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
     const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
     return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
   }
+
 
 
   const sortListingsByUScore = (listings: ListingAndImages[]) => {
@@ -110,6 +122,7 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     }));
 
     let lowestPrice = Infinity;
+    let highestPrice = 0;
     let highestDistance = 0;
     let highestSquareFootage = 0;
     let highestRoomCount = 0;
@@ -118,6 +131,11 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     listingsWithPrices.forEach(listing => {
       if (listing.calculatedPrice < lowestPrice) {
         lowestPrice = listing.calculatedPrice;
+        console.log('lowestPrice', lowestPrice);
+      }
+      if (listing.calculatedPrice > highestPrice) {
+        highestPrice = listing.calculatedPrice;
+        console.log('highestPrice', highestPrice);
       }
       if (listing.distance && listing.distance > highestDistance) {
         highestDistance = listing.distance;
@@ -132,10 +150,11 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
         highestBathroomCount = listing.bathroomCount;
       }
     });
-
+    console.log(' final lowestPrice', lowestPrice);
+    console.log(' final highestPrice', highestPrice);
 
     const updatedListings = listingsWithPrices.map(listing => {
-      const uScore = calculateUScore(listing, lowestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
+      const uScore = calculateUScore(listing, lowestPrice, highestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
       return { ...listing, price: listing.calculatedPrice, uScore };
     });
 

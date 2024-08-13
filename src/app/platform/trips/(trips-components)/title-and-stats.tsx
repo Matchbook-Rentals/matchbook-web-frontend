@@ -37,7 +37,7 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
     .join(' | ');
 
   return (
-    <div className="flex text-center justify-between w-4/5 py-1 mx-auto border-t border-b border-gray-300">
+    <div className="flex text-center justify-between w-4/5 my-2 py-1 mx-auto border-t border-b border-gray-300">
       <div className="flex flex-col w-1/2">
         <h2 className="text-3xl font-semibold">{title}</h2>
         <p onClick={() => console.log(bedrooms)} className="text-xl text-gray-600 mt-2">

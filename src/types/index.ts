@@ -12,6 +12,9 @@ export interface ListingAndImages extends Listing {
   bedrooms?: Bedroom[]
   distance?: number
   user?: User
+  price?: number
+  calculatedPrice?: number
+  uScore?: number
 };
 
 export interface RequestWithUser extends HousingRequest {

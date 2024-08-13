@@ -2,8 +2,11 @@
 
 ## TONIGHT
 finish dialog (filter options, calendar, X to the left, one x, icon import)
+ -- Ask Daniel about calendar
 carousel (fix height, fix arrows)
 ALGO
+ -- do feature score
+reset carousel api to 0.
 
 [X] 1. Finish application summary
 
