@@ -73,6 +73,10 @@ const config = {
           DEFAULT: '#f2df2e',
           80: '#f2df2ecc', // 80% opacity
         },
+        charcoalBrand: {
+          DEFAULT: '#4f4f4f',
+          80: '#4f4f4fcc', // 80% opacity
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

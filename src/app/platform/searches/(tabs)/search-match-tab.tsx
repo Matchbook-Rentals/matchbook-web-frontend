@@ -84,7 +84,7 @@ const MatchViewTab: React.FC = () => {
     <div className="w-full">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
-        <Button onClick={() => console.log(listings)}>{showListings[0]?.uScore}</Button>
+        <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore.toFixed(2)}</Button>
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
