@@ -8,6 +8,7 @@ import PriceFilter from '../(components)/PriceFilter';
 import CategoryFilter from '../(components)/CategoryFilter';
 import FurnitureFilter from '../(components)/FurnitureFilter';
 import DateDaySelector from '@/components/ui/custom-calendar/date-day-selector/date-day-selector';
+import FilterGrouping from '../(components)/FilterGrouping';
 
 interface FilterOptions {
   minPrice: number;
@@ -46,13 +47,13 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
         <div className="p-6 h-full overflow-y-auto flex flex-col items-center">
-          <div className="w-full max-w-md">
+          <div className="w-full ">
             <div className="flex justify-center items-center mb-6">
               <h2 className="text-3xl font-semibold">Filters</h2>
             </div>
 
             <div className="space-y-6 ">
-              <div className="flex justify-between w-2/3 mx-auto items-center">
+              <div className="flex justify-between max-w-md mx-auto items-center">
                 <div className="flex flex-col items-center">
                   <Label htmlFor="flexible-move-in" className="mb-2">Flexible move in</Label>
                   <Switch
@@ -121,6 +122,19 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 unfurnished={filters.unfurnished}
                 onFilterChange={onFilterChange}
               />
+
+              <FilterGrouping title='Utilities' options={[{ label: 'Included In Rent', imageSrc: '/icon_png/utilites.png', checked: true, height: 90, width: 90 }]} onFilterChange={() => { }} />
+              <FilterGrouping
+                title='Property Type'
+                options={[
+                  { label: 'Single Family', imageSrc: '/icon_png/single_family.png', checked: true, height: 90, width: 90 },
+                  { label: 'Apartment', imageSrc: '/icon_png/apartment.png', checked: true, height: 90, width: 90 },
+                  { label: 'Single Room', imageSrc: '/icon_png/single_room.png', checked: true, height: 90, width: 90 },
+                  { label: 'Townhouse', imageSrc: '/icon_png/townhouse.png', checked: true, height: 90, width: 90 },
+                ]}
+                onFilterChange={() => { }}
+              />
+
             </div>
           </div>
         </div>
