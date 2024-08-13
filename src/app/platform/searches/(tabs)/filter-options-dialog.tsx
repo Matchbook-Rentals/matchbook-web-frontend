@@ -34,17 +34,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center rounded-lg p-2">
           <FilterIcon size={24} className="mr-2" />
-          <span>Filters</span>
+          <span >Filters</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
         <div className="p-6 h-full overflow-y-auto flex flex-col items-center">
           <div className="w-full max-w-md">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Filters</h2>
-              <Button variant="ghost" onClick={() => onOpenChange(false)}>
-                <X className="h-6 w-6" />
-              </Button>
+            <div className="flex justify-center items-center mb-6">
+              <h2 className="text-3xl font-semibold">Filters</h2>
             </div>
 
             <div className="space-y-6">
