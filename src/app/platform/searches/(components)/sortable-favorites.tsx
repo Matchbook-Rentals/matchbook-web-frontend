@@ -1,131 +1,87 @@
-import React, { useState } from 'react';
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronUp, ChevronDown, Heart } from 'lucide-react';
-import { ListingAndImages } from '@/types';
+import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 
-interface Listing {
-  id: number;
-  rank: number;
-  image: string;
-  name: string;
-  price: number;
-  rating: number;
-  beds: number;
-  baths: number;
-  distance: number;
-  sqft: number;
-}
-
-interface SortableFavoritesProps {
-  listings: ListingAndImages[];
-}
-
-const SortableFavorites: React.FC<SortableFavoritesProps> = ({ listings: initialListings }) => {
-  const [listings, setListings] = useState(initialListings);
-  const [sortBy, setSortBy] = useState('rank');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
-  const columns = [
-    { key: 'rank', label: 'Listing' },
-    { key: 'calculatedPrice', label: 'Price' },
-    { key: 'rating', label: 'Rating' },
-    { key: 'roomCount', label: 'Beds' },
-    { key: 'bathroomCount', label: 'Baths' },
-    { key: 'distance', label: 'Distance' },
-    { key: 'squareFootage', label: 'Sqft' },
-  ];
-
-  const handleSort = (criteria: string) => {
-    if (sortBy === criteria) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(criteria);
-      setSortDirection('asc');
-    }
-
-    const sortedListings = [...listings].sort((a, b) => {
-      const aValue = a[criteria as keyof ListingAndImages];
-      const bValue = b[criteria as keyof ListingAndImages];
-      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-    setListings(sortedListings);
-  };
+const ScrollableTable = () => {
+  // Sample data
+  const data = Array.from({ length: 10 }, (_, i) => ({
+    id: i + 1,
+    name: `Item ${i + 1}`,
+    col3: `Value 3-${i + 1}`,
+    col4: `Value 4-${i + 1}`,
+    col5: `Value 5-${i + 1}`,
+    col6: `Value 6-${i + 1}`,
+    col7: `Value 7-${i + 1}`,
+    col8: `Value 8-${i + 1}`,
+    col9: `Value 9-${i + 1}`,
+    col10: `Value 10-${i + 1}`,
+    status: ['Active', 'Inactive', 'Pending'][i % 3],
+  }));
 
   return (
-    <div className="w-full max-w-full mx-auto">
-      <ScrollArea className="h-[calc(100vh-100px)]">
-        <div className="min-w-[1200px]">
-          <Table className='overflow-x-scroll'>
+    <div className="w-full overflow-hidden border rounded-lg">
+      <div className="flex">
+        {/* Fixed left columns */}
+        <div className="flex-none">
+          <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-16"></TableHead>
-                <TableHead className="w-48">
-                  <button
-                    onClick={() => handleSort('rank')}
-                    className="flex items-center justify-start space-x-1 w-full"
-                  >
-                    <span>Listing</span>
-                    {sortBy === 'rank' && (
-                      sortDirection === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
-                    )}
-                  </button>
-                </TableHead>
-                {columns.slice(1).map((column) => (
-                  <TableHead key={column.key} className="w-32">
-                    <button
-                      onClick={() => handleSort(column.key)}
-                      className="flex items-center justify-center space-x-1 w-full"
-                    >
-                      <span>{column.label}</span>
-                      {sortBy === column.key && (
-                        sortDirection === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
-                      )}
-                    </button>
-                  </TableHead>
-                ))}
-                <TableHead className="w-24"></TableHead>
+                <TableHead className="w-20">ID</TableHead>
+                <TableHead className="w-40">Name</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {listings.map((listing) => (
-                <TableRow key={listing.id}>
-                  <TableCell className="w-16">
-                    <div className="flex items-center justify-center">
-                      <Heart className="text-red-500 mr-2" />
-                      <span className="font-bold">{listing.rank}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="w-48">
-                    <div className="flex-col items-center">
-                      <img
-                        src={listing.listingImages[0].url}
-                        alt={listing.title}
-                        className="w-24 h-12 object-cover mr-2"
-                      />
-                      <span className="font-semibold text-sm">{listing.title.slice(0, 18)}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="w-32">${listing.calculatedPrice.toLocaleString()}</TableCell>
-                  <TableCell className="w-32">{listing.rating || 3.5}</TableCell>
-                  <TableCell className="w-32">{listing.roomCount} beds</TableCell>
-                  <TableCell className="w-32">{listing.bathroomCount} baths</TableCell>
-                  <TableCell className="w-32">{listing.distance.toFixed(1)} mi.</TableCell>
-                  <TableCell className="w-32">{listing.squareFootage.toLocaleString()} sqft</TableCell>
-                  <TableCell className="w-24">
-                    <Button variant="outline" className="w-full">Apply</Button>
-                  </TableCell>
+              {data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
-      </ScrollArea>
+
+        {/* Scrollable middle columns */}
+        <div className="flex-grow overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {[3, 4, 5, 6, 7, 8, 9, 10].map((colNum) => (
+                  <TableHead key={colNum} className="w-40">Column {colNum}</TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((row) => (
+                <TableRow key={row.id}>
+                  {[3, 4, 5, 6, 7, 8, 9, 10].map((colNum) => (
+                    <TableCell key={colNum}>{row[`col${colNum}`]}</TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Fixed right column */}
+        <div className="flex-none">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-40">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default SortableFavorites;
+export default ScrollableTable;
