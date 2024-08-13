@@ -22,7 +22,7 @@ const Days: React.FC<DaysProps> = ({ currentDate, dateRange, onDateClick }) => {
         end: new Date(dateRange.endDate.getTime() - 86400000) // Subtract one day from end
       });
 
-    let className = "p-2 text-center hover:bg-gray-700 cursor-pointer";
+    let className = "p-2 text-center hover:bg-primaryBrand/40 cursor-pointer";
     if (isStartDate || isEndDate) className += " bg-primaryBrand";
     else if (isInRange) className += " bg-primaryBrand/60";
 

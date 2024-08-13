@@ -32,13 +32,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[50vh]">
       <div className="w-full md:w-1/2  md:h-full relative">
         <img
-          src={listingImages[activeImage].url}
-          alt={`${listingImages[activeImage].category} image ${listingImages[activeImage].rank}`}
+          src={listingImages[activeImage]?.url}
+          alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
           className="w-full h-full object-cover"
         />
       </div>
       <div className="w-full md:w-1/2 md:h-full relative">
-        <Carousel opts={{loop: true}} setApi={setApi} className="">
+        <Carousel opts={{ loop: true }} setApi={setApi} className="">
           <CarouselContent className="">
             {chunkedImages.map((chunk, chunkIndex) => (
               <CarouselItem key={chunkIndex} className=" h-[50vh] p-0">

@@ -1,11 +1,42 @@
 import React, { useState } from 'react';
-import { MapIcon, FilterIcon } from 'lucide-react'; // Assuming these icons exist
+import { MapIcon, FilterIcon } from 'lucide-react';
 import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
+import FilterOptionsDialog from './filter-options-dialog';
+
+// Add this interface
+interface FilterOptions {
+  minPrice: number;
+  maxPrice: number;
+  bedrooms: string;
+  beds: string;
+  baths: string;
+  furnished: boolean;
+  unfurnished: boolean;
+}
 
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // Update the filters state with the correct type and initial values
+  const [filters, setFilters] = useState<FilterOptions>({
+    minPrice: 0,
+    maxPrice: 10000,
+    bedrooms: 'Any',
+    beds: 'Any',
+    baths: 'Any',
+    furnished: false,
+    unfurnished: false,
+  });
+
+  // Update this function to handle all filter changes
+  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -28,24 +59,14 @@ const MatchmakerTab: React.FC = () => {
 
         {/* Input Fields */}
         <SearchControlBar />
-        {/* <div className="flex">
-          {['Input 1', 'Input 2', 'Input 3', 'Input 4'].map((input, index) => (
-            <React.Fragment key={input}>
-              <input
-                type="text"
-                placeholder="PLACEHOLDER"
-                className="border p-2"
-              />
-              {index < 3 && <div className="border-r mx-2 h-8"></div>}
-            </React.Fragment>
-          ))}
-        </div> */}
 
         {/* Filters */}
-        <div className="flex items-center border rounded-lg p-2">
-          <FilterIcon size={24} className="mr-2" />
-          <span>Filters</span>
-        </div>
+        <FilterOptionsDialog
+          isOpen={isFilterOpen}
+          onOpenChange={setIsFilterOpen}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
       </div>
 
       {/* Conditional Rendering of Map or Swipe View */}
@@ -53,5 +74,6 @@ const MatchmakerTab: React.FC = () => {
     </div>
   );
 };
+
 
 export default MatchmakerTab;
