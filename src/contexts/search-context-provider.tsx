@@ -67,6 +67,80 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     requestedIds: new Set()
   });
 
+  const getListingPrice = (listing: ListingAndImages) => {
+    const endDate = currentSearch?.endDate;
+    const startDate = currentSearch?.startDate;
+    const tripLengthInMonths = (endDate - startDate) / (1000 * 60 * 60 * 24 * 30); // Approximate days in a month
+    const shortestLeaseLength = listing.shortestLeaseLength;
+    const shortestLeasePrice = listing.shortestLeasePrice;
+    const longestLeaseLength = listing.longestLeaseLength;
+    const longestLeasePrice = listing.longestLeasePrice;
+
+    if (!endDate || !startDate) return null;
+
+    const leaseLengthDiff = longestLeaseLength - shortestLeaseLength;
+    const leasePriceDiff = longestLeasePrice - shortestLeasePrice;
+    const stepSize = leasePriceDiff / leaseLengthDiff;
+
+    console.log('tripLengthInMonths', tripLengthInMonths);
+    console.log('shortestLeaseLength', shortestLeaseLength);
+    console.log('stepSize', stepSize);
+    const priceAdjustment = Math.round((tripLengthInMonths - shortestLeaseLength) * stepSize);
+    console.log('priceAdjustment', priceAdjustment);
+    listing.price = shortestLeasePrice + priceAdjustment;
+    console.log('listing.price', listing.price);
+    return listing.price;
+  }
+
+  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
+    const priceScore = (listing.calculatedPrice / lowestPrice) * 10;
+    const distanceScore = ((listing.distance || 0) / highestDistance) * 9;
+    const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
+    const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
+    const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
+    return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
+  }
+
+
+  const sortListingsByUScore = (listings: ListingAndImages[]) => {
+    // Pre-calculate prices for all listings
+    const listingsWithPrices = listings.map(listing => ({
+      ...listing,
+      calculatedPrice: getListingPrice(listing)
+    }));
+
+    let lowestPrice = Infinity;
+    let highestDistance = 0;
+    let highestSquareFootage = 0;
+    let highestRoomCount = 0;
+    let highestBathroomCount = 0;
+
+    listingsWithPrices.forEach(listing => {
+      if (listing.calculatedPrice < lowestPrice) {
+        lowestPrice = listing.calculatedPrice;
+      }
+      if (listing.distance && listing.distance > highestDistance) {
+        highestDistance = listing.distance;
+      }
+      if (listing.squareFootage && listing.squareFootage > highestSquareFootage) {
+        highestSquareFootage = listing.squareFootage;
+      }
+      if (listing.roomCount && listing.roomCount > highestRoomCount) {
+        highestRoomCount = listing.roomCount;
+      }
+      if (listing.bathroomCount && listing.bathroomCount > highestBathroomCount) {
+        highestBathroomCount = listing.bathroomCount;
+      }
+    });
+
+
+    const updatedListings = listingsWithPrices.map(listing => {
+      const uScore = calculateUScore(listing, lowestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
+      return { ...listing, price: listing.calculatedPrice, uScore };
+    });
+
+    return updatedListings.sort((a, b) => b.uScore - a.uScore);
+  }
 
   const fetchListings = async (lat: number, lng: number, radius: number) => {
     setIsLoading(true);
@@ -75,7 +149,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       if (results.length === 0) {
         console.log(currentSearch);
       }
-      setListings(results);
+      const sortedResults = sortListingsByUScore(results);
+
+      setListings(sortedResults);
     } finally {
       setIsLoading(false);
     }

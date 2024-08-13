@@ -12,6 +12,7 @@ import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
+import { Button } from '@/components/ui/button';
 
 const MatchViewTab: React.FC = () => {
   const { state, actions } = useSearchContext();
@@ -83,6 +84,8 @@ const MatchViewTab: React.FC = () => {
     <div className="w-full">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
+        <Button onClick={() => console.log(listings)}>{showListings[0]?.uScore}</Button>
+
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
           Icon={
@@ -112,7 +115,7 @@ const MatchViewTab: React.FC = () => {
         numStays={0}
         numBath={showListings[0]?.bathroomCount}
         numBeds={showListings[0]?.roomCount}
-        rentPerMonth={showListings[0]?.shortestLeasePrice}
+        rentPerMonth={showListings[0]?.calculatedPrice || 0}
         distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
         deposit={showListings[0]?.depositSize}
         sqft={showListings[0]?.squareFootage}
