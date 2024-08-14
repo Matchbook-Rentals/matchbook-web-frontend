@@ -14,12 +14,10 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     return <p>No listing Images</p>;
   }
 
-  const handleImageClick = (index: number) => {
-    console.log(`Clicked image index: ${index}`);
-    setActiveImage(index);
-  };
+  // Ensure uniqueness of images based on their id
+  const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
 
-  const chunkedImages = listingImages.reduce((resultArray, item, index) => {
+  const chunkedImages = uniqueImages.reduce((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / 4);
     if (!resultArray[chunkIndex]) {
       resultArray[chunkIndex] = [];
@@ -28,26 +26,31 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     return resultArray;
   }, [] as ListingImage[][]);
 
+  const handleImageClick = (index: number) => {
+    console.log(`Clicked image index: ${index}`);
+    setActiveImage(index);
+  };
+
   return (
     <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[50vh]">
       <div className="w-full md:w-1/2  md:h-full relative">
         <img
-          src={listingImages[activeImage].url}
-          alt={`${listingImages[activeImage].category} image ${listingImages[activeImage].rank}`}
+          src={listingImages[activeImage]?.url}
+          alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
           className="w-full h-full object-cover"
         />
       </div>
       <div className="w-full md:w-1/2 md:h-full relative">
-        <Carousel opts={{loop: true}} setApi={setApi} className="">
+        <Carousel opts={{ loop: true }} setApi={setApi} className="">
           <CarouselContent className="">
             {chunkedImages.map((chunk, chunkIndex) => (
-              <CarouselItem key={chunkIndex} className=" h-[50vh] p-0">
+              <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[50vh] p-0">
                 <div className="grid grid-cols-2 grid-rows-2 gap-2 ">
-                  {chunk.map((image, imageIndex) => (
+                  {chunk.map((image) => (
                     <div
-                      key={image.id}
+                      key={`image-${image.id}`}
                       className="relative cursor-pointer h-[25vh] overflow-hidden"
-                      onClick={() => handleImageClick(chunkIndex * 4 + imageIndex)}
+                      onClick={() => handleImageClick(listingImages.findIndex(img => img.id === image.id))}
                     >
                       <img
                         src={image.url}

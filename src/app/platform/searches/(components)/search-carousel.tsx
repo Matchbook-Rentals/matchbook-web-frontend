@@ -73,8 +73,8 @@ const SearchCarousel: React.FC = () => {
                 )
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className='bg-charcoalBrand text-white scale-125 hover:bg-charcoalBrand/80 hover:text-white' />
+            <CarouselNext className='bg-charcoalBrand text-white scale-125 hover:bg-charcoalBrand/80 hover:text-white' />
           </Carousel>
         </AccordionContent>
       </AccordionItem>

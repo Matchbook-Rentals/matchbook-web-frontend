@@ -1,25 +1,30 @@
 # TO DOs
 
 ## TONIGHT
+finish dialog (filter options, calendar, X to the left, one x, icon import)
+ -- Ask Daniel about calendar
+carousel (fix height, fix arrows)
+ALGO
+ -- do feature score
+reset carousel api to 0.
 
 [X] 1. Finish application summary
 
 [ ] 2. MAP VIEW
-       Change cards to match design
-       Add actions
-       remove console log
+        Kick up coordinates
 
 [ ] 3. New Dashboard
-        Matchmaker
         control bar, populate old data, use popovers, create double calendar, save new dates to trip via handlesave, adults counter, 
-        new matchview
         fix infinite scroll
         Matchbook
+        hearts on map view listings
 
 [] 4. Add other users&application to housingRequest
 
 [ ] 5. Errors for client side validation 
 
+## Algorithm
+U score = Sum of All Scores where Score is (Value/MaxValue * Coeffecient)
 
 store in db, fetch on host side
 

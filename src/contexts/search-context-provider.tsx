@@ -66,7 +66,100 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     dislikedIds: new Set(),
     requestedIds: new Set()
   });
+  const getListingPrice = (listing: ListingAndImages) => {
+    const endDate = currentSearch?.endDate;
+    const startDate = currentSearch?.startDate;
+    if (!endDate || !startDate) return listing.shortestLeasePrice;
 
+    const tripLengthInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+
+    const shortestLeaseLength = listing.shortestLeaseLength;
+    const shortestLeasePrice = listing.shortestLeasePrice;
+    const longestLeaseLength = listing.longestLeaseLength;
+    const longestLeasePrice = listing.longestLeasePrice;
+
+    // If the trip length is shorter than or equal to the shortest lease, return the shortest lease price
+    if (tripLengthInMonths <= shortestLeaseLength) return shortestLeasePrice;
+
+    // If the trip length is longer than or equal to the longest lease, return the longest lease price
+    if (tripLengthInMonths >= longestLeaseLength) return longestLeasePrice;
+
+    // Calculate the price difference and lease length difference
+    const priceDifference = longestLeasePrice - shortestLeasePrice;
+    const leaseLengthDifference = longestLeaseLength - shortestLeaseLength;
+
+    // Calculate the price change per month (can be positive or negative)
+    const priceChangePerMonth = priceDifference / leaseLengthDifference;
+
+    // Calculate the number of months beyond the shortest lease
+    const monthsBeyondShortest = tripLengthInMonths - shortestLeaseLength;
+
+    // Calculate the total price change
+    const totalPriceChange = priceChangePerMonth * monthsBeyondShortest;
+
+    // Calculate the final price
+    const finalPrice = shortestLeasePrice + totalPriceChange;
+
+    return Math.round(finalPrice);
+  }
+
+  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
+    const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
+    const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
+    const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
+    const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
+    const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
+    return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
+  }
+
+
+
+  const sortListingsByUScore = (listings: ListingAndImages[]) => {
+    // Pre-calculate prices for all listings
+    const listingsWithPrices = listings.map(listing => ({
+      ...listing,
+      calculatedPrice: getListingPrice(listing)
+    }));
+
+    let lowestPrice = Infinity;
+    let highestPrice = 0;
+    let highestDistance = 0;
+    let highestSquareFootage = 0;
+    let highestRoomCount = 0;
+    let highestBathroomCount = 0;
+
+    listingsWithPrices.forEach(listing => {
+      if (listing.calculatedPrice < lowestPrice) {
+        lowestPrice = listing.calculatedPrice;
+        console.log('lowestPrice', lowestPrice);
+      }
+      if (listing.calculatedPrice > highestPrice) {
+        highestPrice = listing.calculatedPrice;
+        console.log('highestPrice', highestPrice);
+      }
+      if (listing.distance && listing.distance > highestDistance) {
+        highestDistance = listing.distance;
+      }
+      if (listing.squareFootage && listing.squareFootage > highestSquareFootage) {
+        highestSquareFootage = listing.squareFootage;
+      }
+      if (listing.roomCount && listing.roomCount > highestRoomCount) {
+        highestRoomCount = listing.roomCount;
+      }
+      if (listing.bathroomCount && listing.bathroomCount > highestBathroomCount) {
+        highestBathroomCount = listing.bathroomCount;
+      }
+    });
+    console.log(' final lowestPrice', lowestPrice);
+    console.log(' final highestPrice', highestPrice);
+
+    const updatedListings = listingsWithPrices.map(listing => {
+      const uScore = calculateUScore(listing, lowestPrice, highestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
+      return { ...listing, price: listing.calculatedPrice, uScore };
+    });
+
+    return updatedListings.sort((a, b) => b.uScore - a.uScore);
+  }
 
   const fetchListings = async (lat: number, lng: number, radius: number) => {
     setIsLoading(true);
@@ -75,7 +168,9 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       if (results.length === 0) {
         console.log(currentSearch);
       }
-      setListings(results);
+      const sortedResults = sortListingsByUScore(results);
+
+      setListings(sortedResults);
     } finally {
       setIsLoading(false);
     }

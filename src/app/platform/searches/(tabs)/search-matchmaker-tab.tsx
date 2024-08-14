@@ -1,11 +1,64 @@
 import React, { useState } from 'react';
-import { MapIcon, FilterIcon } from 'lucide-react'; // Assuming these icons exist
+import { MapIcon, FilterIcon } from 'lucide-react';
 import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
+import FilterOptionsDialog from './filter-options-dialog';
+import { useSearchContext } from '@/contexts/search-context-provider';
+
+// Updated FilterOptions interface
+interface FilterOptions {
+  minPrice: number;
+  maxPrice: number;
+  bedrooms: string;
+  beds: string;
+  baths: string;
+  furnished: boolean;
+  unfurnished: boolean;
+  moveInDate: Date;
+  moveOutDate: Date;
+  flexibleMoveIn: boolean;
+  flexibleMoveOut: boolean;
+  flexibleMoveInStart: Date;
+  flexibleMoveInEnd: Date;
+  flexibleMoveOutStart: Date;
+  flexibleMoveOutEnd: Date;
+  propertyTypes: string[];
+  utilities: string[];
+}
 
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { state } = useSearchContext();
+  // Updated initial state for filters
+  const [filters, setFilters] = useState<FilterOptions>({
+    minPrice: 0,
+    maxPrice: 10000,
+    bedrooms: 'Any',
+    beds: 'Any',
+    baths: 'Any',
+    furnished: false,
+    unfurnished: false,
+    moveInDate: state.currentSearch?.startDate || new Date(),
+    moveOutDate: state.currentSearch?.endDate || new Date(),
+    flexibleMoveIn: false,
+    flexibleMoveOut: false,
+    flexibleMoveInStart: state.currentSearch?.startDate || new Date(),
+    flexibleMoveInEnd: state.currentSearch?.startDate || new Date(),
+    flexibleMoveOutStart: state.currentSearch?.endDate || new Date(),
+    flexibleMoveOutEnd: state.currentSearch?.endDate || new Date(),
+    propertyTypes: [],
+    utilities: [],
+  });
+
+  // Updated handleFilterChange function to handle all filter changes, including arrays
+  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean | string[] | Date) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -28,24 +81,14 @@ const MatchmakerTab: React.FC = () => {
 
         {/* Input Fields */}
         <SearchControlBar />
-        {/* <div className="flex">
-          {['Input 1', 'Input 2', 'Input 3', 'Input 4'].map((input, index) => (
-            <React.Fragment key={input}>
-              <input
-                type="text"
-                placeholder="PLACEHOLDER"
-                className="border p-2"
-              />
-              {index < 3 && <div className="border-r mx-2 h-8"></div>}
-            </React.Fragment>
-          ))}
-        </div> */}
 
         {/* Filters */}
-        <div className="flex items-center border rounded-lg p-2">
-          <FilterIcon size={24} className="mr-2" />
-          <span>Filters</span>
-        </div>
+        <FilterOptionsDialog
+          isOpen={isFilterOpen}
+          onOpenChange={setIsFilterOpen}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
       </div>
 
       {/* Conditional Rendering of Map or Swipe View */}
@@ -53,5 +96,6 @@ const MatchmakerTab: React.FC = () => {
     </div>
   );
 };
+
 
 export default MatchmakerTab;

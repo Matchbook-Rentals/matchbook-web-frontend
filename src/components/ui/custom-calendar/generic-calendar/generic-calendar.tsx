@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from './Header';
+import Header from '../calendar-header';
 import DaysOfWeek from './DaysOfWeek';
 import Days from '../date-range-selector/date-range-days';
 
