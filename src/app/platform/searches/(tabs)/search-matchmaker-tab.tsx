@@ -4,6 +4,7 @@ import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
+import { useSearchContext } from '@/contexts/search-context-provider';
 
 // Add this interface
 interface FilterOptions {
@@ -14,11 +15,16 @@ interface FilterOptions {
   baths: string;
   furnished: boolean;
   unfurnished: boolean;
+  moveInDate: Date;
+  moveOutDate: Date;
+  flexibleMoveIn: boolean;
+  flexibleMoveOut: boolean;
 }
 
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { state } = useSearchContext();
   // Update the filters state with the correct type and initial values
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: 0,
@@ -28,6 +34,10 @@ const MatchmakerTab: React.FC = () => {
     baths: 'Any',
     furnished: false,
     unfurnished: false,
+    moveInDate: state.currentSearch?.startDate || new Date(),
+    moveOutDate: state.currentSearch?.endDate || new Date(),
+    flexibleMoveIn: false,
+    flexibleMoveOut: false,
   });
 
   // Update this function to handle all filter changes

@@ -15,6 +15,10 @@ interface FilterOptions {
   maxPrice: number;
   moveInDate: Date;
   moveOutDate: Date;
+  flexibleMoveInStart: Date;
+  flexibleMoveInEnd: Date;
+  flexibleMoveOutStart: Date;
+  flexibleMoveOutEnd: Date;
   bedrooms: string;
   beds: string;
   baths: string;
@@ -87,7 +91,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     <DateDaySelector
                       id="move-in-date"
                       selectedDate={filters.moveInDate}
-                      onDateSelect={(date) => onFilterChange('moveInDate', date)}
+                      tripDate={filters.moveInDate}
+                      onDateSelect={(dates) => {
+                        onFilterChange('flexibleMoveInStart', dates[0]);
+                        onFilterChange('flexibleMoveInEnd', dates[1]);
+                      }}
                     />
                   </div>
 
@@ -96,7 +104,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     <DateDaySelector
                       id="move-out-date"
                       selectedDate={filters.moveOutDate}
-                      onDateSelect={(date) => onFilterChange('moveOutDate', date)}
+                      tripDate={filters.moveOutDate}
+                      onDateSelect={(dates) => {
+                        onFilterChange('flexibleMoveOutStart', dates[0]);
+                        onFilterChange('flexibleMoveOutEnd', dates[1]);
+                      }}
                     />
                   </div>
                 </div>
