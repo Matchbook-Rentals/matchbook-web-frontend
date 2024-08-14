@@ -6,7 +6,7 @@ import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
 import { useSearchContext } from '@/contexts/search-context-provider';
 
-// Add this interface
+// Updated FilterOptions interface
 interface FilterOptions {
   minPrice: number;
   maxPrice: number;
@@ -19,13 +19,19 @@ interface FilterOptions {
   moveOutDate: Date;
   flexibleMoveIn: boolean;
   flexibleMoveOut: boolean;
+  flexibleMoveInStart: Date;
+  flexibleMoveInEnd: Date;
+  flexibleMoveOutStart: Date;
+  flexibleMoveOutEnd: Date;
+  propertyTypes: string[];
+  utilities: string[];
 }
 
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { state } = useSearchContext();
-  // Update the filters state with the correct type and initial values
+  // Updated initial state for filters
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: 0,
     maxPrice: 10000,
@@ -38,10 +44,16 @@ const MatchmakerTab: React.FC = () => {
     moveOutDate: state.currentSearch?.endDate || new Date(),
     flexibleMoveIn: false,
     flexibleMoveOut: false,
+    flexibleMoveInStart: state.currentSearch?.startDate || new Date(),
+    flexibleMoveInEnd: state.currentSearch?.startDate || new Date(),
+    flexibleMoveOutStart: state.currentSearch?.endDate || new Date(),
+    flexibleMoveOutEnd: state.currentSearch?.endDate || new Date(),
+    propertyTypes: [],
+    utilities: [],
   });
 
-  // Update this function to handle all filter changes
-  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean) => {
+  // Updated handleFilterChange function to handle all filter changes, including arrays
+  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean | string[] | Date) => {
     setFilters(prevFilters => ({
       ...prevFilters,
       [key]: value,

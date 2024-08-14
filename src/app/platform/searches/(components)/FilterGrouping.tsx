@@ -5,7 +5,6 @@ import Image from 'next/image';
 interface FilterOption {
   label: string;
   imageSrc: string;
-  checked: boolean;
   height?: number;
   width?: number;
 }
@@ -13,10 +12,11 @@ interface FilterOption {
 interface FilterGroupingProps {
   title: string;
   options: FilterOption[];
-  onFilterChange: (label: string, value: boolean) => void;
+  selectedOptions: string[];
+  onFilterChange: (label: string, checked: boolean) => void;
 }
 
-const FilterGrouping: React.FC<FilterGroupingProps> = ({ title, options, onFilterChange }) => {
+const FilterGrouping: React.FC<FilterGroupingProps> = ({ title, options, selectedOptions = [], onFilterChange }) => {
   return (
     <div className="text-center">
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
@@ -25,7 +25,8 @@ const FilterGrouping: React.FC<FilterGroupingProps> = ({ title, options, onFilte
           <FilterOption
             key={option.label}
             {...option}
-            onChange={() => onFilterChange(option.label, !option.checked)}
+            checked={selectedOptions.includes(option.label)}
+            onChange={() => onFilterChange(option.label, !selectedOptions.includes(option.label))}
           />
         ))}
       </div>
@@ -34,6 +35,7 @@ const FilterGrouping: React.FC<FilterGroupingProps> = ({ title, options, onFilte
 };
 
 interface FilterOptionProps extends FilterOption {
+  checked: boolean;
   onChange: () => void;
 }
 

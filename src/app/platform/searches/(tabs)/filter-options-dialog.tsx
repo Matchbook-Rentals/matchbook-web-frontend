@@ -26,13 +26,15 @@ interface FilterOptions {
   unfurnished: boolean;
   flexibleMoveIn: boolean;
   flexibleMoveOut: boolean;
+  utilities: string[];
+  propertyTypes: string[];
 }
 
 interface FilterOptionsDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   filters: FilterOptions;
-  onFilterChange: (key: keyof FilterOptions, value: string | number | boolean) => void;
+  onFilterChange: (key: keyof FilterOptions, value: string | number | boolean | string[]) => void;
 }
 
 const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
@@ -41,6 +43,13 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   filters,
   onFilterChange,
 }) => {
+  // Ensure that utilities and propertyTypes are initialized as arrays
+  const safeFilters = {
+    ...filters,
+    utilities: filters.utilities || [],
+    propertyTypes: filters.propertyTypes || [],
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -129,22 +138,51 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 />
               ))}
 
-              <FurnitureFilter
-                furnished={filters.furnished}
-                unfurnished={filters.unfurnished}
-                onFilterChange={onFilterChange}
+              <FilterGrouping
+                title='Furniture'
+                options={[
+                  { label: 'Furnished', imageSrc: '/icon_png/furnished.png', height: 90, width: 120 },
+                  { label: 'Unfurnished', imageSrc: '/icon_png/unfurnished.png', height: 90, width: 90 },
+                ]}
+                selectedOptions={[
+                  ...(filters.furnished ? ['Furnished'] : []),
+                  ...(filters.unfurnished ? ['Unfurnished'] : []),
+                ]}
+                onFilterChange={(label, checked) => {
+                  if (label === 'Furnished') {
+                    onFilterChange('furnished', checked);
+                  } else if (label === 'Unfurnished') {
+                    onFilterChange('unfurnished', checked);
+                  }
+                }}
               />
 
-              <FilterGrouping title='Utilities' options={[{ label: 'Included In Rent', imageSrc: '/icon_png/utilites.png', checked: true, height: 90, width: 90 }]} onFilterChange={() => { }} />
+              <FilterGrouping
+                title='Utilities'
+                options={[{ label: 'Included In Rent', imageSrc: '/icon_png/utilites.png', height: 90, width: 90 }]}
+                selectedOptions={safeFilters.utilities}
+                onFilterChange={(label, checked) => {
+                  const updatedUtilities = checked
+                    ? [...safeFilters.utilities, label]
+                    : safeFilters.utilities.filter(item => item !== label);
+                  onFilterChange('utilities', updatedUtilities);
+                }}
+              />
               <FilterGrouping
                 title='Property Type'
                 options={[
-                  { label: 'Single Family', imageSrc: '/icon_png/single_family.png', checked: true, height: 90, width: 90 },
-                  { label: 'Apartment', imageSrc: '/icon_png/apartment.png', checked: true, height: 90, width: 90 },
-                  { label: 'Single Room', imageSrc: '/icon_png/single_room.png', checked: true, height: 90, width: 90 },
-                  { label: 'Townhouse', imageSrc: '/icon_png/townhouse.png', checked: true, height: 90, width: 90 },
+                  { label: 'Single Family', imageSrc: '/icon_png/single_family.png', height: 90, width: 90 },
+                  { label: 'Apartment', imageSrc: '/icon_png/apartment.png', height: 90, width: 90 },
+                  { label: 'Single Room', imageSrc: '/icon_png/single_room.png', height: 90, width: 90 },
+                  { label: 'Townhouse', imageSrc: '/icon_png/townhouse.png', height: 90, width: 90 },
                 ]}
-                onFilterChange={() => { }}
+                selectedOptions={safeFilters.propertyTypes}
+                onFilterChange={(label, checked) => {
+                  const updatedPropertyTypes = checked
+                    ? [...safeFilters.propertyTypes, label]
+                    : safeFilters.propertyTypes.filter(item => item !== label);
+                  onFilterChange('propertyTypes', updatedPropertyTypes);
+                }}
               />
 
             </div>
