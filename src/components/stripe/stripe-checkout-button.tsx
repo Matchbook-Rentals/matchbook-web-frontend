@@ -1,16 +1,21 @@
 import { loadStripe } from '@stripe/stripe-js';
 import { useState } from 'react';
+import { Button } from "@/components/ui/button";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-export default function StripeCheckoutButton() {
+interface StripeCheckoutButtonProps {
+  endpointUrl: string;
+}
+
+export default function StripeCheckoutButton({ endpointUrl }: StripeCheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/create-checkout-session', {
+      const response = await fetch(endpointUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,12 +39,12 @@ export default function StripeCheckoutButton() {
   };
 
   return (
-    <button
+    <Button
       onClick={handleCheckout}
       disabled={isLoading}
-      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+      variant="default"
     >
       {isLoading ? 'Processing...' : 'Pay for Background Screening'}
-    </button>
+    </Button>
   );
 }
