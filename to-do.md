@@ -1,6 +1,17 @@
 # TO DOs
 
-## TONIGHT
+Credit Card APIS for paywall
+EVICTION AND CRIMINAL BACKGROUND CHECKS
+
+ACH PLAID API
+
+## 20AUG24
+STRIPE FROM APPLICATION
+
+
+## 13AUG24
+padding on bottom or footer, prob footer
+dialog X for search deletion is FUGLY
 finish dialog (filter options, calendar, X to the left, one x, icon import)
  -- Ask Daniel about calendar
 carousel (fix height, fix arrows)
