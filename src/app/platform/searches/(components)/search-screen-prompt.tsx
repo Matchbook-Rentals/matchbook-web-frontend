@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import StripeCheckoutButton from "@/components/stripe/stripe-checkout-button";
 
 interface SearchScreenPromptProps {
   isScreened: boolean;
@@ -50,7 +50,7 @@ export function SearchScreenPrompt({ isScreened }: SearchScreenPromptProps) {
             </span>
           </li>
         </ul>
-        <Button className="w-full">Start Screening</Button>
+        <StripeCheckoutButton />
       </CardContent>
     </Card>
   );
