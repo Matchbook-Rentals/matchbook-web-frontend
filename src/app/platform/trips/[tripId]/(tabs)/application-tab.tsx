@@ -205,6 +205,9 @@ const ApplicationForm: React.FC = () => {
             setVerificationImages={setVerificationImages}
           />
           <div className="flex justify-center">
+            <SearchScreenPrompt isScreened={true} />
+          </div>
+          <div className="flex justify-center">
             <SearchScreenPrompt isScreened={false} />
           </div>
           <Questionnaire answers={answers} setAnswers={setAnswers} />
