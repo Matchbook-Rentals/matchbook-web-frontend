@@ -12,10 +12,11 @@ import { createApplication, getTripApplication } from '@/app/actions/application
 import { addParticipant } from '@/app/actions/trips';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import { useToast } from "@/components/ui/use-toast";
-import { useTripContext } from '@/contexts/trip-context-provider';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useSearchContext } from '@/contexts/search-context-provider';
+import { SearchScreenPrompt } from '@/app/platform/searches/(components)/search-screen-prompt';
 
 interface ApplicationFormData {
   personalInfo: PersonalInfo;
@@ -71,7 +72,11 @@ interface QuestionnaireAnswers {
 }
 
 const ApplicationForm: React.FC = () => {
-  const { hasApplication, trip, setHasApplication, application } = useTripContext();
+  // const { hasApplication, trip, setHasApplication, application } = useTripContext();
+  const { state, actions } = useSearchContext();
+  const { hasApplication, currentSearch, application } = state;
+  const { setHasApplication } = actions;
+
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
     firstName: application?.firstName || '',
     lastName: application?.lastName || ''
@@ -143,7 +148,7 @@ const ApplicationForm: React.FC = () => {
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Adding user with email:', email)
-    let participant = await addParticipant(trip?.id, email)
+    let participant = await addParticipant(currentSearch?.id, email)
     console.log('participant', participant)
     setEmail('')
   }
@@ -170,10 +175,10 @@ const ApplicationForm: React.FC = () => {
             <div className="mt-4">
               <h4 className="mb-2 font-medium">Current Participants:</h4>
               <ScrollArea className="h-[100px]" onClick={() => {
-                console.log('trip', trip)
+                console.log('trip', currentSearch)
               }}>
                 <ul className="space-y-1">
-                  {trip?.allParticipants?.length > 0 && trip?.allParticipants?.map((participant, index) => (
+                  {currentSearch?.allParticipants?.length > 0 && currentSearch?.allParticipants?.map((participant, index) => (
                     <li key={index}>{participant.firstName} {participant.lastName}</li>
                   ))}
                 </ul>
@@ -199,6 +204,12 @@ const ApplicationForm: React.FC = () => {
             verificationImages={verificationImages.filter(img => img.category === 'Income')}
             setVerificationImages={setVerificationImages}
           />
+          <div className="flex justify-center">
+            <SearchScreenPrompt isScreened={true} />
+          </div>
+          <div className="flex justify-center">
+            <SearchScreenPrompt isScreened={false} />
+          </div>
           <Questionnaire answers={answers} setAnswers={setAnswers} />
           <Button type="submit" className="w-full">Save Application</Button>
         </form>

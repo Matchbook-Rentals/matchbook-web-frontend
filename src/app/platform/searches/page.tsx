@@ -9,6 +9,7 @@ import MatchmakerTab from './(tabs)/search-matchmaker-tab';
 import MapView from './(tabs)/search-map-tab';
 import ShortListTab from './(tabs)/search-short-list-tab';
 import { Button } from '@/components/ui/button';
+import ApplicationTab from '../trips/[tripId]/(tabs)/application-tab';
 
 interface Tab {
   value: string;
@@ -36,7 +37,7 @@ const SearchesPage: React.FC = () => {
     // { label: 'Map View', value: 'map-view', content: state.currentSearch ? <MapView /> : null, textSize: tabSize },
     { label: 'Favorites', value: 'favorites', content: <ShortListTab />, textSize: tabSize },
     { label: 'Matchbook', value: 'matchbook', content: <div>Matches</div>, textSize: tabSize },
-    { label: 'Application', value: 'application', content: <div>Application</div>, textSize: tabSize },
+    { label: 'Application', value: 'application', content: <ApplicationTab />, textSize: tabSize },
   ];
   return (
     <div className="flex flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
