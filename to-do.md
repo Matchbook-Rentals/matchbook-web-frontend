@@ -5,8 +5,18 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 21AUG24
+OPEN UP STRIPE CLI (one to listen and one to trigger)
+add Order to DB (include service type, status, isRedeemed)
+npx prisma db push
+update webhook to save order to db
+Success page needs to check for Order (type: backgroundCheck, isRedeemed: false) 
+if no order, redirect to please pay, if found proceed with apis
+
 ## 20AUG24
 STRIPE FROM APPLICATION
+STRIPE RECEIPT, DB TRANSACTIONS
+Get tile for listing, store image in db, display in match rather than map
 
 
 ## 13AUG24

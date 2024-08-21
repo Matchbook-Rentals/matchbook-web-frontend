@@ -41,6 +41,7 @@ model User {
   applications       Application[]
   preferences        UserPreferences?
   participatingTrips Trip[]           @relation("TripParticipants")
+  purchases          Purchase[]
 }
 
 model UserPreferences {
@@ -439,4 +440,18 @@ model VerificationImage {
   applicationId String
 
   @@index([applicationId])
+}
+
+model Purchase {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  status     String   @default("pending")
+  isRedeemed Boolean  @default(false)
+  type       String
+  amount     Int?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
