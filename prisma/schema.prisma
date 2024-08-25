@@ -448,6 +448,7 @@ model Purchase {
   updatedAt  DateTime @updatedAt
   status     String   @default("pending")
   isRedeemed Boolean  @default(false)
+  email      String?
   type       String
   amount     Int?
   userId     String?

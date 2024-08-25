@@ -12,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: Request) {
   const body = await req.text();
   const headersList = headers();
-  const sig = headersList.get('stripe-signature');
+  const sig = headersList.get('Stripe-Signature');
 
   let event;
 
@@ -35,14 +35,13 @@ export async function POST(req: Request) {
       const session = event.data.object;
       // Here, you can fulfill the order
       // For example, you could save the order to your database
-      console.log(`Payment successful for session: ${session.id}`);
-      console.log(session)
-      // You might want to update your database here
+      console.log('FROM WEBHOOK', session)
       await prisma.purchase.create({
         data: {
           type: 'payment',
           amount: session.amount_total,
           userId: session.metadata?.userId || null,
+          email: session.customer_details?.email || null,
         },
       });
       break;

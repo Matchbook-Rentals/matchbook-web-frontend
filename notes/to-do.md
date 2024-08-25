@@ -5,6 +5,11 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+##25AUG24
+get auth to webhook
+OPEN API ACCOUNTS        
+
+
 ## 21AUG24
 OPEN UP STRIPE CLI (one to listen and one to trigger)
 add Order to DB (include service type, status, isRedeemed)

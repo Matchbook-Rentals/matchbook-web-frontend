@@ -10,6 +10,11 @@ export async function POST(request: Request) {
   try {
     const { userId } = await request.json(); // Extract userId from request body
 
+    // Check if userId is provided
+    if (!userId) {
+      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -28,7 +33,7 @@ export async function POST(request: Request) {
       success_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/failure`,
       metadata: {
-        userId: userId, // Add userId to metadata
+        userId: userId,
       },
     });
     console.log('session', session);

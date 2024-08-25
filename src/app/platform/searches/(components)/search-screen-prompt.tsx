@@ -50,7 +50,7 @@ export function SearchScreenPrompt({ isScreened }: SearchScreenPromptProps) {
             </span>
           </li>
         </ul>
-        <StripeCheckoutButton endpointUrl="/api/create-checkout-session" />
+        <StripeCheckoutButton endpointUrl="/api/create-checkout-session/background-check" />
       </CardContent>
     </Card>
   );
