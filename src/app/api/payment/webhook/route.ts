@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       console.log('FROM WEBHOOK', session)
       await prisma.purchase.create({
         data: {
-          type: 'payment',
+          type: 'backgroundCheck',
           amount: session.amount_total,
           userId: session.metadata?.userId || null,
           email: session.customer_details?.email || null,

@@ -2,6 +2,8 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
+import StripeCheckoutButton from '@/components/stripe/stripe-checkout-button';
+import { ApiRequestButtons } from './(components)/request-buttons';
 
 async function checkBackgroundCheckPurchase(userId: string) {
   'use server';
@@ -12,7 +14,6 @@ async function checkBackgroundCheckPurchase(userId: string) {
       isRedeemed: false,
     },
   });
-
   return purchase !== null;
 }
 
@@ -43,16 +44,17 @@ export default async function BackgroundCheckPage() {
   const hasUnredeemedPurchase = await checkBackgroundCheckPurchase(userId);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       <h1>Background Check</h1>
       {hasUnredeemedPurchase ? (
-        <form action={() => redeemBackgroundCheck(userId)}>
-          <button type="submit">Get Background Check</button>
-        </form>
+        <ApiRequestButtons />
       ) : (
-        <a href="/purchase/background-check">
-          <button>Pay for Background Check</button>
-        </a>
+        <>
+          <a href="/purchase/background-check">
+            <button>Pay for Background Check</button>
+          </a>
+          <StripeCheckoutButton endpointUrl="/api/create-checkout-session/background-check" />
+        </>
       )}
     </div>
   );

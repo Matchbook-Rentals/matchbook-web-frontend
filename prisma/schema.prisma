@@ -42,6 +42,7 @@ model User {
   preferences        UserPreferences?
   participatingTrips Trip[]           @relation("TripParticipants")
   purchases          Purchase[]
+  personReports      PersonReport?
 }
 
 model UserPreferences {
@@ -453,6 +454,25 @@ model Purchase {
   amount     Int?
   userId     String?
   user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model PersonReport {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  firstName     String
+  lastName      String
+  dateOfBirth   String?
+  city          String?
+  state         String?
+  reportToken   String?
+  bankruptcies  Int?
+  judgements    Int?
+  liens         Int?
+  isSexOffender Boolean?
+
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
