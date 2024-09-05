@@ -78,6 +78,7 @@ export async function createMessage(data: {
   senderRole: string;
   conversationId: string;
   receiverId: string;
+  imgUrl?: string;
 }) {
   const userId = await checkAuth();
   const message = await prisma.message.create({
@@ -132,6 +133,22 @@ export async function getAllConversations() {
           createdAt: 'desc',
         },
         take: 1,
+      },
+      participant1: {
+        select: {
+          firstName: true,
+          lastName: true,
+          imageUrl: true,
+          email: true,
+        },
+      },
+      participant2: {
+        select: {
+          firstName: true,
+          lastName: true,
+          imageUrl: true,
+          email: true,
+        },
       },
     },
     orderBy: {

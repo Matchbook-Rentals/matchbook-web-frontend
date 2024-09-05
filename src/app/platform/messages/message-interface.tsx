@@ -96,19 +96,13 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   return (
     <div className="flex flex-col">
       <UserTypeSelector userType={userType} setUserType={setUserType} />
-      {sseMessages.length}
-      {sseMessages.length > 0 && (
-        <div>
-          {sseMessages.map((message, index) => (
-            <div key={index}>{message.context}</div>
-          ))}
-        </div>
-      )}
+      <div onClick={() => console.log(conversations)} >{sseMessages.length}</div>
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
           conversations={allConversations}
           onSelectConversation={handleSelectConversation}
           onCreateConversation={handleCreateConversation}
+          user={user}
         />
         <MessageArea
           selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex] : null}
