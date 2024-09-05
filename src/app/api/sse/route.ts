@@ -1,11 +1,17 @@
 // app/api/sse/route.js
 
+// Import the Message type from your Prisma schema
+import { Message } from '@prisma/client';
+
 export const dynamic = 'force-dynamic'; // This ensures the route is always dynamically rendered
+
+// Store active connections
+const connections: Map<string, ReadableStreamController<any>> = new Map();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id') || 'defaultId';
-
+  console.log('id', id);
   // Set headers for SSE
   const headers = {
     'Content-Type': 'text/event-stream',
@@ -15,35 +21,37 @@ export async function GET(request: Request) {
 
   // Create a response with the correct headers
   const response = new Response(
-    (function () {
-      let counter = 0;
-      const stream = new ReadableStream({
-        start(controller) {
-          // This function is called when the stream starts
-          const intervalId = setInterval(() => {
-            counter++;
-            const data = `event: message\ndata: {"time": ${Date.now()}, "id": "${id}", "counter": ${counter}}\n\n`;
-            controller.enqueue(data);
-            if (counter >= 10) {
-              clearInterval(intervalId);
-              controller.close(); // Close the stream after 10 messages
-            }
-          }, 1000);
+    new ReadableStream({
+      start(controller) {
+        // Store the connection
+        connections.set(id, controller);
 
-          // Cleanup
-          request.signal.onabort = () => {
-            clearInterval(intervalId);
-            controller.close();
-          };
-        },
-        cancel() {
-          console.log('SSE Connection closed by client');
-        },
-      });
-      return stream;
-    })(),
+        // Cleanup
+        request.signal.onabort = () => {
+          connections.delete(id);
+          controller.close();
+        };
+      },
+      cancel() {
+        console.log(`SSE Connection closed for id: ${id}`);
+        connections.delete(id);
+      },
+    }),
     { headers }
   );
 
   return response;
+}
+
+
+// Updated function to send a message to a specific connection
+export function sendMessageToConnection(message: Message) {
+  console.log('Sending message to connection', message);
+  console.log('Connections', connections);
+  const controller = connections.get(message.receiverId);
+  if (controller) {
+    const messageJSON = JSON.stringify(message);
+    const encoder = new TextEncoder();
+    controller.enqueue(encoder.encode(`data: ${messageJSON}\n\n`));
+  }
 }

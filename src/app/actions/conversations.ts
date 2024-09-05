@@ -2,6 +2,7 @@
 import prisma from '@/lib/prismadb';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server'
+import { sendMessageToConnection } from '../api/sse/route';
 
 // Helper function to check authentication
 async function checkAuth() {
@@ -85,6 +86,7 @@ export async function createMessage(data: {
       senderId: userId,
     },
   });
+  sendMessageToConnection(message);
   revalidatePath('/conversations');
   return message;
 }

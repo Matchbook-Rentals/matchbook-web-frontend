@@ -31,19 +31,21 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   }, [selectedConversationId]);
 
   useEffect(() => {
-    const eventSource = new EventSource(`/api/sse?id=${user?.id}`);
+    if (!user?.id) return;
+    const eventSource = new EventSource(`/api/sse?id=${user.id}`);
 
     eventSource.onmessage = (event) => {
+      // Step 1: Decode uint8 encoded JSON blob
+      // Step 2: Parse JSON to JavaScript object
       const message = JSON.parse(event.data);
+      alert(message.content);
       setSseMessages((prevMessages) => [...prevMessages, message]);
     };
 
     return () => {
       eventSource.close();
     };
-  }, []);
-
-
+  }, [user]);
 
   const handleSelectConversation = (id: string) => {
     setSelectedConversationId(id);
@@ -83,10 +85,11 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   return (
     <div className="flex flex-col">
       <UserTypeSelector userType={userType} setUserType={setUserType} />
+      {sseMessages.length}
       {sseMessages.length > 0 && (
         <div>
           {sseMessages.map((message, index) => (
-            <div key={index}>{message.counter}</div>
+            <div key={index}>{message.context}</div>
           ))}
         </div>
       )}
