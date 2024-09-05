@@ -6,9 +6,9 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 ## 5SEP24
-- [ ] Add profile photo, last message preview and timestamp to conversation list
-- [ ] photo upload support for message interface
------ onSendMessage, add imgUrl to message
+- [x] Add profile photo, last message preview and timestamp to conversation list
+- [x] photo upload support for message interface
+- [ ] add status to housingRequest (pending, accepted, rejected)
 
 #27AUG24
 MOCK SEARCHBUG RESULTS

@@ -113,7 +113,7 @@ export default function ShortListTab() {
       ) : (
         <div className="flex justify-center mx-auto w-full px-2 py-8 ">
           <div className="w-full md:w-2/3 pr-4 ">
-            <h2 className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
+            <h2 onClick={() => alert(lookup.requestedIds.size)} className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
             <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
           </div>
           <div className="w-full md:w-1/3">
