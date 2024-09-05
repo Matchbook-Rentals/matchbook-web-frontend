@@ -55,7 +55,7 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
     setSelectedConversationIndex(index);
   };
 
-  const handleSendMessage = async (newMessageInput: string) => {
+  const handleSendMessage = async (newMessageInput: string, imgUrl?: string) => {
     if (selectedConversationIndex === null || !newMessageInput.trim()) return;
 
     const selectedConversation = allConversations[selectedConversationIndex];
@@ -66,12 +66,18 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
       receiverId = selectedConversation?.participant1Id;
     }
 
-    const newMessage = await createMessage({
+    const messageData = {
       content: newMessageInput,
       senderRole: userType,
       conversationId: selectedConversation.id,
       receiverId: receiverId
-    });
+    };
+
+    if (imgUrl) {
+      messageData.imgUrl = imgUrl;
+    }
+
+    const newMessage = await createMessage(messageData);
 
     setMessages([...messages, newMessage]);
   };

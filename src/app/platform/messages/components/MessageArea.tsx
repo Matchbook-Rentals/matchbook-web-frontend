@@ -45,7 +45,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const handleSend = () => {
     if (newMessageInput.trim()) {
-      onSendMessage(newMessageInput);
+      // Only pass the attachment if it exists
+      const attachment = messageAttachments.length > 0 ? messageAttachments[0] : undefined;
+      onSendMessage(newMessageInput, attachment);
       setNewMessageInput('');
       setMessageAttachments([]);
       scrollToBottom();
@@ -72,6 +74,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 ? 'bg-blue-500 text-white'
                 : 'bg-green-500 text-white'
                 }`}>
+                {message.imgUrl && (
+                  <Image src={message.imgUrl} alt="Message Attachment" width={100} height={100} />
+                )}
                 {message.content}
               </div>
             </div>
