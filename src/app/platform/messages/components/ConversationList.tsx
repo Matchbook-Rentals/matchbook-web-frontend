@@ -34,17 +34,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
     return { displayName, imageUrl: nonUserParticipant.imageUrl };
   };
 
-  const renderParticipantCard = (conv: Conversation) => {
-    const { displayName, imageUrl } = getParticipantInfo(conv, user);
-
-    return (
-      <div className="flex flex-row">
-        <img src={imageUrl} className="w-10 h-10 rounded-full mr-2" alt={displayName} />
-        <span className="text-xs text-gray-300">{displayName}</span>
-      </div>
-    );
-  };
-
   return (
     <Card className="w-1/3 bg-gray-300 h-[75vh] flex flex-col">
       <CardHeader>
@@ -61,15 +50,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 onClick={() => onSelectConversation(index)}
               >
                 <CardContent className="p-4 flex items-start">
-                  <img src={imageUrl} className="w-10 h-10 rounded-full mr-2 flex-shrink-0" alt={displayName} />
+                  <img onMouseOver={() => console.log(conv)} src={imageUrl} className="w-10 h-10 rounded-full mr-2 flex-shrink-0" alt={displayName} />
                   <div className="flex flex-col flex-grow min-w-0">
                     <div className="flex justify-between items-start w-full">
-                      <span className="text-xs text-gray-300">{displayName}</span>
-                      <span className="text-xs text-gray-300 ml-2 flex-shrink-0">
-                        {new Date(conv.messages[0].updatedAt).toLocaleString()}
+                      <span className="text-xs text-black">{displayName}</span>
+                      <span className="text-xs text-black ml-2 flex-shrink-0">
+                        {new Date(conv.messages[conv.messages.length - 1].updatedAt).toLocaleString()}
                       </span>
                     </div>
-                    <span className="text-md text-black truncate">{conv.messages[0].content}</span>
+                    <span className="text-md text-black truncate">{conv.messages[conv.messages.length - 1].content}</span>
                   </div>
                 </CardContent>
               </Card>
