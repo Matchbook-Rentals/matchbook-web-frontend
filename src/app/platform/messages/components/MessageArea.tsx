@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 
@@ -16,11 +16,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   currentUserId
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = () => {
     if (newMessageInput.trim()) {
       onSendMessage(newMessageInput);
       setNewMessageInput('');
+      scrollToBottom();
     }
   };
 
@@ -44,6 +54,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               </div>
             </div>
           ))}
+          <div ref={bottomRef} />
         </ScrollArea>
       ) : (
         <div className="flex-1">Select a conversation</div>
