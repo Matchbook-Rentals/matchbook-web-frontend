@@ -10,36 +10,40 @@ import { getConversation, createMessage, createConversation } from '@/app/action
 const MessageInterface = ({ conversations }: { conversations: Conversation[] }) => {
   const { user } = useUser();
   const [userType, setUserType] = useState<'Landlord' | 'Tenant'>('Landlord');
-  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [allConversations, setAllConversations] = useState<Conversation[]>(conversations);
+  const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [sseMessages, setSseMessages] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchConversation = async () => {
-      if (selectedConversationId) {
-        const conversation = await getConversation(selectedConversationId);
-        setSelectedConversation(conversation);
-        setMessages(conversation?.messages || []);
+      if (selectedConversationIndex !== null) {
+        const conversation = allConversations[selectedConversationIndex];
+        const fullConversation = await getConversation(conversation.id);
+        setMessages(fullConversation?.messages || []);
       } else {
-        setSelectedConversation(null);
         setMessages([]);
       }
     };
 
     fetchConversation();
-  }, [selectedConversationId]);
+  }, [selectedConversationIndex, allConversations]);
 
   useEffect(() => {
     if (!user?.id) return;
     const eventSource = new EventSource(`/api/sse?id=${user.id}`);
 
     eventSource.onmessage = (event) => {
-      // Step 1: Decode uint8 encoded JSON blob
-      // Step 2: Parse JSON to JavaScript object
       const message = JSON.parse(event.data);
-      alert(message.content);
       setSseMessages((prevMessages) => [...prevMessages, message]);
+      setAllConversations((prevConversations) => {
+        const updatedConversations = [...prevConversations];
+        const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+        if (index !== -1) {
+          updatedConversations[index].messages = [...updatedConversations[index].messages, message];
+        }
+        return updatedConversations;
+      });
     };
 
     return () => {
@@ -47,13 +51,14 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
     };
   }, [user]);
 
-  const handleSelectConversation = (id: string) => {
-    setSelectedConversationId(id);
+  const handleSelectConversation = (index: number) => {
+    setSelectedConversationIndex(index);
   };
 
   const handleSendMessage = async (newMessageInput: string) => {
-    if (!selectedConversationId || !newMessageInput.trim()) return;
+    if (selectedConversationIndex === null || !newMessageInput.trim()) return;
 
+    const selectedConversation = allConversations[selectedConversationIndex];
     let receiverId: string;
     if (user?.id === selectedConversation?.participant1Id) {
       receiverId = selectedConversation?.participant2Id;
@@ -64,7 +69,7 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
     const newMessage = await createMessage({
       content: newMessageInput,
       senderRole: userType,
-      conversationId: selectedConversationId,
+      conversationId: selectedConversation.id,
       receiverId: receiverId
     });
 
@@ -74,8 +79,8 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   const handleCreateConversation = async (email: string) => {
     if (!email.trim()) return;
     try {
-      await createConversation(email);
-      // TODO: Update the conversations list or refetch conversations
+      const newConversation = await createConversation(email);
+      setAllConversations([...allConversations, newConversation]);
     } catch (error) {
       console.error('Failed to create conversation:', error);
       // TODO: Handle error (e.g., show an error message to the user)
@@ -95,12 +100,12 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
       )}
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
-          conversations={conversations}
+          conversations={allConversations}
           onSelectConversation={handleSelectConversation}
           onCreateConversation={handleCreateConversation}
         />
         <MessageArea
-          selectedConversation={selectedConversation}
+          selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex] : null}
           messages={messages}
           onSendMessage={handleSendMessage}
           currentUserId={user?.id}

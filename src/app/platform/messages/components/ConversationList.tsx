@@ -7,7 +7,7 @@ import { Conversation } from '@prisma/client';
 
 interface ConversationListProps {
   conversations: Conversation[];
-  onSelectConversation: (id: string) => void;
+  onSelectConversation: (index: number) => void;  // Changed to accept index
   onCreateConversation: (email: string) => void;
 }
 
@@ -21,14 +21,14 @@ const ConversationList: React.FC<ConversationListProps> = ({
   return (
     <div className="w-1/3 border-r flex flex-col h-[75vh]">
       <ScrollArea className="flex-1 max-h-[60vh] px-8">
-        {conversations.map((conv) => (
+        {conversations.map((conv, index) => (  // Added index parameter
           <Button
             key={conv.id}
             variant="ghost"
             className="w-full justify-start"
-            onClick={() => onSelectConversation(conv.id)}
+            onClick={() => onSelectConversation(index)}  // Changed to pass index
           >
-            {`Conversation ${conv.id}`}
+            {`Conversation ${index + 1}`}
           </Button>
         ))}
       </ScrollArea>
