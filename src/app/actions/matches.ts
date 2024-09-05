@@ -35,6 +35,11 @@ export async function getMatch(id: string) {
     await checkAuth()
     const match = await prisma.match.findUnique({
       where: { id },
+      include: {
+        listing: true,
+        trip: true,
+        // TODO: add housingRequest
+      },
     })
     return { success: true, match }
   } catch (error) {
