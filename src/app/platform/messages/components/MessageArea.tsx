@@ -1,12 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { UploadButton } from "@/app/utils/uploadthing";
+import { PaperclipIcon } from 'lucide-react';
+import Image from "next/image";
 
 interface MessageAreaProps {
   selectedConversation: string | null;
   messages: any[];
   onSendMessage: (message: string) => void;
   currentUserId: string | undefined;
+}
+
+interface UploadData {
+  name: string;
+  size: number;
+  key: string;
+  serverData: {
+    uploadedBy: string;
+    fileUrl: string;
+  };
+  url: string;
+  customId: string | null;
+  type: string;
 }
 
 const MessageArea: React.FC<MessageAreaProps> = ({
@@ -16,6 +32,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   currentUserId
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
+  const [messageAttachments, setMessageAttachments] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -30,6 +47,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     if (newMessageInput.trim()) {
       onSendMessage(newMessageInput);
       setNewMessageInput('');
+      setMessageAttachments([]);
       scrollToBottom();
     }
   };
@@ -38,6 +56,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     if (e.key === 'Enter') {
       handleSend();
     }
+  };
+
+  const handleUploadFinish = (res: UploadData[]) => {
+    setMessageAttachments(prev => [...prev, ...res.map(r => r.url)]);
   };
 
   return (
@@ -59,7 +81,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       ) : (
         <div className="flex-1">Select a conversation</div>
       )}
-      <div className="flex mt-4">
+      <div className="flex mt-4 items-center">
+        {messageAttachments.map((attachment, index) => (
+          <div key={index} className="inline-block p-2 rounded bg-gray-200">
+            <Image src={attachment} alt="Message Attachment" width={100} height={100} />
+          </div>
+        ))}
         <input
           type="text"
           className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -67,6 +94,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           value={newMessageInput}
           onChange={(e) => setNewMessageInput(e.target.value)}
           onKeyPress={handleKeyPress}
+        />
+        <UploadButton
+          endpoint="messageUploader"
+          onClientUploadComplete={handleUploadFinish}
+          onUploadError={(error) => alert(error.message)}
+          className="p-0 mt-5"
+          content={{
+            button: <PaperclipIcon className="w-6 h-6" />,
+            allowedContent: 'Image upload'
+          }}
+          appearance={{
+            button: 'bg-parent text-black  focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
+            allowedContent: ''
+          }}
+
         />
         <Button className="rounded-l-none" onClick={handleSend}>Send</Button>
       </div>
