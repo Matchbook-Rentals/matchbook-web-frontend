@@ -20,7 +20,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <div className="w-1/3 border-r flex flex-col h-[75vh]">
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 max-h-[60vh] px-8">
         {conversations.map((conv) => (
           <Button
             key={conv.id}

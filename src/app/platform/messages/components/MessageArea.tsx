@@ -33,7 +33,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   return (
     <div className="flex-1 p-4 flex flex-col">
       {selectedConversation ? (
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 max-h-[40vh] px-8">
           {messages.map((message) => (
             <div key={message.id} className={`mb-2 ${message.senderId === currentUserId ? 'text-right' : 'text-left'}`}>
               <div className={`inline-block p-2 rounded ${message.senderId === currentUserId
