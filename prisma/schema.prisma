@@ -332,6 +332,8 @@ model Message {
   senderId       String
   senderRole     String
   conversationId String
+  isRead         Boolean      @default(false)
+  imgUrl         String?
   sender         User         @relation("SentMessages", fields: [senderId], references: [id])
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   receiver       User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
