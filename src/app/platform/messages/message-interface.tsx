@@ -13,6 +13,7 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
+  const [sseMessages, setSseMessages] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchConversation = async () => {
@@ -28,6 +29,21 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
 
     fetchConversation();
   }, [selectedConversationId]);
+
+  useEffect(() => {
+    const eventSource = new EventSource(`/api/sse?id=${user?.id}`);
+
+    eventSource.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      setSseMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+
 
   const handleSelectConversation = (id: string) => {
     setSelectedConversationId(id);
@@ -67,6 +83,13 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   return (
     <div className="flex flex-col">
       <UserTypeSelector userType={userType} setUserType={setUserType} />
+      {sseMessages.length > 0 && (
+        <div>
+          {sseMessages.map((message, index) => (
+            <div key={index}>{message.counter}</div>
+          ))}
+        </div>
+      )}
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
           conversations={conversations}
