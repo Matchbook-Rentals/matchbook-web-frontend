@@ -20,6 +20,7 @@ interface SearchContextType {
     likedListings: ListingAndImages[];
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
+    matchedListings: ListingAndImages[];
     isLoading: boolean;
     hasApplication: boolean;
     application: ApplicationWithArrays | null;
@@ -27,6 +28,7 @@ interface SearchContextType {
       favIds: Set<string>;
       dislikedIds: Set<string>;
       requestedIds: Set<string>;
+      matchIds: Set<string>; // Add this line
     };
   };
   actions: {
@@ -64,7 +66,8 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
   const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
-    requestedIds: new Set()
+    requestedIds: new Set(),
+    matchIds: new Set() // Add this line
   });
   const getListingPrice = (listing: ListingAndImages) => {
     const endDate = currentSearch?.endDate;
@@ -111,8 +114,6 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
     return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
   }
-
-
 
   const sortListingsByUScore = (listings: ListingAndImages[]) => {
     // Pre-calculate prices for all listings
@@ -183,10 +184,10 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     setLookup({
       favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
       dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
-      requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId))
+      requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId)),
+      matchIds: new Set(currentSearch?.matches.map(match => match.listingId)) // Add this line
     });
   }, [currentSearch]);
-
 
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
@@ -221,6 +222,13 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
     [listings, lookup.requestedIds, getRank]
   );
 
+  const matchedListings = useMemo(() =>
+    listings
+      .filter(listing => lookup.matchIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id)),
+    [listings, lookup.matchIds, getRank]
+  );
+
   const contextValue: SearchContextType = {
     state: {
       activeSearches,
@@ -234,7 +242,8 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       isLoading,
       lookup,
       hasApplication,
-      application
+      application,
+      matchedListings // Add this line
     },
     actions: {
       setCurrentSearch: (search: TripAndMatches | null) => {

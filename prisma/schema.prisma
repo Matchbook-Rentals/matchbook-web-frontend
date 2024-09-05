@@ -42,6 +42,11 @@ model User {
   preferences        UserPreferences?
   participatingTrips Trip[]           @relation("TripParticipants")
   purchases          Purchase[]
+  personReports      PersonReport?
+  sentMessages       Message[]        @relation("SentMessages")
+  receivedMessages   Message[]        @relation("ReceivedMessages")
+  conversations1     Conversation[]   @relation("UserConversations1")
+  conversations2     Conversation[]   @relation("UserConversations2")
 }
 
 model UserPreferences {
@@ -213,6 +218,7 @@ model Listing {
   listingImages   ListingImage[] // Relation to multiple images
   bedrooms        Bedroom[]
   dislikes        Dislike[]
+  matches         Match[]
 }
 
 model ListingImage {
@@ -242,6 +248,7 @@ model HousingRequest {
   tripId    String
   startDate DateTime
   endDate   DateTime
+  //status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -320,19 +327,52 @@ model Notification {
 }
 
 model Message {
-  id      String @id @default(uuid())
-  userId  String
-  content String
+  id             String       @id @default(cuid())
+  content        String       @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  senderId       String
+  senderRole     String
+  conversationId String
+  isRead         Boolean      @default(false)
+  imgUrl         String?
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  receiver       User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId     String
+  User           User?        @relation(fields: [userId], references: [id])
+  userId         String?
 
-  user User @relation(fields: [userId], references: [id])
+  @@index([senderId])
+  @@index([conversationId])
+  @@index([receiverId])
+  @@index([userId])
+}
+
+model Conversation {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  participant1Id String
+  participant2Id String
+  participant1   User      @relation("UserConversations1", fields: [participant1Id], references: [id])
+  participant2   User      @relation("UserConversations2", fields: [participant2Id], references: [id])
+  messages       Message[]
+
+  @@unique([participant1Id, participant2Id])
+  @@index([participant1Id])
+  @@index([participant2Id])
 }
 
 model Match {
-  id      String @id @default(uuid())
-  tripId  String
-  matchId String
+  id        String @id @default(uuid())
+  tripId    String
+  listingId String
 
-  trip Trip @relation(fields: [tripId], references: [id])
+  trip    Trip    @relation(fields: [tripId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id])
+
+  @@index([tripId])
 }
 
 model Favorite {
@@ -448,10 +488,30 @@ model Purchase {
   updatedAt  DateTime @updatedAt
   status     String   @default("pending")
   isRedeemed Boolean  @default(false)
+  email      String?
   type       String
   amount     Int?
   userId     String?
   user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model PersonReport {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  firstName     String
+  lastName      String
+  dateOfBirth   String?
+  city          String?
+  state         String?
+  reportToken   String?
+  bankruptcies  Int?
+  judgements    Int?
+  liens         Int?
+  isSexOffender Boolean?
+
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

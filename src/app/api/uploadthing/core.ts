@@ -70,6 +70,17 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
+  messageUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 4 } })
+    .middleware(async ({ req }) => {
+      const user = await auth();
+      if (!user.userId) throw new UploadThingError("Unauthorized");
+      return { userId: user.userId };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Message attachment upload for userId:", metadata.userId);
+      console.log("file url", file.url);
+      return { uploadedBy: metadata.userId, fileUrl: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

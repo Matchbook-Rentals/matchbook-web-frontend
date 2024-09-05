@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Application, Trip } from '@prisma/client';
 import { ApplicationWithArrays } from '@/types/';
 import { useHostProperties } from '@/contexts/host-properties-provider';
+import { createMatch } from '@/app/actions/matches';
 
 interface ApplicationSummaryProps {
   trip: Trip;
@@ -47,6 +48,15 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
 
   const calculatedPrice = lengthOfStayMonths ? calculatePrice(lengthOfStayMonths) : null;
 
+  const handleApprove = async () => {
+    try {
+      const result = await createMatch(trip.id, currListing?.id);
+      console.log('Match creation result:', result);
+    } catch (error) {
+      console.error('Error creating match:', error);
+    }
+  };
+
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
@@ -76,7 +86,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
           <div>Avg Credit: E (800-850 mocked)</div>
         </div>
         <div className="flex justify-between mb-6">
-          <Button className="w-[48%] bg-primaryBrand/80 hover:bg-primaryBrand">Approve</Button>
+          <Button onClick={handleApprove} className="w-[48%] bg-primaryBrand/80 hover:bg-primaryBrand">Approve</Button>
           <Button className="w-[48%] bg-pinkBrand/80 hover:bg-pinkBrand">Disapprove</Button>
         </div>
       </CardContent>

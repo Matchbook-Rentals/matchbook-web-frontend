@@ -5,6 +5,22 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 5SEP24
+- [x] Add profile photo, last message preview and timestamp to conversation list
+- [x] photo upload support for message interface
+- [ ] add status to housingRequest (pending, accepted, rejected)
+
+#27AUG24
+MOCK SEARCHBUG RESULTS
+BUILD FRONTEND AROUND THAT
+WHEN HAPPY WITH THAT, GET REAL DATA
+REPEAT FOR BACKGROUND CHECKS
+
+##25AUG24
+get auth to webhook
+OPEN API ACCOUNTS        
+
+
 ## 21AUG24
 OPEN UP STRIPE CLI (one to listen and one to trigger)
 add Order to DB (include service type, status, isRedeemed)

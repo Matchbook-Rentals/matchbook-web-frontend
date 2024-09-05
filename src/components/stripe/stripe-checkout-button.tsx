@@ -1,6 +1,8 @@
+'use client';
 import { loadStripe } from '@stripe/stripe-js';
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -10,9 +12,11 @@ interface StripeCheckoutButtonProps {
 
 export default function StripeCheckoutButton({ endpointUrl }: StripeCheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useUser();
 
   const handleCheckout = async () => {
     setIsLoading(true);
+    console.log('USER', user);
 
     try {
       const response = await fetch(endpointUrl, {
@@ -20,6 +24,7 @@ export default function StripeCheckoutButton({ endpointUrl }: StripeCheckoutButt
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ userId: user?.id }),
       });
 
       const { sessionId } = await response.json();
