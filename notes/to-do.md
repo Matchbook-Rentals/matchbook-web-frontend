@@ -5,6 +5,10 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 7 SEP 24
+- [ ]  STRIPE PLATFORM PAYMENT
+  - [ ]  fix sse server 504 erron on deployed app
+
 ## 5SEP24
 - [x] Add profile photo, last message preview and timestamp to conversation list
 - [x] photo upload support for message interface

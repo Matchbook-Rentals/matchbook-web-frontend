@@ -34,6 +34,11 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
     const eventSource = new EventSource(`/api/sse?id=${user.id}`);
 
     eventSource.onmessage = (event) => {
+      if (event.data.trim() === ': heartbeat') {
+        // Ignore heartbeat messages
+        return;
+      }
+
       const message = JSON.parse(event.data);
       setSseMessages((prevMessages) => [...prevMessages, message]);
       setAllConversations((prevConversations) => {
