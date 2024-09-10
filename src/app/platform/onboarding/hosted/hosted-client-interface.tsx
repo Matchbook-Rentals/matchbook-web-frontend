@@ -26,12 +26,12 @@ export default function HostedClientInterface({ user }: { user: User }) {
           {connectedAccountId && <CardTitle>Add information to start accepting money</CardTitle>}
           {!connectedAccountId && (
             <CardDescription>
-              Rocket Rides is the world's leading air travel platform: join our team of pilots to help people travel faster.
+              Rocket Rides is the worlds leading air travel platform: join our team of pilots to help people travel faster.
             </CardDescription>
           )}
           {connectedAccountId && (
             <CardDescription>
-              Matt's Mats partners with Stripe to help you receive payments while keeping your personal and bank details secure.
+              Matts Mats partners with Stripe to help you receive payments while keeping your personal and bank details secure.
             </CardDescription>
           )}
         </CardHeader>
