@@ -11,7 +11,13 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { accountType } = await req.json();
+    let accountType: string | undefined;
+    try {
+      ({ accountType } = await req.json());
+    } catch (error) {
+      console.error('Error parsing request body:', error);
+    }
+
     let user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -24,9 +30,12 @@ export async function POST(req: NextRequest) {
     if (!user.email) {
       return NextResponse.json({ error: 'User email not found' }, { status: 404 });
     }
-    const account = await stripe.accounts.create({
+
+    const accountCreationDetails: any = {
       email: user.email,
-      business_type: accountType,
+      business_profile: {
+        url: 'matchbookrentals.com',
+      },
       controller: {
         stripe_dashboard: {
           type: "none",
@@ -43,10 +52,20 @@ export async function POST(req: NextRequest) {
         transfers: { requested: true }
       },
       country: "US",
-    });
+    };
 
-    console.log(account);
-    await prisma.user.update({
+    if (accountType) {
+      accountCreationDetails.business_type = accountType;
+    }
+    if (accountType === 'individual') {
+      accountCreationDetails.individual = {
+        first_name: user.firstName,
+        last_name: user.lastName,
+      };
+    }
+
+    const account = await stripe.accounts.create(accountCreationDetails);
+    const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
@@ -54,6 +73,8 @@ export async function POST(req: NextRequest) {
         stripeAccountId: account.id,
       },
     });
+
+    console.log('updatedUser', updatedUser);
     return NextResponse.json({ account: account.id });
   } catch (error: any) {
     console.error('An error occurred when calling the Stripe API to create an account:', error);

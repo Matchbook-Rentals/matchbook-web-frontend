@@ -42,7 +42,7 @@ export default function OnboardingClientSide(user: User) {
                   <Label htmlFor="individual">Individual</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="business" id="business" />
+                  <RadioGroupItem value="company" id="business" />
                   <Label htmlFor="business">Business</Label>
                 </div>
               </RadioGroup>
@@ -50,7 +50,7 @@ export default function OnboardingClientSide(user: User) {
                 onClick={async () => {
                   setAccountCreatePending(true);
                   setError(false);
-                  fetch("/api/payment/account", {
+                  fetch("/api/payment/account-create", {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",

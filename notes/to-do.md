@@ -10,7 +10,7 @@ ACH PLAID API
 
 ## 7 SEP 24
 - [ ]  STRIPE PLATFORM PAYMENT
-  - [ ]  fix sse server 504 erron on deployed app
+ - [ ]  fix sse server 504 erron on deployed app
    -- 504 is a gateway timeout, likely due to the server not responding in time
    -- this is due to vercel serverless function timeout, which is 10 seconds
    -- possible solutions
