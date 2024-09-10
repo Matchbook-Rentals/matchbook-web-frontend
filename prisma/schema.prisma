@@ -19,16 +19,17 @@ enum TripStatus {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  firstName      String?
-  lastName       String?
-  fullName       String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  imageUrl       String?
-  hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id              String    @id @default(uuid())
+  stripeAccountId String?
+  firstName       String?
+  lastName        String?
+  fullName        String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  imageUrl        String?
+  hashedPassword  String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   // Relationships trips          Trip[]
   accounts           Account[]
@@ -262,18 +263,23 @@ model HousingRequest {
 }
 
 model Booking {
-  id         String   @id @default(uuid())
-  userId     String
-  listingId  String
-  startDate  DateTime
-  endDate    DateTime
-  totalPrice Int
-  createdAt  DateTime @default(now())
-  status     String   @default("reserved")
+  id           String        @id @default(uuid())
+  userId       String
+  listingId    String
+  matchId      String        @unique
+  startDate    DateTime
+  endDate      DateTime
+  totalPrice   Int?
+  monthlyRent  Int?
+  rentPayments RentPayment[]
+
+  createdAt DateTime @default(now())
+  status    String   @default("reserved")
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  match   Match   @relation(fields: [matchId], references: [id])
 }
 
 model Trip {
@@ -322,7 +328,6 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@unique([actionType, actionId])
   @@index([actionType, actionId])
 }
 
@@ -365,9 +370,11 @@ model Conversation {
 }
 
 model Match {
-  id        String @id @default(uuid())
-  tripId    String
-  listingId String
+  id          String   @id @default(uuid())
+  tripId      String
+  listingId   String
+  booking     Booking?
+  monthlyRent Int?
 
   trip    Trip    @relation(fields: [tripId], references: [id])
   listing Listing @relation(fields: [listingId], references: [id])
@@ -514,4 +521,16 @@ model PersonReport {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model RentPayment {
+  id        String   @id @default(cuid())
+  bookingId String
+  amount    Int
+  dueDate   DateTime
+  isPaid    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
 }

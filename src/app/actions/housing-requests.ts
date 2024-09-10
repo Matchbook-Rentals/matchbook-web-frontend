@@ -60,14 +60,14 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
 
     const messageContent = `${requesterName.trim()} wants to stay at your property ${listing.title}`;
 
-
-    createNotification(
-      listing.userId,
-      messageContent,
-      `/platform/host-dashboard/${listing.id}?tab=applications`,
-      "housingRequest",
-      newHousingRequest.id
-    );
+    const notificationData: CreateNotificationInput = {
+      userId: listing.userId,
+      content: 'New Housing Request',
+      url: `/platform/host-dashboard/${listing.id}?tab=applications`,
+      actionType: 'view',
+      actionId: newHousingRequest.id,
+    }
+    createNotification(notificationData)
 
     return newHousingRequest;
   } catch (error) {

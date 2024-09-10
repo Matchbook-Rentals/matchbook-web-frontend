@@ -56,6 +56,17 @@ export default function ShortListTab() {
     }
   }
 
+
+  const logState = () => {
+    const stateObject = {
+      likedListings: state.likedListings,
+      lookupFavIds: lookup.favIds,
+      requestedListings: state.requestedListings,
+      lookupRequestedIds: lookup.requestedIds,
+    };
+    console.log('stateObject', stateObject);
+  }
+
   const handleUnapply = async (listing: ListingAndImages) => {
     setLookup(prev => {
       const newReqs = new Set(prev.requestedIds)
@@ -94,6 +105,27 @@ export default function ShortListTab() {
                   key={index}
                   listing={listing}
                   actions={generateRequestedCardActions(listing)}
+                />
+              ))}
+            </div>
+          </div>
+        </CustomAccordion>
+      }
+      {likedListings.length > 0 &&
+        <CustomAccordion
+          title="Properties You &lt;3"
+          labelClassName=" pl-5 rounded-none"
+          contentClassName="bg-primaryBrand/80"
+          isOpen={isOpen}
+          toggleOpen={() => setIsOpen((prev) => !prev)}
+        >
+          <div className="flex justify-center mx-auto w-full px-2 py-8">
+            <div className="flex flex-wrap w-full justify-evenly space-y-4 pr-4">
+              {likedListings.map((listing, index) => (
+                <TripListingCard
+                  key={index}
+                  listing={listing}
+                  actions={generateLikedCardActions(listing)}
                 />
               ))}
             </div>

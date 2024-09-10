@@ -13,16 +13,12 @@ type CreateNotificationResponse =
   | { success: true; notification: Notification }
   | { success: false; error: string };
 
-export async function createNotification(userId: string, content: string, url: string, actionType: string, actionId: string): Promise<CreateNotificationResponse> {
+type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
+
+export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse> {
   try {
     const notification = await prisma.notification.create({
-      data: {
-        userId,
-        content,
-        url,
-        actionType,
-        actionId,
-      },
+      data: notificationData,
     })
     revalidatePath('/notifications') // Adjust the path as needed
     return { success: true, notification }
