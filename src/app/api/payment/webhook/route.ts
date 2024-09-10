@@ -97,6 +97,10 @@ async function handleBookingPurchase(session: any) {
       totalPrice: session.amount_total,
       matchId: session.metadata?.matchId || null,
     },
+    include: {
+      trip: true,
+      listing: true,
+    }
   });
   const notificationData: Notification = {
     actionType: 'booking',
