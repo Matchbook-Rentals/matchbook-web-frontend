@@ -1,13 +1,11 @@
 // app/api/webhook/route.js
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prismadb'
 import { Notification } from '@prisma/client';
 import { getMatch } from '@/app/actions/matches'
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
 import { createNotification } from '@/app/actions/notifications';
-import ListingBar from '@/app/platform/trips/[tripId]/listing-bar';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -79,7 +77,12 @@ export async function POST(req: Request) {
 
 
 async function handleBookingPurchase(session: any) {
-  const { match } = await getMatch(session.metadata?.matchId || null)
+  const match = await prisma.match.findUnique({
+    where: {
+      id: session.metadata?.matchId || null,
+    },
+  });
+
   // TODO: Set Trip to 'booked'
   // TODO: block off listing dates
   // TODO: Create payment schedule
@@ -87,7 +90,7 @@ async function handleBookingPurchase(session: any) {
   // TODO: Send notification to user and host
   let booking = await prisma.booking.create({
     data: {
-      userId: session.metadata?.userId || null,
+      userId: match?.trip.userId || null,
       listingId: match?.listingId || null,
       startDate: match?.trip.startDate || null,
       endDate: match?.trip.endDate || null,
