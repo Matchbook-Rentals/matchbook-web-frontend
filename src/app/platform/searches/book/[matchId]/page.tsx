@@ -37,6 +37,7 @@ export default async function MatchPage({ params }: { params: { matchId: string 
 
     return (
       <div>
+        <h1>Confirm Booking</h1>
         <p>{checkoutRequest.listingOwnerId}</p>
         <PropertyBookingPage match={match} clientSecret={clientSecret} />
       </div>
