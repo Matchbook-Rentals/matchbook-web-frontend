@@ -2,6 +2,9 @@
 
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { calculateRent } from '@/lib/calculate-rent'
+import { Trip, Listing, Notification } from '@prisma/client'
+import { createNotification } from './notifications'
 
 // Helper function to check authentication
 async function checkAuth() {
@@ -13,15 +16,24 @@ async function checkAuth() {
 }
 
 // Create a new match
-export async function createMatch(tripId: string, listingId: string, monthlyRent: number) {
+export async function createMatch(trip: Trip, listing: Listing) {
   try {
     await checkAuth()
+    const monthlyRent = calculateRent({ listing, trip })
     const match = await prisma.match.create({
       data: {
-        tripId,
-        listingId,
+        tripId: trip.id,
+        listingId: listing.id,
       },
     })
+    const notificationData: CreateNotificationInput = {
+      userId: trip.userId,
+      content: 'New Match',
+      url: `/platform/searches/?tab=matchbook&searchId=${trip.id}`,
+      actionType: 'view',
+      actionId: trip.id,
+    }
+    createNotification(notificationData)
     return { success: true, match }
   } catch (error) {
     console.error('Error creating match:', error)

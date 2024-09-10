@@ -13,6 +13,7 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
     const searchingTrips = await prisma.trip.findMany({
       where: {
         tripStatus: 'searching',
+        userId: userId,
       },
       include: {
         matches: true,

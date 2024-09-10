@@ -328,7 +328,6 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@unique([actionType, actionId])
   @@index([actionType, actionId])
 }
 
@@ -371,15 +370,14 @@ model Conversation {
 }
 
 model Match {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   tripId      String
   listingId   String
-  bookingId   String?
+  booking     Booking?
   monthlyRent Int?
 
-  trip    Trip     @relation(fields: [tripId], references: [id])
-  listing Listing  @relation(fields: [listingId], references: [id])
-  booking Booking?
+  trip    Trip    @relation(fields: [tripId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id])
 
   @@index([tripId])
 }

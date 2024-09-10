@@ -6,6 +6,8 @@ import { ApplicationWithArrays } from '@/types/';
 import { useHostProperties } from '@/contexts/host-properties-provider';
 import { createMatch } from '@/app/actions/matches';
 import { calculateRent, calculateLengthOfStay } from '@/lib/calculate-rent';
+import { toast } from '@/components/ui/use-toast';
+import { useAuth } from '@clerk/nextjs';
 
 interface ApplicationSummaryProps {
   trip: Trip;
@@ -14,6 +16,7 @@ interface ApplicationSummaryProps {
 
 const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, application }) => {
   const { currListing } = useHostProperties();
+  const { userId } = useAuth();
   const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + income.monthlyAmount, '');
 
   // Calculate length of stay in days and months
@@ -34,8 +37,12 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
 
   const handleApprove = async () => {
     try {
-      const result = await createMatch(trip.id, currListing?.id);
+      const result = await createMatch(trip, currListing);
       console.log('Match creation result:', result);
+      toast({
+        title: 'Match created',
+        description: 'The match has been created',
+      });
     } catch (error) {
       console.error('Error creating match:', error);
     }
