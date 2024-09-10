@@ -84,7 +84,7 @@ export async function POST(req: CheckoutSessionRequest) {
       },
       mode: 'payment',
       ui_mode: 'embedded',
-      return_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${process.env.NEXT_PUBLIC_URL}/platform/dashboard`,
       metadata: {
         userId: userId,
         type: 'booking',
@@ -92,12 +92,9 @@ export async function POST(req: CheckoutSessionRequest) {
       },
     });
 
-    console.log('session', session);
     if (!session.id) {
       return NextResponse.json({ error: 'Error creating checkout session' }, { status: 500 });
     }
-
-    console.log('session', session, new Date());
     return NextResponse.json({ sessionId: session.id, clientSecret: session.client_secret });
   } catch (error) {
     console.error('Error creating checkout session:', error);

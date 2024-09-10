@@ -1,20 +1,25 @@
 import { getMatch } from '@/app/actions/matches'
 import PropertyBookingPage from './booking-client-interface'
 import { CheckoutSessionRequest } from '@/app/api/create-checkout-session/start-booking/route'
+import { calculateRent } from '@/lib/calculate-rent'
 
 
 
 export default async function MatchPage({ params }: { params: { matchId: string } }) {
   const { matchId } = params
   const { success, match, error } = await getMatch(matchId)
+  const monthlyRentDollars = calculateRent({ listing: match.listing, trip: match.trip })
+  const CENTS_PER_DOLLAR = 100
+  const monthlyRentCents = Math.round(monthlyRentDollars * CENTS_PER_DOLLAR)
+  const depositAmountCents = match?.listing?.depositSize ? match.listing.depositSize * CENTS_PER_DOLLAR : 0
 
   if (!success || !match) {
     return <div>Error: {error || 'Failed to fetch match'}</div>
   }
 
   const checkoutRequest: CheckoutSessionRequest = {
-    depositAmountCents: 1000,
-    rentAmountCents: 1000,
+    depositAmountCents,
+    rentAmountCents: monthlyRentCents,
     listingTitle: match.listing.title || 'Test Listing',
     locationString: match.listing.locationString || 'Test Location',
     listingOwnerId: match.listing.userId,

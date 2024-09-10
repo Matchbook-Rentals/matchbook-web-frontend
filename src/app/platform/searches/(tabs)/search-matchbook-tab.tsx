@@ -31,9 +31,9 @@ export function SearchMatchbookTab() {
             {listing.squareFootage && <p>Area: {listing.squareFootage} sq ft</p>}
           </CardContent>
           <CardFooter>
-            <Button className="w-full">
-              <Link href={`/platform/searches/book/${getMatchId(listing.id)}`}>BOOK NOW</Link>
-            </Button>
+            <Link href={`/platform/searches/book/${getMatchId(listing.id)}`} className="w-full">
+              <Button className="w-full">BOOK NOW</Button>
+            </Link>
           </CardFooter>
         </Card>
       ))}

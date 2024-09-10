@@ -2,8 +2,12 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/prismadb'
+import { Notification } from '@prisma/client';
+import { getMatch } from '@/app/actions/matches'
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
+import { createNotification } from '@/app/actions/notifications';
+import ListingBar from '@/app/platform/trips/[tripId]/listing-bar';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -51,8 +55,8 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
-    console.log(process.env.STRIPE_WEBHOOK_SECRET)
-    console.log(sig)
+    console.log('process.env.STRIPE_WEBHOOK_SECRET', process.env.STRIPE_WEBHOOK_SECRET)
+    console.log('sig', sig)
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
@@ -75,15 +79,29 @@ export async function POST(req: Request) {
 
 
 async function handleBookingPurchase(session: any) {
-  console.log('FROM WEBHOOK', session);
-  await prisma.booking.create({
+  const { match } = await getMatch(session.metadata?.matchId || null)
+  // TODO: Set Trip to 'booked'
+  // TODO: block off listing dates
+  // TODO: Create payment schedule
+  // TODO: Send email to user and host
+  // TODO: Send notification to user and host
+  let booking = await prisma.booking.create({
     data: {
       userId: session.metadata?.userId || null,
-      listingId: session.metadata?.listingId || null,
-      startDate: session.metadata?.startDate || null,
-      endDate: session.metadata?.endDate || null,
+      listingId: match?.listingId || null,
+      startDate: match?.trip.startDate || null,
+      endDate: match?.trip.endDate || null,
       totalPrice: session.amount_total,
       matchId: session.metadata?.matchId || null,
     },
   });
+  const notificationData: Notification = {
+    actionType: 'booking',
+    actionId: booking.id,
+    content: `You have a new booking for ${match?.listing.title} from ${match?.trip.startDate} to ${match?.trip.endDate}`,
+    url: `/platform/host-dashboard/${match?.listing.id}?tab=bookings`,
+    unread: true,
+    userId: match?.listing.userId || null,
+  }
+  await createNotification(notificationData);
 }
