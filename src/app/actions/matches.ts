@@ -13,7 +13,7 @@ async function checkAuth() {
 }
 
 // Create a new match
-export async function createMatch(tripId: string, listingId: string) {
+export async function createMatch(tripId: string, listingId: string, monthlyRent: number) {
   try {
     await checkAuth()
     const match = await prisma.match.create({

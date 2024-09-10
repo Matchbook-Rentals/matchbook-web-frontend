@@ -5,6 +5,7 @@ import { Application, Trip } from '@prisma/client';
 import { ApplicationWithArrays } from '@/types/';
 import { useHostProperties } from '@/contexts/host-properties-provider';
 import { createMatch } from '@/app/actions/matches';
+import { calculateRent, calculateLengthOfStay } from '@/lib/calculate-rent';
 
 interface ApplicationSummaryProps {
   trip: Trip;
@@ -25,28 +26,11 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
     : null;
 
   // TODO: get these from the listing
-  const shortestLeaseLength = 1;
-  const shortestLeasePrice = currListing?.shortestLeasePrice;
-  const longestLeaseLength = 12;
-  const longestLeasePrice = currListing?.longestLeasePrice;
+  const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
+  const monthlyRent = calculateRent({ listing: currListing, trip: trip });
 
-  const calculatePrice = (stayLengthMonths: number) => {
-    if (stayLengthMonths <= shortestLeaseLength || !longestLeaseLength || !shortestLeaseLength) {
-      return shortestLeasePrice;
-    }
-
-    if (stayLengthMonths >= longestLeaseLength) {
-      return longestLeasePrice;
-    }
-
-    const priceRange = longestLeasePrice - shortestLeasePrice;
-    const lengthRange = longestLeaseLength - shortestLeaseLength;
-    const pricePerMonth = priceRange / lengthRange;
-
-    return shortestLeasePrice + (stayLengthMonths - shortestLeaseLength) * pricePerMonth;
-  };
-
-  const calculatedPrice = lengthOfStayMonths ? calculatePrice(lengthOfStayMonths) : null;
+  // const calculatedPrice = lengthOfStayMonths ? calculatePrice(lengthOfStayMonths) : null;
+  const calculatedPrice = monthlyRent;
 
   const handleApprove = async () => {
     try {
@@ -73,9 +57,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
           <div>Total Income: $ {totalMonthlyIncome}</div>
 
           <div>Income to Rent Ratio: {calculatedPrice ? `${(totalMonthlyIncome / calculatedPrice).toFixed(2)}:1` : 'N/A'}</div>
-          <div>Length of stay: {lengthOfStayDays ? `${lengthOfStayDays} days` : 'Flexible'}
-            {lengthOfStayMonths && ` (${lengthOfStayMonths} months)`}
-          </div>
+          <div>Length of stay: {lengthOfStay.months} mo. & {lengthOfStay.days} days</div>
           {calculatedPrice && (
             <div>Calculated Price: ${calculatedPrice.toFixed(2)}/month</div>
           )}
@@ -90,7 +72,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
           <Button className="w-[48%] bg-pinkBrand/80 hover:bg-pinkBrand">Disapprove</Button>
         </div>
       </CardContent>
-    </Card>
+    </Card >
   );
 };
 

@@ -263,18 +263,23 @@ model HousingRequest {
 }
 
 model Booking {
-  id         String   @id @default(uuid())
-  userId     String
-  listingId  String
-  startDate  DateTime
-  endDate    DateTime
-  totalPrice Int
-  createdAt  DateTime @default(now())
-  status     String   @default("reserved")
+  id           String        @id @default(uuid())
+  userId       String
+  listingId    String
+  matchId      String        @unique
+  startDate    DateTime
+  endDate      DateTime
+  totalPrice   Int?
+  monthlyRent  Int?
+  rentPayments RentPayment[]
+
+  createdAt DateTime @default(now())
+  status    String   @default("reserved")
 
   // Relationships
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  match   Match   @relation(fields: [matchId], references: [id])
 }
 
 model Trip {
@@ -366,12 +371,15 @@ model Conversation {
 }
 
 model Match {
-  id        String @id @default(uuid())
-  tripId    String
-  listingId String
+  id          String  @id @default(uuid())
+  tripId      String
+  listingId   String
+  bookingId   String?
+  monthlyRent Int?
 
-  trip    Trip    @relation(fields: [tripId], references: [id])
-  listing Listing @relation(fields: [listingId], references: [id])
+  trip    Trip     @relation(fields: [tripId], references: [id])
+  listing Listing  @relation(fields: [listingId], references: [id])
+  booking Booking?
 
   @@index([tripId])
 }
@@ -515,4 +523,16 @@ model PersonReport {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model RentPayment {
+  id        String   @id @default(cuid())
+  bookingId String
+  amount    Int
+  dueDate   DateTime
+  isPaid    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id])
 }

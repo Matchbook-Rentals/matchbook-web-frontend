@@ -9,6 +9,33 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
+// New function to handle different purchase types
+const handleSuccessfulPurchase = async (session: any) => {
+  switch (session.metadata?.type) {
+    case 'backgroundCheck':
+      await prisma.purchase.create({
+        data: {
+          type: 'backgroundCheck',
+          amount: session.amount_total,
+          userId: session.metadata?.userId || null,
+          email: session.customer_details?.email || null,
+        },
+      });
+      break;
+    case 'booking':
+      console.log('Booking session:', session);
+      // TODO: Set Trip to 'booked'
+      // TODO: block off listing dates
+      // TODO: Create payment schedule
+      // TODO: Send email to user and host
+      // TODO: Send notification to user and host
+      await handleBookingPurchase(session);
+      break;
+    default:
+      console.log(`Unhandled purchase type: ${session.metadata?.type}`);
+  }
+};
+
 export async function POST(req: Request) {
   const body = await req.text();
   const headersList = headers();
@@ -33,17 +60,8 @@ export async function POST(req: Request) {
   switch (event.type) {
     case 'checkout.session.completed':
       const session = event.data.object;
-      // Here, you can fulfill the order
-      // For example, you could save the order to your database
-      console.log('FROM WEBHOOK', session)
-      await prisma.purchase.create({
-        data: {
-          type: 'backgroundCheck',
-          amount: session.amount_total,
-          userId: session.metadata?.userId || null,
-          email: session.customer_details?.email || null,
-        },
-      });
+      console.log('FROM WEBHOOK', session);
+      await handleSuccessfulPurchase(session);
       break;
     // ... handle other event types
     default:
@@ -52,4 +70,20 @@ export async function POST(req: Request) {
 
   // Return a response to acknowledge receipt of the event
   return NextResponse.json({ received: true });
+}
+
+
+
+async function handleBookingPurchase(session: any) {
+  console.log('FROM WEBHOOK', session);
+  await prisma.booking.create({
+    data: {
+      userId: session.metadata?.userId || null,
+      listingId: session.metadata?.listingId || null,
+      startDate: session.metadata?.startDate || null,
+      endDate: session.metadata?.endDate || null,
+      totalPrice: session.amount_total,
+      matchId: session.metadata?.matchId || null,
+    },
+  });
 }

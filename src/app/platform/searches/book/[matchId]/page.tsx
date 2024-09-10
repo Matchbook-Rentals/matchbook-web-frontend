@@ -18,6 +18,7 @@ export default async function MatchPage({ params }: { params: { matchId: string 
     listingTitle: match.listing.title || 'Test Listing',
     locationString: match.listing.locationString || 'Test Location',
     listingOwnerId: match.listing.userId,
+    matchId: match.id,
   }
 
   const clientSecret = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/create-checkout-session/start-booking`, {

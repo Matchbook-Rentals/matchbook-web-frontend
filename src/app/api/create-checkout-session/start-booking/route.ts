@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
+import { auth } from '@clerk/nextjs/server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -13,11 +14,21 @@ export interface CheckoutSessionRequest extends Request {
   listingTitle: string;
   locationString: string;
   listingOwnerId: string;
+  matchId: string;
+}
+
+const checkAuth = async () => {
+  const { userId } = auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return userId;
 }
 
 export async function POST(req: CheckoutSessionRequest) {
   try {
-    const { depositAmountCents, rentAmountCents, listingTitle, locationString, listingOwnerId } = await req.json();
+    const userId = await checkAuth();
+    const { depositAmountCents, rentAmountCents, listingTitle, locationString, listingOwnerId, matchId } = await req.json();
     const listingOwner = await prisma.user.findUnique({
       where: {
         id: listingOwnerId,
@@ -38,7 +49,7 @@ export async function POST(req: CheckoutSessionRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `Deposit for "${listingTitle}" in ${locationString}`,
+              name: `Deposit for "${listingTitle}" at ${locationString}`,
             },
             unit_amount: depositAmountCents,
           },
@@ -48,7 +59,7 @@ export async function POST(req: CheckoutSessionRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `First Month's Rent for "${listingTitle}" in ${locationString}`,
+              name: `First Month's Rent for "${listingTitle}" at ${locationString}`,
             },
             unit_amount: rentAmountCents,
           },
@@ -74,6 +85,11 @@ export async function POST(req: CheckoutSessionRequest) {
       mode: 'payment',
       ui_mode: 'embedded',
       return_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      metadata: {
+        userId: userId,
+        type: 'booking',
+        matchId: matchId,
+      },
     });
 
     console.log('session', session);

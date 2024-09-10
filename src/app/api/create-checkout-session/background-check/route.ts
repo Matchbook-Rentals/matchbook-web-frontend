@@ -34,6 +34,7 @@ export async function POST(request: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/platform/checkout/failure`,
       metadata: {
         userId: userId,
+        type: 'backgroundCheck',
       },
     });
     console.log('session', session);
