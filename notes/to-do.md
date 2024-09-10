@@ -5,9 +5,19 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 10SEP24
+- [ ]  Stripe Connect Integration
+
 ## 7 SEP 24
 - [ ]  STRIPE PLATFORM PAYMENT
   - [ ]  fix sse server 504 erron on deployed app
+   -- 504 is a gateway timeout, likely due to the server not responding in time
+   -- this is due to vercel serverless function timeout, which is 10 seconds
+   -- possible solutions
+      - build server using VPS via linode and GO
+      - PUSHER for realtime messaging
+      - batch requests
+      - use websockets
 
 ## 5SEP24
 - [x] Add profile photo, last message preview and timestamp to conversation list
