@@ -12,6 +12,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id') || 'defaultId';
   console.log('id', id);
+
   // Set headers for SSE
   const headers = {
     'Content-Type': 'text/event-stream',
@@ -26,10 +27,21 @@ export async function GET(request: Request) {
         // Store the connection
         connections.set(id, controller);
 
+        // Send heartbeat every 3 seconds
+        const heartbeatInterval = setInterval(() => {
+          if (connections.has(id)) {
+            const encoder = new TextEncoder();
+            controller.enqueue(encoder.encode(': heartbeat\n\n'));
+          } else {
+            clearInterval(heartbeatInterval);
+          }
+        }, 3000);
+
         // Cleanup
         request.signal.onabort = () => {
           connections.delete(id);
           controller.close();
+          clearInterval(heartbeatInterval);
         };
       },
       cancel() {
