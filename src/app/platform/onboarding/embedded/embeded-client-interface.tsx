@@ -27,7 +27,7 @@ export default function OnboardingClientSide(user: User) {
         <CardHeader>
           {!connectedAccountId && <CardTitle>Get ready for take off</CardTitle>}
           {connectedAccountId && !stripeConnectInstance && <CardTitle>Add information to start accepting money</CardTitle>}
-          {!connectedAccountId && <CardDescription>Rocket Rides is the world's leading air travel platform: join our team of pilots to help people travel faster.</CardDescription>}
+          {!connectedAccountId && <CardDescription>Rocket Rides is the worlds leading air travel platform: join our team of pilots to help people travel faster.</CardDescription>}
         </CardHeader>
         <CardContent>
           {!accountCreatePending && !connectedAccountId && (
