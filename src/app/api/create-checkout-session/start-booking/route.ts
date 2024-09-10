@@ -29,13 +29,16 @@ export async function POST(req: CheckoutSessionRequest) {
   try {
     const userId = await checkAuth();
 
-    // Add logging to check the raw request body
-    console.log('Raw request body:', await req.text());
+    // Read the request body as text
+    const rawBody = await req.text();
+
+    // Log the raw request body
+    console.log('Raw request body:', rawBody);
 
     // Parse the JSON manually and add error handling
     let requestData;
     try {
-      requestData = JSON.parse(await req.text());
+      requestData = JSON.parse(rawBody);
     } catch (parseError) {
       console.error('Error parsing JSON:', parseError);
       return NextResponse.json({ error: 'Invalid JSON in request body' }, { status: 400 });
