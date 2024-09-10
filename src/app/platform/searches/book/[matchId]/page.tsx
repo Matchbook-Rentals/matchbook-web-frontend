@@ -9,7 +9,7 @@ export default async function MatchPage({ params }: { params: { matchId: string 
     const { matchId } = params
     const { success, match, error } = await getMatch(matchId)
     if (!success || !match) {
-      return <div>Error: {error || 'Failed to fetch match'}</div>
+      return <div>Error 1: {error || 'Failed to fetch match'}</div>
     }
     const monthlyRentDollars = calculateRent({ listing: match.listing, trip: match.trip })
     const CENTS_PER_DOLLAR = 100
@@ -43,7 +43,7 @@ export default async function MatchPage({ params }: { params: { matchId: string 
     )
   } catch (error) {
     console.error('Error fetching match:', error)
-    return <div>Error: {error?.message || 'Failed to fetch match'}</div>
+    return <div>Error 2: {error?.message || 'Failed to fetch match'}</div>
   }
 }
 
