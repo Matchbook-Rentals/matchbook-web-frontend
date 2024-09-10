@@ -19,7 +19,7 @@ const StripeAccountPage: FC<PageProps> = ({ params }) => {
         </CardHeader>
         <CardContent>
           <h2 className="text-2xl font-bold mb-2">Details submitted</h2>
-          <p className="text-gray-600">That's everything we need for now</p>
+          <p className="text-gray-600">Thats everything we need for now</p>
         </CardContent>
       </Card>
 
