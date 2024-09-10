@@ -28,7 +28,26 @@ const checkAuth = async () => {
 export async function POST(req: CheckoutSessionRequest) {
   try {
     const userId = await checkAuth();
-    const { depositAmountCents, rentAmountCents, listingTitle, locationString, listingOwnerId, matchId } = await req.json();
+
+    // Add logging to check the raw request body
+    console.log('Raw request body:', await req.text());
+
+    // Parse the JSON manually and add error handling
+    let requestData;
+    try {
+      requestData = JSON.parse(await req.text());
+    } catch (parseError) {
+      console.error('Error parsing JSON:', parseError);
+      return NextResponse.json({ error: 'Invalid JSON in request body' }, { status: 400 });
+    }
+
+    const { depositAmountCents, rentAmountCents, listingTitle, locationString, listingOwnerId, matchId } = requestData;
+
+    // Add validation for required fields
+    if (!depositAmountCents || !rentAmountCents || !listingTitle || !locationString || !listingOwnerId || !matchId) {
+      return NextResponse.json({ error: 'Missing required fields in request body' }, { status: 400 });
+    }
+
     const listingOwner = await prisma.user.findUnique({
       where: {
         id: listingOwnerId,
@@ -98,6 +117,6 @@ export async function POST(req: CheckoutSessionRequest) {
     return NextResponse.json({ sessionId: session.id, clientSecret: session.client_secret });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    return NextResponse.json({ error: 'Error creating checkout session' }, { status: 500 });
+    return NextResponse.json({ error: 'Error creating checkout session', details: error.message }, { status: 500 });
   }
 }
