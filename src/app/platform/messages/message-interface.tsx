@@ -15,6 +15,9 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
   const [messages, setMessages] = useState<any[]>([]);
   const [sseMessages, setSseMessages] = useState<any[]>([]);
 
+  const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
+  const url = `${baseUrl}/events?id=${user?.id}`
+
   useEffect(() => {
     const fetchConversation = async () => {
       if (selectedConversationIndex !== null) {
@@ -31,10 +34,13 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
 
   useEffect(() => {
     if (!user?.id) return;
-    const eventSource = new EventSource(`/api/sse?id=${user.id}`);
+
+    //const eventSource = new EventSource(`/api/sse?id=${user.id}`);
+    const eventSource = new EventSource(url);
 
     eventSource.onmessage = (event) => {
-      if (event.data.trim() === ': heartbeat') {
+      console.log(event)
+      if (event.data.trim() === ': keepalive') {
         // Ignore heartbeat messages
         return;
       }
@@ -98,8 +104,10 @@ const MessageInterface = ({ conversations }: { conversations: Conversation[] }) 
     }
   };
 
+  if (!user) return null;
   return (
     <div className="flex flex-col">
+      {url}
       <UserTypeSelector userType={userType} setUserType={setUserType} />
       <div onClick={() => console.log(conversations)} >{sseMessages.length}</div>
       <div className="flex flex-1 overflow-hidden">
