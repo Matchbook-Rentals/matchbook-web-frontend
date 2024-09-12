@@ -87,7 +87,14 @@ export async function createMessage(data: {
       senderId: userId,
     },
   });
-  sendMessageToConnection(message);
+  //  sendMessageToConnection(message);
+  fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
   revalidatePath('/conversations');
   return message;
 }
