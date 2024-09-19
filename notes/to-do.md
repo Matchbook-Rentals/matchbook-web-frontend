@@ -5,6 +5,10 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 18SEP24
+- [ ]  EMAIL TESTING
+- [ ] add outbound to query params, read query params to check for user profile, prompt signup if no user profile, prompt login if found, also maybe clerk to see if already signed in  
+
 ## 10SEP24
 - [ ]  Stripe Connect Integration
 
