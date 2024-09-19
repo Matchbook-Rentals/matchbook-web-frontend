@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function EmailInvitationPage() {
-  const [email, setEmail] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,14 +17,14 @@ export default function EmailInvitationPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ outboundEmail: email, tripId: process.env.NEXT_PUBLIC_TEST_TRIP_ID }),
+        body: JSON.stringify({ recipientEmail, tripId: process.env.NEXT_PUBLIC_TEST_TRIP_ID }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setStatus(data.message);
-        setEmail(''); // Clear the input field upon success
+        setRecipientEmail(''); // Clear the input field upon success
       } else {
         setError(data.error || 'An unexpected error occurred.');
       }
@@ -39,8 +39,8 @@ export default function EmailInvitationPage() {
       <h1 className="text-2xl font-bold mb-4">Invite to Trip</h1>
       <input
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={recipientEmail}
+        onChange={(e) => setRecipientEmail(e.target.value)}
         placeholder="Recipient's email"
         className="w-full p-2 mb-4 rounded border border-gray-300 text-base"
       />

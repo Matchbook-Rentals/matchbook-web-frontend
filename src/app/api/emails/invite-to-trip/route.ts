@@ -3,20 +3,20 @@ import { inviteToTrip } from '@/lib/emails';
 
 export async function POST(request: NextRequest) {
   try {
-    const { outboundEmail, tripId } = await request.json();
+    const { recipientEmail, tripId } = await request.json();
 
-    if (!outboundEmail) {
+    if (!recipientEmail) {
       return NextResponse.json(
-        { error: 'Outbound email is required.' },
+        { error: 'Recipient email is required.' },
         { status: 400 }
       );
     }
 
 
-    console.log('Inviting user to trip', tripId, outboundEmail);
+    console.log('Inviting user to trip', tripId, recipientEmail);
     console.log('EMAIL_USER', process.env.EMAIL_USER);
     console.log('EMAIL_PASS', process.env.EMAIL_PASS);
-    inviteToTrip(tripId, outboundEmail);
+    inviteToTrip(tripId, recipientEmail);
 
     return NextResponse.json({ message: 'Invitation sent successfully.' });
   } catch (error) {

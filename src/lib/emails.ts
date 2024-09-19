@@ -1,9 +1,8 @@
 import nodemailer from 'nodemailer';
 
 // Create a transporter using SMTP
-// TODO: Move to outlook, then move to either smtp server or resend
-const username = process.env.EMAIL_USER;
-const password = process.env.EMAIL_PASS;
+const username = process.env.OUTBOUND_EMAIL_USER;
+const password = process.env.OUTBOUND_EMAIL_PASS;
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -16,15 +15,15 @@ const transporter = nodemailer.createTransport({
  * Sends an invitation email for a specific trip.
  * 
  * @param tripId - The ID of the trip to invite the user to.
- * @param outboundEmail - The email address of the recipient.
+ * @param recipientEmail - The email address of the recipient.
  */
-export function inviteToTrip(tripId: string, outboundEmail: string) {
-  const tripLink = `${process.env.NEXT_PUBLIC_URL}/guest/trips/${tripId}&invited=${outboundEmail}`;
+export function inviteToTrip(tripId: string, recipientEmail: string) {
+  const tripLink = `${process.env.NEXT_PUBLIC_URL}/guest/trips/${tripId}&invited=${recipientEmail}`;
 
   // Define the email options
   const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: outboundEmail,
+    from: process.env.OUTBOUND_EMAIL_USER,
+    to: recipientEmail,
     subject: 'You are Invited to Join a Trip!',
     text: `Hello,
 
@@ -33,7 +32,30 @@ You have been invited to join a trip. Please click the link below to view and ac
 ${tripLink}
 
 Best regards,
-Your Travel Team`
+Your Travel Team`,
+    html: `
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; }
+            .header { background-color: #f0f0f0; padding: 20px; text-align: center; }
+            .content { padding: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <img src="${process.env.NEXT_PUBLIC_URL}/logo-nav-new.png" alt="Matchbook Logo" style="max-width: 200px;">
+            <h1>Matchbook</h1>
+          </div>
+          <div class="content">
+            <p>Hello,</p>
+            <p>You have been invited to join a trip. Please click the link below to view and accept your invitation:</p>
+            <p><a href="${tripLink}">${tripLink}</a></p>
+            <p>Best regards,<br>Your Travel Team</p>
+          </div>
+     /publicdy>
+      </html>
+    `
   };
 
   // Send the email
