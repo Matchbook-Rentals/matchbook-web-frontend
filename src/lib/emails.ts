@@ -53,7 +53,7 @@ Your Travel Team`,
             <p><a href="${tripLink}">${tripLink}</a></p>
             <p>Best regards,<br>Your Travel Team</p>
           </div>
-     /publicdy>
+        </body>
       </html>
     `
   };
