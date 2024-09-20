@@ -64,10 +64,15 @@ async function createTemplateFromListing(listingId: string, templateData: {
   templateDescription?: string;
 }) {
   const userId = await checkAuth();
-  console.log('FROM TEMPLACE ACTIONS', userId);
 
-  const newTemplate = await createBoldSignTemplate({ ...templateData, userId });
-  console.log('NEW TEMPLATE', newTemplate);
+  const newTemplate = await prisma.boldSignTemplate.create({
+    data: {
+      id: templateData.templateId,
+      templateName: templateData.templateName,
+      templateDescription: templateData.templateDescription,
+      userId: userId,
+    },
+  });
 
   await prisma.listing.update({
     where: { id: listingId },

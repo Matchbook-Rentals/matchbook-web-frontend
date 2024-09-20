@@ -133,7 +133,6 @@ export default function OverviewTab() {
       }
 
       const data = await response.json();
-      console.log(data)
       setEmbedUrl(data.createUrl);
       setTemplateId(data.templateId);
     } catch (err) {
@@ -159,15 +158,12 @@ export default function OverviewTab() {
           break;
         case "onCreateSuccess":
           // handle create success
-          console.log("Template created successfully");
           const newTemplateData = {
             templateId: templateId,
             templateName: templateTitle,
             templateDescription: description,
           }
-          console.log('NEW TEMPLATE DATA', newTemplateData);
           const newTemplate = await createTemplateFromListing(listingId as string, newTemplateData);
-          console.log('NEW TEMPLATE', newTemplate);
           toast({
             title: "Template created successfully",
             description: "Your template has been created",
