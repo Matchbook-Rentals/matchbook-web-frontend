@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from '@clerk/nextjs'
+import { createTemplateFromListing } from "@/app/actions/templates";
 
 interface FormField {
   id: string;
@@ -51,6 +54,8 @@ interface TemplatePayload {
 }
 
 export default function OverviewTab() {
+  const { user } = useUser();
+  const { listingId } = useParams();
   const [templateTitle, setTemplateTitle] = useState("");
   const [documentTitle, setDocumentTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -78,28 +83,35 @@ export default function OverviewTab() {
 
     try {
       const formData = new FormData();
-      formData.append("RedirectUrl", "https://boldsign.com/esignature-api/");
       formData.append("ShowToolbar", "true");
       formData.append("ViewOption", "PreparePage");
       formData.append("ShowSaveButton", "true");
       formData.append("ShowSendButton", "true");
       formData.append("ShowPreviewButton", "true");
       formData.append("ShowNavigationButtons", "true");
+      formData.append("AutoDetectFields", "true");
       formData.append("Title", templateTitle);
       formData.append("Description", description);
       formData.append("DocumentMessage", "document message for signers");
-      formData.append("Roles[0][Name]", "HR");
+      formData.append("Roles[0][Name]", "Host");
+      formData.append("Roles[0][DefaultSignerName]", user?.fullName || "Host");
+      formData.append("Roles[0][DefaultSignerEmail]", user?.emailAddresses[0].emailAddress || "host@cubeflakes.com");
       formData.append("Roles[0][Index]", "1");
-      formData.append("Roles[0][DefaultSignerName]", "Alex Gayle");
-      formData.append("Roles[0][DefaultSignerEmail]", "alexgayle@cubeflakes.com");
       formData.append("Roles[0][SignerOrder]", "1");
       formData.append("Roles[0][SignerType]", "Signer");
       formData.append("Roles[0][Locale]", "EN");
       formData.append("Roles[0][ImposeAuthentication]", "EmailOTP");
       formData.append("Roles[0][DeliveryMode]", "Email");
+      formData.append("Roles[1][Name]", "Tenant");
+      formData.append("Roles[1][Index]", "2");
+      formData.append("Roles[1][SignerOrder]", "2");
+      formData.append("Roles[1][SignerType]", "Signer");
+      formData.append("Roles[1][Locale]", "EN");
+      formData.append("Roles[1][ImposeAuthentication]", "EmailOTP");
+      formData.append("Roles[1][DeliveryMode]", "Email");
       formData.append("AllowNewRoles", "true");
       formData.append("AllowMessageEditing", "true");
-      formData.append("EnableSigningOrder", "true");
+      formData.append("EnableSigningOrder", "false");
       formData.append("DocumentInfo[0][Title]", documentTitle);
       formData.append("DocumentInfo[0][Locale]", "EN");
       formData.append("DocumentInfo[0][Description]", description);
@@ -139,6 +151,54 @@ export default function OverviewTab() {
       reader.onerror = error => reject(error);
     });
   };
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== "https://app.boldsign.com") {
+        return;
+      }
+
+      switch (event.data.status) {
+        case "OnDraftSavedSuccess":
+          // handle draft success
+          console.log("Draft saved successfully");
+          break;
+        case "onDraftFailed":
+          // handle draft failure
+          console.error("Draft save failed");
+          break;
+        case "onCreateSuccess":
+          // handle create success
+          console.log("Template created successfully");
+          createTemplateFromListing(listingId, {
+            templateName: event.data.templateName,
+            templateDescription: event.data.templateDescription,
+          });
+          break;
+        case "onCreateFailed":
+          // handle create failure
+          console.error("Template creation failed");
+          break;
+        case "onTemplateEditingCompleted":
+          // handle edit success
+          console.log("Template editing completed");
+          break;
+        case "onTemplateEditingFailed":
+          // handle edit failure
+          console.error("Template editing failed");
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
   return (
     <div className="flex flex-col space-y-4 p-4">
@@ -194,7 +254,7 @@ export default function OverviewTab() {
               <iframe
                 src={embedUrl}
                 width="100%"
-                height="600px"
+                height="1000px"
                 frameBorder="0"
                 title="Template Preview"
               />
