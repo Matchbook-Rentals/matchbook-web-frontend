@@ -113,8 +113,8 @@ export default function OverviewTab() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create template');
         alert('failed')
+        throw new Error('Failed to create template');
       }
 
       const data = await response.json();
