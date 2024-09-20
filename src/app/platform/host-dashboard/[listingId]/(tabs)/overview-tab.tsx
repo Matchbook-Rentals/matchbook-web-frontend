@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from '@clerk/nextjs'
 import { createTemplateFromListing } from "@/app/actions/templates";
+import { toast } from "@/components/ui/use-toast";
 
 interface FormField {
   id: string;
@@ -140,23 +141,9 @@ export default function OverviewTab() {
     }
   };
 
-  const convertFileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          resolve(reader.result); // Return the full data URL
-        } else {
-          reject(new Error('Failed to convert file to base64'));
-        }
-      };
-      reader.onerror = error => reject(error);
-    });
-  };
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
+    const handleMessage = async (event: MessageEvent) => {
       if (event.origin !== "https://app.boldsign.com") {
         return;
       }
@@ -173,11 +160,17 @@ export default function OverviewTab() {
         case "onCreateSuccess":
           // handle create success
           console.log("Template created successfully");
-          console.log(event)
-          createTemplateFromListing(listingId, {
-            templateId: event.data.templateId,
-            templateName: event.data.templateName,
-            templateDescription: event.data.templateDescription,
+          const newTemplateData = {
+            templateId: templateId,
+            templateName: templateTitle,
+            templateDescription: description,
+          }
+          console.log('NEW TEMPLATE DATA', newTemplateData);
+          const newTemplate = await createTemplateFromListing(listingId as string, newTemplateData);
+          console.log('NEW TEMPLATE', newTemplate);
+          toast({
+            title: "Template created successfully",
+            description: "Your template has been created",
           });
           break;
         case "onCreateFailed":
@@ -203,7 +196,7 @@ export default function OverviewTab() {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+  }, [templateId]); // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
   const triggerIframeAction = (action: string) => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
@@ -269,6 +262,10 @@ export default function OverviewTab() {
               <Button className="hidden" onClick={() => triggerIframeAction("onCreateClick")}>Create template</Button>
               <Button className="hidden" onClick={() => triggerIframeAction("onPreviewExit")}>Exit preview</Button>
             </div>
+            <p>{templateId || ''}</p>
+            <p>{templateTitle || ''}</p>
+            <p>{documentTitle || ''}</p>
+            <p>{description || ''}</p>
             <iframe
               ref={iframeRef}
               src={embedUrl}
