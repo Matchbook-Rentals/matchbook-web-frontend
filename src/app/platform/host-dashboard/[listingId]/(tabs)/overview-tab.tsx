@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -62,6 +62,8 @@ export default function OverviewTab() {
   const [error, setError] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const [templateId, setTemplateId] = useState<string | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0];
@@ -132,6 +134,7 @@ export default function OverviewTab() {
       const data = await response.json();
       console.log(data)
       setEmbedUrl(data.createUrl);
+      setTemplateId(data.templateId);
     } catch (err) {
       setError('Error creating template: ' + (err as Error).message);
     }
@@ -170,7 +173,9 @@ export default function OverviewTab() {
         case "onCreateSuccess":
           // handle create success
           console.log("Template created successfully");
+          console.log(event)
           createTemplateFromListing(listingId, {
+            templateId: event.data.templateId,
             templateName: event.data.templateName,
             templateDescription: event.data.templateDescription,
           });
@@ -199,6 +204,12 @@ export default function OverviewTab() {
       window.removeEventListener("message", handleMessage);
     };
   }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+
+  const triggerIframeAction = (action: string) => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(action, "https://app.boldsign.com");
+    }
+  };
 
   return (
     <div className="flex flex-col space-y-4 p-4">
@@ -250,15 +261,22 @@ export default function OverviewTab() {
             <CardTitle>Template Preview</CardTitle>
           </CardHeader>
           <CardContent>
-            {embedUrl && (
-              <iframe
-                src={embedUrl}
-                width="100%"
-                height="1000px"
-                frameBorder="0"
-                title="Template Preview"
-              />
-            )}
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button className="hidden" onClick={() => triggerIframeAction("onNextClick")}>Configure fields</Button>
+              <Button className="hidden" onClick={() => triggerIframeAction("onPreviewClick")}>Preview template</Button>
+              <Button className="hidden" onClick={() => triggerIframeAction("onSaveClick")}>Save</Button>
+              <Button className="hidden" onClick={() => triggerIframeAction("onSaveAndCloseClick")}>Save and close</Button>
+              <Button className="hidden" onClick={() => triggerIframeAction("onCreateClick")}>Create template</Button>
+              <Button className="hidden" onClick={() => triggerIframeAction("onPreviewExit")}>Exit preview</Button>
+            </div>
+            <iframe
+              ref={iframeRef}
+              src={embedUrl}
+              width="100%"
+              height="1000px"
+              frameBorder="0"
+              title="Template Preview"
+            />
           </CardContent>
         </Card>
       )}

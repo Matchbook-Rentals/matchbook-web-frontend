@@ -59,6 +59,7 @@ async function deleteBoldSignTemplate(id: string) {
 
 // Create template from listing
 async function createTemplateFromListing(listingId: string, templateData: {
+  templateId?: string;
   templateName?: string;
   templateDescription?: string;
 }) {
