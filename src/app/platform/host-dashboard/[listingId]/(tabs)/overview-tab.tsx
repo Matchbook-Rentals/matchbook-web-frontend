@@ -66,6 +66,8 @@ export default function OverviewTab() {
   const [file, setFile] = useState<File | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [templateId, setTemplateId] = useState<string | null>(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,15 +144,37 @@ export default function OverviewTab() {
     }
   };
 
-  const handleUpdateTemplate = async (templateId: string) => {
-    if (!templateId) {
-      alert("Template ID is required");
-      setError("Template ID is required");
+  const handleTemplateSelection = (templateId: string) => {
+    setSelectedTemplateId(templateId);
+  };
+
+  const handleUpdateTemplate = async () => {
+    if (!selectedTemplateId) {
+      toast({
+        title: "Error",
+        description: "Please select a template first",
+        variant: "destructive",
+      });
       return;
     }
-    alert(`Updating template ${templateId}`);
-    await updateListingTemplate(listingId as string, templateId);
-  }
+
+    setIsUpdating(true);
+    try {
+      await updateListingTemplate(listingId as string, selectedTemplateId);
+      toast({
+        title: "Success",
+        description: "Template updated successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update template",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
@@ -221,10 +245,10 @@ export default function OverviewTab() {
         <CardContent>
           <div className="space-y-2">
             <h3>Current Template - {currListing?.boldSignTemplateId}</h3>
-            <h3>Current Template Name - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId).templateName}</h3>
-            <h3>Current Template Description - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId).templateDescription}</h3>
+            <h3>Current Template Name - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId)?.templateName}</h3>
+            <h3>Current Template Description - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId)?.templateDescription}</h3>
             <h3>Select a different template</h3>
-            <Select onValueChange={handleUpdateTemplate}>
+            <Select onValueChange={handleTemplateSelection}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a template" />
               </SelectTrigger>
@@ -234,6 +258,12 @@ export default function OverviewTab() {
                 ))}
               </SelectContent>
             </Select>
+            <Button
+              onClick={handleUpdateTemplate}
+              disabled={!selectedTemplateId || isUpdating}
+            >
+              {isUpdating ? "Updating..." : "Confirm Template Change"}
+            </Button>
           </div>
         </CardContent>
 
