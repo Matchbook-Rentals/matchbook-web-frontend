@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from '@clerk/nextjs'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { createTemplateFromListing } from "@/app/actions/templates";
 import { toast } from "@/components/ui/use-toast";
+import { useHostProperties } from "@/contexts/host-properties-provider";
+import { updateListingTemplate } from "@/app/actions/listings";
 
 interface FormField {
   id: string;
@@ -55,8 +57,8 @@ interface TemplatePayload {
 }
 
 export default function OverviewTab() {
-  const { user } = useUser();
   const { listingId } = useParams();
+  const { currListing } = useHostProperties();
   const [templateTitle, setTemplateTitle] = useState("");
   const [documentTitle, setDocumentTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -97,8 +99,8 @@ export default function OverviewTab() {
       formData.append("Description", description);
       formData.append("DocumentMessage", "document message for signers");
       formData.append("Roles[0][Name]", "Host");
-      formData.append("Roles[0][DefaultSignerName]", user?.fullName || "Host");
-      formData.append("Roles[0][DefaultSignerEmail]", user?.emailAddresses[0].emailAddress || "host@cubeflakes.com");
+      formData.append("Roles[0][DefaultSignerName]", currListing?.user?.fullName || "Host");
+      formData.append("Roles[0][DefaultSignerEmail]", currListing?.user?.email || "host@cubeflakes.com");
       formData.append("Roles[0][Index]", "1");
       formData.append("Roles[0][SignerOrder]", "1");
       formData.append("Roles[0][SignerType]", "Signer");
@@ -140,6 +142,15 @@ export default function OverviewTab() {
     }
   };
 
+  const handleUpdateTemplate = async (templateId: string) => {
+    if (!templateId) {
+      alert("Template ID is required");
+      setError("Template ID is required");
+      return;
+    }
+    alert(`Updating template ${templateId}`);
+    await updateListingTemplate(listingId as string, templateId);
+  }
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
@@ -202,6 +213,31 @@ export default function OverviewTab() {
 
   return (
     <div className="flex flex-col space-y-4 p-4">
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Templates</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <h3>Current Template - {currListing?.boldSignTemplateId}</h3>
+            <h3>Current Template Name - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId).templateName}</h3>
+            <h3>Current Template Description - {currListing.user.boldSignTemplates.find((template) => template.id === currListing?.boldSignTemplateId).templateDescription}</h3>
+            <h3>Select a different template</h3>
+            <Select onValueChange={handleUpdateTemplate}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a template" />
+              </SelectTrigger>
+              <SelectContent>
+                {currListing?.user?.boldSignTemplates.map((template) => (
+                  <SelectItem key={template.id} value={template.id}>{template.templateName}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>File Upload</CardTitle>
@@ -258,10 +294,6 @@ export default function OverviewTab() {
               <Button className="hidden" onClick={() => triggerIframeAction("onCreateClick")}>Create template</Button>
               <Button className="hidden" onClick={() => triggerIframeAction("onPreviewExit")}>Exit preview</Button>
             </div>
-            <p>{templateId || ''}</p>
-            <p>{templateTitle || ''}</p>
-            <p>{documentTitle || ''}</p>
-            <p>{description || ''}</p>
             <iframe
               ref={iframeRef}
               src={embedUrl}

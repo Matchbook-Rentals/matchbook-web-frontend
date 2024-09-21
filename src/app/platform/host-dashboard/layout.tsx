@@ -1,6 +1,6 @@
 import React from "react";
 import prisma from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser, User, auth } from "@clerk/nextjs/server";
 import { HostPropertiesProvider } from "@/contexts/host-properties-provider";
 import { ListingAndImages, RequestWithUser } from "@/types";
 
@@ -8,14 +8,23 @@ const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
   'use server';
 
   try {
-    const user = await currentUser();
-    if (!user) {
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
       throw new Error("User not authenticated");
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: clerkUser.id,
+      },
+      include: {
+        boldSignTemplates: true,
+      },
+    });
+
     const listings = await prisma.listing.findMany({
       where: {
-        userId: user.id,
+        userId: user!.id,
       },
       include: {
         bedrooms: true,
@@ -23,7 +32,11 @@ const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
         housingRequests: true,
       },
     });
-    return listings;
+    const updatedListings = listings.map((listing) => {
+      listing.user = user;
+      return listing;
+    });
+    return updatedListings;
   } catch (error) {
     console.error("Error fetching listings:", error);
     throw error; // Re-throw the error for further handling
