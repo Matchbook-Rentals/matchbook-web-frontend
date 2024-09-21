@@ -12,6 +12,8 @@ ACH PLAID API
 - [ ] build trip specific page
 - [ ] add invited trips to current searches
 - [ ] implement permissions for searches and affect UI
+- [ ] add bold sign template to listing
+- [ ] implement bold sign signing side
 
 ## 10SEP24
 - [ ]  Stripe Connect Integration
