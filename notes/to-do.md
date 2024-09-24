@@ -5,6 +5,9 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 24SEP24
+- [ ]  Change flow to choose lease at housingRequest approval   
+
 ## 18SEP24
 - [ ]  EMAIL TESTING
 - [X] add outbound to query params, read query params to check for user profile, prompt signup if no user profile, prompt login if found, also maybe clerk to see if already signed in  

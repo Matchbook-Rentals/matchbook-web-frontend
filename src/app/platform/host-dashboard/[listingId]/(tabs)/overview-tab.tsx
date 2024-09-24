@@ -101,8 +101,8 @@ export default function OverviewTab() {
       formData.append("Description", description);
       formData.append("DocumentMessage", "document message for signers");
       formData.append("Roles[0][Name]", "Host");
-      formData.append("Roles[0][DefaultSignerName]", currListing?.user?.fullName || "Host");
-      formData.append("Roles[0][DefaultSignerEmail]", currListing?.user?.email || "host@cubeflakes.com");
+      formData.append("Roles[0][DefaultSignerName]", currListing?.user?.firstName + " " + currListing?.user?.lastName || "Host");
+      formData.append("Roles[0][DefaultSignerEmail]", currListing?.user?.email || '');
       formData.append("Roles[0][Index]", "1");
       formData.append("Roles[0][SignerOrder]", "1");
       formData.append("Roles[0][SignerType]", "Signer");
