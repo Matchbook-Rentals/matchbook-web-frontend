@@ -1,17 +1,20 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHostProperties } from '@/contexts/host-properties-provider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
+import { toast } from '@/components/ui/use-toast';
+import { createMatch } from '@/app/actions/matches';
 
 const SendLeasePage: React.FC = () => {
   const router = useRouter();
-  const { currListing, currHousingRequest, } = useHostProperties();
+  const { currListing, currHousingRequest, currApplication, trip } = useHostProperties();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [numRoles, setNumRoles] = useState<number>(2);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (!currListing) {
@@ -67,8 +70,8 @@ const SendLeasePage: React.FC = () => {
         },
         {
           roleIndex: 2,
-          signerName: currHousingRequest?.firstName + " " + currHousingRequest?.lastName || "",
-          signerEmail: currHousingRequest?.email || "mockedForNow@gmail.com",
+          signerName: currApplication?.firstName + " " + currApplication?.lastName || "",
+          signerEmail: currApplication?.email || "mockedForNow@gmail.com",
           signerOrder: 2,
           signerType: "signer",
         }
@@ -100,20 +103,62 @@ const SendLeasePage: React.FC = () => {
       }
 
       const data = await response.json();
-      // Redirect to the embedded URL
-      router.push(data.sendUrl);
+      setEmbedUrl(data.sendUrl);
     } catch (error) {
       console.error('Error creating embedded request:', error);
       // Handle error (e.g., show an error message to the user)
     }
   };
 
+  // New functions for client-side triggers
+  const triggerIframeAction = (action: string) => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage(action, "*");
+    }
+  };
+
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== "https://app.boldsign.com") {
+        return;
+      }
+
+      switch (event.data) {
+        case "onDraftSuccess":
+          console.log("Draft saved successfully");
+          break;
+        case "onDraftFailed":
+          console.error("Failed to save draft");
+          break;
+        case "onCreateSuccess":
+          console.log("Document created successfully");
+          try {
+            const result = await createMatch(trip, currListing);
+            console.log('Match creation result:', result);
+            toast({
+              title: 'Match created',
+              description: 'The match has been created',
+            });
+          } catch (error) {
+            console.error('Error creating match:', error);
+          }
+          break;
+        case "onCreateFailed":
+          console.error("Failed to create document");
+          break;
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
   if (!currListing) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div onMouseEnter={() => console.log(currHousingRequest)} className="container mx-auto p-4">
+    <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create Lease</h1>
       <p className="mb-4">Creating lease for: {currListing?.locationString}</p>
       <Card>
@@ -140,14 +185,35 @@ const SendLeasePage: React.FC = () => {
               Create from Template
             </Button>
           </div>
+
+          {embedUrl ? (
+            <div className="mt-4">
+              <iframe
+                ref={iframeRef}
+                src={embedUrl}
+                height="768px"
+                width="100%"
+                className="border-0"
+                title="Lease Agreement Document"
+              />
+              <div className="mt-4 space-x-2">
+                <Button onClick={() => triggerIframeAction("onNextClick")}>Configure fields</Button>
+                <Button onClick={() => triggerIframeAction("onPreviewClick")}>Preview document</Button>
+                <Button onClick={() => triggerIframeAction("onSaveClick")}>Save</Button>
+                <Button onClick={() => triggerIframeAction("onSaveAndCloseClick")}>Save and close</Button>
+                <Button onClick={() => triggerIframeAction("onSendClick")}>Send document</Button>
+                <Button onClick={() => triggerIframeAction("onPreviewExit")}>Exit preview</Button>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4">
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Upload New
+              </button>
+            </div>
+          )}
         </CardContent>
       </Card>
-      OR
-      <div className="mt-4">
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-          Upload New
-        </button>
-      </div>
     </div>
   );
 };

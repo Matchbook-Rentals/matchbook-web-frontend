@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { ListingAndImages } from "@/types";
-import { HousingRequest } from "@prisma/client";
+import { HousingRequest, Trip, Application } from "@prisma/client";
 import { useParams } from 'next/navigation';
 
 interface HostPropertiesContextProps {
@@ -10,6 +10,10 @@ interface HostPropertiesContextProps {
   currListing: ListingAndImages | null;
   currHousingRequest: HousingRequest | null;
   setCurrHousingRequest: React.Dispatch<React.SetStateAction<HousingRequest | null>>;
+  currApplication: Application | null;
+  setCurrApplication: React.Dispatch<React.SetStateAction<Application | null>>;
+  trip: Trip | null;
+  setTrip: React.Dispatch<React.SetStateAction<Trip | null>>;
 }
 
 interface HostPropertiesProviderProps {
@@ -24,6 +28,8 @@ export const HostPropertiesProvider: React.FC<HostPropertiesProviderProps> = ({ 
   const [currListing, setCurrListing] = useState<ListingAndImages | null>(null);
   const params = useParams();
   const [currHousingRequest, setCurrHousingRequest] = useState<HousingRequest | null>(null);
+  const [currApplication, setCurrApplication] = useState<Application | null>(null);
+  const [trip, setTrip] = useState<Trip | null>(null);
 
   useEffect(() => {
     const listingId = params.listingId as string | undefined;
@@ -41,7 +47,11 @@ export const HostPropertiesProvider: React.FC<HostPropertiesProviderProps> = ({ 
       getListingHousingRequests,
       currListing,
       currHousingRequest,
-      setCurrHousingRequest
+      setCurrHousingRequest,
+      currApplication,
+      setCurrApplication,
+      trip,
+      setTrip
     }}>
       {children}
     </HostPropertiesContext.Provider>
