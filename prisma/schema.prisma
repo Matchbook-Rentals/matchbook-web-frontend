@@ -49,6 +49,7 @@ model User {
   conversations1     Conversation[]     @relation("UserConversations1")
   conversations2     Conversation[]     @relation("UserConversations2")
   boldSignTemplates  BoldSignTemplate[]
+  BoldSignLease      BoldSignLease[]
 }
 
 model UserPreferences {
@@ -379,8 +380,9 @@ model Match {
   booking     Booking?
   monthlyRent Int?
 
-  trip    Trip    @relation(fields: [tripId], references: [id])
-  listing Listing @relation(fields: [listingId], references: [id])
+  trip          Trip           @relation(fields: [tripId], references: [id])
+  listing       Listing        @relation(fields: [listingId], references: [id])
+  BoldSignLease BoldSignLease?
 
   @@index([tripId])
 }
@@ -551,4 +553,20 @@ model BoldSignTemplate {
   listings Listing[]
 
   @@index([userId])
+}
+
+model BoldSignLease {
+  id                String   @id @default(cuid())
+  embedUrl          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  matchId           String
+  landlordId        String
+  primaryTenantId   String
+  secondaryTenantId String?
+
+  match    Match @relation(fields: [matchId], references: [id])
+  landlord User  @relation(fields: [landlordId], references: [id])
+
+  @@unique([matchId])
 }

@@ -7,6 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { createMatch } from '@/app/actions/matches';
+import { createInitialLease } from '@/app/actions/documents';
+
+
 
 const SendLeasePage: React.FC = () => {
   const router = useRouter();
@@ -14,6 +17,7 @@ const SendLeasePage: React.FC = () => {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [numRoles, setNumRoles] = useState<number>(2);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const [docId, setDocId] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -23,10 +27,16 @@ const SendLeasePage: React.FC = () => {
     if (currListing?.boldSignTemplateId) {
       setSelectedTemplateId(currListing.boldSignTemplateId);
     }
+  }, [currListing]);
+
+  useEffect(() => {
+    if (!selectedTemplateId) {
+      return;
+    }
 
     const fetchTemplateDetails = async () => {
       try {
-        const response = await fetch(`/api/leases/template?templateId=${currListing?.boldSignTemplateId}`);
+        const response = await fetch(`/api/leases/template?templateId=${selectedTemplateId}`);
         const data = await response.json();
         console.log("BoldSign API response:", data);
         setNumRoles(data?.roles?.length || 2);
@@ -37,7 +47,7 @@ const SendLeasePage: React.FC = () => {
     };
 
     fetchTemplateDetails();
-  }, [currListing]);
+  }, [selectedTemplateId]);
 
   const handleTemplateSelection = (value: string) => {
     setSelectedTemplateId(value);
@@ -71,7 +81,7 @@ const SendLeasePage: React.FC = () => {
         {
           roleIndex: 2,
           signerName: currApplication?.firstName + " " + currApplication?.lastName || "",
-          signerEmail: currApplication?.email || "mockedForNow@gmail.com",
+          signerEmail: currApplication?.email || "tyler.bennett@matchbookrentals.com",
           signerOrder: 2,
           signerType: "signer",
         }
@@ -104,6 +114,7 @@ const SendLeasePage: React.FC = () => {
 
       const data = await response.json();
       setEmbedUrl(data.sendUrl);
+      setDocId(data.documentId);
     } catch (error) {
       console.error('Error creating embedded request:', error);
       // Handle error (e.g., show an error message to the user)
@@ -133,8 +144,12 @@ const SendLeasePage: React.FC = () => {
         case "onCreateSuccess":
           console.log("Document created successfully");
           try {
+            console.log('try create match');
             const result = await createMatch(trip, currListing);
+            console.log('try create lease');
+            const lease = await createInitialLease(docId, result.match.id, currListing.userId, currApplication?.userId);
             console.log('Match creation result:', result);
+            console.log('Lease creation result:', lease);
             toast({
               title: 'Match created',
               description: 'The match has been created',
@@ -151,7 +166,7 @@ const SendLeasePage: React.FC = () => {
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  }, [docId]);
 
   if (!currListing) {
     return <div>Loading...</div>;
@@ -159,8 +174,17 @@ const SendLeasePage: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {docId && <p>Doc ID: {docId}</p>}
       <h1 className="text-2xl font-bold mb-4">Create Lease</h1>
-      <Button onClick={() => console.log('trip', trip)}>Log Application</Button>
+      <Button onClick={() => console.log('currListing', currListing)}>Log Application</Button>
+
+
+      <div>
+        <p>Doc ID: {docId}</p>
+        <p>Listing User ID: {currListing?.userId}</p>
+        <p>Application User ID: {currApplication?.userId}</p>
+      </div>
+
       <p className="mb-4">Creating lease for: {currListing?.locationString}</p>
       <Card>
         <CardContent>
@@ -209,7 +233,7 @@ const SendLeasePage: React.FC = () => {
           ) : (
             <div className="mt-4">
               <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Upload New
+                Upload New (not implemented)
               </button>
             </div>
           )}
