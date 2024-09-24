@@ -7,6 +7,9 @@ ACH PLAID API
 
 ## 24SEP24
 - [ ]  Change flow to choose lease at housingRequest approval   
+- [ ] Store doc Id in match
+- [ ] Use doc Id to pull Sign embed page
+- [ ] Worry about auth... somehow? email?
 
 ## 18SEP24
 - [ ]  EMAIL TESTING

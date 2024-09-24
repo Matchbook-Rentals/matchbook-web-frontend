@@ -16,7 +16,7 @@ interface ApplicationSummaryProps {
 }
 
 const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, application }) => {
-  const { currListing, setCurrApplication } = useHostProperties();
+  const { currListing, setCurrApplication, setTrip } = useHostProperties();
   const router = useRouter();
   const { userId } = useAuth();
   const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + income.monthlyAmount, '');
@@ -39,6 +39,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
 
   const handleApprove = async () => {
     setCurrApplication(application);
+    setTrip(trip);
     router.push(`/platform/host-dashboard/${currListing?.id}/send-lease`);
     // try {
     //   const result = await createMatch(trip, currListing);

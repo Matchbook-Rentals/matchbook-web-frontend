@@ -24,6 +24,7 @@ export async function createMatch(trip: Trip, listing: Listing) {
       data: {
         tripId: trip.id,
         listingId: listing.id,
+        monthlyRent: monthlyRent,
       },
     })
     const notificationData: CreateNotificationInput = {
