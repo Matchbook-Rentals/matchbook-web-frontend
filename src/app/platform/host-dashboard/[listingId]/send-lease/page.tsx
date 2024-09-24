@@ -8,22 +8,33 @@ import { Card, CardContent } from "@/components/ui/card";
 const SendLeasePage: React.FC = () => {
   const { currListing } = useHostProperties();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [numRoles, setNumRoles] = useState<number>(2);
 
   useEffect(() => {
+    if (!currListing) {
+      return;
+    }
     if (currListing?.boldSignTemplateId) {
       setSelectedTemplateId(currListing.boldSignTemplateId);
     }
+
+    const fetchTemplateDetails = async () => {
+      try {
+        const response = await fetch(`/api/leases/template?templateId=${currListing?.boldSignTemplateId}`);
+        const data = await response.json();
+        console.log("BoldSign API response:", data);
+        setNumRoles(data?.roles?.length || 2);
+        // You can set state or perform other operations with the data here
+      } catch (error) {
+        console.error('Error fetching template properties:', error);
+      }
+    };
+
+    fetchTemplateDetails();
   }, [currListing]);
 
   const handleTemplateSelection = (value: string) => {
     setSelectedTemplateId(value);
-  };
-
-  const handleUpdateTemplate = async () => {
-    // Implement the update logic here
-    setIsUpdating(true);
-    // ... update logic ...
-    setIsUpdating(false);
   };
 
   const selectedTemplate = currListing?.user.boldSignTemplates.find(
@@ -37,6 +48,7 @@ const SendLeasePage: React.FC = () => {
   return (
     <div onMouseEnter={() => console.log(currListing)} className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create Lease</h1>
+      {numRoles}
       <p className="mb-4">Creating lease for: {currListing?.locationString}</p>
       <Card>
         <CardContent>
@@ -56,14 +68,15 @@ const SendLeasePage: React.FC = () => {
               </SelectContent>
             </Select>
             <Button
-              onClick={handleUpdateTemplate}
-              disabled={!selectedTemplateId || selectedTemplateId === currListing?.boldSignTemplateId}
+              onClick={() => console.log('handle create from template')}
+              disabled={!selectedTemplateId}
             >
               Create from Template
             </Button>
           </div>
         </CardContent>
       </Card>
+      OR
       <div className="mt-4">
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
           Upload New
