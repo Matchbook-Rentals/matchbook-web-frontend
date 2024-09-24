@@ -4,11 +4,14 @@ import { useHostProperties } from '@/contexts/host-properties-provider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRouter } from 'next/navigation';
 
 const SendLeasePage: React.FC = () => {
-  const { currListing } = useHostProperties();
+  const router = useRouter();
+  const { currListing, currHousingRequest, } = useHostProperties();
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [numRoles, setNumRoles] = useState<number>(2);
+  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!currListing) {
@@ -41,14 +44,77 @@ const SendLeasePage: React.FC = () => {
     (template) => template.id === selectedTemplateId
   );
 
+  const handleCreateFromTemplate = async () => {
+    if (!selectedTemplateId || !currListing) return;
+
+    const requestBody = {
+      showToolbar: true,
+      sendViewOption: "PreparePage",
+      showSaveButton: true,
+      showSendButton: true,
+      showPreviewButton: true,
+      showNavigationButtons: true,
+      sendLinkValidTill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+      title: "Lease Agreement for " + currListing.locationString,
+      message: "Please review and sign the lease agreement.",
+      roles: [
+        {
+          roleIndex: 1,
+          signerName: currListing.user?.firstName + " " + currListing.user?.lastName || "",
+          signerEmail: currListing.user?.email || "",
+          signerOrder: 1,
+          signerType: "signer",
+        },
+        {
+          roleIndex: 2,
+          signerName: currHousingRequest?.firstName + " " + currHousingRequest?.lastName || "",
+          signerEmail: currHousingRequest?.email || "mockedForNow@gmail.com",
+          signerOrder: 2,
+          signerType: "signer",
+        }
+      ],
+      reminderSettings: {
+        enableAutoReminder: true,
+        reminderDays: 3,
+        reminderCount: 5
+      },
+      expiryDays: 30,
+      expiryDateType: "Days",
+      expiryValue: 30,
+      disableExpiryAlert: false,
+      enablePrintAndSign: true,
+      enableReassign: true
+    };
+
+    try {
+      const response = await fetch(`/api/leases/document?templateId=${selectedTemplateId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create embedded request URL');
+      }
+
+      const data = await response.json();
+      // Redirect to the embedded URL
+      router.push(data.sendUrl);
+    } catch (error) {
+      console.error('Error creating embedded request:', error);
+      // Handle error (e.g., show an error message to the user)
+    }
+  };
+
   if (!currListing) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div onMouseEnter={() => console.log(currListing)} className="container mx-auto p-4">
+    <div onMouseEnter={() => console.log(currHousingRequest)} className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Create Lease</h1>
-      {numRoles}
       <p className="mb-4">Creating lease for: {currListing?.locationString}</p>
       <Card>
         <CardContent>
@@ -68,7 +134,7 @@ const SendLeasePage: React.FC = () => {
               </SelectContent>
             </Select>
             <Button
-              onClick={() => console.log('handle create from template')}
+              onClick={handleCreateFromTemplate}
               disabled={!selectedTemplateId}
             >
               Create from Template
