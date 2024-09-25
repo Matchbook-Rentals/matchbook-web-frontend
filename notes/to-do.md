@@ -6,8 +6,9 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 ## 24SEP24
-- [ ]  Change flow to choose lease at housingRequest approval   
-- [ ] Store doc Id in match
+- [X]  Change flow to choose lease at housingRequest approval   
+- [x] Store doc Id in match
+- [ ] Embed on Guest Side
 - [ ] Use doc Id to pull Sign embed page
 - [ ] Worry about auth... somehow? email?
 

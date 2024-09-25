@@ -564,6 +564,8 @@ model BoldSignLease {
   landlordId        String
   primaryTenantId   String
   secondaryTenantId String?
+  landlordSigned    Boolean  @default(false)
+  tenantSigned      Boolean  @default(false)
 
   match    Match @relation(fields: [matchId], references: [id])
   landlord User  @relation(fields: [landlordId], references: [id])

@@ -51,6 +51,7 @@ export async function getMatch(id: string) {
       include: {
         listing: true,
         trip: true,
+        BoldSignLease: true,
         // TODO: add housingRequest
       },
     })
