@@ -12,6 +12,8 @@ import { useState } from "react"
 import StripeCheckoutEmbed from "./stripe-checkout-embed"
 import LeaseSignEmbed from "./(components)/lease-sign-embed"
 import { useUser } from '@clerk/nextjs'
+import { updateBoldSignLease } from "@/app/actions/documents"
+import { toast } from "@/components/ui/use-toast"
 
 export default function PropertyBookingPage({ match, clientSecret }: { match: Match & { trip: Trip & { listing: Listing } }, clientSecret: string }) {
   const [useStripeCheckout, setUseStripeCheckout] = useState(false)
@@ -44,6 +46,15 @@ export default function PropertyBookingPage({ match, clientSecret }: { match: Ma
     console.log(data);
   };
 
+  const handleUpdateLease = async () => {
+    const response = await updateBoldSignLease(match.BoldSignLease.id, { tenantSigned: true })
+    toast({
+      title: 'Lease Signed',
+      description: 'The lease has been signed by the tenant',
+    })
+    console.log(response)
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-end mb-4">
@@ -62,6 +73,7 @@ export default function PropertyBookingPage({ match, clientSecret }: { match: Ma
       </div>
 
       {embedUrl && <LeaseSignEmbed embeddedSigningLink={embedUrl} isLeaseSigned={isLeaseSigned} setIsLeaseSigned={setIsLeaseSigned} />}
+      <Button onClick={handleUpdateLease}>TEST UPDATE LEASE</Button>
 
 
       {useStripeCheckout ? (

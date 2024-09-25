@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { updateBoldSignLease } from '@/app/actions/documents';
 
 interface LeaseSignEmbedProps {
   embeddedSigningLink: string;
@@ -17,6 +18,7 @@ const LeaseSignEmbed: React.FC<LeaseSignEmbedProps> = ({ embeddedSigningLink, is
         case "onDocumentSigned":
           console.log("Document signed successfully");
           setIsLeaseSigned(true);
+          updateBoldSignLease(event.data.documentId, { tenantSigned: true });
           break;
         case "onDocumentSigningFailed":
           console.error("Document signing failed");

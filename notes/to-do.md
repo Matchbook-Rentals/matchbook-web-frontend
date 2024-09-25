@@ -8,9 +8,10 @@ ACH PLAID API
 ## 24SEP24
 - [X]  Change flow to choose lease at housingRequest approval   
 - [x] Store doc Id in match
-- [ ] Embed on Guest Side
-- [ ] Use doc Id to pull Sign embed page
+- [x] Embed on Guest Side
+- [x] Use doc Id to pull Sign embed page
 - [ ] Worry about auth... somehow? email?
+- [ ] Get all applicants from housingRequest, add to lease in db (ensure emails are correct for auth)
 
 ## 18SEP24
 - [ ]  EMAIL TESTING
