@@ -10,10 +10,16 @@ import { QuestionMarkCircledIcon, CalendarIcon, PersonIcon } from "@radix-ui/rea
 import { Match, Trip, Listing } from "@prisma/client"
 import { useState } from "react"
 import StripeCheckoutEmbed from "./stripe-checkout-embed"
+import LeaseSignEmbed from "./(components)/lease-sign-embed"
+import { useUser } from '@clerk/nextjs'
+import { updateBoldSignLease } from "@/app/actions/documents"
+import { toast } from "@/components/ui/use-toast"
 
 export default function PropertyBookingPage({ match, clientSecret }: { match: Match & { trip: Trip & { listing: Listing } }, clientSecret: string }) {
   const [useStripeCheckout, setUseStripeCheckout] = useState(false)
-
+  const [embedUrl, setEmbedUrl] = useState('')
+  const { user } = useUser()
+  const [isLeaseSigned, setIsLeaseSigned] = useState(false)
   // Calculate length of stay
   const calculateStayLength = () => {
     const startDate = new Date(match.trip.startDate);
@@ -25,16 +31,50 @@ export default function PropertyBookingPage({ match, clientSecret }: { match: Ma
     return `${months} M | ${days} D`;
   };
 
+  const handleSignLease = async () => {
+    const signerEmail = user?.emailAddresses[0].emailAddress
+    const requestUrl = `/api/leases/document?documentId=${match.BoldSignLease.id}&signerEmail=${signerEmail}`
+    console.log('hitting', requestUrl)
+    const response = await fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    setEmbedUrl(data.signLink)
+    console.log(data);
+  };
+
+  const handleUpdateLease = async () => {
+    const response = await updateBoldSignLease(match.BoldSignLease.id, { tenantSigned: true })
+    toast({
+      title: 'Lease Signed',
+      description: 'The lease has been signed by the tenant',
+    })
+    console.log(response)
+  }
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-end mb-4">
+        <Button onClick={() => {
+          console.log(match.BoldSignLease)
+        }}>
+          Log Lease
+        </Button>
         <Label htmlFor="use-stripe" className="mr-2">Use Stripe Checkout</Label>
         <Switch
           id="use-stripe"
           checked={useStripeCheckout}
           onCheckedChange={setUseStripeCheckout}
         />
+
       </div>
+
+      {embedUrl && <LeaseSignEmbed embeddedSigningLink={embedUrl} isLeaseSigned={isLeaseSigned} setIsLeaseSigned={setIsLeaseSigned} />}
+      <Button onClick={handleUpdateLease}>TEST UPDATE LEASE</Button>
+
 
       {useStripeCheckout ? (
         <StripeCheckoutEmbed clientSecret={clientSecret} />
@@ -57,7 +97,7 @@ export default function PropertyBookingPage({ match, clientSecret }: { match: Ma
               </div>
               <p className="text-sm text-muted-foreground mb-4">Reminder: Date change requests need to be approved by host</p>
 
-              <Button className="w-full mb-4">Review and Sign Lease</Button>
+              <Button className="w-full mb-4" onClick={handleSignLease} disabled={isLeaseSigned}> {isLeaseSigned ? 'Lease Signed' : 'Review and Sign Lease'}</Button>
 
               <h4 className="text-lg font-semibold mb-2">Payment</h4>
               <Select>

@@ -1,9 +1,18 @@
 'use server'
 import prisma from "@/lib/prismadb";
+import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
 
+const checkAuth = async () => {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('User not authenticated');
+  }
+  return userId;
+}
+
 export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number): Promise<ListingAndImages[]> => {
-  'use server';
+  const userId = await checkAuth();
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
 
@@ -111,4 +120,12 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     console.error('Error in pullListingsFromDb:', error);
     throw error; // Re-throw the error for the caller to handle
   }
+}
+
+export const updateListingTemplate = async (listingId: string, templateId: string) => {
+  const userId = await checkAuth();
+  return prisma.listing.update({
+    where: { id: listingId },
+    data: { boldSignTemplateId: templateId },
+  });
 }

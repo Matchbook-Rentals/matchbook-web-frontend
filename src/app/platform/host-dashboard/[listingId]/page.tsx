@@ -37,12 +37,6 @@ const PropertyDetails: React.FC = ({ params }) => {
 
   const tabs = [
     {
-      value: "overview",
-      label: "Overview",
-      Icon: OverviewIcon,
-      content: <OverviewTab />,
-    },
-    {
       value: "listing",
       label: "Listing",
       Icon: ListingIcon,
@@ -52,6 +46,12 @@ const PropertyDetails: React.FC = ({ params }) => {
           content={<div>Listing content goes here.</div>}
         />
       ),
+    },
+    {
+      value: "lease",
+      label: "Lease",
+      Icon: OverviewIcon,
+      content: <OverviewTab />,
     },
     {
       value: "applications",

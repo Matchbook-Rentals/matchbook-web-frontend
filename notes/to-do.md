@@ -5,6 +5,24 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 24SEP24
+- [X]  Change flow to choose lease at housingRequest approval   
+- [x] Store doc Id in match
+- [x] Embed on Guest Side
+- [x] Use doc Id to pull Sign embed page
+- [ ] Worry about auth... somehow? email?
+- [ ] Get all applicants from housingRequest, add to lease in db (ensure emails are correct for auth)
+
+## 18SEP24
+- [ ]  EMAIL TESTING
+- [X] add outbound to query params, read query params to check for user profile, prompt signup if no user profile, prompt login if found, also maybe clerk to see if already signed in  
+- [ ] fix tab selector eating other query params
+- [ ] build trip specific page
+- [ ] add invited trips to current searches
+- [ ] implement permissions for searches and affect UI
+- [ ] add bold sign template to listing
+- [ ] implement bold sign signing side
+
 ## 10SEP24
 - [ ]  Stripe Connect Integration
 

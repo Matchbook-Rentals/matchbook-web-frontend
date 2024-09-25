@@ -41,13 +41,15 @@ model User {
   trips              Trip[]
   applications       Application[]
   preferences        UserPreferences?
-  participatingTrips Trip[]           @relation("TripParticipants")
+  participatingTrips Trip[]             @relation("TripParticipants")
   purchases          Purchase[]
   personReports      PersonReport?
-  sentMessages       Message[]        @relation("SentMessages")
-  receivedMessages   Message[]        @relation("ReceivedMessages")
-  conversations1     Conversation[]   @relation("UserConversations1")
-  conversations2     Conversation[]   @relation("UserConversations2")
+  sentMessages       Message[]          @relation("SentMessages")
+  receivedMessages   Message[]          @relation("ReceivedMessages")
+  conversations1     Conversation[]     @relation("UserConversations1")
+  conversations2     Conversation[]     @relation("UserConversations2")
+  boldSignTemplates  BoldSignTemplate[]
+  BoldSignLease      BoldSignLease[]
 }
 
 model UserPreferences {
@@ -211,15 +213,17 @@ model Listing {
   privateBathroom   Boolean @default(false)
 
   // Relationships
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bookings        Booking[]
-  housingRequests HousingRequest[]
-  Trip            Trip?            @relation(fields: [tripId], references: [id])
-  tripId          String?
-  listingImages   ListingImage[] // Relation to multiple images
-  bedrooms        Bedroom[]
-  dislikes        Dislike[]
-  matches         Match[]
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings           Booking[]
+  housingRequests    HousingRequest[]
+  Trip               Trip?             @relation(fields: [tripId], references: [id])
+  tripId             String?
+  listingImages      ListingImage[] // Relation to multiple images
+  bedrooms           Bedroom[]
+  dislikes           Dislike[]
+  matches            Match[]
+  boldSignTemplate   BoldSignTemplate? @relation(fields: [boldSignTemplateId], references: [id])
+  boldSignTemplateId String?
 }
 
 model ListingImage {
@@ -376,8 +380,9 @@ model Match {
   booking     Booking?
   monthlyRent Int?
 
-  trip    Trip    @relation(fields: [tripId], references: [id])
-  listing Listing @relation(fields: [listingId], references: [id])
+  trip          Trip           @relation(fields: [tripId], references: [id])
+  listing       Listing        @relation(fields: [listingId], references: [id])
+  BoldSignLease BoldSignLease?
 
   @@index([tripId])
 }
@@ -533,4 +538,37 @@ model RentPayment {
   updatedAt DateTime @updatedAt
 
   booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model BoldSignTemplate {
+  id                  String   @id @default(uuid())
+  embedUrl            String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  templateName        String?
+  templateDescription String?
+
+  user     User?     @relation(fields: [userId], references: [id])
+  userId   String?
+  listings Listing[]
+
+  @@index([userId])
+}
+
+model BoldSignLease {
+  id                String   @id @default(cuid())
+  embedUrl          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  matchId           String
+  landlordId        String
+  primaryTenantId   String
+  secondaryTenantId String?
+  landlordSigned    Boolean  @default(false)
+  tenantSigned      Boolean  @default(false)
+
+  match    Match @relation(fields: [matchId], references: [id])
+  landlord User  @relation(fields: [landlordId], references: [id])
+
+  @@unique([matchId])
 }

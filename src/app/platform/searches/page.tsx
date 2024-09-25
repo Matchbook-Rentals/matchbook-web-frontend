@@ -32,6 +32,7 @@ const SearchesPage: React.FC = () => {
     console.log("Current Search:", state.currentSearch);
     console.log("Liked Listings:", state.likedListings);
     console.log("Matched Listings:", state.lookup.matchIds);
+    console.log("matches", state.currentSearch?.matches)
   }
 
   const tabSize = 'text-xl'

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
 import { Application, Trip } from '@prisma/client';
-import { ApplicationWithArrays } from '@/types/';
+import { ApplicationWithArrays } from '@/types';
 import { useHostProperties } from '@/contexts/host-properties-provider';
 import { createMatch } from '@/app/actions/matches';
 import { calculateRent, calculateLengthOfStay } from '@/lib/calculate-rent';
@@ -15,7 +16,8 @@ interface ApplicationSummaryProps {
 }
 
 const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, application }) => {
-  const { currListing } = useHostProperties();
+  const { currListing, setCurrApplication, setTrip } = useHostProperties();
+  const router = useRouter();
   const { userId } = useAuth();
   const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + income.monthlyAmount, '');
 
@@ -36,16 +38,19 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   const calculatedPrice = monthlyRent;
 
   const handleApprove = async () => {
-    try {
-      const result = await createMatch(trip, currListing);
-      console.log('Match creation result:', result);
-      toast({
-        title: 'Match created',
-        description: 'The match has been created',
-      });
-    } catch (error) {
-      console.error('Error creating match:', error);
-    }
+    setCurrApplication(application);
+    setTrip(trip);
+    router.push(`/platform/host-dashboard/${currListing?.id}/send-lease`);
+    // try {
+    //   const result = await createMatch(trip, currListing);
+    //   console.log('Match creation result:', result);
+    //   toast({
+    //     title: 'Match created',
+    //     description: 'The match has been created',
+    //   });
+    // } catch (error) {
+    //   console.error('Error creating match:', error);
+    // }
   };
 
   return (
@@ -75,7 +80,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
           <div>Avg Credit: E (800-850 mocked)</div>
         </div>
         <div className="flex justify-between mb-6">
-          <Button onClick={handleApprove} className="w-[48%] bg-primaryBrand/80 hover:bg-primaryBrand">Approve</Button>
+          <Button onClick={handleApprove} className="w-[48%] bg-primaryBrand/80 hover:bg-primaryBrand">Approve and Send Lease</Button>
           <Button className="w-[48%] bg-pinkBrand/80 hover:bg-pinkBrand">Disapprove</Button>
         </div>
       </CardContent>
