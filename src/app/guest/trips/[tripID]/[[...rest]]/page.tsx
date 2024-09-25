@@ -24,7 +24,7 @@ export default async function Page({ params, searchParams }: { params: { tripID:
       {userId ? (
         <>
           <p className="mb-4">
-            Hello {searchParams.invited}! You've been invited on a trip to {trip?.locationString} with {trip?.user.firstName}.
+            Hello {searchParams.invited}! You&apos;ve been invited on a trip to {trip?.locationString} with {trip?.user.firstName}.
             This is an exciting opportunity to join them on their adventure!
           </p>
           <Link href={`/platform/searches?currentTrip=${params.tripID}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -34,7 +34,7 @@ export default async function Page({ params, searchParams }: { params: { tripID:
       ) : (
         <>
           <p className="mb-4">
-            Hello {searchParams.invited}! You've been invited on a trip to {trip?.locationString} with {trip?.user.firstName}.
+            Hello {searchParams.invited}! You&apos;ve been invited on a trip to {trip?.locationString} with {trip?.user.firstName}.
             To continue and join this exciting adventure, please sign in or sign up below.
           </p>
           <div className="flex items-center space-x-4">
