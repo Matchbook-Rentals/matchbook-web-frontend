@@ -213,17 +213,27 @@ model Listing {
   privateBathroom   Boolean @default(false)
 
   // Relationships
-  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookings           Booking[]
   housingRequests    HousingRequest[]
-  Trip               Trip?             @relation(fields: [tripId], references: [id])
+  Trip               Trip?                   @relation(fields: [tripId], references: [id])
   tripId             String?
   listingImages      ListingImage[] // Relation to multiple images
   bedrooms           Bedroom[]
   dislikes           Dislike[]
   matches            Match[]
-  boldSignTemplate   BoldSignTemplate? @relation(fields: [boldSignTemplateId], references: [id])
+  boldSignTemplate   BoldSignTemplate?       @relation(fields: [boldSignTemplateId], references: [id])
   boldSignTemplateId String?
+  unavailablePeriods ListingUnavailability[]
+}
+
+model ListingUnavailability {
+  id        String   @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+  reason    String? // Optional: could track why it's blocked (repairs, personal reasons, etc.)
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  listingId String
 }
 
 model ListingImage {
