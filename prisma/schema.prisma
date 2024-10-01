@@ -232,8 +232,8 @@ model ListingUnavailability {
   startDate DateTime
   endDate   DateTime
   reason    String? // Optional: could track why it's blocked (repairs, personal reasons, etc.)
-  listing   Listing  @relation(fields: [listingId], references: [id])
   listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id])
 }
 
 model ListingImage {

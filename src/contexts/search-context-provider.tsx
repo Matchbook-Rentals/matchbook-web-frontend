@@ -196,7 +196,7 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
       !lookup.favIds.has(listing.id) &&
       !lookup.dislikedIds.has(listing.id) &&
       !lookup.requestedIds.has(listing.id)
-    ),
+     ),
     [listings, lookup]
   );
 

@@ -1,4 +1,4 @@
-import { HousingRequest, Application, Dislike, ListingImage, Match, Favorite, Trip, User, Listing, Bedroom, VerificationImage, Income, Identification } from "@prisma/client";
+import { HousingRequest, Application, Dislike, ListingImage, Match, Favorite, Trip, User, Listing, Bedroom, VerificationImage, Income, Identification, ListingUnavailability } from "@prisma/client";
 
 export interface TripAndMatches extends Trip {
   favorites: Favorite[]
@@ -15,6 +15,7 @@ export interface ListingAndImages extends Listing {
   price?: number
   calculatedPrice?: number
   uScore?: number
+  unavailablePeriods: ListingUnavailability[]
 };
 
 export interface RequestWithUser extends HousingRequest {
