@@ -29,7 +29,6 @@ const SearchesPage: React.FC = () => {
     state.listings
       .filter(listing => listing.unavailablePeriods.length > 0)
       .forEach(listing => console.log(listing.id, 'unavailables', listing.unavailablePeriods))
-    console.log('end unavailables')
   }
 
   const tabSize = 'text-xl'
