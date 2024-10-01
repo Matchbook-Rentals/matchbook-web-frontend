@@ -15,7 +15,7 @@ export interface ListingAndImages extends Listing {
   price?: number
   calculatedPrice?: number
   uScore?: number
-  unavailablePeriods: ListingUnavailability[]
+  unavailablePeriods?: ListingUnavailability[]
 };
 
 export interface RequestWithUser extends HousingRequest {
