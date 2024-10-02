@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { createNotification } from './notifications'
 import { HousingRequest } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
+import { auth } from '@clerk/nextjs/server'
+
 
 export async function getHousingRequestsByListingId(listingId: string) {
   try {

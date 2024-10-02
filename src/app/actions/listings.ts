@@ -1,7 +1,9 @@
 'use server'
+//Imports
 import prisma from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
+import { Listing, ListingUnavailability } from "@prisma/client";
 
 const checkAuth = async () => {
   const { userId } = auth();
@@ -51,13 +53,15 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     b.id AS bedroomId, b.bedroomNumber, b.bedType,
     u.id AS userId, u.firstName AS userFirstName, u.lastName AS userLastName, 
     u.fullName AS userFullName, u.email AS userEmail, u.imageUrl AS userImageUrl,
-    u.createdAt AS userCreatedAt
+    u.createdAt AS userCreatedAt,
+    lu.id AS unavailabilityId, lu.startDate AS unavailabilityStartDate, lu.endDate AS unavailabilityEndDate
     FROM Listing l
     LEFT JOIN ListingImage li ON l.id = li.listingId
     LEFT JOIN Bedroom b ON l.id = b.listing_id
     LEFT JOIN User u ON l.userId = u.id
+    LEFT JOIN ListingUnavailability lu ON l.id = lu.listingId
     HAVING distance <= ${radiusMiles}
-    ORDER BY distance, l.id, li.id, b.bedroomNumber
+    ORDER BY distance, l.id, li.id, b.bedroomNumber, lu.startDate
     `;
 
     if (listingsWithDistanceAndBedrooms.length === 0) {
@@ -80,6 +84,14 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
             bedType: curr.bedType
           });
         }
+        if (curr.unavailabilityId && curr.unavailabilityStartDate && curr.unavailabilityEndDate &&
+          !existingListing.unavailablePeriods.some(u => u.id === curr.unavailabilityId)) {
+          existingListing.unavailablePeriods.push({
+            id: curr.unavailabilityId,
+            startDate: curr.unavailabilityStartDate,
+            endDate: curr.unavailabilityEndDate
+          });
+        }
       } else {
         acc.push({
           ...curr,
@@ -88,6 +100,11 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
             id: curr.bedroomId,
             bedroomNumber: curr.bedroomNumber,
             bedType: curr.bedType
+          }] : [],
+          unavailablePeriods: curr.unavailabilityId && curr.unavailabilityStartDate && curr.unavailabilityEndDate ? [{
+            id: curr.unavailabilityId,
+            startDate: curr.unavailabilityStartDate,
+            endDate: curr.unavailabilityEndDate
           }] : [],
           user: {
             id: curr.userId,
@@ -104,6 +121,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     }, [] as (ListingAndImages & {
       distance: number,
       bedrooms: { id: string, bedroomNumber: number, bedType: string }[],
+      unavailablePeriods: { id: string, startDate: Date, endDate: Date }[],
       user: {
         id: string,
         firstName: string | null,
@@ -129,3 +147,95 @@ export const updateListingTemplate = async (listingId: string, templateId: strin
     data: { boldSignTemplateId: templateId },
   });
 }
+
+export const updateListing = async (listingId: string, updateData: Partial<Listing>) => {
+  const userId = await checkAuth();
+
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to update this listing');
+    }
+
+    // Update the listing
+    const updatedListing = await prisma.listing.update({
+      where: { id: listingId },
+      data: updateData,
+    });
+
+    return updatedListing;
+  } catch (error) {
+    console.error('Error in updateListing:', error);
+    throw error;
+  }
+}
+
+export const deleteListing = async (listingId: string) => {
+  const userId = await checkAuth();
+
+  try {
+    // Fetch the listing to ensure it belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized to delete this listing');
+    }
+
+    // Delete the listing
+    await prisma.listing.delete({
+      where: { id: listingId },
+    });
+
+    return { success: true, message: 'Listing deleted successfully' };
+  } catch (error) {
+    console.error('Error in deleteListing:', error);
+    throw error;
+  }
+}
+
+export const addUnavailability = async (listingId: string, startDate: Date, endDate: Date): Promise<ListingUnavailability> => {
+  const userId = await checkAuth();
+
+  try {
+    // Verify the listing belongs to the authenticated user
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing || listing.userId !== userId) {
+      throw new Error('Unauthorized to add unavailability to this listing');
+    }
+
+    // Create the unavailability period
+    const unavailability = await prisma.listingUnavailability.create({
+      data: {
+        listingId,
+        startDate,
+        endDate
+      }
+    });
+
+    return unavailability;
+  } catch (error) {
+    console.error('Error in addUnavailability:', error);
+    throw error;
+  }
+}
+

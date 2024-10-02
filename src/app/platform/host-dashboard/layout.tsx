@@ -30,6 +30,8 @@ const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
         bedrooms: true,
         listingImages: true,
         housingRequests: true,
+        unavailablePeriods: true,
+        bookings: true,
       },
     });
     const updatedListings = listings.map((listing) => {

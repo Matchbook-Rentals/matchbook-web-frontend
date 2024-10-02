@@ -192,12 +192,27 @@ export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ ch
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
   const showListings = useMemo(() =>
-    listings.filter(listing =>
-      !lookup.favIds.has(listing.id) &&
-      !lookup.dislikedIds.has(listing.id) &&
-      !lookup.requestedIds.has(listing.id)
-    ),
-    [listings, lookup]
+    listings.filter(listing => {
+      const isNotFavorited = !lookup.favIds.has(listing.id);
+      const isNotDisliked = !lookup.dislikedIds.has(listing.id);
+      const isNotRequested = !lookup.requestedIds.has(listing.id);
+
+      const isAvailable = !listing.unavailablePeriods.some(period => {
+        const periodStart = new Date(period.startDate);
+        const periodEnd = new Date(period.endDate);
+        const searchStart = new Date(currentSearch?.startDate || '');
+        const searchEnd = new Date(currentSearch?.endDate || '');
+
+        return (
+          (searchStart >= periodStart && searchStart <= periodEnd) ||
+          (searchEnd >= periodStart && searchEnd <= periodEnd) ||
+          (searchStart <= periodStart && searchEnd >= periodEnd)
+        );
+      });
+
+      return isNotFavorited && isNotDisliked && isNotRequested && isAvailable;
+    }),
+    [listings, lookup, currentSearch]
   );
 
   const likedListings = useMemo(() =>

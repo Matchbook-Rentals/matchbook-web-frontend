@@ -9,6 +9,7 @@ import OverviewTab from './(tabs)/overview-tab';
 import BookingsTab from './(tabs)/bookings-tab';
 import PaymentsTab from './(tabs)/payments-tab';
 import ApplicationsTab from './(tabs)/host-applications-tab';
+import ListingTab from './(tabs)/listing-tab';
 
 const PropertyDetails: React.FC = ({ params }) => {
   const [housingRequests, setHousingRequests] = React.useState([]);
@@ -41,10 +42,7 @@ const PropertyDetails: React.FC = ({ params }) => {
       label: "Listing",
       Icon: ListingIcon,
       content: (
-        <CardWithHeader
-          title="Listing"
-          content={<div>Listing content goes here.</div>}
-        />
+      <ListingTab />
       ),
     },
     {

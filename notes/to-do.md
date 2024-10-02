@@ -5,6 +5,12 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+## 30OCT24
+- [X] On booking set unavailable
+- [X] On getTrip adjust query to strip out booked/unavailable
+- [X] Add ability to block off without a trip
+- [X] Add unavailablePeriods to bookings tab
+
 ## 24SEP24
 - [X]  Change flow to choose lease at housingRequest approval   
 - [x] Store doc Id in match

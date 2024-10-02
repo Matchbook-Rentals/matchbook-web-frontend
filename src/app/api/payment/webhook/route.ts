@@ -1,7 +1,7 @@
 // app/api/webhook/route.js
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb'
-import { Notification } from '@prisma/client';
+import { Notification, ListingUnavailability } from '@prisma/client';
 import { getMatch } from '@/app/actions/matches'
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
@@ -102,6 +102,16 @@ async function handleBookingPurchase(session: any) {
       matchId: session.metadata?.matchId || null,
     },
   });
+
+let listingUnavailability = await prisma.listingUnavailability.create({
+    data: {
+      startDate: booking.startDate,
+      endDate: booking.endDate, 
+      reason: 'Booking',
+      listingId: booking.listingId
+    }
+  })
+
   const notificationData: Notification = {
     actionType: 'booking',
     actionId: booking.id,
