@@ -5,7 +5,16 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
-## 30OCT24
+##08OCT24
+- [] Create fake lease with all of trip details
+- [] Create template on AirSlate
+- [] Use template to doc gen with details
+- [] Kick off workflow
+- [] Get both siggies
+- [] fix start conversation
+- [] finish resend
+
+## 01OCT24
 - [X] On booking set unavailable
 - [X] On getTrip adjust query to strip out booked/unavailable
 - [X] Add ability to block off without a trip
