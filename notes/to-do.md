@@ -6,6 +6,7 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 ##08OCT24
+- [] Fix deployment issues
 - [] Create fake lease with all of trip details
 - [] Create template on AirSlate
 - [] Use template to doc gen with details
