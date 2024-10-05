@@ -21,6 +21,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [newConversationEmail, setNewConversationEmail] = useState('');
 
+// Clean up and improve the code
+if (!conversations || conversations.length === 0) {
+  return <p>No conversations available</p>;
+}
   const getParticipantInfo = (conv: Conversation, user: User | null) => {
     if (!user) return { displayName: "Loading...", imageUrl: "" };
 
@@ -55,10 +59,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
                     <div className="flex justify-between items-start w-full">
                       <span className="text-xs text-black">{displayName}</span>
                       <span className="text-xs text-black ml-2 flex-shrink-0">
-                        {new Date(conv.messages[conv.messages.length - 1].updatedAt).toLocaleString()}
+                        {new Date(conv.messages[conv.messages.length - 1]?.updatedAt).toLocaleString() || 'undefined'}
                       </span>
                     </div>
-                    <span className="text-md text-black truncate">{conv.messages[conv.messages.length - 1].content}</span>
+                    <span className="text-md text-black truncate">{conv.messages[conv.messages.length - 1]?.content}</span>
                   </div>
                 </CardContent>
               </Card>
