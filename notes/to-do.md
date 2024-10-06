@@ -13,7 +13,7 @@ ACH PLAID API
 - [] Kick off workflow
 - [] Get both siggies
 - [] fix start conversation
-- [] finish resend
+- [x] finish resend
 
 ## 01OCT24
 - [X] On booking set unavailable
