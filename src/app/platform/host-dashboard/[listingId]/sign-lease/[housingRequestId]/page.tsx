@@ -6,9 +6,6 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
   const { housingRequestId } = params;
   console.log('PAGE LOAD');
 
-  if (!housingRequestId) {
-    notFound();
-  }
 
   try {
     const url = `${process.env.NEXT_PUBLIC_URL}/api/leases/start-flow`
@@ -17,6 +14,7 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        "cache": "no-store"
       },
       body: JSON.stringify({ housingRequestId }),
     });
