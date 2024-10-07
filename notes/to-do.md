@@ -16,6 +16,8 @@ ACH PLAID API
 - [] Get both siggies
 - [] fix start conversation
 - [x] finish resend
+- [] send-lease needs URL param of housingRequest
+- [] send POST to sendTEmplate endpoint, save docId to prisma.boldsignlease.create
 
 ## 01OCT24
 - [X] On booking set unavailable

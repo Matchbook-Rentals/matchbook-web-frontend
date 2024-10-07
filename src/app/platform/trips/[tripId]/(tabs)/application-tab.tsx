@@ -1,4 +1,5 @@
 'use client'
+//Imports
 import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { PersonalInfo } from '../../(trips-components)/application-personal-info';
@@ -18,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchContext } from '@/contexts/search-context-provider';
 import { SearchScreenPrompt } from '@/app/platform/searches/(components)/search-screen-prompt';
 
+//Interfaces
 interface ApplicationFormData {
   personalInfo: PersonalInfo;
   residentialHistory: ResidentialHistory;

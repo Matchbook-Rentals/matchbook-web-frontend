@@ -13,7 +13,7 @@ import ListingTab from './(tabs)/listing-tab';
 
 const PropertyDetails: React.FC = ({ params }) => {
   const [housingRequests, setHousingRequests] = React.useState([]);
-  const { listings, getListingHousingRequests } = useHostProperties();
+  const { listings, getListingHousingRequests, setCurrHousingRequest } = useHostProperties();
   const { listingId } = params;
 
   const listing = listings.find(listing => listing.id === listingId);
@@ -23,6 +23,7 @@ const PropertyDetails: React.FC = ({ params }) => {
       try {
         const requests = await getListingHousingRequests(listing.id);
         setHousingRequests(requests);
+        setCurrHousingRequest(requests[0] || null);
       } catch (error) {
         console.error('Error fetching housing requests:', error);
       }

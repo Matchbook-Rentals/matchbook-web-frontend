@@ -1,6 +1,60 @@
 
 import { NextResponse } from 'next/server';
 
+//Interfaces
+interface BearerTokenResponse {
+  access_token: string;
+  // Add other properties if needed
+}
+
+interface TemplateData {
+  // Add properties based on what's expected in createTemplate
+  name: string;
+  // Add other properties as needed
+}
+
+interface FileData {
+  name: string;
+  type: string;
+  is_conditional: boolean;
+  content: string;
+}
+
+interface StepData {
+  name: string;
+  document_settings: Array<{
+    document_id: string;
+    access_option: string;
+  }>;
+}
+
+interface WorkflowData {
+  documents: Array<{
+    id: string;
+    fields: Array<{
+      name: string;
+      value: string;
+    }>;
+  }>;
+  invites: Array<{
+    step_name: string;
+    email?: string;
+    phone_number?: string;
+  }>;
+  share_links: Array<{
+    auth_method: string;
+    signer_identity: string;
+    expire: number;
+    step_name: string;
+  }>;
+  webhooks: Array<{
+    event_name: string;
+    callback: {
+      url: string;
+    };
+  }>;
+}
+
 export async function POST(request: Request) {
   try {
     const bearerObject = await getBearerToken();
@@ -11,8 +65,35 @@ export async function POST(request: Request) {
     const versionId = process.env.AIRSLATE_VERSION_ID!;
     const body = await request.json();
 
-    const templateInfo = await getDocumentInfo(orgId, templateId, versionId, documentId, bearerToken);
-    console.log(templateInfo)
+    let allVersions = await getTemplateVersions(orgId, templateId, bearerToken);
+    console.log('VERSIONS', allVersions);
+
+    // Build sample data for the step
+    const stepData: StepData = {
+      name: "New Step",
+      document_settings: [
+        {
+          document_id: documentId,
+          access_option: "fill"
+        }
+      ]
+    };
+    let newStep = await addStepToTemplate(orgId, templateId, bearerToken, stepData);
+    console.log('New Step Added:', newStep);
+
+    const prefillData: WorkflowData = {
+      documents: [{
+        id: documentId,
+        fields: [{ name: 'hostName', value: 'Melanie Johnston' }]
+      }],
+      invites: [
+        { step_name: 'Recipient 1', email: 'tyler.bennett52@gmail.com' },
+        //{ step_name: 'Fill and Sign 2', phone_number: '+17028488141' },
+      ],
+      //share_links: [],
+      webhooks: []
+    };
+    //const filledDoc = await fillAndStartWorkflow(orgId, templateId, bearerToken, prefillData);
 
     // Log each value separately with a caption
     return NextResponse.json({ status: 'success', data: bearerToken });
@@ -22,7 +103,7 @@ export async function POST(request: Request) {
   }
 }
 
-const getBearerToken = async (): Promise<any> => {
+const getBearerToken = async (): Promise<BearerTokenResponse> => {
   let JWT = process.env.AIRSLATE_JWT!
   const response = await fetch('https://oauth.airslate.com/public/oauth/token', {
     method: 'POST',
@@ -60,7 +141,23 @@ const getOrgList = async (bearerToken: string): Promise<any> => {
   return response.json();
 }
 
-const createTemplate = async (organizationId: string, bearerToken: string, templateData: any): Promise<any> => {
+const getAllTemplates = async (organizationId: string, bearerToken: string): Promise<any> => {
+  const response = await fetch(`https://api.airslate.io/v1/organizations/${organizationId}/templates`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${bearerToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+const createTemplate = async (organizationId: string, bearerToken: string, templateData: TemplateData): Promise<any> => {
   const response = await fetch(`https://api.airslate.io/v1/organizations/${organizationId}/templates`, {
     method: 'POST',
     headers: {
@@ -91,7 +188,7 @@ const createTemplate = async (organizationId: string, bearerToken: string, templ
   return response.json();
 }
 
-const addFileToTemplate = async (organizationId: string, templateId: string, bearerToken: string, fileData: any): Promise<any> => {
+const addFileToTemplate = async (organizationId: string, templateId: string, bearerToken: string, fileData: FileData): Promise<any> => {
   const response = await fetch(`https://api.airslate.io/v1/organizations/${organizationId}/templates/${templateId}/documents`, {
     method: 'POST',
     headers: {
@@ -165,6 +262,99 @@ const getDocumentInfo = async (
       }
     }
   );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+const getTemplateSteps = async (organizationId: string, templateId: string, versionId: string, bearerToken: string): Promise<any> => {
+  const url = `https://api.airslate.io/v1/organizations/${organizationId}/templates/${templateId}/versions/${versionId}/steps`;
+  console.log('URL', url);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${bearerToken}`
+    }
+  });
+
+  if (!response.ok) {
+    const message = await response.json();
+    console.log(message)
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+const addStepToTemplate = async (
+  organizationId: string,
+  templateId: string,
+  bearerToken: string,
+  stepData: StepData
+): Promise<any> => {
+  const response = await fetch(
+    `https://api.airslate.io/v1/organizations/${organizationId}/templates/${templateId}/steps`,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(stepData)
+    }
+  );
+
+  if (!response.ok) {
+    const message = await response.json();
+    console.log(message);
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+const fillAndStartWorkflow = async (
+  organizationId: string,
+  templateId: string,
+  bearerToken: string,
+  workflowData: WorkflowData
+): Promise<any> => {
+  const response = await fetch(
+    `https://api.airslate.io/v1/organizations/${organizationId}/templates/${templateId}/flows`,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(workflowData)
+    }
+  );
+
+  if (!response.ok) {
+    const message = await response.json();
+    console.log(message);
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};
+
+
+const getTemplateVersions = async (organizationId: string, templateId: string, bearerToken: string): Promise<any> => {
+  const response = await fetch(`https://api.airslate.io/v1/organizations/${organizationId}/templates/${templateId}/versions`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${bearerToken}`
+    }
+  });
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

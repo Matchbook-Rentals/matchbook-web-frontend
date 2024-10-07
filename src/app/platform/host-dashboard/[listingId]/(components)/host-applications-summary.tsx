@@ -1,3 +1,4 @@
+//Imports
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ interface ApplicationSummaryProps {
 }
 
 const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, application }) => {
-  const { currListing, setCurrApplication, setTrip } = useHostProperties();
+  const { currListing, setCurrApplication, setTrip, currHousingRequest  } = useHostProperties();
   const router = useRouter();
   const { userId } = useAuth();
   const totalMonthlyIncome = application?.incomes?.length > 0 && application.incomes.reduce((acc, income) => acc + income.monthlyAmount, '');
@@ -40,7 +41,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
   const handleApprove = async () => {
     setCurrApplication(application);
     setTrip(trip);
-    router.push(`/platform/host-dashboard/${currListing?.id}/send-lease`);
+    router.push(`/platform/host-dashboard/${currListing?.id}/sign-lease/${currHousingRequest.id}`);
     // try {
     //   const result = await createMatch(trip, currListing);
     //   console.log('Match creation result:', result);

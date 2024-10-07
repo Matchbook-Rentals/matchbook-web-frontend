@@ -64,3 +64,54 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+
+
+
+
+
+
+const requestBodySample = {
+      showToolbar: true,
+      sendViewOption: "PreparePage",
+      showSaveButton: true,
+      showSendButton: true,
+      showPreviewButton: true,
+      showNavigationButtons: true,
+      sendLinkValidTill: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+      title: "Lease Agreement for " + currListing.locationString,
+      message: "Please review and sign the lease agreement.",
+      roles: [
+        {
+          roleIndex: 1,
+          signerName: currListing.user?.firstName + " " + currListing.user?.lastName || "",
+          signerEmail: currListing.user?.email || "",
+          signerOrder: 1,
+          signerType: "signer",
+          existingFormFields: [
+            {
+              id: 'monthlyRent',
+              value: '$99899.00'
+            }
+          ]
+        },
+        {
+          roleIndex: 2,
+          signerName: currApplication?.firstName + " " + currApplication?.lastName || "",
+          signerEmail: currApplication?.email || "tyler.bennett@matchbookrentals.com",
+          signerOrder: 2,
+          signerType: "signer",
+        }
+      ],
+      reminderSettings: {
+        enableAutoReminder: true,
+        reminderDays: 3,
+        reminderCount: 5
+      },
+      expiryDays: 30,
+      expiryDateType: "Days",
+      expiryValue: 30,
+      disableExpiryAlert: false,
+      enablePrintAndSign: true,
+      enableReassign: true
+    }

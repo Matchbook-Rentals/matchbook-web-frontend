@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { RequestWithUser } from '@/types';
+import { useHostProperties } from '@/contexts/host-properties-provider';
+import { HousingRequest } from '@prisma/client';
 
 interface ApplicationsSidebarProps {
   housingRequests: RequestWithUser[];
@@ -12,16 +14,25 @@ const ApplicationCard: React.FC<{
   request: RequestWithUser;
   setSelectedApplication: React.Dispatch<React.SetStateAction<RequestWithUser | null>>;
 }> = ({ request, setSelectedApplication }) => {
-  let requesterName = '';
+  const { currHousingRequest, setCurrHousingRequest } = useHostProperties();
 
-  request.user.firstName && (requesterName += request.user.firstName + ' ');
-  request.user.lastName && (requesterName += request.user.lastName);
-  requesterName = requesterName || request.user.email || '';
+  // This code constructs the requester's name by concatenating firstName and lastName
+  // If both are empty, it falls back to the email address
+  // If all are empty, it defaults to an empty string
+  const requesterName = [
+    request.user.firstName,
+    request.user.lastName
+  ].filter(Boolean).join(' ') || request.user.email || '';
+
+  const handleSelectRequest = (request: HousingRequest) => {
+    setCurrHousingRequest(request);
+    setSelectedApplication(request);
+  }
 
   return (
     <Card
       className="mb-2 bg-gray-300 border flex py-3 cursor-pointer"
-      onClick={() => setSelectedApplication(request)}
+      onClick={() => handleSelectRequest(request)}
     >
       <div className="w-[15%] flex justify-center items-center">
         <img alt='user-image' src={`${request.user.imageUrl}`} className='rounded-full w-8 h-8 ' />
