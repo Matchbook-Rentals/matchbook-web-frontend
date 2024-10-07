@@ -7,9 +7,11 @@ ACH PLAID API
 
 ##08OCT24
 - [] Fix deployment issues
-- [] Create fake lease with all of trip details
-- [] Create template on AirSlate
-- [] Use template to doc gen with details
+- [x] Create fake lease with all of trip details
+- [x] Create template on AirSlate
+- [x] Use template to doc gen with details
+- [] add steps
+- [] assign fields to steps
 - [] Kick off workflow
 - [] Get both siggies
 - [] fix start conversation

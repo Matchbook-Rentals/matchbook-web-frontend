@@ -1,4 +1,5 @@
 'use client'
+//IMports
 import React, { useState, useEffect, useRef } from 'react';
 import { useHostProperties } from '@/contexts/host-properties-provider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,8 +9,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { createMatch } from '@/app/actions/matches';
 import { createInitialLease } from '@/app/actions/documents';
-
-
 
 const SendLeasePage: React.FC = () => {
   const router = useRouter();
@@ -77,6 +76,12 @@ const SendLeasePage: React.FC = () => {
           signerEmail: currListing.user?.email || "",
           signerOrder: 1,
           signerType: "signer",
+          existingFormFields: [
+            {
+              id: 'monthlyRent',
+              value: '$99899.00'
+            }
+          ]
         },
         {
           roleIndex: 2,
