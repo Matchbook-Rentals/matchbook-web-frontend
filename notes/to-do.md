@@ -18,6 +18,14 @@ ACH PLAID API
 - [x] finish resend
 - [] send-lease needs URL param of housingRequest
 - [] send POST to sendTEmplate endpoint, save docId to prisma.boldsignlease.create
+DOCUSIGN SDK
+
+
+- [] create template
+- [] create document
+- [] send document
+- [] embed doc sign - landlord
+- [] embed doc sign - tenant
 
 ## 01OCT24
 - [X] On booking set unavailable

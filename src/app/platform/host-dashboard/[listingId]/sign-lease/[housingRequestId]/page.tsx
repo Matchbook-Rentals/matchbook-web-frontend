@@ -1,37 +1,36 @@
 
 import { NextPage } from 'next';
 import { notFound } from 'next/navigation';
+import DocumentEmbed from './document-embed';
+
+export const revalidate = 0;
 
 const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async ({ params }) => {
   const { housingRequestId } = params;
-  console.log('PAGE LOAD');
-
 
   try {
-    const url = `${process.env.NEXT_PUBLIC_URL}/api/leases/start-flow`
-    console.log('URL', url)
+    const url = `${process.env.NEXT_PUBLIC_URL}/api/pandadoc/templates`
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        "cache": "no-store"
       },
       body: JSON.stringify({ housingRequestId }),
     });
 
     if (!response.ok) {
       const message = await response.json();
-      console.log(message)
       throw new Error('Failed to start lease flow');
     }
 
     const result = await response.json();
-    console.log('RESULT', result);
 
     return (
-      <div>
+      <div className='mx auto p-2 w-full'>
         <h1>Lease Flow Started</h1>
         <pre>{JSON.stringify(result, null, 2)}</pre>
+        <DocumentEmbed sessionId={result.id} />
+
       </div>
     );
   } catch (error: any) {
