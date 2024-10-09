@@ -1,7 +1,6 @@
 
 import { NextPage } from 'next';
-import { notFound } from 'next/navigation';
-import DocumentEmbed from './document-embed';
+import DocumentEmbed from './lease-host-sign-embed';
 
 export const revalidate = 0;
 
@@ -12,7 +11,11 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
     const url = `${process.env.NEXT_PUBLIC_URL}/api/pandadoc/templates`
     const response = await fetch(url, {
       method: 'POST',
+      // set no cache and content type
       headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ housingRequestId }),
@@ -29,7 +32,7 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
       <div className='mx auto p-2 w-full'>
         <h1>Lease Flow Started</h1>
         <pre>{JSON.stringify(result, null, 2)}</pre>
-        <DocumentEmbed sessionId={result.id} />
+        <DocumentEmbed sessionId={result.sessionId} documentId={result.documentId} housingRequestId={housingRequestId} />
 
       </div>
     );

@@ -15,6 +15,7 @@ const WebhookTester: React.FC = () => {
       const urlWithSignature = signature
         ? `${url}${url.includes('?') ? '&' : '?'}signature=${encodeURIComponent(signature)}`
         : url;
+      alert(urlWithSignature);
       const res = await fetch(urlWithSignature, {
         method: 'POST',
         headers: {

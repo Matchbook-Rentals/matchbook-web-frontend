@@ -126,6 +126,7 @@ const SendLeasePage: React.FC = () => {
     }
   };
 
+
   // New functions for client-side triggers
   const triggerIframeAction = (action: string) => {
     if (iframeRef.current) {

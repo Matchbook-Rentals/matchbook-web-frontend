@@ -1,13 +1,16 @@
-
 'use client'
 
+import { createInitialLease, createLease } from '@/app/actions/documents';
+import { Button } from '@/components/ui/button';
 import React, { useEffect } from 'react';
 
 interface DocumentEmbedProps {
   sessionId: string;
+  housingRequestId: string;
+  documentId: string;
 }
 
-const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId }) => {
+const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId, housingRequestId, documentId }) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const { type, payload } = event.data || {};
@@ -18,6 +21,7 @@ const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId }) => {
           break;
         case 'session_view.document.completed':
           console.log('Document is completed');
+          createLease(documentId, housingRequestId)
           console.log(payload);
           break;
         case 'session_view.document.exception':
@@ -35,10 +39,13 @@ const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId }) => {
   }, []);
 
   return (
-    <iframe 
-      className='w-[800px] h-[800px]' 
-      src={`https://app.pandadoc.com/s/${sessionId}/`}
-    />
+    <>
+      <Button> CREATE LEASE </Button>
+      <iframe
+        className='w-[800px] h-[800px]'
+        src={`https://app.pandadoc.com/s/${sessionId}/`}
+      />
+    </>
   );
 };
 

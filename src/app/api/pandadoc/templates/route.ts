@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     let embedSessionData = await createEmbedSession(newDocument.id);
 
     console.log('FETCH RESPONSE', embedSessionData);
-    return NextResponse.json(embedSessionData);
+    return NextResponse.json({sessionId: embedSessionData.id, documentId: newDocument.id}, {status: 200});
   } catch (error) {
     console.error('Error fetching templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });

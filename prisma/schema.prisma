@@ -50,6 +50,7 @@ model User {
   conversations2     Conversation[]     @relation("UserConversations2")
   boldSignTemplates  BoldSignTemplate[]
   BoldSignLease      BoldSignLease[]
+  Lease              Lease[]
 }
 
 model UserPreferences {
@@ -263,7 +264,7 @@ model HousingRequest {
   tripId    String
   startDate DateTime
   endDate   DateTime
-  //status    String   @default("pending")
+  status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -393,6 +394,7 @@ model Match {
   trip          Trip           @relation(fields: [tripId], references: [id])
   listing       Listing        @relation(fields: [listingId], references: [id])
   BoldSignLease BoldSignLease?
+  Lease         Lease?
 
   @@index([tripId])
 }
@@ -566,6 +568,24 @@ model BoldSignTemplate {
 }
 
 model BoldSignLease {
+  id                String   @id @default(cuid())
+  embedUrl          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  matchId           String
+  landlordId        String
+  primaryTenantId   String
+  secondaryTenantId String?
+  landlordSigned    Boolean  @default(false)
+  tenantSigned      Boolean  @default(false)
+
+  match    Match @relation(fields: [matchId], references: [id])
+  landlord User  @relation(fields: [landlordId], references: [id])
+
+  @@unique([matchId])
+}
+
+model Lease {
   id                String   @id @default(cuid())
   embedUrl          String?
   createdAt         DateTime @default(now())

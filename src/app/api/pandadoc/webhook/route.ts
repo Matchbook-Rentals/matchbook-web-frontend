@@ -5,6 +5,7 @@ import crypto from 'crypto';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    console.log('BODY', body);
 
     // Extract signature from query parameters
     const url = new URL(req.url);
@@ -22,8 +23,11 @@ export async function POST(req: Request) {
 
     // Finish the webhook signature verification
     const hmac = crypto.createHmac('sha256', sharedKey);
+    console.log(hmac)
     const requestBody = JSON.stringify(body);
+    console.log(requestBody)
     hmac.update(requestBody);
+    console.log(hmac)
     const calculatedSignature = hmac.digest('hex');
 
     if (signature !== calculatedSignature) {
