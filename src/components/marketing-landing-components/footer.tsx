@@ -3,58 +3,65 @@ import { ApartmentIcon } from "../svgs/svg-components"
 
 export default function Footer() {
   return (
-    <footer className=" border-t-4 border-gray-200 pt-4 pb-8 md:pb-10">
-      <div className="container max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-        <div className="grid gap-4">
-          <div className="flex items-center gap-2">
-            <ApartmentIcon className="h-6 w-6" />
-            <span className="text-lg font-bold">Matchbook Rentals, LLC.</span>
+    <footer className="border-t-4 border-gray-200 pt-4 pb-2">
+      <div className="container max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Company Logo and Tagline */}
+        <div className="flex flex-col items-center gap-4 px-4 sm:px-6 md:px-8">
+          <img className="h-8" src="/logo-nav-new.png" alt="Company Logo" />
+          <img className="w-full max-w-[300px] sm:max-w-[320px] md:max-w-[340px] h-auto" src="/village_footer.png" alt="Village Footer" />
+        </div>
+
+        {/* Links Section */}
+        <div className="grid grid-cols-3 sm:grid-cols-3 gap-8">
+          {/* Navigation Links */}
+          <div className="text-lg mx-auto ">
+            <h3 className="text-xl font-semibold">Navigation</h3>
+            <nav className="flex flex-col ">
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                Home
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                About
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                Contact
+              </Link>
+            </nav>
           </div>
-          <p className="text-muted-foreground">Your place, all in one place</p>
-        </div>
-        <div className="grid gap-2">
-          <h3 className="text-lg font-semibold">Navigation</h3>
-          <nav className="grid gap-1">
-            <Link href="#" className="hover:underline" prefetch={false}>
-              Home
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              About
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              Contact
-            </Link>
-          </nav>
-        </div>
-        <div className="grid gap-2">
-          <h3 className="text-lg font-semibold">Resources</h3>
-          <nav className="grid gap-1">
-            <Link href="#" className="hover:underline" prefetch={false}>
-              Blog
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              FAQ
-            </Link>
-            <Link href="#" className="hover:underline" prefetch={false}>
-              Support
-            </Link>
-          </nav>
-        </div>
-        <div className="grid gap-2">
-          <h3 className="text-lg font-semibold">Follow Us</h3>
-          <div className="flex gap-2">
-            <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
-              <TwitterIcon className="h-6 w-6" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
-              <FacebookIcon className="h-6 w-6" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
-              <InstagramIcon className="h-6 w-6" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary" prefetch={false}>
-              <LinkedinIcon className="h-6 w-6" />
-            </Link>
+
+          {/* Resource Links */}
+          <div className="text-lg mx-auto">
+            <h3 className="text-xl font-semibold">Resources</h3>
+            <nav className="flex flex-col">
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                Blog
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                FAQ
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                Support
+              </Link>
+            </nav>
+          </div>
+
+          {/* Social Media Links */}
+          <div className="text-lg mx-auto">
+            <h3 className="text-xl font-semibold">Follow Us</h3>
+            <div className="flex gap-2 pt-6">
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                <TwitterIcon className="h-6 w-6" />
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                <FacebookIcon className="h-6 w-6" />
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                <InstagramIcon className="h-6 w-6" />
+              </Link>
+              <Link href="#" className="text-gray-500 hover:text-black" prefetch={false}>
+                <LinkedinIcon className="h-6 w-6" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -62,6 +69,7 @@ export default function Footer() {
   )
 }
 
+// Facebook icon SVG component
 function FacebookIcon(props) {
   return (
     <svg
@@ -81,7 +89,7 @@ function FacebookIcon(props) {
   )
 }
 
-
+// Instagram icon SVG component
 function InstagramIcon(props) {
   return (
     <svg
@@ -103,7 +111,7 @@ function InstagramIcon(props) {
   )
 }
 
-
+// LinkedIn icon SVG component
 function LinkedinIcon(props) {
   return (
     <svg
@@ -125,7 +133,7 @@ function LinkedinIcon(props) {
   )
 }
 
-
+// Mountain icon SVG component (currently unused in the footer)
 function MountainIcon(props) {
   return (
     <svg
@@ -145,7 +153,7 @@ function MountainIcon(props) {
   )
 }
 
-
+// Twitter icon SVG component
 function TwitterIcon(props) {
   return (
     <svg
