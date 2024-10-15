@@ -52,6 +52,7 @@ export async function getMatch(id: string) {
         listing: true,
         trip: true,
         BoldSignLease: true,
+        Lease: true,
         // TODO: add housingRequest
       },
     })

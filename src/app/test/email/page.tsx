@@ -12,7 +12,7 @@ export default function EmailInvitationPage() {
     setError(null);
 
     try {
-      const response = await fetch('/api/emails/invite-to-trip', {
+      const response = await fetch('/api/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -15,6 +15,16 @@ type CreateNotificationResponse =
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
+
+
+async function checkAuth() {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+  return userId;
+}
+
 export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse> {
   try {
     const notification = await prisma.notification.create({
@@ -54,6 +64,7 @@ export async function updateNotification(
   notificationId: string,
   data: Partial<Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>>
 ): Promise<Notification> {
+  checkAuth();
   try {
     const updatedNotification = await prisma.notification.update({
       where: {
@@ -76,6 +87,7 @@ export async function updateNotification(
 }
 
 export async function deleteNotification(notificationId: string): Promise<{ success: boolean; error?: string }> {
+  checkAuth();
   try {
     await prisma.notification.delete({
       where: {

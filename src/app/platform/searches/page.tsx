@@ -1,17 +1,14 @@
 'use client';
-
+//Imports
 import React from 'react';
-import Link from 'next/link';
 import SearchCarousel from './(components)/search-carousel';
 import TabSelector from '@/components/ui/tab-selector';
 import { useSearchContext } from '@/contexts/search-context-provider';
 import MatchmakerTab from './(tabs)/search-matchmaker-tab';
-
-import MapView from './(tabs)/search-map-tab';
 import ShortListTab from './(tabs)/search-short-list-tab';
-import { Button } from '@/components/ui/button';
 import ApplicationTab from '../trips/[tripId]/(tabs)/application-tab';
 import { SearchMatchbookTab } from './(tabs)/search-matchbook-tab';
+import { addUnavailability, updateListing } from '@/app/actions/listings';
 
 interface Tab {
   value: string;
@@ -26,13 +23,12 @@ interface Tab {
 const SearchesPage: React.FC = () => {
   const { state, actions } = useSearchContext();
 
-  const consoleLogs = () => {
-    console.log("Show Listings:", state.showListings);
-    console.log("Favorite IDs:", state.lookup.favIds);
-    console.log("Current Search:", state.currentSearch);
-    console.log("Liked Listings:", state.likedListings);
-    console.log("Matched Listings:", state.lookup.matchIds);
-    console.log("matches", state.currentSearch?.matches)
+  const consoleLogs = async () => {
+    //console.log("Show Listings:", state.showListings);
+    console.log("Show Listings:", state.listings);
+    state.listings
+      .filter(listing => listing.unavailablePeriods.length > 0)
+      .forEach(listing => console.log(listing.id, 'unavailables', listing.unavailablePeriods))
   }
 
   const tabSize = 'text-xl'

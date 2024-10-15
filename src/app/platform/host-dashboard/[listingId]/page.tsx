@@ -9,10 +9,11 @@ import OverviewTab from './(tabs)/overview-tab';
 import BookingsTab from './(tabs)/bookings-tab';
 import PaymentsTab from './(tabs)/payments-tab';
 import ApplicationsTab from './(tabs)/host-applications-tab';
+import ListingTab from './(tabs)/listing-tab';
 
 const PropertyDetails: React.FC = ({ params }) => {
   const [housingRequests, setHousingRequests] = React.useState([]);
-  const { listings, getListingHousingRequests } = useHostProperties();
+  const { listings, getListingHousingRequests, setCurrHousingRequest } = useHostProperties();
   const { listingId } = params;
 
   const listing = listings.find(listing => listing.id === listingId);
@@ -22,6 +23,7 @@ const PropertyDetails: React.FC = ({ params }) => {
       try {
         const requests = await getListingHousingRequests(listing.id);
         setHousingRequests(requests);
+        setCurrHousingRequest(requests[0] || null);
       } catch (error) {
         console.error('Error fetching housing requests:', error);
       }
@@ -41,10 +43,7 @@ const PropertyDetails: React.FC = ({ params }) => {
       label: "Listing",
       Icon: ListingIcon,
       content: (
-        <CardWithHeader
-          title="Listing"
-          content={<div>Listing content goes here.</div>}
-        />
+      <ListingTab />
       ),
     },
     {

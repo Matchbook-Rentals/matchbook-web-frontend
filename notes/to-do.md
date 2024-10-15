@@ -5,6 +5,39 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+##08OCT24
+- [] Fix deployment issues
+- [x] Create fake lease with all of trip details
+- [x] Create template on AirSlate
+- [x] Use template to doc gen with details
+- [] add steps
+- [] assign fields to steps
+- [] Kick off workflow
+- [] Get both siggies
+- [] fix start conversation
+- [x] finish resend
+- [] send-lease needs URL param of housingRequest
+- [] send POST to sendTEmplate endpoint, save docId to prisma.boldsignlease.create
+DOCUSIGN SDK
+
+
+- [x] create template
+- [x] create document
+- [x] send document
+- [x] embed doc sign - landlord
+- [x] create lease and match from client side event
+- [x] watch for webhook saying person signed, add siggy to db lease 
+- [] embed doc sign - tenant
+- [] set housingRequest status to approved, handle this in applications logic
+- [] setup second webhook for live site, please try to keep them separate (env vars for dev testing)
+- [] Go through flow and change hardcoded usernames to correct username (PENDING API APPROVAL)
+
+## 01OCT24
+- [X] On booking set unavailable
+- [X] On getTrip adjust query to strip out booked/unavailable
+- [X] Add ability to block off without a trip
+- [X] Add unavailablePeriods to bookings tab
+
 ## 24SEP24
 - [X]  Change flow to choose lease at housingRequest approval   
 - [x] Store doc Id in match

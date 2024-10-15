@@ -10,53 +10,9 @@ import { toast } from "@/components/ui/use-toast";
 import { useHostProperties } from "@/contexts/host-properties-provider";
 import { updateListingTemplate } from "@/app/actions/listings";
 
-interface FormField {
-  id: string;
-  name: string;
-  fieldType: string;
-  pageNumber: number;
-  bounds: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  isRequired: boolean;
-  backgroundHexColor?: string;
-}
-
-interface Role {
-  name: string;
-  index: number;
-  defaultSignerName?: string;
-  defaultSignerEmail?: string;
-  signerOrder?: number;
-  signerType: string;
-  locale: string;
-  imposeAuthentication: string;
-  deliveryMode: string;
-  formFields: FormField[];
-  allowRoleEdit: boolean;
-  allowRoleDelete: boolean;
-}
-
-interface TemplatePayload {
-  BrandId: string;
-  EnableReassign: boolean;
-  AllowNewRoles: boolean;
-  EnablePrintAndSign: boolean;
-  DocumentMessage: string;
-  EnableSigningOrder: boolean;
-  UseTextTags: boolean;
-  Files: string[];
-  Title: string;
-  AllowMessageEditing: boolean;
-  Description: string;
-  DocumentTitle: string;
-  Roles: Role[];
-}
 
 export default function OverviewTab() {
+  // State Variables
   const { listingId } = useParams();
   const { currListing } = useHostProperties();
   const [templateTitle, setTemplateTitle] = useState("");
@@ -235,10 +191,56 @@ export default function OverviewTab() {
     }
   };
 
+  const handleSendPOST = async () => {
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+
+    try {
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64Content = reader.result?.toString().split(',')[1];
+
+        if (!base64Content) {
+          throw new Error('Failed to convert file to base64');
+        }
+
+        const postBody = {
+          name: file.name,
+          type: "DOC_GENERATION",
+          is_conditional: false,
+          content: base64Content
+        };
+
+        const response = await fetch('/api/airslate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(postBody),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send POST request');
+        }
+
+        const data = await response.json();
+        console.log('POST request successful:', data);
+      };
+    } catch (error) {
+      console.error('Error sending POST request:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col space-y-4 p-4">
 
       <Card>
+        <Button onClick={handleSendPOST}> SEND POST </Button>
+        <p> {file?.name || 'FUCK'} </p>
         <CardHeader>
           <CardTitle>Your Templates</CardTitle>
         </CardHeader>
