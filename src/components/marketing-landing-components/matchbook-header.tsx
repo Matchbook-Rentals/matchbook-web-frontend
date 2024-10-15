@@ -4,16 +4,17 @@ import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 export default function MatchbookHeader() {
   return (
     <div className="sticky top-0 bg-white z-30 ">
-      <header className="relative flex mb-6 justify-between px-4 pt-4 pb-8 items-start border-b-0">
-        <div className="flex">
-          <img src="logo-nav-new.png" alt="MatchBook Logo" className="w-full h-14" />
+      <header className="relative flex mb-6 px-4 sm:px-12 md:px-16 lg:px-30 xl:px-36 2xl:px-44 justify-between pt-4 pb-8 items-start border-b-0">
+        <div className="flex items-center">
+          <img src="logo-nav-new.png" alt="MatchBook Logo" className="hidden sm:block w-full h-14" />
+          <img src="/svg/heart-header.svg" alt="MatchBook Heart" className="sm:hidden h-10 w-10" />
         </div>
-        <div className="absolute inset-x-0 bottom-2 flex justify-center w-[100px] mx-auto bg-white">
+        <div className="absolute inset-x-0 bottom-2 hidden md:flex justify-center  md:w-[70px] lg:w-[100px] mx-auto bg-white">
           <img src="/svg/heart-header.svg" className="h-14 w-14  heart" alt="MatchBook Heart" />
         </div>
-        <div className="flex space-x-4">
-          <MenuIcon className="h-14 w-14" />
-          <UserIcon className="h-14 w-14" />
+        <div className="flex md:space-x-4 items-center">
+          <MenuIcon className="h-12 w-12 md:h-14 md:w-14" />
+          <UserIcon className="h-12 w-10 md:h-14 md:w-14" />
         </div>
         <style jsx>{`
           header::before {
