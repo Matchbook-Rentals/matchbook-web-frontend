@@ -13,32 +13,31 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
           <input
             type="text"
             placeholder="Where to?"
-            disabled
-            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none disabled:bg-transparent cursor-not-allowed sm:border-r border-gray-300"
+            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed"
+            readOnly
           />
           <input
             type="text"
             placeholder="Move in:"
-            disabled
-            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none disabled:bg-transparent cursor-not-allowed sm:border-r border-gray-300"
+            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed"
+            readOnly
           />
           <input
             type="text"
             placeholder="Move out:"
-            disabled
-            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none disabled:bg-transparent cursor-not-allowed sm:border-r border-gray-300"
+            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed"
+            readOnly
           />
           <input
             type="text"
             placeholder="Who?"
-            disabled
-            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none disabled:bg-transparent cursor-not-allowed"
+            className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none cursor-not-allowed"
+            readOnly
           />
-          <button className="w-full sm:w-auto mt-3 sm:mt-0 p-3 cursor-not-allowed bg-primaryBrand rounded-full">
+          <button disabled className="w-full sm:w-auto mt-3 sm:mt-0 p-3 cursor-not-allowed bg-primaryBrand rounded-full">
             <FaSearch className="text-white mx-auto" size={20} />
           </button>
         </div>
-        <div className="absolute inset-0 bg-gray-400 opacity-50 rounded-3xl sm:rounded-full cursor-not-allowed"></div>
       </div>
     </div>
   );

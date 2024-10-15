@@ -23,7 +23,7 @@ export default function MarketingList({ title, Icon, marketingItems, brandColor 
         <Icon className="h-20 w-20" />
         <div>
 
-          <h1 className="text-6xl z-10 font-semibold" style={{ position: 'relative', top: '-50%', left: '' }}>{title}</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl z-10 font-semibold" style={{ position: 'relative', top: '-50%', left: '' }}>{title}</h1>
           <div className={`${bgColorClass} transform -translate-y-2/3 -translate-x-[2%] w-[110%] h-[30px]`}>
           </div>
         </div>

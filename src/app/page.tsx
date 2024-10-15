@@ -10,6 +10,9 @@ import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
 import Countdown from "@/components/marketing-landing-components/countdown";
+import SubscriptionForm from "@/components/home-components/email-collection";
+import EmbeddedBrevoForm from "@/components/home-components/email-collection";
+import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
 
 const rentMarketingItems = [
   {
@@ -44,7 +47,7 @@ const listMarketingItems = [
   {
     number: 1,
     title: "Manage your place, all in once place.",
-    description: "No more listing on 4 different sites with the hopes of finding a good tenant. ON Matchbook, list your property, match with renters, view applications, and manage your place all on a singular website."
+    description: "No more listing on 4 different sites with the hopes of finding a good tenant. On Matchbook, list your property, match with renters, view applications, and manage your place all on a singular website."
   },
   {
     number: 2,
@@ -77,26 +80,30 @@ interface Tab {
   textSize?: string
 }
 
+const ApartmentImage = ({ className }) => {
+  return <img className={`h-20 w-20 ${className}`} src="/img/listing-type/apartment_icon.png" />
+}
+
 const tabs: Tab[] = [
   {
-    value: "rent", label: "For Renters", className: 'bg-primaryBrand/80 hover:bg-primaryBrand hover:text-black  w-1/2', textSize: 'text-lg', content: 
+    value: "rent", label: "For Renters", className: 'bg-primaryBrand/80 hover:bg-primaryBrand hover:text-black  w-1/2', textSize: 'text-lg', content:
       <MarketingList
         title="Looking to rent?"
-        Icon={ApartmentIcon}
+        Icon={ApartmentImage}
         marketingItems={rentMarketingItems}
         brandColor="primary"
       />
     ,
   },
   {
-    value: 'list', label: 'For Owners', className: 'bg-blueBrand/80 hover:bg-blueBrand hover:text-black w-1/2', textSize: 'text-lg', content: 
+    value: 'list', label: 'For Owners', className: 'bg-blueBrand/80 hover:bg-blueBrand hover:text-black w-1/2', textSize: 'text-lg', content:
       <MarketingList
         title="Looking to list?"
         Icon={SingleHomeIcon}
         marketingItems={listMarketingItems}
         brandColor="secondary"
       />
-    
+
   }
 
 ]
@@ -110,7 +117,9 @@ const WebHomePage = () => {
         <AdCopy />
       </div>
       <Countdown />
-      <TabSelector tabs={tabs} className="max-w-[700px] mx-auto" tabsListClassName="justify-between" />
+      <TabSelector tabs={tabs} className="max-w-[700px] p-2 mx-auto" tabsListClassName="justify-between" />
+      <MarketingSteps />
+      <EmbeddedBrevoForm />
       <RentEasyCopy />
       <Footer />
     </>
