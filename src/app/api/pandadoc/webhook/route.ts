@@ -52,7 +52,7 @@ export async function POST(req: Request) {
           if (recipient.roles.includes('Landlord')) {
             updateData.landlordSigned = true;
           }
-          if (recipient.role === 'Tenant') {
+          if (recipient.roles.includes('Tenant')) {
             updateData.tenantSigned = true;
           }
         }

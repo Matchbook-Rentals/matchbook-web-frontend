@@ -30,6 +30,7 @@ DOCUSIGN SDK
 - [] embed doc sign - tenant
 - [] set housingRequest status to approved, handle this in applications logic
 - [] setup second webhook for live site, please try to keep them separate (env vars for dev testing)
+- [] Go through flow and change hardcoded usernames to correct username (PENDING API APPROVAL)
 
 ## 01OCT24
 - [X] On booking set unavailable

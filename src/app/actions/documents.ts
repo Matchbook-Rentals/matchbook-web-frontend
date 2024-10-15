@@ -123,3 +123,25 @@ export async function deleteLease(id: string): Promise<Lease> {
     where: { id },
   });
 }
+
+export async function checkSignature(id: string, role: 'Landlord' | 'Tenant'): Promise<boolean | null> {
+  try {
+    const lease = await prisma.lease.findUnique({
+      where: { id },
+      select: {
+        landlordSigned: true,
+        tenantSigned: true,
+      },
+    });
+
+    if (!lease) {
+      return null;
+    }
+
+    return role === 'Landlord' ? lease.landlordSigned : lease.tenantSigned;
+  } catch (error) {
+    console.error('Error checking signature:', error);
+    throw error;
+  }
+}
+

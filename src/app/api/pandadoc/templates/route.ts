@@ -3,6 +3,31 @@ import { NextRequest, NextResponse } from 'next/server';
 const pandaApiKey = process.env.PANDADOC_API_KEY;
 const defaultLeaseTemplate = 'tx8zGvArnGLuqGJoeoRd2R';
 
+//TODO: change createEmbedSessionTEMP to createEmbedSession. 
+//Insert correct contact info for landlord and tenants based on app data/db reads (createDocFromTemplate, createEmbedSession)
+
+
+export async function GET(request: NextRequest) {
+  if (!pandaApiKey) {
+    return NextResponse.json({ error: 'No API Key found' }, { status: 500 });
+  }
+
+  const docId = request.nextUrl.searchParams.get('docId');
+
+  if (!docId) {
+    return NextResponse.json({ error: 'Document ID is required' }, { status: 400 });
+  }
+
+  try {
+    const embedSessionData = await createEmbedSessionTEMP(docId);
+    console.log('CREATED EMBED SESSION', embedSessionData);
+    return NextResponse.json({ sessionId: embedSessionData.id }, { status: 200 });
+  } catch (error) {
+    console.error('Error creating embed session:', error);
+    return NextResponse.json({ error: 'Failed to create embed session' }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: NextRequest) {
   if (!pandaApiKey) {
     return NextResponse.json({ error: 'No API Key found' }, { status: 500 });
@@ -254,6 +279,36 @@ async function createEmbedSession(documentId: string) {
     body: JSON.stringify({
       expires_in: 3600, // Session expiration time in seconds
       recipient: 'tyler.bennett@matchbookrentals.com', // Replace with the actual recipient email
+    })
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log('Embed session created:', data);
+    return data;
+  } catch (error) {
+    console.error('Error creating embed session:', error);
+    throw error;
+  }
+}
+
+async function createEmbedSessionTEMP(documentId: string) {
+  if (!pandaApiKey) {
+    throw new Error('No API Key found');
+  }
+
+  const url = `https://api.pandadoc.com/public/v1/documents/${documentId}/session`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `API-Key ${pandaApiKey}`
+    },
+    body: JSON.stringify({
+      expires_in: 3600, // Session expiration time in seconds
+      recipient: 'tyler.bennett2@matchbookrentals.com', // Replace with the actual recipient email
     })
   };
 

@@ -1,11 +1,19 @@
 
 import { NextPage } from 'next';
 import DocumentEmbed from './lease-host-sign-embed';
+import { createLease } from '@/app/actions/documents';
 
 export const revalidate = 0;
 
 const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async ({ params }) => {
   const { housingRequestId } = params;
+
+  const handleComplete = async (documentId, housingRequestId) => {
+    'use server'
+
+    let newLease = await createLease(documentId, housingRequestId);
+    return newLease;
+  }
 
   try {
     const url = `${process.env.NEXT_PUBLIC_URL}/api/pandadoc/templates`
@@ -32,7 +40,13 @@ const StartLeaseFlow: NextPage<{ params: { housingRequestId: string } }> = async
       <div className='mx auto p-2 w-full'>
         <h1>Lease Flow Started</h1>
         <pre>{JSON.stringify(result, null, 2)}</pre>
-        <DocumentEmbed sessionId={result.sessionId} documentId={result.documentId} housingRequestId={housingRequestId} />
+
+        <DocumentEmbed
+          sessionId={result.sessionId}
+          documentId={result.documentId}
+          matchOrHouseReqId={housingRequestId}
+          handleComplete={handleComplete}
+        />
 
       </div>
     );

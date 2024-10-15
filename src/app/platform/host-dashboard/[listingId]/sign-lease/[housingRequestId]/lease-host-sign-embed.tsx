@@ -1,16 +1,23 @@
 'use client'
 
-import { createInitialLease, createLease } from '@/app/actions/documents';
 import { Button } from '@/components/ui/button';
 import React, { useEffect } from 'react';
 
 interface DocumentEmbedProps {
   sessionId: string;
-  housingRequestId: string;
+  matchOrHouseReqId: string;
   documentId: string;
+  handleComplete: (...args: any[]) => void;
+  handleLoad?: () => void;
 }
 
-const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId, housingRequestId, documentId }) => {
+const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ 
+  sessionId, 
+  matchOrHouseReqId,
+  documentId, 
+  handleComplete, 
+  handleLoad 
+}) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const { type, payload } = event.data || {};
@@ -18,10 +25,11 @@ const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId, housingRequest
       switch (type) {
         case 'session_view.document.loaded':
           console.log('Session view is loaded');
+          handleLoad?.();
           break;
         case 'session_view.document.completed':
           console.log('Document is completed');
-          createLease(documentId, housingRequestId)
+          handleComplete(documentId, matchOrHouseReqId);
           console.log(payload);
           break;
         case 'session_view.document.exception':
@@ -36,7 +44,7 @@ const DocumentEmbed: React.FC<DocumentEmbedProps> = ({ sessionId, housingRequest
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, []);
+  }, [documentId, matchOrHouseReqId, handleComplete, handleLoad]);
 
   return (
     <>

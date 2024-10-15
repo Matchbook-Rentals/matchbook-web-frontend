@@ -15,6 +15,8 @@ import {
   Identification,
   ListingUnavailability,
   Booking,
+  Lease,
+  BoldSignLease,
 } from "@prisma/client";
 
 export interface TripAndMatches extends Trip {
@@ -74,4 +76,11 @@ export interface ApplicationWithArrays extends Application {
   verificationImages: VerificationImage[]
   incomes: Income[]
   identifications: Identification[]
+}
+
+export interface MatchWithRelations extends Match {
+  Lease?: Lease
+  BoldSignLease: BoldSignLease
+  listing: Listing
+  trip: Trip
 }
