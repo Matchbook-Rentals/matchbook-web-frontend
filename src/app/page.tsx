@@ -9,6 +9,7 @@ import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-co
 import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
+import Countdown from "@/components/marketing-landing-components/countdown";
 
 const rentMarketingItems = [
   {
@@ -108,6 +109,7 @@ const WebHomePage = () => {
       <div className="scale-75 mb-12">
         <AdCopy />
       </div>
+      <Countdown />
       <TabSelector tabs={tabs} className="max-w-[700px] mx-auto" tabsListClassName="justify-between" />
       <RentEasyCopy />
       <Footer />
