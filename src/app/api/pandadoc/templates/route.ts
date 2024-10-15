@@ -3,6 +3,72 @@ import { NextRequest, NextResponse } from 'next/server';
 const pandaApiKey = process.env.PANDADOC_API_KEY;
 const defaultLeaseTemplate = 'tx8zGvArnGLuqGJoeoRd2R';
 
+export async function DELETE(request: NextRequest) {
+  if (!pandaApiKey) {
+    return NextResponse.json({ error: 'No API Key found' }, { status: 500 });
+  }
+
+  try {
+    // Get list of all documents
+    const listUrl = 'https://api.pandadoc.com/public/v1/documents';
+    const listOptions = {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `API-Key ${pandaApiKey}`
+      }
+    };
+
+    const listResponse = await fetch(listUrl, listOptions);
+    const documents = await listResponse.json();
+
+    console.log(`Found ${documents.results.length} documents to delete`);
+
+    let deletedCount = 0;
+
+    // Function to delete a single document
+    const deleteDocument = async (doc: any) => {
+      const deleteUrl = `https://api.pandadoc.com/public/v1/documents/${doc.id}`;
+      const deleteOptions = {
+        method: 'DELETE',
+        headers: {
+          'accept': 'application/json',
+          'Authorization': `API-Key ${pandaApiKey}`
+        }
+      };
+
+      console.log(`Attempting to delete document: ${doc.id}`);
+      let deleteResponse = await fetch(deleteUrl, deleteOptions);
+      console.log(`Delete response for ${doc.id}:`, deleteResponse.status);
+
+      if (deleteResponse.ok) {
+        deletedCount++;
+        console.log(`Successfully deleted document ${doc.id}. Total deleted: ${deletedCount}`);
+      } else {
+        let message = await deleteResponse.json();
+        console.log(message);
+        console.error(`Failed to delete document ${doc.id}`);
+      }
+    };
+
+    // Debounced delete function
+    const debouncedDelete = async () => {
+      for (const doc of documents.results) {
+        await deleteDocument(doc);
+        await new Promise(resolve => setTimeout(resolve, 30000)); // Wait for 30 seconds
+      }
+    };
+
+    // Start the debounced deletion process
+    debouncedDelete();
+
+    return NextResponse.json({ message: 'Document deletion process started' }, { status: 202 });
+  } catch (error) {
+    console.error('Error in delete process:', error);
+    return NextResponse.json({ error: 'Failed to start document deletion process' }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   if (!pandaApiKey) {
     return NextResponse.json({ error: 'No APi Key found', status: 500 })
@@ -35,7 +101,7 @@ export async function POST(request: NextRequest) {
     let embedSessionData = await createEmbedSession(newDocument.id);
 
     console.log('FETCH RESPONSE', embedSessionData);
-    return NextResponse.json({sessionId: embedSessionData.id, documentId: newDocument.id}, {status: 200});
+    return NextResponse.json({ sessionId: embedSessionData.id, documentId: newDocument.id }, { status: 200 });
   } catch (error) {
     console.error('Error fetching templates:', error);
     return NextResponse.json({ error: 'Failed to fetch templates' }, { status: 500 });

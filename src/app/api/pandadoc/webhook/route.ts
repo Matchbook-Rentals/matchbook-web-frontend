@@ -1,11 +1,12 @@
 
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import prisma from '@/lib/prismadb'
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    console.log('BODY', body);
+    const bodyObject = await req.json();
+    const body = bodyObject[0];   
 
     // Extract signature from query parameters
     const url = new URL(req.url);
@@ -23,24 +24,47 @@ export async function POST(req: Request) {
 
     // Finish the webhook signature verification
     const hmac = crypto.createHmac('sha256', sharedKey);
-    console.log(hmac)
-    const requestBody = JSON.stringify(body);
-    console.log(requestBody)
+    //console.log(hmac)
+    const requestBody = JSON.stringify(bodyObject);
+    //console.log('REQ BODY',requestBody)
     hmac.update(requestBody);
-    console.log(hmac)
     const calculatedSignature = hmac.digest('hex');
 
     if (signature !== calculatedSignature) {
       return NextResponse.json({ message: 'Invalid signature' }, { status: 401 });
     }
 
+    console.log('EVENT NAME',body.event)
     // Handle different webhook events
     switch (body.event) {
       case 'document_deleted':
         // Handle document deleted event
         break;
       case 'recipient_completed':
-        // Handle recipient completed event
+        console.log('HITTING SIGGY ROUTE')
+        const { data } = body;
+        const documentId = data.id;
+        const completedRecipients = data.recipients.filter((recipient: any) => recipient.has_completed === true);
+        console.log('Completed Recipients', completedRecipients);
+
+        const updateData: any = {};
+        for (const recipient of completedRecipients) {
+          if (recipient.roles.includes('Landlord')) {
+            updateData.landlordSigned = true;
+          }
+          if (recipient.role === 'Tenant') {
+            updateData.tenantSigned = true;
+          }
+        }
+        console.log('UPDATE DATA', updateData)
+
+        if (Object.keys(updateData).length > 0) {
+          let lease = await prisma.lease.update({
+            where: { id: documentId },
+            data: updateData,
+          });
+          console.log('Lease',lease);
+        }
         break;
       case 'document_updated':
         // Handle document updated event
@@ -75,7 +99,7 @@ export async function POST(req: Request) {
     }
 
     // Process the webhook data here
-    console.log(body.event);
+    //console.log(body.event);
 
     return NextResponse.json({ message: 'Webhook received successfully' }, { status: 200 });
   } catch (error) {
