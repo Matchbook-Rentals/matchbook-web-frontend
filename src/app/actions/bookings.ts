@@ -41,9 +41,7 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
   }
 
   revalidatePath('/bookings');
-  await createNotification({
-    type:
-  })
+  await createNotification(notificationData);
 
   return booking;
 }

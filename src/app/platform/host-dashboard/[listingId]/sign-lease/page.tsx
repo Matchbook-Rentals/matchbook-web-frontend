@@ -5,16 +5,14 @@ import { useHostProperties } from '@/contexts/host-properties-provider';
 const SignLeasePage = ({ params }: { params: { listingId: string } }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const {currHousingRequest} = useHostProperties();
-
-  if (!currHousingRequest) {
-    return <p> Loading Details, try refreshing if stalled. If seen again try revisiting applications tab and clicking approve and sign </p>
-  }
+  const { currHousingRequest } = useHostProperties();
 
   useEffect(() => {
     if (!currHousingRequest) {
-      return 
+      setIsLoading(false);
+      return;
     }
+
     const fetchLeaseDocument = async () => {
       try {
         const response = await fetch('/api/leases/start-flow', {
@@ -41,6 +39,10 @@ const SignLeasePage = ({ params }: { params: { listingId: string } }) => {
 
     fetchLeaseDocument();
   }, [currHousingRequest]);
+
+  if (!currHousingRequest) {
+    return <p>Loading Details, try refreshing if stalled. If seen again try revisiting applications tab and clicking approve and sign</p>;
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
