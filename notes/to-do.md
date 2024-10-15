@@ -26,9 +26,10 @@ DOCUSIGN SDK
 - [x] send document
 - [x] embed doc sign - landlord
 - [x] create lease and match from client side event
-- [] watch for webhook saying person signed, add siggy to db lease 
+- [x] watch for webhook saying person signed, add siggy to db lease 
 - [] embed doc sign - tenant
 - [] set housingRequest status to approved, handle this in applications logic
+- [] setup second webhook for live site, please try to keep them separate (env vars for dev testing)
 
 ## 01OCT24
 - [X] On booking set unavailable

@@ -107,6 +107,16 @@ export async function updateLease(
   });
 }
 
+export async function updateBoldSignLease(
+  id: string,
+  data: Partial<Omit<Lease, 'id' | 'createdAt' | 'updatedAt'>>
+): Promise<Lease> {
+  return prisma.lease.update({
+    where: { id },
+    data,
+  });
+}
+
 // Delete
 export async function deleteLease(id: string): Promise<Lease> {
   return prisma.lease.delete({
