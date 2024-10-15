@@ -4,13 +4,13 @@ import Countdown from "../marketing-landing-components/countdown";
 
 const Hero: React.FC = () => {
   return (
-    <div className="relative  mx-auto flex flex-col items-center px-12 bg-cover justify-start" style={{ backgroundImage: "url('/hero-image.png')" }}>
+    <div className="relative min-h-[60vh] w-full md:w-[90vw] lg:w-[80vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start" style={{ backgroundImage: "url('/hero-image.png')" }}>
+
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gray-400 opacity-50"></div>
+      {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
 
       {/* Content */}
-      <SearchContainer className="pt-[10%]  w-[80%] relative " />
-      <Countdown className="z-20 mt-8" />
+      <SearchContainer className="md:pt-[5%] pt-[15%] sm:w-[90%] md:w-[70%] relative" />
     </div>
   );
 };
