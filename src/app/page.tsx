@@ -10,9 +10,8 @@ import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
 import Countdown from "@/components/marketing-landing-components/countdown";
-import SubscriptionForm from "@/components/home-components/email-collection";
-import EmbeddedBrevoForm from "@/components/home-components/email-collection";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
+import BrevoIframe from "@/components/home-components/brevo-iframe";
 
 const rentMarketingItems = [
   {
@@ -119,7 +118,7 @@ const WebHomePage = () => {
       <Countdown />
       <TabSelector tabs={tabs} className="max-w-[700px] p-2 mx-auto" tabsListClassName="justify-between" />
       <MarketingSteps />
-      <EmbeddedBrevoForm />
+      <BrevoIframe />
       <RentEasyCopy />
       <Footer />
     </>
