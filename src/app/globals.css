@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 100% 99.6%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 0 100% 99.6%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
+    --popover: 0 100% 99.6%;
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 222.2 47.4% 11.2%;
@@ -148,4 +148,32 @@
   /* Color of the scrollbar thumb */
   border-radius: 2px;
   /* Completely rounded corners for the scrollbar thumb */
+}
+
+
+.test {
+  border-width: 2px;
+  border-color: #ef4444;
+  /* red-500 */
+}
+
+.test-yellow {
+  border-width: 2px;
+  border-color: #eab308;
+  /* yellow-500 */
+}
+
+.test-green {
+  border-width: 2px;
+  border-color: green;
+}
+
+.test-blue {
+  border-width: 2px;
+  border-color: blue;
+}
+
+.test-black {
+  border-width: 2px;
+  border-color: black;
 }
