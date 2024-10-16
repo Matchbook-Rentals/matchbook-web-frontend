@@ -1,4 +1,5 @@
-#
+
+
 # 0. Tab view for marketing branch (main/comingSoon)
 #
 # 1. Photo display left, 4x4 grid on right - New component
@@ -26,3 +27,12 @@
 1. Circle Icons
 2. color darkening
 
+
+
+#
+- [] update navbar icon (colors)
+- [] Dialog with email form and countdown
+- [] increase padding on navbar or make it match margins
+- [] List your property button
+- [] House Image not heart
+- [] House Image not heart
