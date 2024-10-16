@@ -1,17 +1,15 @@
-import prisma from '@/lib/prismadb'
-import MatchBar from '../matchBar';
-import ListingPhotos from '../listingPhotos';
-import TripIdPageClient from '../tripID-page-client';
-
+import prisma from "@/lib/prismadb";
+import MatchBar from "../matchBar";
+import ListingPhotos from "../listingPhotos";
+import TripIdPageClient from "../tripID-page-client";
 
 type TripsPageProps = {
   params: { tripId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-
 const pullMockListings = async () => {
-  'use server';
+  "use server";
 
   try {
     const listings = await prisma.listing.findMany({
@@ -23,21 +21,24 @@ const pullMockListings = async () => {
     });
     return listings;
   } catch (error) {
-    console.error('Error fetching listings:', error);
+    console.error("Error fetching listings:", error);
     throw error; // Re-throw the error for further handling
   }
-}
+};
 
 const pullTripFromDb = async (tripId) => {
-  'use server'
+  "use server";
 
-  const trip = await prisma.trip.findUnique({ where: { id: tripId }, include: { favorites: true, matches: true, } })
+  const trip = await prisma.trip.findUnique({
+    where: { id: tripId },
+    include: { favorites: true, matches: true },
+  });
 
-  return trip
-}
+  return trip;
+};
 
 const addListingToFavorites = async (listingId, tripId) => {
-  'use server';
+  "use server";
 
   try {
     const favorite = await prisma.favorite.create({
@@ -46,20 +47,20 @@ const addListingToFavorites = async (listingId, tripId) => {
         listingId: listingId,
       },
     });
-    console.log('Listing added to favorites successfully:', favorite);
+    console.log("Listing added to favorites successfully:", favorite);
   } catch (error) {
-    console.error('Failed to add listing to favorites:', error);
+    console.error("Failed to add listing to favorites:", error);
     // throw error; // Or handle the error as needed
   }
 };
 
-
-export default async function TripsPage({ params, searchParams }: TripsPageProps) {
-
+export default async function TripsPage({
+  params,
+  searchParams,
+}: TripsPageProps) {
   return (
     <>
       <TripIdPageClient addListingToFavorites={addListingToFavorites} />
     </>
   );
 }
-

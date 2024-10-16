@@ -1,22 +1,19 @@
-import React from 'react'
-import PreferenceCarousel from './preference-carousel'
-import prisma from '@/lib/prismadb'
+import React from "react";
+import PreferenceCarousel from "./preference-carousel";
+import prisma from "@/lib/prismadb";
 
 export default function Page() {
-
   const updateUserPreferences = async (userPreferences, amenities) => {
-    'use server';
-    const dbAmenities = {}
+    "use server";
+    const dbAmenities = {};
 
-    amenities.map(item => {
-
+    amenities.map((item) => {
       if (item.isRequired) {
         dbAmenities[item.id] = item.isRequired;
-
       }
-    })
+    });
 
-    const dbPreferences = { ...userPreferences, ...dbAmenities }
+    const dbPreferences = { ...userPreferences, ...dbAmenities };
 
     // await prisma.userPreferences.create({ data: dbPreferences})
 
@@ -27,10 +24,10 @@ export default function Page() {
       update: dbPreferences,
       create: dbPreferences,
     });
-  }
+  };
   return (
     <>
       <PreferenceCarousel updateUserPreferences={updateUserPreferences} />
     </>
-  )
+  );
 }

@@ -7,7 +7,12 @@ interface CarouselButtonControlsProps {
   nextLabel: string;
 }
 
-const CarouselButtonControls: React.FC<CarouselButtonControlsProps> = ({ onBack, onNext, backLabel, nextLabel }) => {
+const CarouselButtonControls: React.FC<CarouselButtonControlsProps> = ({
+  onBack,
+  onNext,
+  backLabel,
+  nextLabel,
+}) => {
   return (
     <div className="flex gap-2 justify-center mt-5 p-1">
       <button

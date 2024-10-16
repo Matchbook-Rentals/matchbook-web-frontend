@@ -12,28 +12,33 @@ type TripContextProviderProps = {
 
 // Adjust Values to Provider Here
 type TTripContext = {
-  trip: Trip,
-  setTrip: Function,
-  getUpdatedTrip: Function,
-  headerText: string,
-  setHeaderText: Function,
-  listings: Listing[],
-  setListings: Function,
+  trip: Trip;
+  setTrip: Function;
+  getUpdatedTrip: Function;
+  headerText: string;
+  setHeaderText: Function;
+  listings: Listing[];
+  setListings: Function;
 };
 
 export const TripContext = createContext<TTripContext | null>(null);
 
-export default function TripContextProvider({ tripData, listingData, pullTripFromDb, children }: TripContextProviderProps) {
+export default function TripContextProvider({
+  tripData,
+  listingData,
+  pullTripFromDb,
+  children,
+}: TripContextProviderProps) {
   const [trip, setTrip] = useState<Trip>(tripData);
   const [listings, setListings] = useState<Listing[]>(listingData);
-  const [headerText, setHeaderText] = useState('');
+  const [headerText, setHeaderText] = useState("");
 
   // Event handlers / actions
 
   const getUpdatedTrip = async () => {
     const tempTrip: Trip = await pullTripFromDb(trip.id);
-    setTrip(tempTrip)
-  }
+    setTrip(tempTrip);
+  };
 
   return (
     <TripContext.Provider
@@ -45,7 +50,6 @@ export default function TripContextProvider({ tripData, listingData, pullTripFro
         listings,
         setListings,
         getUpdatedTrip,
-
       }}
     >
       {children}

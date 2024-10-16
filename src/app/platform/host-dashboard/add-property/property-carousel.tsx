@@ -140,7 +140,7 @@ export default function PropertyCarousel({
       className="lg:w-1/2 h-1/2 m-auto"
       opts={{ watchDrag: false }}
       setApi={setApi}
-    // keyboardControls={false}
+      // keyboardControls={false}
     >
       <CarouselContent>
         <CarouselItem>
@@ -162,7 +162,6 @@ export default function PropertyCarousel({
             goToNext={goToNext}
             goToPrevious={goToPrevious}
           />
-
         </CarouselItem>
         <CarouselItem>
           <ImageUploadForm
@@ -174,7 +173,9 @@ export default function PropertyCarousel({
         </CarouselItem>
         <CarouselItem>
           <h2 className="text-3xl font-bold text-center mt-8">Lease Terms</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-center">Please select your minimum and maximum acceptable lease length</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center">
+            Please select your minimum and maximum acceptable lease length
+          </p>
           <LeaseTermsForm
             goToNext={goToNext}
             goToPrevious={goToPrevious}

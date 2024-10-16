@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript } from '@react-google-maps/api';
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import { useLoadScript } from "@react-google-maps/api";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
 export default function LocationSuggest({ setDestination }) {
@@ -29,8 +32,8 @@ export default function LocationSuggest({ setDestination }) {
   } = usePlacesAutocomplete({
     initOnMount: false,
     requestOptions: {
-      types: ['(cities)'],
-      componentRestrictions: { country: 'us' },
+      types: ["(cities)"],
+      componentRestrictions: { country: "us" },
     },
   });
 
@@ -60,8 +63,8 @@ export default function LocationSuggest({ setDestination }) {
     setValue(description, false); // Update the autocomplete value
     clearSuggestions(); // Uncomment if you want to clear suggestions after selection
     setOpen(false);
-    console.log('place ID', place_id);
-    console.log('description', description);
+    console.log("place ID", place_id);
+    console.log("description", description);
 
     const results = await getGeocode({ address: description });
     const { lat, lng } = await getLatLng(results[0]);
@@ -72,7 +75,8 @@ export default function LocationSuggest({ setDestination }) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button className="placeholder:text-gray-500 focus:outline-none rounded-full text-lg h-full p-5 md:p-8 cursor-pointer">
-          {displayValue ? displayValue : "Where to?"} {/* Display the selected description or "Where to?" */}
+          {displayValue ? displayValue : "Where to?"}{" "}
+          {/* Display the selected description or "Where to?" */}
         </button>
       </PopoverTrigger>
       <PopoverContent className="rounded-2xl">
@@ -82,11 +86,16 @@ export default function LocationSuggest({ setDestination }) {
           disabled={!ready}
           placeholder="Where's the party?"
           type="text"
-          className="w-full h-full text-2xl focus:outline-none" />
+          className="w-full h-full text-2xl focus:outline-none"
+        />
         {suggestions.length > 0 && (
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (
-              <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(description.slice(0, -5), place_id)}>
+              <li
+                className="hover:bg-primaryBrand"
+                key={place_id}
+                onClick={() => handleSelect(description.slice(0, -5), place_id)}
+              >
                 {description?.slice(0, -5)}
               </li>
             ))}

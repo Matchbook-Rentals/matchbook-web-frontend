@@ -1,7 +1,7 @@
-import React from 'react';
-import { Booking } from '@prisma/client';
-import Day from './day';
-import PopoverDay from './popover-day';
+import React from "react";
+import { Booking } from "@prisma/client";
+import Day from "./day";
+import PopoverDay from "./popover-day";
 
 interface DayGridProps {
   currentDate: Date;
@@ -15,7 +15,8 @@ const DayGrid: React.FC<DayGridProps> = ({ currentDate, bookings }) => {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const isDateInRange = (date: Date, bookings: Booking[]) => {
-    const normalizeDate = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const normalizeDate = (d: Date) =>
+      new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
     const normalizedDate = normalizeDate(date);
 
@@ -23,11 +24,11 @@ const DayGrid: React.FC<DayGridProps> = ({ currentDate, bookings }) => {
       const startDate = normalizeDate(new Date(booking.startDate));
       const endDate = normalizeDate(new Date(booking.endDate));
       if (normalizedDate >= startDate && normalizedDate <= endDate) {
-        console.log('date in range', normalizedDate, startDate, endDate);
+        console.log("date in range", normalizedDate, startDate, endDate);
         return booking;
       }
     }
-    console.log('date not in range', normalizedDate, bookings);
+    console.log("date not in range", normalizedDate, bookings);
     return null;
   };
 
@@ -44,7 +45,14 @@ const DayGrid: React.FC<DayGridProps> = ({ currentDate, bookings }) => {
       days.push(<Day key={day} day={day} />);
     }
   }
-  return <div onClick={() => console.log(days)} className="grid grid-cols-7 gap-1 p-2">{days}</div>;
+  return (
+    <div
+      onClick={() => console.log(days)}
+      className="grid grid-cols-7 gap-1 p-2"
+    >
+      {days}
+    </div>
+  );
 };
 
 export default DayGrid;

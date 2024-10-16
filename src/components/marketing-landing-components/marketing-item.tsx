@@ -4,15 +4,23 @@ interface MarketingItemProps {
   number: number;
   title: string;
   description: string;
-  brandColor: 'primary' | 'secondary';
+  brandColor: "primary" | "secondary";
 }
 
-export default function MarketingItem({ number, title, description, brandColor }: MarketingItemProps) {
-  const bgColorClass = brandColor === 'primary' ? 'bg-primaryBrand' : 'bg-blueBrand';
+export default function MarketingItem({
+  number,
+  title,
+  description,
+  brandColor,
+}: MarketingItemProps) {
+  const bgColorClass =
+    brandColor === "primary" ? "bg-primaryBrand" : "bg-blueBrand";
 
   return (
     <div className="flex items-center space-x-8 ml-2 space-y-4">
-      <div className={`flex-shrink-0 ${bgColorClass} rounded-full w-14 h-14 flex items-center justify-center`}>
+      <div
+        className={`flex-shrink-0 ${bgColorClass} rounded-full w-14 h-14 flex items-center justify-center`}
+      >
         <span className="font-semibold text-black text-2xl">{number}</span>
       </div>
       <div>

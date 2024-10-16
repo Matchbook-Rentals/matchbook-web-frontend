@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 import { withUt } from "uploadthing/tw";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -54,24 +54,24 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         primaryBrand: {
-          DEFAULT: '#a4b99a',
-          80: '#a4b99acc', // 80% opacity
+          DEFAULT: "#a4b99a",
+          80: "#a4b99acc", // 80% opacity
         },
         secondaryBrand: {
-          DEFAULT: '#85997d',
-          80: '#85997dcc', // 80% opacity
+          DEFAULT: "#85997d",
+          80: "#85997dcc", // 80% opacity
         },
         blueBrand: {
-          DEFAULT: '#5c9ac5',
-          80: '#5c9ac5cc', // 80% opacity
+          DEFAULT: "#5c9ac5",
+          80: "#5c9ac5cc", // 80% opacity
         },
         pinkBrand: {
-          DEFAULT: '#c68087',
-          80: '#c68087cc', // 80% opacity
+          DEFAULT: "#c68087",
+          80: "#c68087cc", // 80% opacity
         },
         darkBrand: {
-          DEFAULT: '#f2df2e',
-          80: '#f2df2ecc', // 80% opacity
+          DEFAULT: "#f2df2e",
+          80: "#f2df2ecc", // 80% opacity
         },
       },
       borderRadius: {
@@ -96,26 +96,26 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
 const scrollbarHide = {
-  '.scrollbar-hide': {
+  ".scrollbar-hide": {
     /* IE and Edge */
-    '-ms-overflow-style': 'none',
+    "-ms-overflow-style": "none",
     /* Firefox */
-    'scrollbar-width': 'none',
+    "scrollbar-width": "none",
     /* Safari and Chrome */
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    }
-  }
-}
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+  },
+};
 
 config.theme.extend = {
   ...config.theme.extend,
-  ...scrollbarHide
-}
+  ...scrollbarHide,
+};
 
 export default withUt({
-  ...config
+  ...config,
 });

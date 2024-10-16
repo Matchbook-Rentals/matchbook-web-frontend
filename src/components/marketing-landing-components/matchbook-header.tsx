@@ -20,21 +20,28 @@ export default function MatchbookHeader() {
     };
   }, []);
 
-
   const translateY = Math.max(-30, Math.min((scrollY - 50) / 2, 0));
-
-
 
   return (
     // Updated transition classes for a 3-second duration
-    <div className={`sticky mb-0 md:mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0`}>
+    <div
+      className={`sticky mb-0 md:mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0`}
+    >
       <header
         className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-4 items-start border-b-0 pb-2`}
       >
         <div className="flex items-center">
           <Link href={"/"}>
-            <img src="logo-nav-new.png" alt="MatchBook Logo" className="hidden sm:block w-full h-14" />
-            <img src="House_Logo.png" alt="MatchBook Heart" className="sm:hidden h-10 w-10" />
+            <img
+              src="logo-nav-new.png"
+              alt="MatchBook Logo"
+              className="hidden sm:block w-full h-14"
+            />
+            <img
+              src="House_Logo.png"
+              alt="MatchBook Heart"
+              className="sm:hidden h-10 w-10"
+            />
           </Link>
         </div>
         <div
@@ -44,11 +51,18 @@ export default function MatchbookHeader() {
             transition: "transform 0.1s ease-out",
           }}
         >
-          <img src="/svg/heart-header.svg" className="h-14 w-14 heart" alt="MatchBook Heart" />
+          <img
+            src="/svg/heart-header.svg"
+            className="h-14 w-14 heart"
+            alt="MatchBook Heart"
+          />
         </div>
         <div className="flex md:space-x-4 items-center">
-          <Link href={'/?tab=list#list-your-property'} shallow>
-            <Button className="border border-black mr-2 lg:mr-8 lg:text-lg" variant={'outline'} >
+          <Link href={"/?tab=list#list-your-property"} shallow>
+            <Button
+              className="border border-black mr-2 lg:mr-8 lg:text-lg"
+              variant={"outline"}
+            >
               List your property
             </Button>
           </Link>
@@ -57,7 +71,7 @@ export default function MatchbookHeader() {
         </div>
         <style jsx>{`
           header::before {
-            content: '';
+            content: "";
             position: absolute;
             bottom: 00%;
             left: 0;
@@ -66,7 +80,7 @@ export default function MatchbookHeader() {
             background-color: lightgray;
           }
           .heart::before {
-            content: '';
+            content: "";
             position: absolute;
             bottom: 25%;
             left: -25px;

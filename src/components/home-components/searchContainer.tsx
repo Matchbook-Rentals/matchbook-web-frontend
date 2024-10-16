@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaSearch } from 'react-icons/fa';
+import React from "react";
+import { FaSearch } from "react-icons/fa";
 
 interface SearchContainerProps {
   className?: string;
@@ -7,7 +7,7 @@ interface SearchContainerProps {
 
 const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
   return (
-    <div className={`mx-auto p-2 ${className || ''}`}>
+    <div className={`mx-auto p-2 ${className || ""}`}>
       <div className="relative">
         <div className="flex flex-col sm:flex-row p-3 items-center bg-gray-100 rounded-3xl sm:rounded-full shadow-md overflow-hidden disabled">
           <input
@@ -34,7 +34,10 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
             className="w-full sm:w-1/4 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none cursor-not-allowed opacity-50 bg-transparent"
             readOnly
           />
-          <button disabled className="w-full sm:w-auto mt-3 sm:mt-0 p-3 cursor-not-allowed bg-primaryBrand rounded-full opacity-50">
+          <button
+            disabled
+            className="w-full sm:w-auto mt-3 sm:mt-0 p-3 cursor-not-allowed bg-primaryBrand rounded-full opacity-50"
+          >
             <FaSearch className="text-white mx-auto" size={20} />
           </button>
         </div>

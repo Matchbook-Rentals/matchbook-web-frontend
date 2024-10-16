@@ -26,7 +26,7 @@
 
 // export default ListIcon;
 
-import React from 'react';
+import React from "react";
 
 // Define a type for the size prop
 interface Size {
@@ -63,24 +63,57 @@ const ListIcon: React.FC<ListIconProps> = ({
       width={size.width}
       height={size.height}
       viewBox="0 0 44.5 28"
-      style={{ display: 'block', marginRight: borderRight ? '1px' : '0' }}
+      style={{ display: "block", marginRight: borderRight ? "1px" : "0" }}
     >
       <g transform="translate(-1542.75 -419)">
-        <g transform="translate(1542.75 419)" fill="#5a6754" stroke="#5a6754" strokeWidth="1">
+        <g
+          transform="translate(1542.75 419)"
+          fill="#5a6754"
+          stroke="#5a6754"
+          strokeWidth="1"
+        >
           <rect width="8" height="8" stroke="none" />
           <rect x="0.5" y="0.5" width="7" height="7" fill="none" />
         </g>
-        <g transform="translate(1542.75 429)" fill="#5a6754" stroke="#5a6754" strokeWidth="1">
+        <g
+          transform="translate(1542.75 429)"
+          fill="#5a6754"
+          stroke="#5a6754"
+          strokeWidth="1"
+        >
           <rect width="8" height="8" stroke="none" />
           <rect x="0.5" y="0.5" width="7" height="7" fill="none" />
         </g>
-        <g transform="translate(1542.75 439)" fill="#5a6754" stroke="#5a6754" strokeWidth="1">
+        <g
+          transform="translate(1542.75 439)"
+          fill="#5a6754"
+          stroke="#5a6754"
+          strokeWidth="1"
+        >
           <rect width="8" height="8" stroke="none" />
           <rect x="0.5" y="0.5" width="7" height="7" fill="none" />
         </g>
-        <line x2="29" transform="translate(1558.25 423.5)" fill="none" stroke="#5a6754" strokeWidth="1" />
-        <line x2="29" transform="translate(1558.25 433)" fill="none" stroke="#5a6754" strokeWidth="1" />
-        <line x2="29" transform="translate(1558.25 442.5)" fill="none" stroke="#5a6754" strokeWidth="1" />
+        <line
+          x2="29"
+          transform="translate(1558.25 423.5)"
+          fill="none"
+          stroke="#5a6754"
+          strokeWidth="1"
+        />
+        <line
+          x2="29"
+          transform="translate(1558.25 433)"
+          fill="none"
+          stroke="#5a6754"
+          strokeWidth="1"
+        />
+        <line
+          x2="29"
+          transform="translate(1558.25 442.5)"
+          fill="none"
+          stroke="#5a6754"
+          strokeWidth="1"
+        />
         {/* Optional right border */}
         {borderRight && <line {...borderStyle} />}
       </g>
@@ -89,4 +122,3 @@ const ListIcon: React.FC<ListIconProps> = ({
 };
 
 export default ListIcon;
-

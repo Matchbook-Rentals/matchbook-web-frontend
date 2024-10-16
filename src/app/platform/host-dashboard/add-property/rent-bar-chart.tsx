@@ -1,5 +1,14 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface RentBarChartProps {
   minValue: number;
@@ -12,7 +21,12 @@ const roundToNearestFive = (value: number) => {
   return Math.round(value / 5) * 5;
 };
 
-const generateData = (minValue: number, maxValue: number, minLength: number, maxLength: number) => {
+const generateData = (
+  minValue: number,
+  maxValue: number,
+  minLength: number,
+  maxLength: number,
+) => {
   const data = [];
   const stepValue = (maxValue - minValue) / (maxLength - minLength);
   let currMonth = 1;
@@ -42,9 +56,16 @@ const generateTicks = (maxValue: number) => {
   return ticks;
 };
 
-const RentBarChart: React.FC<RentBarChartProps> = ({ minValue, maxValue, minLength, maxLength }) => {
+const RentBarChart: React.FC<RentBarChartProps> = ({
+  minValue,
+  maxValue,
+  minLength,
+  maxLength,
+}) => {
   const data = generateData(minValue, maxValue, minLength, maxLength);
-  const roundedMaxValue = roundUpToNearestHundred(Math.max(minValue, maxValue) * 1.2);
+  const roundedMaxValue = roundUpToNearestHundred(
+    Math.max(minValue, maxValue) * 1.2,
+  );
   const ticks = generateTicks(roundedMaxValue);
 
   return (
@@ -53,7 +74,8 @@ const RentBarChart: React.FC<RentBarChartProps> = ({ minValue, maxValue, minLeng
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" interval={maxLength - minLength > 6 ? 1 : 0} />
-          <YAxis domain={[0, roundedMaxValue]} ticks={ticks} /> {/* Set ticks for Y-axis */}
+          <YAxis domain={[0, roundedMaxValue]} ticks={ticks} />{" "}
+          {/* Set ticks for Y-axis */}
           <Tooltip />
           <Legend />
           <Bar dataKey="price" name="Price Per Month" fill="#a3b899" />

@@ -29,7 +29,11 @@ const fetchListingsFromDb = async (): Promise<Listing[]> => {
   }
 };
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const listings = await fetchListingsFromDb();
 
   return (

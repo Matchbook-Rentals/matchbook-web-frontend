@@ -1,12 +1,27 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, ChangeEvent } from "react";
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript, useJsApiLoader, Libraries } from '@react-google-maps/api';
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import {
+  useLoadScript,
+  useJsApiLoader,
+  Libraries,
+} from "@react-google-maps/api";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 interface AddressSuggestProps {
-  setPropertyDetails: (details: { locationString: string; latitude: number; longitude: number }) => void;
+  setPropertyDetails: (details: {
+    locationString: string;
+    latitude: number;
+    longitude: number;
+  }) => void;
   initialValue?: string;
 }
 
@@ -15,7 +30,10 @@ interface Suggestion {
   description: string;
 }
 
-export default function AddressSuggest({ setPropertyDetails, initialValue = '' }: AddressSuggestProps) {
+export default function AddressSuggest({
+  setPropertyDetails,
+  initialValue = "",
+}: AddressSuggestProps) {
   const [inputValue, setInputValue] = useState<string>(initialValue); // State for input field value
   const [displayValue, setDisplayValue] = useState<string>(""); // Separate state for display value in the "Where to?" section
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -39,7 +57,7 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
   } = usePlacesAutocomplete({
     initOnMount: false,
     requestOptions: {
-      componentRestrictions: { country: 'us' },
+      componentRestrictions: { country: "us" },
     },
   });
 
@@ -73,20 +91,25 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
     setValue(description, false); // Update the autocomplete value
     clearSuggestions(); // Uncomment if you want to clear suggestions after selection
     setOpen(false);
-    console.log('place ID', place_id);
-    console.log('description', description);
+    console.log("place ID", place_id);
+    console.log("description", description);
 
     const results = await getGeocode({ address: description });
     const { lat, lng } = await getLatLng(results[0]);
-    setPropertyDetails((prev => {
-      return { ...prev, locationString: description, latitude: lat, longitude: lng }
-    }));
+    setPropertyDetails((prev) => {
+      return {
+        ...prev,
+        locationString: description,
+        latitude: lat,
+        longitude: lng,
+      };
+    });
     console.log("Selected location:", { lat, lng, results });
   };
 
   const removeCountry = (address: string) => {
-    return address.replace(', USA', '');
-  }
+    return address.replace(", USA", "");
+  };
 
   return (
     <Popover open={open && suggestions.length > 0} onOpenChange={setOpen}>
@@ -99,13 +122,23 @@ export default function AddressSuggest({ setPropertyDetails, initialValue = '' }
           placeholder="0 Hassle Drive, Salt Lake City, UT"
           type="text"
           autoComplete="off"
-          className="w-full h-full text-2xl focus:outline-none text-center" />
+          className="w-full h-full text-2xl focus:outline-none text-center"
+        />
       </PopoverTrigger>
       {suggestions.length > 0 && (
-        <PopoverContent className="rounded-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <PopoverContent
+          className="rounded-2xl"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (
-              <li className="hover:bg-primaryBrand" key={place_id} onClick={() => handleSelect(removeCountry(description), place_id)}>
+              <li
+                className="hover:bg-primaryBrand"
+                key={place_id}
+                onClick={() =>
+                  handleSelect(removeCountry(description), place_id)
+                }
+              >
                 {removeCountry(description)}
               </li>
             ))}

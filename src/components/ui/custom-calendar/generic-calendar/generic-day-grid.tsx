@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const GenericDayGrid = ({ currentDate }) => {
   const year = currentDate.getFullYear();
@@ -14,7 +14,7 @@ const GenericDayGrid = ({ currentDate }) => {
     days.push(
       <div key={day} className="h-12 flex items-center justify-center border">
         {day}
-      </div>
+      </div>,
     );
   }
 

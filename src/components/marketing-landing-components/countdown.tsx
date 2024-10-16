@@ -1,14 +1,14 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 
 // Add className to the component props
 const Countdown: React.FC<{ className?: string }> = ({ className }) => {
-  const targetDate = new Date('2025-02-01T00:00:00');
+  const targetDate = new Date("2025-02-01T00:00:00");
   const [timeLeft, setTimeLeft] = useState<Record<string, number | string>>({
-    days: '??',
-    hours: '??',
-    minutes: '??',
-    seconds: '??'
+    days: "??",
+    hours: "??",
+    minutes: "??",
+    seconds: "??",
   });
 
   useEffect(() => {
@@ -51,14 +51,21 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
   });
 
   return (
-    <div className={`text-xl md:text-2xl lg:text-3xl
+    <div
+      className={`text-xl md:text-2xl lg:text-3xl
       mx-auto py-1 lg:px-8 font-semibold text-black text-center
-      w-full max-w-[700px] ${className || ''}`}>
+      w-full max-w-[700px] ${className || ""}`}
+    >
       Find your place, all in once place in:
       <div className="flex pt-6 justify-evenly">
         {Object.keys(timeLeft).map((interval) => (
-          <div key={interval} className="flex flex-col justify-center items-center">
-            <span className="text-xl md:text-2xl lg:text-3xl font-semibold">{timeLeft[interval]}</span>
+          <div
+            key={interval}
+            className="flex flex-col justify-center items-center"
+          >
+            <span className="text-xl md:text-2xl lg:text-3xl font-semibold">
+              {timeLeft[interval]}
+            </span>
             <span className="text-xl md:text-2xl lg:text-3xl">{interval}</span>
           </div>
         ))}

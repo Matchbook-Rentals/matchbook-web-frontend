@@ -25,7 +25,9 @@ const SlidingHeart: React.FC = () => {
   }, []);
 
   return (
-    <div className={`flex justify-center ${mounted && !scrolled ? 'translate-y-8' : ''} transition-transform duration-300`}>
+    <div
+      className={`flex justify-center ${mounted && !scrolled ? "translate-y-8" : ""} transition-transform duration-300`}
+    >
       <Image
         src={"/heart-logo.png"}
         alt="logo"

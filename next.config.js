@@ -3,24 +3,24 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '**',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "**",
       },
       {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-        pathname: '**',
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        pathname: "**",
       },
       {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        pathname: '**',
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "**",
       },
       {
-        protocol: 'https',
-        hostname: 'utfs.io',
-        pathname: '**',
+        protocol: "https",
+        hostname: "utfs.io",
+        pathname: "**",
       },
     ],
   },
@@ -31,6 +31,6 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import * as Slider from '@radix-ui/react-slider';
-import CurrencyInput from '@/components/ui/currency-input';
+import React, { useState, useEffect } from "react";
+import * as Slider from "@radix-ui/react-slider";
+import CurrencyInput from "@/components/ui/currency-input";
 
 interface DualThumbSliderProps {
   setShortestLeaseTerms: (length: number, price: number) => void;
@@ -18,14 +18,21 @@ interface PropertyDetails {
   longestLeasePrice: number | null;
 }
 
-const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, propertyDetails }: DualThumbSliderProps) => {
+const DualThumbSlider = ({
+  setShortestLeaseTerms,
+  setLongestLeaseTerms,
+  propertyDetails,
+}: DualThumbSliderProps) => {
   const [values, setValues] = useState([1, 12]); // Initial values for the thumbs
   const [minValue, setMinValue] = useState(3000); // Initial minimum value
   const [maxValue, setMaxValue] = useState(2500); // Initial maximum value
 
   useEffect(() => {
     if (propertyDetails) {
-      setValues([propertyDetails.shortestLeaseLength || 1, propertyDetails.longestLeaseLength || 12]);
+      setValues([
+        propertyDetails.shortestLeaseLength || 1,
+        propertyDetails.longestLeaseLength || 12,
+      ]);
       setMinValue(propertyDetails.shortestLeasePrice || 3000);
       setMaxValue(propertyDetails.longestLeasePrice || 2500);
     }
@@ -63,8 +70,8 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
               className="absolute w-px bg-gray-600"
               style={{
                 left: `${((step - 1) / 11) * 100}%`, // Position notches evenly
-                top: '-8px', // Adjust this value as needed
-                height: '8px',
+                top: "-8px", // Adjust this value as needed
+                height: "8px",
               }}
             />
           ))}

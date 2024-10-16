@@ -12,7 +12,6 @@ import { type Listing } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 import HostDashboardClient from "./host-dashboard-client";
 
-
 const fetchListingsFromDb = async () => {
   "use server";
 
@@ -44,7 +43,9 @@ export default async function HostDashboard() {
 
   return (
     <div className="md:w-4/5 w-[95%] mx-auto">
-      <h1 className="text-3xl my-3 font-semibold text-center">Your Properties</h1>
+      <h1 className="text-3xl my-3 font-semibold text-center">
+        Your Properties
+      </h1>
       <Button
         className="w-fit text-2xl  flex md:ml-auto md:mr-0 mx-auto"
         variant="ghost"

@@ -5,7 +5,12 @@ import AddPropertyClient from "./app-property-client";
 import { type Listing, type Bedroom } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 
-const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedroom[], listingImages: { url: string }[] }) => {
+const handleListingCreation = async (
+  propertyDetails: Listing & {
+    bedrooms: Bedroom[];
+    listingImages: { url: string }[];
+  },
+) => {
   "use server";
 
   try {
@@ -26,10 +31,9 @@ const handleListingCreation = async (propertyDetails: Listing & { bedrooms: Bedr
         },
       },
     });
-    console.log('TRUE', listing);
+    console.log("TRUE", listing);
 
-
-    return 'true';
+    return "true";
   } catch (error: any) {
     return error.message;
     throw error; // Re-throw the error if you want to propagate it further

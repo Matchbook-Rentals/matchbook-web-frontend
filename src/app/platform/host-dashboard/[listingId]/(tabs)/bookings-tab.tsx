@@ -29,15 +29,15 @@ export default function BookingsTab() {
       endDate: endDate,
       totalPrice: 500,
       createdAt: new Date("2023-09-01T00:00:00Z"),
-      status: 'active',
+      status: "active",
       user: {
         id: "user123",
-        name: "John Doe"
+        name: "John Doe",
       },
       listing: {
         id: "listing123",
-        title: "Sample Listing"
-      }
+        title: "Sample Listing",
+      },
     },
     {
       id: "2",
@@ -50,12 +50,12 @@ export default function BookingsTab() {
       status: "finished",
       user: {
         id: "user456",
-        name: "Jane Smith"
+        name: "Jane Smith",
       },
       listing: {
         id: "listing456",
-        title: "Another Sample Listing"
-      }
+        title: "Another Sample Listing",
+      },
     },
     {
       id: "3",
@@ -68,19 +68,23 @@ export default function BookingsTab() {
       status: "reserved",
       user: {
         id: "user789",
-        name: "Alice Johnson"
+        name: "Alice Johnson",
       },
       listing: {
         id: "listing789",
-        title: "Third Sample Listing"
-      }
-    }
+        title: "Third Sample Listing",
+      },
+    },
   ];
 
   return (
     <div className="flex py-2 ">
       <div className="flex flex-col  border-red-500 gap-y-4 w-full">
-        <CardWithHeader className="w-full" title="Bookings" content={<div>Payment content goes here.</div>} />
+        <CardWithHeader
+          className="w-full"
+          title="Bookings"
+          content={<div>Payment content goes here.</div>}
+        />
       </div>
       <div className="flex flex-col border-6 border-red-500 gap-y-4 w-full">
         <DisplayCalendar bookings={sampleBookings} />

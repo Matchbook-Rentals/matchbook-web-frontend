@@ -1,5 +1,5 @@
 export default function RentEasyCopy() {
-  let blackLineStyle = "w-1/5 h-[2px] bg-black hidden sm:block"
+  let blackLineStyle = "w-1/5 h-[2px] bg-black hidden sm:block";
   return (
     <div className="flex w-full my-5 sm:my-10 items-center justify-center py-4 sm:py-8">
       <div className="flex w-full sm:w-[90%] px-4 sm:px-0 space-x-0 sm:space-x-4 items-center justify-between">
@@ -11,5 +11,5 @@ export default function RentEasyCopy() {
         <div className={blackLineStyle} />
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { createContext, useContext } from "react";
 import { type Listing, ListingImage, Bedroom } from "@prisma/client";
 
@@ -11,9 +11,14 @@ interface HostPropertiesContextProps {
   listings: ListingsWithImagesAndBedrooms[];
 }
 
-const HostPropertiesContext = createContext<HostPropertiesContextProps | undefined>(undefined);
+const HostPropertiesContext = createContext<
+  HostPropertiesContextProps | undefined
+>(undefined);
 
-export const HostPropertiesProvider: React.FC<{ listings: Listing[], children: React.ReactNode }> = ({ listings, children }) => {
+export const HostPropertiesProvider: React.FC<{
+  listings: Listing[];
+  children: React.ReactNode;
+}> = ({ listings, children }) => {
   return (
     <HostPropertiesContext.Provider value={{ listings }}>
       {children}
@@ -24,7 +29,9 @@ export const HostPropertiesProvider: React.FC<{ listings: Listing[], children: R
 export const useHostProperties = () => {
   const context = useContext(HostPropertiesContext);
   if (!context) {
-    throw new Error("useHostProperties must be used within a HostPropertiesProvider");
+    throw new Error(
+      "useHostProperties must be used within a HostPropertiesProvider",
+    );
   }
   return context;
 };

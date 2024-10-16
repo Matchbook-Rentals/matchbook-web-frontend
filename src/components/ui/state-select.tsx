@@ -3,7 +3,15 @@
  * @see https://v0.dev/t/6mCIRLk8eUy
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { SelectValue, SelectTrigger, SelectLabel, SelectItem, SelectGroup, SelectContent, Select } from "@/components/ui/select"
+import {
+  SelectValue,
+  SelectTrigger,
+  SelectLabel,
+  SelectItem,
+  SelectGroup,
+  SelectContent,
+  Select,
+} from "@/components/ui/select";
 
 interface StateSelectProps {
   id: string;
@@ -12,10 +20,17 @@ interface StateSelectProps {
   invalidFields: { [key: string]: boolean };
 }
 
-export default function StateSelect({id, value, setState, invalidFields}: StateSelectProps) {
+export default function StateSelect({
+  id,
+  value,
+  setState,
+  invalidFields,
+}: StateSelectProps) {
   return (
     <Select value={value} onValueChange={(value) => setState(value)}>
-      <SelectTrigger className={`w-[240px] ${invalidFields.state ? 'border-2 border-red-500' : ''}`}>
+      <SelectTrigger
+        className={`w-[240px] ${invalidFields.state ? "border-2 border-red-500" : ""}`}
+      >
         <SelectValue placeholder="Select a state" />
       </SelectTrigger>
       <SelectContent>
@@ -74,6 +89,5 @@ export default function StateSelect({id, value, setState, invalidFields}: StateS
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }
-

@@ -1,6 +1,6 @@
-import { previousDay } from 'date-fns';
-import Image from 'next/image';
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import { previousDay } from "date-fns";
+import Image from "next/image";
+import React, { useState, Dispatch, SetStateAction } from "react";
 
 interface ListingTypeRadioProps {
   goToNext: () => void;
@@ -9,10 +9,10 @@ interface ListingTypeRadioProps {
 }
 
 const housingOptions = [
-  { id: 'single_family', label: 'Single Family' },
-  { id: 'multi_family', label: 'Multi Family' },
-  { id: 'townhouse', label: 'Townhouse' },
-  { id: 'apartment', label: 'Apartment' },
+  { id: "single_family", label: "Single Family" },
+  { id: "multi_family", label: "Multi Family" },
+  { id: "townhouse", label: "Townhouse" },
+  { id: "apartment", label: "Apartment" },
 ];
 
 const ListingTypeRadio: React.FC<ListingTypeRadioProps> = ({
@@ -20,49 +20,69 @@ const ListingTypeRadio: React.FC<ListingTypeRadioProps> = ({
   goToPrev,
   setUserPreferences,
 }) => {
-  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>("");
 
-  const handleSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSelectedType(event.target.value);
     setUserPreferences(event.target.value); // Assuming the preference is just the selectedType value
   };
 
   const handleNext = () => {
-    setUserPreferences(prev => {
-      return { ...prev, listingType: selectedType }
-    })
+    setUserPreferences((prev) => {
+      return { ...prev, listingType: selectedType };
+    });
     goToNext();
-  }
+  };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2 className='text-2xl text-center mt-10 font-semibold'>Welcome! Lets find you a match.</h2>
-      <h2 className='text-2xl my-10 font-semibold'>What kind of place are you looking for?</h2>
+    <div style={{ textAlign: "center", padding: "20px" }}>
+      <h2 className="text-2xl text-center mt-10 font-semibold">
+        Welcome! Lets find you a match.
+      </h2>
+      <h2 className="text-2xl my-10 font-semibold">
+        What kind of place are you looking for?
+      </h2>
       <div className="flex justify-between">
         {housingOptions.map((option) => (
-          <div className='flex flex-col items-center' key={option.id} onClick={() => setSelectedType(option.id)}>
-            <Image alt='placeholder' src={`https://source.unsplash.com/random/1`} width={100} height={100} />
-            <p className='text-xl font-semibold'>{option.label}</p>
+          <div
+            className="flex flex-col items-center"
+            key={option.id}
+            onClick={() => setSelectedType(option.id)}
+          >
+            <Image
+              alt="placeholder"
+              src={`https://source.unsplash.com/random/1`}
+              width={100}
+              height={100}
+            />
+            <p className="text-xl font-semibold">{option.label}</p>
             <input
               type="radio"
-              className='sr-only'
+              className="sr-only"
               name="housingType"
               value={option.id}
               checked={selectedType === option.id}
               onChange={handleSelectionChange}
             />
             <div
-              className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selectedType === option.id ? 'bg-primaryBrand' : ''}`}
+              className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selectedType === option.id ? "bg-primaryBrand" : ""}`}
             ></div>
           </div>
         ))}
         {/* Buttons to navigate to the next or previous questions */}
       </div>
       <div className="flex justify-center mt-5 ">
-        <button className='bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg' onClick={handleNext}>NEXT</button>
+        <button
+          className="bg-primaryBrand px-5 py-2 text-2xl text-white rounded-lg"
+          onClick={handleNext}
+        >
+          NEXT
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default ListingTypeRadio;

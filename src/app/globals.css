@@ -76,7 +76,6 @@
   }
 }
 
-
 .cl-userButtonTrigger {
   position: relative;
   z-index: 2;
@@ -106,7 +105,7 @@
 
 .cl-userButtonPopoverCard {
   border: 1px gray solid;
-  margin-top: 6px
+  margin-top: 6px;
 }
 
 .cl-userButtonPopoverCard * {
@@ -149,7 +148,6 @@
   border-radius: 2px;
   /* Completely rounded corners for the scrollbar thumb */
 }
-
 
 .test {
   border-width: 2px;

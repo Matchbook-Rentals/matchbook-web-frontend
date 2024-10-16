@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import Header from './calendar-header';
-import ColumnHeaders from './column-headers';
-import DayGrid from './day-grid';
-import { Booking } from '@prisma/client';
+import React, { useState } from "react";
+import Header from "./calendar-header";
+import ColumnHeaders from "./column-headers";
+import DayGrid from "./day-grid";
+import { Booking } from "@prisma/client";
 
 interface DisplayCalendarProps {
   bookings: Booking[];

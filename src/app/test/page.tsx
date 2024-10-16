@@ -1,9 +1,9 @@
-import React from 'react'
-import prisma from '@/lib/prismadb'
+import React from "react";
+import prisma from "@/lib/prismadb";
 
 // import React from "react";
 import "./styles.css";
-import ProgressBar from './progress-bar';
+import ProgressBar from "./progress-bar";
 
 export default async function HostDashboard() {
   return (
@@ -14,40 +14,84 @@ export default async function HostDashboard() {
         <div className="profile-menu">
           <div className="drop-down-menu">
             <div className="group">
-              <img className="drop-shadow-botton" alt="Drop shadow botton" src="/img/drop-shadow-botton.svg" />
+              <img
+                className="drop-shadow-botton"
+                alt="Drop shadow botton"
+                src="/img/drop-shadow-botton.svg"
+              />
               <img className="line" alt="Line" src="/img/line-6.svg" />
-              <img className="drop-shadow-middle" alt="Drop shadow middle" src="/img/drop-shadow-botton.svg" />
+              <img
+                className="drop-shadow-middle"
+                alt="Drop shadow middle"
+                src="/img/drop-shadow-botton.svg"
+              />
               <img className="line-2" alt="Line" src="/img/line-6.svg" />
-              <img className="drop-shadow-top" alt="Drop shadow top" src="/img/drop-shadow-botton.svg" />
+              <img
+                className="drop-shadow-top"
+                alt="Drop shadow top"
+                src="/img/drop-shadow-botton.svg"
+              />
               <img className="line-3" alt="Line" src="/img/line-6.svg" />
             </div>
           </div>
           <div className="profile-icon">
             <ProgressBar steps={5} currentStep={2} />
-            <img className="drop-shadow-profile" alt="Drop shadow profile" src="/img/drop-shadow-profile.png" />
+            <img
+              className="drop-shadow-profile"
+              alt="Drop shadow profile"
+              src="/img/drop-shadow-profile.png"
+            />
             <div className="overlap-group">
               <div className="ellipse" />
-              <img className="overlap-group" alt="Group" src="/img/group-3.png" />
+              <img
+                className="overlap-group"
+                alt="Group"
+                src="/img/group-3.png"
+              />
             </div>
           </div>
         </div>
-        <img className="drop-shadow-box" alt="Drop shadow box" src="/img/drop-shadow-box.png" />
+        <img
+          className="drop-shadow-box"
+          alt="Drop shadow box"
+          src="/img/drop-shadow-box.png"
+        />
         <div className="profile-menu">
           <div className="drop-down-menu">
             <div className="group">
-              <img className="drop-shadow-botton" alt="Drop shadow botton" src="/img/drop-shadow-botton-1.svg" />
+              <img
+                className="drop-shadow-botton"
+                alt="Drop shadow botton"
+                src="/img/drop-shadow-botton-1.svg"
+              />
               <img className="line" alt="Line" src="public/img/line-6-1.svg" />
-              <img className="drop-shadow-middle" alt="Drop shadow middle" src="/img/drop-shadow-botton-1.svg" />
+              <img
+                className="drop-shadow-middle"
+                alt="Drop shadow middle"
+                src="/img/drop-shadow-botton-1.svg"
+              />
               <img className="line-2" alt="Line" src="/img/line-6-1.svg" />
-              <img className="drop-shadow-top" alt="Drop shadow top" src="/img/drop-shadow-botton-1.svg" />
+              <img
+                className="drop-shadow-top"
+                alt="Drop shadow top"
+                src="/img/drop-shadow-botton-1.svg"
+              />
               <img className="line-3" alt="Line" src="/img/line-6-1.svg" />
             </div>
           </div>
           <div className="profile-icon">
-            <img className="drop-shadow-profile" alt="Drop shadow profile" src="/img/drop-shadow-profile.png" />
+            <img
+              className="drop-shadow-profile"
+              alt="Drop shadow profile"
+              src="/img/drop-shadow-profile.png"
+            />
             <div className="overlap-group">
               <div className="ellipse" />
-              <img className="overlap-group" alt="Group" src="/img/group-3.png" />
+              <img
+                className="overlap-group"
+                alt="Group"
+                src="/img/group-3.png"
+              />
             </div>
           </div>
         </div>
@@ -70,7 +114,11 @@ export default async function HostDashboard() {
           <img className="group-2" alt="Group" src="/img/group-48.png" />
           <div className="path-3" />
         </div>
-        <img className="drop-shadow-box-2" alt="Drop shadow box" src="/img/drop-shadow-box-1.png" />
+        <img
+          className="drop-shadow-box-2"
+          alt="Drop shadow box"
+          src="/img/drop-shadow-box-1.png"
+        />
         <p className="your-properties">
           <span className="text-wrapper-3">Your Proper</span>
           <span className="text-wrapper-4">ties</span>
@@ -114,7 +162,11 @@ export default async function HostDashboard() {
                 <span className="text-wrapper-9"> Ave</span>
               </p>
             </div>
-            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <img
+              className="screenshot"
+              alt="Screenshot"
+              src="/img/screenshot-2024-03-13-at-6-48-12-pm.png"
+            />
             <div className="div-wrapper">
               <div className="text-wrapper-10">FOR RENT</div>
             </div>
@@ -135,7 +187,11 @@ export default async function HostDashboard() {
                 <span className="text-wrapper-9"> Ave</span>
               </p>
             </div>
-            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <img
+              className="screenshot"
+              alt="Screenshot"
+              src="/img/screenshot-2024-03-13-at-6-48-12-pm.png"
+            />
             <div className="div-wrapper">
               <div className="text-wrapper-11">RENTED</div>
             </div>
@@ -156,7 +212,11 @@ export default async function HostDashboard() {
                 <span className="text-wrapper-9"> Ave</span>
               </p>
             </div>
-            <img className="screenshot" alt="Screenshot" src="/img/screenshot-2024-03-13-at-6-48-12-pm.png" />
+            <img
+              className="screenshot"
+              alt="Screenshot"
+              src="/img/screenshot-2024-03-13-at-6-48-12-pm.png"
+            />
             <div className="div-wrapper">
               <div className="text-wrapper-11">RENTED</div>
             </div>
@@ -171,4 +231,4 @@ export default async function HostDashboard() {
       </div>
     </div>
   );
-};
+}

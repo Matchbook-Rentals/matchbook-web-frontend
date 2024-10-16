@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ProgressBarProps {
   steps: number;
@@ -7,7 +7,7 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep }) => {
   const stepWidth = 100 / steps;
-  const progress = ((currentStep - 1) * stepWidth) + stepWidth / 2;
+  const progress = (currentStep - 1) * stepWidth + stepWidth / 2;
 
   return (
     <div className="w-full h-4 bg-gray-200 rounded-full">
@@ -20,8 +20,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep }) => {
           key={index}
           className={`absolute w-4 h-4 rounded-full border-2 border-white transform -translate-x-1/2 transition-colors duration-300 ${
             index + 1 === currentStep
-              ? 'bg-green-500 border-green-500'
-              : 'bg-gray-200 border-gray-200'
+              ? "bg-green-500 border-green-500"
+              : "bg-gray-200 border-gray-200"
           }`}
           style={{ left: `${index * stepWidth}%` }}
         />

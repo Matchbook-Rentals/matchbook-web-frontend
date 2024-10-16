@@ -1,9 +1,19 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
-import { useLoadScript } from '@react-google-maps/api';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import { useLoadScript } from "@react-google-maps/api";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
 export default function ComboboxDemo() {
@@ -29,8 +39,8 @@ export default function ComboboxDemo() {
   } = usePlacesAutocomplete({
     initOnMount: false,
     requestOptions: {
-      types: ['(cities)'],
-      componentRestrictions: { country: 'us' },
+      types: ["(cities)"],
+      componentRestrictions: { country: "us" },
     },
   });
 
@@ -57,9 +67,8 @@ export default function ComboboxDemo() {
     setInputValue(address);
     setValue(address, false);
     clearSuggestions();
-    console.log('place ID', place_id)
-    console.log('address', address)
-
+    console.log("place ID", place_id);
+    console.log("address", address);
 
     const results = await getGeocode({ address });
     const { lat, lng } = await getLatLng(results[0]);
@@ -77,7 +86,10 @@ export default function ComboboxDemo() {
       {suggestions.length > 0 && (
         <ul>
           {suggestions.map(({ place_id, description }) => (
-            <li key={place_id} onClick={() => handleSelect(description, place_id)}>
+            <li
+              key={place_id}
+              onClick={() => handleSelect(description, place_id)}
+            >
               {description}
             </li>
           ))}
@@ -86,8 +98,7 @@ export default function ComboboxDemo() {
 
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <button>{inputValue ?
-            inputValue : "Where to?"}</button>
+          <button>{inputValue ? inputValue : "Where to?"}</button>
         </PopoverTrigger>
         <PopoverContent className="p-0">
           <input
@@ -96,11 +107,15 @@ export default function ComboboxDemo() {
             disabled={!ready}
             placeholder="Search an address"
             type="text"
-            className="w-full h-full text-3xl" />
+            className="w-full h-full text-3xl"
+          />
           {suggestions.length > 0 && (
             <ul>
               {suggestions.map(({ place_id, description }) => (
-                <li key={place_id} onClick={() => handleSelect(description, place_id)}>
+                <li
+                  key={place_id}
+                  onClick={() => handleSelect(description, place_id)}
+                >
                   {description}
                 </li>
               ))}
