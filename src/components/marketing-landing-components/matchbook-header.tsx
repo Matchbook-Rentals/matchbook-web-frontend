@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 export default function MatchbookHeader() {
   const [scrollY, setScrollY] = useState(0);
@@ -46,8 +47,10 @@ export default function MatchbookHeader() {
           <img src="/svg/heart-header.svg" className="h-14 w-14 heart" alt="MatchBook Heart" />
         </div>
         <div className="flex md:space-x-4 items-center">
-          <Link href={'/'}>
-          <Button className="border border-black mr-2 lg:mr-8 lg:text-lg" variant={'outline'}> List your property </Button>
+          <Link href={'/?tab=list#list-your-property'} shallow>
+            <Button className="border border-black mr-2 lg:mr-8 lg:text-lg" variant={'outline'} >
+              List your property
+            </Button>
           </Link>
           <MenuIcon className="h-12 w-12 md:h-14 md:w-14" />
           <UserIcon className="h-12 w-10 md:h-14 md:w-14" />

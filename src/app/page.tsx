@@ -166,9 +166,11 @@ const WebHomePage = () => {
       <Hero />
       <div className="scale-75 mb-12">
         <AdCopy />
+        {/* this is here to temporarily get people to the right marketing info */}
+        <div id='list-your-property' className='mb-16'> </div>
       </div>
       <CountdownDialog />
-      <TabSelector tabs={tabs} className="max-w-[700px] p-2 mx-auto" tabsListClassName="justify-between" />
+      <TabSelector useUrlParams tabs={tabs} className="max-w-[700px] p-2 mx-auto" tabsListClassName="justify-between w-full mx-auto" />
       <MarketingSteps />
       <RentEasyCopy />
       <Footer />
