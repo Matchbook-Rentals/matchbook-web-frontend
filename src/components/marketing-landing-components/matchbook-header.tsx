@@ -27,7 +27,7 @@ export default function MatchbookHeader() {
     // Updated transition classes for a 3-second duration
     <div className={`sticky mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0`}>
       <header
-        className={`relative flex mb-6 px-4 sm:px-12 md:px-16 lg:px-30 xl:px-36 2xl:px-44 justify-between pt-4 items-start border-b-0 pb-2`}
+        className={`relative flex mb-6 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-4 items-start border-b-0 pb-2`}
       >
         <div className="flex items-center">
           <Link href={"/"}>
