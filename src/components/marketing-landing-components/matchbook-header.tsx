@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
+import Link from "next/link";
 
 export default function MatchbookHeader() {
   const [scrollY, setScrollY] = useState(0);
@@ -29,11 +30,11 @@ export default function MatchbookHeader() {
         className={`relative flex mb-6 px-4 sm:px-12 md:px-16 lg:px-30 xl:px-36 2xl:px-44 justify-between pt-4 items-start border-b-0 pb-2`}
       >
         <div className="flex items-center">
+          <Link href={"/"}>
           <img src="logo-nav-new.png" alt="MatchBook Logo" className="hidden sm:block w-full h-14" />
-          <img src="/svg/heart-header.svg" alt="MatchBook Heart" className="sm:hidden h-10 w-10" />
+          <img src="House_Logo.png" alt="MatchBook Heart" className="sm:hidden h-10 w-10" />
+          </Link>
         </div>
-        {translateY}
-        ,{scrollY}
         <div
           className="absolute inset-x-0 bottom-2 rounded-full hidden md:flex justify-center md:w-[70px] lg:w-[100px] mx-auto bg-background"
           style={{
