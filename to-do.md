@@ -35,4 +35,4 @@
 - [x] increase padding on navbar or make it match margins
 - [] List your property button
 - [x] House Image not heart
-- [x] marketing copy for how it works
+- [ ] marketing copy for how it works
