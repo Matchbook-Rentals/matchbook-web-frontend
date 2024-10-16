@@ -51,15 +51,15 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
   });
 
   return (
-    <div className={`text-2xl md:text-3xl lg:text-4xl
-      mx-auto py-12 font-semibold text-black text-center
+    <div className={`text-xl md:text-2xl lg:text-3xl
+      mx-auto py-1 lg:px-8 font-semibold text-black text-center
       w-full max-w-[700px] ${className || ''}`}>
       Find your place, all in once place in:
       <div className="flex pt-6 justify-evenly">
         {Object.keys(timeLeft).map((interval) => (
           <div key={interval} className="flex flex-col justify-center items-center">
-            <span className="text-2xl md:text-3xl lg:text-4xl font-semibold">{timeLeft[interval]}</span>
-            <span className="text-2xl md:text-3xl lg:text-4xl">{interval}</span>
+            <span className="text-xl md:text-2xl lg:text-3xl font-semibold">{timeLeft[interval]}</span>
+            <span className="text-xl md:text-2xl lg:text-3xl">{interval}</span>
           </div>
         ))}
       </div>

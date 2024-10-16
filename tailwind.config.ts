@@ -98,6 +98,24 @@ const config = {
   plugins: [require("tailwindcss-animate")],
 } satisfies Config
 
+const scrollbarHide = {
+  '.scrollbar-hide': {
+    /* IE and Edge */
+    '-ms-overflow-style': 'none',
+    /* Firefox */
+    'scrollbar-width': 'none',
+    /* Safari and Chrome */
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    }
+  }
+}
+
+config.theme.extend = {
+  ...config.theme.extend,
+  ...scrollbarHide
+}
+
 export default withUt({
   ...config
 });

@@ -1,5 +1,59 @@
 'use client'
-import React from "react";
+
+import React, { useState, useEffect } from 'react'
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import Countdown from "@/components/marketing-landing-components/countdown"
+import BrevoIframe from "@/components/home-components/brevo-iframe"
+
+const CountdownDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="
+        w-[95%] sm:w-4/5 md:w-3/5 
+        h-[80vh] sm:h-[80vh] md:h-[80vh]
+        px-1 py-1 "
+      >
+        <div className='overflow-y-scroll overflow-x-hidden'
+          style={{
+            scrollbarWidth: 'none',
+            height: '100%',
+          }}
+        >
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              width: 8px;
+            }
+            div::-webkit-scrollbar-track {
+              background: #f1f1f1;
+            }
+            div::-webkit-scrollbar-thumb {
+              background-color: #888;
+              border-radius: 10px;
+              border: 2px solid #f1f1f1;
+            }
+            div::-webkit-scrollbar-thumb:hover {
+              background: #555;
+            }
+          `}</style>
+          <Countdown />
+          <BrevoIframe />
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+
 import '@/app/utils/animaStyles.css'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Hero from "@/components/home-components/hero";
@@ -9,9 +63,7 @@ import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-co
 import Footer from "@/components/marketing-landing-components/footer";
 import { ApartmentIcon, SingleHomeIcon } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
-import Countdown from "@/components/marketing-landing-components/countdown";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
-import BrevoIframe from "@/components/home-components/brevo-iframe";
 
 const rentMarketingItems = [
   {
@@ -115,10 +167,9 @@ const WebHomePage = () => {
       <div className="scale-75 mb-12">
         <AdCopy />
       </div>
-      <Countdown />
+      <CountdownDialog />
       <TabSelector tabs={tabs} className="max-w-[700px] p-2 mx-auto" tabsListClassName="justify-between" />
       <MarketingSteps />
-      <BrevoIframe />
       <RentEasyCopy />
       <Footer />
     </>

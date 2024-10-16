@@ -31,8 +31,8 @@
 
 #
 - [] update navbar icon (colors)
-- [] Dialog with email form and countdown
-- [] increase padding on navbar or make it match margins
+- [x] Dialog with email form and countdown
+- [x] increase padding on navbar or make it match margins
 - [] List your property button
-- [] House Image not heart
-- [] House Image not heart
+- [x] House Image not heart
+- [x] marketing copy for how it works
