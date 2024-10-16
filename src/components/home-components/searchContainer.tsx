@@ -9,7 +9,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
   return (
     <div className={`mx-auto p-2 ${className || ''}`}>
       <div className="relative">
-        <div className="flex flex-col sm:flex-row p-3 items-center bg-gray-200 rounded-3xl sm:rounded-full shadow-md overflow-hidden disabled">
+        <div className="flex flex-col sm:flex-row p-3 items-center bg-gray-100 rounded-3xl sm:rounded-full shadow-md overflow-hidden disabled">
           <input
             type="text"
             placeholder="Where to?"

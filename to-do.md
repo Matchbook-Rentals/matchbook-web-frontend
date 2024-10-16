@@ -33,6 +33,6 @@
 - [] update navbar icon (colors)
 - [x] Dialog with email form and countdown
 - [x] increase padding on navbar or make it match margins
-- [] List your property button
+- [x] List your property button
 - [x] House Image not heart
 - [ ] marketing copy for how it works
