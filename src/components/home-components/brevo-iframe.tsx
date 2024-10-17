@@ -2,15 +2,21 @@
 
 import React from "react";
 
-const BrevoIframe: React.FC = () => {
+const BrevoIframe = () => {
   return (
     <iframe
-      src="https://2ad770f1.sibforms.com/serve/MUIFAJutuVy3q-IaU_mtt0wjkz_tqMvN7RdEimEeQanCW5H1w7NW-COt3_Bxi_u_rva8KenQamiIS8kGTiXkMYC0qgRabYNaIN2Z3RF7cqtQ1r6lkzSLdZvYPsXrfmBOkecy2eUHShEgRD4VWxU0V9DAGAu-siDUO0qU00PZ7qMq6DiFf_RCN90sSI0Jw_D6IjpIweKu6plsvw12"
-      width="100%"
-      height="100%"
-      style={{ border: "none", margin: "0 auto", overflow: "hidden" }}
-      title="Brevo Form"
-      scrolling="no"
+      width="540"
+      height="305"
+      src="https://2ad770f1.sibforms.com/serve/MUIFAHcHg4cAoKga0ovVndvaqvTLm79G59UuyemMwyOJeTyPhUNp-g6LmJbH4rrhKx7eJbwIbJvtltohK9SDGDwSl0frYWavjdD1nDXykWCYRl2QncBtCCxkYkxW5Z2TTIMR1R1BEKkuRgIVbHRwzmPUq0fsvydxbDT7RH90JklhBcHDRnTnRUWt-ae2ED9iofvTHC0D9WEJa5cc"
+      frameBorder="0"
+      scrolling="auto"
+      allowFullScreen
+      style={{
+        display: "block",
+        marginLeft: "auto",
+        marginRight: "auto",
+        maxWidth: "100%"
+      }}
     />
   );
 };

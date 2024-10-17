@@ -35,7 +35,7 @@ export default function MatchbookHeader() {
             <img
               src="logo-nav-new.png"
               alt="MatchBook Logo"
-              className="hidden sm:block w-full h-14"
+              className="hidden sm:block w-[full] h-14 md:h-14"
             />
             <img
               src="House_Logo.png"
@@ -60,13 +60,13 @@ export default function MatchbookHeader() {
         <div className="flex md:space-x-4 items-center">
           <Link href={"/?tab=list#list-your-property"} shallow>
             <Button
-              className="border border-black mr-2 lg:mr-8 lg:text-lg"
+              className="border px-2  border-black mr-2 lg:mr-8 lg:text-lg"
               variant={"outline"}
             >
               List your property
             </Button>
           </Link>
-          <MenuIcon className="h-12 w-12 md:h-14 md:w-14" />
+          <MenuIcon className=" text-charcoal h-12 w-12 md:h-14 md:w-14" />
           <UserIcon className="h-12 w-10 md:h-14 md:w-14" />
         </div>
         <style jsx>{`
