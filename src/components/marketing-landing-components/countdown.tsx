@@ -52,8 +52,8 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <div
-      className={`text-xl md:text-2xl lg:text-3xl
-      mx-auto py-1 lg:px-8 font-semibold text-black text-center
+      className={`text-lg md:text-xl lg:text-2xl
+      mx-auto py-1 lg:px-8 font-semibold text-black text-left
       w-full max-w-[700px] ${className || ""}`}
     >
       Find your place, all in once place in:

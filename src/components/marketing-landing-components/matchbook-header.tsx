@@ -67,7 +67,7 @@ export default function MatchbookHeader() {
             </Button>
           </Link>
           <MenuIcon className=" text-charcoal h-12 w-12 md:h-14 md:w-14" />
-          <UserIcon className="h-12 w-10 md:h-14 md:w-14" />
+          <UserIcon className=" text-charcoal h-12 w-10 md:h-14 md:w-14" />
         </div>
         <style jsx>{`
           header::before {

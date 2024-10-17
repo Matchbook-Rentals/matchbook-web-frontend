@@ -47,6 +47,7 @@ const CountdownDialog = () => {
               background: #555;
             }
           `}</style>
+          <h2 className="text-5xl text-center mb-8"> Get ready for launch! </h2>
           <Countdown />
           <BrevoIframe />
         </div>
@@ -193,7 +194,7 @@ const WebHomePage = () => {
       <div className="scale-75 mb-12">
         <AdCopy />
         {/* this is here to temporarily get people to the right marketing info */}
-        <div id="list-your-property" className="mb-16"/>
+        <div id="list-your-property" className="mb-16" />
       </div>
       <CountdownDialog />
       <TabSelector
