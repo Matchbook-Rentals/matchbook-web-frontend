@@ -58,7 +58,7 @@ export const MarketingSteps: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="font-semibold text-xl py-5 w-4/5 mx-auto">
+      <div className="font-semibold text-xl py-5 w-4/5 mx-auto min-h-[250px] flex items-center">
         <p>{steps[activeStep].description}</p>
       </div>
     </div>
