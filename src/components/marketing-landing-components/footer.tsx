@@ -4,10 +4,10 @@ import { ApartmentIcon } from "../svgs/svg-components";
 export default function Footer() {
   return (
     <footer className="border-t  border-gray-200 pt-4 pb-2">
-      <div className=" mx-auto flex flex-col md:flex-row justify-between w-full md:w-[90vw] lg:w-[80vw]">
+      <div className=" mx-auto flex flex-col lg:flex-row justify-between w-full md:w-[90vw] lg:w-[80vw]">
         {/* Company Logo and Tagline */}
-        <div className="flex flex-col py-6 items-center gap-4 px-4 sm:px-6 md:px-8">
-          <img className="h-8" src="/logo-nav-new.png" alt="Company Logo" />
+        <div className="flex flex-col  items-center gap-4 px-4 sm:px-6 md:px-8">
+          <img className="h-8" src="/navbar-logo-full.png" alt="Company Logo" />
           <img
             className=" h-[100px]"
             src="/village_footer.png"
@@ -16,7 +16,7 @@ export default function Footer() {
         </div>
 
         {/* Links Section */}
-        <div className="flex justify-between w-full md:w-1/2 gap-2 lg:gap-0 ">
+        <div className="flex justify-between w-full pt-3 lg:w-1/2 gap-2 lg:gap-0 ">
           {/* Navigation Links */}
           <div className="text-lg mx-auto ">
             <h3 className="text-xl font-semibold">Navigation</h3>

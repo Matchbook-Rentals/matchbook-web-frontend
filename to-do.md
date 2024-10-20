@@ -45,12 +45,12 @@
 - [ ] marketing copy for how it works
 
 
--[ ] New navbar
+-[x] New navbar
 -[ ] new countdown, top padding in 
 -[ ] get ready for launch left-align smaller by 1 
 -[ ] uncover the x
 -[ ] new footer spacing 
 -[x] change click behavior of how it works 
--[ ] book now button
+-[ ] book now button and list open dialog
 -[ ] add heart to bottom
 -[x] for guests and hosts
