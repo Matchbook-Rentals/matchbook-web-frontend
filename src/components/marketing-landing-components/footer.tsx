@@ -3,20 +3,20 @@ import { ApartmentIcon } from "../svgs/svg-components";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 pt-4 pb-2">
-      <div className="container max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <footer className="border-t  border-gray-200 pt-4 pb-2">
+      <div className=" mx-auto flex flex-col md:flex-row justify-between w-full md:w-[90vw] lg:w-[80vw]">
         {/* Company Logo and Tagline */}
-        <div className="flex flex-col items-center gap-4 px-4 sm:px-6 md:px-8">
+        <div className="flex flex-col py-6 items-center gap-4 px-4 sm:px-6 md:px-8">
           <img className="h-8" src="/logo-nav-new.png" alt="Company Logo" />
           <img
-            className="w-full max-w-[300px] sm:max-w-[320px] md:max-w-[340px] h-auto"
+            className=" h-[100px]"
             src="/village_footer.png"
             alt="Village Footer"
           />
         </div>
 
         {/* Links Section */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 gap-8">
+        <div className="flex justify-between w-full md:w-1/2 gap-2 lg:gap-0 ">
           {/* Navigation Links */}
           <div className="text-lg mx-auto ">
             <h3 className="text-xl font-semibold">Navigation</h3>
@@ -76,7 +76,7 @@ export default function Footer() {
           {/* Social Media Links */}
           <div className="text-lg mx-auto">
             <h3 className="text-xl font-semibold">Follow Us</h3>
-            <div className="flex gap-2 pt-6">
+            <div className="flex gap-x-2 pt-6  ">
               <Link
                 href="#"
                 className="text-gray-500 hover:text-black"

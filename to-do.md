@@ -43,3 +43,14 @@
 - [x] List your property button
 - [x] House Image not heart
 - [ ] marketing copy for how it works
+
+
+-[ ] New navbar
+-[ ] new countdown, top padding in 
+-[ ] get ready for launch left-align smaller by 1 
+-[ ] uncover the x
+-[ ] new footer spacing 
+-[x] change click behavior of how it works 
+-[ ] book now button
+-[ ] add heart to bottom
+-[x] for guests and hosts

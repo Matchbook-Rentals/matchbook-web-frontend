@@ -47,7 +47,7 @@ const CountdownDialog = () => {
               background: #555;
             }
           `}</style>
-          <h2 className="text-5xl text-center mb-8"> Get ready for launch! </h2>
+          <h2 className="text-5xl text-center mb-8 font-semibold"> Get ready for launch! </h2>
           <Countdown />
           <BrevoIframe />
         </div>
@@ -69,6 +69,7 @@ import {
 } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const rentMarketingItems = [
   {
@@ -157,7 +158,7 @@ const ApartmentImage = ({ className }) => {
 const tabs: Tab[] = [
   {
     value: "rent",
-    label: "For Renters",
+    label: "For Guests",
     className:
       "bg-primaryBrand/80 hover:bg-primaryBrand hover:text-black  w-1/2",
     textSize: "text-lg",
@@ -172,7 +173,7 @@ const tabs: Tab[] = [
   },
   {
     value: "list",
-    label: "For Owners",
+    label: "For Hosts",
     className: "bg-blueBrand/80 hover:bg-blueBrand hover:text-black w-1/2",
     textSize: "text-lg",
     content: (
