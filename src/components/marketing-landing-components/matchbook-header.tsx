@@ -14,12 +14,12 @@ export default function MatchbookHeader() {
       className={`sticky mb-0 md:mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}
     >
       <header
-        className={`relative flex mb-0 test w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-4 items-start border-b-0 pb-2`}
+        className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-4 items-start border-b-0 pb-2`}
       >
         <div className="flex items-center" >
           <Link href={"/"}>
             <img
-              src="logo-nav-new.png"
+              src="navbar-logo-full.png"
               alt="MatchBook Logo"
               className="hidden sm:block w-[full] h-14 md:h-14"
             />
