@@ -5,16 +5,14 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Countdown from "@/components/marketing-landing-components/countdown";
 import BrevoIframe from "@/components/home-components/brevo-iframe";
 
-const CountdownDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const CountdownDialog = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 1000);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [setIsOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -25,7 +23,7 @@ const CountdownDialog = () => {
         px-1 py-1 "
       >
         <div
-          className="overflow-y-scroll overflow-x-hidden"
+          className="overflow-y-scroll overflow-x-hidden px-2"
           style={{
             scrollbarWidth: "none",
             height: "100%",
@@ -47,7 +45,7 @@ const CountdownDialog = () => {
               background: #555;
             }
           `}</style>
-          <h2 className="text-5xl text-center mb-8 font-semibold"> Get ready for launch! </h2>
+          <h2 className="text-4xl text-center mt-2 mb-4 font-semibold"> Get ready for launch! </h2>
           <Countdown />
           <BrevoIframe />
         </div>
@@ -69,7 +67,7 @@ import {
 } from "@/components/svgs/svg-components";
 import TabSelector from "@/components/ui/tab-selector";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { Button } from "@/components/ui/button";
 
 const rentMarketingItems = [
   {
@@ -188,24 +186,30 @@ const tabs: Tab[] = [
 ];
 
 const WebHomePage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <MatchbookHeader />
+      <MatchbookHeader handleListProperty={() => setIsOpen(true)} />
       <Hero />
       <div className="scale-75 mb-12">
         <AdCopy />
         {/* this is here to temporarily get people to the right marketing info */}
         <div id="list-your-property" className="mb-16" />
       </div>
-      <CountdownDialog />
+      <CountdownDialog isOpen={isOpen} setIsOpen={setIsOpen} />
       <TabSelector
         useUrlParams
         tabs={tabs}
         className="max-w-[700px] p-2 mx-auto"
         tabsListClassName="justify-between w-full mx-auto"
       />
+      <div className="w-full justify-center flex">
+        <Button className="bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm" onClick={() => setIsOpen(true)}> Get Notified </Button>
+      </div>
       <MarketingSteps />
       <RentEasyCopy />
+      <div className="flex w-full justify-center"> <img className="h-12 mb-8" src="/heart-logo.png" /> </div>
       <Footer />
     </>
   );

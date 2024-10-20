@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 
-export default function MatchbookHeader() {
-  const [scrollY, setScrollY] = useState(0);
+export default function MatchbookHeader({ handleListProperty }) {
 
 
   return (
@@ -39,6 +37,7 @@ export default function MatchbookHeader() {
           <Link href={"/?tab=list#list-your-property"} shallow>
             <Button
               className="border px-2 py-1  border-black mr-0 lg:text-lg"
+              onClick={handleListProperty}
               variant={"outline"}
             >
               List your property
