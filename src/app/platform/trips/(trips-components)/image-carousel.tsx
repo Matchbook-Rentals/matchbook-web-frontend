@@ -3,6 +3,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
 import { PictureIcon } from '@/components/svgs/svg-components';
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
@@ -11,6 +12,7 @@ interface ListingImageCarouselProps {
 const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages }) => {
   const [activeImage, setActiveImage] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   if (listingImages.length === 0) {
     return <p>No listing Images</p>;
@@ -33,13 +35,21 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
     setActiveImage(index);
   };
 
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
-    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[40vh]">
+    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-4 w-full h-[40vh]">
       <div className="w-full hidden md:flex md:w-1/2  md:h-full relative">
         <img
           src={listingImages[activeImage]?.url}
           alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-lg"
         />
       </div>
       <div className="w-full md:w-1/2 md:h-full relative">
@@ -57,14 +67,33 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                       <img
                         src={image.url}
                         alt={`${image.category} image ${image.rank}`}
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full rounded-lg"
                       />
 
                       {idx === 3 && (
-                        <Button className="absolute md:hidden bottom-[15%] h-6 right-[5%] flex justify-between gap-x-2  bg-white text-black hover:bg-gray-200">
-                          <img src='/picture-icon.png' className='h-5 w-5' />
-                          <p className=''>More</p>
-                        </Button>
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button
+                              onClick={handleDialogOpen}
+                              className="absolute md:hidden bottom-[15%] h-6 right-[5%] flex justify-between gap-x-2 bg-white text-black hover:bg-gray-200"
+                            >
+                              <img src='/picture-icon.png' className='h-5 w-5' />
+                              <p className=''>More</p>
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-[90vw] max-h-[90vh] overflow-y-auto">
+                            <div className="grid grid-cols-2 sm:grid-cols-2 ">
+                              {uniqueImages.map((image) => (
+                                <img
+                                  key={image.id}
+                                  src={image.url}
+                                  alt={`${image.category} image ${image.rank}`}
+                                  className="w-full h-auto rounded-lg border my-2 object-cover"
+                                />
+                              ))}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       )}
 
                     </div>
@@ -88,3 +117,4 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 };
 
 export default ListingImageCarousel;
+
