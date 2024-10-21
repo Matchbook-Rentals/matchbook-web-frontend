@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import { ListingImage } from '@prisma/client';
+import { Button } from '@/components/ui/button';
+import { PictureIcon } from '@/components/svgs/svg-components';
 
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
@@ -32,8 +34,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[50vh]">
-      <div className="w-full md:w-1/2  md:h-full relative">
+    <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-8 w-full h-[40vh]">
+      <div className="w-full hidden md:flex md:w-1/2  md:h-full relative">
         <img
           src={listingImages[activeImage]?.url}
           alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
@@ -44,27 +46,41 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
         <Carousel opts={{ loop: true }} setApi={setApi} className="">
           <CarouselContent className="">
             {chunkedImages.map((chunk, chunkIndex) => (
-              <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[50vh] p-0">
-                <div className="grid grid-cols-2 grid-rows-2 gap-2 ">
-                  {chunk.map((image) => (
+              <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[40vh] p-0">
+                <div className="grid grid-cols-2 grid-rows-2 gap-4 ">
+                  {chunk.map((image, idx) => (
                     <div
                       key={`image-${image.id}`}
-                      className="relative cursor-pointer h-[25vh] overflow-hidden"
+                      className="relative cursor-pointer  h-[20vh] overflow-hidden"
                       onClick={() => handleImageClick(listingImages.findIndex(img => img.id === image.id))}
                     >
                       <img
                         src={image.url}
                         alt={`${image.category} image ${image.rank}`}
-                        className=" object-cover"
+                        className="object-cover w-full h-full"
                       />
+
+                      {idx === 3 && (
+                        <Button className="absolute md:hidden bottom-[15%] h-6 right-[5%] flex justify-between gap-x-2  bg-white text-black hover:bg-gray-200">
+                          <img src='/picture-icon.png' className='h-5 w-5' />
+                          <p className=''>More</p>
+                        </Button>
+                      )}
+
                     </div>
                   ))}
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute -left-4 md:-left-5 lg:-left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-          <CarouselNext className="absolute -right-4 md:-right-5 lg:-right-0 bottom-6  h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+          <CarouselPrevious className="absolute -left-0 h-16 w-16 text-white
+                                       bg-black/10 hover:bg-black/70 
+                                       hover:text-white"
+          />
+          <CarouselNext className="absolute -right-0 bottom-6 h-16 w-16
+                                   hover:bg-black/70 hover:text-white
+                                   text-white bg-black/10"
+          />
         </Carousel>
       </div>
     </div>

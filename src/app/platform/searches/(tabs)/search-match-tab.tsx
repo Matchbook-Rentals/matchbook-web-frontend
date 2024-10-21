@@ -77,12 +77,16 @@ const MatchViewTab: React.FC = () => {
     return null;
   }
   if (showListings.length === 0) {
-    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.trip?.id}</div>;
+    return (
+      <div onClick={() => console.log(state.listings)}>
+        No listings available. {listings.length} {state.trip?.id}
+      </div>
+    )
   }
 
   // Main component render
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
         <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore?.toFixed(2)}</Button>
@@ -107,7 +111,9 @@ const MatchViewTab: React.FC = () => {
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
           Icon={<HeartIcon height={40} width={40} />}
-          className="bg-primaryBrand/80 hover:bg-primaryBrand w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm transition-all duration-200"
+          className="bg-primaryBrand/80 hover:bg-primaryBrand
+                     w-1/5 py-2 rounded-lg text-center flex
+                     justify-center text-white text-sm transition-all duration-200"
         />
       </div>
       <TitleAndStats
@@ -123,6 +129,7 @@ const MatchViewTab: React.FC = () => {
         bedrooms={showListings[0]?.bedrooms}
         searchLocation={state.trip?.locationString}
       />
+
       <DescriptionAndAmenities
         description={showListings[0]?.description}
         amenities={getListingAmenities(showListings[0])}
@@ -133,6 +140,7 @@ const MatchViewTab: React.FC = () => {
         roomCount={showListings[0]?.roomCount}
         propertyType={showListings[0]?.category}
       />
+
     </div>
   );
 };

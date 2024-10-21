@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
+import { ListingAndImages } from '@/types';
 
 interface MapMarker {
   lat: number;
