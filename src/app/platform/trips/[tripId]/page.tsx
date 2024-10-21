@@ -21,7 +21,7 @@ interface Tab {
 const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
 
-  const tabSize = 'text-xl'
+  const tabSize = 'text-lg sm:text-xl'
   const tabs: Tab[] = [
     {
       label: 'Matchmaker',
@@ -63,7 +63,7 @@ const TripsPage: React.FC = () => {
           tabs={tabs}
           className='mx-auto w-full'
           tabsClassName='w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex justify-center gap-x-4 w-full  mx-auto'
+          tabsListClassName='flex justify-center md:gap-x-4 w-full  mx-auto'
         />
       </div>
     </div>

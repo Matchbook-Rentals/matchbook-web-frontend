@@ -54,7 +54,10 @@ const MatchmakerTab: React.FC = () => {
   });
 
   // Updated handleFilterChange function to handle all filter changes, including arrays
-  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean | string[] | Date) => {
+  const handleFilterChange = (
+    key: keyof FilterOptions,
+    value: string | number | boolean | string[] | Date
+  ) => {
     setFilters(prevFilters => ({
       ...prevFilters,
       [key]: value,
@@ -62,8 +65,9 @@ const MatchmakerTab: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex flex-col sm:flex-row w-full max-w-[900px] mx-auto justify-between items-center mb-4 gap-4">
+    <div className="flex flex-col w-full text-[#404040]">
+      <div className="flex flex-col sm:flex-row w-full max-w-[900px]
+                      mx-auto justify-between items-center mb-4 gap-4">
         {/* View Selector and sub-small filter options */}
         <div className="flex justify-center w-full sm:w-auto">
           <div className="flex border shadow-lg rounded-full">
