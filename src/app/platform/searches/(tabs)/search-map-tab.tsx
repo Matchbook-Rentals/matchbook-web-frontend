@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
 
@@ -10,7 +10,7 @@ interface MapMarker {
 }
 
 const MapView: React.FC = () => {
-  const { state } = useSearchContext();
+  const { state } = useTripContext();
   const { listings } = state;
 
   const getListingStatus = (listing: ListingAndImages) => {
@@ -31,7 +31,7 @@ const MapView: React.FC = () => {
     status: getListingStatus(listing)
   }));
 
-  const center = { lat: state.currentSearch?.latitude, lng: state.currentSearch?.longitude };
+  const center = { lat: state.trip?.latitude, lng: state.trip?.longitude };
   const markers: MapMarker[] = state.listings.map((listing) => ({
     title: listing.title,
     lat: listing.latitude,

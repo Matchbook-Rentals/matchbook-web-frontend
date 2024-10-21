@@ -1,3 +1,4 @@
+//Imports
 import React from 'react';
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
@@ -35,6 +36,7 @@ interface FilterOptionsDialogProps {
   onOpenChange: (open: boolean) => void;
   filters: FilterOptions;
   onFilterChange: (key: keyof FilterOptions, value: string | number | boolean | string[]) => void;
+  className: string;
 }
 
 const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
@@ -42,6 +44,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   onOpenChange,
   filters,
   onFilterChange,
+  className,
 }) => {
   // Ensure that utilities and propertyTypes are initialized as arrays
   const safeFilters = {
@@ -53,9 +56,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center rounded-lg p-2">
+        <Button variant="outline" className={`flex items-center rounded-lg p-2 ${className}`}>
           <FilterIcon size={24} className="mr-2" />
-          <span>Filters</span>
+          <span className=''>Filters</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
@@ -189,7 +192,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           </div>
         </div>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 };
 

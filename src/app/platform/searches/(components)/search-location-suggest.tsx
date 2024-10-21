@@ -1,11 +1,12 @@
 "use client";
-
+//Imports
 import React, { useState, useEffect } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useTripContext } from "@/contexts/trip-context-provider";
 import { updateTrip } from "@/app/actions/trips";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface LocationSuggestProps {
   triggerClassName?: string;
@@ -14,7 +15,6 @@ interface LocationSuggestProps {
 
 export default function LocationSuggest({ triggerClassName = "", contentClassName = "" }: LocationSuggestProps) {
   const { state, actions } = useTripContext();
-
   const [inputValue, setInputValue] = useState("");
   const [displayValue, setDisplayValue] = useState(state.trip?.locationString);
   const [suggestions, setSuggestions] = useState([]);
@@ -59,8 +59,9 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
         const updatedTrip = await updateTrip(newTrip);
         if (updatedTrip) {
           toast({
-            title: "Trip location updated",
-            description: "Your trip location has been successfully updated.",
+            title: "Trip location changed successfully",
+            description: "Shown listings may change",
+            style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' } // Equivalent to grey-100 in most CSS color systems
           });
           router.refresh();
         } else {
@@ -80,9 +81,9 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className={`placeholder:text-gray-500 text-gray-500 focus:outline-none rounded-full text-lg h-full p-2 md:p-3 cursor-pointer ${triggerClassName}`}>
+        <Button variant='ghost' className={` focus:outline-none rounded-l-full text-md h-full p-2 md:p-3 cursor-pointer ${triggerClassName}`}>
           {displayValue ? displayValue : "Where to?"}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className={`rounded-2xl ${contentClassName}`}>
         <input

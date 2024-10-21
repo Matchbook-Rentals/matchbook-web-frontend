@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ListingAndImages } from '@/types';
 import { SearchListingCard } from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -10,7 +10,7 @@ interface SearchListingsGridProps {
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
-  const { state } = useSearchContext();
+  const { state } = useTripContext();
   const [page, setPage] = useState(1);
   const loader = useRef(null);
 

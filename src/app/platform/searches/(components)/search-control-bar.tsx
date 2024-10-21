@@ -1,3 +1,4 @@
+//Imports
 import React, { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -67,15 +68,15 @@ const SearchControlBar: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-between items-center border-2 shadow-lg rounded-full">
+    <div className="flex justify-between px-1 items-center border-2 shadow-lg rounded-full">
       {/* Destination trigger */}
       <LocationSuggest />
       <Separator orientation="vertical" className="h-10" />
       {/* Date triggers */}
       <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
         <PopoverTrigger asChild>
-          <div className="flex gap-x-1 px-2">
-            <Button variant="ghost" className="px-2">
+          <div className="flex gap-x-1 ">
+            <Button variant="ghost" className="">
               <div className="text-left">
                 <div className="text-md ">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
               </div>
@@ -97,7 +98,7 @@ const SearchControlBar: React.FC = () => {
       {/* Guests trigger */}
       <Popover open={guestPopoverOpen} onOpenChange={setGuestPopoverOpen}>
         <PopoverTrigger asChild>
-          <Button variant="ghost" className="h-10 px-4">
+          <Button variant="ghost" className="rounded-r-full">
             <div className="text-left">
               <div className="text-md">
                 {localGuests.numAdults + localGuests.numChildren} Guests

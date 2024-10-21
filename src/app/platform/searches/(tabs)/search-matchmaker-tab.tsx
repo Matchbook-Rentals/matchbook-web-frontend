@@ -5,6 +5,7 @@ import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
 import { useTripContext } from '@/contexts/trip-context-provider';
+import { Separator } from '@radix-ui/react-select';
 
 // Updated FilterOptions interface
 interface FilterOptions {
@@ -62,32 +63,45 @@ const MatchmakerTab: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex w-1/2 mx-auto justify-between items-center mb-4">
-        {/* View Selector */}
-        <div className="flex border shadow-lg rounded-lg">
-          <button
-            className={`p-2 ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('swipe')}
-          >
-            <FilterIcon size={24} />
-          </button>
-          <button
-            className={`p-2 ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('map')}
-          >
-            <MapIcon size={24} />
-          </button>
+      <div className="flex flex-col sm:flex-row w-full max-w-[900px] mx-auto justify-between items-center mb-4 gap-4">
+        {/* View Selector and sub-small filter options */}
+        <div className="flex justify-center w-full sm:w-auto">
+          <div className="flex border shadow-lg rounded-full">
+            <button
+              className={`p-2 rounded-l-full ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
+              onClick={() => setViewMode('swipe')}
+            >
+              <FilterIcon size={24} />
+            </button>
+            <Separator className='h-10' />
+            <button
+              className={`p-2 rounded-r-full ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+              onClick={() => setViewMode('map')}
+            >
+              <MapIcon size={24} />
+            </button>
+          </div>
+          <FilterOptionsDialog
+            isOpen={isFilterOpen}
+            onOpenChange={setIsFilterOpen}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            className='flex sm:hidden ml-2'
+          />
         </div>
 
         {/* Input Fields */}
-        <SearchControlBar />
+        <div className="w-full sm:w-auto flex justify-center">
+          <SearchControlBar />
+        </div>
 
-        {/* Filters */}
+        {/* Filters for larger screens */}
         <FilterOptionsDialog
           isOpen={isFilterOpen}
           onOpenChange={setIsFilterOpen}
           filters={filters}
           onFilterChange={handleFilterChange}
+          className='hidden sm:flex'
         />
       </div>
 
