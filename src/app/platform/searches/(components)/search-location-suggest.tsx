@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { useSearchContext } from "@/contexts/search-context-provider";
+import { useTripContext } from "@/contexts/trip-context-provider";
+import { updateTrip } from "@/app/actions/trips";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 interface LocationSuggestProps {
   triggerClassName?: string;
@@ -10,16 +13,17 @@ interface LocationSuggestProps {
 }
 
 export default function LocationSuggest({ triggerClassName = "", contentClassName = "" }: LocationSuggestProps) {
-  const { state, actions } = useSearchContext();
+  const { state, actions } = useTripContext();
 
   const [inputValue, setInputValue] = useState("");
-  const [displayValue, setDisplayValue] = useState(state.currentSearch?.locationString);
+  const [displayValue, setDisplayValue] = useState(state.trip?.locationString);
   const [suggestions, setSuggestions] = useState([]);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    setDisplayValue(state.currentSearch?.locationString);
-  }, [state.currentSearch]);
+    setDisplayValue(state.trip?.locationString);
+  }, [state.trip]);
 
   const handleInput = async (e) => {
     const newValue = e.target.value;
@@ -49,7 +53,24 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
       const data = await response.json();
       if (data.results && data.results.length > 0) {
         const { lat, lng } = data.results[0].geometry.location;
-        actions.setCurrentSearch(prev => ({ ...prev, locationString: description, latitude: lat, longitude: lng }));
+        const newTrip = { ...state.trip, locationString: description, latitude: lat, longitude: lng }
+        actions.setTrip(prev => ({ ...prev, locationString: description, latitude: lat, longitude: lng }));
+        // Update the trip and handle the response
+        const updatedTrip = await updateTrip(newTrip);
+        if (updatedTrip) {
+          toast({
+            title: "Trip location updated",
+            description: "Your trip location has been successfully updated.",
+          });
+          router.refresh();
+        } else {
+          // Handle the case where updateTrip fails or returns falsy
+          toast({
+            title: "Update failed",
+            description: "There was an error updating your trip location. Please try again.",
+            variant: "destructive",
+          });
+        }
       }
     } catch (error) {
       console.error("Error fetching geocode:", error);

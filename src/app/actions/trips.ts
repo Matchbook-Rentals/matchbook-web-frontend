@@ -30,6 +30,33 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
   }
 }
 
+export async function getAllUserTrips(): Promise<TripAndMatches[]> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    const userTrips = await prisma.trip.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        matches: true,
+        dislikes: true,
+        favorites: true,
+        housingRequests: true,
+        allParticipants: true,
+        applications: true,
+      },
+    });
+    return userTrips;
+  } catch (error) {
+    console.error('Error fetching all trips for user:', error);
+    throw new Error('Failed to fetch all trips for user');
+  }
+}
+
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
   const { userId } = auth();
   if (!userId) {
@@ -123,3 +150,29 @@ export async function deleteTrip(tripId: string): Promise<void> {
     throw new Error('Failed to delete trip');
   }
 }
+
+export async function getTripById(tripId: string): Promise<TripAndMatches | null> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: {
+        matches: true,
+        dislikes: true,
+        favorites: true,
+        housingRequests: true,
+        allParticipants: true,
+      },
+    });
+
+    return trip;
+  } catch (error) {
+    console.error('Error fetching trip by ID:', error);
+    throw new Error('Failed to fetch trip');
+  }
+}
+

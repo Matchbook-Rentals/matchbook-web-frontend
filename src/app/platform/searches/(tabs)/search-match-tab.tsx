@@ -7,7 +7,8 @@ import { CrossIcon, RewindIcon } from 'lucide-react';
 import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
-import { useSearchContext } from '@/contexts/search-context-provider';
+//import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
@@ -15,14 +16,14 @@ import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
 import { Button } from '@/components/ui/button';
 
 const MatchViewTab: React.FC = () => {
-  const { state, actions } = useSearchContext();
+  const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
   const { setViewedListings, setLookup } = actions;
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
-    const actionId = await createDbFavorite(state.currentSearch?.id, listing.id);
+    const actionId = await createDbFavorite(state.trip?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'favorite', actionId }]);
     setLookup(prev => ({
       ...prev,
@@ -31,7 +32,7 @@ const MatchViewTab: React.FC = () => {
   };
 
   const handleReject = async (listing: ListingAndImages) => {
-    const actionId = await createDbDislike(state.currentSearch?.id, listing.id);
+    const actionId = await createDbDislike(state.trip?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'dislike', actionId }]);
     setLookup(prev => ({
       ...prev,
@@ -76,7 +77,7 @@ const MatchViewTab: React.FC = () => {
     return null;
   }
   if (showListings.length === 0) {
-    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.currentSearch?.id}</div>;
+    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.trip?.id}</div>;
   }
 
   // Main component render
@@ -84,7 +85,7 @@ const MatchViewTab: React.FC = () => {
     <div className="w-full">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
       <div className="button-control-box flex justify-around p-5">
-        <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore.toFixed(2)}</Button>
+        <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore?.toFixed(2)}</Button>
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
@@ -120,7 +121,7 @@ const MatchViewTab: React.FC = () => {
         deposit={showListings[0]?.depositSize}
         sqft={showListings[0]?.squareFootage}
         bedrooms={showListings[0]?.bedrooms}
-        searchLocation={state.currentSearch?.locationString}
+        searchLocation={state.trip?.locationString}
       />
       <DescriptionAndAmenities
         description={showListings[0]?.description}

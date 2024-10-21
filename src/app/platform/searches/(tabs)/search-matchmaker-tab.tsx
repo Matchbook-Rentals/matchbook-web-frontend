@@ -4,7 +4,7 @@ import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
-import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 
 // Updated FilterOptions interface
 interface FilterOptions {
@@ -30,7 +30,7 @@ interface FilterOptions {
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { state } = useSearchContext();
+  const { state } = useTripContext();
   // Updated initial state for filters
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: 0,
@@ -40,14 +40,14 @@ const MatchmakerTab: React.FC = () => {
     baths: 'Any',
     furnished: false,
     unfurnished: false,
-    moveInDate: state.currentSearch?.startDate || new Date(),
-    moveOutDate: state.currentSearch?.endDate || new Date(),
+    moveInDate: state.trip?.startDate || new Date(),
+    moveOutDate: state.trip?.endDate || new Date(),
     flexibleMoveIn: false,
     flexibleMoveOut: false,
-    flexibleMoveInStart: state.currentSearch?.startDate || new Date(),
-    flexibleMoveInEnd: state.currentSearch?.startDate || new Date(),
-    flexibleMoveOutStart: state.currentSearch?.endDate || new Date(),
-    flexibleMoveOutEnd: state.currentSearch?.endDate || new Date(),
+    flexibleMoveInStart: state.trip?.startDate || new Date(),
+    flexibleMoveInEnd: state.trip?.startDate || new Date(),
+    flexibleMoveOutStart: state.trip?.endDate || new Date(),
+    flexibleMoveOutEnd: state.trip?.endDate || new Date(),
     propertyTypes: [],
     utilities: [],
   });
@@ -62,7 +62,7 @@ const MatchmakerTab: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex w-1/2 mx-auto justify-between items-center mb-4">
         {/* View Selector */}
         <div className="flex border shadow-lg rounded-lg">
           <button
