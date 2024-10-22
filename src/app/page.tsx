@@ -9,7 +9,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 1500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [setIsOpen]);
@@ -19,11 +19,10 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
       <DialogContent
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
-        h-[80vh] sm:h-[80vh] md:h-[80vh]
-        px-1 py-1 "
+        h-[75vh] md:h-[75vh] px-1 pt-4 "
       >
         <div
-          className="overflow-y-scroll overflow-x-hidden px-2"
+          className="overflow-y-hidden overflow-x-hidden px-2"
           style={{
             scrollbarWidth: "none",
             height: "100%",
@@ -45,7 +44,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
               background: #555;
             }
           `}</style>
-          <h2 className="text-4xl text-center mt-2 mb-4 font-semibold"> Get ready for launch! </h2>
+          <h2 className="text-4xl text-left pl-12 mt-2 mb-4 font-semibold">Get ready for launch!</h2>
           <Countdown />
           <BrevoIframe />
         </div>

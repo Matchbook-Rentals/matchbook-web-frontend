@@ -118,16 +118,19 @@
 }
 
 .custom-scrollbar {
-  scrollbar-width: thin;
+  /*scrollbar-width: thin;*/
+  scrollbar-width: auto;
   /* For Firefox */
-  scrollbar-color: #a3b899 transparent;
+  scrollbar-color: #4c4c4c transparent;
   scroll-behavior: smooth;
   /* For Firefox */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  /* Width of the scrollbar */
+  width: 6px;
+  /* Width of the vertical scrollbar */
+  height: 4px;
+  /* Height of the horizontal scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -136,17 +139,29 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #a3b899;
+  background-color: #4c4c4c;
   /* Color of the scrollbar thumb */
-  border-radius: 2px;
-  /* Completely rounded corners for the scrollbar thumb */
+  border-radius: 3px;
+  /* Rounded corners for the scrollbar thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:horizontal {
+  height: 4px;
+  /* Height of the horizontal scrollbar thumb */
+}
+
+.custom-scrollbar::-moz-scrollbar {
+  width: 6px;
+  /* Width of the vertical scrollbar for Firefox */
+  height: 4px;
+  /* Height of the horizontal scrollbar for Firefox */
 }
 
 .custom-scrollbar::-moz-scrollbar-thumb {
-  background-color: #a3b899;
+  background-color: #4c4c4c;
   /* Color of the scrollbar thumb */
-  border-radius: 2px;
-  /* Completely rounded corners for the scrollbar thumb */
+  border-radius: 3px;
+  /* Rounded corners for the scrollbar thumb */
 }
 
 .test {

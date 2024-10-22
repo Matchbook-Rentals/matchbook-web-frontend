@@ -4,8 +4,8 @@ import { Inter, Lora, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-const lora = Lora({ subsets: ["latin"] });
-const montserrat = Montserrat({ subsets: ["latin"] });
+const lora = Lora({ subsets: ["latin"], variable: '--font-lora' });
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 export const metadata: Metadata = {
   title: "Matchbook Rentals | Coming Soon",

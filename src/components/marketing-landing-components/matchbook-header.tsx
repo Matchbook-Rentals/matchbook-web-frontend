@@ -12,7 +12,7 @@ export default function MatchbookHeader({ handleListProperty }) {
       className={`sticky mb-0 md:mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}
     >
       <header
-        className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-4 items-start border-b-0 pb-2`}
+        className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-2 items-center border-b-0 pb-2`}
       >
         <div className="flex items-center " >
           <Link href={"/"}>
@@ -33,18 +33,18 @@ export default function MatchbookHeader({ handleListProperty }) {
           className="h-10 w-8 hidden md:flex "
           alt="MatchBook Heart"
         />
-        <div className="flex md:space-x-1 items-center">
+        <div className="flex md:space-x-1 items-center ">
           <Link href={"/?tab=list#list-your-property"} shallow>
             <Button
-              className="border px-2 py-1  border-black mr-0 lg:text-lg"
+              className="border px-2 py-1  border-black lg:mr-0 lg:text-[15px] "
               onClick={handleListProperty}
               variant={"outline"}
             >
               List your property
             </Button>
           </Link>
-          <MenuIcon className=" text-charcoal h-12 w-12 " />
-          <UserIcon className="  h-12 w-12 " />
+          <MenuIcon className=" text-charcoal h-10 w-10  lg:h-11 lg:w-11" />
+          <UserIcon className="  h-10 w-10 lg:h-11 lg:w-11" />
         </div>
       </header>
     </div>
