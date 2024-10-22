@@ -42,7 +42,16 @@ export const MarketingSteps: React.FC = () => {
             {steps.map((step, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div
-                  className={`w-10 h-10 rounded-full ${index === activeStep ? "bg-pinkBrand text-white border-pinkBrand" : "bg-white text-black"} flex items-center justify-center font-bold mb-2 border-2 ${index === activeStep ? "border-pinkBrand" : "border-black"} cursor-pointer`}
+                  className={`
+                  w-10 h-10 rounded-full 
+                  ${index === activeStep
+                      ? "bg-pinkBrand text-white border-pinkBrand"
+                      : "bg-white text-black"
+                    }
+    flex items-center justify-center font-bold mb-2 border-2 
+    ${index === activeStep ? "border-pinkBrand" : "border-black"}
+    cursor-pointer
+  `}
                   onClick={() => setActiveStep(index)}
                 >
                   {index + 1}
@@ -58,7 +67,7 @@ export const MarketingSteps: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="font-semibold text-xl py-5 w-4/5 mx-auto min-h-[250px] flex items-center">
+      <div className="font-semibold text-xl mb-5 py-5 w-4/5 mx-auto min-h-[250px] flex items-start">
         <p>{steps[activeStep].description}</p>
       </div>
     </div>

@@ -200,10 +200,10 @@ const WebHomePage = () => {
       <TabSelector
         useUrlParams
         tabs={tabs}
-        className="max-w-[700px] p-2 mx-auto"
+        className="max-w-[700px] p-2 mx-auto border-b-0"
         tabsListClassName="justify-between w-full mx-auto"
       />
-      <div className="w-full justify-center flex">
+      <div className="justify-center flex border-b-2 mx-auto w-1/2 p-6">
         <Button className="bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm" onClick={() => setIsOpen(true)}> Get Notified </Button>
       </div>
       <MarketingSteps />
