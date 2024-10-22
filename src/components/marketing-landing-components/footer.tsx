@@ -57,9 +57,9 @@ export default function Footer() {
                 Blog
               </Link>
               <Link
-                href="#"
+                href="/faq"
                 className="text-gray-500 hover:text-black"
-                prefetch={false}
+                prefetch={true}
               >
                 FAQ
               </Link>

@@ -3,6 +3,7 @@ import TabSelector from '@/components/ui/tab-selector';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header';
 import { Montserrat } from 'next/font/google';
+import Footer from '@/components/marketing-landing-components/footer';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -128,16 +129,10 @@ const FAQPage = () => {
           tabs={tabs}
           tabsListClassName={`p-0 border-b-0 ${montserrat.className}`}
           tabsClassName='border-0 [&[data-state=active]]:shadow-none'
+          className='border-0 mb-8'
         />
-        <div className="space-y-6">
-          {guestFaqData.map((faq, index) => (
-            <div key={index} className="border-b pb-4">
-              <h2 className="text-xl font-semibold mb-2">{faq.question}</h2>
-              <p className="text-gray-600">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
       </div>
+      <Footer />
     </>
   );
 };
