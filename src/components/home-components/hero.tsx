@@ -5,7 +5,7 @@ import Countdown from "../marketing-landing-components/countdown";
 const Hero: React.FC = () => {
   return (
     <div
-      className="relative min-h-[60vh] w-full md:w-[90vw] lg:w-[80vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative md:mt-20 min-h-[60vh] w-full md:w-[90vw] lg:w-[80vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
         backgroundImage: "url('/hero-image.png')",
         backgroundSize: "cover", // Ensures the image covers the container

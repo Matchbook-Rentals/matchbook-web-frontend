@@ -44,7 +44,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
               background: #555;
             }
           `}</style>
-          <h2 className="text-4xl text-left pl-12 mt-2 mb-4 font-semibold">Get ready for launch!</h2>
+          <h2 className="text-4xl text-left pl-[45px] mt-2 mb-4 font-semibold">Get ready for launch!</h2>
           <Countdown />
           <BrevoIframe />
         </div>

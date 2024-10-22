@@ -1,15 +1,21 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
-export default function MatchbookHeader({ handleListProperty }) {
+
+const defaultListProperty = () => {
+  console.log('Awaiting dialog import')
+}
+
+export default function MatchbookHeader({ handleListProperty = defaultListProperty }) {
 
 
   return (
     // Updated transition classes for a 3-second duration
     <div
-      className={`sticky mb-0 md:mb-20 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}
+      className={`sticky mb-0  top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}
     >
       <header
         className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-2 items-center border-b-0 pb-2`}

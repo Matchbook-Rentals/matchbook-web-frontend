@@ -64,7 +64,7 @@ export default function TabSelector({
       className={cn("flex justify-start space-x-2 py-4 border-b", className)}
     >
       <Tabs
-        className={cn("w-full", tabsClassName)}
+        className="w-full"
         value={activeTab}
         onValueChange={handleTabChange}
       >
@@ -84,10 +84,7 @@ export default function TabSelector({
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className={cn(
-                  "flex flex-col items-center hover:bg-gray-300",
-                  tab.className,
-                )}
+                className={cn("flex flex-col items-center hover:bg-gray-300", tabsClassName,)}
               >
                 <div
                   className={cn(
