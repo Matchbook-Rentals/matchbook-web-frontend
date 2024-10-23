@@ -49,8 +49,8 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
               List your property
             </Button>
           </Link>
-          <MenuIcon className=" text-charcoal h-10 w-10  lg:h-11 lg:w-11" />
-          <UserIcon className="  h-10 w-10 lg:h-11 lg:w-11" />
+          <MenuIcon className=" text-charcoal h-8 w-8 " />
+          <UserIcon className="  h-8 w-8 " />
         </div>
       </header>
     </div>

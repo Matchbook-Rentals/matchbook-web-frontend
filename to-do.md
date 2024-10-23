@@ -59,7 +59,7 @@
 -[ ] faq margins
 -[ ] guest text
 -[ ] background color
--[ ] tabselector home page FIX IT
+-[x] tabselector home page FIX IT
 -[ ] countdown xs sizing
 -[ ] matchbook how it works copy & logo design
 -[ ] how it works auto scroll 7 seconds, stop on click
