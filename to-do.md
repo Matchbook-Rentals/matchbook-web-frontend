@@ -56,12 +56,12 @@
 -[x] for guests and hosts
 
 
--[ ] faq margins
+-[x] faq margins
 -[ ] guest text
--[ ] background color
+-[x] background color
 -[x] tabselector home page FIX IT
 -[ ] countdown xs sizing
 -[ ] matchbook how it works copy & logo design
--[ ] how it works auto scroll 7 seconds, stop on click
--[ ] tiktok logo
+-[X] how it works auto scroll 7 seconds, stop on click
+-[X] tiktok logo
 -[ ] markdown blog posts

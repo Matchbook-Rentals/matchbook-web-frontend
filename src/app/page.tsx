@@ -22,8 +22,8 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
       <DialogContent
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
-        h-[75vh] md:h-[75vh] px-1 pt-4 "
-      >
+        h-[90vh] sm:h-[84vh] md:h-[77vh] px-1 pt-4 
+      ">
         <div
           className=" overflow-y-scroll overflow-x-hidden px-2"
           style={{
@@ -31,28 +31,12 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
             height: "100%",
           }}
         >
-          <style jsx>{`
-            div::-webkit-scrollbar {
-              width: 8px;
-            }
-            div::-webkit-scrollbar-track {
-              background: #f1f1f1;
-            }
-            div::-webkit-scrollbar-thumb {
-              background-color: #888;
-              border-radius: 10px;
-              border: 2px solid #f1f1f1;
-            }
-            div::-webkit-scrollbar-thumb:hover {
-              background: #555;
-            }
-          `}</style>
           <h2 className="text-2xl xs:text-3xl sm:text-4xl text-center xs:text-left pl-2 sm:pl-[45px] mt-8 xs:mt-2 mb-4 font-semibold">Get ready for launch!</h2>
           <Countdown />
           <BrevoIframe />
         </div>
-      </DialogContent>
-    </Dialog>
+      </DialogContent >
+    </Dialog >
   );
 };
 

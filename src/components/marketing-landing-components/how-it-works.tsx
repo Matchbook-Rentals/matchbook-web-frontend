@@ -53,12 +53,16 @@ export const MarketingSteps = () => {
     if (isAutoMoving) {
       timer = setInterval(moveToNextStep, 7000);
     }
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+    };
   }, [isAutoMoving, moveToNextStep]);
 
   const handleStepClick = (index) => {
     setActiveStep(index);
     setIsAutoMoving(false);
+    // Reset auto-moving after a delay
+    setTimeout(() => setIsAutoMoving(true), 30000);
   };
 
   return (

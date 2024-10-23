@@ -94,11 +94,11 @@ const tabs: Tab[] = [
     label: 'Guest',
     textSize: 'text-xl',
     content:
-      <Accordion type="multiple" className="space-y-6" defaultValue={guestFaqData.map((_, index) => `item-${index}`)}>
+      <Accordion type="multiple" className="space-y-6" >
         {guestFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl font-semibold">{faq.question}</AccordionTrigger>
-            <AccordionContent className="font-semibold text-[15px] pr-6">{faq.answer}</AccordionContent>
+            <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
@@ -108,7 +108,7 @@ const tabs: Tab[] = [
     label: 'Host',
     textSize: 'text-xl',
     content:
-      <Accordion type="multiple" className="space-y-6" defaultValue={hostFaqData.map((_, index) => `item-${index}`)}>
+      <Accordion type="multiple" className="space-y-6" >
         {hostFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl font-semibold">{faq.question}</AccordionTrigger>
@@ -123,7 +123,7 @@ const FAQPage = () => {
   return (
     <>
       <MatchbookHeader />
-      <div className="container mx-auto mt-8 px-4 py-8 bg-white">
+      <div className=" w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto mt-10 ">
         <h1 className="text-3xl  mb-8">Frequently Asked Questions</h1>
         <TabSelector
           tabs={tabs}
