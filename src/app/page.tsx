@@ -200,6 +200,7 @@ const WebHomePage = () => {
         <div id="list-your-property" className="mb-16" />
       </div>
       <CountdownDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <MarketingSteps />
       <TabSelector
         useUrlParams
         tabs={tabs}
@@ -209,7 +210,6 @@ const WebHomePage = () => {
       <div className="justify-center flex border-b-2 mx-auto w-1/2 p-6">
         <Button className={`bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm ${montserrat.className}`} onClick={() => setIsOpen(true)}> Get Notified </Button>
       </div>
-      <MarketingSteps />
       <RentEasyCopy />
       <div className="flex w-full justify-center"> <img className="h-12 mb-8" src="/heart-logo.png" /> </div>
       <Footer />
