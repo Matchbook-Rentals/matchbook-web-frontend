@@ -81,8 +81,10 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant='ghost' className={` focus:outline-none rounded-l-full text-md h-full p-2 md:p-3 cursor-pointer ${triggerClassName}`}>
-          {displayValue ? displayValue : "Where to?"}
+        <Button variant='ghost' className={` focus:outline-none  rounded-l-full text-md  md:px-2 cursor-pointer ${triggerClassName}`}>
+          <span className="inline-block translate-y-[1px]">
+            {displayValue ? displayValue : "Where to?"}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className={`rounded-2xl ${contentClassName}`}>
@@ -103,6 +105,6 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
           </ul>
         )}
       </PopoverContent>
-    </Popover>
+    </Popover >
   );
 }

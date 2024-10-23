@@ -76,15 +76,15 @@ const SearchControlBar: React.FC = () => {
       <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
         <PopoverTrigger asChild>
           <div className="flex gap-x-1 ">
-            <Button variant="ghost" className="">
+            <Button variant="ghost" className="h-10 ">
               <div className="text-left">
-                <div className="text-md ">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
+                <div className="text-[15px] ">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
               </div>
             </Button>
             <Separator orientation="vertical" className="h-10" />
-            <Button variant="ghost" className="h-10 px-2">
+            <Button variant="ghost" className="h-10 ">
               <div className="text-left">
-                <div className="text-md ">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
+                <div className="text-[15px] ">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
               </div>
             </Button>
           </div>

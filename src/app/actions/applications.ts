@@ -174,3 +174,28 @@ export async function getTripApplication(tripId?: string) {
     return { success: false, error: 'Failed to get trip application' };
   }
 }
+
+export async function getUserApplication() {
+  const { userId } = auth();
+  if (!userId) return null;
+
+  try {
+    const application = await prisma.application.findFirst({
+      where: {
+        userId,
+        isDefault: true,
+      },
+      include: {
+        incomes: true,
+        verificationImages: true,
+        identifications: true,
+      },
+    });
+
+    return application; // This will be null if no application is found
+  } catch (error) {
+    console.error('Failed to get user application:', error);
+    return null;
+  }
+}
+

@@ -66,10 +66,10 @@ const MatchmakerTab: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full text-[#404040]">
-      <div className="flex flex-col sm:flex-row w-full max-w-[900px]
+      <div className="flex flex-col md:flex-row w-full max-w-[900px]
                       mx-auto justify-between items-center mb-4 gap-4">
         {/* View Selector and sub-small filter options */}
-        <div className="flex justify-center w-full sm:w-auto">
+        <div className="flex justify-evenly w-full md:w-auto">
           <div className="flex border shadow-lg rounded-full">
             <button
               className={`p-2 rounded-l-full ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
@@ -90,7 +90,7 @@ const MatchmakerTab: React.FC = () => {
             onOpenChange={setIsFilterOpen}
             filters={filters}
             onFilterChange={handleFilterChange}
-            className='flex sm:hidden ml-2'
+            className='flex md:hidden ml-2'
           />
         </div>
 
@@ -105,7 +105,7 @@ const MatchmakerTab: React.FC = () => {
           onOpenChange={setIsFilterOpen}
           filters={filters}
           onFilterChange={handleFilterChange}
-          className='hidden sm:flex'
+          className='hidden md:flex'
         />
       </div>
 

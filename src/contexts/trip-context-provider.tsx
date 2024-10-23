@@ -22,8 +22,8 @@ interface TripContextType {
     requestedListings: ListingAndImages[];
     matchedListings: ListingAndImages[];
     isLoading: boolean;
-    //hasApplication: boolean;
-    //application: ApplicationWithArrays | null;
+    hasApplication: boolean;
+    application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
       dislikedIds: Set<string>;
@@ -36,7 +36,7 @@ interface TripContextType {
     setTrip: React.Dispatch<React.SetStateAction<TripAndMatches[]>>;
     fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
     setLookup: React.Dispatch<React.SetStateAction<TripContextType['state']['lookup']>>;
-    //setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
+    setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -44,7 +44,6 @@ interface TripContextProviderProps {
   children: ReactNode;
   tripData: TripAndMatches
   listingData: ListingAndImages[];
-  // Mark hasApplicationData and application as optional
   hasApplicationData?: boolean;
   application?: ApplicationWithArrays | null;
 }
@@ -59,12 +58,12 @@ export const useTripContext = () => {
   return context;
 };
 
-export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData }) => {
+export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData, application, hasApplicationData }) => {
   const [listings, setListings] = useState(listingData);
   const [trip, setTrip] = useState(tripData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  //const [hasApplication, setHasApplication] = useState(hasApplicationData);
+  const [hasApplication, setHasApplication] = useState(hasApplicationData);
   const [lookup, setLookup] = useState<TripContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
@@ -109,14 +108,25 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     return Math.round(finalPrice);
   }
 
-  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
+
+  // Calculate U-Score for a listing
+  const calculateUScore = (
+    listing: ListingAndImages & { calculatedPrice: number },
+    lowestPrice: number,
+    highestPrice: number,
+    highestDistance: number,
+    highestSquareFootage: number,
+    highestRoomCount: number,
+    highestBathroomCount: number
+  ): number => {
     const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
     const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
     const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
     const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
     const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
+
     return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
-  }
+  };
 
   const sortListingsByUScore = (listings: ListingAndImages[]) => {
     // Pre-calculate prices for all listings
@@ -182,7 +192,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   };
 
   useEffect(() => {
-    setListings(listingData);
+    const sortedListings = sortListingsByUScore(listingData);
+    setListings(sortedListings);
   }, [listingData])
 
   useEffect(() => {
@@ -265,8 +276,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       viewedListings,
       isLoading,
       lookup,
-      //hasApplication,
-      //application,
+      hasApplication,
+      application,
       matchedListings // Add this line
     },
     actions: {
@@ -274,7 +285,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       setTrip,
       fetchListings,
       setLookup,
-      //setHasApplication,
+      setHasApplication,
     }
   };
 
