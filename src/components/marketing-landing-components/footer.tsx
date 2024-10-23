@@ -85,21 +85,28 @@ export default function Footer() {
                 <TwitterIcon className="h-6 w-6" />
               </Link>
               <Link
-                href="#"
+                href="https://www.facebook.com/share/MpdT4CSW4cp75vZh/?mibextid=LQQJ4d"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
                 <FacebookIcon className="h-6 w-6" />
               </Link>
               <Link
-                href="#"
+                href="https://www.instagram.com/matchbookrentals?igsh=MWh4NngyZ2Q4Nnlmbw=="
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
                 <InstagramIcon className="h-6 w-6" />
               </Link>
               <Link
-                href="#"
+                href="https://www.tiktok.com/@matchbookrentals?_t=8qlshKMhmfe&_r=1"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                <LinkedinIcon className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://www.tiktok.com/@matchbookrentals?_t=8qlshKMhmfe&_r=1"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >

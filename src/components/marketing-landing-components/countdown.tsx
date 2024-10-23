@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 // Add className to the component props
 const Countdown: React.FC<{ className?: string }> = ({ className }) => {
-  const targetDate = new Date("2025-02-01T00:00:00");
+  const targetDate = new Date("2025-03-01T00:00:00");
   const [timeLeft, setTimeLeft] = useState<Record<string, number | string>>({
     days: "??",
     hours: "??",
@@ -52,13 +52,13 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <div
-      className={`text-xl mx-auto  py-1 pl-12  font-semibold text-black text-left w-full max-w-[700px] ${className || ""}`} >
+      className={`text-lg xs:text-xl mx-auto  py-1 pl-2 xs:pl-12  font-semibold text-black text-center xs:text-left w-full max-w-[700px] ${className || ""}`} >
       <h2 className="pl-[1px]"> Find your place, all in once place in: </h2>
       <div className="flex pt-6 justify-start gap-x-4">
         {Object.keys(timeLeft).map((interval) => (
           <div
             key={interval}
-            className="flex flex-row gap-x-1 justify-start items-end"
+            className="flex flex-col xs:flex-row gap-x-1 justify-start items-end"
           >
             <span className="text-2xl font-semibold text-charcoal">
               {timeLeft[interval]}

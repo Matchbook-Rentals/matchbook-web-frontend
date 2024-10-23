@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Countdown from "@/components/marketing-landing-components/countdown";
 import BrevoIframe from "@/components/home-components/brevo-iframe";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 const CountdownDialog = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
@@ -22,7 +25,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
         h-[75vh] md:h-[75vh] px-1 pt-4 "
       >
         <div
-          className="overflow-y-hidden overflow-x-hidden px-2"
+          className=" overflow-y-scroll overflow-x-hidden px-2"
           style={{
             scrollbarWidth: "none",
             height: "100%",
@@ -44,7 +47,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
               background: #555;
             }
           `}</style>
-          <h2 className="text-4xl text-left pl-[45px] mt-2 mb-4 font-semibold">Get ready for launch!</h2>
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl text-center xs:text-left pl-2 sm:pl-[45px] mt-8 xs:mt-2 mb-4 font-semibold">Get ready for launch!</h2>
           <Countdown />
           <BrevoIframe />
         </div>
@@ -204,7 +207,7 @@ const WebHomePage = () => {
         tabsListClassName="justify-between w-full mx-auto"
       />
       <div className="justify-center flex border-b-2 mx-auto w-1/2 p-6">
-        <Button className="bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm" onClick={() => setIsOpen(true)}> Get Notified </Button>
+        <Button className={`bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm ${montserrat.className}`} onClick={() => setIsOpen(true)}> Get Notified </Button>
       </div>
       <MarketingSteps />
       <RentEasyCopy />

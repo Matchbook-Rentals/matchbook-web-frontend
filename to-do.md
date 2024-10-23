@@ -54,3 +54,14 @@
 -[x] book now button and list open dialog
 -[x] add heart to bottom
 -[x] for guests and hosts
+
+
+-[ ] faq margins
+-[ ] guest text
+-[ ] background color
+-[ ] tabselector home page FIX IT
+-[ ] countdown xs sizing
+-[ ] matchbook how it works copy & logo design
+-[ ] how it works auto scroll 7 seconds, stop on click
+-[ ] tiktok logo
+-[ ] markdown blog posts
