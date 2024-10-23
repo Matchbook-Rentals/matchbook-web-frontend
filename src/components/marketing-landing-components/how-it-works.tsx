@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
   {
@@ -25,6 +26,25 @@ const steps = [
 
 export const MarketingSteps: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [isAutoMoving, setIsAutoMoving] = useState(true);
+
+  const moveToNextStep = useCallback(() => {
+    setActiveStep((prevStep) => (prevStep + 1) % steps.length);
+  }, []);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isAutoMoving) {
+      timer = setInterval(moveToNextStep, 7000);
+    }
+    return () => clearInterval(timer);
+  }, [isAutoMoving, moveToNextStep]);
+
+  const handleStepClick = (index: number) => {
+    setActiveStep(index);
+    setIsAutoMoving(false);
+  };
+
   return (
     <div className="max-w-2xl mx-auto px-8 mt-24">
       <div className="flex items-center justify-start space-x-4 ">
@@ -41,7 +61,7 @@ export const MarketingSteps: React.FC = () => {
           <div className="flex justify-evenly mt-8">
             {steps.map((step, index) => (
               <div key={index} className="flex flex-col items-center">
-                <div
+                <motion.div
                   className={`
                   w-10 h-10 rounded-full 
                   ${index === activeStep
@@ -52,16 +72,18 @@ export const MarketingSteps: React.FC = () => {
     ${index === activeStep ? "border-pinkBrand" : "border-black"}
     cursor-pointer
   `}
-                  onClick={() => setActiveStep(index)}
+                  onClick={() => handleStepClick(index)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   {index + 1}
-                </div>
-                <span
+                </motion.div>
+                <motion.span
                   className={`text-md font-semibold ${index === activeStep ? "text-pinkBrand" : ""}`}
+                  animate={{ color: index === activeStep ? "#c68087" : "#000000" }}
                 >
                   {step.title}
-
-                </span>
+                </motion.span>
               </div>
             ))}
           </div>
