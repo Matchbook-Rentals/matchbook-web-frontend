@@ -21,9 +21,9 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
       className={`sticky mb-0  top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}
     >
       <header
-        className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-between pt-2 items-center border-b-0 pb-2`}
+        className={`relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-center pt-2 items-center border-b-0 pb-2`}
       >
-        <div className="flex items-center " >
+        <div className="flex items-center mr-auto " >
           <Link href={"/"}>
             <img
               src="navbar-logo-full.png"
@@ -42,10 +42,12 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
           className="h-10 w-8 hidden md:flex "
           alt="MatchBook Heart"
         />
-        <div className="flex md:space-x-1 items-center ">
+        <div className="flex md:space-x-1 items-center ml-auto">
           <Link href={"/?tab=list#list-your-property"} shallow>
             <Button
-              className={`border  py-1 w-[191px] h-[36px] text-[18px] rounded-sm border-black lg:mr-0 ${montserrat.className} `}
+
+              className={`w-[191px] h-[36px] text-[18px] rounded-[15px]
+                          border-[1px] font-normal border-charcoal font- mr-6 ${montserrat.className} `}
               onClick={handleListProperty}
               variant={"outline"}
             >
