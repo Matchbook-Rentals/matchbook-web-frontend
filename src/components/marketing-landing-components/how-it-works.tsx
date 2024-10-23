@@ -2,24 +2,24 @@ import React, { useState } from "react";
 
 const steps = [
   {
-    title: "Swipe",
+    title: "Search",
     description:
-      "Browse listings that match your preferences and swipe on them! Swipe right if you love it, choose \"maybe\" to think them over, and swipe left to send them right to the friendzone.",
+      "Browse listings that match your preferences and select the best of them to add to your favorites.",
   },
   {
     title: "Apply",
     description:
-      "Now that you've got your favorites, it's time to show your roster you're serious. Simply click apply and we'll send them your application to review. Apply to up to 5 properties at a time; and if you change your mind on one, withdraw your application so you can give another favorite a chance!",
+      "Fill out one universal application and access every property in our marketplace - No application fee!",
   },
   {
     title: "Match",
     description:
-      "Once your options look over your applications, they can approve you as their match! We'll let you know when you get denied (it's ok, they weren't right for you anyway) and when you find a match! Once you've got a match, you can move to the last step: booking.",
+      "Hosts review your application. If they approve, then you have a match!",
   },
   {
     title: "Book",
     description:
-      "Look over your matches and get ready to commit for real. When you're ready, click \"book\" on your top pick to officially lock in your stay. Congrats, you've found the one (for the next 1-12 months)!",
+      "All your matches are stored in \"Your Matchbook\". When you're ready, you can lock in your top pick right then and there!",
   },
 ];
 
@@ -67,7 +67,7 @@ export const MarketingSteps: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="font-semibold text-xl mb-5 py-5 w-4/5 mx-auto min-h-[250px] flex items-start">
+      <div className="font-semibold text-xl mb-5 py-5 w-4/5 mx-auto min-h-[150px] flex items-start">
         <p>{steps[activeStep].description}</p>
       </div>
     </div>

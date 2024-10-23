@@ -108,7 +108,7 @@ export default function Footer() {
                 <FaTiktok className="h-6 w-6" />
               </Link>
               <Link
-                href="https://www.tiktok.com/@matchbookrentals?_t=8qlshKMhmfe&_r=1"
+                href="https://www.linkedin.com/company/matchbookrentals/"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >

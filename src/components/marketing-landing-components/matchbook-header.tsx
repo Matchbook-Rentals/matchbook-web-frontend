@@ -39,7 +39,7 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
         </div>
         <img
           src="/svg/heart-header.svg"
-          className="h-10 w-8 hidden md:flex "
+          className="h-8 w-8 hidden md:flex "
           alt="MatchBook Heart"
         />
         <div className="flex md:space-x-1 items-center ml-auto">
