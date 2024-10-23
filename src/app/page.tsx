@@ -205,9 +205,9 @@ const WebHomePage = () => {
         useUrlParams
         tabs={tabs}
         className="max-w-[700px] p-2 mx-auto border-b-0"
-        tabsListClassName="justify-center w-full mx-auto"
+        tabsListClassName="justify-center w-full border-b-0 mx-auto"
       />
-      <div className="justify-center flex border-b-2 mx-auto w-1/2 p-6">
+      <div className="justify-center flex border-b-0 mx-auto w-1/2 p-6">
         <Button className={`bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm ${montserrat.className}`} onClick={() => setIsOpen(true)}> Get Notified </Button>
       </div>
       <RentEasyCopy />
