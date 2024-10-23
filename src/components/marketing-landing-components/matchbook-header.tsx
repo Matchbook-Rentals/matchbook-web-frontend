@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Montserrat } from "next/font/google";
 
+
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 const defaultListProperty = () => {
   console.log('Awaiting dialog import')
@@ -42,15 +45,15 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
         <div className="flex md:space-x-1 items-center ">
           <Link href={"/?tab=list#list-your-property"} shallow>
             <Button
-              className="border px-2 py-1  border-black lg:mr-0 lg:text-[15px] "
+              className={`border  py-1 w-[191px] h-[36px] text-[18px] rounded-sm border-black lg:mr-0 ${montserrat.className} `}
               onClick={handleListProperty}
               variant={"outline"}
             >
               List your property
             </Button>
           </Link>
-          <MenuIcon className=" text-charcoal h-8 w-8 " />
-          <UserIcon className="  h-8 w-8 " />
+          <MenuIcon className=" text-charcoal h-[31px] w-[31px] " />
+          <UserIcon className="  h-[33px] w-[30px] " />
         </div>
       </header>
     </div>
