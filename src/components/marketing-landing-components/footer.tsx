@@ -80,7 +80,7 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">Follow Us</h3>
             <div className="flex flex-wrap gap-2 pt-3 md:pt-6 w-[88px] md:w-auto justify-center">
               <Link
-                href="#"
+                href="https://x.com/matchbookrent"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
