@@ -22,7 +22,7 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
       <DialogContent
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
-        h-[90vh] sm:h-[84vh] md:h-[77vh] px-1 pt-4 
+        h-[80vh] sm:h-[84vh] md:h-[77vh] px-1 pt-4 
       ">
         <div
           className=" overflow-y-scroll overflow-x-hidden px-2"

@@ -74,4 +74,4 @@
 -[ ] markdown blog posts
 -[ ] footer links -> grid
 -[ ] center list your property button at smaller sizes
-
+-[ ] add button to escape dialog on mobile
