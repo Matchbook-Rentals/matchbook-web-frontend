@@ -21,7 +21,8 @@ const StepCircle: React.FC<StepCircleProps> = ({ index, isActive }) => (
       stiffness: 300,
       damping: 30
     }}
-    className="w-10 h-10 rounded-full border-2 border-current flex items-center justify-center font-bold mb-2"
+    // Making the circle responsive with smaller sizes for mobile and original sizes for md+
+    className="w-[35px] h-[35px] text-lg md:w-[40px] md:h-[40px] md:text-2xl rounded-full border border-current flex items-center justify-center font-bold mb-2"
   >
     {index + 1}
   </motion.div>
@@ -75,15 +76,15 @@ export const MarketingSteps = () => {
     <div className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
       {/* Header section with title and decorative elements */}
       <div className="relative">
-        <div className="flex justify-between items-end p-0 w-full">
-          <SettingsIcon className="w-[60px] h-[51px] sm:w-[75px] sm:h-[64px] md:w-[91px] md:h-[77px] mb-0 flex-shrink-0" />
-          <h1 className="text-[6vw] xs:text-[6.5vw]  md:text-[59px] font-medium text-left whitespace-nowrap text-ellipsis flex-shrink-1">
+        <div className="flex justify-between  p-0 w-full mb-1">
+          <SettingsIcon className="w-[60px] h-[51px] sm:w-[75px] sm:h-[64px] md:w-[91px] md:h-[77px] mb-4 flex-shrink-0 self-start" />
+          <h1 className="text-[6.1vw] leading-none xs:text-[6.6vw] md:text-[59px]  font-medium text-left whitespace-nowrap text-ellipsis self-end flex-shrink-1">
             How Matchbook Works
           </h1>
         </div>
         {/* Animated underline */}
         <motion.div
-          className="bg-pinkBrand absolute left-0 w-full h-[30px] mt-4"
+          className="bg-pinkBrand absolute left-0 w-full h-[30px] "
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.5 }}
@@ -91,7 +92,7 @@ export const MarketingSteps = () => {
       </div>
 
       {/* Step indicators */}
-      <div className="flex justify-evenly mt-16">
+      <div className="flex justify-between  mt-16">
         {steps.map((step, index) => (
           <motion.div
             key={index}
@@ -104,7 +105,7 @@ export const MarketingSteps = () => {
               animate={{
                 color: index === activeStep ? "#c68087" : "#000000"
               }}
-              className="text-md font-semibold"
+              className="text-lg sm:text-xl md:text-2xl font-semibold"
             >
               {step.title}
             </motion.span>
@@ -119,7 +120,7 @@ export const MarketingSteps = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="font-semibold text-xl mb-5 py-5 w-4/5 mx-auto min-h-[150px] flex items-start"
+          className=" text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
         >
           <p>{steps[activeStep].description}</p>
         </motion.div>
