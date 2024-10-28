@@ -104,7 +104,7 @@ export const MarketingSteps = () => {
         </div>
         {/* Animated underline */}
         <motion.div
-          className="bg-pinkBrand absolute left-0 w-full h-[30px] "
+          className="bg-pinkBrand absolute left-0 w-full h-[26px] "
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.5 }}

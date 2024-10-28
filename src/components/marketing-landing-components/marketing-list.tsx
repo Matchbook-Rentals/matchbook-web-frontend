@@ -35,7 +35,7 @@ export default function MarketingList({
             {title}
           </h1>
         </div>
-        <div className={`${bgColorClass} mb-[-5px] sm:mb-[-10px] md:mb-[-20px]  h-[30px]`} />
+        <div className={`${bgColorClass} mb-[-5px] sm:mb-[-10px] md:mb-[-20px]  h-[26px]`} />
       </div>
       <div className="">
         {marketingItems.map((item, index) => (
