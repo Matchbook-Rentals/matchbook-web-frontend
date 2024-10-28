@@ -4,7 +4,9 @@ import prisma from '@/lib/prismadb'
 import { BlogArticle } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Montserrat } from 'next/font/google';
 
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 async function getBlogArticles(): Promise<BlogArticle[]> {
   const articles = await prisma.blogArticle.findMany({
@@ -20,11 +22,11 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
-      <h1 className="text-5xl text-left mb-8">Articles</h1>
+      <h1 className="text-5xl text-left mb-8 font-regular">Articles</h1>
       {articles.map((article) => (
         <>
           <div className='flex'>
-            <h3 key={article.id}>{article.createdAt.toDateString()}</h3>
+            <h3 key={article.id} className={`mb-3 ${montserrat.className}`}>{article.createdAt.toDateString()}</h3>
           </div>
           <Image
             src={`/article-images/introduction.png`} // Assuming imageUrl is stored in article data

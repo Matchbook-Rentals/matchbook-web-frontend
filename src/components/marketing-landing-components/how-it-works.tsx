@@ -76,6 +76,13 @@ export const MarketingSteps = () => {
     };
   }, [isAutoMoving]);
 
+  useEffect(() => {
+    console.log('Component re-rendered', { activeStep, steps });
+  }, [activeStep, steps]);
+
+  useEffect(() => {
+    console.log('Active step changed', activeStep);
+  }, [activeStep]);
 
   const handleStepClick = (index: number) => {
     setIsAutoMoving(false);
