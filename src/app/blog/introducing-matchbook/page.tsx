@@ -1,6 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
+import { CountdownDialog } from '@/app/page';
+import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 const BlogArticle = () => {
   return (
@@ -10,14 +15,14 @@ const BlogArticle = () => {
         alt={'Blog article image'}
         width={1515}
         height={337}
-        className="w-full aspect-square lg:aspect-[1515/337] rounded-lg object-cover mt-16"
+        className="w-[95%] mx-auto md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
         priority={true} // Loads image immediately for better UX
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
       />
-      <article className="max-w-2xl mx-auto prose prose-lg space-y-8 text-left indent-4 my-4 sm:my-8 md:my-16">
+      <article className="max-w-2xl mx-auto prose prose-lg text-left space-y-4 indent-4 my-4 sm:my-8 md:my-16">
         <div>
-          <h1 className="text-4xl font-bold mb-1 text-center indent-0">Revolutionizing the Rental Experience</h1>
-          <h2 className="text-xl  pl-8 font-thin mb-6 text-left text-gray-600 indent-0">from The Matchbook Team</h2>
+          <h1 className="text-4xl font-bold mb-1 text-left indent-0">Revolutionizing the Rental Experience</h1>
+          <h2 className="text-xl pl-8 font-thin mb-6 text-left text-gray-600 indent-0">from The Matchbook Team</h2>
         </div>
         <p>In an age of simplicity and efficiency, we are shocked by how annoying
           and redundant arguably the most important transaction, finding a place
@@ -39,20 +44,18 @@ const BlogArticle = () => {
           From searching, to matching, to booking, and managing all your
           monthly payments—we’ve got it here.</p>
 
-        <h2 className="text-3xl font-semibold my-4">Our Story</h2>
+        <h2 className="text-[28px] font-semibold pt-4">Our Story</h2>
         <p>After moving 50+ times in the last 10 years ourselves, we’re
           ready to change up the process, because lord knows, it’s about time.</p>
 
-        <h2 className="text-3xl font-semibold my-4">Join Us</h2>
+        <h2 className="text-[28px] font-semibold pt-4">Join Us</h2>
         <p>Ready to join us? Our launch is just a few months away, so
           subscribe to our email notifications if you want to say goodbye
           to the old process and welcome a new way of renting. Renting
           shouldn’t be so hard. Now it doesn’t have to be.</p>
 
         <div className="text-center mt-8">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-12 rounded">
-            Subscribe for Updates
-          </button>
+          <SubscribeDialog triggerText='Subscribe for Updates' triggerClassNames={`bg-blueBrand hover:bg-blue-700 text-white font-bold py-2 px-4 mt-16 mb-12 rounded ${montserrat.className}`} />
         </div>
       </article>
     </div>

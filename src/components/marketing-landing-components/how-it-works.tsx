@@ -110,6 +110,7 @@ export const MarketingSteps = () => {
         {/* Animated underline */}
         <motion.div
           className="bg-pinkBrand absolute left-0 w-full h-[26px] "
+          key={'sliding-bar'}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.5 }}
@@ -144,11 +145,11 @@ export const MarketingSteps = () => {
           {steps.map((step, index) => (
             index === activeStep && (
               <motion.div
-                key={index}
+                key={step.description}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start absolute"
+                className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
               >
                 <p>{step.description}</p>
               </motion.div>

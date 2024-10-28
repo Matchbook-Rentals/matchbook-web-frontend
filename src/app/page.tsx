@@ -128,7 +128,6 @@ interface Tab {
   className?: string;
   textSize?: string;
 }
-
 const ApartmentImage = ({ className }) => {
   return (
     <img
@@ -201,3 +200,6 @@ const WebHomePage = () => {
 };
 
 export default WebHomePage;
+
+
+export { CountdownDialog }
