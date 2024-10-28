@@ -64,4 +64,14 @@
 -[ ] matchbook how it works copy & logo design
 -[X] how it works auto scroll 7 seconds, stop on click
 -[X] tiktok logo
+
+
+
+
+
+
+
 -[ ] markdown blog posts
+-[ ] footer links -> grid
+-[ ] center list your property button at smaller sizes
+

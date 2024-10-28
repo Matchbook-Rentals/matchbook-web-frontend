@@ -30,7 +30,7 @@ export default function MarketingList({
         <div className="flex items-end mb-1">
           <Icon className="w-[80px] h-[80px] sm:w-[80px] sm:h-[80px] md:w-[115px] md:h-[115px] mr-3" />
           <h1
-            className="text-[6.2vw] xs:text-[6.6vw] md:text-[59px] leading-none  font-semibold"
+            className="text-[6.2vw] xs:text-[6.6vw] md:text-[59px] leading-none  font-medium"
           >
             {title}
           </h1>

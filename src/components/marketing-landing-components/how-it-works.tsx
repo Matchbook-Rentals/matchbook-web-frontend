@@ -28,7 +28,12 @@ const StepCircle: React.FC<StepCircleProps> = ({ index, isActive }) => (
   </motion.div>
 );
 
-const steps = [
+interface Step {
+  title: string;
+  description: string;
+}
+
+const steps: Step[] = [
   {
     title: "Search",
     description: "Browse listings that match your preferences and select the best of them to add to your favorites."
@@ -52,7 +57,10 @@ export const MarketingSteps = () => {
   const [isAutoMoving, setIsAutoMoving] = useState(true);
 
   const moveToNextStep = useCallback(() => {
-    setActiveStep((prevStep) => (prevStep + 1) % steps.length);
+    setActiveStep((prevStep) => {
+      const nextStep = (prevStep + 1) % steps.length;
+      return nextStep >= 0 && nextStep < steps.length ? nextStep : 0;
+    });
   }, []);
 
   useEffect(() => {
@@ -105,7 +113,7 @@ export const MarketingSteps = () => {
               animate={{
                 color: index === activeStep ? "#c68087" : "#000000"
               }}
-              className="text-lg sm:text-xl md:text-2xl font-semibold"
+              className="text-lg sm:text-xl md:text-2xl font-medium"
             >
               {step.title}
             </motion.span>
@@ -122,7 +130,7 @@ export const MarketingSteps = () => {
           exit={{ opacity: 0, y: -20 }}
           className=" text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
         >
-          <p>{steps[activeStep].description}</p>
+          <p>{steps[activeStep]?.description || steps[0].description}</p>
         </motion.div>
       </AnimatePresence>
     </div>
