@@ -31,7 +31,6 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
             height: "100%",
           }}
         >
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl text-center xs:text-left pl-2 sm:pl-[45px] mt-8 xs:mt-2 mb-4 font-semibold">Get ready for launch!</h2>
           <Countdown />
           <BrevoIframe />
         </div>
