@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SettingsIcon } from "../svgs/svg-components";
+import { on } from "events";
 
 interface StepCircleProps {
   index: number;
@@ -55,8 +56,15 @@ const steps: Step[] = [
 export const MarketingSteps = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isAutoMoving, setIsAutoMoving] = useState(true);
+  const [count, setCount] = useState(0);
+
+
+  useEffect(() => {
+    console.log('Component render count:', count);
+  }, []); // Empty deps array means this only runs on mount
 
   const moveToNextStep = () => {
+    setCount(prev => prev + 1);
     setActiveStep((prevStep) => {
       let nextStep = (prevStep + 1)
       if (nextStep >= steps.length) {
@@ -76,13 +84,6 @@ export const MarketingSteps = () => {
     };
   }, [isAutoMoving]);
 
-  useEffect(() => {
-    console.log('Component re-rendered', { activeStep, steps });
-  }, [activeStep, steps]);
-
-  useEffect(() => {
-    console.log('Active step changed', activeStep);
-  }, [activeStep]);
 
   const handleStepClick = (index: number) => {
     setIsAutoMoving(false);
@@ -141,18 +142,24 @@ export const MarketingSteps = () => {
 
       {/* Step description with animation */}
       <div className="relative">
-        {steps.map((step, index) => (
-          index === activeStep && (
-            <div
-              key={step.description}
-              className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
-            >
-              <p>{step.description}</p>
-            </div>
-          )
-        ))}
+        <AnimatePresence mode="wait" >
+          {steps.map((step, index) => (
+            index === activeStep && (
+              < motion.li
+                key={`step--${count}`}
+                initial={{ opacity: 0, y: 20 }}
+                onAnimationComplete={() => console.log(`step--${count}`)}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
+              >
+                <p>{step.description}</p>
+              </motion.li>
+            )
+          ))}
+        </AnimatePresence>
       </div>
-    </div>
+    </div >
   );
 };
 
