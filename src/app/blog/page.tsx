@@ -33,7 +33,7 @@ export default async function Home() {
             alt={article.title || 'Blog article image'}
             width={1515}
             height={375}
-            className="w-full aspect-square lg:aspect-[1515/375] rounded-lg object-cover"
+            className="w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
             priority={true} // Loads image immediately for better UX
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
           />

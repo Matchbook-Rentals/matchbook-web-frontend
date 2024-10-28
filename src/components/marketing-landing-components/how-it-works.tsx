@@ -139,17 +139,23 @@ export const MarketingSteps = () => {
       </div>
 
       {/* Step description with animation */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`description-${activeStep}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className=" text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
-        >
-          <p>{steps[activeStep]?.description}</p>
-        </motion.div>
-      </AnimatePresence>
+      <div className="relative">
+        <AnimatePresence mode="wait" initial={false}>
+          {steps.map((step, index) => (
+            index === activeStep && (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start absolute"
+              >
+                <p>{step.description}</p>
+              </motion.div>
+            )
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
