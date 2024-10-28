@@ -52,7 +52,7 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">Resources</h3>
             <nav className="flex flex-col">
               <Link
-                href="#"
+                href="/blog"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >

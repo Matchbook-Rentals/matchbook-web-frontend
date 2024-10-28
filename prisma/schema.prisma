@@ -631,6 +631,7 @@ model BlogArticle {
   excerpt    String     @db.Text
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  imageUrl   String?
   published  Boolean    @default(false)
   authorId   String
   author     User       @relation(fields: [authorId], references: [id])

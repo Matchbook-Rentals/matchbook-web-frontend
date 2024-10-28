@@ -90,33 +90,33 @@ const rentMarketingItems = [
 const listMarketingItems = [
   {
     number: 1,
-    title: "Manage your place, all in once place.",
+    title: "Manage your place, all in one place",
     description:
-      "No more listing on 4 different sites with the hopes of finding a good tenant. On Matchbook, list your property, match with renters, view applications, and manage your place all on a singular website.",
+      "Gone are the days of listing, managing, and taking payments all separately. On MatchBook you can list your property, view applications, match with potential guests, manage your bookings, and collect payment all in a single intuitive location.",
   },
   {
     number: 2,
-    title: "List for free.",
+    title: "List for free",
     description:
-      "List your property for free and pay only after your first booking. The fee? Only 1.5% of the first month's rent.",
+      "List your property for free and pay only after your first booking. The fee? Only 1%",
   },
   {
     number: 3,
-    title: "Connect with Matchbook Verified Tenants.",
+    title: "Connect with MatchBook Verified Tenants",
     description:
-      "Matchbook Verified tenants are pre-screened and ready to match! Matching with unverified tenants? Don't worry. Enjoy seamless in-app screening.",
+      "MatchBook Verified tenants are pre-screened and ready to match! Enjoy easy to understand screenings with insight on prospects credit, eviction, and criminal history.",
   },
   {
     number: 4,
-    title: "Rent automatically collected.",
+    title: "Rent automatically collected",
     description:
-      "No more sending awkward texts. Rent is automatically collected each month from your tenant's bank and transferred to yours, at no cost.",
+      "No more sending awkward texts. Rent is automatically collected each month from your tenant's bank and transferred to yours, completely free.",
   },
   {
     number: 5,
-    title: "Transform your business.",
+    title: "Manage your Calendar",
     description:
-      "With Matchbook, you have access to data-driven Property Insights. See how your property is performing in your dedicated analytics dashboard.",
+      "Easily view your property's performance, track move-in and move-out all from your property dashboard.",
   },
 ];
 
