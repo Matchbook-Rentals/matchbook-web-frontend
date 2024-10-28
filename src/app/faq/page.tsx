@@ -32,7 +32,7 @@ const guestFaqData = [
     answer: "We believe in complete price transparency. For you that means that the price you see on the listing is the price you pay. We love surprises, just not that kind"
   },
   {
-    question: "How is the Matchbook application process different",
+    question: "How is the Matchbook application process different?",
     answer: "Filling out one application is already a hassle, having to do it for each property is unthinkable. We can do better. All properties on our platform accept our matchbook universal application. Its as simple as clicking apply. Oh, and its completely free."
   },
   {
@@ -67,7 +67,7 @@ const hostFaqData = [
     answer: "We think the current status quo in the rental market is pretty annoying. Why is it so difficult to find rentals that fit your lifestyle and budget? Matchbook is designed to make finding a place as easy as online shopping. We have built a curated marketplace where housing providers and guests are able to come together while we handle details."
   },
   {
-    question: "What features does Matchbook offer to support hosts",
+    question: "What features does Matchbook offer to support hosts?",
     answer: "Matchbook provides state-compliant leases valid in all 50 states, built-in guest screening at no cost to you, payment processing, and a calendar management system to keep everything organized in one place."
   },
   {
@@ -97,7 +97,7 @@ const tabs: Tab[] = [
       <Accordion type="multiple" className="space-y-6" >
         {guestFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl font-semibold">{faq.question}</AccordionTrigger>
+            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl text-left font-semibold">{faq.question}</AccordionTrigger>
             <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
@@ -111,7 +111,7 @@ const tabs: Tab[] = [
       <Accordion type="multiple" className="space-y-6" >
         {hostFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl font-semibold">{faq.question}</AccordionTrigger>
+            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl text-left font-semibold">{faq.question}</AccordionTrigger>
             <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}

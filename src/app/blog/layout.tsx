@@ -1,3 +1,4 @@
+import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 
 
@@ -10,6 +11,7 @@ export default function BlogLayout({
     <>
       <MatchbookHeader />
       {children}
+      <Footer />
     </>
   );
 }

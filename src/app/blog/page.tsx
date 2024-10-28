@@ -1,3 +1,4 @@
+import SocialLinks from '@/components/SocialLinks';
 import { PAGE_MARGIN } from '@/constants/styles';
 import prisma from '@/lib/prismadb'
 import { BlogArticle } from '@prisma/client';
@@ -18,12 +19,18 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
-      <h1 className="text-4xl font-bold text-left mb-8">Articles</h1>
+      <h1 className="text-5xl text-left mb-8">Articles</h1>
       {articles.map((article) => (
         <>
-          <h2 key={article.id}>{article.createdAt.toDateString()}</h2>
+          <h3 key={article.id}>{article.createdAt.toDateString()}</h3>
           <img src='/article-images/introduction.png' className='w-full h-[375px] rounded-lg' alt='Introducing Matchbook - Lead Image' />
           <div>
+            <div className='flex justify-between'>
+              <h2 className='text-[30px] font-semibold'> {article.title} </h2>
+              <SocialLinks />
+
+
+            </div>
 
           </div>
 
