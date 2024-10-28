@@ -1,10 +1,11 @@
 import React from "react";
 
+// Props interface defining the required properties for the MarketingItem component
 interface MarketingItemProps {
-  number: number;
-  title: string;
-  description: string;
-  brandColor: "primary" | "secondary";
+  number: number;      // The number to display in the circle
+  title: string;       // The title of the marketing item
+  description: string; // The description text
+  brandColor: "primary" | "secondary"; // Color theme selection
 }
 
 export default function MarketingItem({
@@ -13,20 +14,14 @@ export default function MarketingItem({
   description,
   brandColor,
 }: MarketingItemProps) {
+  // Determine background color class based on brandColor prop
   const bgColorClass =
     brandColor === "primary" ? "bg-primaryBrand" : "bg-blueBrand";
 
   return (
-    <div className="flex items-center space-x-8 ml-2 space-y-4">
-      <div
-        className={`flex-shrink-0 ${bgColorClass} rounded-full w-14 h-14 flex items-center justify-center`}
-      >
-        <span className="font-semibold text-black text-2xl">{number}</span>
-      </div>
-      <div>
-        <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-gray-700 font-semibold">{description}</p>
-      </div>
+    <div className="">
+      <h2 className="text-2xl xs:text-3xl sm:text-4xl mb-4 mt-12 font-semibold">{title}</h2>
+      <p className="sm:text-lg md:text-xl ">{description}</p>
     </div>
   );
 }

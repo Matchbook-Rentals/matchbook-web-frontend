@@ -20,6 +20,7 @@ export default function MarketingList({
   marketingItems,
   brandColor,
 }: MarketingListProps) {
+
   const bgColorClass =
     brandColor === "primary" ? "bg-primaryBrand" : "bg-blueBrand";
 
