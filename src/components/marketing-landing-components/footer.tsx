@@ -78,7 +78,7 @@ export default function Footer() {
           {/* Social Media Links */}
           <div className="text-lg mx-auto">
             <h3 className="text-xl font-semibold">Follow Us</h3>
-            <div className="flex gap-x-2 pt-6  ">
+            <div className="flex flex-wrap gap-2 pt-3 md:pt-6 w-[88px] md:w-auto justify-center">
               <Link
                 href="#"
                 className="text-gray-500 hover:text-black"
