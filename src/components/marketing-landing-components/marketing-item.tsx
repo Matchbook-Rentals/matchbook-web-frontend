@@ -20,7 +20,7 @@ export default function MarketingItem({
 
   return (
     <div className="">
-      <h2 className="text-2xl xs:text-3xl sm:text-4xl mb-4 mt-12 font-semibold">{title}</h2>
+      <h2 className="text-2xl xs:text-3xl sm:text-4xl mb-2 mt-8 md:mb-4 md:mt-12 font-semibold">{title}</h2>
       <p className="sm:text-lg md:text-xl ">{description}</p>
     </div>
   );

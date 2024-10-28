@@ -25,20 +25,17 @@ export default function MarketingList({
     brandColor === "primary" ? "bg-primaryBrand" : "bg-blueBrand";
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-2 ">
-      <div className="flex items-center justify-start space-x-4 ">
-        <Icon className="h-20 w-20" />
-        <div>
+    <div className="w-full mx-auto ">
+      <div>
+        <div className="flex items-end mb-1">
+          <Icon className="w-[80px] h-[80px] sm:w-[80px] sm:h-[80px] md:w-[115px] md:h-[115px] mr-3" />
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl z-10 font-semibold"
-            style={{ position: "relative", top: "-50%", left: "" }}
+            className="text-[6.2vw] xs:text-[6.6vw] md:text-[59px] leading-none  font-semibold"
           >
             {title}
           </h1>
-          <div
-            className={`${bgColorClass} transform -translate-y-2/3 -translate-x-[2%] w-[110%] h-[30px]`}
-          ></div>
         </div>
+        <div className={`${bgColorClass} mb-[-5px] sm:mb-[-10px] md:mb-[-20px]  h-[30px]`} />
       </div>
       <div className="">
         {marketingItems.map((item, index) => (

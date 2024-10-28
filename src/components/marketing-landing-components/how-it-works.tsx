@@ -76,9 +76,9 @@ export const MarketingSteps = () => {
     <div className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
       {/* Header section with title and decorative elements */}
       <div className="relative">
-        <div className="flex justify-between  p-0 w-full mb-1">
+        <div className="flex justify-start  p-0 w-full mb-1">
           <SettingsIcon className="w-[60px] h-[51px] sm:w-[75px] sm:h-[64px] md:w-[91px] md:h-[77px] mb-4 flex-shrink-0 self-start" />
-          <h1 className="text-[6.1vw] leading-none xs:text-[6.6vw] md:text-[59px]  font-medium text-left whitespace-nowrap text-ellipsis self-end flex-shrink-1">
+          <h1 className="text-[6.1vw]  xs:text-[6.6vw] md:text-[59px] leading-none font-medium text-left whitespace-nowrap text-ellipsis self-end flex-shrink-1">
             How Matchbook Works
           </h1>
         </div>
