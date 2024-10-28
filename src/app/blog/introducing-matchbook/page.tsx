@@ -55,7 +55,11 @@ const BlogArticle = () => {
           shouldn’t be so hard. Now it doesn’t have to be.</p>
 
         <div className="text-center mt-8">
-          <SubscribeDialog triggerText='Subscribe for Updates' triggerClassNames={`bg-blueBrand hover:bg-blue-700 text-white font-bold py-2 px-4 mt-16 mb-12 rounded ${montserrat.className}`} />
+          <SubscribeDialog triggerText='Subscribe for Updates'
+            triggerClassNames={`bg-blueBrand font-regular
+                                hover:bg-blue-700 text-white 
+                                font-bold py-2 px-4 mt-16 
+                                mb-12 rounded ${montserrat.className}`} />
         </div>
       </article>
     </div>

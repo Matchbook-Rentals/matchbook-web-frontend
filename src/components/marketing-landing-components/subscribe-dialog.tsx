@@ -7,12 +7,19 @@ import { DialogOverlay } from "../ui/dialog";
 interface SubscribeDialogProps {
   triggerText: string;
   triggerClassNames?: string;
+  isOpen?: boolean;
+  setOpen?: (open: boolean) => void;
 }
 
-export default function SubscribeDialog({ triggerText, triggerClassNames }: SubscribeDialogProps) {
+export default function SubscribeDialog({
+  triggerText,
+  triggerClassNames,
+  isOpen,
+  setOpen
+}: SubscribeDialogProps) {
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger className={triggerClassNames}>
         {triggerText}
       </DialogTrigger>

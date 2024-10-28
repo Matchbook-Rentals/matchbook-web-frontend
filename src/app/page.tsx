@@ -8,14 +8,22 @@ import { Montserrat } from "next/font/google";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
-const CountdownDialog = ({ isOpen, setIsOpen }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 1000);
+interface CountdownDialogProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  autoOpen?: boolean;
+}
 
-    return () => clearTimeout(timer);
-  }, [setIsOpen]);
+const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialogProps) => {
+  useEffect(() => {
+    if (autoOpen) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [setIsOpen, autoOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -34,8 +42,8 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
           <Countdown />
           <BrevoIframe />
         </div>
-      </DialogContent >
-    </Dialog >
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -181,7 +189,7 @@ const WebHomePage = () => {
         {/* this is here to temporarily get people to the right marketing info */}
         <div id="list-your-property" className="mb-16" />
       </div>
-      <CountdownDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <CountdownDialog autoOpen isOpen={isOpen} setIsOpen={setIsOpen} />
       <MarketingSteps />
       <TabSelector
         useUrlParams

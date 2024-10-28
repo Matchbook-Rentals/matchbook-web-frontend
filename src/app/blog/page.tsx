@@ -5,6 +5,7 @@ import { BlogArticle } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Montserrat } from 'next/font/google';
+import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
