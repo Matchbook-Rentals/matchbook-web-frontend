@@ -56,17 +56,15 @@ export const MarketingSteps = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isAutoMoving, setIsAutoMoving] = useState(true);
 
-  const moveToNextStep = useCallback(() => {
+  const moveToNextStep = () => {
     setActiveStep((prevStep) => {
-      // Calculate next step by incrementing current step and using modulo to wrap around
-      const nextStep = (prevStep + 1) % steps.length;
-
-      // Safety check to ensure next step is valid (between 0 and steps.length)
-      // Returns nextStep if valid, otherwise returns 0
-      // This is technically redundant with the modulo operation but adds safety
-      return nextStep >= 0 && nextStep < steps.length ? nextStep : 0;
+      const nextStep = (prevStep + 1)
+      if (nextStep > steps.length) {
+        return 0
+      }
+      return nextStep;
     });
-  }, []); // Empty dependency array since function doesn't depend on any external values
+  };
 
   useEffect(() => {
     let timer: any;
