@@ -50,7 +50,6 @@ model User {
   boldSignTemplates BoldSignTemplate[]
   BoldSignLease     BoldSignLease[]
   Lease             Lease[]
-  articles          BlogArticle[]
 }
 
 model UserPreferences {
@@ -633,13 +632,11 @@ model BlogArticle {
   updatedAt  DateTime   @updatedAt
   imageUrl   String?
   published  Boolean    @default(false)
-  authorId   String
-  author     User       @relation(fields: [authorId], references: [id])
+  authorName String     @default("The Matchbookk Team")
   categories Category[]
   tags       Tag[]
 
   @@index([slug])
-  @@index([authorId])
   @@index([createdAt])
 }
 

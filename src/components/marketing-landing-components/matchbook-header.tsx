@@ -26,12 +26,12 @@ export default function MatchbookHeader({ handleListProperty = defaultListProper
         <div className="flex items-center mr-auto " >
           <Link href={"/"}>
             <img
-              src="navbar-logo-full.png"
+              src="/navbar-logo-full.png"
               alt="MatchBook Logo"
               className="hidden sm:block w-[full] h-14 md:h-14"
             />
             <img
-              src="House_Logo.png"
+              src="/House_Logo.png"
               alt="MatchBook Heart"
               className="sm:hidden h-10 w-10"
             />
