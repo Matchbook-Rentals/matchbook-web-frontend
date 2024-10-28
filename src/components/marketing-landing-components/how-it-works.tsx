@@ -59,7 +59,7 @@ export const MarketingSteps = () => {
   const moveToNextStep = () => {
     setActiveStep((prevStep) => {
       const nextStep = (prevStep + 1)
-      if (nextStep > steps.length) {
+      if (nextStep > 3) {
         return 0
       }
       return nextStep;
@@ -75,6 +75,7 @@ export const MarketingSteps = () => {
       clearInterval(timer);
     };
   }, [isAutoMoving, moveToNextStep]);
+
 
   const handleStepClick = (index: number) => {
     setActiveStep(index);
