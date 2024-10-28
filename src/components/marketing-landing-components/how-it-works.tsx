@@ -115,7 +115,7 @@ export const MarketingSteps = () => {
       <div className="flex justify-between  mt-16">
         {steps.map((step, index) => (
           <motion.div
-            key={index}
+            key={`title-${index}`}
             className="flex flex-col items-center cursor-pointer"
             onClick={() => handleStepClick(index)}
             whileHover={{ scale: 1.05 }}
@@ -136,7 +136,7 @@ export const MarketingSteps = () => {
       {/* Step description with animation */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={`step-${activeStep}`}
+          key={`description-${activeStep}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}

@@ -632,7 +632,7 @@ model BlogArticle {
   updatedAt  DateTime   @updatedAt
   imageUrl   String?
   published  Boolean    @default(false)
-  authorName String     @default("The Matchbookk Team")
+  authorName String     @default("The Matchbook Team")
   categories Category[]
   tags       Tag[]
 
