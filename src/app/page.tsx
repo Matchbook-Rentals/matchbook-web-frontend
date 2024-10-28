@@ -25,7 +25,17 @@ const CountdownDialog = ({ isOpen, setIsOpen }) => {
         h-[90vh] sm:h-[84vh] md:h-[77vh] px-1 pt-4 
       ">
         <div
-          className=" overflow-y-scroll overflow-x-hidden px-2"
+          // Adding colored borders for different responsive sizes using custom xs breakpoint
+          className="
+  overflow-y-scroll overflow-x-hidden px-2
+  border-2 
+  xs:border-red-500 
+  sm:border-blue-500 
+  md:border-green-500 
+  lg:border-yellow-500 
+  xl:border-purple-500
+  2xl:border-pink-500
+"
           style={{
             scrollbarWidth: "none",
             height: "100%",
