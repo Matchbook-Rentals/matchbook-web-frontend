@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { SettingsIcon } from "../svgs/svg-components";
 
 interface StepCircleProps {
   index: number;
@@ -72,44 +72,47 @@ export const MarketingSteps = () => {
   };
 
   return (
-    <div className="max-w-2xl min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
-      <div className="flex items-center justify-start space-x-4">
-        <div className="mx-auto w-full">
-          <div className="relative">
-            <h1 className="text-4xl md:text-5xl font-semibold text-right pr-5 mb-2">
-              How Matchbook Works
-            </h1>
-            <motion.div
-              className="bg-pinkBrand absolute -bottom-2 left-0 w-full h-[30px] -z-10"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-
-          <div className="flex justify-evenly mt-8">
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                className="flex flex-col items-center cursor-pointer"
-                onClick={() => handleStepClick(index)}
-                whileHover={{ scale: 1.05 }}
-              >
-                <StepCircle index={index} isActive={index === activeStep} />
-                <motion.span
-                  animate={{
-                    color: index === activeStep ? "#c68087" : "#000000"
-                  }}
-                  className="text-md font-semibold"
-                >
-                  {step.title}
-                </motion.span>
-              </motion.div>
-            ))}
-          </div>
+    <div className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
+      {/* Header section with title and decorative elements */}
+      <div className="relative">
+        <div className="flex justify-start items-end test p-0 w-full">
+          <SettingsIcon className="w-[91px] h-[77px] mb-0 " />
+          <h1 className="text-4xl md:text-[59px] test font-medium text-left whitespace-nowrap text-ellipsis">
+            How Matchbook Works
+          </h1>
         </div>
+        {/* Animated underline */}
+        <motion.div
+          className="bg-pinkBrand absolute left-0 w-full h-[30px] mt-4"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.5 }}
+        />
       </div>
 
+      {/* Step indicators */}
+      <div className="flex justify-evenly mt-16">
+        {steps.map((step, index) => (
+          <motion.div
+            key={index}
+            className="flex flex-col items-center cursor-pointer"
+            onClick={() => handleStepClick(index)}
+            whileHover={{ scale: 1.05 }}
+          >
+            <StepCircle index={index} isActive={index === activeStep} />
+            <motion.span
+              animate={{
+                color: index === activeStep ? "#c68087" : "#000000"
+              }}
+              className="text-md font-semibold"
+            >
+              {step.title}
+            </motion.span>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Step description with animation */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeStep}
