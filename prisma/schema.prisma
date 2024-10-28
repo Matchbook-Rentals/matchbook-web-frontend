@@ -50,7 +50,7 @@ model User {
   boldSignTemplates BoldSignTemplate[]
   BoldSignLease     BoldSignLease[]
   Lease             Lease[]
-  posts             Post[]
+  articles          BlogArticle[]
 }
 
 model UserPreferences {
@@ -623,7 +623,7 @@ model Lease {
   @@unique([matchId])
 }
 
-model Post {
+model BlogArticle {
   id         String     @id @default(cuid())
   slug       String     @unique
   title      String     @db.VarChar(255)
@@ -643,24 +643,24 @@ model Post {
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  description String?  @db.Text
-  posts       Post[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String        @id @default(cuid())
+  name        String        @unique
+  slug        String        @unique
+  description String?       @db.Text
+  articles    BlogArticle[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@index([slug])
 }
 
 model Tag {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
-  posts     Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String        @id @default(cuid())
+  name      String        @unique
+  slug      String        @unique
+  articles  BlogArticle[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([slug])
 }
