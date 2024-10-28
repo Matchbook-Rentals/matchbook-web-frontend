@@ -22,7 +22,11 @@ export default async function Home() {
       {articles.map((article) => (
         <>
           <h2 key={article.id}>{article.createdAt.toDateString()}</h2>
-          <img src='/article-images/introduciton.jpg' className='w-full rounded-lg' alt='Introducing Matchbook - Lead Image' />
+          <img src='/article-images/introduction.png' className='w-full h-[375px] rounded-lg' alt='Introducing Matchbook - Lead Image' />
+          <div>
+
+          </div>
+
         </>
       ))}
     </main>

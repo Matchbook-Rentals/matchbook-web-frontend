@@ -58,9 +58,9 @@ export const MarketingSteps = () => {
 
   const moveToNextStep = () => {
     setActiveStep((prevStep) => {
-      const nextStep = (prevStep + 1)
+      let nextStep = (prevStep + 1)
       if (nextStep > 3) {
-        return 0
+        nextStep = 0;
       }
       return nextStep;
     });
@@ -74,12 +74,12 @@ export const MarketingSteps = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [isAutoMoving, moveToNextStep]);
+  }, [isAutoMoving]);
 
 
   const handleStepClick = (index: number) => {
-    setActiveStep(index);
     setIsAutoMoving(false);
+    setActiveStep(index);
     // Reset auto-moving after a delay
     //setTimeout(() => setIsAutoMoving(true), 30000);
   };
@@ -136,7 +136,7 @@ export const MarketingSteps = () => {
       {/* Step description with animation */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeStep}
+          key={`step-${activeStep}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
