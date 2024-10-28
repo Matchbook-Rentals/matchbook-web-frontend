@@ -74,7 +74,6 @@ export default function Footer() {
           </div>
 
           {/* Social Media Links */}
-          {/* Social Media Links */}
           <div className="text-lg mx-auto">
             <h3 className="text-xl font-semibold">Follow Us</h3>
             <SocialLinks className="pt-3 md:pt-6 w-[88px] md:w-auto justify-center" />

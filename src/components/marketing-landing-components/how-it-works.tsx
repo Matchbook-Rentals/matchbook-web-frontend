@@ -142,7 +142,7 @@ export const MarketingSteps = () => {
           exit={{ opacity: 0, y: -20 }}
           className=" text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
         >
-          <p>{steps[activeStep]?.description || steps[0].description}</p>
+          <p>{steps[activeStep]?.description}</p>
         </motion.div>
       </AnimatePresence>
     </div>
