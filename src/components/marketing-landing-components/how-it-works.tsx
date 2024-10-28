@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const StepCircle = ({ index, isActive }) => (
+
+interface StepCircleProps {
+  index: number;
+  isActive: boolean;
+}
+
+const StepCircle: React.FC<StepCircleProps> = ({ index, isActive }) => (
   <motion.div
     layout
     initial={false}
@@ -49,7 +55,7 @@ export const MarketingSteps = () => {
   }, []);
 
   useEffect(() => {
-    let timer;
+    let timer: any;
     if (isAutoMoving) {
       timer = setInterval(moveToNextStep, 7000);
     }
@@ -58,7 +64,7 @@ export const MarketingSteps = () => {
     };
   }, [isAutoMoving, moveToNextStep]);
 
-  const handleStepClick = (index) => {
+  const handleStepClick = (index: number) => {
     setActiveStep(index);
     setIsAutoMoving(false);
     // Reset auto-moving after a delay
@@ -66,7 +72,7 @@ export const MarketingSteps = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-8 mt-24">
+    <div className="max-w-2xl min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
       <div className="flex items-center justify-start space-x-4">
         <div className="mx-auto w-full">
           <div className="relative">

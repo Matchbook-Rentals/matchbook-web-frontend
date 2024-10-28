@@ -187,7 +187,7 @@ const WebHomePage = () => {
       <TabSelector
         useUrlParams
         tabs={tabs}
-        className="max-w-[700px] p-2 mx-auto mt-32 border-b-0"
+        className="max-w-[700px] p-2 mx-auto mt-12 xs:mt-32 border-b-0"
         tabsListClassName="justify-center w-full border-b-0 mx-auto"
       />
       <div className="justify-center flex border-b-0 mx-auto w-1/2 p-6">
