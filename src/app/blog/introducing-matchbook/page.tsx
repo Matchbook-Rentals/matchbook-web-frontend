@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
-import { CountdownDialog } from '@/app/page';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
 import { Montserrat } from 'next/font/google';
 
@@ -15,54 +14,24 @@ const BlogArticle = () => {
         alt={'Blog article image'}
         width={1515}
         height={337}
-        className="w-[95%] mx-auto md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
-        priority={true} // Loads image immediately for better UX
+        className="w-[95%] mx-auto mt-12 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
+        priority={true}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
       />
-      <article className="max-w-2xl mx-auto prose prose-lg text-left space-y-4 indent-4 my-4 sm:my-8 md:my-16">
+      <article className="max-w-3xl mx-auto prose prose-sm md:prose-base lg:prose-lg text-left shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(0,0,0,0.15)] transition-shadow duration-300 space-y-4 indent-4 p-4 md:p-6 lg:p-8 my-4 sm:my-8 md:my-16 bg-white rounded-xl">
         <div>
-          <h1 className="text-4xl font-bold mb-1 text-left indent-0">Revolutionizing the Rental Experience</h1>
-          <h2 className="text-xl pl-8 font-thin mb-6 text-left text-gray-600 indent-0">from The Matchbook Team</h2>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-center indent-0">Introducing MatchBook</h1>
+          <h2 className="text-base md:text-lg font-thin mb-6 text-center text-gray-600 indent-0">by Daniel Resner </h2>
         </div>
-        <p>In an age of simplicity and efficiency, we are shocked by how annoying
-          and redundant arguably the most important transaction, finding a place
-          to live, still is. We are here to make renting easier for guests
-          and hosts alike.</p>
+        <div className="max-w-3xl mx-auto bg-background  px-4 pb-8 rounded-lg  space-y-4">
+          <p className="mb-6">Finding a new place should be an exciting time; a time to celebrate new beginnings and fresh starts. The trouble is, currently the process of finding and renting a new spot is a pain in the ass... especially, if like many folks out there your rental needs don't fall into the traditional.</p>
 
-        <p>We want to eliminate the clunky process of diving through random
-          apartment listings on Craigslist or Facebook. We’re here to get rid
-          of those $50+ fees per application because seriously? What are we
-          paying for?</p>
+          <p className="mb-6">After moving over 30 times in the last 10 years, my wife and I were so fed up that we decided to do something about it. MatchBook is designed to eliminate the ass pain and make the process of renting easy for both parties.</p>
 
-        <p>We’re here to standardize and streamline the process across the
-          board, so you know you can trust the fine print. And we’re here to
-          make the process of finding an apartment fun—because right now, it’s
-          just frustrating.</p>
-
-        <p>With us, you’ll have the entire process of finding, renting, and
-          rating a mid-term or long-term stay, all in one website and app.
-          From searching, to matching, to booking, and managing all your
-          monthly payments—we’ve got it here.</p>
-
-        <h2 className="text-[28px] font-semibold pt-4">Our Story</h2>
-        <p>After moving 50+ times in the last 10 years ourselves, we’re
-          ready to change up the process, because lord knows, it’s about time.</p>
-
-        <h2 className="text-[28px] font-semibold pt-4">Join Us</h2>
-        <p>Ready to join us? Our launch is just a few months away, so
-          subscribe to our email notifications if you want to say goodbye
-          to the old process and welcome a new way of renting. Renting
-          shouldn’t be so hard. Now it doesn’t have to be.</p>
-
-        <div className="text-center mt-8">
-          <SubscribeDialog triggerText='Subscribe for Updates'
-            triggerClassNames={`bg-blueBrand font-regular
-                                hover:bg-blue-700 text-white 
-                                font-bold py-2 px-4 mt-16 
-                                mb-12 rounded ${montserrat.className}`} />
+          <p>We want to eliminate the clunky process of diving through random apartment listings on Craigslist, Facebook or Furnished Finders. We’re here to get rid of $50+ fees per application, because seriously? We’re here to standardize and streamline the lease process across the board, so you know you can trust the fine print. We’re here to provide a simple and intuitive interface that helps you sift through the rough to find the diamonds. With us, you’ll have the entire process of finding, renting, and rating a mid-term or long-term stay, all in one platform. From searching, to matching, to booking, and all your monthly payments- we've got it here.</p>
         </div>
-      </article>
-    </div>
+      </article >
+    </div >
   );
 };
 

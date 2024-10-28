@@ -14,9 +14,10 @@ const BrevoIframe: React.FC = () => {
       src={BREVO_FORM_URL}
       className={
         "border-0 border-white focus:ring-0 focus:outline-none " +
-        "w-full h-[750px] sm:h-[600px] overflow-y-scroll mt-[]"
+        "w-full h-[800px] sm:h-[750px] overflow-y-scroll mt-[]"
       }
       title="Brevo Form"
+      scrolling="no"
     />
   );
 };
