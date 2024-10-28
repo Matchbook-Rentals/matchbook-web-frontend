@@ -81,11 +81,19 @@ export const MarketingSteps = () => {
     setActiveStep(index);
     setIsAutoMoving(false);
     // Reset auto-moving after a delay
-    setTimeout(() => setIsAutoMoving(true), 30000);
+    //setTimeout(() => setIsAutoMoving(true), 30000);
+  };
+
+
+  const logDetails = () => {
+    console.log('Active Step Index:', activeStep);
+    console.log('Is Auto Moving:', isAutoMoving);
+    console.log('Current Step Details:', steps[activeStep]);
+    console.log('All Steps:', steps);
   };
 
   return (
-    <div className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
+    <div onClick={logDetails} className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
       {/* Header section with title and decorative elements */}
       <div className="relative">
         <div className="flex justify-start  p-0 w-full mb-1">
