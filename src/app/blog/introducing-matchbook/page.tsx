@@ -10,14 +10,14 @@ const BlogArticle = () => {
         alt={'Blog article image'}
         width={1515}
         height={337}
-        className="w-full aspect-square lg:aspect-[1515/337] rounded-lg object-cover"
+        className="w-full aspect-square lg:aspect-[1515/337] rounded-lg object-cover mt-16"
         priority={true} // Loads image immediately for better UX
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
       />
-      <article className="max-w-2xl mx-auto prose prose-lg space-y-8 indent-4 my-4 sm:my-8 md:my-16">
+      <article className="max-w-2xl mx-auto prose prose-lg space-y-8 text-left indent-4 my-4 sm:my-8 md:my-16">
         <div>
           <h1 className="text-4xl font-bold mb-1 text-center indent-0">Revolutionizing the Rental Experience</h1>
-          <h2 className=" font-thin mb-6 text-left indent-0">from The Matchbook Team</h2>
+          <h2 className="text-xl  pl-8 font-thin mb-6 text-left text-gray-600 indent-0">from The Matchbook Team</h2>
         </div>
         <p>In an age of simplicity and efficiency, we are shocked by how annoying
           and redundant arguably the most important transaction, finding a place
