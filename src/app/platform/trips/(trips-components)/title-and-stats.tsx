@@ -39,36 +39,36 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
     .join(' | ');
 
   return (
-    <div className="flex flex-col md:flex-row md:-translate-y-[50%] lg:-translate-y-[65%] md:space-x-4 text-center justify-between w-full my-2 py-1 mx-auto  border-b border-gray-300">
-      <div className="flex flex-col mb-4 md:mb-0  w-full md:w-1/2">
-        <div className='flex flex-col  xs:flex-row md:flex-col lg:flex-row gap-2 justify-between'>
-          <div className='test'>
-            <p className="text-lg text-center xs:text-left md:text-center lg:text-left text-gray-600 mt-2">
+    <div className="flex flex-col md:flex-row md:-translate-y-[40%] lg:-translate-y-[50%]  md:space-x-8 text-center justify-between w-full my-2 py-1 mx-auto">
+      <div className="flex flex-col mb-4 md:mb-0  w-full md:w-1/2 ">
+        <div className='flex flex-col  xs:flex-row md:flex-col lg:flex-row lg:items-start gap-2 justify-between'>
+          <div className=''>
+            <p className="text-lg lg:text-xl text-center xs:text-left md:text-center lg:text-left text-[#2D2F2E] mt-2">
               Address
             </p>
-            <p className="text-xl text-black font-medium truncate ">
+            <p className="text-xl lg:text-3xl text-charcoalBrand font-medium truncate ">
               {address}
             </p>
 
           </div>
-          <div className='test'>
-            <p className="text-lg text-gray-600 mt-2">
+          <div className=''>
+            <p className="text-lg lg:text-xl text-center xs:text-right md:text-center lg:text-right text-[#2D2F2E] mt-2">
               Distance
             </p>
-            <p className="text-xl font-medium text-black ">
+            <p className="text-xl lg:text-3xl font-medium text-[#404040] ">
               {distance} Miles
             </p>
           </div>
         </div>
       </div>
-      <div className="flex flex-col w-full md:w-1/2 py-1 test-blue">
+      <div className="flex flex-col w-full md:w-1/2 pt-1 pb-8 justify-evenly border-b border-[#313131] ">
         <div className='flex justify-between'>
-          <p className="text-xl xs:text-3xl font-semibold">{bedrooms.length} BR | {numBath} BA</p>
-          <p className="text-xl xs:text-3xl font-semibold">${rentPerMonth.toLocaleString()} / Mo</p>
+          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">{bedrooms.length} BR | {numBath} BA</p>
+          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">${rentPerMonth.toLocaleString()} / Mo</p>
         </div>
-        <div className='flex justify-between mt-6'>
-          <p className="text-xl xs:text-3xl "> {sqft} Sqft</p>
-          <p className="text-xl xs:text-3xl ">${deposit.toLocaleString()} Dep.</p>
+        <div className='flex justify-between mt-6 border-b-1'>
+          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl"> {sqft} Sqft</p>
+          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">${deposit.toLocaleString()} Dep.</p>
         </div>
       </div>
     </div>

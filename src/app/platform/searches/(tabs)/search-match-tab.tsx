@@ -152,7 +152,7 @@ const MatchViewTab: React.FC = () => {
           />
 
         </div>
-        <h2 className={`md:text-3xl lg:text-4xl hidden md:inline w-1/2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
+        <h2 className={`md:text-3xl lg:text-4xl hidden md:inline w-1/2 pl-2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
       </div>
       <TitleAndStats
         title={showListings[0]?.title}
