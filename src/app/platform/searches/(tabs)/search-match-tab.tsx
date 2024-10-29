@@ -13,9 +13,11 @@ import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
-import { Button } from '@/components/ui/button';
 import { QuestionMarkIcon } from '@radix-ui/react-icons';
-import { BiQuestionMark } from 'react-icons/bi';
+import { Montserrat } from 'next/font/google';
+
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 const MatchViewTab: React.FC = () => {
   const { state, actions } = useTripContext();
@@ -94,60 +96,63 @@ const MatchViewTab: React.FC = () => {
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className="button-control-box flex justify-around p-3 md:p-5 w-full md:w-1/2 gap-2">
+      <div className='flex p-0'>
+        <div className="button-control-box flex justify-around py-0  md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
 
-        <ButtonControl
-          handleClick={() => handleReject(showListings[0])}
-          Icon={
-            <RejectIcon
-              className='h-[60%] w-[60%] md:h-[50%] md:w-[50%]'
-            />
-          }
-          className={`
+          <ButtonControl
+            handleClick={() => handleReject(showListings[0])}
+            Icon={
+              <RejectIcon
+                className='h-[60%] w-[60%] md:h-[50%] md:w-[50%]'
+              />
+            }
+            className={`
             bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] 
             flex items-center justify-center p-4 rounded-full text-center text-white 
             text-sm transition-all duration-200
           `}
-        />
+          />
 
-        <ButtonControl
-          handleClick={
-            viewedListings.length === 0
-              ? () => console.log('No previous listing')
-              : handleBack
-          }
-          Icon={<ReturnIcon className='h-[60%] w-[60%]' />}
-          className={`
+          <ButtonControl
+            handleClick={
+              viewedListings.length === 0
+                ? () => console.log('No previous listing')
+                : handleBack
+            }
+            Icon={<ReturnIcon className='h-[60%] w-[60%]' />}
+            className={`
             bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square 
             md:w-[100px] self-center rounded-full text-center flex items-center 
             justify-center text-white text-sm transition-all duration-200
           `}
-        />
+          />
 
-        <ButtonControl
-          handleClick={() => console.log('Help clicked')}
-          Icon={<QuestionMarkIcon className='h-[60%] w-[60%]' />}
-          className={`
+          <ButtonControl
+            handleClick={() => console.log('Help clicked')}
+            Icon={<QuestionMarkIcon className='h-[60%] w-[60%]' />}
+            className={`
             bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square 
             md:w-[100px] self-center rounded-full text-center flex items-center 
             justify-center text-white text-sm transition-all duration-200
           `}
-        />
+          />
 
-        <ButtonControl
-          handleClick={() => handleLike(showListings[0])}
-          Icon={
-            <BrandHeart
-              className='h-[70%] w-[70%] md:h-[50%] md:w-[50%]'
-            />
-          }
-          className={`
-            bg-primaryBrand/70 hover:bg-primaryBrand w-[20vw] aspect-square 
+          <ButtonControl
+            handleClick={() => handleLike(showListings[0])}
+            Icon={
+              <BrandHeart
+                className='h-[70%] w-[70%] md:h-[50%] md:w-[50%]'
+              />
+            }
+            className={`
+            bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-square 
             md:w-[150px] flex items-center justify-center p-4 rounded-full text-center 
             text-white text-sm transition-all duration-200
           `}
-        />
+          />
 
+        </div>
+        <h2 className={`md:text-3xl lg:text-4xl hidden md:inline w-1/2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
       </div>
       <TitleAndStats
         title={showListings[0]?.title}

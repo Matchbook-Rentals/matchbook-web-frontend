@@ -57,8 +57,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         primaryBrand: {
-          DEFAULT: '#a4b99a',
-          80: '#a4b99acc', // 80% opacity
+          DEFAULT: '#85997DBF',
         },
         secondaryBrand: {
           DEFAULT: '#85997d',

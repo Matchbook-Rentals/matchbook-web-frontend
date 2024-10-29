@@ -64,13 +64,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <CarouselContent className="">
             {/* Map through chunks of 4 images */}
             {chunkedImages.map((chunk, chunkIndex) => (
-              <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[40vh] p-0">
+              <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[40vh] px-4 ">
                 {/* Grid layout for 4 images */}
                 <div className="grid grid-cols-2 grid-rows-2 gap-4 ">
                   {chunk.map((image, idx) => (
                     <div
                       key={`image-${image.id}`}
-                      className="relative cursor-pointer  h-[20vh] overflow-hidden"
+                      className="relative cursor-pointer  h-[19vh] overflow-hidden"
                       onClick={() => handleImageClick(listingImages.findIndex(img => img.id === image.id))}
                     >
                       <img
