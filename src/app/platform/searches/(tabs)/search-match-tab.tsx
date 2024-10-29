@@ -94,25 +94,25 @@ const MatchViewTab: React.FC = () => {
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
           Icon={<RejectIcon height="50%" width="50%" />}
-          className="bg-pinkBrand/70 hover:bg-pinkBrand h-[20vw] w-[20vw] md:h-[150px] md:w-[150px] flex items-center justify-center p-4 rounded-full text-center text-white text-sm transition-all duration-200"
+          className="bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] flex items-center justify-center p-4 rounded-full text-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
           Icon={<ReturnIcon height="60%" width="60%" />}
-          className="bg-orangeBrand/70 hover:bg-orangeBrand h-[15vw] w-[15vw] md:h-[100px] md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          className="bg-orangeBrand/70 hover:bg-orangeBrand w-[15vw] aspect-square md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => console.log('Help clicked')}
           Icon={<QuestionMarkIcon height="60%" width="60%" />}
-          className="bg-yellowBrand/80 hover:bg-yellowBrand h-[15vw] w-[15vw] md:h-[100px] md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          className="bg-yellowBrand/80 hover:bg-yellowBrand w-[15vw] aspect-square md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
           Icon={<BrandHeart height="40%" width="40%" />}
-          className="bg-primaryBrand/70 hover:bg-primaryBrand h-[20vw] w-[20vw] md:h-[150px] md:w-[150px] rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          className="bg-primaryBrand/70 hover:bg-primaryBrand w-[20vw] aspect-square md:w-[150px] rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
       </div>
