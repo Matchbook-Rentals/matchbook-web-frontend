@@ -26,8 +26,9 @@ export default async function Home() {
       <h1 className="text-5xl text-left mb-8 font-regular">Articles</h1>
       {articles.map((article) => (
         <>
-          <div className='flex'>
-            <h3 key={article.id} className={`mb-3 ${montserrat.className}`}>{article.createdAt.toDateString()}</h3>
+          <div className='flex justify-between mb-4 items-start'>
+            <h3 key={article.id} className={`${montserrat.className}`}>{article.createdAt.toDateString()}</h3>
+            <SocialLinks className='' />
           </div>
           <Image
             src={`/article-images/introduction.png`} // Assuming imageUrl is stored in article data
@@ -41,7 +42,6 @@ export default async function Home() {
           <div>
             <div className='flex justify-between mt-5'>
               <h2 className='text-[30px] font-semibold'> {article.title} </h2>
-              <SocialLinks className='pt-3 md:pt-6  md:w-auto justify-center' />
             </div>
             <p className='mt-2'>{article.excerpt} </p>
 
