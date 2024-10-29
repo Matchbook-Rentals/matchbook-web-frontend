@@ -90,13 +90,13 @@ const MatchViewTab: React.FC = () => {
 
   // Main component render
   return (
-    <div className="w-full ">
+    <div className={`w-full `}>
 
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className='flex p-0'>
+      <div className='flex p-0 '>
         <div className="button-control-box flex justify-around py-0  md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
 
           <ButtonControl
@@ -158,6 +158,7 @@ const MatchViewTab: React.FC = () => {
         title={showListings[0]?.title}
         rating={3.5}
         numStays={0}
+        address={showListings[0]?.locationString}
         numBath={showListings[0]?.bathroomCount}
         numBeds={showListings[0]?.roomCount}
         rentPerMonth={showListings[0]?.calculatedPrice || 0}
