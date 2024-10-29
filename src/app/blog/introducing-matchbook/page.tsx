@@ -3,15 +3,13 @@ import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
 import { Montserrat } from 'next/font/google';
-
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
-
 const BlogArticle = () => {
   return (
     <div className={`${PAGE_MARGIN} mx-auto`}>
       <Image
-        src={`/article-images/introduction.png`}
-        alt={'Blog article image'}
+        src={"/article-images/introduction.png"}
+        alt={"Blog article image"}
         width={1515}
         height={337}
         className="w-[95%] mx-auto mt-12 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
@@ -24,15 +22,12 @@ const BlogArticle = () => {
           <h2 className="text-base md:text-lg font-thin mb-6 text-center text-gray-600 indent-0">by Daniel Resner </h2>
         </div>
         <div className="max-w-3xl mx-auto bg-background  px-4 pb-8 rounded-lg  space-y-4">
-          <p className="mb-6">Finding a new place should be an exciting time; a time to celebrate new beginnings and fresh starts. The trouble is, currently the process of finding and renting a new spot is a pain in the ass... especially, if like many folks out there your rental needs don't fall into the traditional.</p>
-
+          <p className="mb-6">Finding a new place should be an exciting time; a time to celebrate new beginnings and fresh starts. The trouble is, currently the process of finding and renting a new spot is a pain in the ass... especially, if like many folks out there your rental needs don&apos;t fall into the traditional.</p>
           <p className="mb-6">After moving over 30 times in the last 10 years, my wife and I were so fed up that we decided to do something about it. MatchBook is designed to eliminate the ass pain and make the process of renting easy for both parties.</p>
-
-          <p>We want to eliminate the clunky process of diving through random apartment listings on Craigslist, Facebook or Furnished Finders. We’re here to get rid of $50+ fees per application, because seriously? We’re here to standardize and streamline the lease process across the board, so you know you can trust the fine print. We’re here to provide a simple and intuitive interface that helps you sift through the rough to find the diamonds. With us, you’ll have the entire process of finding, renting, and rating a mid-term or long-term stay, all in one platform. From searching, to matching, to booking, and all your monthly payments- we've got it here.</p>
+          <p>We want to eliminate the clunky process of diving through random apartment listings on Craigslist, Facebook or Furnished Finders. We&apos;re here to get rid of $50+ fees per application, because seriously? We&apos;re here to standardize and streamline the lease process across the board, so you know you can trust the fine print. We&apos;re here to provide a simple and intuitive interface that helps you sift through the rough to find the diamonds. With us, you&apos;ll have the entire process of finding, renting, and rating a mid-term or long-term stay, all in one platform. From searching, to matching, to booking, and all your monthly payments- we&apos;ve got it here.</p>
         </div>
-      </article >
-    </div >
+      </article>
+    </div>
   );
 };
-
 export default BlogArticle;
