@@ -1,4 +1,5 @@
 'use client'
+//IMports
 import React, { use } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
@@ -88,31 +89,63 @@ const MatchViewTab: React.FC = () => {
   // Main component render
   return (
     <div className="w-full ">
-      <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
+
+      <ListingImageCarousel
+        listingImages={showListings[0]?.listingImages || []}
+      />
+
       <div className="button-control-box flex justify-around p-3 md:p-5 w-full md:w-1/2 gap-2">
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
-          Icon={<RejectIcon className=' h-[60%] w-[60%]  md:h-[50%] md:w-[50%]' />}
-          className="bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] flex items-center justify-center p-4 rounded-full text-center text-white text-sm transition-all duration-200"
+          Icon={
+            <RejectIcon
+              className='h-[60%] w-[60%] md:h-[50%] md:w-[50%]'
+            />
+          }
+          className={`
+            bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] 
+            flex items-center justify-center p-4 rounded-full text-center text-white 
+            text-sm transition-all duration-200
+          `}
         />
 
         <ButtonControl
-          handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
+          handleClick={
+            viewedListings.length === 0
+              ? () => console.log('No previous listing')
+              : handleBack
+          }
           Icon={<ReturnIcon className='h-[60%] w-[60%]' />}
-          className="bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          className={`
+            bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square 
+            md:w-[100px] self-center rounded-full text-center flex items-center 
+            justify-center text-white text-sm transition-all duration-200
+          `}
         />
 
         <ButtonControl
           handleClick={() => console.log('Help clicked')}
           Icon={<QuestionMarkIcon className='h-[60%] w-[60%]' />}
-          className="bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          className={`
+            bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square 
+            md:w-[100px] self-center rounded-full text-center flex items-center 
+            justify-center text-white text-sm transition-all duration-200
+          `}
         />
 
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<BrandHeart className=' h-[50%] w-[50%]  md:h-[40%] md:w-[40%]' />}
-          className="bg-primaryBrand/70 hover:bg-primaryBrand w-[20vw] aspect-square md:w-[150px] rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
+          Icon={
+            <BrandHeart
+              className='h-[50%] w-[50%] md:h-[40%] md:w-[40%]'
+            />
+          }
+          className={`
+            bg-primaryBrand/70 hover:bg-primaryBrand w-[20vw] aspect-square 
+            md:w-[150px] rounded-full text-center flex items-center justify-center 
+            text-white text-sm transition-all duration-200
+          `}
         />
 
       </div>
@@ -123,7 +156,11 @@ const MatchViewTab: React.FC = () => {
         numBath={showListings[0]?.bathroomCount}
         numBeds={showListings[0]?.roomCount}
         rentPerMonth={showListings[0]?.calculatedPrice || 0}
-        distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
+        distance={
+          showListings[0]?.distance
+            ? parseFloat(showListings[0]?.distance.toFixed(1))
+            : undefined
+        }
         deposit={showListings[0]?.depositSize}
         sqft={showListings[0]?.squareFootage}
         bedrooms={showListings[0]?.bedrooms}
