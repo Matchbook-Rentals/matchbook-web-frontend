@@ -89,31 +89,30 @@ const MatchViewTab: React.FC = () => {
   return (
     <div className="w-full ">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
-      <div className="button-control-box flex justify-around p-5 w-full md:w-1/2">
+      <div className="button-control-box flex justify-around p-3 md:p-5 w-full md:w-1/2 gap-2">
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
-          Icon={<RejectIcon height={60} width={60} />}
-          className="bg-pinkBrand/70 hover:bg-pinkBrand h-[150px] w-[150px] flex items-center justify-center p-4 rounded-full text-center flex justify-center text-white text-sm  transition-all duration-200"
+          Icon={<RejectIcon height="50%" width="50%" />}
+          className="bg-pinkBrand/70 hover:bg-pinkBrand h-[20vw] w-[20vw] md:h-[150px] md:w-[150px] flex items-center justify-center p-4 rounded-full text-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
-          Icon={<ReturnIcon height={60} width={60} />}
-          className="bg-orangeBrand/70 hover:bg-orangeBrand h-[100px] flex items-center justify-center w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          Icon={<ReturnIcon height="60%" width="60%" />}
+          className="bg-orangeBrand/70 hover:bg-orangeBrand h-[15vw] w-[15vw] md:h-[100px] md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => console.log('Help clicked')}
-          // chagne to a question mark icon (no circle)
-          Icon={<QuestionMarkIcon height={60} width={60} />}
-          className="bg-yellowBrand/80 flex items-center justify-center hover:bg-yellowBrand h-[100px] w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          Icon={<QuestionMarkIcon height="60%" width="60%" />}
+          className="bg-yellowBrand/80 hover:bg-yellowBrand h-[15vw] w-[15vw] md:h-[100px] md:w-[100px] self-center rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<BrandHeart height={60} width={60} />}
-          className="bg-primaryBrand/70 flex items-center justify-center hover:bg-primaryBrand h-[150px] w-[150px] rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          Icon={<BrandHeart height="40%" width="40%" />}
+          className="bg-primaryBrand/70 hover:bg-primaryBrand h-[20vw] w-[20vw] md:h-[150px] md:w-[150px] rounded-full text-center flex items-center justify-center text-white text-sm transition-all duration-200"
         />
 
       </div>
