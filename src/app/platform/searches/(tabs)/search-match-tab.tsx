@@ -138,12 +138,12 @@ const MatchViewTab: React.FC = () => {
           handleClick={() => handleLike(showListings[0])}
           Icon={
             <BrandHeart
-              className='h-[50%] w-[50%] md:h-[40%] md:w-[40%]'
+              className='h-[70%] w-[70%] md:h-[50%] md:w-[50%]'
             />
           }
           className={`
             bg-primaryBrand/70 hover:bg-primaryBrand w-[20vw] aspect-square 
-            md:w-[150px] rounded-full text-center flex items-center justify-center 
+            md:w-[150px] flex items-center justify-center p-4 rounded-full text-center 
             text-white text-sm transition-all duration-200
           `}
         />
