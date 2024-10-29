@@ -97,7 +97,7 @@ const tabs: Tab[] = [
       <Accordion type="multiple" className="space-y-4" >
         {guestFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl text-left pt-0 font-semibold">{faq.question}</AccordionTrigger>
+            <AccordionTrigger alternativeArrow chevronClassName='mt-2' className="text-xl text-left pt-0 font-semibold flex items-start">{faq.question}</AccordionTrigger>
             <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
@@ -108,10 +108,10 @@ const tabs: Tab[] = [
     label: 'Host',
     textSize: 'text-xl',
     content:
-      <Accordion type="multiple" className="space-y-6" >
+      <Accordion type="multiple" className="space-y-4" >
         {hostFaqData.map((faq, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger alternativeArrow chevronClassName='' className="text-xl text-left font-semibold">{faq.question}</AccordionTrigger>
+            <AccordionTrigger alternativeArrow chevronClassName='mt-2' className="text-xl text-left pt-0 font-semibold flex items-start">{faq.question}</AccordionTrigger>
             <AccordionContent className=" text-[15px] pr-6">{faq.answer}</AccordionContent>
           </AccordionItem>
         ))}
