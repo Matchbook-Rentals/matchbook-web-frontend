@@ -58,11 +58,6 @@ export const MarketingSteps = () => {
   const [isAutoMoving, setIsAutoMoving] = useState(true);
   const [count, setCount] = useState(0);
 
-
-  useEffect(() => {
-    console.log('Component render count:', count);
-  }, []); // Empty deps array means this only runs on mount
-
   const moveToNextStep = () => {
     setCount(prev => prev + 1);
     setActiveStep((prevStep) => {
@@ -91,15 +86,9 @@ export const MarketingSteps = () => {
   };
 
 
-  const logDetails = () => {
-    console.log('Active Step Index:', activeStep);
-    console.log('Is Auto Moving:', isAutoMoving);
-    console.log('Current Step Details:', steps[activeStep]);
-    console.log('All Steps:', steps);
-  };
 
   return (
-    <div onClick={logDetails} className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
+    <div className="max-w-[800px] min-h-[480px] xs:min-h-[0px] mx-auto px-8 mt-24">
       {/* Header section with title and decorative elements */}
       <div className="relative">
         <div className="flex justify-start  p-0 w-full mb-1">
@@ -148,7 +137,6 @@ export const MarketingSteps = () => {
               < motion.li
                 key={`step--${count}`}
                 initial={{ opacity: 0, y: 20 }}
-                onAnimationComplete={() => console.log(`step--${count}`)}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 className="text-xl sm:text-2xl md:text-3xl mb-5 mt-8 md:mt-12 w-full mx-auto min-h-[150px] flex items-start"
