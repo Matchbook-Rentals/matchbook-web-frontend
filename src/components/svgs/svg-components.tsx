@@ -218,9 +218,9 @@ const ReturnIcon = (props: any) => (
     <path
       d="M61 26.5C61 36 52 38 32 38M61 26.5C61 17 52 15 32 15M32 15L3 15M3 15L14 5M3 15L14 25"
       stroke="white"
-      stroke-width="5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

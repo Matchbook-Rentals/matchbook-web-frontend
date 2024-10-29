@@ -94,26 +94,26 @@ const MatchViewTab: React.FC = () => {
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
           Icon={<RejectIcon height={60} width={60} />}
-          className="bg-red-500/50 h-[150px] w-[150px] flex items-center justify-center p-4 rounded-full text-center flex justify-center text-white text-sm hover:bg-red-600 transition-all duration-200"
+          className="bg-pinkBrand/70 hover:bg-pinkBrand h-[150px] w-[150px] flex items-center justify-center p-4 rounded-full text-center flex justify-center text-white text-sm  transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
           Icon={<ReturnIcon height={60} width={60} />}
-          className="bg-orange-500/50 hover:bg-orange-600 h-[100px] flex items-center justify-center w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          className="bg-orangeBrand/70 hover:bg-orangeBrand h-[100px] flex items-center justify-center w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => console.log('Help clicked')}
           // chagne to a question mark icon (no circle)
           Icon={<QuestionMarkIcon height={60} width={60} />}
-          className="bg-yellow-500/50 flex items-center justify-center hover:bg-yellow-600 h-[100px] w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          className="bg-yellowBrand/80 flex items-center justify-center hover:bg-yellowBrand h-[100px] w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<BrandHeart height={40} width={40} />}
-          className="bg-green-500/50 flex items-center justify-center hover:bg-green-600 h-[150px] w-[150px] rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+          Icon={<BrandHeart height={60} width={60} />}
+          className="bg-primaryBrand/70 flex items-center justify-center hover:bg-primaryBrand h-[150px] w-[150px] rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
       </div>
