@@ -2,8 +2,7 @@
 import React, { use } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
-import { HeartIcon } from '@/components/svgs/svg-components';
-import { CrossIcon, RewindIcon, HelpCircle } from 'lucide-react';
+import { BrandHeart, HeartIcon, PictureIcon, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
@@ -14,6 +13,8 @@ import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
 import { Button } from '@/components/ui/button';
+import { QuestionMarkIcon } from '@radix-ui/react-icons';
+import { BiQuestionMark } from 'react-icons/bi';
 
 const MatchViewTab: React.FC = () => {
   const { state, actions } = useTripContext();
@@ -92,27 +93,26 @@ const MatchViewTab: React.FC = () => {
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
-          Icon={
-            <CrossIcon height={40} width={40} />
-          }
+          Icon={<RejectIcon height={60} width={60} />}
           className="bg-red-500/50 h-[150px] w-[150px] flex items-center justify-center p-4 rounded-full text-center flex justify-center text-white text-sm hover:bg-red-600 transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
-          Icon={<RewindIcon height={40} width={40} />}
+          Icon={<ReturnIcon height={60} width={60} />}
           className="bg-orange-500/50 hover:bg-orange-600 h-[100px] flex items-center justify-center w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => console.log('Help clicked')}
-          Icon={<HelpCircle height={40} width={40} />}
+          // chagne to a question mark icon (no circle)
+          Icon={<QuestionMarkIcon height={60} width={60} />}
           className="bg-yellow-500/50 flex items-center justify-center hover:bg-yellow-600 h-[100px] w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
-          Icon={<HeartIcon height={40} width={40} />}
+          Icon={<BrandHeart height={40} width={40} />}
           className="bg-green-500/50 flex items-center justify-center hover:bg-green-600 h-[150px] w-[150px] rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
 
