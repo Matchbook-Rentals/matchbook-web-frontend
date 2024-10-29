@@ -21,37 +21,44 @@ interface Tab {
 const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
 
-  const tabSize = 'text-lg sm:text-xl'
+  const tabTriggerTextStyles = 'text-md xs:text-[16px] sm:text-xl'
+  const tabTriggerStyles = 'p-0 xs:px-1 sm:px-2 '
   const tabs: Tab[] = [
     {
       label: 'Matchmaker',
       value: 'matchmaker',
       content: state.trip ? <MatchmakerTab /> : null,
-      textSize: tabSize
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+
     },
     // {
     //   label: 'Map View',
     //   value: 'map-view',
     //   content: state.trip ? <MapView /> : null,
-    //   textSize: tabSize
+    //   textSize: tabTriggerTextStyles,
+    //   className: tabTriggerStyles,
     // },
     {
       label: 'Favorites',
       value: 'favorites',
       content: <ShortListTab />,
-      textSize: tabSize
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
     {
       label: 'Matchbook',
       value: 'matchbook',
       content: <SearchMatchbookTab />,
-      textSize: tabSize
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
     {
       label: 'Application',
       value: 'application',
       content: <ApplicationTab />,
-      textSize: tabSize
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
   ];
 
@@ -63,7 +70,7 @@ const TripsPage: React.FC = () => {
           tabs={tabs}
           className='mx-auto w-full'
           tabsClassName='w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex justify-center md:gap-x-4 w-full  mx-auto'
+          tabsListClassName='flex justify-between xs:justify-center space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
         />
       </div>
     </div>

@@ -54,9 +54,9 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
   };
 
   return (
-    <div className="flex gap-x-4">
+    <div className="flex flex-col md:flex-row gap-x-4">
       {/* Left half */}
-      <div className="w-1/2 min-h-[600px] p-4">
+      <div className=" w-full md:w-1/2 min-h-[600px] p-4">
         <p className='text-lg text-center flex items-center justify-center pb-2 font-semibold'>{address}</p>
         <SearchMap markers={[listingPin]} center={listingPin!} zoom={12} />
       </div>
@@ -82,7 +82,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
         {/* Highlights */}
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-center">Highlights</h2>
-          <div className='mt-3 flex w-full justify-between'>
+          <div className='mt-3 flex flex-wrap  w-full justify-between'>
             {getIconAndLabel(propertyType)}
             <Tile icon={<CrossIcon />} label={`${bathroomCount} bathrooms`} />
             <Tile icon={<CrossIcon />} label={`${roomCount} bedrooms`} />

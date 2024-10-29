@@ -68,25 +68,40 @@ const SearchControlBar: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-between px-1 items-center border-2 shadow-lg rounded-full">
+    <div className="flex justify-between px-0 xs:px-1 items-center border-2 shadow-lg rounded-full">
       {/* Destination trigger */}
       <LocationSuggest />
       <Separator orientation="vertical" className="h-10" />
       {/* Date triggers */}
       <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
         <PopoverTrigger asChild>
-          <div className="flex gap-x-1 ">
-            <Button variant="ghost" className="h-10 ">
-              <div className="text-left">
-                <div className="text-[15px] ">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
-              </div>
-            </Button>
-            <Separator orientation="vertical" className="h-10" />
-            <Button variant="ghost" className="h-10 ">
-              <div className="text-left">
-                <div className="text-[15px] ">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
-              </div>
-            </Button>
+          {/* Larger screens - split date display */}
+          <div>
+            <div className="hidden xs:flex gap-x-0 xs:gap-x-1">
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[15px]">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
+                </div>
+              </Button>
+              <Separator orientation="vertical" className="h-10" />
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[15px]">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
+                </div>
+              </Button>
+            </div>
+            {/* Extra small screens - combined date range display */}
+            <div className="xs:hidden">
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[13px]">
+                    {state.trip?.startDate && state.trip?.endDate
+                      ? `${state.trip.startDate.toLocaleDateString()} - ${state.trip.endDate.toLocaleDateString()}`
+                      : 'Add dates'}
+                  </div>
+                </div>
+              </Button>
+            </div>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">

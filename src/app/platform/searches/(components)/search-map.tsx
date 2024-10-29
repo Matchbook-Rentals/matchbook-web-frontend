@@ -12,16 +12,20 @@ interface SearchMapProps {
   center: { lat: number; lng: number };
   markers?: MapMarker[]; // Made optional
   zoom?: number;
+  height?: string; // Height prop with default
 }
 
-const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, markers = [], zoom = 1 }) => {
+const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, markers = [], zoom = 1, height = '600px' }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
 
   const mapContainerStyle = {
     width: '100%',
-    height: '100%',
+    height,
+    minHeight: '200px',
+    flex: '1 1 auto',
+    display: 'block',
   };
 
   const [map, setMap] = React.useState<google.maps.Map | null>(null);
