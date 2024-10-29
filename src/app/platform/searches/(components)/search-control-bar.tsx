@@ -77,24 +77,24 @@ const SearchControlBar: React.FC = () => {
         <PopoverTrigger asChild>
           {/* Larger screens - split date display */}
           <div>
-            <div className="hidden xs:flex gap-x-0 xs:gap-x-1">
+            <div className="hidden sm:flex gap-x-0 xs:gap-x-1">
               <Button variant="ghost" className="h-10">
                 <div className="text-left">
-                  <div className="text-[15px]">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
                 </div>
               </Button>
               <Separator orientation="vertical" className="h-10" />
               <Button variant="ghost" className="h-10">
                 <div className="text-left">
-                  <div className="text-[15px]">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
                 </div>
               </Button>
             </div>
             {/* Extra small screens - combined date range display */}
-            <div className="xs:hidden">
+            <div className="sm:hidden">
               <Button variant="ghost" className="h-10">
                 <div className="text-left">
-                  <div className="text-[13px]">
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">
                     {state.trip?.startDate && state.trip?.endDate
                       ? `${state.trip.startDate.toLocaleDateString()} - ${state.trip.endDate.toLocaleDateString()}`
                       : 'Add dates'}
@@ -115,7 +115,7 @@ const SearchControlBar: React.FC = () => {
         <PopoverTrigger asChild>
           <Button variant="ghost" className="rounded-r-full">
             <div className="text-left">
-              <div className="text-md">
+              <div className="text-[11px] xs:text-[13px] sm:text-[15px]">
                 {localGuests.numAdults + localGuests.numChildren} Guests
               </div>
             </div>

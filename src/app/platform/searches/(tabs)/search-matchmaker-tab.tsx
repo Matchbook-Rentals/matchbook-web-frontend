@@ -65,7 +65,7 @@ const MatchmakerTab: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full text-[#404040]">
+    <div className="flex flex-col w-full text-[#4f4f4f]">
       <div className="flex flex-col md:flex-row w-full max-w-[900px]
                       mx-auto justify-between items-center mb-4 gap-4">
         {/* View Selector and sub-small filter options */}
