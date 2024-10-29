@@ -3,7 +3,7 @@ import React, { use } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
 import { HeartIcon } from '@/components/svgs/svg-components';
-import { CrossIcon, RewindIcon } from 'lucide-react';
+import { CrossIcon, RewindIcon, HelpCircle } from 'lucide-react';
 import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
@@ -88,33 +88,34 @@ const MatchViewTab: React.FC = () => {
   return (
     <div className="w-full ">
       <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
-      <div className="button-control-box flex justify-around p-5">
-        <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore?.toFixed(2)}</Button>
+      <div className="button-control-box flex justify-around p-5 w-full md:w-1/2">
 
         <ButtonControl
           handleClick={() => handleReject(showListings[0])}
           Icon={
-            <div className="transform rotate-45">
-              <CrossIcon height={40} width={40} />
-            </div>
+            <CrossIcon height={40} width={40} />
           }
-          className="bg-red-800/80 w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm hover:bg-red-800 transition-all duration-200"
+          className="bg-red-500/50 h-[150px] w-[150px] flex items-center justify-center p-4 rounded-full text-center flex justify-center text-white text-sm hover:bg-red-600 transition-all duration-200"
         />
+
         <ButtonControl
           handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
           Icon={<RewindIcon height={40} width={40} />}
-          className={`${viewedListings.length === 0
-            ? 'bg-black/10 cursor-default transition-all duration-500'
-            : 'bg-black/50 hover:bg-black/70 cursor-pointer transition-all duration-300'
-            } w-[10%] py-2 rounded-lg text-center flex justify-center text-white text-sm`}
+          className="bg-orange-500/50 hover:bg-orange-600 h-[100px] flex items-center justify-center w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
+
+        <ButtonControl
+          handleClick={() => console.log('Help clicked')}
+          Icon={<HelpCircle height={40} width={40} />}
+          className="bg-yellow-500/50 flex items-center justify-center hover:bg-yellow-600 h-[100px] w-[100px] self-center rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
+        />
+
         <ButtonControl
           handleClick={() => handleLike(showListings[0])}
           Icon={<HeartIcon height={40} width={40} />}
-          className="bg-primaryBrand/80 hover:bg-primaryBrand
-                     w-1/5 py-2 rounded-lg text-center flex
-                     justify-center text-white text-sm transition-all duration-200"
+          className="bg-green-500/50 flex items-center justify-center hover:bg-green-600 h-[150px] w-[150px] rounded-full text-center flex justify-center text-white text-sm transition-all duration-200"
         />
+
       </div>
       <TitleAndStats
         title={showListings[0]?.title}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
+//Imports
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
 import { PictureIcon } from '@/components/svgs/svg-components';
@@ -14,6 +15,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   const [api, setApi] = useState<CarouselApi>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  // Early return for no images
   if (listingImages.length === 0) {
     return <p>No listing Images</p>;
   }
@@ -44,7 +46,10 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   };
 
   return (
+
     <div className="flex flex-col md:flex-row md:space-x-4 lg:space-x-4 w-full h-[40vh]">
+
+      {/* Large featured image - hidden on mobile */}
       <div className="w-full hidden md:flex md:w-1/2  md:h-full relative">
         <img
           src={listingImages[activeImage]?.url}
@@ -52,11 +57,15 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
+
+      {/* Carousel section */}
       <div className="w-full md:w-1/2 md:h-full relative">
         <Carousel opts={{ loop: true }} setApi={setApi} className="">
           <CarouselContent className="">
+            {/* Map through chunks of 4 images */}
             {chunkedImages.map((chunk, chunkIndex) => (
               <CarouselItem key={`chunk-${chunkIndex}`} className=" h-[40vh] p-0">
+                {/* Grid layout for 4 images */}
                 <div className="grid grid-cols-2 grid-rows-2 gap-4 ">
                   {chunk.map((image, idx) => (
                     <div
@@ -70,6 +79,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                         className="object-cover w-full h-full rounded-lg"
                       />
 
+                      {/* "Show More" dialog trigger on the last image */}
                       {idx === 3 && (
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                           <DialogTrigger asChild>
@@ -95,13 +105,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                           </DialogContent>
                         </Dialog>
                       )}
-
                     </div>
                   ))}
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
+
+          {/* Carousel navigation buttons */}
           <CarouselPrevious className="absolute -left-0 h-16 w-16 text-white
                                        bg-black/10 hover:bg-black/70 
                                        hover:text-white"
@@ -110,6 +121,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                                    hover:bg-black/70 hover:text-white
                                    text-white bg-black/10"
           />
+
         </Carousel>
       </div>
     </div>
