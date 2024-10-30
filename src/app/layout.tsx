@@ -20,10 +20,21 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.fwSettings={
+                  'widget_id':157000000242
+                };
+                !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()
+              `
+            }}
+          />
+          <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer />
+        </head>
         <body className={lora.className}>{children}</body>
       </html>
     </ClerkProvider>
   );
 }
-
-//ClerkProvider may need to be moved to a (app) or (platform) route group to allow for SSR.
