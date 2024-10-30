@@ -42,11 +42,12 @@ const ListingDetails = ({ listing }): ListingDetailsProps => {
             <p className="text-gray-600">2 years on Matchbook</p>
           </div>
         </div>
+
         <div className="flex items-center gap-2">
-          <p className="text-xl">23 stays</p>
+          <p className="hidden sm:block text-xl">23 stays</p>
           <div className="flex items-center gap-1">
             <Star className="fill-current text-gray-700" size={24} />
-            <span className="text-xl">4.9</span>
+            <span className="text-xl">4.9<span className="sm:hidden align-sub text-sm">(23)</span></span>
           </div>
         </div>
       </div>
