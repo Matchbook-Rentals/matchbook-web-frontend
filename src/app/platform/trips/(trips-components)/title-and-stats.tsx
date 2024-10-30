@@ -1,5 +1,6 @@
 import { Bedroom } from '@prisma/client';
 import React from 'react';
+import SearchMap from '../../searches/(components)/search-map';
 
 interface TitleAndStatsProps {
   title?: string;
@@ -12,10 +13,15 @@ interface TitleAndStatsProps {
   address: string;
   bedrooms?: Bedroom[];
   searchLocation?: string;
+  listingPin?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   title = 'Placeholder Title',
+  listingPin,
   rentPerMonth = 0,
   numBeds = 0,
   numBath = 0,
@@ -24,7 +30,6 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   distance = 0,
   bedrooms = [],
   address = '',
-  searchLocation = ''
 }) => {
   const bedTypeCounts = bedrooms.reduce((acc, bedroom) => {
     acc[bedroom.bedType] = (acc[bedroom.bedType] || 0) + 1;
@@ -41,24 +46,9 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
   return (
     <div className="flex flex-col md:flex-row md:-translate-y-[40%] lg:-translate-y-[50%]  md:space-x-8 text-center justify-between w-full my-2 py-1 mx-auto">
       <div className="flex flex-col mb-4 md:mb-0  w-full md:w-1/2 ">
-        <div className='flex flex-col  xs:flex-row md:flex-col lg:flex-row lg:items-start gap-2 justify-between'>
-          <div className=''>
-            <p className="text-lg lg:text-xl text-center xs:text-left md:text-center lg:text-left text-[#2D2F2E] mt-2">
-              Address
-            </p>
-            <p className="text-xl lg:text-3xl text-charcoalBrand font-medium truncate ">
-              {address}
-            </p>
-
-          </div>
-          <div className=''>
-            <p className="text-lg lg:text-xl text-center xs:text-right md:text-center lg:text-right text-[#2D2F2E] mt-2">
-              Distance
-            </p>
-            <p className="text-xl lg:text-3xl font-medium text-[#404040] ">
-              {distance} Miles
-            </p>
-          </div>
+        <div className=" w-full md:w-1/2 min-h-[600px] p-4">
+          <p className='text-lg text-center flex items-center justify-center pb-2 font-semibold'>{address}</p>
+          <SearchMap markers={[listingPin]} center={listingPin!} zoom={12} />
         </div>
       </div>
       <div className="flex flex-col w-full md:w-1/2 pt-1 pb-8 justify-evenly border-b border-[#313131] ">

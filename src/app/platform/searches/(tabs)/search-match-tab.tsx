@@ -1,10 +1,9 @@
 'use client'
 //IMports
-import React, { use } from 'react';
+import React from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
-import { BrandHeart, HeartIcon, PictureIcon, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
-import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
+import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
 //import { useSearchContext } from '@/contexts/search-context-provider';
@@ -15,6 +14,8 @@ import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
 import { QuestionMarkIcon } from '@radix-ui/react-icons';
 import { Montserrat } from 'next/font/google';
+import SearchMap from '../(components)/search-map';
+import ListingDetails from '../(components)/listing-details';
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -152,39 +153,51 @@ const MatchViewTab: React.FC = () => {
           />
 
         </div>
-        <h2 className={`md:text-3xl lg:text-4xl hidden md:inline w-1/2 pl-2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
+        <h2 className={`md:text-3xl lg:text-[40px] hidden md:inline w-1/2 pl-2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
       </div>
-      <TitleAndStats
-        title={showListings[0]?.title}
-        rating={3.5}
-        numStays={0}
-        address={showListings[0]?.locationString}
-        numBath={showListings[0]?.bathroomCount}
-        numBeds={showListings[0]?.roomCount}
-        rentPerMonth={showListings[0]?.calculatedPrice || 0}
-        distance={
-          showListings[0]?.distance
-            ? parseFloat(showListings[0]?.distance.toFixed(1))
-            : undefined
-        }
-        deposit={showListings[0]?.depositSize}
-        sqft={showListings[0]?.squareFootage}
-        bedrooms={showListings[0]?.bedrooms}
-        searchLocation={state.trip?.locationString}
-      />
 
-      <DescriptionAndAmenities
-        description={showListings[0]?.description}
-        amenities={getListingAmenities(showListings[0])}
-        listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
-        user={showListings[0]?.user}
-        address={showListings[0]?.locationString}
-        bathroomCount={showListings[0]?.bathroomCount}
-        roomCount={showListings[0]?.roomCount}
-        propertyType={showListings[0]?.category}
-      />
 
-    </div>
+      {/* MAP AND ADDRESS */}
+      {/* Map and location information container */}
+      <div className='flex flex-col md:flex-row md:-translate-y-[5%]'>
+        {/* Left column with map and address details */}
+        <div className="w-full md:w-1/2 min-h-[800px] p-4">
+          {/* Address and distance information */}
+          <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4 px-4">
+            {/* Address display */}
+            <div className="flex flex-col w-full sm:w-auto">
+              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
+              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
+                {showListings[0].locationString}
+              </span>
+            </div>
+            {/* Distance display */}
+            <div className="flex flex-col sm:text-right md:text-left xl:text-right w-full sm:w-auto">
+              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
+              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
+                {showListings[0].distance?.toFixed(0)} miles
+              </span>
+            </div>
+          </div>
+
+
+          <SearchMap
+            markers={[{
+              lat: showListings[0]?.latitude,
+              lng: showListings[0]?.longitude
+            }]}
+            center={{
+              lat: showListings[0]?.latitude,
+              lng: showListings[0]?.longitude
+            }}
+            zoom={12}
+          />
+        </div>
+
+        <ListingDetails />
+
+      </div >
+    </div >
   );
 };
 

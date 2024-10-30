@@ -16,7 +16,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useSearchContext } from '@/contexts/search-context-provider';
+//import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import { SearchScreenPrompt } from '@/app/platform/searches/(components)/search-screen-prompt';
 
 //Interfaces
@@ -75,8 +76,8 @@ interface QuestionnaireAnswers {
 
 const ApplicationForm: React.FC = () => {
   // const { hasApplication, trip, setHasApplication, application } = useTripContext();
-  const { state, actions } = useSearchContext();
-  const { hasApplication, currentSearch, application } = state;
+  const { state, actions } = useTripContext();
+  const { hasApplication, trip, application } = state;
   const { setHasApplication } = actions;
 
   const [personalInfo, setPersonalInfo] = React.useState<PersonalInfo>({
@@ -150,7 +151,7 @@ const ApplicationForm: React.FC = () => {
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Adding user with email:', email)
-    let participant = await addParticipant(currentSearch?.id, email)
+    let participant = await addParticipant(trip?.id, email)
     console.log('participant', participant)
     setEmail('')
   }
@@ -177,10 +178,10 @@ const ApplicationForm: React.FC = () => {
             <div className="mt-4">
               <h4 className="mb-2 font-medium">Current Participants:</h4>
               <ScrollArea className="h-[100px]" onClick={() => {
-                console.log('trip', currentSearch)
+                console.log('trip', trip)
               }}>
                 <ul className="space-y-1">
-                  {currentSearch?.allParticipants?.length > 0 && currentSearch?.allParticipants?.map((participant, index) => (
+                  {trip?.allParticipants?.length > 0 && trip?.allParticipants?.map((participant, index) => (
                     <li key={index}>{participant.firstName} {participant.lastName}</li>
                   ))}
                 </ul>

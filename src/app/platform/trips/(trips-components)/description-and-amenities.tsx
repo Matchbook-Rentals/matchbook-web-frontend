@@ -54,12 +54,8 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-x-4">
+    <div className="flex test-blue flex-col md:w-1/2 md:flex-row gap-x-4">
       {/* Left half */}
-      <div className=" w-full md:w-1/2 min-h-[600px] p-4">
-        <p className='text-lg text-center flex items-center justify-center pb-2 font-semibold'>{address}</p>
-        <SearchMap markers={[listingPin]} center={listingPin!} zoom={12} />
-      </div>
       {/* Right half */}
       <div className="w-1/2 flex flex-col">
         {/* Hosted by, Rating, Badges */}
