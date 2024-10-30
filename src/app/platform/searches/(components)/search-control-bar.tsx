@@ -1,40 +1,63 @@
+//Imports
 import React, { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import LocationSuggest from './search-location-suggest';
 import DateRangeSelector from '@/components/ui/custom-calendar/date-range-selector/date-range-selector';
 import { updateTrip } from '@/app/actions/trips';
 import { Plus, Minus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useToast } from "@/components/ui/use-toast";
 
 const SearchControlBar: React.FC = () => {
-  const { state, actions } = useSearchContext();
+  const { state, actions } = useTripContext();
+  const router = useRouter();
+  const { toast } = useToast();
   const [localGuests, setLocalGuests] = useState({
-    numAdults: state.currentSearch?.numAdults || 1,
-    numChildren: state.currentSearch?.numChildren || 0,
-    numPets: state.currentSearch?.numPets || 0,
+    numAdults: state.trip?.numAdults || 1,
+    numChildren: state.trip?.numChildren || 0,
+    numPets: state.trip?.numPets || 0,
   });
+  const [datePopoverOpen, setDatePopoverOpen] = useState(false);
+  const [guestPopoverOpen, setGuestPopoverOpen] = useState(false);
 
-  const handleSave = (newStartDate: Date, newEndDate: Date) => {
-    let newSearch = state.currentSearch;
+  const handleSave = async (newStartDate: Date, newEndDate: Date) => {
+    let newSearch = state.trip;
     if (newSearch) {
       newSearch.startDate = newStartDate;
       newSearch.endDate = newEndDate;
     }
-    actions.setCurrentSearch(prev => ({ ...prev, ...newSearch }));
-    updateTrip(newSearch);
+    actions.setTrip(prev => ({ ...prev, ...newSearch }));
+    await updateTrip(newSearch);
+    toast({
+      title: "Dates changed successfully",
+      description: "Shown listings may change",
+      duration: 3000,
+      style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' } // Equivalent to grey-100 in most CSS color systems
+    });
+    router.refresh();
+    setDatePopoverOpen(false);
   }
 
-  const handleSaveGuests = () => {
-    let newSearch = state.currentSearch;
+  const handleSaveGuests = async () => {
+    let newSearch = state.trip;
     if (newSearch) {
       newSearch.numAdults = localGuests.numAdults;
       newSearch.numChildren = localGuests.numChildren;
       newSearch.numPets = localGuests.numPets;
     }
-    actions.setCurrentSearch(prev => ({ ...prev, ...newSearch }));
-    updateTrip(newSearch);
+    actions.setTrip(prev => ({ ...prev, ...newSearch }));
+    await updateTrip(newSearch);
+    toast({
+      title: "Guests changed successfully",
+      description: "Shown listings may change",
+      duration: 3000,
+      style: { backgroundColor: '#f5f5f5' } // Equivalent to grey-100 in most CSS color systems
+    });
+    router.refresh();
+    setGuestPopoverOpen(false);
   };
 
   const handleGuestChange = (type: 'numAdults' | 'numChildren' | 'numPets', increment: boolean) => {
@@ -45,40 +68,55 @@ const SearchControlBar: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-between items-center border-2 shadow-lg rounded-md">
+    <div className="flex justify-between px-0 xs:px-1 items-center border-2 shadow-lg rounded-full">
       {/* Destination trigger */}
       <LocationSuggest />
       <Separator orientation="vertical" className="h-10" />
       {/* Date triggers */}
-      <Popover>
+      <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
         <PopoverTrigger asChild>
-          <div className="flex gap-x-1 px-2">
-            <Button variant="ghost" className="h-10 px-2">
-              <div className="text-left">
-                <div className="text-md text-muted-foreground">{state.currentSearch?.startDate ? state.currentSearch.startDate.toLocaleDateString() : 'Add date'}</div>
-              </div>
-            </Button>
-            <Separator orientation="vertical" className="h-10" />
-            <Button variant="ghost" className="h-10 px-2">
-              <div className="text-left">
-                <div className="text-md text-muted-foreground">{state.currentSearch?.endDate ? state.currentSearch.endDate.toLocaleDateString() : 'Add date'}</div>
-              </div>
-            </Button>
+          {/* Larger screens - split date display */}
+          <div>
+            <div className="hidden sm:flex gap-x-0 xs:gap-x-1">
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">{state.trip?.startDate ? state.trip.startDate.toLocaleDateString() : 'Add date'}</div>
+                </div>
+              </Button>
+              <Separator orientation="vertical" className="h-10" />
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">{state.trip?.endDate ? state.trip.endDate.toLocaleDateString() : 'Add date'}</div>
+                </div>
+              </Button>
+            </div>
+            {/* Extra small screens - combined date range display */}
+            <div className="sm:hidden">
+              <Button variant="ghost" className="h-10">
+                <div className="text-left">
+                  <div className="text-[11px] xs:text-[13px] sm:text-[15px]">
+                    {state.trip?.startDate && state.trip?.endDate
+                      ? `${state.trip.startDate.toLocaleDateString()} - ${state.trip.endDate.toLocaleDateString()}`
+                      : 'Add dates'}
+                  </div>
+                </div>
+              </Button>
+            </div>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
-          <DateRangeSelector start={state.currentSearch?.startDate} end={state.currentSearch?.endDate} handleSave={handleSave} />
+          <DateRangeSelector start={state.trip?.startDate} end={state.trip?.endDate} handleSave={handleSave} />
         </PopoverContent>
       </Popover>
       <Separator orientation="vertical" className="h-10" />
 
       {/* Guests trigger */}
-      <Popover>
+      <Popover open={guestPopoverOpen} onOpenChange={setGuestPopoverOpen}>
         <PopoverTrigger asChild>
-          <Button variant="ghost" className="h-10 px-4">
+          <Button variant="ghost" className="rounded-r-full">
             <div className="text-left">
-              <div className="text-md text-muted-foreground">
-                {localGuests.numAdults} adults, {localGuests.numChildren} children, {localGuests.numPets} pets
+              <div className="text-[11px] xs:text-[13px] sm:text-[15px]">
+                {localGuests.numAdults + localGuests.numChildren} Guests
               </div>
             </div>
           </Button>

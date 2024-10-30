@@ -41,7 +41,7 @@ export default async function Hero() {
     <div className="relative h-[70vh] flex items-center justify-center text-white">
       {/* Background image */}
       <Image
-        src="/paul-weaver-hero.jpg" // Replace with the path to your image
+        src="/hero-image.png" // Replace with the path to your image
         layout="fill"
         objectFit="cover"
         quality={100}

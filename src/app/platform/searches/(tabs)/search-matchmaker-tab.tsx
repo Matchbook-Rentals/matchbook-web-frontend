@@ -4,7 +4,8 @@ import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
 import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
-import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
+import { Separator } from '@radix-ui/react-select';
 
 // Updated FilterOptions interface
 interface FilterOptions {
@@ -30,7 +31,7 @@ interface FilterOptions {
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { state } = useSearchContext();
+  const { state } = useTripContext();
   // Updated initial state for filters
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: 0,
@@ -40,20 +41,23 @@ const MatchmakerTab: React.FC = () => {
     baths: 'Any',
     furnished: false,
     unfurnished: false,
-    moveInDate: state.currentSearch?.startDate || new Date(),
-    moveOutDate: state.currentSearch?.endDate || new Date(),
+    moveInDate: state.trip?.startDate || new Date(),
+    moveOutDate: state.trip?.endDate || new Date(),
     flexibleMoveIn: false,
     flexibleMoveOut: false,
-    flexibleMoveInStart: state.currentSearch?.startDate || new Date(),
-    flexibleMoveInEnd: state.currentSearch?.startDate || new Date(),
-    flexibleMoveOutStart: state.currentSearch?.endDate || new Date(),
-    flexibleMoveOutEnd: state.currentSearch?.endDate || new Date(),
+    flexibleMoveInStart: state.trip?.startDate || new Date(),
+    flexibleMoveInEnd: state.trip?.startDate || new Date(),
+    flexibleMoveOutStart: state.trip?.endDate || new Date(),
+    flexibleMoveOutEnd: state.trip?.endDate || new Date(),
     propertyTypes: [],
     utilities: [],
   });
 
   // Updated handleFilterChange function to handle all filter changes, including arrays
-  const handleFilterChange = (key: keyof FilterOptions, value: string | number | boolean | string[] | Date) => {
+  const handleFilterChange = (
+    key: keyof FilterOptions,
+    value: string | number | boolean | string[] | Date
+  ) => {
     setFilters(prevFilters => ({
       ...prevFilters,
       [key]: value,
@@ -61,33 +65,47 @@ const MatchmakerTab: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex justify-between items-center mb-4">
-        {/* View Selector */}
-        <div className="flex border shadow-lg rounded-lg">
-          <button
-            className={`p-2 ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('swipe')}
-          >
-            <FilterIcon size={24} />
-          </button>
-          <button
-            className={`p-2 ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('map')}
-          >
-            <MapIcon size={24} />
-          </button>
+    <div className="flex flex-col w-full text-[#4f4f4f]">
+      <div className="flex flex-col md:flex-row w-full max-w-[900px]
+                      mx-auto justify-between items-center mb-4 gap-4">
+        {/* View Selector and sub-small filter options */}
+        <div className="flex justify-evenly w-full md:w-auto">
+          <div className="flex border shadow-lg rounded-full">
+            <button
+              className={`p-2 rounded-l-full ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
+              onClick={() => setViewMode('swipe')}
+            >
+              <FilterIcon size={24} />
+            </button>
+            <Separator className='h-10' />
+            <button
+              className={`p-2 rounded-r-full ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+              onClick={() => setViewMode('map')}
+            >
+              <MapIcon size={24} />
+            </button>
+          </div>
+          <FilterOptionsDialog
+            isOpen={isFilterOpen}
+            onOpenChange={setIsFilterOpen}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            className='flex md:hidden ml-2'
+          />
         </div>
 
         {/* Input Fields */}
-        <SearchControlBar />
+        <div className="w-full sm:w-auto flex justify-center">
+          <SearchControlBar />
+        </div>
 
-        {/* Filters */}
+        {/* Filters for larger screens */}
         <FilterOptionsDialog
           isOpen={isFilterOpen}
           onOpenChange={setIsFilterOpen}
           filters={filters}
           onFilterChange={handleFilterChange}
+          className='hidden md:flex'
         />
       </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useSearchContext } from '@/contexts/search-context-provider';
+//import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import TripListingCard from '../../trips/(trips-components)/trip-listing-card';
 import { ListingAndImages } from '@/types';
 import CustomAccordion from '@/components/ui/custom-accordion';
@@ -14,7 +15,7 @@ import SortableFavorites from '../(components)/sortable-favorites';
 
 export default function ShortListTab() {
   const [isOpen, setIsOpen] = useState(true);
-  const { state, actions } = useSearchContext();
+  const { state, actions } = useTripContext();
   const { likedListings, requestedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function ShortListTab() {
       return { ...prev, requestedIds: newReqs }
     })
     try {
-      let response = await createDbHousingRequest(state.currentSearch, listing)
+      let response = await createDbHousingRequest(state.trip, listing)
       toast({
         title: "Application Sent",
         description: "Your application has been sent to the host.",
@@ -73,7 +74,7 @@ export default function ShortListTab() {
       newReqs.delete(listing.id)
       return { ...prev, requestedIds: newReqs }
     })
-    await deleteDbHousingRequest(state.currentSearch?.id, listing.id)
+    await deleteDbHousingRequest(state.trip?.id, listing.id)
   }
 
   const generateLikedCardActions = (listing: ListingAndImages) => {
@@ -149,7 +150,7 @@ export default function ShortListTab() {
             <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
           </div>
           <div className="w-full md:w-1/3">
-            <SearchMap center={{ lat: state.currentSearch?.latitude || 0, lng: state.currentSearch?.longitude || 0 }} zoom={10} markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))} />
+            <SearchMap center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }} zoom={10} markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))} />
           </div>
         </div>
       )}

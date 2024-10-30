@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: '400px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -54,8 +57,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         primaryBrand: {
-          DEFAULT: '#a4b99a',
-          80: '#a4b99acc', // 80% opacity
+          DEFAULT: '#85997DBF',
         },
         secondaryBrand: {
           DEFAULT: '#85997d',
@@ -76,7 +78,15 @@ const config = {
         charcoalBrand: {
           DEFAULT: '#4f4f4f',
           80: '#4f4f4fcc', // 80% opacity
-        }
+        },
+        orangeBrand: {
+          DEFAULT: '#DC9932',
+          80: '#DC9932cc', // 80% opacity
+        },
+        yellowBrand: {
+          DEFAULT: '#E3CE5B',
+          80: '#E3CE5Bcc', // 80% opacity
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

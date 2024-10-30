@@ -62,7 +62,7 @@ export default function TabSelector({
   return (
     <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
       <Tabs
-        className={cn("w-full", tabsClassName)}
+        className="w-full"
         value={activeTab}
         onValueChange={handleTabChange}
       >
@@ -95,7 +95,7 @@ export default function TabSelector({
           )}
         </div>
         {tabs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value} forceMount={tab.forceMount || undefined}>
+          <TabsContent key={tab.value} className={tabsClassName} value={tab.value} forceMount={tab.forceMount || undefined}>
             {tab.content}
           </TabsContent>
         ))}

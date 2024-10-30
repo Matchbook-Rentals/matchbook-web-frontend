@@ -1,28 +1,34 @@
 'use client'
-import React, { use } from 'react';
+//IMports
+import React from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
-import { HeartIcon } from '@/components/svgs/svg-components';
-import { CrossIcon, RewindIcon } from 'lucide-react';
-import TitleAndStats from '../../trips/(trips-components)/title-and-stats';
+import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import { amenities } from '@/lib/amenities-list';
 import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
-import { useSearchContext } from '@/contexts/search-context-provider';
+//import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
-import { Button } from '@/components/ui/button';
+import { QuestionMarkIcon } from '@radix-ui/react-icons';
+import { Montserrat } from 'next/font/google';
+import SearchMap from '../(components)/search-map';
+import ListingDetails from '../(components)/listing-details';
+
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 const MatchViewTab: React.FC = () => {
-  const { state, actions } = useSearchContext();
+  const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
   const { setViewedListings, setLookup } = actions;
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
-    const actionId = await createDbFavorite(state.currentSearch?.id, listing.id);
+    const actionId = await createDbFavorite(state.trip?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'favorite', actionId }]);
     setLookup(prev => ({
       ...prev,
@@ -31,7 +37,7 @@ const MatchViewTab: React.FC = () => {
   };
 
   const handleReject = async (listing: ListingAndImages) => {
-    const actionId = await createDbDislike(state.currentSearch?.id, listing.id);
+    const actionId = await createDbDislike(state.trip?.id, listing.id);
     setViewedListings(prev => [...prev, { listing, action: 'dislike', actionId }]);
     setLookup(prev => ({
       ...prev,
@@ -76,63 +82,122 @@ const MatchViewTab: React.FC = () => {
     return null;
   }
   if (showListings.length === 0) {
-    return <div onClick={() => console.log(state.listings)}>No listings available. {listings.length} {state.currentSearch?.id}</div>;
+    return (
+      <div onClick={() => console.log(state.listings)}>
+        No listings available. {listings.length} {state.trip?.id}
+      </div>
+    )
   }
 
   // Main component render
   return (
-    <div className="w-full">
-      <ListingImageCarousel listingImages={showListings[0]?.listingImages || []} />
-      <div className="button-control-box flex justify-around p-5">
-        <Button onClick={() => console.log(listings)}>U Score - {showListings[0]?.uScore.toFixed(2)}</Button>
+    <div className={`w-full `}>
 
-        <ButtonControl
-          handleClick={() => handleReject(showListings[0])}
-          Icon={
-            <div className="transform rotate-45">
-              <CrossIcon height={40} width={40} />
-            </div>
-          }
-          className="bg-red-800/80 w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm hover:bg-red-800 transition-all duration-200"
-        />
-        <ButtonControl
-          handleClick={viewedListings.length === 0 ? () => console.log('No previous listing') : handleBack}
-          Icon={<RewindIcon height={40} width={40} />}
-          className={`${viewedListings.length === 0
-            ? 'bg-black/10 cursor-default transition-all duration-500'
-            : 'bg-black/50 hover:bg-black/70 cursor-pointer transition-all duration-300'
-            } w-[10%] py-2 rounded-lg text-center flex justify-center text-white text-sm`}
-        />
-        <ButtonControl
-          handleClick={() => handleLike(showListings[0])}
-          Icon={<HeartIcon height={40} width={40} />}
-          className="bg-primaryBrand/80 hover:bg-primaryBrand w-1/5 py-2 rounded-lg text-center flex justify-center text-white text-sm transition-all duration-200"
-        />
+      <ListingImageCarousel
+        listingImages={showListings[0]?.listingImages || []}
+      />
+
+      <div className='flex p-0 '>
+        <div className="button-control-box flex justify-around py-2  md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
+
+          <ButtonControl
+            handleClick={() => handleReject(showListings[0])}
+            Icon={
+              <RejectIcon
+                className='h-[60%] w-[60%] md:h-[50%] md:w-[50%]'
+              />
+            }
+            className={`
+            bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] 
+            flex items-center justify-center p-4 rounded-full text-center text-white 
+            text-sm transition-all duration-200
+          `}
+          />
+
+          <ButtonControl
+            handleClick={
+              viewedListings.length === 0
+                ? () => console.log('No previous listing')
+                : handleBack
+            }
+            Icon={<ReturnIcon className='h-[60%] w-[60%]' />}
+            className={`
+            bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square 
+            md:w-[100px] self-center rounded-full text-center flex items-center 
+            justify-center text-white text-sm transition-all duration-200
+          `}
+          />
+
+          <ButtonControl
+            handleClick={() => console.log('Help clicked')}
+            Icon={<QuestionMarkIcon className='h-[60%] w-[60%]' />}
+            className={`
+            bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square 
+            md:w-[100px] self-center rounded-full text-center flex items-center 
+            justify-center text-white text-sm transition-all duration-200
+          `}
+          />
+
+          <ButtonControl
+            handleClick={() => handleLike(showListings[0])}
+            Icon={
+              <BrandHeart
+                className='h-[70%] w-[70%] md:h-[50%] md:w-[50%]'
+              />
+            }
+            className={`
+            bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-square 
+            md:w-[150px] flex items-center justify-center p-4 rounded-full text-center 
+            text-white text-sm transition-all duration-200
+          `}
+          />
+
+        </div>
+        <h2 className={`md:text-3xl lg:text-[40px] hidden md:inline w-1/2 pl-2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
       </div>
-      <TitleAndStats
-        title={showListings[0]?.title}
-        rating={3.5}
-        numStays={0}
-        numBath={showListings[0]?.bathroomCount}
-        numBeds={showListings[0]?.roomCount}
-        rentPerMonth={showListings[0]?.calculatedPrice || 0}
-        distance={showListings[0]?.distance ? parseFloat(showListings[0]?.distance.toFixed(1)) : undefined}
-        deposit={showListings[0]?.depositSize}
-        sqft={showListings[0]?.squareFootage}
-        bedrooms={showListings[0]?.bedrooms}
-        searchLocation={state.currentSearch?.locationString}
-      />
-      <DescriptionAndAmenities
-        description={showListings[0]?.description}
-        amenities={getListingAmenities(showListings[0])}
-        listingPin={{ lat: showListings[0]?.latitude, lng: showListings[0]?.longitude }}
-        user={showListings[0]?.user}
-        address={showListings[0]?.locationString}
-        bathroomCount={showListings[0]?.bathroomCount}
-        roomCount={showListings[0]?.roomCount}
-        propertyType={showListings[0]?.category}
-      />
-    </div>
+
+
+      {/* MAP AND ADDRESS */}
+      {/* Map and location information container */}
+      <div className='flex flex-col md:flex-row md:-translate-y-[5%]'>
+        {/* Left column with map and address details */}
+        <div className="w-full md:w-1/2 min-h-[800px] p-4">
+          {/* Address and distance information */}
+          <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4 px-4">
+            {/* Address display */}
+            <div className="flex flex-col w-full sm:w-auto">
+              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
+              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
+                {showListings[0].locationString}
+              </span>
+            </div>
+            {/* Distance display */}
+            <div className="flex flex-col sm:text-right md:text-left xl:text-right w-full sm:w-auto">
+              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
+              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
+                {showListings[0].distance?.toFixed(0)} miles
+              </span>
+            </div>
+          </div>
+
+
+          <SearchMap
+            markers={[{
+              lat: showListings[0]?.latitude,
+              lng: showListings[0]?.longitude
+            }]}
+            center={{
+              lat: showListings[0]?.latitude,
+              lng: showListings[0]?.longitude
+            }}
+            zoom={12}
+          />
+        </div>
+
+        <ListingDetails />
+
+      </div >
+    </div >
   );
 };
 

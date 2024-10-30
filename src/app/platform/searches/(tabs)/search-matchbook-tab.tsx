@@ -1,19 +1,20 @@
 import React from 'react';
-import { useSearchContext } from '@/contexts/search-context-provider';
+//import { useSearchContext } from '@/contexts/search-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 
 export function SearchMatchbookTab() {
-  const { state } = useSearchContext();
-  const { matchedListings, currentSearch } = state;
+  const { state } = useTripContext();
+  const { matchedListings, trip } = state;
 
   if (matchedListings.length === 0) {
     return <p>No matched listings found.</p>;
   }
 
   const getMatchId = (listingId: string) => {
-    const match = currentSearch?.matches.find((match) => match.listingId === listingId);
+    const match = trip?.matches.find((match) => match.listingId === listingId);
     return match?.id;
   };
 

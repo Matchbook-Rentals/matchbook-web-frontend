@@ -1,84 +1,80 @@
-'use client'
+'use client';
 //Imports
-import React, { useContext } from 'react';
+import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
-import CardWithHeader from '@/components/ui/card-with-header';
-import TripCardSmall from '../(trips-components)/trip-card-small';
-import { TripContext } from '@/contexts/trip-context-provider';
-import NewPossibilitiesTab from './(tabs)/new-possibilities-tab';
-import PropertiesYouLoveTab from './(tabs)/properties-you-love';
-import DislikedProperties from './(tabs)/disliked-properties';
+import MatchmakerTab from '../../searches/(tabs)/search-matchmaker-tab';
+import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
 import ApplicationTab from './(tabs)/application-tab';
+import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
+import { useTripContext } from '@/contexts/trip-context-provider';
 
-const TripIdPage: React.FC = ({ params }) => {
-  const tripContext = useContext(TripContext);
-  if (!tripContext) {
-    throw new Error('TripContext must be used within a TripContextProvider');
-  }
+interface Tab {
+  value: string;
+  label: string;
+  Icon?: React.ElementType;
+  content: React.ReactNode;
+  className?: string;
+  textSize?: string;
+  forceMount?: boolean;
+}
 
-  const { trip } = tripContext;
+const TripsPage: React.FC = () => {
+  const { state, actions } = useTripContext();
 
-
-
-  let tabTextSize = 'text-lg'
-  const tabs = [
+  const tabTriggerTextStyles = 'text-md xs:text-[16px] sm:text-xl'
+  const tabTriggerStyles = 'p-0 xs:px-1 sm:px-2 '
+  const tabs: Tab[] = [
     {
-      value: "new-possibilities",
-      label: "New Possibilities",
-      content: <NewPossibilitiesTab />,
-      textSize: tabTextSize,
+      label: 'Matchmaker',
+      value: 'matchmaker',
+      content: state.trip ? <MatchmakerTab /> : null,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+
+    },
+    // {
+    //   label: 'Map View',
+    //   value: 'map-view',
+    //   content: state.trip ? <MapView /> : null,
+    //   textSize: tabTriggerTextStyles,
+    //   className: tabTriggerStyles,
+    // },
+    {
+      label: 'Favorites',
+      value: 'favorites',
+      content: <ShortListTab />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
     {
-      value: "properties-you-love",
-      label: "Properties You Love",
-      content: <PropertiesYouLoveTab />,
-      textSize: tabTextSize,
+      label: 'Matchbook',
+      value: 'matchbook',
+      content: <SearchMatchbookTab />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
     {
-      value: "matches",
-      label: "Matches",
-      content: (
-        <CardWithHeader
-          title="Matches"
-          content={<div>Matches content goes here.</div>}
-        />
-      ),
-      textSize: tabTextSize,
-    },
-    {
-      value: "dislikes",
-      label: "Dislikes",
-      content: <DislikedProperties />,
-      textSize: tabTextSize,
-    },
-    {
-      value: "trip-editor",
-      label: "Trip Editor",
-      content: (
-        <CardWithHeader
-          title="Trip Editor"
-          content={<div>Trip Editor content goes here.</div>}
-        />
-      ),
-      textSize: tabTextSize,
-    },
-    {
-      value: "applications",
-      label: "Application",
-      content: (
-        <ApplicationTab />
-      ),
-      textSize: tabTextSize,
+      label: 'Application',
+      value: 'application',
+      content: <ApplicationTab />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
     },
   ];
 
   return (
-    <div className='px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto'>
-      <TripCardSmall trip={trip} stateCode={(trip?.locationString && trip.locationString.slice(-2)) || 'ut'} />
-      <TabSelector tabs={tabs} className='' useUrlParams />
-      {/* Add more details as needed */}
+    <div className="flex flex-col items-center w-full mx-auto">
+      <div className="flex w-full ">
+        <TabSelector
+          useUrlParams
+          tabs={tabs}
+          className='mx-auto w-full'
+          tabsClassName='w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto'
+          tabsListClassName='flex justify-between xs:justify-center space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
+        />
+      </div>
     </div>
   );
 };
 
-export default TripIdPage;
+export default TripsPage;
