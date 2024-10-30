@@ -66,6 +66,8 @@
 -[X] tiktok logo
 
 
+-[ ] blog cahnges (breadcrumb title signature)
+
 
 [tenant views]
 
