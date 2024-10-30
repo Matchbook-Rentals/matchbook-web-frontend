@@ -59,7 +59,7 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
         {Object.keys(timeLeft).map((interval) => (
           <div
             key={interval}
-            className="flex flex-col xs:flex-row gap-x-1 justify-start items-end"
+            className="flex flex-col xs:flex-row gap-x-1 justify-start items-center xs:items-end"
           >
             <span className="text-2xl font-semibold text-charcoal">
               {timeLeft[interval]}

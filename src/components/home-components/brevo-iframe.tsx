@@ -17,7 +17,6 @@ const BrevoIframe: React.FC = () => {
         "w-full h-[800px] sm:h-[750px] overflow-y-scroll mt-[]"
       }
       title="Brevo Form"
-      scrolling="no"
     />
   );
 };
