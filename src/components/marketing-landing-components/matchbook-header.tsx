@@ -52,19 +52,19 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
           className="h-8 w-8 hidden md:flex "
           alt="MatchBook Heart"
         />
-        <div className="flex md:space-x-1 items-center ml-auto">
+        <div className="flex md:space-x-4 items-center ml-auto">
           <Link href={"?tab=list#list-your-property"} shallow>
             <Button
 
               className={`w-[191px] h-[36px] text-[18px] rounded-[15px]
-                          border-[1px] font-normal border-charcoal font- mr-6 ${montserrat.className} `}
+                          border-[1px] font-normal border-charcoal  ${montserrat.className} `}
               onClick={handleListProperty || handleDefault}
               variant={"outline"}
             >
               List your property
             </Button>
           </Link>
-          <MenuIcon className=" text-charcoal h-[31px] w-[31px] " />
+          <MenuIcon className=" text-charcoal h-[31px] w-[31px]  " />
           <UserIcon className="  h-[33px] w-[30px] " />
         </div>
       </header>
