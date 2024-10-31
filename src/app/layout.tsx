@@ -23,15 +23,10 @@ export default function RootLayout({
         <head>
           <script
             dangerouslySetInnerHTML={{
-              __html: `
-                window.fwSettings={
-                  'widget_id':157000000242
-                };
-                !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()
-              `
+              __html: `window.fwSettings={'widget_id':157000000242};!function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()`
             }}
           />
-          <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer />
+          <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer></script>
         </head>
         <body className={lora.className}>{children}</body>
       </html>

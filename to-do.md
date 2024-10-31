@@ -67,6 +67,10 @@
 
 
 -[ ] blog cahnges (breadcrumb title signature)
+-[ ] new support
+-[ ] Update Article  
+-[ ] Center LIST PROPERTY at smallest size and increase distance of user and Menu icon 
+-[ ] Contact us and About Us 
 
 
 [tenant views]
