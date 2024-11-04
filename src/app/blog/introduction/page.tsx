@@ -49,11 +49,13 @@ const BlogArticle = () => {
             mid-term or long-term stay, all in one platform. From searching, to matching, to booking,
             and all your monthly payments- we&apos;ve got it here.
           </p>
+
+          {/* Signature */}
           <div className='flex flex-col items-end'>
             <h4 className='font-medium text-[36px]'> Daniel Resner </h4>
             <h5 className='text-[20px] font-normal'> Co-Founder &amp; CEO </h5>
-
           </div>
+
         </div>
       </article>
     </div>

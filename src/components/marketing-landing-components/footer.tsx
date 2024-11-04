@@ -29,14 +29,14 @@ export default function Footer() {
                 Home
               </Link>
               <Link
-                href="#"
+                href="/about"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
                 About
               </Link>
               <Link
-                href="#"
+                href=""
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
