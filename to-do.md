@@ -67,10 +67,11 @@
 
 
 -[ ] blog cahnges (breadcrumb title signature)
--[ ] new support
+-[X] new support
 -[ ] Update Article  
--[ ] Center LIST PROPERTY at smallest size and increase distance of user and Menu icon 
+-[X] Center LIST PROPERTY at smallest size and increase distance of user and Menu icon 
 -[ ] Contact us and About Us 
+-[ ] New Form
 
 
 [tenant views]

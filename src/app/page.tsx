@@ -30,18 +30,10 @@ const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialo
       <DialogContent
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
-        h-[70vh] sm:h-[84vh] md:h-[77vh] px-1 pt-4 
-      ">
-        <div
-          className=" overflow-y-scroll overflow-x-hidden px-2"
-          style={{
-            scrollbarWidth: "none",
-            height: "100%",
-          }}
-        >
-          <Countdown />
-          <BrevoIframe />
-        </div>
+        h-[70vh] sm:h-[84vh] md:h-[77vh] px-6 sm:px-10 pt-4 
+        overflow-y-scroll     ">
+        <Countdown />
+        <BrevoIframe />
       </DialogContent>
     </Dialog>
   );

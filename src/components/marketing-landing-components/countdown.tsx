@@ -52,7 +52,7 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <div
-      className={`text-lg xs:text-xl mx-auto  py-1 pl-9  xs:pl-11  font-semibold text-black text-left w-full max-w-[700px] ${className || ""}`} >
+      className={`text-lg xs:text-xl mx-auto py-1 font-semibold text-black test text-left w-full max-w-[700px] ${className || ""}`} >
       <h1 className="text-2xl xs:text-3xl sm:text-4xl text-left  mt-8 xs:mt-2 mb-4 font-semibold">Get ready for launch!</h1>
       <h2 className="pl-[1px]"> Find your place, all in once place in: </h2>
       <div className="flex pt-6 justify-start gap-x-4">
