@@ -1,4 +1,3 @@
-import { FaTwitter, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { PAGE_MARGIN } from '@/constants/styles';
 import Image from 'next/image';
 import MatchbookHeader from '@/components/marketing-landing-components/matchbook-header';

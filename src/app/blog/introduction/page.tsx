@@ -2,8 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
-import { Montserrat } from 'next/font/google';
 import SocialLinks from '@/components/SocialLinks';
+import { Montserrat } from 'next/font/google';
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 const BlogArticle = () => {

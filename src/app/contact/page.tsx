@@ -1,0 +1,118 @@
+import SocialLinks from "@/components/SocialLinks";
+import Footer from "@/components/marketing-landing-components/footer";
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import Image from "next/image";
+import { Montserrat } from 'next/font/google';
+import { CareersIcon, InquiriesIcon, NewspaperIcon, SupportIcon } from "@/components/svgs/svg-components";
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
+
+export default function ContactPage() {
+  return (
+    <>
+      <MatchbookHeader />
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* Page Title */}
+        <h1 className='text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal'> Contact </h1>
+        <div className='flex justify-between items-end px-1'>
+          <h3 className={`${montserrat.className}`}>October 28, 2024</h3>
+          <SocialLinks className='' />
+        </div>
+
+        {/* Hero Image */}
+        <Image
+          src={"/article-images/contact.png"}
+          alt={"Blog article image"}
+          width={1515}
+          height={337}
+          className="w-[95%] mx-auto mt-1 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
+          priority={true}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
+        />
+
+        <h2 className="text-2xl font-serif mb-8">Contact Us</h2>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Left Column */}
+          <div className="space-y-8">
+            {/* Media and Press */}
+            <div className="flex items-start gap-4">
+              <NewspaperIcon height={40} width={40} />
+              <div>
+                <h3 className="font-medium mb-1">Media and Press</h3>
+                <a
+                  href="mailto:press@matchbookrentals.com"
+                  className="text-gray-600 hover:underline"
+                >
+                  press@matchbookrentals.com
+                </a>
+              </div>
+            </div>
+
+            {/* General Inquiries */}
+            <div className="flex items-start gap-4">
+              <InquiriesIcon height={40} width={40} />
+              <div>
+                <h3 className="font-medium mb-1">General Inquiries</h3>
+                <a
+                  href="mailto:supports@matchbookrentals.com"
+                  className="text-gray-600 hover:underline"
+                >
+                  support@matchbookrentals.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-8">
+            {/* Support */}
+            <div className="flex items-start gap-4">
+              <SupportIcon height={40} width={40} />
+              <div>
+                <h3 className="font-medium mb-1">Support</h3>
+                <a
+                  href="mailto:info@matchbookrentals.com"
+                  className="text-gray-600 hover:underline"
+                >
+                  info@matchbookrentals.com
+                </a>
+              </div>
+            </div>
+
+            {/* Join our Team */}
+            <div className="flex items-start gap-4">
+              <CareersIcon height={40} width={40} />
+              <div>
+                <h3 className="font-medium mb-1">Join our Team</h3>
+                <a
+                  href="mailto:careers@matchbookrentals.com"
+                  className="text-gray-600 hover:underline"
+                >
+                  careers@matchbookrentals.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 mt-12">
+          {/* Headquarters */}
+          <div>
+            <h2 className="text-2xl font-serif mb-4">Headquarters</h2>
+            <address className="not-italic text-gray-600">
+              1534 Washington Blvd<br />
+              Ogden, UT, 84401
+            </address>
+          </div>
+
+          {/* Follow Us */}
+          <div>
+            <h2 className="text-2xl font-serif mb-4">Follow Us</h2>
+            <SocialLinks />
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+}

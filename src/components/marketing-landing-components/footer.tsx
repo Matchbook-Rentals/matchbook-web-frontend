@@ -22,21 +22,21 @@ export default function Footer() {
             <h3 className="text-xl font-semibold">Navigation</h3>
             <nav className="flex flex-col ">
               <Link
-                href="#"
+                href="/#"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
                 Home
               </Link>
               <Link
-                href="/about"
+                href="/about/#"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
                 About
               </Link>
               <Link
-                href=""
+                href="/contact/#"
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
