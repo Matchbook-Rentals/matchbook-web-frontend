@@ -712,11 +712,11 @@ const AccordionDownIcon = (props: any) => (
 
 const SettingsIcon = (props: any) => (
   <svg {...props} width="114" height="107" viewBox="0 0 114 107" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g id="Settings Icon">
-      <g id="Group">
-        <path id="Vector" d="M64.7191 23.4803C71.4466 20.6555 79.141 23.7023 81.9051 30.2853C84.6691 36.8684 81.4561 44.4949 74.7286 47.3196C68.0011 50.1443 60.3066 47.0976 57.5426 40.5145C54.7785 33.9315 57.9915 26.305 64.7191 23.4803Z" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-        <path id="Vector_2" d="M47.1699 38.8347C47.4272 40.7335 47.9321 42.596 48.6726 44.3595" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-        <path id="Vector_3" d="M56.1849 17.5824C52.6332 20.0534 49.8889 23.5842 48.6162 27.6931" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <g>
+      <g>
+        <path d="M64.7191 23.4803C71.4466 20.6555 79.141 23.7023 81.9051 30.2853C84.6691 36.8684 81.4561 44.4949 74.7286 47.3196C68.0011 50.1443 60.3066 47.0976 57.5426 40.5145C54.7785 33.9315 57.9915 26.305 64.7191 23.4803Z" stroke="black" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M47.1699 38.8347C47.4272 40.7335 47.9321 42.596 48.6726 44.3595" stroke="black" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M56.1849 17.5824C52.6332 20.0534 49.8889 23.5842 48.6162 27.6931" stroke="black" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         <path id="Vector_4" d="M78.4404 14.9948C74.9043 13.4253 70.9583 12.8591 67.1047 13.2067" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
         <path id="Vector_5" d="M91.4636 32.0486C91.1855 28.4422 89.7757 25.0001 87.6194 22.1147" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
         <path id="Vector_6" d="M83.0876 52.946C86.2879 50.3996 88.7207 46.9726 90.1876 43.2078" stroke="black" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />

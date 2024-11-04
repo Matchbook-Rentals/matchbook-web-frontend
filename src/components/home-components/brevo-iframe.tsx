@@ -59,7 +59,9 @@ const SubscriptionForm = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error('Subscription failed');
+      const responseData = await response.json();
+      console.log(responseData)
+      if (!response.ok) throw new Error(responseData.error?.message || 'Subscription failed');
 
       setStatus({
         message: 'Successfully subscribed! We\'ll keep you updated.',
@@ -74,17 +76,27 @@ const SubscriptionForm = () => {
         interest: ''
       });
 
-    } catch (error) {
+      // iS this the correct way to log an error
+    } catch (error: any) {
       setStatus({
-        message: 'Something went wrong. Please try again later.',
+        message: `Something went wrong: ${error}`,
         type: 'error'
       });
     }
   };
 
   return (
-    <div className="w-full mx-auto  rounded-lg ">
+    <div className="w-full mx-auto rounded-lg">
       <h2 className="text-xl font-semibold mb-6">Sign up to stay up to date on launch details.</h2>
+
+      {/* Status Message Above Form */}
+      {status.message && (
+        <Alert className={`${status.type === 'error' ? 'bg-red-50' : 'bg-green-50'} mb-6`}>
+          <AlertDescription>
+            {status.message}
+          </AlertDescription>
+        </Alert>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Subscription */}
