@@ -35,7 +35,7 @@ export default function AboutPage() {
             <section className=' mt-4 '>
               <h2 className="text-xl font-bold mb-4">Our Journey</h2>
               <p className="text-gray-700">
-                Ever tried finding a place to live that fits your not-so-typical schedule? We did, and it was a bad time. When Isabelle and I left Active Duty Air force to attend school, we discovered that trying to find a flexible rental property was like like finding a missing sock in a pile of laundry. We thought, "There has to be a better way!" And just like that, the idea for MatchBook was born. 3 years later and with the help of an amazing team, we have created a platform that makes connecting housing providers with guests a breeze for all types and schedules.
+                Ever tried finding a place to live that fits your not-so-typical schedule? We did, and it was a bad time. When Isabelle and I left Active Duty Air force to attend school, we discovered that trying to find a flexible rental property was like finding a missing sock in a pile of laundry. We thought, &quot;There has to be a better way!&quot; And just like that, the idea for MatchBook was born. 3 years later and with the help of an amazing team, we have created a platform that makes connecting housing providers with guests a breeze for all types and schedules.
               </p>
             </section>
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
             <section>
               <h2 className="text-xl font-bold mb-4">Mission Statement</h2>
               <p className="text-gray-700">
-                Our mission at MatchBook is to make finding and offering flexible housing straightforward and stress-free. We value honesty, integrity, and delivering real value upfront. We're dedicated to building lasting relationships rather than chasing quick wins. By focusing on what's best for our customers and team, we aim to create a fair, and dare we say, enjoyable experience for everyone involved.
+                Our mission at MatchBook is to make finding and offering flexible housing straightforward and stress-free. We value honesty, integrity, and delivering real value upfront. We&apos;re dedicated to building lasting relationships rather than chasing quick wins. By focusing on what&apos;s best for our customers and team, we aim to create a fair, and dare we say, enjoyable experience for everyone involved.
               </p>
             </section>
 
@@ -59,7 +59,7 @@ export default function AboutPage() {
             <section>
               <h2 className="text-xl font-bold mb-4">Looking Ahead</h2>
               <p className="text-gray-700">
-                We're gearing up for our big debut and have been chatting with loads of awesome people to make sure we're on the right track. Their stories, laughs, and nuggets of wisdom have been the secret sauce in shaping MatchBook. We're beyond excited to launch a platform that doesn't just meet your needs but makes you wonder how you ever lived without it.
+                We&apos;re gearing up for our big debut and have been chatting with loads of awesome people to make sure we&apos;re on the right track. Their stories, laughs, and nuggets of wisdom have been the secret sauce in shaping MatchBook. We&apos;re beyond excited to launch a platform that doesn&apos;t just meet your needs but makes you wonder how you ever lived without it.
               </p>
             </section>
           </div>
