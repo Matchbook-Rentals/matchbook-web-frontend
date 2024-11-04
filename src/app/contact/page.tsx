@@ -1,3 +1,4 @@
+import { PAGE_MARGIN } from '@/constants/styles';
 import SocialLinks from "@/components/SocialLinks";
 import Footer from "@/components/marketing-landing-components/footer";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
@@ -10,7 +11,7 @@ export default function ContactPage() {
   return (
     <>
       <MatchbookHeader />
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
         {/* Page Title */}
         <h1 className='text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal'> Contact </h1>
         <div className='flex justify-between items-end px-1'>
@@ -110,7 +111,7 @@ export default function ContactPage() {
             <SocialLinks />
           </div>
         </div>
-      </div>
+      </main>
       <Footer />
     </>
   );
