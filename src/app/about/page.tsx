@@ -21,7 +21,7 @@ export default function AboutPage() {
 
           {/* Hero Image */}
           <Image
-            src={"/article-images/contact.png"}
+            src={"/article-images/about.png"}
             alt={"Blog article image"}
             width={1515}
             height={337}

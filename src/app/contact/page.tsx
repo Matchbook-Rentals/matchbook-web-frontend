@@ -29,19 +29,18 @@ export default function ContactPage() {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
         />
 
-        <h2 className="text-2xl font-serif mb-8">Contact Us</h2>
-
+        <h2 className="text-[36px] font-medium font-serif my-8">Contact Us</h2>
         <div className="grid md:grid-cols-2 gap-12">
           {/* Left Column */}
           <div className="space-y-8">
             {/* Media and Press */}
             <div className="flex items-start gap-4">
-              <NewspaperIcon height={40} width={40} />
+              <NewspaperIcon className="h-10 w-10" />
               <div>
-                <h3 className="font-medium mb-1">Media and Press</h3>
+                <h3 className="font-medium mb-1 text-xl">Media and Press</h3>
                 <a
                   href="mailto:press@matchbookrentals.com"
-                  className="text-gray-600 hover:underline"
+                  className="text-gray-600 hover:underline text-lg"
                 >
                   press@matchbookrentals.com
                 </a>
@@ -50,12 +49,12 @@ export default function ContactPage() {
 
             {/* General Inquiries */}
             <div className="flex items-start gap-4">
-              <InquiriesIcon height={40} width={40} />
+              <InquiriesIcon className="h-10 w-10" />
               <div>
-                <h3 className="font-medium mb-1">General Inquiries</h3>
+                <h3 className="font-medium mb-1 text-xl">General Inquiries</h3>
                 <a
                   href="mailto:supports@matchbookrentals.com"
-                  className="text-gray-600 hover:underline"
+                  className="text-gray-600 hover:underline text-lg"
                 >
                   support@matchbookrentals.com
                 </a>
@@ -67,12 +66,12 @@ export default function ContactPage() {
           <div className="space-y-8">
             {/* Support */}
             <div className="flex items-start gap-4">
-              <SupportIcon height={40} width={40} />
+              <SupportIcon className="h-10 w-10" />
               <div>
-                <h3 className="font-medium mb-1">Support</h3>
+                <h3 className="font-medium mb-1 text-xl">Support</h3>
                 <a
                   href="mailto:info@matchbookrentals.com"
-                  className="text-gray-600 hover:underline"
+                  className="text-gray-600 hover:underline text-lg"
                 >
                   info@matchbookrentals.com
                 </a>
@@ -81,12 +80,12 @@ export default function ContactPage() {
 
             {/* Join our Team */}
             <div className="flex items-start gap-4">
-              <CareersIcon height={40} width={40} />
+              <CareersIcon className="h-10 w-10" />
               <div>
-                <h3 className="font-medium mb-1">Join our Team</h3>
+                <h3 className="font-medium mb-1 text-xl">Join our Team</h3>
                 <a
                   href="mailto:careers@matchbookrentals.com"
-                  className="text-gray-600 hover:underline"
+                  className="text-gray-600 hover:underline text-lg"
                 >
                   careers@matchbookrentals.com
                 </a>
