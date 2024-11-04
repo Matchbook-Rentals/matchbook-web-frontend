@@ -52,7 +52,7 @@ const BlogArticle = () => {
 
           {/* Signature */}
           <div className='flex flex-col items-end'>
-            <h4 className='font-medium text-[36px]'> Daniel Resner </h4>
+            <h4 className='font-medium text-[34px]'> Daniel Resner </h4>
             <h5 className='text-[20px] font-normal'> Co-Founder &amp; CEO </h5>
           </div>
 
