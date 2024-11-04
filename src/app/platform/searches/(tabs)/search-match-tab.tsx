@@ -12,10 +12,10 @@ import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
-import { QuestionMarkIcon } from '@radix-ui/react-icons';
 import { Montserrat } from 'next/font/google';
 import SearchMap from '../(components)/search-map';
 import ListingDetails from '../(components)/listing-details';
+import { QuestionMarkIcon } from '@radix-ui/react-icons';
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -194,7 +194,7 @@ const MatchViewTab: React.FC = () => {
           />
         </div>
 
-        <ListingDetails />
+        <ListingDetails listing={showListings[0]} />
 
       </div >
     </div >

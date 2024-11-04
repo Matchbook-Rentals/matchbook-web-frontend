@@ -6,6 +6,7 @@ import SearchControlBar from '../(components)/search-control-bar';
 import FilterOptionsDialog from './filter-options-dialog';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Separator } from '@radix-ui/react-select';
+import { MapViewIcon, MatchViewIcon } from '@/components/svgs/svg-components';
 
 // Updated FilterOptions interface
 interface FilterOptions {
@@ -72,17 +73,17 @@ const MatchmakerTab: React.FC = () => {
         <div className="flex justify-evenly w-full md:w-auto">
           <div className="flex border shadow-lg rounded-full">
             <button
-              className={`p-2 rounded-l-full ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
+              className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
               onClick={() => setViewMode('swipe')}
             >
-              <FilterIcon size={24} />
+              <img src='/icon_png/match-view-icon.png' alt='heart' className='w-[20px] h-[20px]' />
             </button>
             <Separator className='h-10' />
             <button
-              className={`p-2 rounded-r-full ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+              className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
               onClick={() => setViewMode('map')}
             >
-              <MapIcon size={24} />
+              <MapViewIcon className='w-[31px]' />
             </button>
           </div>
           <FilterOptionsDialog

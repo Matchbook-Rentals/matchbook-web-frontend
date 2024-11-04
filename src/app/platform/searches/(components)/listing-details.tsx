@@ -32,7 +32,7 @@ const ListingDetails = ({ listing }): ListingDetailsProps => {
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <img
-              src="/api/placeholder/48/48"
+              src={listing.user.imageUrl}
               alt="Host"
               className="w-full h-full object-cover"
             />
@@ -43,11 +43,11 @@ const ListingDetails = ({ listing }): ListingDetailsProps => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-col">
           <p className="hidden sm:block text-xl">23 stays</p>
           <div className="flex items-center gap-1">
             <Star className="fill-current text-gray-700" size={24} />
-            <span className="text-xl">4.9<span className="sm:hidden align-sub text-sm">(23)</span></span>
+            <span className="text-xl">{(listing.uScore / 10).toFixed(1)}<span className="sm:hidden align-sub text-sm">(23)</span></span>
           </div>
         </div>
       </div>
