@@ -1,17 +1,20 @@
 import React from 'react';
 import { ListingAndImages } from '@/types';
-
-
-interface ListingDetailsProps {
-  listing: ListingAndImages;
-}
 import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car } from 'lucide-react';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
+interface ListingDetailsProps {
+  listing: ListingAndImages;
+}
 
-const ListingDetails = ({ listing }): ListingDetailsProps => {
+const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   return (
     <div className={`md:w-1/2 p-6 ${montserrat.className}`}>
 
@@ -32,7 +35,7 @@ const ListingDetails = ({ listing }): ListingDetailsProps => {
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <img
-              src="/api/placeholder/48/48"
+              src={listing.user.imageUrl}
               alt="Host"
               className="w-full h-full object-cover"
             />
@@ -43,12 +46,20 @@ const ListingDetails = ({ listing }): ListingDetailsProps => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-col">
           <p className="hidden sm:block text-xl">23 stays</p>
-          <div className="flex items-center gap-1">
-            <Star className="fill-current text-gray-700" size={24} />
-            <span className="text-xl">4.9<span className="sm:hidden align-sub text-sm">(23)</span></span>
-          </div>
+          {/* Replace with a shadcn hovercard */}
+          <HoverCard>
+            <HoverCardTrigger>
+              <div className="flex items-center gap-1 cursor-default">
+                <Star className="fill-current text-gray-700" size={24} />
+                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden align-sub text-sm">(23)</span></span>
+              </div>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-auto">
+              <p className="text-sm">Raw Score: {listing?.uScore?.toFixed(3)}</p>
+            </HoverCardContent>
+          </HoverCard>
         </div>
       </div>
 
