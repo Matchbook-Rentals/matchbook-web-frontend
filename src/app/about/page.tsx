@@ -51,7 +51,7 @@ export default function AboutPage() {
             <section>
               <h2 className="text-xl font-bold mb-4">What Makes Us Different</h2>
               <p className="text-gray-700">
-                We stand out by offering a complete solution to common rental challenges. Unlike others who leave you to figure out the complexities on your own charge you an arm and a leg for their help, MatchBook integrates essential features like calendar management, tenant screening, and application management into one platform accessible for all budgets.
+                We stand out by offering a complete solution to common rental challenges. Unlike others who leave you to figure out the complexities on your own &amp; charge you an arm and a leg for their help, MatchBook integrates essential features like calendar management, tenant screening, and application management into one platform accessible for all budgets.
               </p>
             </section>
 
