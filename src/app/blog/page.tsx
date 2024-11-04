@@ -23,7 +23,7 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
-      <h1 className="text-5xl text-left mb-8 font-regular">Articles</h1>
+      <h1 className="text-5xl text-left mb-8 font-normal">Articles</h1>
       {articles.map((article) => (
         <>
           <div className='flex justify-between mb-4 items-start'>
