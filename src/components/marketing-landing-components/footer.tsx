@@ -54,7 +54,7 @@ export default function Footer() {
                 className="text-gray-500 hover:text-black"
                 prefetch={false}
               >
-                Blog
+                Articles
               </Link>
               <Link
                 href="/faq"
@@ -62,13 +62,6 @@ export default function Footer() {
                 prefetch={true}
               >
                 FAQ
-              </Link>
-              <Link
-                href="#"
-                className="text-gray-500 hover:text-black"
-                prefetch={false}
-              >
-                Support
               </Link>
             </nav>
           </div>
