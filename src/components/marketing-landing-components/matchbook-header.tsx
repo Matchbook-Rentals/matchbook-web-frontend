@@ -50,7 +50,7 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
         />
 
         {/* Right-side elements container */}
-        <div className="flex md:space-x-4 items-center absolute right-2 xs:static xs:ml-auto">
+        <div className="flex space-x-2 md:space-x-4 items-center absolute right-2 xs:static xs:ml-auto">
           <Link className="hidden xs:flex" href={"?tab=list#list-your-property"} shallow>
             <Button
               className={`w-[191px] h-[36px] text-[18px] rounded-[15px]
