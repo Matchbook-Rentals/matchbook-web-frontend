@@ -9,17 +9,20 @@ const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat
 const BlogArticle = () => {
   return (
     <div className={`${PAGE_MARGIN} mx-auto py-8`}>
-      <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">Articles &gt; Introduction</h1>
-      <div className='flex justify-between items-end px-1'>
+      <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">
+        <a href="/articles" className="hover:underline">Articles</a> &gt; Introduction
+      </h1>
+      <div className='flex justify-between px-1'>
         <h3 className={`${montserrat.className}`}>October 28, 2024</h3>
-        <SocialLinks className='' />
+
+        <SocialLinks className='mb-1' />
       </div>
       <Image
         src={"/article-images/introduction.png"}
         alt={"Blog article image"}
         width={1515}
         height={337}
-        className="w-[95%] mx-auto mt-1 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
+        className="w-[95%] mx-auto md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
         priority={true}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
       />

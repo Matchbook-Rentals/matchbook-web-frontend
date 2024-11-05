@@ -23,12 +23,18 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
-      <h1 className="text-5xl text-left mb-8 font-normal">Articles</h1>
+      <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">Articles</h1>
       {articles.map((article) => (
         <>
-          <div className='flex justify-between mb-4 items-start'>
-            <h3 key={article.id} className={`${montserrat.className}`}>{article.createdAt.toDateString()}</h3>
-            <SocialLinks className='' />
+          <div className='flex justify-between px-1 '>
+            <h3 key={article.id} className={`${montserrat.className}`}>
+              {new Intl.DateTimeFormat('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              }).format(new Date(article.createdAt))}
+            </h3>
+            <SocialLinks className='mb-1' />
           </div>
           <Image
             src={`/article-images/introduction.png`} // Assuming imageUrl is stored in article data
