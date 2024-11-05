@@ -46,7 +46,7 @@ export default async function Home() {
             <p className='mt-2'>{article.excerpt} </p>
 
             <Link
-              href={`/blog/${article.slug}`}
+              href={`/articles/${article.slug}`}
               className="inline-block text-blue-500 hover:text-blue-700 mt-4"
             >
               <p className="flex items-center text-[#0170D7] hover:opacity-80 transition-opacity">
