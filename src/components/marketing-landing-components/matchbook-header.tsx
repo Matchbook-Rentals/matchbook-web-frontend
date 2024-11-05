@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Montserrat } from "next/font/google";
 import { CountdownDialog } from "@/app/page";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -60,8 +61,18 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
               List your property
             </Button>
           </Link>
-          <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
-          <UserIcon className="h-[33px] w-[30px]" />
+          <Popover>
+            <PopoverTrigger className="flex justify-between">
+              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
+            </PopoverTrigger>
+            <PopoverContent> Coming Soon! </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger className="flex justify-between">
+              <UserIcon className="text-charcoal h-[31px] w-[31px]" />
+            </PopoverTrigger>
+            <PopoverContent> Coming Soon! </PopoverContent>
+          </Popover>
         </div>
 
         {/* Centered button container for mobile */}
