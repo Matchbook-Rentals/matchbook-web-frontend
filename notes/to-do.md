@@ -5,6 +5,11 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+##05NOV25
+-[ ] paddles
+-[ ] pandadoc 
+-[ ] changed error messages on comingSoon 
+
 ##08OCT24
 - [] Fix deployment issues
 - [x] Create fake lease with all of trip details
