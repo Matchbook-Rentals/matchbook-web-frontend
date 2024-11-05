@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
@@ -10,7 +11,8 @@ const BlogArticle = () => {
   return (
     <div className={`${PAGE_MARGIN} mx-auto py-8`}>
       <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">
-        <a href="/articles" className="hover:underline">Articles</a> &gt; Introduction
+
+        <Link href="/articles" className="hover:underline">Articles</Link> &gt; Introduction
       </h1>
       <div className='flex justify-between px-1'>
         <h3 className={`${montserrat.className}`}>October 28, 2024</h3>
