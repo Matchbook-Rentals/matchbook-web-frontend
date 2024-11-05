@@ -9,6 +9,7 @@ import { DescriptionAndAmenities } from '../../trips/(trips-components)/descript
 //import { useSearchContext } from '@/contexts/search-context-provider';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
+import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
@@ -92,7 +93,7 @@ const MatchViewTab: React.FC = () => {
   // Main component render
   return (
     <div className={`w-full `}>
-
+      <Button onClick={() => console.log(listings)}> listing </Button>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
