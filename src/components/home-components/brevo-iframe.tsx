@@ -60,7 +60,6 @@ const SubscriptionForm = () => {
       });
 
       const responseData = await response.json();
-      console.log(responseData)
       if (!response.ok) throw new Error(responseData.error?.message || 'Subscription failed');
 
       setStatus({
@@ -79,7 +78,7 @@ const SubscriptionForm = () => {
       // iS this the correct way to log an error
     } catch (error: any) {
       setStatus({
-        message: `Something went wrong: ${error}`,
+        message: error.toString().replace(/^Error:\s*/, ''),
         type: 'error'
       });
     }
@@ -121,7 +120,7 @@ const SubscriptionForm = () => {
           </label>
           <div className="flex gap-2">
             <select
-              className="w-20 px-2 py-2 border rounded-md"
+              className="w-20 bg-white px-2 py-2 border rounded-md"
               value={formData.countryCode}
               onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
             >
