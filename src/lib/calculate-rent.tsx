@@ -31,28 +31,47 @@ export function calculateRent({ listing, trip, }: RentParams): number {
 
   // Calculate the final rent
   const calculatedRent = shortestLeasePrice + (pricePerMonth * additionalMonths);
+  const roundedRent = Math.round(calculatedRent);
 
-  return Math.round(calculatedRent); // Round to nearest integer
+  return roundedRent;
 }
 
 
 export const calculateLengthOfStay = (startDate: Date, endDate: Date) => {
+
   const start = new Date(startDate);
   const end = new Date(endDate);
+
+  // Validate dates
+  if (end <= start) {
+    console.error('Invalid date range: end date must be after start date');
+    return { months: 0, days: 0 };
+  }
 
   let months = 0;
   let days = 0;
   const tempDate = new Date(start);
+  let safetyCounter = 0;
+  const MAX_ITERATIONS = 120; // 10 years worth of months as safety limit
 
-  while (tempDate < end) {
+  while (tempDate < end && safetyCounter < MAX_ITERATIONS) {
     const monthEnd = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0);
+
     if (monthEnd > end) {
-      days += end.getDate() - tempDate.getDate() + 1;
+      const remainingDays = end.getDate() - tempDate.getDate() + 1;
+      days += remainingDays;
+      break;
     } else {
       months++;
       tempDate.setMonth(tempDate.getMonth() + 1);
       tempDate.setDate(1);
     }
+
+    safetyCounter++;
+  }
+
+  if (safetyCounter >= MAX_ITERATIONS) {
+    console.error('Length of stay calculation reached maximum iterations - possible infinite loop prevented');
   }
 
   return { months, days };
