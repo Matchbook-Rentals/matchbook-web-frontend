@@ -9,6 +9,10 @@ ACH PLAID API
 -[ ] paddles
 -[ ] pandadoc 
 -[ ] changed error messages on comingSoon 
+-[ ] Change stripe behaviour
+-[ ] Stripe 2 payment structure
+-[ ] Integrate branches
+-[ ] Lease gets Rent - guest fee (but leave in cost of host fee)
 
 ##08OCT24
 - [] Fix deployment issues

@@ -2,7 +2,6 @@
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
-import { pullListingsFromDb } from '@/app/actions/listings';
 import { calculateRent } from '@/lib/calculate-rent';
 
 interface ViewedListing {
@@ -91,11 +90,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const sortListingsByUScore = (listings: ListingAndImages[]) => {
     // Pre-calculate prices for all listings
-    const listingsWithPrices = listings.map(listing => ({
-      ...listing,
-      //calculatedPrice: getListingPrice(listing)
-      calculatedPrice: calculateRent({ listing, trip }),
-    }));
+    const listingsWithPrices = listings.map(listing => {
+      const calculatedPrice = calculateRent({ listing, trip });
+      return {
+        ...listing,
+        calculatedPrice,
+      };
+    });
 
     let lowestPrice = Infinity;
     let highestPrice = 0;
@@ -107,11 +108,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     listingsWithPrices.forEach(listing => {
       if (listing.calculatedPrice < lowestPrice) {
         lowestPrice = listing.calculatedPrice;
-        console.log('lowestPrice', lowestPrice);
       }
       if (listing.calculatedPrice > highestPrice) {
         highestPrice = listing.calculatedPrice;
-        console.log('highestPrice', highestPrice);
       }
       if (listing.distance && listing.distance > highestDistance) {
         highestDistance = listing.distance;
@@ -126,16 +125,29 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         highestBathroomCount = listing.bathroomCount;
       }
     });
-    console.log(' final lowestPrice', lowestPrice);
-    console.log(' final highestPrice', highestPrice);
 
     const updatedListings = listingsWithPrices.map(listing => {
-      const uScore = calculateUScore(listing, lowestPrice, highestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
+      const uScore = calculateUScore(
+        listing,
+        lowestPrice,
+        highestPrice,
+        highestDistance,
+        highestSquareFootage,
+        highestRoomCount,
+        highestBathroomCount
+      );
       return { ...listing, price: listing.calculatedPrice, uScore };
     });
 
-    return updatedListings.sort((a, b) => b.uScore - a.uScore);
+    const sortedListings = updatedListings.sort((a, b) => b.uScore - a.uScore);
+
+    return sortedListings;
   }
+
+  useEffect(() => {
+    const sortedListings = sortListingsByUScore(listingData);
+    setListings(sortedListings);
+  }, [])
 
   useEffect(() => {
     setLookup({
