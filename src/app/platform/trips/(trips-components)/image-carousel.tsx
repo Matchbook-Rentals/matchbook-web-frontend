@@ -20,7 +20,6 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
 
   const handleImageClick = (index: number) => {
-    alert(index)
     setActiveImage(index);
   };
 
