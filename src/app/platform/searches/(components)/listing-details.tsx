@@ -66,7 +66,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Host Badges */}
       <div className="flex gap-4 pb-6 border-b mt-6">
         <div className="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-green-500" />
+          <div className="w-5 h-5 rounded-full bg-primaryBrand" />
           <span>Verified</span>
         </div>
         <div className="flex items-center gap-2 px-3 py-1 bg-yellow-100 rounded-full">
@@ -115,8 +115,8 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         <h3 className="text-2xl font-semibold mb-4">Property availability</h3>
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-green-500"></div>
-            <span>Preferred</span>
+            <div className="w-4 h-4 rounded-full bg-primaryBrand"></div>
+            <span onClick={() => console.log('unavailablities:', listing.unavailablePeriods)}>Preferred</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-gray-300"></div>
@@ -137,7 +137,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                 <div
                   key={i}
                   className={`w-8 h-8 flex items-center justify-center rounded-full
-                    ${i === 9 ? 'bg-green-500 text-white' :
+                    ${i === 9 ? 'bg-primaryBrand text-white' :
                       i >= 12 && i <= 29 ? 'bg-gray-200' : ''}`}
                 >
                   {i + 1}
@@ -158,7 +158,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                 <div
                   key={i}
                   className={`w-8 h-8 flex items-center justify-center rounded-full
-                    ${i === 15 ? 'bg-green-500 text-white' :
+                    ${i === 15 ? 'bg-primaryBrand text-white' :
                       i <= 4 ? 'bg-gray-200' : ''}`}
                 >
                   {i + 1}
