@@ -64,18 +64,24 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Host Badges */}
-      <div className="flex gap-4 pb-6 border-b mt-6">
-        <div className="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-primaryBrand" />
-          <span>Verified</span>
+      <div className="flex gap-4   mt-6">
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/matchbook-verified.png' alt='Matchbook Verified Badge' />
+          </div>
+          <span className='font-semibold'>Verified</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 bg-yellow-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-yellow-500" />
-          <span>Trailblazer</span>
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/trailblazer.png' alt='Trailblazer Badge' />
+          </div>
+          <span className='font-semibold'>Trailblazer</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-blue-500" />
-          <span>Hallmark Host</span>
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/hallmark-host.png' alt='Hallmark Host Badge' />
+          </div>
+          <span className='font-semibold'>Hallmark Host</span>
         </div>
       </div>
 
