@@ -10,16 +10,14 @@ import { getPersonReports } from "@/app/actions/person-reports"
 export function ApiRequestButtons() {
   const { user } = useUser()
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    middleName: "",
+    first_name: "",
+    last_name: "",
     address: "",
     city: "",
     state: "",
     zip: "",
-    dob: "",
-    phoneNumber: "",
-    email: "",
+    ssn: "",
+    date_of_birth: "",
   })
   const [personReport, setPersonReport] = useState(null)
   const [criminalData, setCriminalData] = useState(null)
@@ -106,8 +104,23 @@ export function ApiRequestButtons() {
     }
   };
 
-  const handleCredit = () => {
-    alert('Credit check not implemented yet');
+  const handleCredit = async () => {
+    try {
+      const response = await fetch('/api/background-check/credit-score/isoftpull', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      console.log('Credit Score Data:', data);
+      // You may want to add state to display the credit score results
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to get credit score');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to perform credit check');
+    }
   };
 
   return (
@@ -118,32 +131,23 @@ export function ApiRequestButtons() {
       <form className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="firstName">First Name</Label>
+            <Label htmlFor="first_name">First Name</Label>
             <Input
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
+              id="first_name"
+              name="first_name"
+              value={formData.first_name}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor="lastName">Last Name</Label>
+            <Label htmlFor="last_name">Last Name</Label>
             <Input
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
+              id="last_name"
+              name="last_name"
+              value={formData.last_name}
               onChange={handleInputChange}
               required
-            />
-          </div>
-          <div>
-            <Label htmlFor="middleName">Middle Name</Label>
-            <Input
-              id="middleName"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleInputChange}
             />
           </div>
           <div>
@@ -183,32 +187,21 @@ export function ApiRequestButtons() {
             />
           </div>
           <div>
-            <Label htmlFor="dob">Date of Birth</Label>
+            <Label htmlFor="date_of_birth">Date of Birth</Label>
             <Input
-              id="dob"
-              name="dob"
+              id="date_of_birth"
+              name="date_of_birth"
               type="date"
-              value={formData.dob}
+              value={formData.date_of_birth}
               onChange={handleInputChange}
             />
           </div>
           <div>
-            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Label htmlFor="ssn">SSN</Label>
             <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
+              id="ssn"
+              name="ssn"
+              value={formData.ssn}
               onChange={handleInputChange}
             />
           </div>
