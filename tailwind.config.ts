@@ -79,6 +79,9 @@ const config = {
           '80': '#4f4f4fcc',
           DEFAULT: '#4f4f4f'
         },
+        subtext: {
+          DEFAULT: 'rgba(45, 47, 46, 0.60)'
+        },
         orangeBrand: {
           '80': '#DC9932cc',
           DEFAULT: '#DC9932'

@@ -6,6 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import Paddle from '@/components/ui/paddle';
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -86,25 +87,14 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Property Highlights */}
+      {/* Convert all highlights to Paddle components */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col items-center text-center gap-2">
-            <Home size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Single Family</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Sofa size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Furnished</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Zap size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Utilities included</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Dog size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Pets Allowed</span>
-          </div>
+        <div className="flex flex-wrap justify-between">
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Home} title="Single Family" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Sofa} title="Furnished" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Zap} title="Utilities included" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Dog} title="Pets Allowed" />
         </div>
       </div>
 
