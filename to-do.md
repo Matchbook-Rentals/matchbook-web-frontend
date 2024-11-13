@@ -76,3 +76,8 @@
 
 [tenant views]
 
+
+
+photo mobile view padding indent
+
+Padding for countdown at large view sizes
