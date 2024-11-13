@@ -25,7 +25,7 @@ export default function AboutPage() {
             alt={"Blog article image"}
             width={1515}
             height={337}
-            className="w-[95%] mx-auto mt-1 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
+            className="w-full mx-auto mt-1 md:w-full aspect-[1500/800] md:aspect-[1515/375] rounded-lg object-cover"
             priority={true}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
           />
