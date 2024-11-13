@@ -180,18 +180,59 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
       <AlertDialog open={open} onOpenChange={onOpenChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Consent Required</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-4">
-              <div className="flex items-start space-x-2 pt-4">
-                <Checkbox
-                  id="consent"
-                  checked={localConsentChecked}
-                  onCheckedChange={(checked) => setLocalConsentChecked(checked as boolean)}
-                  className="mt-1"
-                />
-                <Label htmlFor="consent" className="text-sm">
-                  By checking this box, I hereby consent to getting totally owned by this company with my personal data.
-                </Label>
+            <AlertDialogTitle>Credit Report Authorization and Consent</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-4 py-4">
+                <div>
+                  <h3 className="font-semibold">1. Authorization to Obtain Credit Report</h3>
+                  <p className="text-sm mt-2">
+                    By signing this Consent, I, {formData.first_name} {formData.last_name}, authorize Matchbook LLC and its agents to obtain, review, and evaluate my credit information from one or more consumer reporting agencies for the purpose of assessing creditworthiness in connection with any application for services or financing purposes as disclosed by Matchbook LLC.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">2. Agreement to Share Credit Score Range with Property Owners or Managers</h3>
+                  <p className="text-sm mt-2">
+                    By applying to any property through Matchbook LLC, I agree to allow Matchbook LLC to share my general credit score range with the property owner or manager specifically for evaluating my eligibility for rental or leasing purposes at the specified property. This information will only include a credit score range (e.g., "excellent," "good," "fair") and will not disclose my exact credit score or any other detailed personal financial information.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">3. Disclosure of Credit Information</h3>
+                  <p className="text-sm mt-2">
+                    Matchbook LLC agrees that my credit information will be treated as confidential and will only be used as outlined above, and will not be disclosed to any unauthorized third party without further consent.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">4. Customer's Rights</h3>
+                  <p className="text-sm mt-2">
+                    I understand that I have the right to:
+                  </p>
+                  <ul className="list-disc list-inside text-sm ml-4 mt-1">
+                    <li>Obtain a copy of my credit report directly from the consumer reporting agency.</li>
+                    <li>Contact the consumer reporting agency to dispute any errors in the report.</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">5. Acknowledgement and Agreement</h3>
+                  <p className="text-sm mt-2">
+                    By checking the box below, I acknowledge that I have read and understood this Consent and voluntarily agree to its terms.
+                  </p>
+                </div>
+
+                <div className="flex items-start space-x-2 pt-4">
+                  <Checkbox
+                    id="consent"
+                    checked={localConsentChecked}
+                    onCheckedChange={(checked) => setLocalConsentChecked(checked as boolean)}
+                    className="mt-1"
+                  />
+                  <Label htmlFor="consent" className="text-sm">
+                    I have read and agree to the terms above
+                  </Label>
+                </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
