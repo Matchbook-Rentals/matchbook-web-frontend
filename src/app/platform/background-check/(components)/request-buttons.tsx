@@ -193,7 +193,7 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
                 <div>
                   <h3 className="font-semibold">2. Agreement to Share Credit Score Range with Property Owners or Managers</h3>
                   <p className="text-sm mt-2">
-                    By applying to any property through Matchbook LLC, I agree to allow Matchbook LLC to share my general credit score range with the property owner or manager specifically for evaluating my eligibility for rental or leasing purposes at the specified property. This information will only include a credit score range (e.g., "excellent," "good," "fair") and will not disclose my exact credit score or any other detailed personal financial information.
+                    By applying to any property through Matchbook LLC, I agree to allow Matchbook LLC to share my general credit score range with the property owner or manager specifically for evaluating my eligibility for rental or leasing purposes at the specified property. This information will only include a credit score range (e.g., &ldquo;excellent,&rdquo; &ldquo;good,&rdquo; &ldquo;fair&rdquo;) and will not disclose my exact credit score or any other detailed personal financial information.
                   </p>
                 </div>
 
@@ -205,7 +205,7 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
                 </div>
 
                 <div>
-                  <h3 className="font-semibold">4. Customer's Rights</h3>
+                  <h3 className="font-semibold">4. Customer&apos;s Rights</h3>
                   <p className="text-sm mt-2">
                     I understand that I have the right to:
                   </p>
