@@ -43,11 +43,18 @@ export default async function BackgroundCheckPage() {
 
   const hasUnredeemedPurchase = await checkBackgroundCheckPurchase(userId);
 
+  const creditReport = await prisma.creditReport.findUnique({
+    where: {
+      userId
+    }
+  });
+
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h1>Background Check</h1>
       {hasUnredeemedPurchase ? (
-        <ApiRequestButtons />
+        <ApiRequestButtons creditBucket={creditReport?.creditBucket} creditTime={creditReport?.creditUpdatedAt} />
       ) : (
         <>
           <a href="/purchase/background-check">

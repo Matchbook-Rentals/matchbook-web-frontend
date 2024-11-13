@@ -7,7 +7,12 @@ import { Label } from "@/components/ui/label"
 import { useUser } from "@clerk/nextjs"
 import { getPersonReports } from "@/app/actions/person-reports"
 
-export function ApiRequestButtons() {
+interface ApiRequestButtonsProps {
+  creditBucket: string | null;
+  creditTime?: Date;
+}
+
+export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButtonsProps) {
   const { user } = useUser()
   const [formData, setFormData] = useState({
     first_name: "",
@@ -21,6 +26,8 @@ export function ApiRequestButtons() {
   })
   const [personReport, setPersonReport] = useState(null)
   const [criminalData, setCriminalData] = useState(null)
+  const [creditScoreBucket, setCreditScoreBucket] = useState(creditBucket);
+  const [creditUpdatedAt, setCreditUpdatedAt] = useState<string | null>(creditTime ? creditTime.toLocaleString() : null);
 
   useEffect(() => {
     if (user) {
@@ -112,6 +119,11 @@ export function ApiRequestButtons() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      const { name, result } = data.creditData.intelligence
+      if (name && result === 'passed') {
+        setCreditScoreBucket(name);
+        setCreditUpdatedAt(new Date().toLocaleString());
+      }
       console.log('Credit Score Data:', data);
       // You may want to add state to display the credit score results
       if (!response.ok) {
@@ -211,6 +223,12 @@ export function ApiRequestButtons() {
         <Card>
           <CardContent className="pt-6">
             <h3 className="text-xl font-semibold text-center">Credit Check</h3>
+            {creditScoreBucket && (
+              <>
+                <p className="text-center mt-2">{creditScoreBucket.replace('_', ' ')}</p>
+                <p className="text-center mt-2">{creditUpdatedAt}</p>
+              </>
+            )}
           </CardContent>
           <CardFooter>
             <Button className="w-full" onClick={handleCredit}>

@@ -1,9 +1,23 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import prisma from '@/lib/prismadb'
+import { headers } from 'next/headers';
 
 const ISOFTPULL_API_URL = 'https://app.isoftpull.com/api/v2/reports';
 
 export async function POST(request: Request) {
   try {
+    // Get the auth session
+    const { userId } = auth();
+
+    // Check if user is authenticated
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     console.log('Starting iSoftPull credit score check...');
 
     // Get the request body
@@ -22,6 +36,7 @@ export async function POST(request: Request) {
         );
       }
     }
+
     console.log('All required fields validated successfully');
 
     // Create form data
@@ -29,6 +44,7 @@ export async function POST(request: Request) {
     Object.entries(body).forEach(([key, value]) => {
       formData.append(key, value as string);
     });
+
     console.log('Form data prepared for iSoftPull API');
 
     // Make request to iSoftPull API
@@ -52,11 +68,43 @@ export async function POST(request: Request) {
       );
     }
 
-    const data = await response.json();
+    const creditData = await response.json();
     console.log('Successfully received iSoftPull API response');
-    console.log('ISOFTPULL DATA:', data)
-    return NextResponse.json(data);
+    console.log('ISOFTPULL DATA:', creditData);
 
+
+
+    if (creditData.intelligence.result === 'passed') {
+      try {
+        const creditReport = await prisma.creditReport.upsert({
+          where: {
+            userId: userId
+          },
+          update: {
+            creditBucket: creditData.intelligence.name,
+            creditUpdatedAt: new Date(),
+          },
+          create: {
+            userId: userId,
+            creditBucket: creditData.intelligence.name,
+            creditUpdatedAt: new Date(),
+          },
+        });
+        console.log('Successfully created/updated credit report', creditReport.creditBucket);
+      } catch (dbError) {
+        console.error('Database update error:', dbError);
+        return NextResponse.json(
+          { error: 'Failed to update credit report', details: dbError },
+          { status: 500 }
+        );
+      }
+    }
+
+
+    return NextResponse.json({
+      message: 'Credit check completed and user record updated',
+      creditData,
+    });
   } catch (error) {
     console.error('iSoftPull API error:', error);
     return NextResponse.json(

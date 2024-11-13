@@ -22,23 +22,23 @@ enum CreditBucket {
   Low
   Fair
   Good
+  Very_Good
   VeryGood
   Exceptional
 }
 
 model User {
-  id              String       @id @default(uuid())
+  id              String    @id @default(uuid())
   stripeAccountId String?
   firstName       String?
   lastName        String?
   fullName        String?
-  email           String?      @unique
+  email           String?   @unique
   emailVerified   DateTime?
   imageUrl        String?
   hashedPassword  String?
-  creditBucket    CreditBucket
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
   verifiedAt      DateTime? // Timestamp of when user was verified
   hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
   trailblazerAt   DateTime? // Timestamp of when user became trailblazer
@@ -55,6 +55,7 @@ model User {
   participatingTrips Trip[]                    @relation("TripParticipants")
   purchases          Purchase[]
   personReports      PersonReport?
+  creditReport       CreditReport?
   conversations      ConversationParticipant[]
   messageReads       MessageRead[]
   sentMessages       Message[]                 @relation("MessageSender")
@@ -584,6 +585,18 @@ model PersonReport {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model CreditReport {
+  id              String       @id @default(uuid())
+  userId          String       @unique
+  creditBucket    CreditBucket
+  creditUpdatedAt DateTime
+  consentReceived DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model RentPayment {

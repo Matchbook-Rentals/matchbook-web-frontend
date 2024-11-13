@@ -5,8 +5,16 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
-##05NOV25
--[ ] paddles
+
+##13NOV24
+- [X] Credit Intelligence Filtering 
+- [X] save to creditBucket on user
+- [ ] consume Ticket
+- [ ] Add Dialog to confirm data
+- [ ] Create flowchart
+
+##05NOV24
+- [x] paddles
 -[ ] pandadoc 
 -[ ] changed error messages on comingSoon 
 -[ ] Change stripe behaviour
