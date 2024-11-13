@@ -5,6 +5,23 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+
+##13NOV24
+- [X] Credit Intelligence Filtering 
+- [X] save to creditBucket on user
+- [ ] consume Ticket
+- [ ] Add Dialog to confirm data
+- [ ] Create flowchart
+
+##05NOV24
+- [x] paddles
+-[ ] pandadoc 
+-[ ] changed error messages on comingSoon 
+-[ ] Change stripe behaviour
+-[ ] Stripe 2 payment structure
+-[ ] Integrate branches
+-[ ] Lease gets Rent - guest fee (but leave in cost of host fee)
+
 ##08OCT24
 - [] Fix deployment issues
 - [x] Create fake lease with all of trip details

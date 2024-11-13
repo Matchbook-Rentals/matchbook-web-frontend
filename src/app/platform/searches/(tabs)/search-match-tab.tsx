@@ -9,6 +9,7 @@ import { DescriptionAndAmenities } from '../../trips/(trips-components)/descript
 //import { useSearchContext } from '@/contexts/search-context-provider';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
+import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/spinner';
 import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
 import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
@@ -92,13 +93,12 @@ const MatchViewTab: React.FC = () => {
   // Main component render
   return (
     <div className={`w-full `}>
-
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className='flex p-0 '>
-        <div className="button-control-box flex justify-around py-2  md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
+      <div className='flex p-0'>
+        <div className="button-control-box flex lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
 
           <ButtonControl
             handleClick={() => handleReject(showListings[0])}
@@ -153,7 +153,7 @@ const MatchViewTab: React.FC = () => {
           />
 
         </div>
-        <h2 className={`md:text-3xl lg:text-[40px] hidden md:inline w-1/2 pl-2 truncate text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
+        <h2 className={`md:text-3xl lg:text-[40px] hidden md:inline w-1/2 pl-2 text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
       </div>
 
 

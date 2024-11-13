@@ -4,25 +4,36 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useUser } from "@clerk/nextjs"
 import { getPersonReports } from "@/app/actions/person-reports"
 
-export function ApiRequestButtons() {
+interface ApiRequestButtonsProps {
+  creditBucket: string | null;
+  creditTime?: Date;
+}
+
+export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButtonsProps) {
   const { user } = useUser()
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    middleName: "",
+    first_name: "",
+    last_name: "",
     address: "",
     city: "",
     state: "",
     zip: "",
-    dob: "",
-    phoneNumber: "",
-    email: "",
+    ssn: "",
+    date_of_birth: "",
   })
   const [personReport, setPersonReport] = useState(null)
   const [criminalData, setCriminalData] = useState(null)
+  const [creditScoreBucket, setCreditScoreBucket] = useState(creditBucket);
+  const [creditUpdatedAt, setCreditUpdatedAt] = useState<string | null>(creditTime ? creditTime.toLocaleString() : null);
+  const [currentAction, setCurrentAction] = useState<'credit' | 'criminal' | 'bankruptcy' | null>(null);
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -37,40 +48,34 @@ export function ApiRequestButtons() {
     }
   }
 
+  const validateForm = () => {
+    return Object.values(formData).every(value => value.trim() !== "");
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleBackgroundCheck = async (type: string) => {
+  const handleCredit = async () => {
     try {
-      let endpoint = '';
-      switch (type) {
-        case 'Criminal':
-          endpoint = '/api/background-check/criminal-records';
-          break;
-        case 'Bankruptcy':
-          endpoint = '/api/background-check/people-search';
-          break;
-        default:
-          alert(`${type} check not implemented yet`);
-          return;
-      }
-
-      const response = await fetch(endpoint, {
-        method: type === 'Criminal' ? 'GET' : 'POST',
+      const response = await fetch('/api/background-check/credit-score/isoftpull', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: type === 'Criminal' ? undefined : JSON.stringify(formData),
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
-
-      if (type === 'Criminal') {
-        setCriminalData(data);
-      } else {
-        console.log(data); // Handle other responses as needed
+      const { name, result } = data.creditData.intelligence
+      if (name && result === 'passed') {
+        setCreditScoreBucket(name);
+        setCreditUpdatedAt(new Date().toLocaleString());
+      }
+      console.log('Credit Score Data:', data);
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to get credit score');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert(`Failed to perform ${type.toLowerCase()} check`);
+      alert('Failed to perform credit check');
     }
   };
 
@@ -81,8 +86,6 @@ export function ApiRequestButtons() {
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
-      console.log('PARSED RESPONSE', data)
-      console.log('RESPONSE', response)
       setCriminalData(data);
     } catch (error) {
       console.error('Error:', error);
@@ -98,16 +101,156 @@ export function ApiRequestButtons() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setPersonReport(data); // Save the response to personReport state
-      console.log('People Search Endpoint', data); // Optional: keep this for debugging if needed
+      setPersonReport(data);
     } catch (error) {
       console.error('Error:', error);
       alert('Failed to perform bankruptcy check');
     }
   };
 
-  const handleCredit = () => {
-    alert('Credit check not implemented yet');
+  const handleConfirmedAction = () => {
+    switch (currentAction) {
+      case 'credit':
+        setShowConsentDialog(true);
+        break;
+      case 'criminal':
+        handleCriminal();
+        break;
+      case 'bankruptcy':
+        handleBankruptcy();
+        break;
+    }
+    setCurrentAction(null);
+  };
+
+  const handleConsentConfirmed = () => {
+    handleCredit();
+    setShowConsentDialog(false);
+  };
+
+  const ConfirmationDialog = () => (
+    <AlertDialog open={currentAction !== null} onOpenChange={() => setCurrentAction(null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Check</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please double-check all information carefully. You will be charged for this check regardless of whether a matching file is found.
+            {Object.entries(formData).map(([key, value]) => (
+              <div key={key} className="grid grid-cols-2 gap-2 py-1">
+                <span className="font-medium capitalize">{key.replace(/_/g, ' ')}:</span>
+                <span>{value || 'Not provided'}</span>
+              </div>
+            ))}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirmedAction}>
+            Get {currentAction?.[0].toUpperCase() + currentAction?.slice(1)}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+
+  const ConsentDialog = ({
+    open,
+    onOpenChange,
+    onConfirm,
+    onCancel
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }) => {
+    const [localConsentChecked, setLocalConsentChecked] = useState(false);
+
+    const handleCancel = () => {
+      setLocalConsentChecked(false);
+      onCancel();
+    };
+
+    const handleConfirm = () => {
+      setLocalConsentChecked(false);
+      onConfirm();
+    };
+
+    return (
+      <AlertDialog open={open} onOpenChange={onOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Credit Report Authorization and Consent</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-4 py-4">
+                <div>
+                  <h3 className="font-semibold">1. Authorization to Obtain Credit Report</h3>
+                  <p className="text-sm mt-2">
+                    By signing this Consent, I, {formData.first_name} {formData.last_name}, authorize Matchbook LLC and its agents to obtain, review, and evaluate my credit information from one or more consumer reporting agencies for the purpose of assessing creditworthiness in connection with any application for services or financing purposes as disclosed by Matchbook LLC.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">2. Agreement to Share Credit Score Range with Property Owners or Managers</h3>
+                  <p className="text-sm mt-2">
+                    By applying to any property through Matchbook LLC, I agree to allow Matchbook LLC to share my general credit score range with the property owner or manager specifically for evaluating my eligibility for rental or leasing purposes at the specified property. This information will only include a credit score range (e.g., &ldquo;excellent,&rdquo; &ldquo;good,&rdquo; &ldquo;fair&rdquo;) and will not disclose my exact credit score or any other detailed personal financial information.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">3. Disclosure of Credit Information</h3>
+                  <p className="text-sm mt-2">
+                    Matchbook LLC agrees that my credit information will be treated as confidential and will only be used as outlined above, and will not be disclosed to any unauthorized third party without further consent.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">4. Customer&apos;s Rights</h3>
+                  <p className="text-sm mt-2">
+                    I understand that I have the right to:
+                  </p>
+                  <ul className="list-disc list-inside text-sm ml-4 mt-1">
+                    <li>Obtain a copy of my credit report directly from the consumer reporting agency.</li>
+                    <li>Contact the consumer reporting agency to dispute any errors in the report.</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">5. Acknowledgement and Agreement</h3>
+                  <p className="text-sm mt-2">
+                    By checking the box below, I acknowledge that I have read and understood this Consent and voluntarily agree to its terms.
+                  </p>
+                </div>
+
+                <div className="flex items-start space-x-2 pt-4">
+                  <Checkbox
+                    id="consent"
+                    checked={localConsentChecked}
+                    onCheckedChange={(checked) => setLocalConsentChecked(checked as boolean)}
+                    className="mt-1"
+                  />
+                  <Label htmlFor="consent" className="text-sm">
+                    I have read and agree to the terms above
+                  </Label>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancel}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirm}
+              disabled={!localConsentChecked}
+              className="disabled:opacity-50"
+            >
+              Proceed
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
   };
 
   return (
@@ -118,32 +261,23 @@ export function ApiRequestButtons() {
       <form className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="firstName">First Name</Label>
+            <Label htmlFor="first_name">First Name</Label>
             <Input
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
+              id="first_name"
+              name="first_name"
+              value={formData.first_name}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor="lastName">Last Name</Label>
+            <Label htmlFor="last_name">Last Name</Label>
             <Input
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
+              id="last_name"
+              name="last_name"
+              value={formData.last_name}
               onChange={handleInputChange}
               required
-            />
-          </div>
-          <div>
-            <Label htmlFor="middleName">Middle Name</Label>
-            <Input
-              id="middleName"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleInputChange}
             />
           </div>
           <div>
@@ -183,32 +317,21 @@ export function ApiRequestButtons() {
             />
           </div>
           <div>
-            <Label htmlFor="dob">Date of Birth</Label>
+            <Label htmlFor="date_of_birth">Date of Birth</Label>
             <Input
-              id="dob"
-              name="dob"
+              id="date_of_birth"
+              name="date_of_birth"
               type="date"
-              value={formData.dob}
+              value={formData.date_of_birth}
               onChange={handleInputChange}
             />
           </div>
           <div>
-            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Label htmlFor="ssn">SSN</Label>
             <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
+              id="ssn"
+              name="ssn"
+              value={formData.ssn}
               onChange={handleInputChange}
             />
           </div>
@@ -218,9 +341,24 @@ export function ApiRequestButtons() {
         <Card>
           <CardContent className="pt-6">
             <h3 className="text-xl font-semibold text-center">Credit Check</h3>
+            {creditScoreBucket && (
+              <>
+                <p className="text-center mt-2">{creditScoreBucket.replace('_', ' ')}</p>
+                <p className="text-center mt-2">{creditUpdatedAt}</p>
+              </>
+            )}
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleCredit}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('credit');
+              }}
+            >
               Get Credit
             </Button>
           </CardFooter>
@@ -230,7 +368,16 @@ export function ApiRequestButtons() {
             <h3 className="text-xl font-semibold text-center">Criminal Check</h3>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleCriminal}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('criminal');
+              }}
+            >
               Get Criminal
             </Button>
           </CardFooter>
@@ -240,12 +387,30 @@ export function ApiRequestButtons() {
             <h3 className="text-xl font-semibold text-center">Bankruptcy Check</h3>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleBankruptcy}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('bankruptcy');
+              }}
+            >
               Get Bankruptcy
             </Button>
           </CardFooter>
         </Card>
       </div>
+
+      <ConfirmationDialog />
+      <ConsentDialog
+        open={showConsentDialog}
+        onOpenChange={(open) => setShowConsentDialog(open)}
+        onConfirm={handleConsentConfirmed}
+        onCancel={() => setShowConsentDialog(false)}
+      />
+
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Person Report</h2>
         {personReport ? (

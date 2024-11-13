@@ -12,7 +12,6 @@ export default async function PlatformNavbar() {
   const updateUserImage = async () => {
     'use server'
 
-    console.log("CALLED")
     try {
       if (!clerkUser?.id) {
         throw new Error('User ID is missing')
@@ -26,9 +25,9 @@ export default async function PlatformNavbar() {
         throw new Error('User not found in database')
       }
 
-      if (clerkUser.imageUrl !== dbUser.imageUrl){
+      if (clerkUser.imageUrl !== dbUser.imageUrl) {
         console.log("NOT SAME")
-       let result = await prisma?.user.update({where: {id: dbUser.id}, data: {imageUrl: clerkUser.imageUrl}})
+        let result = await prisma?.user.update({ where: { id: dbUser.id }, data: { imageUrl: clerkUser.imageUrl } })
 
         console.log(result)
       }

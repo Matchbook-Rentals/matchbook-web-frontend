@@ -54,7 +54,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                   <div className="grid grid-cols-2 grid-rows-2 gap-4">
                     {chunk.map((image, idx) => (
                       <div
-                        key={`image-${image.id}`}
+                        key={`image-${image.id}-${idx}`}
                         className={`relative cursor-pointer h-[19vh] overflow-hidden ${activeImage === uniqueImages.indexOf(image) ? 'ring-2 ring-blue-500' : ''
                           }`}
                         onClick={() => handleImageClick(uniqueImages.indexOf(image))}

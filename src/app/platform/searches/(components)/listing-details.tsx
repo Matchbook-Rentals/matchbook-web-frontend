@@ -6,6 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import Paddle from '@/components/ui/paddle';
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -64,41 +65,36 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Host Badges */}
-      <div className="flex gap-4 pb-6 border-b mt-6">
-        <div className="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-green-500" />
-          <span>Verified</span>
+      <div className="flex gap-4   mt-6">
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/matchbook-verified.png' alt='Matchbook Verified Badge' />
+          </div>
+          <span className='font-semibold'>Verified</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 bg-yellow-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-yellow-500" />
-          <span>Trailblazer</span>
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/trailblazer.png' alt='Trailblazer Badge' />
+          </div>
+          <span className='font-semibold'>Trailblazer</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full">
-          <div className="w-5 h-5 rounded-full bg-blue-500" />
-          <span>Hallmark Host</span>
+        <div className="flex items-center gap-2 ">
+          <div className="w-7 h-7" >
+            <img src='/badges_png/hallmark-host.png' alt='Hallmark Host Badge' />
+          </div>
+          <span className='font-semibold'>Hallmark Host</span>
         </div>
       </div>
 
       {/* Property Highlights */}
+      {/* Convert all highlights to Paddle components */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col items-center text-center gap-2">
-            <Home size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Single Family</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Sofa size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Furnished</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Zap size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Utilities included</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Dog size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Pets Allowed</span>
-          </div>
+        <div className="flex flex-wrap justify-between">
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Home} title="Single Family" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Sofa} title="Furnished" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Zap} title="Utilities included" />
+          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Dog} title="Pets Allowed" />
         </div>
       </div>
 
@@ -115,8 +111,8 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         <h3 className="text-2xl font-semibold mb-4">Property availability</h3>
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-green-500"></div>
-            <span>Preferred</span>
+            <div className="w-4 h-4 rounded-full bg-primaryBrand"></div>
+            <span onClick={() => console.log('unavailablities:', listing.unavailablePeriods)}>Preferred</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-gray-300"></div>
@@ -137,7 +133,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                 <div
                   key={i}
                   className={`w-8 h-8 flex items-center justify-center rounded-full
-                    ${i === 9 ? 'bg-green-500 text-white' :
+                    ${i === 9 ? 'bg-primaryBrand text-white' :
                       i >= 12 && i <= 29 ? 'bg-gray-200' : ''}`}
                 >
                   {i + 1}
@@ -158,7 +154,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                 <div
                   key={i}
                   className={`w-8 h-8 flex items-center justify-center rounded-full
-                    ${i === 15 ? 'bg-green-500 text-white' :
+                    ${i === 15 ? 'bg-primaryBrand text-white' :
                       i <= 4 ? 'bg-gray-200' : ''}`}
                 >
                   {i + 1}

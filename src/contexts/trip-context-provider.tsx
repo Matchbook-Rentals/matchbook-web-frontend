@@ -2,7 +2,6 @@
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
-import { pullListingsFromDb } from '@/app/actions/listings';
 import { calculateRent } from '@/lib/calculate-rent';
 
 interface ViewedListing {
@@ -34,7 +33,6 @@ interface TripContextType {
   actions: {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
     setTrip: React.Dispatch<React.SetStateAction<TripAndMatches[]>>;
-    fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
     setLookup: React.Dispatch<React.SetStateAction<TripContextType['state']['lookup']>>;
     setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
   };
@@ -71,44 +69,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     matchIds: new Set() // Add this line
   });
 
-  const getListingPrice = (listing: ListingAndImages) => {
-    const endDate = trip?.endDate;
-    const startDate = trip?.startDate;
-    if (!endDate || !startDate) return listing.shortestLeasePrice;
-
-    const tripLengthInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
-
-    const shortestLeaseLength = listing.shortestLeaseLength;
-    const shortestLeasePrice = listing.shortestLeasePrice;
-    const longestLeaseLength = listing.longestLeaseLength;
-    const longestLeasePrice = listing.longestLeasePrice;
-
-    // If the trip length is shorter than or equal to the shortest lease, return the shortest lease price
-    if (tripLengthInMonths <= shortestLeaseLength) return shortestLeasePrice;
-
-    // If the trip length is longer than or equal to the longest lease, return the longest lease price
-    if (tripLengthInMonths >= longestLeaseLength) return longestLeasePrice;
-
-    // Calculate the price difference and lease length difference
-    const priceDifference = longestLeasePrice - shortestLeasePrice;
-    const leaseLengthDifference = longestLeaseLength - shortestLeaseLength;
-
-    // Calculate the price change per month (can be positive or negative)
-    const priceChangePerMonth = priceDifference / leaseLengthDifference;
-
-    // Calculate the number of months beyond the shortest lease
-    const monthsBeyondShortest = tripLengthInMonths - shortestLeaseLength;
-
-    // Calculate the total price change
-    const totalPriceChange = priceChangePerMonth * monthsBeyondShortest;
-
-    // Calculate the final price
-    const finalPrice = shortestLeasePrice + totalPriceChange;
-
-    return Math.round(finalPrice);
-  }
-
-
   // Calculate U-Score for a listing
   const calculateUScore = (
     listing: ListingAndImages & { calculatedPrice: number },
@@ -130,11 +90,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const sortListingsByUScore = (listings: ListingAndImages[]) => {
     // Pre-calculate prices for all listings
-    const listingsWithPrices = listings.map(listing => ({
-      ...listing,
-      //calculatedPrice: getListingPrice(listing)
-      calculatedPrice: calculateRent({ listing, trip }),
-    }));
+    const listingsWithPrices = listings.map(listing => {
+      const calculatedPrice = calculateRent({ listing, trip });
+      return {
+        ...listing,
+        calculatedPrice,
+      };
+    });
 
     let lowestPrice = Infinity;
     let highestPrice = 0;
@@ -146,11 +108,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     listingsWithPrices.forEach(listing => {
       if (listing.calculatedPrice < lowestPrice) {
         lowestPrice = listing.calculatedPrice;
-        console.log('lowestPrice', lowestPrice);
       }
       if (listing.calculatedPrice > highestPrice) {
         highestPrice = listing.calculatedPrice;
-        console.log('highestPrice', highestPrice);
       }
       if (listing.distance && listing.distance > highestDistance) {
         highestDistance = listing.distance;
@@ -165,36 +125,29 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         highestBathroomCount = listing.bathroomCount;
       }
     });
-    console.log(' final lowestPrice', lowestPrice);
-    console.log(' final highestPrice', highestPrice);
 
     const updatedListings = listingsWithPrices.map(listing => {
-      const uScore = calculateUScore(listing, lowestPrice, highestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
+      const uScore = calculateUScore(
+        listing,
+        lowestPrice,
+        highestPrice,
+        highestDistance,
+        highestSquareFootage,
+        highestRoomCount,
+        highestBathroomCount
+      );
       return { ...listing, price: listing.calculatedPrice, uScore };
     });
 
-    return updatedListings.sort((a, b) => b.uScore - a.uScore);
+    const sortedListings = updatedListings.sort((a, b) => b.uScore - a.uScore);
+
+    return sortedListings;
   }
-
-  const fetchListings = async (lat: number, lng: number, radius: number) => {
-    setIsLoading(true);
-    try {
-      const results = await pullListingsFromDb(lat, lng, radius);
-      if (results.length === 0) {
-        console.log(trip);
-      }
-      const sortedResults = sortListingsByUScore(results);
-
-      setListings(sortedResults);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     const sortedListings = sortListingsByUScore(listingData);
     setListings(sortedListings);
-  }, [listingData])
+  }, [])
 
   useEffect(() => {
     setLookup({
@@ -283,7 +236,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     actions: {
       setViewedListings,
       setTrip,
-      fetchListings,
       setLookup,
       setHasApplication,
     }

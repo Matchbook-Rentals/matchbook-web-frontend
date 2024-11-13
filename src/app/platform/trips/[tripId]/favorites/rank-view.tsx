@@ -2,11 +2,13 @@
 import React, { useContext, useState } from 'react';
 import { Listing, Trip } from '@prisma/client';
 import ListingBar from '../listing-bar';
-import TripContextProvider, { TripContext } from '@/contexts/trip-context-provider';
+import { useTripContext } from '@/contexts/trip-context-provider';
 import Link from 'next/link';
 
 export default function RankView({ updateFavoriteRank }) {
-  const { trip, getUpdatedTrip, listings } = useContext(TripContext);
+  const { state, actions } = useTripContext();
+  const { trip, listings } = state;
+  const { getUpdatedTrip } = actions
 
 
   // State to track the order of the listings based on their favorite ranking

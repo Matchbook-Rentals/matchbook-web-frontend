@@ -73,7 +73,8 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     const groupedListings = listingsWithDistanceAndBedrooms.reduce((acc, curr) => {
       const existingListing = acc.find(l => l.id === curr.id);
       if (existingListing) {
-        if (curr.imageId && curr.imageUrl) {
+        if (curr.imageId && curr.imageUrl &&
+          !existingListing.listingImages.some(img => img.id === curr.imageId)) {
           existingListing.listingImages.push({ id: curr.imageId, url: curr.imageUrl });
         }
         if (curr.bedroomId && curr.bedroomNumber && curr.bedType &&
