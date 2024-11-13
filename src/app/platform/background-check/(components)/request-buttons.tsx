@@ -4,6 +4,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useUser } from "@clerk/nextjs"
 import { getPersonReports } from "@/app/actions/person-reports"
 
@@ -28,6 +30,10 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
   const [criminalData, setCriminalData] = useState(null)
   const [creditScoreBucket, setCreditScoreBucket] = useState(creditBucket);
   const [creditUpdatedAt, setCreditUpdatedAt] = useState<string | null>(creditTime ? creditTime.toLocaleString() : null);
+  const [currentAction, setCurrentAction] = useState<'credit' | 'criminal' | 'bankruptcy' | null>(null);
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -42,74 +48,13 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
     }
   }
 
+  const validateForm = () => {
+    return Object.values(formData).every(value => value.trim() !== "");
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const handleBackgroundCheck = async (type: string) => {
-    try {
-      let endpoint = '';
-      switch (type) {
-        case 'Criminal':
-          endpoint = '/api/background-check/criminal-records';
-          break;
-        case 'Bankruptcy':
-          endpoint = '/api/background-check/people-search';
-          break;
-        default:
-          alert(`${type} check not implemented yet`);
-          return;
-      }
-
-      const response = await fetch(endpoint, {
-        method: type === 'Criminal' ? 'GET' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: type === 'Criminal' ? undefined : JSON.stringify(formData),
-      });
-      const data = await response.json();
-
-      if (type === 'Criminal') {
-        setCriminalData(data);
-      } else {
-        console.log(data); // Handle other responses as needed
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert(`Failed to perform ${type.toLowerCase()} check`);
-    }
-  };
-
-  const handleCriminal = async () => {
-    try {
-      const response = await fetch('/api/background-check/criminal-records', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await response.json();
-      console.log('PARSED RESPONSE', data)
-      console.log('RESPONSE', response)
-      setCriminalData(data);
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to perform criminal check');
-    }
-  };
-
-  const handleBankruptcy = async () => {
-    try {
-      const response = await fetch('/api/background-check/people-search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      setPersonReport(data); // Save the response to personReport state
-      console.log('People Search Endpoint', data); // Optional: keep this for debugging if needed
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to perform bankruptcy check');
-    }
-  };
 
   const handleCredit = async () => {
     try {
@@ -125,7 +70,6 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
         setCreditUpdatedAt(new Date().toLocaleString());
       }
       console.log('Credit Score Data:', data);
-      // You may want to add state to display the credit score results
       if (!response.ok) {
         throw new Error(data.message || 'Failed to get credit score');
       }
@@ -133,6 +77,139 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
       console.error('Error:', error);
       alert('Failed to perform credit check');
     }
+  };
+
+  const handleCriminal = async () => {
+    try {
+      const response = await fetch('/api/background-check/criminal-records', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      setCriminalData(data);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to perform criminal check');
+    }
+  };
+
+  const handleBankruptcy = async () => {
+    try {
+      const response = await fetch('/api/background-check/people-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      setPersonReport(data);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to perform bankruptcy check');
+    }
+  };
+
+  const handleConfirmedAction = () => {
+    switch (currentAction) {
+      case 'credit':
+        setShowConsentDialog(true);
+        break;
+      case 'criminal':
+        handleCriminal();
+        break;
+      case 'bankruptcy':
+        handleBankruptcy();
+        break;
+    }
+    setCurrentAction(null);
+  };
+
+  const handleConsentConfirmed = () => {
+    handleCredit();
+    setShowConsentDialog(false);
+  };
+
+  const ConfirmationDialog = () => (
+    <AlertDialog open={currentAction !== null} onOpenChange={() => setCurrentAction(null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Check</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please double-check all information carefully. You will be charged for this check regardless of whether a matching file is found.
+            {Object.entries(formData).map(([key, value]) => (
+              <div key={key} className="grid grid-cols-2 gap-2 py-1">
+                <span className="font-medium capitalize">{key.replace(/_/g, ' ')}:</span>
+                <span>{value || 'Not provided'}</span>
+              </div>
+            ))}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirmedAction}>
+            Get {currentAction?.[0].toUpperCase() + currentAction?.slice(1)}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+
+  const ConsentDialog = ({
+    open,
+    onOpenChange,
+    onConfirm,
+    onCancel
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }) => {
+    const [localConsentChecked, setLocalConsentChecked] = useState(false);
+
+    const handleCancel = () => {
+      setLocalConsentChecked(false);
+      onCancel();
+    };
+
+    const handleConfirm = () => {
+      setLocalConsentChecked(false);
+      onConfirm();
+    };
+
+    return (
+      <AlertDialog open={open} onOpenChange={onOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Consent Required</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-4">
+              <div className="flex items-start space-x-2 pt-4">
+                <Checkbox
+                  id="consent"
+                  checked={localConsentChecked}
+                  onCheckedChange={(checked) => setLocalConsentChecked(checked as boolean)}
+                  className="mt-1"
+                />
+                <Label htmlFor="consent" className="text-sm">
+                  By checking this box, I hereby consent to getting totally owned by this company with my personal data.
+                </Label>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancel}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirm}
+              disabled={!localConsentChecked}
+              className="disabled:opacity-50"
+            >
+              Proceed
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
   };
 
   return (
@@ -231,7 +308,16 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
             )}
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleCredit}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('credit');
+              }}
+            >
               Get Credit
             </Button>
           </CardFooter>
@@ -241,7 +327,16 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
             <h3 className="text-xl font-semibold text-center">Criminal Check</h3>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleCriminal}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('criminal');
+              }}
+            >
               Get Criminal
             </Button>
           </CardFooter>
@@ -251,12 +346,30 @@ export function ApiRequestButtons({ creditBucket, creditTime }: ApiRequestButton
             <h3 className="text-xl font-semibold text-center">Bankruptcy Check</h3>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleBankruptcy}>
+            <Button
+              className="w-full"
+              onClick={() => {
+                if (!validateForm()) {
+                  alert('Please fill in all required fields');
+                  return;
+                }
+                setCurrentAction('bankruptcy');
+              }}
+            >
               Get Bankruptcy
             </Button>
           </CardFooter>
         </Card>
       </div>
+
+      <ConfirmationDialog />
+      <ConsentDialog
+        open={showConsentDialog}
+        onOpenChange={(open) => setShowConsentDialog(open)}
+        onConfirm={handleConsentConfirmed}
+        onCancel={() => setShowConsentDialog(false)}
+      />
+
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Person Report</h2>
         {personReport ? (

@@ -50,6 +50,7 @@ export default async function BackgroundCheckPage() {
   });
 
 
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h1>Background Check</h1>
