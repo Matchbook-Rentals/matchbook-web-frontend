@@ -64,8 +64,8 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
   };
 
   return (
-    <div className="relative h-[600px]">
-      <ScrollArea className="h-[540px] w-full rounded-md border p-4">
+    <div className="relative h-full">
+      <ScrollArea className="h-[640px] w-full rounded-md border p-4">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-12">
           {displayedListings.map((listing) => (
             <SearchListingCard

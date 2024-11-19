@@ -10,7 +10,7 @@ enum Status {
   None = 'none'
 }
 
-const TITLE_MAX_LENGTH = 35
+const TITLE_MAX_LENGTH = 30
 
 interface SearchListingCardProps {
   listing: ListingAndImages
@@ -34,7 +34,8 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
 
   return (
     <Card className={`w-full overflow-hidden bg-white ${getStatusStyles(status)}`}>
-      <div className="relative w-full aspect-[4/4]">
+
+      <div className="relative w-full aspect-[297/276]">
         <Image
           src={listing.listingImages[0].url}
           alt={listing.title}
@@ -44,9 +45,9 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
         />
       </div>
 
-      <div className="p-2">
-        <div className="flex justify-between gap-x-2 items-start mb-2">
-          <h3 className="font-semibold text-gray-900 text-base">
+      <div className="p-2 flex flex-col min-h-[110px]">
+        <div className="flex justify-between gap-x-2 items-start">
+          <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
               ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
               : listing.title}
@@ -57,8 +58,8 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="text-base  ">
+        <div className="flex items-center justify-between mt-auto">
+          <div className="text-base">
             ${listing.price || 2350}
             <span className=""> month</span>
           </div>

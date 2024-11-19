@@ -44,7 +44,7 @@ const MapView: React.FC = () => {
   const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
 
   return (
-    <>
+    <div className='h-[100vh]'>
       <div className='px-2 w-full'>
         <h2 className='text-left text-xl'>Listings for {state.trip.locationString} </h2>
       </div>
@@ -68,7 +68,7 @@ const MapView: React.FC = () => {
           />
         </div>
       </div>
-    </>
+    </div>
 
   );
 };
