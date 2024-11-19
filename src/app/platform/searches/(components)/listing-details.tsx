@@ -88,7 +88,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Highlights */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
-        <div className="flex flex-wrap gap-y-6 justify-between">
+        <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           <Tile icon={<Home size={64} className='' />} label="Single Family" />
           <Tile icon={<Sofa size={64} />} label="Furnished" />
           <Tile icon={<Zap size={64} />} label="Utilities included" />
