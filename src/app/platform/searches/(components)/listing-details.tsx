@@ -89,7 +89,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Highlights */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
-        <div className="flex flex-wrap justify-between">
+        <div className="flex flex-wrap gap-y-6 justify-between">
           <Tile icon={<Home size={64} className='' />} label="Single Family" />
           <Tile icon={<Sofa size={64} />} label="Furnished" />
           <Tile icon={<Zap size={64} />} label="Utilities included" />
@@ -167,7 +167,11 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
-        <div className="flex flex-wrap justify-between">
+        <div className="flex flex-wrap gap-y-6 gap-x-2 justify-start">
+          <Tile icon={<Mountain size={64} />} label="Mountain View" />
+          <Tile icon={<Trees size={64} />} label="Nature Access" />
+          <Tile icon={<Tv size={64} />} label="Smart TV" />
+          <Tile icon={<Car size={64} />} label="Parking" />
           <Tile icon={<Mountain size={64} />} label="Mountain View" />
           <Tile icon={<Trees size={64} />} label="Nature Access" />
           <Tile icon={<Tv size={64} />} label="Smart TV" />
