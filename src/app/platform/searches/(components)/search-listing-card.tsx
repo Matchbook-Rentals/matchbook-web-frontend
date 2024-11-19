@@ -35,13 +35,13 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
   return (
     <Card className={`w-full overflow-hidden border-0  shadow-0 shadow-none ${getStatusStyles(status)}`}>
 
-      <div className="relative w-full aspect-[297/276]">
+      <div className="relative rounded-lg  aspect-[297/276]">
         <Image
           src={listing.listingImages[0].url}
           alt={listing.title}
           layout="fill"
           objectFit="cover"
-          className="rounded-t-lg"
+          className="rounded-lg"
         />
       </div>
 
