@@ -42,13 +42,13 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
             />
           </div>
           <div className=''>
-            <p className="text-xl md:text-sm">Hosted by Daniel</p>
-            <p className="text-gray-600 md:text-sm">2 years on Matchbook</p>
+            <p className="text-xl md:text-lg lg:text-xl">Hosted by Daniel</p>
+            <p className="text-gray-600 md:text-lg lg:text-xl">2 years on Matchbook</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-col">
-          <p className="hidden sm:block md:hidden lg:block test-blue text-xl truncate ">23 stays</p>
+          <p className="hidden sm:block md:hidden lg:block text-xl truncate ">23 stays</p>
           <HoverCard>
             <HoverCardTrigger>
               <div className="flex items-center gap-1 cursor-default">
