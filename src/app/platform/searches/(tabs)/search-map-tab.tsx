@@ -45,7 +45,7 @@ const MapView: React.FC = () => {
 
   return (
     <div className='h-[100vh]'>
-      <div className='px-2 w-full'>
+      <div className='px-2 w-full mb-2'>
         <h2 className='text-left text-xl'>Listings for {state.trip.locationString} </h2>
       </div>
 
