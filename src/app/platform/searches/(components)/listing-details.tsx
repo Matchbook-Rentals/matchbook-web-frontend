@@ -6,7 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import Paddle from '@/components/ui/paddle';
+import Tile from '@/components/ui/tile';
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -87,14 +87,13 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Property Highlights */}
-      {/* Convert all highlights to Paddle components */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
         <div className="flex flex-wrap justify-between">
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Home} title="Single Family" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Sofa} title="Furnished" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Zap} title="Utilities included" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Dog} title="Pets Allowed" />
+          <Tile icon={<Home size={64} className='' />} label="Single Family" />
+          <Tile icon={<Sofa size={64} />} label="Furnished" />
+          <Tile icon={<Zap size={64} />} label="Utilities included" />
+          <Tile icon={<Dog size={64} />} label="Pets Allowed" />
         </div>
       </div>
 
