@@ -49,7 +49,7 @@ const MapView: React.FC = () => {
         <h2 className='text-left text-xl'>Listings for {state.trip.locationString} </h2>
       </div>
 
-      <div className="mx-auto px-2 w-full flex flex-col md:flex-row items-center gap-x-4">
+      <div className="mx-auto px-2 w-full flex flex-col-reverse md:flex-row items-center gap-x-4">
         <div className="w-full md:w-2/3">
           <SearchListingsGrid
             listings={state.listings}

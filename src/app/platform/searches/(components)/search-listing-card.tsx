@@ -55,9 +55,8 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
         <div className="absolute top-2 right-2 ">
 
           {/* Expandable menu container with animation */}
-          <div className={`bg-white/60 rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? 'w-8 h-48' : 'w-8 h-8'
-          }`}>
+          <div className={`bg-white/60 rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'w-8 h-36' : 'w-8 h-8'
+            }`}>
 
             {/* Menu toggle button */}
             <button
