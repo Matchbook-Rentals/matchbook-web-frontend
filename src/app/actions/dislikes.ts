@@ -47,16 +47,18 @@ export const deleteDbDislike = async (dislikeId: string) => {
   }
 }
 
-export const optimisticDislike = async (
+export const optimisticDislikeDb = async (
   tripId: string,
   listingId: string,
-  currentTrip: TripAndMatches
 ): Promise<{ success: boolean, dislikeId?: string, error?: string }> => {
   try {
-    // Optimistic check for duplicate
-    const existingDislike = currentTrip.dislikes.find(
-      dislike => dislike.listingId === listingId && dislike.tripId === tripId
-    );
+    // Check for existing dislike using Prisma
+    const existingDislike = await prisma.dislike.findFirst({
+      where: {
+        tripId,
+        listingId
+      }
+    });
 
     if (existingDislike) {
       return { success: false, error: 'Already disliked' };
@@ -74,6 +76,32 @@ export const optimisticDislike = async (
     return {
       success: false,
       error: 'Failed to create dislike'
+    };
+  }
+}
+
+export const optimisticRemoveDislikeDb = async (
+  tripId: string,
+  listingId: string,
+): Promise<{ success: boolean, error?: string }> => {
+  console.log('Starting optimisticRemoveDislike with:', { tripId, listingId });
+  try {
+    const result = await prisma.dislike.deleteMany({
+      where: {
+        tripId,
+        listingId
+      }
+    });
+
+    console.log('Delete operation result:', result);
+    revalidatePath('/dislikes');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Remove dislike operation failed:', error);
+    return {
+      success: false,
+      error: 'Failed to remove dislike'
     };
   }
 }

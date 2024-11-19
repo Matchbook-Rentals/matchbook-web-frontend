@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, X, Heart, HelpCircle } from "lucide-react"
+import { MoreHorizontal, Star, X, Heart, HelpCircle } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
@@ -24,7 +24,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { state, actions } = useTripContext();
-  const { optimisticLike, optimisticDislike } = actions;
+  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
 
   const getStatusStyles = (status: Status) => {
     switch (status) {
@@ -92,7 +92,11 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
             <div className={`flex flex-col items-center  ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
               <button
                 onClick={() => {
-                  optimisticLike(listing.id);
+                  if (status === Status.Favorite) {
+                    optimisticRemoveLike(listing.id);
+                  } else {
+                    optimisticLike(listing.id);
+                  }
                   setIsMenuOpen(false);
                 }}
                 className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
@@ -104,7 +108,11 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
               </button>
               <button
                 onClick={() => {
-                  optimisticDislike(listing.id);
+                  if (status === Status.Dislike) {
+                    optimisticRemoveDislike(listing.id);
+                  } else {
+                    optimisticDislike(listing.id);
+                  }
                   setIsMenuOpen(false);
                 }}
                 className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
@@ -131,7 +139,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
 
           {/* Rating display */}
           <div className="flex items-center">
-            <MoreHorizontal className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
+            <Star className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
             <span className="ml-1 text-base font-semibold">{listing.rating || 4.9}</span>
           </div>
         </div>

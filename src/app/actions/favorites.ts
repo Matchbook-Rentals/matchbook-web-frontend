@@ -71,19 +71,9 @@ export const deleteDbFavorite = async (favoriteId: string) => {
 export const optimisticFavorite = async (
   tripId: string,
   listingId: string,
-  currentTrip: TripAndMatches
 ): Promise<{ success: boolean, favoriteId?: string, error?: string }> => {
   try {
-    // Optimistic check for duplicate
-    const existingFavorite = currentTrip.favorites.find(
-      fav => fav.listingId === listingId && fav.tripId === tripId
-    );
-
-    if (existingFavorite) {
-      return { success: false, error: 'Already favorited' };
-    }
-
-    // Perform DB operation
+    // Perform DB operation - createDbFavorite already handles duplicate checking
     const newFavoriteId = await createDbFavorite(tripId, listingId);
 
     return {
@@ -91,10 +81,45 @@ export const optimisticFavorite = async (
       favoriteId: newFavoriteId
     };
   } catch (error) {
+    // If the error is our duplicate check from createDbFavorite
+    if (error instanceof Error && error.message.includes('Favorite already exists')) {
+      return {
+        success: false,
+        error: 'Already favorited'
+      };
+    }
+
+    // For any other errors
     console.error('Favorite operation failed:', error);
     return {
       success: false,
       error: 'Failed to create favorite'
+    };
+  }
+}
+
+export const optimisticRemoveFavorite = async (
+  tripId: string,
+  listingId: string,
+): Promise<{ success: boolean, error?: string }> => {
+  console.log('Starting optimisticRemoveFavorite with:', { tripId, listingId });
+  try {
+    const result = await prisma.favorite.deleteMany({
+      where: {
+        tripId,
+        listingId
+      }
+    });
+
+    console.log('Delete operation result:', result);
+    revalidatePath('/favorites');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Remove favorite operation failed:', error);
+    return {
+      success: false,
+      error: 'Failed to remove favorite'
     };
   }
 }
