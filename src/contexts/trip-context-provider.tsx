@@ -3,6 +3,8 @@
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
+import { optimisticFavorite } from '@/app/actions/favorites';
+import { optimisticDislike } from '@/app/actions/dislikes';
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -35,6 +37,8 @@ interface TripContextType {
     setTrip: React.Dispatch<React.SetStateAction<TripAndMatches[]>>;
     setLookup: React.Dispatch<React.SetStateAction<TripContextType['state']['lookup']>>;
     setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
+    optimisticLike: (listingId: string) => Promise<void>;
+    optimisticDislike: (listingId: string) => Promise<void>;
   };
 }
 
@@ -218,6 +222,54 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     [listings, lookup.matchIds, getRank]
   );
 
+  const optimisticLike = useCallback(async (listingId: string) => {
+    try {
+      // Optimistically update UI
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds, listingId])
+      }));
+
+      // Perform backend operation
+      const result = await optimisticFavorite(trip.id, listingId, trip);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => {
+          const newFavIds = new Set(prev.favIds);
+          newFavIds.delete(listingId);
+          return { ...prev, favIds: newFavIds };
+        });
+      }
+    } catch (error) {
+      console.error('Failed to like listing:', error);
+    }
+  }, [trip]);
+
+  const optimisticDislike = useCallback(async (listingId: string) => {
+    try {
+      // Optimistically update UI
+      setLookup(prev => ({
+        ...prev,
+        dislikedIds: new Set([...prev.dislikedIds, listingId])
+      }));
+
+      // Perform backend operation
+      const result = await optimisticDislike(trip.id, listingId, trip);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => {
+          const newDislikedIds = new Set(prev.dislikedIds);
+          newDislikedIds.delete(listingId);
+          return { ...prev, dislikedIds: newDislikedIds };
+        });
+      }
+    } catch (error) {
+      console.error('Failed to dislike listing:', error);
+    }
+  }, [trip]);
+
   const contextValue: TripContextType = {
     state: {
       trip,
@@ -238,6 +290,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       setTrip,
       setLookup,
       setHasApplication,
+      optimisticLike,
+      optimisticDislike,
     }
   };
 

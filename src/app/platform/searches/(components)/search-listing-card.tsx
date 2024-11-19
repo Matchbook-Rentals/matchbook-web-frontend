@@ -3,11 +3,13 @@ import { Card } from "@/components/ui/card"
 import { MoreHorizontal, X, Heart, HelpCircle } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
+import { useTripContext } from '@/contexts/trip-context-provider'
 
 enum Status {
   Favorite = 'favorite',
   Dislike = 'dislike',
   Applied = 'applied',
+  Maybe = 'maybe',
   None = 'none'
 }
 
@@ -21,6 +23,9 @@ interface SearchListingCardProps {
 export default function SearchListingCard({ listing, status }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const { state, actions } = useTripContext();
+  const { optimisticLike, optimisticDislike } = actions;
+
   const getStatusStyles = (status: Status) => {
     switch (status) {
       case Status.Favorite:
@@ -29,9 +34,26 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
         return ''
       case Status.Applied:
         return ''
+      case Status.Maybe:
+        return ''
       case Status.None:
       default:
         return ''
+    }
+  }
+
+  const getStatusIcon = (status: Status) => {
+    switch (status) {
+      case Status.Favorite:
+        return <Heart className="w-5 h-5" />
+      case Status.Applied:
+        return <Heart className="w-5 h-5" />
+      case Status.Dislike:
+        return <X className="w-5 h-5" />
+      case Status.Maybe:
+        return <HelpCircle className="w-5 h-5" />
+      default:
+        return <MoreHorizontal className="w-5 h-5" />
     }
   }
 
@@ -63,18 +85,30 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="w-8 h-8 flex items-center rounded-full justify-center hover:bg-gray-100"
             >
-              <MoreHorizontal className="w-5 h-5" />
+              {getStatusIcon(status)}
             </button>
 
             {/* Menu options (favorite, help, dismiss) */}
             <div className={`flex flex-col items-center  ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
-              <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+              <button
+                onClick={() => {
+                  optimisticLike(listing.id);
+                  setIsMenuOpen(false);
+                }}
+                className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
+              >
                 <Heart className="w-5 h-5" />
               </button>
               <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
                 <HelpCircle className="w-5 h-5" />
               </button>
-              <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+              <button
+                onClick={() => {
+                  optimisticDislike(listing.id);
+                  setIsMenuOpen(false);
+                }}
+                className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>

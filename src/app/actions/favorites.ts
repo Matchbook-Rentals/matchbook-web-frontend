@@ -1,6 +1,7 @@
 'use server'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
+import { TripAndMatches } from '@/types';
 
 export const createDbFavorite = async (tripId: string, listingId: string): Promise<string> => {
   console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
@@ -64,5 +65,36 @@ export const deleteDbFavorite = async (favoriteId: string) => {
   } catch (error) {
     console.error('Error deleting favorite:', error);
     throw error;
+  }
+}
+
+export const optimisticFavorite = async (
+  tripId: string,
+  listingId: string,
+  currentTrip: TripAndMatches
+): Promise<{ success: boolean, favoriteId?: string, error?: string }> => {
+  try {
+    // Optimistic check for duplicate
+    const existingFavorite = currentTrip.favorites.find(
+      fav => fav.listingId === listingId && fav.tripId === tripId
+    );
+
+    if (existingFavorite) {
+      return { success: false, error: 'Already favorited' };
+    }
+
+    // Perform DB operation
+    const newFavoriteId = await createDbFavorite(tripId, listingId);
+
+    return {
+      success: true,
+      favoriteId: newFavoriteId
+    };
+  } catch (error) {
+    console.error('Favorite operation failed:', error);
+    return {
+      success: false,
+      error: 'Failed to create favorite'
+    };
   }
 }
