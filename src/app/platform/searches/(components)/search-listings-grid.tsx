@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ListingAndImages } from '@/types';
 import { SearchListingCard } from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
+import { Button } from "@/components/ui/button";
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -11,36 +12,14 @@ interface SearchListingsGridProps {
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const { state } = useTripContext();
-  const [page, setPage] = useState(1);
-  const loader = useRef(null);
-
-  const listingsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const listingsPerPage = 12;
 
   useEffect(() => {
-    setDisplayedListings(listings.slice(0, listingsPerPage));
-  }, [listings]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, { threshold: 1 });
-    if (loader.current) {
-      observer.observe(loader.current);
-    }
-    return () => observer.disconnect();
-  }, []);
-
-  const handleObserver = (entities: IntersectionObserverEntry[]) => {
-    const target = entities[0];
-    if (target.isIntersecting) {
-      loadMore();
-    }
-  };
-
-  const loadMore = () => {
-    const nextPage = page + 1;
-    const nextListings = listings.slice(0, nextPage * listingsPerPage);
-    setDisplayedListings(nextListings);
-    setPage(nextPage);
-  };
+    const startIndex = (currentPage - 1) * listingsPerPage;
+    const endIndex = startIndex + listingsPerPage;
+    setDisplayedListings(listings.slice(startIndex, endIndex));
+  }, [listings, currentPage]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (state.lookup.requestedIds.has(listing.id)) {
@@ -55,9 +34,11 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
     return 'none'
   }
 
+  const totalPages = Math.ceil(listings.length / listingsPerPage);
+
   return (
     <ScrollArea className="h-[600px] w-full rounded-md border p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {displayedListings.map((listing) => (
           <SearchListingCard
             key={listing.id}
@@ -66,11 +47,25 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
           />
         ))}
       </div>
-      {displayedListings.length < listings.length && (
-        <div ref={loader} className="mt-4 text-center">
-          Loading more...
-        </div>
-      )}
+      <div className="mt-4 flex justify-center gap-2">
+        <Button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          variant="outline"
+        >
+          Previous
+        </Button>
+        <span className="flex items-center px-2">
+          Page {currentPage} of {totalPages}
+        </span>
+        <Button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          variant="outline"
+        >
+          Next
+        </Button>
+      </div>
     </ScrollArea>
   );
 };

@@ -44,25 +44,32 @@ const MapView: React.FC = () => {
   const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
 
   return (
-    <div className="mx-auto px-2 w-full flex gap-x-4">
-      <div className="w-1/2">
-        <SearchListingsGrid
-          listings={state.listings}
-        />
+    <>
+      <div className='px-2 w-full'>
+        <h2 className='text-left text-muted text-xl'>Listings for {state.trip.locationString} </h2>
       </div>
-      <div className="w-1/2">
-        <SearchMap
-          center={mapCenter}
-          zoom={10}
-          markers={markers.map((marker) => ({
-            ...marker,
-            lat: marker.lat,
-            lng: marker.lng
 
-          }))}
-        />
+      <div className="mx-auto px-2 w-full flex flex-col md:flex-row items-center gap-x-4">
+        <div className="w-2/3">
+          <SearchListingsGrid
+            listings={state.listings}
+          />
+        </div>
+        <div className="w-1/3">
+          <SearchMap
+            center={mapCenter}
+            zoom={10}
+            markers={markers.map((marker) => ({
+              ...marker,
+              lat: marker.lat,
+              lng: marker.lng
+
+            }))}
+          />
+        </div>
       </div>
-    </div>
+    </>
+
   );
 };
 
