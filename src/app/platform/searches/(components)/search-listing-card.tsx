@@ -1,9 +1,8 @@
 import Image from 'next/image'
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
+import { Star } from "lucide-react"
 import { ListingAndImages } from "@/types"
-import RatingStar from '@/components/ui/rating-star'
 
-// Add the Status enum
 enum Status {
   Favorite = 'favorite',
   Dislike = 'dislike',
@@ -11,21 +10,22 @@ enum Status {
   None = 'none'
 }
 
+const TITLE_MAX_LENGTH = 35
+
 interface SearchListingCardProps {
   listing: ListingAndImages
-  status: Status // Add the status prop
+  status: Status
 }
 
-export function SearchListingCard({ listing, status }: SearchListingCardProps) {
-  // Function to get the background color based on status
-  const getBackgroundColor = (status: Status) => {
+export default function SearchListingCard({ listing, status }: SearchListingCardProps) {
+  const getStatusStyles = (status: Status) => {
     switch (status) {
       case Status.Favorite:
-        return 'bg-primaryBrand' // Placeholder for favorite color
+        return ''
       case Status.Dislike:
-        return 'bg-pinkBrand' // Placeholder for dislike color
+        return ''
       case Status.Applied:
-        return 'bg-blueBrand' // Placeholder for applied color
+        return ''
       case Status.None:
       default:
         return ''
@@ -33,25 +33,40 @@ export function SearchListingCard({ listing, status }: SearchListingCardProps) {
   }
 
   return (
-    <Card className={`flex flex-col w-full max-w-sm ${getBackgroundColor(status)}`}>
-      <div className="relative w-full h-48">
+    <Card className={`w-full overflow-hidden bg-white ${getStatusStyles(status)}`}>
+      <div className="relative w-full aspect-[4/4]">
         <Image
           src={listing.listingImages[0].url}
           alt={listing.title}
           layout="fill"
           objectFit="cover"
+          className="rounded-t-lg"
         />
       </div>
-      <CardContent className="p-4">
-        <h3 className="text-lg font-semibold mb-2">{listing.title}</h3>
-        <div className="flex items-center mb-2">
-          <RatingStar rating={listing?.rating || 3.5} />
+
+      <div className="p-2">
+        <div className="flex justify-between gap-x-2 items-start mb-2">
+          <h3 className="font-semibold text-gray-900 text-base">
+            {listing.title.length > TITLE_MAX_LENGTH
+              ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
+              : listing.title}
+          </h3>
+          <div className="flex items-center">
+            <Star className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
+            <span className="ml-1 text-base font-semibold">{listing.rating || 4.9}</span>
+          </div>
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>{listing.roomCount} rooms</span>
-          <span>{listing.bathroomCount} bathrooms</span>
+
+        <div className="flex items-center justify-between">
+          <div className="text-base  ">
+            ${listing.price || 2350}
+            <span className=""> month</span>
+          </div>
+          <div className="">
+            {listing.roomCount || 4} bds | {listing.bathroomCount || 2} ba
+          </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
   )
 }
