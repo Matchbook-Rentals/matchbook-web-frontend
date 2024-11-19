@@ -92,14 +92,21 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
       }
     });
 
-    let deleted = await prisma.notification.delete({
-      where: {
-        actionType_actionId: {
-          actionType: 'housingRequest',
-          actionId: deletedRequest.id
+    try {
+      await prisma.notification.deleteMany({
+        where: {
+          AND: [
+            { actionType: 'view' },
+            { actionId: deletedRequest.id }
+          ]
         }
+      });
+    } catch (error) {
+      // Ignore error if notification doesn't exist
+      if (!(error instanceof Error) || !error.message.includes('Record to delete does not exist')) {
+        throw error;
       }
-    })
+    }
 
 
     // Revalidate the favorites page or any other relevant pages
