@@ -33,7 +33,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
   }
 
   return (
-    <Card className={`w-full overflow-hidden bg-white ${getStatusStyles(status)}`}>
+    <Card className={`w-full overflow-hidden border-0  shadow-0 shadow-none ${getStatusStyles(status)}`}>
 
       <div className="relative w-full aspect-[297/276]">
         <Image
@@ -45,7 +45,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
         />
       </div>
 
-      <div className="p-2 flex flex-col min-h-[110px]">
+      <div className="p-2 flex flex-col min-h-[100px]  ">
         <div className="flex justify-between gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH

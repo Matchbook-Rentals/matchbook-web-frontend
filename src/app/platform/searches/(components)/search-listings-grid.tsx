@@ -14,7 +14,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const { state } = useTripContext();
   const [currentPage, setCurrentPage] = useState(1);
-  const listingsPerPage = 12;
+  const listingsPerPage = 9;
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * listingsPerPage;

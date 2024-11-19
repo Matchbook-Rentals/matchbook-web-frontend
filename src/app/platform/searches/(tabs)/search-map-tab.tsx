@@ -50,12 +50,12 @@ const MapView: React.FC = () => {
       </div>
 
       <div className="mx-auto px-2 w-full flex flex-col md:flex-row items-center gap-x-4">
-        <div className="w-2/3">
+        <div className="w-full md:w-2/3">
           <SearchListingsGrid
             listings={state.listings}
           />
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3 h-[640px]">
           <SearchMap
             center={mapCenter}
             zoom={10}
