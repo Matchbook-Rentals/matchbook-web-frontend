@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { Star } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 import { ListingAndImages } from "@/types"
 
 enum Status {
@@ -35,7 +35,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
   return (
     <Card className={`w-full overflow-hidden border-0  shadow-0 shadow-none ${getStatusStyles(status)}`}>
 
-      <div className="relative rounded-lg   aspect-[297/266]">
+      <div className="relative rounded-lg aspect-[297/266]">
         <Image
           src={listing.listingImages[0].url}
           alt={listing.title}
@@ -43,6 +43,9 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
           objectFit="cover"
           className="rounded-lg"
         />
+        <button className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/60 flex items-center justify-center shadow-md hover:bg-gray-100 transition-all">
+          <MoreHorizontal className="w-5 h-5" />
+        </button>
       </div>
 
       <div className="p-2 flex flex-col min-h-[100px]  ">
@@ -53,7 +56,7 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
               : listing.title}
           </h3>
           <div className="flex items-center">
-            <Star className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
+            <MoreHorizontal className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
             <span className="ml-1 text-base font-semibold">{listing.rating || 4.9}</span>
           </div>
         </div>
