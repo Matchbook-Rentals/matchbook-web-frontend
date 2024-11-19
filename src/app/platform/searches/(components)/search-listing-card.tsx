@@ -55,19 +55,20 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
         <div className="absolute top-2 right-2 ">
 
           {/* Expandable menu container with animation */}
-          <div className={`bg-white/60 rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'h-48' : 'h-8 '
-            }`}>
+          <div className={`bg-white/60 rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'w-8 h-48' : 'w-8 h-8'
+          }`}>
 
             {/* Menu toggle button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="w-full h-8 flex items-center rounded-full justify-center hover:bg-gray-100"
+              className="w-8 h-8 flex items-center rounded-full justify-center hover:bg-gray-100"
             >
               <MoreHorizontal className="w-5 h-5" />
             </button>
 
             {/* Menu options (favorite, help, dismiss) */}
-            <div className={`flex flex-col gap-2 p-1 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`flex flex-col items-center  ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
               <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
                 <Heart className="w-5 h-5" />
               </button>
