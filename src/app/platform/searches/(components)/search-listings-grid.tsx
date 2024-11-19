@@ -4,6 +4,7 @@ import { SearchListingCard } from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -36,6 +37,32 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
 
   const totalPages = Math.ceil(listings.length / listingsPerPage);
 
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 7;
+    let startPage = Math.max(1, currentPage - 3);
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust startPage if we're near the end
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={currentPage === i ? "default" : "ghost"}
+          className={`w-8 h-8 p-0 rounded-full ${currentPage === i ? 'bg-black text-white hover:bg-black/90' : ''}`}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pages;
+  };
+
   return (
     <ScrollArea className="h-[600px] w-full rounded-md border p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -47,23 +74,25 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
           />
         ))}
       </div>
-      <div className="mt-4 flex justify-center gap-2">
+      <div className="mt-4 flex justify-center items-center gap-1">
         <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          variant="outline"
         >
-          Previous
+          <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="flex items-center px-2">
-          Page {currentPage} of {totalPages}
-        </span>
+        {renderPageNumbers()}
         <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
-          variant="outline"
         >
-          Next
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     </ScrollArea>
