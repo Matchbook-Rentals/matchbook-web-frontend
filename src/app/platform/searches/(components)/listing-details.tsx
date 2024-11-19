@@ -167,23 +167,11 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col items-center text-center gap-2">
-            <Mountain size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Mountain View</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Trees size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Nature Access</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Tv size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Smart TV</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Car size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Parking</span>
-          </div>
+        <div className="flex flex-wrap justify-between">
+          <Tile icon={<Mountain size={64} />} label="Mountain View" />
+          <Tile icon={<Trees size={64} />} label="Nature Access" />
+          <Tile icon={<Tv size={64} />} label="Smart TV" />
+          <Tile icon={<Car size={64} />} label="Parking" />
         </div>
       </div>
     </div>
