@@ -41,20 +41,19 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div>
-            <p className="text-xl">Hosted by Daniel</p>
-            <p className="text-gray-600">2 years on Matchbook</p>
+          <div className=''>
+            <p className="text-xl md:text-sm">Hosted by Daniel</p>
+            <p className="text-gray-600 md:text-sm">2 years on Matchbook</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-col">
-          <p className="hidden sm:block text-xl">23 stays</p>
-          {/* Replace with a shadcn hovercard */}
+          <p className="hidden sm:block md:hidden lg:block test-blue text-xl truncate ">23 stays</p>
           <HoverCard>
             <HoverCardTrigger>
               <div className="flex items-center gap-1 cursor-default">
                 <Star className="fill-current text-gray-700" size={24} />
-                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden align-sub text-sm">(23)</span></span>
+                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden md:inline lg:hidden align-sub text-sm">(23)</span></span>
               </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-auto">
@@ -65,7 +64,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Host Badges */}
-      <div className="flex gap-4   mt-6">
+      <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 mt-6">
         <div className="flex items-center gap-2 ">
           <div className="w-7 h-7" >
             <img src='/badges_png/matchbook-verified.png' alt='Matchbook Verified Badge' />
@@ -119,7 +118,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Move in Calendar */}
           <div>
             <h4 className="text-xl mb-2">Move in</h4>
