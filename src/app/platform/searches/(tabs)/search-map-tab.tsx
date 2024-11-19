@@ -46,7 +46,7 @@ const MapView: React.FC = () => {
   return (
     <>
       <div className='px-2 w-full'>
-        <h2 className='text-left text-muted text-xl'>Listings for {state.trip.locationString} </h2>
+        <h2 className='text-left text-xl'>Listings for {state.trip.locationString} </h2>
       </div>
 
       <div className="mx-auto px-2 w-full flex flex-col md:flex-row items-center gap-x-4">

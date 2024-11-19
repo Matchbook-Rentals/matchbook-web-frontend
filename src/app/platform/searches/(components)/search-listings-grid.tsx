@@ -53,7 +53,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
         <Button
           key={i}
           variant={currentPage === i ? "default" : "ghost"}
-          className={`w-8 h-8 p-0 rounded-full ${currentPage === i ? 'bg-black text-white hover:bg-black/90' : ''}`}
+          className={`w-8 h-8 p-0 ${currentPage === i ? 'bg-black text-white hover:bg-black/90' : ''}`}
           onClick={() => setCurrentPage(i)}
         >
           {i}
@@ -64,17 +64,19 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
   };
 
   return (
-    <ScrollArea className="h-[600px] w-full rounded-md border p-4">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {displayedListings.map((listing) => (
-          <SearchListingCard
-            key={listing.id}
-            listing={listing}
-            status={getListingStatus(listing)}
-          />
-        ))}
-      </div>
-      <div className="mt-4 flex justify-center items-center gap-1">
+    <div className="relative h-[600px]">
+      <ScrollArea className="h-[540px] w-full rounded-md p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-12">
+          {displayedListings.map((listing) => (
+            <SearchListingCard
+              key={listing.id}
+              listing={listing}
+              status={getListingStatus(listing)}
+            />
+          ))}
+        </div>
+      </ScrollArea>
+      <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-white border-t flex items-center justify-center gap-1">
         <Button
           variant="ghost"
           size="icon"
@@ -95,7 +97,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 
