@@ -12,9 +12,12 @@ import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 import SortableFavorites from '../(components)/sortable-favorites';
+import { Separator } from "@/components/ui/separator";
+import { MapIcon } from "lucide-react";
 
 export default function ShortListTab() {
   const [isOpen, setIsOpen] = useState(true);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const { state, actions } = useTripContext();
   const { likedListings, requestedListings, lookup } = state;
   const { setLookup } = actions;
@@ -91,66 +94,81 @@ export default function ShortListTab() {
 
   return (
     <>
-      {requestedListings.length > 0 &&
-        <CustomAccordion
-          title="Submitted Applications"
-          labelClassName="bg-primaryBrand/80 pl-5 rounded-none"
-          contentClassName="bg-primaryBrand/80"
-          isOpen={isOpen}
-          toggleOpen={() => setIsOpen((prev) => !prev)}
-        >
-          <div className="flex justify-center mx-auto w-full px-2 py-8">
-            <div className="flex flex-col space-y-4 pr-4">
-              {requestedListings.map((listing, index) => (
-                <TripListingCard
-                  key={index}
-                  listing={listing}
-                  actions={generateRequestedCardActions(listing)}
-                />
-              ))}
-            </div>
-          </div>
-        </CustomAccordion>
-      }
-      {likedListings.length > 0 &&
-        <CustomAccordion
-          title="Properties You &lt;3"
-          labelClassName=" pl-5 rounded-none"
-          contentClassName="bg-primaryBrand/80"
-          isOpen={isOpen}
-          toggleOpen={() => setIsOpen((prev) => !prev)}
-        >
-          <div className="flex justify-center mx-auto w-full px-2 py-8">
-            <div className="flex flex-wrap w-full justify-evenly space-y-4 pr-4">
-              {likedListings.map((listing, index) => (
-                <TripListingCard
-                  key={index}
-                  listing={listing}
-                  actions={generateLikedCardActions(listing)}
-                />
-              ))}
-            </div>
-          </div>
-        </CustomAccordion>
-      }
-      {likedListings.length === 0 ? (
-        <>
-          <h3 className='text-center text-xl'>Applied for all liked listing, please return to new possibilites tab to find more listings!</h3>
-          <Button
-            className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center text-black block mt-5 mx-auto"
-            onClick={() => router.push(`${pathname}?tab=properties-you-love`)}
+      <div className="flex justify-center mb-4">
+        <div className="flex border shadow-lg rounded-full">
+          <button
+            className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'list' ? 'bg-gray-200' : ''}`}
+            onClick={() => setViewMode('list')}
           >
-            Back to New Possibilites
-          </Button>
+            <img src='/icon_png/match-view-icon.png' alt='heart' className='w-[20px] h-[20px]' />
+          </button>
+          <Separator orientation="vertical" className='h-10 my-auto' />
+          <button
+            className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+            onClick={() => setViewMode('map')}
+          >
+            <MapIcon className='w-[31px]' />
+          </button>
+        </div>
+      </div>
+
+      {viewMode === 'list' ? (
+        <>
+          {requestedListings.length > 0 &&
+            <CustomAccordion
+              title="Submitted Applications"
+              labelClassName="bg-primaryBrand/80 pl-5 rounded-none"
+              contentClassName="bg-primaryBrand/80"
+              isOpen={isOpen}
+              toggleOpen={() => setIsOpen((prev) => !prev)}
+            >
+              <div className="flex justify-center mx-auto w-full px-2 py-8">
+                <div className="flex flex-col space-y-4 pr-4">
+                  {requestedListings.map((listing, index) => (
+                    <TripListingCard
+                      key={index}
+                      listing={listing}
+                      actions={generateRequestedCardActions(listing)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </CustomAccordion>
+          }
+          {likedListings.length > 0 &&
+            <CustomAccordion
+              title="Properties You &lt;3"
+              labelClassName=" pl-5 rounded-none"
+              contentClassName="bg-primaryBrand/80"
+              isOpen={isOpen}
+              toggleOpen={() => setIsOpen((prev) => !prev)}
+            >
+              <div className="flex justify-center mx-auto w-full px-2 py-8">
+                <div className="flex flex-wrap w-full justify-evenly space-y-4 pr-4">
+                  {likedListings.map((listing, index) => (
+                    <TripListingCard
+                      key={index}
+                      listing={listing}
+                      actions={generateLikedCardActions(listing)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </CustomAccordion>
+          }
         </>
       ) : (
         <div className="flex justify-center mx-auto w-full px-2 py-8 ">
           <div className="w-full md:w-2/3 pr-4 ">
-            <h2 onClick={() => alert(lookup.requestedIds.size)} className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
+            <h2 className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
             <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
           </div>
           <div className="w-full md:w-1/3">
-            <SearchMap center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }} zoom={10} markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))} />
+            <SearchMap
+              center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
+              zoom={10}
+              markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
+            />
           </div>
         </div>
       )}

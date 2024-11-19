@@ -18,9 +18,14 @@ const TITLE_MAX_LENGTH = 30
 interface SearchListingCardProps {
   listing: ListingAndImages
   status: Status
+  callToAction?: {
+    label: string
+    action: () => void
+    className?: string
+  }
 }
 
-export default function SearchListingCard({ listing, status }: SearchListingCardProps) {
+export default function SearchListingCard({ listing, status, callToAction }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { state, actions } = useTripContext();
@@ -159,6 +164,18 @@ export default function SearchListingCard({ listing, status }: SearchListingCard
           </div>
         </div>
       </div>
+
+      {/* Add new footer section if callToAction is provided */}
+      {callToAction && (
+        <div className="p-2 pt-0">
+          <button
+            onClick={callToAction.action}
+            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          >
+            {callToAction.label}
+          </button>
+        </div>
+      )}
     </Card>
   )
 }

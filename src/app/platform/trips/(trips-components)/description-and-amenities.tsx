@@ -54,7 +54,7 @@ const DescriptionAndAmenities: React.FC<ComponentProps> = ({ description, amenit
   };
 
   return (
-    <div className="flex test-blue flex-col md:w-1/2 md:flex-row gap-x-4">
+    <div className="flex flex-col md:w-1/2 md:flex-row gap-x-4">
       {/* Left half */}
       {/* Right half */}
       <div className="w-1/2 flex flex-col">
