@@ -130,7 +130,7 @@ export default function SearchListingCard({ listing, status, callToAction }: Sea
       </div>
 
       {/* Listing Details Section */}
-      <div className="p-2 flex flex-col min-h-[100px]  ">
+      <div className="p-2 flex flex-col min-h-[180px] xs:min-h-[160px] sm:min-h-[100px]  ">
 
         {/* Title and Rating Row */}
         <div className="flex justify-between gap-x-2 items-start">
