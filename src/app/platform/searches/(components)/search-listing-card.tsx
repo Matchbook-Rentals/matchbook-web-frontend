@@ -71,7 +71,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
 
   return (
     <Card className={`w-full overflow-hidden border-0 shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
-      <div className="relative rounded-lg aspect-[297/266]">
+      <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
         <Image
           src={listing.listingImages[0].url}
           alt={listing.title}
@@ -136,7 +136,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
         )}
       </div>
 
-      <div className={`p-2 flex flex-col min-h-[180px] xs:min-h-[160px] sm:min-h-[100px] ${detailsClassName || ''}`}>
+      <div className={` pt-1 flex flex-col  sm:min-h-[80px] ${detailsClassName || ''}`}>
         <div className="flex justify-between gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
@@ -161,7 +161,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
       </div>
 
       {callToAction && (
-        <div className="p-2 pt-0">
+        <div className=" pt-0">
           <button
             onClick={() => callToAction.action()}
             className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blue-600 text-white hover:bg-blue-700'}`}
