@@ -54,15 +54,47 @@ export function SearchMatchbookTab() {
     }
   };
 
+  const getContextLabel = (status: Status) => {
+    switch (status) {
+      case Status.Applied:
+        return {
+          label: 'Book Now',
+          action: () => alert('Book Now'),
+          className: 'bg-blue-600/80 text-white hover:bg-blue-700/80'
+        };
+      case Status.Favorite:
+        return {
+          label: 'Review',
+          action: () => alert('Review'),
+          className: 'bg-[#E3CE5B]/80 text-gray-900 hover:bg-[#d4c154]/80'
+        };
+      case Status.Maybe:
+        return {
+          label: 'Retract',
+          action: () => alert('Retract'),
+          className: 'bg-white/80 text-gray-900 border border-gray-200 hover:bg-gray-50/80'
+        };
+      case Status.Dislike:
+        return {
+          label: 'Remove',
+          action: () => alert('Remove'),
+          className: 'bg-pink-600/80 text-white hover:bg-pink-700/80'
+        };
+      default:
+        return undefined;
+    }
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {matchedListings.map((listing) => (
         <SearchListingCard
           key={listing.id}
           listing={listing}
+          detailsClassName="min-h-[0px]"
           status={getListingStatus(listing.id)}
           callToAction={getCallToAction(getListingStatus(listing.id))}
-          contextLabel={getCallToAction(getListingStatus(listing.id))}
+          contextLabel={getContextLabel(getListingStatus(listing.id))}
         />
       ))}
     </div>

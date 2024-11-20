@@ -18,6 +18,8 @@ const TITLE_MAX_LENGTH = 30
 interface SearchListingCardProps {
   listing: ListingAndImages
   status: Status
+  className?: string
+  detailsClassName?: string
   callToAction?: {
     label: string
     action: () => void
@@ -30,7 +32,7 @@ interface SearchListingCardProps {
   }
 }
 
-export default function SearchListingCard({ listing, status, callToAction, contextLabel }: SearchListingCardProps) {
+export default function SearchListingCard({ listing, status, className, detailsClassName, callToAction, contextLabel }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { state, actions } = useTripContext();
@@ -68,7 +70,7 @@ export default function SearchListingCard({ listing, status, callToAction, conte
   }
 
   return (
-    <Card className={`w-full overflow-hidden border-0 shadow-0 shadow-none ${getStatusStyles(status)}`}>
+    <Card className={`w-full overflow-hidden border-0 shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
       <div className="relative rounded-lg aspect-[297/266]">
         <Image
           src={listing.listingImages[0].url}
@@ -80,10 +82,10 @@ export default function SearchListingCard({ listing, status, callToAction, conte
 
         {/* Conditional render either context banner or action menu */}
         {contextLabel ? (
-          <div className="absolute top-5 mx-auto flex justify-center test w-full">
+          <div className="absolute top-5 mx-auto flex justify-center  w-full">
             <button
               onClick={contextLabel.action}
-              className={`w-4/5 py-2 px-4 text-center ${contextLabel.className || 'bg-white/60 hover:bg-white/80'}`}
+              className={`w-4/5 py-2 px-4 text-center rounded-xl ${contextLabel.className || 'bg-white/60 hover:bg-white/80'}`}
             >
               {contextLabel.label}
             </button>
@@ -134,7 +136,7 @@ export default function SearchListingCard({ listing, status, callToAction, conte
         )}
       </div>
 
-      <div className="p-2 flex flex-col min-h-[180px] xs:min-h-[160px] sm:min-h-[100px]  ">
+      <div className={`p-2 flex flex-col min-h-[180px] xs:min-h-[160px] sm:min-h-[100px] ${detailsClassName || ''}`}>
         <div className="flex justify-between gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
