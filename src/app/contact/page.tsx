@@ -97,13 +97,6 @@ export default function ContactPage() {
 
         <div className="grid md:grid-cols-2 gap-12 mt-12">
           {/* Headquarters */}
-          <div>
-            <h2 className="text-2xl font-serif mb-4">Headquarters</h2>
-            <address className="not-italic text-gray-600">
-              1534 Washington Blvd<br />
-              Ogden, UT, 84401
-            </address>
-          </div>
 
           {/* Follow Us */}
           <div>
