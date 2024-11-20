@@ -29,7 +29,7 @@ export function SearchMatchbookTab() {
         return {
           label: 'Book Now',
           action: () => alert('Book Now'),
-          className: 'bg-blue-600 text-white hover:bg-blue-700'
+          className: 'bg-blueBrand text-white hover:bg-blueBrand'
         };
       case Status.Favorite:
         return {
@@ -41,13 +41,13 @@ export function SearchMatchbookTab() {
         return {
           label: 'Retract',
           action: () => alert('Retract'),
-          className: 'bg-white text-gray-900 border border-gray-200 hover:bg-gray-50'
+          className: 'bg-gray-200 text-gray-900 border border-gray-200 hover:bg-gray-50'
         };
       case Status.Dislike:
         return {
           label: 'Remove',
           action: () => alert('Remove'),
-          className: 'bg-pink-600 text-white hover:bg-pink-700'
+          className: 'bg-pinkBrand text-white hover:bg-pinkBrand'
         };
       default:
         return undefined;
@@ -60,7 +60,7 @@ export function SearchMatchbookTab() {
         return {
           label: 'Book Now',
           action: () => alert('Book Now'),
-          className: 'bg-blue-600/80 text-white hover:bg-blue-700/80'
+          className: 'bg-blueBrand/80 text-white hover:bg-blueBrand/80'
         };
       case Status.Favorite:
         return {
@@ -72,13 +72,13 @@ export function SearchMatchbookTab() {
         return {
           label: 'Retract',
           action: () => alert('Retract'),
-          className: 'bg-white/80 text-gray-900 border border-gray-200 hover:bg-gray-50/80'
+          className: 'bg-gray-200/80 text-gray-900 border border-gray-200 hover:bg-gray-50/80'
         };
       case Status.Dislike:
         return {
           label: 'Remove',
           action: () => alert('Remove'),
-          className: 'bg-pink-600/80 text-white hover:bg-pink-700/80'
+          className: 'bg-pinkBrand/80 text-white hover:bg-pinkBrand/80'
         };
       default:
         return undefined;
@@ -86,17 +86,36 @@ export function SearchMatchbookTab() {
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {matchedListings.map((listing) => (
-        <SearchListingCard
-          key={listing.id}
-          listing={listing}
-          detailsClassName="min-h-[0px]"
-          status={getListingStatus(listing.id)}
-          callToAction={getCallToAction(getListingStatus(listing.id))}
-          contextLabel={getContextLabel(getListingStatus(listing.id))}
-        />
-      ))}
-    </div>
+    <>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {matchedListings.map((listing) => (
+          <SearchListingCard
+            key={listing.id}
+            listing={listing}
+            detailsClassName="min-h-[0px]"
+            status={getListingStatus(listing.id)}
+            callToAction={getCallToAction(getListingStatus(listing.id))}
+            contextLabel={getContextLabel(getListingStatus(listing.id))}
+          />
+        ))}
+      </div>
+
+      {/* Test Cards Section */}
+      <div className="mt-8 border-t pt-8">
+        <h2 className="mb-4 text-lg font-semibold">Test Cards</h2>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {state.listings.slice(-4).map((listing, index) => (
+            <SearchListingCard
+              key={`test-${listing.id}`}
+              listing={listing}
+              detailsClassName="min-h-[0px]"
+              status={[Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index]}
+              callToAction={getCallToAction([Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index])}
+              contextLabel={getContextLabel([Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index])}
+            />
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
