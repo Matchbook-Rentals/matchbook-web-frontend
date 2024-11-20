@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
-//import { useSearchContext } from '@/contexts/search-context-provider';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import TripListingCard from '../../trips/(trips-components)/trip-listing-card';
 import { ListingAndImages } from '@/types';
-import CustomAccordion from '@/components/ui/custom-accordion';
 import SearchMap from '../(components)/search-map';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 import SortableFavorites from '../(components)/sortable-favorites';
+import { Separator } from "@/components/ui/separator";
+import { LayoutGrid, List } from "lucide-react";
+import SearchListingsGrid from '../(components)/search-listings-grid';
+import FilterOptionsDialog from '../(tabs)/filter-options-dialog';
+import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 export default function ShortListTab() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
   const { likedListings, requestedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
+
+  const [filters, setFilters] = useState<FilterOptions>({
+    ...DEFAULT_FILTER_OPTIONS,
+    moveInDate: state.trip?.startDate || new Date(),
+    moveOutDate: state.trip?.endDate || new Date(),
+    flexibleMoveInStart: state.trip?.startDate || new Date(),
+    flexibleMoveInEnd: state.trip?.startDate || new Date(),
+    flexibleMoveOutStart: state.trip?.endDate || new Date(),
+    flexibleMoveOutEnd: state.trip?.endDate || new Date(),
+  });
+
+  const handleFilterChange = (
+    key: keyof FilterOptions,
+    value: string | number | boolean | string[] | Date
+  ) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
 
   const handleApply = async (listing: ListingAndImages) => {
     if (!state.hasApplication) {
@@ -91,69 +113,55 @@ export default function ShortListTab() {
 
   return (
     <>
-      {requestedListings.length > 0 &&
-        <CustomAccordion
-          title="Submitted Applications"
-          labelClassName="bg-primaryBrand/80 pl-5 rounded-none"
-          contentClassName="bg-primaryBrand/80"
-          isOpen={isOpen}
-          toggleOpen={() => setIsOpen((prev) => !prev)}
-        >
-          <div className="flex justify-center mx-auto w-full px-2 py-8">
-            <div className="flex flex-col space-y-4 pr-4">
-              {requestedListings.map((listing, index) => (
-                <TripListingCard
-                  key={index}
-                  listing={listing}
-                  actions={generateRequestedCardActions(listing)}
-                />
-              ))}
+      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 py-8">
+        <div className="w-full md:w-2/3 md:pr-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex border shadow-lg rounded-full">
+              <button
+                className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className='w-[20px] h-[20px]' />
+              </button>
+              <Separator orientation="vertical" className='h-10 my-auto' />
+              <button
+                className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'list' ? 'bg-gray-200' : ''}`}
+                onClick={() => setViewMode('list')}
+              >
+                <List className='w-[20px] h-[20px]' />
+              </button>
             </div>
+            <h2 className='text-2xl font-semibold hidden md:inline'>These ones caught your eye</h2>
+            <FilterOptionsDialog
+              isOpen={isOpen}
+              onOpenChange={setIsOpen}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              className=""
+            />
           </div>
-        </CustomAccordion>
-      }
-      {likedListings.length > 0 &&
-        <CustomAccordion
-          title="Properties You &lt;3"
-          labelClassName=" pl-5 rounded-none"
-          contentClassName="bg-primaryBrand/80"
-          isOpen={isOpen}
-          toggleOpen={() => setIsOpen((prev) => !prev)}
-        >
-          <div className="flex justify-center mx-auto w-full px-2 py-8">
-            <div className="flex flex-wrap w-full justify-evenly space-y-4 pr-4">
-              {likedListings.map((listing, index) => (
-                <TripListingCard
-                  key={index}
-                  listing={listing}
-                  actions={generateLikedCardActions(listing)}
-                />
-              ))}
-            </div>
-          </div>
-        </CustomAccordion>
-      }
-      {likedListings.length === 0 ? (
-        <>
-          <h3 className='text-center text-xl'>Applied for all liked listing, please return to new possibilites tab to find more listings!</h3>
-          <Button
-            className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center text-black block mt-5 mx-auto"
-            onClick={() => router.push(`${pathname}?tab=properties-you-love`)}
-          >
-            Back to New Possibilites
-          </Button>
-        </>
-      ) : (
-        <div className="flex justify-center mx-auto w-full px-2 py-8 ">
-          <div className="w-full md:w-2/3 pr-4 ">
-            <h2 onClick={() => alert(lookup.requestedIds.size)} className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
+
+          {viewMode === 'grid' ? (
+            <SearchListingsGrid
+              listings={[...requestedListings, ...likedListings]}
+              withCallToAction={true}
+              cardActions={listing => lookup.requestedIds.has(listing.id) ?
+                generateRequestedCardActions(listing) :
+                generateLikedCardActions(listing)
+              }
+            />
+          ) : (
             <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
-          </div>
-          <div className="w-full md:w-1/3">
-            <SearchMap center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }} zoom={10} markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))} />
-          </div>
+          )}
         </div>
-      )}
+        <div className="w-full md:w-1/3 mt-4 md:mt-0">
+          <SearchMap
+            center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
+            zoom={10}
+            markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
+          />
+        </div>
+      </div>
     </>
   );
 }

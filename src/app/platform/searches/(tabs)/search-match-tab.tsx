@@ -98,7 +98,7 @@ const MatchViewTab: React.FC = () => {
       />
 
       <div className='flex p-0'>
-        <div className="button-control-box flex lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
+        <div className="button-control-box flex justify-evenly lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
 
           <ButtonControl
             handleClick={() => handleReject(showListings[0])}

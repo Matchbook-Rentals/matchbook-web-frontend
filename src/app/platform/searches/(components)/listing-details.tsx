@@ -6,7 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import Paddle from '@/components/ui/paddle';
+import Tile from '@/components/ui/tile';
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -41,20 +41,19 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div>
-            <p className="text-xl">Hosted by Daniel</p>
-            <p className="text-gray-600">2 years on Matchbook</p>
+          <div className=''>
+            <p className="text-xl md:text-lg lg:text-xl">Hosted by Daniel</p>
+            <p className="text-gray-600 md:text-lg lg:text-xl">2 years on Matchbook</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-col">
-          <p className="hidden sm:block text-xl">23 stays</p>
-          {/* Replace with a shadcn hovercard */}
+          <p className="hidden sm:block md:hidden lg:block text-xl truncate ">23 stays</p>
           <HoverCard>
             <HoverCardTrigger>
               <div className="flex items-center gap-1 cursor-default">
                 <Star className="fill-current text-gray-700" size={24} />
-                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden align-sub text-sm">(23)</span></span>
+                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden md:inline lg:hidden align-sub text-sm">(23)</span></span>
               </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-auto">
@@ -65,7 +64,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Host Badges */}
-      <div className="flex gap-4   mt-6">
+      <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 mt-6">
         <div className="flex items-center gap-2 ">
           <div className="w-7 h-7" >
             <img src='/badges_png/matchbook-verified.png' alt='Matchbook Verified Badge' />
@@ -87,14 +86,13 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Property Highlights */}
-      {/* Convert all highlights to Paddle components */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
-        <div className="flex flex-wrap justify-between">
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Home} title="Single Family" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Sofa} title="Furnished" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Zap} title="Utilities included" />
-          <Paddle className='h-44 w-28' iconClassName='h-12 w-12' Icon={Dog} title="Pets Allowed" />
+        <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
+          <Tile icon={<Home size={64} className='' />} label="Single Family" />
+          <Tile icon={<Sofa size={64} />} label="Furnished" />
+          <Tile icon={<Zap size={64} />} label="Utilities included" />
+          <Tile icon={<Dog size={64} />} label="Pets Allowed" />
         </div>
       </div>
 
@@ -120,7 +118,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Move in Calendar */}
           <div>
             <h4 className="text-xl mb-2">Move in</h4>
@@ -168,23 +166,15 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col items-center text-center gap-2">
-            <Mountain size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Mountain View</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Trees size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Nature Access</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Tv size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Smart TV</span>
-          </div>
-          <div className="flex flex-col items-center text-center gap-2">
-            <Car size={32} className="text-gray-600" />
-            <span className="text-sm text-gray-600">Parking</span>
-          </div>
+        <div className="flex flex-wrap gap-y-6 gap-x-2 justify-start">
+          <Tile icon={<Mountain size={64} />} label="Mountain View" />
+          <Tile icon={<Trees size={64} />} label="Nature Access" />
+          <Tile icon={<Tv size={64} />} label="Smart TV" />
+          <Tile icon={<Car size={64} />} label="Parking" />
+          <Tile icon={<Mountain size={64} />} label="Mountain View" />
+          <Tile icon={<Trees size={64} />} label="Nature Access" />
+          <Tile icon={<Tv size={64} />} label="Smart TV" />
+          <Tile icon={<Car size={64} />} label="Parking" />
         </div>
       </div>
     </div>

@@ -7,51 +7,21 @@ import FilterOptionsDialog from './filter-options-dialog';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Separator } from '@radix-ui/react-select';
 import { MapViewIcon, MatchViewIcon } from '@/components/svgs/svg-components';
-
-// Updated FilterOptions interface
-interface FilterOptions {
-  minPrice: number;
-  maxPrice: number;
-  bedrooms: string;
-  beds: string;
-  baths: string;
-  furnished: boolean;
-  unfurnished: boolean;
-  moveInDate: Date;
-  moveOutDate: Date;
-  flexibleMoveIn: boolean;
-  flexibleMoveOut: boolean;
-  flexibleMoveInStart: Date;
-  flexibleMoveInEnd: Date;
-  flexibleMoveOutStart: Date;
-  flexibleMoveOutEnd: Date;
-  propertyTypes: string[];
-  utilities: string[];
-}
+import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 const MatchmakerTab: React.FC = () => {
   const [viewMode, setViewMode] = useState<'map' | 'swipe'>('swipe');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { state } = useTripContext();
-  // Updated initial state for filters
+
   const [filters, setFilters] = useState<FilterOptions>({
-    minPrice: 0,
-    maxPrice: 10000,
-    bedrooms: 'Any',
-    beds: 'Any',
-    baths: 'Any',
-    furnished: false,
-    unfurnished: false,
+    ...DEFAULT_FILTER_OPTIONS,
     moveInDate: state.trip?.startDate || new Date(),
     moveOutDate: state.trip?.endDate || new Date(),
-    flexibleMoveIn: false,
-    flexibleMoveOut: false,
     flexibleMoveInStart: state.trip?.startDate || new Date(),
     flexibleMoveInEnd: state.trip?.startDate || new Date(),
     flexibleMoveOutStart: state.trip?.endDate || new Date(),
     flexibleMoveOutEnd: state.trip?.endDate || new Date(),
-    propertyTypes: [],
-    utilities: [],
   });
 
   // Updated handleFilterChange function to handle all filter changes, including arrays

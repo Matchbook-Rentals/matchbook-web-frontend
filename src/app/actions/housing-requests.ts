@@ -92,14 +92,21 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
       }
     });
 
-    let deleted = await prisma.notification.delete({
-      where: {
-        actionType_actionId: {
-          actionType: 'housingRequest',
-          actionId: deletedRequest.id
+    try {
+      await prisma.notification.deleteMany({
+        where: {
+          AND: [
+            { actionType: 'view' },
+            { actionId: deletedRequest.id }
+          ]
         }
+      });
+    } catch (error) {
+      // Ignore error if notification doesn't exist
+      if (!(error instanceof Error) || !error.message.includes('Record to delete does not exist')) {
+        throw error;
       }
-    })
+    }
 
 
     // Revalidate the favorites page or any other relevant pages
@@ -109,5 +116,45 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
   } catch (error) {
     console.error('Error deleting favorite:', error);
     throw error;
+  }
+}
+
+export async function optimisticApplyDb(tripId: string, listing: ListingAndImages) {
+  try {
+    const { userId } = auth();
+    if (!userId) throw new Error('Unauthorized');
+
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: {
+        favorites: true,
+        dislikes: true,
+        housingRequests: true,
+        matches: true,
+      }
+    });
+
+    if (!trip) throw new Error('Trip not found');
+
+    const housingRequest = await createDbHousingRequest(trip, listing);
+
+    return { success: true, housingRequest };
+  } catch (error) {
+    console.error('Failed to apply:', error);
+    return { success: false };
+  }
+}
+
+export async function optimisticRemoveApplyDb(tripId: string, listingId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) throw new Error('Unauthorized');
+
+    await deleteDbHousingRequest(tripId, listingId);
+
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to remove application:', error);
+    return { success: false };
   }
 }
