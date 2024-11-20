@@ -95,15 +95,9 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 mt-12">
-          {/* Headquarters */}
+        {/* Headquarters */}
 
-          {/* Follow Us */}
-          <div>
-            <h2 className="text-2xl font-serif mb-4">Follow Us</h2>
-            <SocialLinks />
-          </div>
-        </div>
+        {/* Follow Us */}
       </main>
       <Footer />
     </>
