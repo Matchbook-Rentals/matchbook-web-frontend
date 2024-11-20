@@ -11,15 +11,37 @@ import SortableFavorites from '../(components)/sortable-favorites';
 import { Separator } from "@/components/ui/separator";
 import { LayoutGrid, List } from "lucide-react";
 import SearchListingsGrid from '../(components)/search-listings-grid';
+import FilterOptionsDialog from '../(tabs)/filter-options-dialog';
+import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 export default function ShortListTab() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
   const { likedListings, requestedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
+
+  const [filters, setFilters] = useState<FilterOptions>({
+    ...DEFAULT_FILTER_OPTIONS,
+    moveInDate: state.trip?.startDate || new Date(),
+    moveOutDate: state.trip?.endDate || new Date(),
+    flexibleMoveInStart: state.trip?.startDate || new Date(),
+    flexibleMoveInEnd: state.trip?.startDate || new Date(),
+    flexibleMoveOutStart: state.trip?.endDate || new Date(),
+    flexibleMoveOutEnd: state.trip?.endDate || new Date(),
+  });
+
+  const handleFilterChange = (
+    key: keyof FilterOptions,
+    value: string | number | boolean | string[] | Date
+  ) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
 
   const handleApply = async (listing: ListingAndImages) => {
     if (!state.hasApplication) {
@@ -91,26 +113,34 @@ export default function ShortListTab() {
 
   return (
     <>
-      <div className="flex justify-center mb-4">
-        <div className="flex border shadow-lg rounded-full">
-          <button
-            className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('grid')}
-          >
-            <LayoutGrid className='w-[20px] h-[20px]' />
-          </button>
-          <Separator orientation="vertical" className='h-10 my-auto' />
-          <button
-            className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'list' ? 'bg-gray-200' : ''}`}
-            onClick={() => setViewMode('list')}
-          >
-            <List className='w-[20px] h-[20px]' />
-          </button>
-        </div>
-      </div>
-
       <div className="flex justify-center mx-auto w-full px-2 py-8">
         <div className="w-full md:w-2/3 pr-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex border shadow-lg rounded-full">
+              <button
+                className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
+                onClick={() => setViewMode('grid')}
+              >
+                <LayoutGrid className='w-[20px] h-[20px]' />
+              </button>
+              <Separator orientation="vertical" className='h-10 my-auto' />
+              <button
+                className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'list' ? 'bg-gray-200' : ''}`}
+                onClick={() => setViewMode('list')}
+              >
+                <List className='w-[20px] h-[20px]' />
+              </button>
+            </div>
+            <h2 className='text-2xl font-semibold'>These ones caught your eye</h2>
+            <FilterOptionsDialog
+              isOpen={isOpen}
+              onOpenChange={setIsOpen}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              className=""
+            />
+          </div>
+
           {viewMode === 'grid' ? (
             <SearchListingsGrid
               listings={[...requestedListings, ...likedListings]}
@@ -121,10 +151,7 @@ export default function ShortListTab() {
               }
             />
           ) : (
-            <>
-              <h2 className='text-2xl font-semibold text-center'>Properties You &lt;3</h2>
-              <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
-            </>
+            <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
           )}
         </div>
         <div className="w-full md:w-1/3">
