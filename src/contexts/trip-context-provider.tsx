@@ -5,6 +5,7 @@ import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
+import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -41,6 +42,8 @@ interface TripContextType {
     optimisticDislike: (listingId: string) => Promise<void>;
     optimisticRemoveLike: (listingId: string) => Promise<void>;
     optimisticRemoveDislike: (listingId: string) => Promise<void>;
+    optimisticApply: (listing: ListingAndImages) => Promise<void>;
+    optimisticRemoveApply: (listingId: string) => Promise<void>;
   };
 }
 
@@ -344,6 +347,66 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
   }, [trip, lookup]);
 
+  const optimisticApply = useCallback(async (listing: ListingAndImages) => {
+    try {
+      if (lookup.requestedIds.has(listing.id)) return;
+
+      // Optimistically update the UI
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds, listing.id])
+      }));
+
+      const result = await optimisticApplyDb(trip.id, listing);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to apply:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))
+      }));
+    }
+  }, [trip, lookup]);
+
+  const optimisticRemoveApply = useCallback(async (listingId: string) => {
+    console.log(listingId)
+    try {
+      // Skip if not requested
+      if (!lookup.requestedIds.has(listingId)) return;
+
+      // Optimistically update the UI
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds].filter(id => id !== listingId))
+      }));
+
+      const result = await optimisticRemoveApplyDb(trip.id, listingId);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          requestedIds: new Set([...prev.requestedIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to remove application:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds, listingId])
+      }));
+    }
+  }, [trip, lookup]);
+
   const contextValue: TripContextType = {
     state: {
       trip,
@@ -368,6 +431,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       optimisticDislike,
       optimisticRemoveLike,
       optimisticRemoveDislike,
+      optimisticApply,
+      optimisticRemoveApply,
     }
   };
 

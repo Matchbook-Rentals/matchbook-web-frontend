@@ -118,3 +118,43 @@ export const deleteDbHousingRequest = async (tripId: string, listingId: string) 
     throw error;
   }
 }
+
+export async function optimisticApplyDb(tripId: string, listing: ListingAndImages) {
+  try {
+    const { userId } = auth();
+    if (!userId) throw new Error('Unauthorized');
+
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: {
+        favorites: true,
+        dislikes: true,
+        housingRequests: true,
+        matches: true,
+      }
+    });
+
+    if (!trip) throw new Error('Trip not found');
+
+    const housingRequest = await createDbHousingRequest(trip, listing);
+
+    return { success: true, housingRequest };
+  } catch (error) {
+    console.error('Failed to apply:', error);
+    return { success: false };
+  }
+}
+
+export async function optimisticRemoveApplyDb(tripId: string, listingId: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) throw new Error('Unauthorized');
+
+    await deleteDbHousingRequest(tripId, listingId);
+
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to remove application:', error);
+    return { success: false };
+  }
+}

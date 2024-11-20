@@ -169,7 +169,7 @@ export default function SearchListingCard({ listing, status, callToAction }: Sea
       {callToAction && (
         <div className="p-2 pt-0">
           <button
-            onClick={callToAction.action}
+            onClick={() => callToAction.action()}
             className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blue-600 text-white hover:bg-blue-700'}`}
           >
             {callToAction.label}

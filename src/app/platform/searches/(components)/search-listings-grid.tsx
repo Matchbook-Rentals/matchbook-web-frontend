@@ -8,11 +8,16 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
+  withCallToAction?: boolean;
 }
 
-const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => {
+const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
+  listings,
+  withCallToAction = false
+}) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
-  const { state } = useTripContext();
+  const { state, actions } = useTripContext();
+  const { optimisticApply, optimisticRemoveApply } = actions;
   const [currentPage, setCurrentPage] = useState(1);
   const listingsPerPage = 9;
 
@@ -34,6 +39,22 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
     }
     return 'none'
   }
+
+  const getCallToAction = (listing: ListingAndImages, status: string) => {
+    if (!withCallToAction) return undefined;
+
+    return status === 'applied'
+      ? {
+        label: 'Cancel Application',
+        action: () => optimisticRemoveApply(listing.id),
+        className: 'bg-pinkBrand text-white'
+      }
+      : {
+        label: 'Apply Now',
+        action: () => optimisticApply(listing),
+        className: 'bg-blueBrand text-white'
+      };
+  };
 
   const totalPages = Math.ceil(listings.length / listingsPerPage);
 
@@ -67,13 +88,17 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({ listings }) => 
     <div className="relative h-full">
       <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-12">
-          {displayedListings.map((listing) => (
-            <SearchListingCard
-              key={listing.id}
-              listing={listing}
-              status={getListingStatus(listing)}
-            />
-          ))}
+          {displayedListings.map((listing) => {
+            const status = getListingStatus(listing);
+            return (
+              <SearchListingCard
+                key={listing.id}
+                listing={listing}
+                status={status}
+                callToAction={getCallToAction(listing, status)}
+              />
+            );
+          })}
         </div>
       </ScrollArea>
       <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-white border-t flex items-center justify-center gap-1">
