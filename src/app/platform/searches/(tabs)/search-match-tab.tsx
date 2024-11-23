@@ -166,15 +166,15 @@ const MatchViewTab: React.FC = () => {
           <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4 px-4">
             {/* Address display */}
             <div className="flex flex-col w-full sm:w-auto">
-              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
-              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
+              <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
+              <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
                 {showListings[0].locationString}
               </span>
             </div>
             {/* Distance display */}
             <div className="flex flex-col sm:text-right md:text-left xl:text-right w-full sm:w-auto">
-              <span className="text-sm xs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
-              <span className="text-lg xs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
+              <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
+              <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
                 {showListings[0].distance?.toFixed(0)} miles
               </span>
             </div>
