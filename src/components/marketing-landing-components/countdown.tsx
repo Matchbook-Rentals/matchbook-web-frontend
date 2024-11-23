@@ -1,14 +1,14 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 
 // Add className to the component props
 const Countdown: React.FC<{ className?: string }> = ({ className }) => {
-  const targetDate = new Date('2025-02-01T00:00:00');
+  const targetDate = new Date("2025-03-01T00:00:00");
   const [timeLeft, setTimeLeft] = useState<Record<string, number | string>>({
-    days: '??',
-    hours: '??',
-    minutes: '??',
-    seconds: '??'
+    days: "??",
+    hours: "??",
+    minutes: "??",
+    seconds: "??",
   });
 
   useEffect(() => {
@@ -44,20 +44,27 @@ const Countdown: React.FC<{ className?: string }> = ({ className }) => {
     }
 
     return (
-      <span key={interval} className="mx-2">
+      <span key={interval} className="">
         {timeLeft[interval]} {interval}{" "}
       </span>
     );
   });
 
   return (
-    <div className={`text-4xl font-semibold text-black ${className || ''}`}>
-      Find your place, all in once place in:
-      <div className="flex  pt-6 justify-evenly">
+    <div
+      className={`text-lg xs:text-xl mx-auto py-1 font-semibold text-black text-left w-full max-w-[700px] ${className || ""}`} >
+      <h1 className="text-2xl xs:text-3xl sm:text-4xl text-left  mt-8 xs:mt-2 mb-4 font-semibold">Get ready for launch!</h1>
+      <h2 className="pl-[1px]"> Find your place, all in once place in: </h2>
+      <div className="flex pt-6 justify-start gap-x-4">
         {Object.keys(timeLeft).map((interval) => (
-          <div key={interval} className="flex flex-col justify-center items-center">
-            <span className="text-4xl text-white font-semibold">{timeLeft[interval]}</span>
-            <span className="text-4xl">{interval}</span>
+          <div
+            key={interval}
+            className="flex flex-col xs:flex-row gap-x-1 justify-start items-center xs:items-end"
+          >
+            <span className="text-2xl font-semibold text-charcoal">
+              {timeLeft[interval]}
+            </span>
+            <span className="text-[16px] text-muted-foreground ">{interval}</span>
           </div>
         ))}
       </div>
