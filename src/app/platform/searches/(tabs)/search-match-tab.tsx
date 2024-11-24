@@ -104,7 +104,7 @@ const MatchViewTab: React.FC = () => {
             handleClick={() => handleReject(showListings[0])}
             Icon={
               <RejectIcon
-                className='h-[60%] w-[60%] md:h-[50%] md:w-[50%]'
+                className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full'
               />
             }
             className={`
@@ -120,7 +120,7 @@ const MatchViewTab: React.FC = () => {
                 ? () => console.log('No previous listing')
                 : handleBack
             }
-            Icon={<ReturnIcon className='h-[60%] w-[60%]' />}
+            Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
             className={`
             bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square 
             md:w-[100px] self-center rounded-full text-center flex items-center 
@@ -130,7 +130,7 @@ const MatchViewTab: React.FC = () => {
 
           <ButtonControl
             handleClick={() => console.log('Help clicked')}
-            Icon={<QuestionMarkIcon className='h-[60%] w-[60%]' />}
+            Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full' />}
             className={`
             bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square 
             md:w-[100px] self-center rounded-full text-center flex items-center 
@@ -142,7 +142,7 @@ const MatchViewTab: React.FC = () => {
             handleClick={() => handleLike(showListings[0])}
             Icon={
               <BrandHeart
-                className='h-[70%] w-[70%] md:h-[50%] md:w-[50%]'
+                className='h-[70%] w-[70%] md:h-[50%] md:w-[50%] rounded-2xl'
               />
             }
             className={`
