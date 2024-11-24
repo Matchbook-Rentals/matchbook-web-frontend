@@ -39,7 +39,7 @@ export default async function PlatformNavbar() {
   }
 
   return (
-    <nav className="bg-white sticky top-0 z-50 border-b border-black mb-9">
+    <nav className="bg-white sticky top-0 z-50 border-b  mb-9">
       <div className="flex items-center justify-between w-full md:w-[90vw] lg:w-[95vw] mx-auto pt-2 pb-2 px-2 md:px-0">
         <div className="w-1/3">
           <Link href={"/"}>
