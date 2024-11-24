@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, X, Heart, HelpCircle } from "lucide-react"
+import { MoreHorizontal, Star, X, Heart, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
@@ -102,8 +102,8 @@ export default function SearchListingCard({ listing, status, className, detailsC
             ))}
           </CarouselContent>
           <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <CarouselPrevious className="left-2 bg-white/60 hover:bg-white/80" />
-            <CarouselNext className="right-2 bg-white/60 hover:bg-white/80" />
+            <CarouselPrevious Icon={ChevronLeft} className="left-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
+            <CarouselNext Icon={ChevronRight} className="right-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
           </div>
         </Carousel>
 
