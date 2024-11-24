@@ -81,7 +81,7 @@ export default function LocationSuggest({ triggerClassName = "", contentClassNam
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant='ghost' className={` focus:outline-none rounded-l-full text-[11px] xs:text-[13px] sm:text-[15px] md:px-2 cursor-pointer ${triggerClassName}`}>
+        <Button variant='ghost' className={` focus:outline-none rounded-l-full text-[11px] xxs:text-[13px] sm:text-[15px] md:px-2 cursor-pointer ${triggerClassName}`}>
           <span className="inline-block translate-y-[1px]">
             {displayValue ? displayValue : "Where to?"}
           </span>

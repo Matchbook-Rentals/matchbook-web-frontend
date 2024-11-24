@@ -53,12 +53,12 @@ const TitleAndStats: React.FC<TitleAndStatsProps> = ({
       </div>
       <div className="flex flex-col w-full md:w-1/2 pt-1 pb-8 justify-evenly border-b border-[#313131] ">
         <div className='flex justify-between'>
-          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">{bedrooms.length} BR | {numBath} BA</p>
-          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">${rentPerMonth.toLocaleString()} / Mo</p>
+          <p className="text-lg xxs:text-xl md:text-2xl lg:text-3xl">{bedrooms.length} BR | {numBath} BA</p>
+          <p className="text-lg xxs:text-xl md:text-2xl lg:text-3xl">${rentPerMonth.toLocaleString()} / Mo</p>
         </div>
         <div className='flex justify-between mt-6 border-b-1'>
-          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl"> {sqft} Sqft</p>
-          <p className="text-lg xs:text-xl md:text-2xl lg:text-3xl">${deposit.toLocaleString()} Dep.</p>
+          <p className="text-lg xxs:text-xl md:text-2xl lg:text-3xl"> {sqft} Sqft</p>
+          <p className="text-lg xxs:text-xl md:text-2xl lg:text-3xl">${deposit.toLocaleString()} Dep.</p>
         </div>
       </div>
     </div>

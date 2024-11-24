@@ -7,6 +7,7 @@ import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
 import ApplicationTab from './(tabs)/application-tab';
 import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
+import { APP_PAGE_MARGIN } from '@/constants/styles';
 
 interface Tab {
   value: string;
@@ -21,8 +22,8 @@ interface Tab {
 const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
 
-  const tabTriggerTextStyles = 'text-md xs:text-[16px] sm:text-xl'
-  const tabTriggerStyles = 'p-0 xs:px-1 sm:px-2 '
+  const tabTriggerTextStyles = 'text-md xxs:text-[16px] sm:text-xl'
+  const tabTriggerStyles = 'p-0 xxs:px-1 sm:px-2 '
   const tabs: Tab[] = [
     {
       label: 'Matchmaker',
@@ -69,8 +70,8 @@ const TripsPage: React.FC = () => {
           useUrlParams
           tabs={tabs}
           className='mx-auto w-full'
-          tabsClassName='w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex justify-between xs:justify-center space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
+          tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
+          tabsListClassName='flex justify-between xxs:justify-center space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
         />
       </div>
     </div>

@@ -1,9 +1,16 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, X, Heart, HelpCircle } from "lucide-react"
+import { MoreHorizontal, Star, X, Heart, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 enum Status {
   Favorite = 'favorite',
@@ -34,6 +41,7 @@ interface SearchListingCardProps {
 
 export default function SearchListingCard({ listing, status, className, detailsClassName, callToAction, contextLabel }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   const { state, actions } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
@@ -70,15 +78,34 @@ export default function SearchListingCard({ listing, status, className, detailsC
   }
 
   return (
-    <Card className={`w-full overflow-hidden border-0 shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
-      <div className="relative rounded-lg aspect-[297/266]">
-        <Image
-          src={listing.listingImages[0].url}
-          alt={listing.title}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
-        />
+    <Card
+      className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
+        <Carousel className="w-full h-full">
+          <CarouselContent>
+            {listing.listingImages.map((image, index) => (
+              <CarouselItem key={index} className="relative">
+                <div className="aspect-[297/266] relative w-full h-full">
+                  <Image
+                    src={image.url}
+                    alt={`${listing.title} - Image ${index + 1}`}
+                    fill
+                    className="rounded-lg object-cover"
+                    sizes="(max-width: 267px) 100vw, 267px"
+                    priority={index === 0}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <CarouselPrevious Icon={ChevronLeft} className="left-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
+            <CarouselNext Icon={ChevronRight} className="right-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
+          </div>
+        </Carousel>
 
         {/* Conditional render either context banner or action menu */}
         {contextLabel ? (
@@ -136,7 +163,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
         )}
       </div>
 
-      <div className={`p-2 flex flex-col min-h-[180px] xs:min-h-[160px] sm:min-h-[100px] ${detailsClassName || ''}`}>
+      <div className={` pt-1 flex flex-col  sm:min-h-[80px] ${detailsClassName || ''}`}>
         <div className="flex justify-between gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
@@ -161,7 +188,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
       </div>
 
       {callToAction && (
-        <div className="p-2 pt-0">
+        <div className=" pt-0">
           <button
             onClick={() => callToAction.action()}
             className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blue-600 text-white hover:bg-blue-700'}`}

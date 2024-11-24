@@ -39,23 +39,32 @@ export default async function PlatformNavbar() {
   }
 
   return (
-    <nav className="bg-white flex items-center justify-between pt-2 pr-9 w-full border-b sticky top-0 border-black mb-9 z-50">
-      <div className="w-1/3">
-        <Link href={"/"}>
-          <Image
-            src={"/logo-nav-2.png"}
-            alt="logo"
-            width={400}
-            height={400}
-            className=""
+    <nav className="bg-white sticky top-0 z-50 border-b  mb-9">
+      <div className="flex items-center justify-between w-full md:w-[90vw] lg:w-[95vw] mx-auto pt-2 pb-2 px-2 md:px-0">
+        <div className="w-1/3">
+          <Link href={"/"}>
+            <img
+              src="/navbar-logo-full.png"
+              alt="MatchBook Logo"
+              className="hidden sm:block h-14 md:h-14"
+            />
+            <img
+              src="/House_Logo.png"
+              alt="MatchBook Heart"
+              className="sm:hidden h-10 w-10"
+            />
+          </Link>
+        </div>
+        <div className="w-1/3 flex justify-center">
+          <img
+            src="/svg/heart-header.svg"
+            className="h-8 w-8 hidden md:flex"
+            alt="MatchBook Heart"
           />
-        </Link>
-      </div>
-      <div className="w-1/3 flex justify-center">
-        <SlidingHeart />
-      </div>
-      <div className="w-1/3 flex justify-end">
-        <UserMenu color="black" isSignedIn={isSignedIn} updateUserImage={updateUserImage} />
+        </div>
+        <div className="w-1/3 flex justify-end">
+          <UserMenu color="black" isSignedIn={isSignedIn} updateUserImage={updateUserImage} />
+        </div>
       </div>
     </nav>
   );
