@@ -8,7 +8,7 @@ export default async function AdminDashboard(params: {
   searchParams: Promise<{ search?: string }>
 }) {
   if (!checkRole('admin')) {
-    redirect('/')
+    redirect('/unauthorized')
   }
 
   const query = (await params.searchParams).search

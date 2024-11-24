@@ -1,11 +1,13 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Montserrat } from "next/font/google";
 import { CountdownDialog } from "@/app/page";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { UserButton } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -15,6 +17,20 @@ interface MatchbookHeaderProps {
 
 export default function MatchbookHeader({ handleListProperty = false }: MatchbookHeaderProps) {
   const [defaultIsOpen, setDefaultIsOpen] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (isSignedIn && user) {
+        const userRole = user.publicMetadata.role as string;
+        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta');
+      }
+    };
+
+    checkAccess();
+  }, [isSignedIn, user]);
 
   const handleDefault = () => {
     setDefaultIsOpen(true);
@@ -65,14 +81,54 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
             <PopoverTrigger className="flex justify-between">
               <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
             </PopoverTrigger>
-            <PopoverContent> Coming Soon! </PopoverContent>
+            <PopoverContent className="flex flex-col w-48 p-0">
+              {isSignedIn ? (
+                <>
+                  {hasAccess && (
+                    <Link href="/platform/trips">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start p-2"
+                      >
+                        Trips
+                      </Button>
+                    </Link>
+                  )}
+                  <div className="p-2">
+                    Role: {user?.publicMetadata.role as string || 'No role'}
+                  </div>
+                </>
+              ) : (
+                <Link href="/sign-in">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start p-2"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+            </PopoverContent>
           </Popover>
-          <Popover>
-            <PopoverTrigger className="flex justify-between">
-              <UserIcon className="text-charcoal h-[31px] w-[31px]" />
-            </PopoverTrigger>
-            <PopoverContent> Coming Soon! </PopoverContent>
-          </Popover>
+          {isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
+          ) : (
+            <Popover>
+              <PopoverTrigger className="flex justify-between">
+                <UserIcon className="text-charcoal h-[31px] w-[31px]" />
+              </PopoverTrigger>
+              <PopoverContent className="flex flex-col w-48 p-0">
+                <Link href="/sign-in">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start p-2"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
 
         {/* Centered button container for mobile */}
