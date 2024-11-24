@@ -70,7 +70,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
   }
 
   return (
-    <Card className={`w-full overflow-hidden border-0 shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
+    <Card className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
       <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
         <Image
           src={listing.listingImages[0].url}
