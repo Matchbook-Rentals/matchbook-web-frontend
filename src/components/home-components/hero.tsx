@@ -1,59 +1,24 @@
-import React from 'react'
-import Image from "next/image";
-import SearchContainer from './searchContainer';
-import prisma from '@/lib/prismadb'
-import { currentUser } from '@clerk/nextjs/server';
-import { Trip } from '@prisma/client';
+import React from "react";
+import SearchContainer from "./searchContainer";
+import Countdown from "../marketing-landing-components/countdown";
 
-export default async function Hero() {
-
-  const createTrip = async (trip: Trip,) => {
-    'use server';
-
-    const clerkUser = await currentUser();
-
-    // Check if there is a user with the provided userId
-    const userExists = await prisma.user.findUnique({
-      where: { id: trip.userId },
-    });
-
-    // If the user does not exist, create a new user
-    if (!userExists) {
-      await prisma.user.create({
-        data: {
-          id: trip.userId,
-          firstName: clerkUser?.firstName,
-          lastName: clerkUser?.lastName,
-          email: clerkUser?.emailAddresses[0].emailAddress,
-
-          // You need to provide additional required fields for the User model here
-        },
-      });
-    }
-
-    // Create the trip
-    const newTrip = await prisma.trip.create({ data: trip });
-
-    return newTrip;
-  };
-
+const Hero: React.FC = () => {
   return (
-    <div className="relative h-[70vh] flex items-center justify-center text-white">
-      {/* Background image */}
-      <Image
-        src="/hero-image.png" // Replace with the path to your image
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        alt="Background"
-        className="absolute z-0" // Ensures the image is in the background
-      />
+    <div
+      className="relative md:mt-20 min-h-[60vh] rounded-lg shadow-md w-full md:w-[90vw] lg:w-[80vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
+      style={{
+        backgroundImage: "url('/hero-image.png')",
+        backgroundSize: "cover", // Ensures the image covers the container
+        backgroundPosition: "center", // Centers the image so it crops equally from all sides
+      }}
+    >
       {/* Overlay */}
-      <div className="absolute bg-black bg-opacity-50 inset-0 z-10" />
-      {/* Text */}
-      <div className="relative translate-y-[-130%] z-20 lg:w-[55vw] md:w-[70vw]  w-full">
-        <SearchContainer createTrip={createTrip} />
-      </div>
+      {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
+
+      {/* Content */}
+      <SearchContainer className="md:pt-[5%] pt-[5%] sm:w-[90%] md:w-[70%] relative" />
     </div>
-  )
-}
+  );
+};
+
+export default Hero;
