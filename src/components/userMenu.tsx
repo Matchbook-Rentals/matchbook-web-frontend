@@ -10,6 +10,7 @@ import { getNotifications, updateNotification, deleteNotification } from '@/app/
 import { updateUserImage } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
+import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
@@ -76,14 +77,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   }
 
   return (
-    <div className="flex items-center scale-125">
+    <div className="flex items-center space-x-2 md:space-x-4">
       {isSignedIn ? (
         <>
           <Popover>
-            <PopoverTrigger className="relative" onClick={handleImageUpdate}>
-              <Image src={`/svg/${color}-hamburger.svg`} alt='menu icon' width={50} height={50} />
+            <PopoverTrigger className="flex justify-between">
+              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
               {hasUnread && (
-                <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-red-500 rounded-full" />
+                <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
               )}
             </PopoverTrigger>
             <PopoverContent>
@@ -123,15 +124,22 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       ) : (
         <>
           <Popover>
-            <PopoverTrigger>
-              <Image src={`/svg/${color}-hamburger.svg`} alt='menu icon' width={50} height={50} />
+            <PopoverTrigger className="flex justify-between">
+              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
             </PopoverTrigger>
             <PopoverContent className='w-full p-0'>
               <Link href="/sign-in" className='hover:bg-primaryBrand/50 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
               <p className='hover:bg-primaryBrand/50 cursor-pointer pl-3'>Get help</p>
             </PopoverContent>
           </Popover>
-          <Image src="/svg/account.svg" alt='person icon' width={50} height={50} className='rounded-full border-white border-[3px] pb-1' />
+          <Popover>
+            <PopoverTrigger className="flex justify-between">
+              <UserIcon className="text-charcoal h-[31px] w-[31px]" />
+            </PopoverTrigger>
+            <PopoverContent>
+              <Link href="/sign-in">Sign In</Link>
+            </PopoverContent>
+          </Popover>
         </>
       )}
     </div>
