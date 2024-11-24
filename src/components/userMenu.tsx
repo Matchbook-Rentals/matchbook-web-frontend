@@ -81,10 +81,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       {isSignedIn ? (
         <>
           <Popover>
-            <PopoverTrigger className="flex justify-between">
+            <PopoverTrigger className="flex justify-between relative">
               <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
               {hasUnread && (
-                <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
               )}
             </PopoverTrigger>
             <PopoverContent>
