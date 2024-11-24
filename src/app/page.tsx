@@ -28,6 +28,7 @@ const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialo
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
+        xOnRight
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
         h-[70vh] sm:h-[84vh] md:h-[77vh] px-6 sm:px-10 pt-4 
