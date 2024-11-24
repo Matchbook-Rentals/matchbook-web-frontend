@@ -4,6 +4,13 @@ import { MoreHorizontal, Star, X, Heart, HelpCircle } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 enum Status {
   Favorite = 'favorite',
@@ -34,6 +41,7 @@ interface SearchListingCardProps {
 
 export default function SearchListingCard({ listing, status, className, detailsClassName, callToAction, contextLabel }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   const { state, actions } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
@@ -70,15 +78,34 @@ export default function SearchListingCard({ listing, status, className, detailsC
   }
 
   return (
-    <Card className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}>
+    <Card
+      className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
-        <Image
-          src={listing.listingImages[0].url}
-          alt={listing.title}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
-        />
+        <Carousel className="w-full h-full">
+          <CarouselContent>
+            {listing.listingImages.map((image, index) => (
+              <CarouselItem key={index} className="relative">
+                <div className="aspect-[297/266] relative w-full h-full">
+                  <Image
+                    src={image.url}
+                    alt={`${listing.title} - Image ${index + 1}`}
+                    fill
+                    className="rounded-lg object-cover"
+                    sizes="(max-width: 267px) 100vw, 267px"
+                    priority={index === 0}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <CarouselPrevious className="left-2 bg-white/60 hover:bg-white/80" />
+            <CarouselNext className="right-2 bg-white/60 hover:bg-white/80" />
+          </div>
+        </Carousel>
 
         {/* Conditional render either context banner or action menu */}
         {contextLabel ? (

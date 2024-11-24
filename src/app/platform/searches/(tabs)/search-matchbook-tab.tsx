@@ -14,10 +14,6 @@ export function SearchMatchbookTab() {
   const { state } = useTripContext();
   const { matchedListings, trip, lookup } = state;
 
-  if (matchedListings.length === 0) {
-    return <p>No matched listings found.</p>;
-  }
-
   const getListingStatus = (listingId: string): Status => {
     const status = lookup.matchIds.has(listingId) ? Status.Favorite : Status.None;
     return status;
@@ -87,18 +83,24 @@ export function SearchMatchbookTab() {
 
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {matchedListings.map((listing) => (
-          <SearchListingCard
-            key={listing.id}
-            listing={listing}
-            detailsClassName="min-h-[0px]"
-            status={getListingStatus(listing.id)}
-            callToAction={getCallToAction(getListingStatus(listing.id))}
-            contextLabel={getContextLabel(getListingStatus(listing.id))}
-          />
-        ))}
-      </div>
+      {matchedListings.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {matchedListings.map((listing) => (
+            <SearchListingCard
+              key={listing.id}
+              listing={listing}
+              detailsClassName="min-h-[0px]"
+              status={getListingStatus(listing.id)}
+              callToAction={getCallToAction(getListingStatus(listing.id))}
+              contextLabel={getContextLabel(getListingStatus(listing.id))}
+            />
+          ))}
+        </div>
+      )}
+
+      {matchedListings.length === 0 && (
+        <p>No matched listings found.</p>
+      )}
 
       {/* Test Cards Section */}
       <div className="mt-8 border-t pt-8">
