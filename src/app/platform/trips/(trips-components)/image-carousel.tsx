@@ -122,8 +122,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
         {/* Mobile horizontal thumbnail carousel */}
         <div className="w-full">
-          <Carousel opts={{ loop: true }} className="w-full">
-            <CarouselContent>
+          <Carousel
+            opts={{
+              loop: true,
+              dragFree: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
               {uniqueImages.map((image, index) => (
                 <CarouselItem key={image.id} className="basis-1/4 pl-4">
                   <div
