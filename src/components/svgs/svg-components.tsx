@@ -182,7 +182,7 @@ const BookingsIcon = () => (
   </svg>
 );
 
-const UserIcon = (props) => (
+const UserIcon = (props: any) => (
   <svg
     {...props}
     width="164"
@@ -209,7 +209,7 @@ const UserIcon = (props) => (
   </svg>
 );
 
-function MenuIcon(props) {
+function MenuIcon(props: any) {
   return (
     <svg
       {...props}
@@ -230,7 +230,7 @@ function MenuIcon(props) {
   );
 }
 
-function ApartmentIcon(props) {
+function ApartmentIcon(props: any) {
   return (
     <svg
       {...props}
