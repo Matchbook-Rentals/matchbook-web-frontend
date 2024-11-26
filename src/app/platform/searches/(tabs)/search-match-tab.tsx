@@ -106,12 +106,12 @@ const MatchViewTab: React.FC = () => {
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className="flex gap-x-4">
+      <div className="flex flex-col md:flex-row gap-x-4">
         {/* Left Column */}
-        <div className="w-full md:w-1/2 sticky top-0">
+        <div className="w-full md:w-1/2 sticky top-[50px] md:top-0">
           {/* Button Controls */}
-          <div className={`button-control-box sticky top-[60px] z-10 flex justify-evenly
-                     lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full
+          <div className={`button-control-box bg-background sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
+                     lg:justify-center lg:gap-x-8 pb-2 pt-3 md:p-5 w-full
                      ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
             <ButtonControl
               handleClick={() => handleReject(showListings[0])}
@@ -161,7 +161,7 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Map and Address Section */}
-          <div className={`sticky top-[230px] ${!isScrolled ? 'md:-translate-y-[85px]' : ''} transition-transform duration-500`}>
+          <div className={`hidden md:block sticky top-[230px] ${!isScrolled ? 'md:-translate-y-[85px]' : ''} transition-transform duration-500`}>
             {/* Address and distance information */}
             <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4">
               {/* Address display */}
