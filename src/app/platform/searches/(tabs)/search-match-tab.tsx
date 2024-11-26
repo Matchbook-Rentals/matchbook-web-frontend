@@ -98,7 +98,7 @@ const MatchViewTab: React.FC = () => {
       />
 
       <div className='flex p-0'>
-        <div className="button-control-box flex justify-evenly lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
+        <div className="button-control-box  flex justify-evenly lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
 
           <ButtonControl
             handleClick={() => handleReject(showListings[0])}
@@ -159,11 +159,11 @@ const MatchViewTab: React.FC = () => {
 
       {/* MAP AND ADDRESS */}
       {/* Map and location information container */}
-      <div className='flex flex-col md:flex-row md:-translate-y-[5%]'>
+      <div className='flex flex-col space-x-4 md:flex-row md:-translate-y-[5%]'>
         {/* Left column with map and address details */}
-        <div className="w-full md:w-1/2 min-h-[800px] p-4">
+        <div className="w-full md:w-1/2 min-h-[800px]">
           {/* Address and distance information */}
-          <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4 px-4">
+          <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4">
             {/* Address display */}
             <div className="flex flex-col w-full sm:w-auto">
               <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>

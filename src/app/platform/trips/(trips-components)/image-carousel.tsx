@@ -50,7 +50,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
-                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[40vh] px-4">
+                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[40vh] pl-4">
                   <div className="grid grid-cols-2 grid-rows-2 gap-4">
                     {chunk.map((image, idx) => (
                       <div
