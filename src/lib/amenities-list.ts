@@ -74,4 +74,40 @@ const amenities = [
   { code: 'privateBathroom', label: 'Private Bathroom' }
 ];
 
+const iconAmenities = [
+  { code: 'wheelchairAccess', label: 'Wheelchair Accessible' },
+  { code: 'garbageDisposal', label: 'Garbage Disposal' },
+  { code: 'dishwasher', label: 'Dishwasher' },
+  { code: 'grill', label: 'Grill' },
+  { code: 'uncoveredParkingFree', label: 'Free Parking' },
+  { code: 'garageParking', label: 'Garage' },
+  { code: 'washerInUnit', label: 'Washer' },
+  { code: 'balcony', label: 'Balcony' },
+  { code: 'pool', label: 'Pool' },
+  { code: 'patio', label: 'Patio' },
+  { code: 'porch', label: 'Porch' },
+  { code: 'sunroom', label: 'Sunroom' },
+  { code: 'gym', label: 'Gym' },
+  { code: 'sauna', label: 'Sauna' },
+  { code: 'fencedInYard', label: 'Fenced Yard' },
+  { code: 'alarmSystem', label: 'Alarm System' },
+  { code: 'gatedEntry', label: 'Gated Entry' },
+  { code: 'smokeDetector', label: 'Smoke Detector' },
+  { code: 'carbonMonoxide', label: 'Carbon Monoxide Detector' },
+  { code: 'security', label: 'Security System' },
+  { code: 'waterfront', label: 'Waterfront' },
+  { code: 'waterview', label: 'Water View' },
+  { code: 'mountainView', label: 'Mountain View' },
+  { code: 'cityview', label: 'City View' },
+]
+
+const highlightAmenities = [
+  { code: 'singleFamily', label: 'Single Family Home' },
+  { code: 'townhome', label: 'Townhome' },
+  { code: 'singleRoom', label: 'Single Room' },
+  { code: 'furnished', label: 'Fully Furnished' },
+  { code: 'petsAllowed', label: 'Pet Friendly' },
+  { code: 'utilitiesIncluded', label: 'Utilities Included' },
+]
+
 export { amenities };

@@ -1,12 +1,13 @@
 import React from 'react';
 import { ListingAndImages } from '@/types';
-import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car } from 'lucide-react';
+import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car, Wifi, Coffee, Snowflake, Waves, Dumbbell, Lock, UtensilsCrossed, Bath, Warehouse } from 'lucide-react';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import Tile from '@/components/ui/tile';
+import { amenities } from '@/lib/amenities-list';
 import { Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -14,6 +15,92 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 interface ListingDetailsProps {
   listing: ListingAndImages;
 }
+
+const getAmenityIcon = (amenity: string) => {
+  switch (amenity) {
+    // General Amenities
+    case 'airConditioning': return { icon: Dumbbell, label: 'Air Conditioning' };
+    case 'laundryFacilities': return { icon: Dumbbell, label: 'Laundry Facilities' };
+    case 'fitnessCenter': return { icon: Dumbbell, label: 'Fitness Center' };
+    case 'elevator': return { icon: Dumbbell, label: 'Elevator' };
+    case 'wheelchairAccess': return { icon: Dumbbell, label: 'Wheelchair Access' };
+    case 'doorman': return { icon: Dumbbell, label: 'Doorman' };
+    case 'parking': return { icon: Dumbbell, label: 'Parking' };
+    case 'wifi': return { icon: Dumbbell, label: 'WiFi' };
+    case 'kitchen': return { icon: Dumbbell, label: 'Kitchen' };
+    case 'dedicatedWorkspace': return { icon: Dumbbell, label: 'Dedicated Workspace' };
+    case 'hairDryer': return { icon: Dumbbell, label: 'Hair Dryer' };
+    case 'iron': return { icon: Dumbbell, label: 'Iron' };
+    case 'heating': return { icon: Dumbbell, label: 'Heating' };
+    case 'hotTub': return { icon: Dumbbell, label: 'Hot Tub' };
+    case 'petsAllowed': return { icon: Dumbbell, label: 'Pets Allowed' };
+    case 'smokingAllowed': return { icon: Dumbbell, label: 'Smoking Allowed' };
+    case 'eventsAllowed': return { icon: Dumbbell, label: 'Events Allowed' };
+    case 'privateEntrance': return { icon: Dumbbell, label: 'Private Entrance' };
+    case 'secure': return { icon: Dumbbell, label: 'Secure' };
+    case 'waterfront': return { icon: Dumbbell, label: 'Waterfront' };
+    case 'beachfront': return { icon: Dumbbell, label: 'Beachfront' };
+    case 'mountainView': return { icon: Dumbbell, label: 'Mountain View' };
+
+    // Washer and Dryer Options
+    case 'washerInUnit': return { icon: Dumbbell, label: 'Washer In Unit' };
+    case 'washerHookup': return { icon: Dumbbell, label: 'Washer Hookup' };
+    case 'washerNotAvailable': return { icon: Dumbbell, label: 'Washer Not Available' };
+    case 'washerInComplex': return { icon: Dumbbell, label: 'Washer In Complex' };
+    case 'dryerInUnit': return { icon: Dumbbell, label: 'Dryer In Unit' };
+    case 'dryerHookup': return { icon: Dumbbell, label: 'Dryer Hookup' };
+    case 'dryerNotAvailable': return { icon: Dumbbell, label: 'Dryer Not Available' };
+    case 'dryerInComplex': return { icon: Dumbbell, label: 'Dryer In Complex' };
+
+    // Parking Options
+    case 'streetParking': return { icon: Dumbbell, label: 'Street Parking' };
+    case 'streetParkingFree': return { icon: Dumbbell, label: 'Street Parking Free' };
+    case 'coveredParking': return { icon: Dumbbell, label: 'Covered Parking' };
+    case 'coveredParkingFree': return { icon: Dumbbell, label: 'Covered Parking Free' };
+    case 'uncoveredParking': return { icon: Dumbbell, label: 'Uncovered Parking' };
+    case 'uncoveredParkingFree': return { icon: Dumbbell, label: 'Uncovered Parking Free' };
+    case 'garageParking': return { icon: Dumbbell, label: 'Garage Parking' };
+    case 'garageParkingFree': return { icon: Dumbbell, label: 'Garage Parking Free' };
+    case 'evCharging': return { icon: Dumbbell, label: 'EV Charging' };
+
+    // Pet Policies
+    case 'allowDogs': return { icon: Dumbbell, label: 'Allow Dogs' };
+    case 'allowCats': return { icon: Dumbbell, label: 'Allow Cats' };
+
+    // Structural Amenities
+    case 'gym': return { icon: Dumbbell, label: 'Gym' };
+    case 'balcony': return { icon: Dumbbell, label: 'Balcony' };
+    case 'patio': return { icon: Dumbbell, label: 'Patio' };
+    case 'sunroom': return { icon: Dumbbell, label: 'Sunroom' };
+    case 'fireplace': return { icon: Dumbbell, label: 'Fireplace' };
+    case 'firepit': return { icon: Dumbbell, label: 'Firepit' };
+    case 'pool': return { icon: Dumbbell, label: 'Pool' };
+    case 'jacuzzi': return { icon: Dumbbell, label: 'Jacuzzi' };
+    case 'grill': return { icon: Dumbbell, label: 'Grill' };
+    case 'oven': return { icon: Dumbbell, label: 'Oven' };
+    case 'stove': return { icon: Dumbbell, label: 'Stove' };
+    case 'wheelAccessible': return { icon: Dumbbell, label: 'Wheel Accessible' };
+    case 'fencedInYard': return { icon: Dumbbell, label: 'Fenced In Yard' };
+    case 'secureLobby': return { icon: Dumbbell, label: 'Secure Lobby' };
+    case 'keylessEntry': return { icon: Dumbbell, label: 'Keyless Entry' };
+    case 'alarmSystem': return { icon: Dumbbell, label: 'Alarm System' };
+    case 'storageShed': return { icon: Dumbbell, label: 'Storage Shed' };
+
+    // Kitchen
+    case 'garbageDisposal': return { icon: Dumbbell, label: 'Garbage Disposal' };
+    case 'dishwasher': return { icon: Dumbbell, label: 'Dishwasher' };
+
+    // Furnished
+    case 'tv': return { icon: Dumbbell, label: 'TV' };
+    case 'workstation': return { icon: Dumbbell, label: 'Workstation' };
+    case 'microwave': return { icon: Dumbbell, label: 'Microwave' };
+    case 'kitchenEssentails': return { icon: Dumbbell, label: 'Kitchen Essentials' };
+    case 'linens': return { icon: Dumbbell, label: 'Linens' };
+    case 'privateBathroom': return { icon: Dumbbell, label: 'Private Bathroom' };
+
+    default: return { icon: Dumbbell, label: amenity };
+  }
+};
 
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   return (
@@ -167,14 +254,13 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
         <div className="flex flex-wrap gap-y-6 gap-x-2 justify-start">
-          <Tile icon={<Mountain size={64} />} label="Mountain View" />
-          <Tile icon={<Trees size={64} />} label="Nature Access" />
-          <Tile icon={<Tv size={64} />} label="Smart TV" />
-          <Tile icon={<Car size={64} />} label="Parking" />
-          <Tile icon={<Mountain size={64} />} label="Mountain View" />
-          <Tile icon={<Trees size={64} />} label="Nature Access" />
-          <Tile icon={<Tv size={64} />} label="Smart TV" />
-          <Tile icon={<Car size={64} />} label="Parking" />
+          {amenities.map((amenity) => {
+            if (listing[amenity.code as keyof ListingAndImages]) {
+              const { icon: Icon, label } = getAmenityIcon(amenity.code);
+              return <Tile key={amenity.code} icon={<Icon size={64} />} label={label} />;
+            }
+            return null;
+          })}
         </div>
       </div>
     </div>
