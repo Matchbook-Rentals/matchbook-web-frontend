@@ -261,7 +261,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
-        <div className="flex flex-wrap gap-y-6 gap-x-2 justify-between">
+        <div className="grid grid-cols-[repeat(auto-fit,170px)] gap-6 justify-between">
           {iconAmenities.map((amenity) => {
             const { icon: Icon, label } = getAmenityIcon(amenity.code);
             return <Tile key={amenity.code} icon={<Icon className='mt-4' />} label={label} />;
