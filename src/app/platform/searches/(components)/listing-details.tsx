@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ListingAndImages } from '@/types';
 import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car, Wifi, Coffee, Snowflake, Waves, Dumbbell, Lock, UtensilsCrossed, Bath, Warehouse } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -79,6 +79,25 @@ const getAmenityIcon = (amenity: string) => {
 };
 
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
+  const [showAllAmenities, setShowAllAmenities] = useState(false);
+
+  // Add this function to get 6 random amenities
+  const getRandomAmenities = () => {
+    const shuffled = [...iconAmenities].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 6);
+  };
+
+  // Get random highlights for the collapsed view
+  const getRandomHighlights = () => {
+    const baseHighlights = [
+      { type: 'category', value: listing.category },
+      { type: 'furnished', value: listing.furnished },
+      { type: 'utilities', value: listing.utilitiesIncluded },
+      { type: 'pets', value: listing.petFriendly }
+    ];
+    return baseHighlights.slice(0, 4); // Show all base highlights in collapsed view
+  };
+
   return (
     <div className={`md:w-1/2 ${montserrat.className}`}>
       <h2 className={`md:text-3xl lg:text-[48px] text-black font-medium mt-8 mb-12`}>
@@ -160,42 +179,51 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
-          {/* Property Type */}
-          {/* {listing.category === 'singleFamily' && <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />}
-          {listing.category === 'townhouse' && <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />}
-          {listing.category === 'singleRoom' && <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />}
-          {listing.category === 'apartment' && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />} */}
-          <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />
-          <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-8" />} label="Townhouse" />
-          <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />
-          <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />
+          {!showAllAmenities ? (
+            // Show real values when collapsed
+            <>
+              {/* Property Type */}
+              {listing.category === 'singleFamily' && <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />}
+              {listing.category === 'townhouse' && <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />}
+              {listing.category === 'singleRoom' && <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />}
+              {listing.category === 'apartment' && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />}
 
-          {/* Furnished Status */}
-          {/* {listing.furnished ? (
-            <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
-          ) : (
-            <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
-          )} */}
-          <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
-          <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+              {/* Furnished Status */}
+              {listing.furnished ? (
+                <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
+              ) : (
+                <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+              )}
 
-          {/* Utilities */}
-          {/* {listing.utilitiesIncluded ? (
-            <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
-          ) : (
-            <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
-          )} */}
-          <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
-          <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+              {/* Utilities */}
+              {listing.utilitiesIncluded ? (
+                <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
+              ) : (
+                <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+              )}
 
-          {/* Pets */}
-          {/* {listing.petFriendly ? (
-            <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+              {/* Pets */}
+              {listing.petFriendly ? (
+                <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+              ) : (
+                <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+              )}
+            </>
           ) : (
-            <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
-          )} */}
-          <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
-          <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+            // Show all possible highlights when expanded
+            <>
+              <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />
+              <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />
+              <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />
+              <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />
+              <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
+              <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+              <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities Included" />
+              <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+              <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+              <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+            </>
+          )}
         </div>
       </div>
 
@@ -268,9 +296,14 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
 
       {/* Property Amenities */}
       <div className="mt-6">
-        <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
+        <h3
+          className="text-2xl font-semibold mb-4 cursor-pointer hover:text-primaryBrand transition-colors"
+          onClick={() => setShowAllAmenities(!showAllAmenities)}
+        >
+          Amenities {showAllAmenities ? '(show less)' : ''}
+        </h3>
         <div className="grid grid-cols-[repeat(auto-fit,170px)] gap-6 justify-between">
-          {iconAmenities.map((amenity) => {
+          {(showAllAmenities ? iconAmenities : getRandomAmenities()).map((amenity) => {
             const { icon: Icon, label } = getAmenityIcon(amenity.code);
             return <Tile key={amenity.code} icon={<Icon className='mt-4' />} label={label} />;
           })}

@@ -27,10 +27,12 @@ const MatchViewTab: React.FC = () => {
   const { favIds, dislikedIds } = lookup;
   const { setViewedListings, setLookup } = actions;
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolledDeep, setIsScrolledDeep] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
+      setIsScrolledDeep(window.scrollY > 900);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -110,9 +112,10 @@ const MatchViewTab: React.FC = () => {
         {/* Left Column */}
         <div className="w-full md:w-1/2 sticky top-[50px] md:top-0">
           {/* Button Controls */}
-          <div className={`button-control-box bg-background md:bg-transparent sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
-                     lg:justify-center lg:gap-x-8 pb-2 pt-3 md:p-5 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
+          <div className={`button-control-box ${isScrolledDeep ? 'bg-background' : 'bg-transparent'}
+                   sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
+                   lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 w-full
+                   ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
             <ButtonControl
               handleClick={() => handleReject(showListings[0])}
               Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}
