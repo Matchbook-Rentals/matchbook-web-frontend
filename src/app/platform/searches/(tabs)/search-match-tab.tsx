@@ -84,7 +84,7 @@ const MatchViewTab: React.FC = () => {
     }
     return listingAmenities;
   };
-// Early returns for edge cases
+  // Early returns for edge cases
   if (state.isLoading) {
     return <LoadingSpinner />;
   }
@@ -110,7 +110,7 @@ const MatchViewTab: React.FC = () => {
         {/* Left Column */}
         <div className="w-full md:w-1/2 sticky top-[50px] md:top-0">
           {/* Button Controls */}
-          <div className={`button-control-box bg-background sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
+          <div className={`button-control-box bg-background md:bg-transparent sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
                      lg:justify-center lg:gap-x-8 pb-2 pt-3 md:p-5 w-full
                      ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
             <ButtonControl
@@ -161,7 +161,7 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Map and Address Section */}
-          <div className={`hidden md:block sticky top-[230px] ${!isScrolled ? 'md:-translate-y-[85px]' : ''} transition-transform duration-500`}>
+          <div className={`hidden md:block sticky top-[230px] ${!isScrolled ? 'md:-translate-y-[65px]' : ''} transition-transform duration-500`}>
             {/* Address and distance information */}
             <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4">
               {/* Address display */}

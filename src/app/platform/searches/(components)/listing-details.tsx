@@ -81,10 +81,15 @@ const getAmenityIcon = (amenity: string) => {
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   return (
     <div className={`md:w-1/2 ${montserrat.className}`}>
-      <h2 className={`md:text-3xl lg:text-[40px] text-black font-medium mb-6`}>
+      <h2 className={`md:text-3xl lg:text-[48px] text-black font-medium mt-8 mb-12`}>
         {listing?.title}
       </h2>
 
+
+      {/* Apply Matchbook verification styles */}
+      <h2 className={`md:text-xl lg:text-[32px] text-[#404040] font-semibold leading-normal mt-8 mb-12 ${montserrat.className}`}>
+        Matchbook Verification Required
+      </h2>
       {/* Property Stats */}
       <div className="flex justify-between items-center mb-12 md:mb-0">
         <div>
@@ -93,7 +98,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         </div>
         <div className="text-right">
           <p className="text-2xl md:text-4xl mb-2 md:mb-8 font-medium">$2,350 / Mo</p>
-          <p className="text-lg md:text-2xl text-gray-600">$1500 Dep.</p>
+          <p className="text-lg md:text-2xl ">$1500 Dep.</p>
         </div>
       </div>
 
