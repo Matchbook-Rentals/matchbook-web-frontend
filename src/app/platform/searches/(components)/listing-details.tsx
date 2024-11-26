@@ -249,7 +249,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Move in Calendar */}
           <div>
             <h4 className="text-xl mb-2">Move in</h4>

@@ -115,7 +115,7 @@ const MatchViewTab: React.FC = () => {
           <div className={`button-control-box ${isScrolledDeep ? 'bg-background' : 'bg-transparent'}
                    sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
                    lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 w-full
-                   ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
+                   ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-transform duration-500`}>
             <ButtonControl
               handleClick={() => handleReject(showListings[0])}
               Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}

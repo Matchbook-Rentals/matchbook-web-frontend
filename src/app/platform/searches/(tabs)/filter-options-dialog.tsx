@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { FilterIcon } from 'lucide-react';
+import { FilterIcon } from '@/components/icons/actions';
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import PriceFilter from '../(components)/PriceFilter';
