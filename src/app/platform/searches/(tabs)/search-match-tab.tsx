@@ -1,6 +1,6 @@
 'use client'
 //IMports
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
 import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
@@ -26,6 +26,16 @@ const MatchViewTab: React.FC = () => {
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
   const { setViewedListings, setLookup } = actions;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
@@ -74,8 +84,7 @@ const MatchViewTab: React.FC = () => {
     }
     return listingAmenities;
   };
-
-  // Early returns for edge cases
+// Early returns for edge cases
   if (state.isLoading) {
     return <LoadingSpinner />;
   }
@@ -97,107 +106,98 @@ const MatchViewTab: React.FC = () => {
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className='flex p-0'>
-        <div className="button-control-box  flex justify-evenly lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full md:w-1/2 md:-translate-y-1/2 gap-2">
+      <div className="flex gap-x-4">
+        {/* Left Column */}
+        <div className="w-full md:w-1/2 sticky top-0">
+          {/* Button Controls */}
+          <div className={`button-control-box sticky top-[60px] z-10 flex justify-evenly
+                     lg:justify-center lg:gap-x-8 py-2 md:p-5 w-full
+                     ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-all duration-500`}>
+            <ButtonControl
+              handleClick={() => handleReject(showListings[0])}
+              Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}
+              className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px]
+              flex items-center justify-center p-4 rounded-full text-center text-white
+              text-sm transition-all duration-200`}
+            />
 
-          <ButtonControl
-            handleClick={() => handleReject(showListings[0])}
-            Icon={
-              <RejectIcon
-                className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full'
-              />
-            }
-            className={`
-            bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px] 
-            flex items-center justify-center p-4 rounded-full text-center text-white 
-            text-sm transition-all duration-200
-          `}
-          />
+            <ButtonControl
+              handleClick={
+                viewedListings.length === 0
+                  ? () => console.log('No previous listing')
+                  : handleBack
+              }
+              Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
+              className={`
+              bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square
+              md:w-[100px] self-center rounded-full text-center flex items-center
+              justify-center text-white text-sm transition-all duration-200
+            `}
+            />
 
-          <ButtonControl
-            handleClick={
-              viewedListings.length === 0
-                ? () => console.log('No previous listing')
-                : handleBack
-            }
-            Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
-            className={`
-            bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square 
-            md:w-[100px] self-center rounded-full text-center flex items-center 
-            justify-center text-white text-sm transition-all duration-200
-          `}
-          />
+            <ButtonControl
+              handleClick={() => console.log('Help clicked')}
+              Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full' />}
+              className={`
+              bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square
+              md:w-[100px] self-center rounded-full text-center flex items-center
+              justify-center text-white text-sm transition-all duration-200
+            `}
+            />
 
-          <ButtonControl
-            handleClick={() => console.log('Help clicked')}
-            Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full' />}
-            className={`
-            bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square 
-            md:w-[100px] self-center rounded-full text-center flex items-center 
-            justify-center text-white text-sm transition-all duration-200
-          `}
-          />
-
-          <ButtonControl
-            handleClick={() => handleLike(showListings[0])}
-            Icon={
-              <BrandHeart
-                className='h-[70%] w-[70%] md:h-[50%] md:w-[50%] rounded-2xl'
-              />
-            }
-            className={`
-            bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-square 
-            md:w-[150px] flex items-center justify-center p-4 rounded-full text-center 
-            text-white text-sm transition-all duration-200
-          `}
-          />
-
-        </div>
-        <h2 className={`md:text-3xl lg:text-[40px] hidden md:inline w-1/2 pl-2 text-black font-medium mt-5 ${montserrat.className}`}>{showListings[0].title}</h2>
-      </div>
-
-
-      {/* MAP AND ADDRESS */}
-      {/* Map and location information container */}
-      <div className='flex flex-col space-x-4 md:flex-row md:-translate-y-[5%]'>
-        {/* Left column with map and address details */}
-        <div className="w-full md:w-1/2 min-h-[800px]">
-          {/* Address and distance information */}
-          <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4">
-            {/* Address display */}
-            <div className="flex flex-col w-full sm:w-auto">
-              <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
-              <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
-                {showListings[0].locationString}
-              </span>
-            </div>
-            {/* Distance display */}
-            <div className="flex flex-col sm:text-right md:text-left xl:text-right w-full sm:w-auto">
-              <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
-              <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
-                {showListings[0].distance?.toFixed(0)} miles
-              </span>
-            </div>
+            <ButtonControl
+              handleClick={() => handleLike(showListings[0])}
+              Icon={
+                <BrandHeart
+                  className='h-[70%] w-[70%] md:h-[50%] md:w-[50%] rounded-2xl'
+                />
+              }
+              className={`
+              bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-square
+              md:w-[150px] flex items-center justify-center p-4 rounded-full text-center
+              text-white text-sm transition-all duration-200
+            `}
+            />
           </div>
 
+          {/* Map and Address Section */}
+          <div className={`sticky top-[230px] ${!isScrolled ? 'md:-translate-y-[85px]' : ''} transition-transform duration-500`}>
+            {/* Address and distance information */}
+            <div className="w-full space-y-2 sm:space-y-0 flex flex-col sm:flex-row md:flex-col xl:flex-row justify-between items-start sm:items-center md:items-start xl:items-center mb-4">
+              {/* Address display */}
+              <div className="flex flex-col w-full sm:w-auto">
+                <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Address</span>
+                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  font-medium max-w-[300px]">
+                  {showListings[0].locationString}
+                </span>
+              </div>
+              {/* Distance display */}
+              <div className="flex flex-col sm:text-right md:text-left xl:text-right w-full sm:w-auto">
+                <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-gray-500">Distance</span>
+                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-3xl font-medium">
+                  {showListings[0].distance?.toFixed(0)} miles
+                </span>
+              </div>
+            </div>
 
-          <SearchMap
-            markers={[{
-              lat: showListings[0]?.latitude,
-              lng: showListings[0]?.longitude
-            }]}
-            center={{
-              lat: showListings[0]?.latitude,
-              lng: showListings[0]?.longitude
-            }}
-            zoom={12}
-          />
+            <SearchMap
+              markers={[{
+                lat: showListings[0]?.latitude,
+                lng: showListings[0]?.longitude
+              }]}
+              center={{
+                lat: showListings[0]?.latitude,
+                lng: showListings[0]?.longitude
+              }}
+              zoom={12}
+            />
+          </div>
         </div>
 
+        {/* Right Column */}
         <ListingDetails listing={showListings[0]} />
-
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

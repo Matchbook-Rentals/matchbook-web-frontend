@@ -80,7 +80,10 @@ const getAmenityIcon = (amenity: string) => {
 
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   return (
-    <div className={`md:w-1/2  ${montserrat.className}`}>
+    <div className={`md:w-1/2 ${montserrat.className}`}>
+      <h2 className={`md:text-3xl lg:text-[40px] text-black font-medium mb-6`}>
+        {listing?.title}
+      </h2>
 
       {/* Property Stats */}
       <div className="flex justify-between items-center mb-12 md:mb-0">
