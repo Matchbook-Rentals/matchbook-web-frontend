@@ -152,10 +152,42 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
-          <Tile icon={<Home size={64} className='' />} label="Single Family" />
-          <Tile icon={<Sofa size={64} />} label="Furnished" />
-          <Tile icon={<Zap size={64} />} label="Utilities included" />
-          <Tile icon={<Dog size={64} />} label="Pets Allowed" />
+          {/* Property Type */}
+          {/* {listing.category === 'singleFamily' && <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />}
+          {listing.category === 'townhouse' && <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />}
+          {listing.category === 'singleRoom' && <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />}
+          {listing.category === 'apartment' && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />} */}
+          <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />
+          <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-8" />} label="Townhouse" />
+          <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />
+          <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />
+
+          {/* Furnished Status */}
+          {/* {listing.furnished ? (
+            <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
+          ) : (
+            <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+          )} */}
+          <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
+          <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+
+          {/* Utilities */}
+          {/* {listing.utilitiesIncluded ? (
+            <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
+          ) : (
+            <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+          )} */}
+          <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
+          <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+
+          {/* Pets */}
+          {/* {listing.petFriendly ? (
+            <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+          ) : (
+            <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+          )} */}
+          <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+          <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
         </div>
       </div>
 
@@ -229,10 +261,10 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Amenities</h3>
-        <div className="flex flex-wrap gap-y-6 gap-x-2 justify-start">
+        <div className="flex flex-wrap gap-y-6 gap-x-2 justify-between">
           {iconAmenities.map((amenity) => {
             const { icon: Icon, label } = getAmenityIcon(amenity.code);
-            return <Tile key={amenity.code} icon={<Icon className='' />} label={label} />;
+            return <Tile key={amenity.code} icon={<Icon className='mt-4' />} label={label} />;
           })}
         </div>
       </div>

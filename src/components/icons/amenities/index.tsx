@@ -1,56 +1,507 @@
 import React from "react";
 import { IconProps } from "../types";
 
-export const SingleFamilyIcon = (props: IconProps) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="115" height="116" viewBox="0 0 115 116" fill="none">
+export const ApartmentIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={115}
+    height={116}
+    viewBox="0 0 115 116"
+    fill="none"
+    {...props}
+  >
     <g filter="url(#filter0_d_2140_841)">
-      <g opacity="0.75">
-        <path opacity="0.5" d="M92.4812 7.2063H65.6953V105.348H92.4812V7.2063Z" fill="#D8D9D8" />
-        <path d="M24.4797 7.2063L24.1816 105.83" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M64.9824 9.15894L65.747 105.83" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M56.1576 71.531H32.3457V105.564H56.1576V71.531Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M24.4795 7.2063H91.2758" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M22.3477 2.65051L24.2267 6.82898" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M94.8267 2.65051L91.8721 7.10885" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M22.3477 2H94.8264" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M91.3794 105.563L91.2822 7.2063" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M44.377 72.8319L44.2539 103.344" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M32.3457 84.3721H54.46" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M39.3946 16.156H30.9131V26.5696H39.3946V16.156Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M57.0128 16.156H48.5312V26.5696H57.0128V16.156Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M39.6798 41.3763H31.1982V51.79H39.6798V41.3763Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M57.2911 41.3763H48.8096V51.79H57.2911V41.3763Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M74.8118 16.6445H68.5332V27.0582H74.8118V16.6445Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M87.8479 16.6445H81.5693V27.0582H87.8479V16.6445Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M74.9739 41.3763H68.6953V51.79H74.9739V41.3763Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M88.01 41.3763H81.7314V51.79H88.01V41.3763Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M74.9739 68.0609H68.6953V78.4746H74.9739V68.0609Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M88.01 68.0609H81.7314V78.4746H88.01V68.0609Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M68.2349 2.52002L65.2803 6.97836" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M20.2158 65.0226L29.8378 58.2343" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M50.9414 64.9174L60.5633 58.1355" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M52.1855 64.8339H61.2762" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M20.2158 65.0225H51.479" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M30.1611 57.8622H60.0053" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-        <path d="M61.4315 64.3709L61.3926 57.9926" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
+      <g opacity={0.75}>
+        <path
+          opacity={0.5}
+          d="M92.4812 7.2063H65.6953V105.348H92.4812V7.2063Z"
+          fill="#D8D9D8"
+        />
+        <path
+          d="M24.4797 7.2063L24.1816 105.83"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M64.9824 9.15894L65.747 105.83"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M56.1576 71.531H32.3457V105.564H56.1576V71.531Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M24.4795 7.2063H91.2758"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M22.3477 2.65051L24.2267 6.82898"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M94.8267 2.65051L91.8721 7.10885"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M22.3477 2H94.8264"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M91.3794 105.563L91.2822 7.2063"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M44.377 72.8319L44.2539 103.344"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M32.3457 84.3721H54.46"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M39.3946 16.156H30.9131V26.5696H39.3946V16.156Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M57.0128 16.156H48.5312V26.5696H57.0128V16.156Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M39.6798 41.3763H31.1982V51.79H39.6798V41.3763Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M57.2911 41.3763H48.8096V51.79H57.2911V41.3763Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M74.8118 16.6445H68.5332V27.0582H74.8118V16.6445Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M87.8479 16.6445H81.5693V27.0582H87.8479V16.6445Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M74.9739 41.3763H68.6953V51.79H74.9739V41.3763Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M88.01 41.3763H81.7314V51.79H88.01V41.3763Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M74.9739 68.0609H68.6953V78.4746H74.9739V68.0609Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M88.01 68.0609H81.7314V78.4746H88.01V68.0609Z"
+          fill="#D8D9D8"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M68.2349 2.52002L65.2803 6.97836"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M20.2158 65.0226L29.8378 58.2343"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M50.9414 64.9174L60.5633 58.1355"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M52.1855 64.8339H61.2762"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M20.2158 65.0225H51.479"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M30.1611 57.8622H60.0053"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
+        <path
+          d="M61.4315 64.3709L61.3926 57.9926"
+          stroke="black"
+          strokeWidth={3}
+          strokeMiterlimit={10}
+          strokeLinecap="round"
+        />
       </g>
-      <path opacity="0.75" d="M6 106.026L108.822 106" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M28.7426 72.9677C28.7426 75.1415 26.6756 76.9053 24.1228 76.9053C21.5699 76.9053 19.5029 75.1415 19.5029 72.9677C19.5029 70.7938 21.7189 71.0607 24.2718 71.0607C26.8247 71.0607 28.7426 70.7938 28.7426 72.9677Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M40.1073 72.9677C40.1073 75.1415 38.0144 76.9053 35.4291 76.9053C32.8438 76.9053 30.751 75.1415 30.751 72.9677C30.751 70.7938 32.9929 71.0607 35.5781 71.0607C38.1634 71.0607 40.1008 70.7938 40.1008 72.9677H40.1073Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
-      <path opacity="0.85" d="M51.369 72.9677C51.369 75.1415 49.166 76.9053 46.4511 76.9053C43.7362 76.9053 41.5332 75.1415 41.5332 72.9677C41.5332 70.7938 43.8917 71.0607 46.6066 71.0607C49.3215 71.0607 51.3625 70.7938 51.3625 72.9677H51.369Z" fill="#D8D9D8" stroke="black" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" />
+      <path
+        opacity={0.75}
+        d="M6 106.026L108.822 106"
+        stroke="black"
+        strokeWidth={3}
+        strokeMiterlimit={10}
+        strokeLinecap="round"
+      />
+      <path
+        opacity={0.85}
+        d="M28.7426 72.9677C28.7426 75.1415 26.6756 76.9053 24.1228 76.9053C21.5699 76.9053 19.5029 75.1415 19.5029 72.9677C19.5029 70.7938 21.7189 71.0607 24.2718 71.0607C26.8247 71.0607 28.7426 70.7938 28.7426 72.9677Z"
+        fill="#D8D9D8"
+        stroke="black"
+        strokeWidth={3}
+        strokeMiterlimit={10}
+        strokeLinecap="round"
+      />
+      <path
+        opacity={0.85}
+        d="M40.1073 72.9677C40.1073 75.1415 38.0144 76.9053 35.4291 76.9053C32.8438 76.9053 30.751 75.1415 30.751 72.9677C30.751 70.7938 32.9929 71.0607 35.5781 71.0607C38.1634 71.0607 40.1008 70.7938 40.1008 72.9677H40.1073Z"
+        fill="#D8D9D8"
+        stroke="black"
+        strokeWidth={3}
+        strokeMiterlimit={10}
+        strokeLinecap="round"
+      />
+      <path
+        opacity={0.85}
+        d="M51.369 72.9677C51.369 75.1415 49.166 76.9053 46.4511 76.9053C43.7362 76.9053 41.5332 75.1415 41.5332 72.9677C41.5332 70.7938 43.8917 71.0607 46.6066 71.0607C49.3215 71.0607 51.3625 70.7938 51.3625 72.9677H51.369Z"
+        fill="#D8D9D8"
+        stroke="black"
+        strokeWidth={3}
+        strokeMiterlimit={10}
+        strokeLinecap="round"
+      />
     </g>
     <defs>
-      <filter id="filter0_d_2140_841" x="0.5" y="0.5" width="113.822" height="115.026" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-        <feOffset dy="4" />
-        <feGaussianBlur stdDeviation="2" />
+      <filter
+        id="filter0_d_2140_841"
+        x={0.5}
+        y={0.5}
+        width={113.822}
+        height={115.026}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy={4} />
+        <feGaussianBlur stdDeviation={2} />
         <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2140_841" />
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2140_841" result="shape" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_2140_841"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_2140_841"
+          result="shape"
+        />
       </filter>
     </defs>
+  </svg>
+);
+
+export const SingleFamilyIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={103}
+    height={93}
+    viewBox="0 0 103 93"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M10.9404 36.5408V88.9529"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M34.4722 10.0367L9.88086 35.0364"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M34.4721 2.05396L2 35.0368"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M10.9854 35.7892H2.2002"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M31.8848 52.79V86.7633"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      opacity={0.5}
+      d="M91.4372 24.4161L88.835 43.9646L96.093 43.5773L91.4372 24.4161Z"
+      fill="#D9D9D9"
+    />
+    <path
+      opacity={0.5}
+      d="M63.482 33.3016H54.2148V87.6649H63.482V33.3016Z"
+      fill="#D9D9D9"
+    />
+    <path
+      opacity={0.5}
+      d="M93.3571 43.9424H85.9434V89.898H93.3571V43.9424Z"
+      fill="#D9D9D9"
+    />
+    <path
+      d="M97.6199 44.9994H93.9131"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M4.2002 90.6879H101.12"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M52.8213 36.5408V88.9529"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M91.1553 20.2836H59.7285"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M44.3023 50.5718H19.459V88.7229H44.3023V50.5718Z"
+      fill="#D9D9D9"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M31.8841 43.1089C36.3225 43.1089 39.9206 39.4947 39.9206 35.0363C39.9206 30.578 36.3225 26.9637 31.8841 26.9637C27.4457 26.9637 23.8477 30.578 23.8477 35.0363C23.8477 39.4947 27.4457 43.1089 31.8841 43.1089Z"
+      fill="#D9D9D9"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M34.4717 2.05396L57.7285 35.0368"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M63.4512 3.79529L76.3584 20.283"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M91.7041 21.0424L97.6128 44.8505"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M91.7041 38.2821L93.9208 45.1557"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M35.1836 2.05396H61.7544"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M59.7285 36.0364H69.9001"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M59.7285 19.5422L69.9001 36.0374"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M91.1557 20.2836L87.8418 45.0151"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M64.3561 35.7893L61.7539 43.4374"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M87.8416 45.0153H63.7471"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M64.8838 83.9047V44.2716"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M84.5352 90.4568V46.0129"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M94.2178 90.6945V45.3049"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M19.459 67.7522H42.5305"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M75.7947 63.1333C78.2432 63.1333 80.2281 60.8194 80.2281 57.9651C80.2281 55.1108 78.2432 52.7969 75.7947 52.7969C73.3462 52.7969 71.3613 55.1108 71.3613 57.9651C71.3613 60.8194 73.3462 63.1333 75.7947 63.1333Z"
+      fill="#D9D9D9"
+      stroke="black"
+      strokeWidth={3}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
   </svg>
 );
 
