@@ -41,7 +41,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <img
             src={listingImages[activeImage]?.url}
             alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-            className="w-full h-full object-cover rounded-[30px]"
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
 
@@ -55,13 +55,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                     {chunk.map((image, idx) => (
                       <div
                         key={`image-${image.id}-${idx}`}
-                        className="relative cursor-pointer h-[24vh] overflow-hidden rounded-[30px]"
+                        className="relative cursor-pointer h-[24vh] overflow-hidden rounded-lg"
                         onClick={() => handleImageClick(uniqueImages.indexOf(image))}
                       >
                         <img
                           src={image.url}
                           alt={`${image.category} image ${image.rank}`}
-                          className="object-cover w-full h-full rounded-[30px]"
+                          className="object-cover w-full h-full rounded-lg"
                         />
                       </div>
                     ))}

@@ -21,7 +21,8 @@ interface SortableFavoritesProps {
 const SortableFavorites: React.FC<SortableFavoritesProps> = ({
   onApply
 }) => {
-  const { state } = useTripContext();
+  const { state, actions } = useTripContext();
+  const { optimisticApply, optimisticRemoveApply } = actions;
 
   // Combine and sort listings
   const combinedListings: ListingAndImages[] = [
@@ -92,12 +93,21 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
               <TableCell>{listing.bathroomCount}</TableCell>
               <TableCell>{listing.distance.toFixed(1)}mi</TableCell>
               <TableCell>
-                <Button
-                  className="bg-blueBrand text-white w-full"
-                  onClick={() => onApply(listing)}
-                >
-                  Apply
-                </Button>
+                {state.lookup.requestedIds.has(listing.id) ? (
+                  <Button
+                    className="bg-pinkBrand text-white w-full"
+                    onClick={() => optimisticRemoveApply(listing)}
+                  >
+                    Remove
+                  </Button>
+                ) : (
+                  <Button
+                    className="bg-blueBrand text-white w-full"
+                    onClick={() => optimisticApply(listing)}
+                  >
+                    Apply
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
