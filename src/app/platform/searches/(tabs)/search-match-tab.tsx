@@ -25,9 +25,11 @@ const MatchViewTab: React.FC = () => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
-  const { setViewedListings, setLookup } = actions;
+  const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike } = actions;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isScrolledDeep, setIsScrolledDeep] = useState(false);
+  const MAX_HISTORY = 50; // Maximum number of actions to remember
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,39 +43,42 @@ const MatchViewTab: React.FC = () => {
 
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
-    const actionId = await createDbFavorite(state.trip?.id, listing.id);
-    setViewedListings(prev => [...prev, { listing, action: 'favorite', actionId }]);
-    setLookup(prev => ({
-      ...prev,
-      favIds: new Set([...prev.favIds, listing.id])
-    }));
+    await optimisticLike(listing.id);
+    setViewedListings(prev => {
+        const newState = [...prev, { listing, action: 'favorite', actionId: '' }];
+        console.log('Viewed listings after like:', newState);
+        return newState.slice(-MAX_HISTORY);
+    });
   };
 
   const handleReject = async (listing: ListingAndImages) => {
-    const actionId = await createDbDislike(state.trip?.id, listing.id);
-    setViewedListings(prev => [...prev, { listing, action: 'dislike', actionId }]);
-    setLookup(prev => ({
-      ...prev,
-      dislikedIds: new Set([...prev.dislikedIds, listing.id])
-    }));
+    await optimisticDislike(listing.id);
+    setViewedListings(prev => {
+        const newState = [...prev, { listing, action: 'dislike', actionId: '' }];
+        console.log('Viewed listings after dislike:', newState);
+        return newState.slice(-MAX_HISTORY);
+    });
   };
 
   const handleBack = async () => {
-    let lastAction = viewedListings[viewedListings.length - 1];
-    setViewedListings(prev => prev.slice(0, -1));
+    if (viewedListings.length === 0 || isProcessing) return;
 
-    if (lastAction.action === 'favorite') {
-      await deleteDbFavorite(lastAction.actionId)
-      setLookup(prev => ({
-        ...prev,
-        favIds: new Set([...prev.favIds].filter(id => id !== lastAction.listing.id))
-      }));
-    } else if (lastAction.action === 'dislike') {
-      await deleteDbDislike(lastAction.actionId)
-      setLookup(prev => ({
-        ...prev,
-        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== lastAction.listing.id))
-      }));
+    try {
+        setIsProcessing(true);
+        const lastAction = viewedListings[viewedListings.length - 1];
+
+        if (lastAction.action === 'favorite') {
+            await optimisticRemoveLike(lastAction.listing.id);
+        } else if (lastAction.action === 'dislike') {
+            await optimisticRemoveDislike(lastAction.listing.id);
+        }
+
+        setViewedListings(prev => prev.slice(0, -1));
+    } catch (error) {
+        console.error('Error during back operation:', error);
+        // Optionally add error handling UI here
+    } finally {
+        setIsProcessing(false);
     }
   };
 
