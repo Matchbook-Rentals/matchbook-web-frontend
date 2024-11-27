@@ -37,19 +37,19 @@ interface Step {
 const steps: Step[] = [
   {
     title: "Search",
-    description: "Browse listings that match your preferences and select the best of them to add to your favorites."
+    description: "Browse rental listings that fit your preferences and save the best ones to your favorites. Discover mid-term, long-term, and furnished rental properties with verified landlords, all in one place."
   },
   {
     title: "Apply",
-    description: "Fill out one universal application and access every property in our marketplace - No application fee!"
+    description: "Fill out one universal application and unlock access to every property in our marketplace. It’s fast, simple, and saves you time."
   },
   {
     title: "Match",
-    description: "Hosts review your application. If they approve, then you have a match!"
+    description: "Hosts review your application, and when they approve, it’s a match! Connect with landlords offering mid-term, long-term, and furnished rentals that align with your needs."
   },
   {
     title: "Book",
-    description: "All your matches are stored in \"Your Matchbook\". When you're ready, you can lock in your top pick right then and there!"
+    description: "Your approved matches are saved in “Your Matchbook.” When you’re ready, choose your top pick and secure your rental directly from your dashboard. Easy and hassle-free!"
   }
 ];
 
