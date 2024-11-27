@@ -122,7 +122,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Host Information */}
-      <div className="flex items-center justify-between border-b pb-6 mt-6">
+      <div className="flex items-center justify-between pb-1 mt-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <img
