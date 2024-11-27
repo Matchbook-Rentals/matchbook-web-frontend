@@ -227,6 +227,69 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     [listings, lookup.matchIds, getRank]
   );
 
+  const optimisticRemoveApply = useCallback(async (listingId: string) => {
+    console.log(listingId)
+    try {
+      // Skip if not requested
+      if (!lookup.requestedIds.has(listingId)) return;
+
+      // Optimistically update the UI
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds].filter(id => id !== listingId))
+      }));
+
+      const result = await optimisticRemoveApplyDb(trip.id, listingId);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          requestedIds: new Set([...prev.requestedIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to remove application:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        requestedIds: new Set([...prev.requestedIds, listingId])
+      }));
+    }
+  }, [trip, lookup]);
+
+  const optimisticRemoveLike = useCallback(async (listingId: string) => {
+    try {
+      // Skip if not liked
+      if (!lookup.favIds.has(listingId)) return;
+
+      let isRequested = lookup.requestedIds.has(listingId);
+
+      // If there's an application, remove it first
+      if (isRequested) {
+        await optimisticRemoveApply(listingId);
+      }
+
+      // Then remove from favorites
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds].filter(id => id !== listingId)),
+      }));
+
+      const result = await optimisticRemoveFavorite(trip.id, listingId);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          favIds: new Set([...prev.favIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to remove like:', error);
+    }
+  }, [trip, lookup, optimisticRemoveApply]);
+
   const optimisticLike = useCallback(async (listingId: string) => {
     try {
       if (lookup.favIds.has(listingId)) {
@@ -299,30 +362,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
   }, [trip, lookup]);
 
-  const optimisticRemoveLike = useCallback(async (listingId: string) => {
-    try {
-      // Skip if not liked
-      if (!lookup.favIds.has(listingId)) return;
-
-      setLookup(prev => ({
-        ...prev,
-        favIds: new Set([...prev.favIds].filter(id => id !== listingId))
-      }));
-
-      const result = await optimisticRemoveFavorite(trip.id, listingId);
-
-      if (!result.success) {
-        // Rollback on failure
-        setLookup(prev => ({
-          ...prev,
-          favIds: new Set([...prev.favIds, listingId])
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to remove like:', error);
-    }
-  }, [trip, lookup]);
-
   const optimisticRemoveDislike = useCallback(async (listingId: string) => {
     try {
       // Skip if not disliked
@@ -372,37 +411,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       setLookup(prev => ({
         ...prev,
         requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))
-      }));
-    }
-  }, [trip, lookup]);
-
-  const optimisticRemoveApply = useCallback(async (listingId: string) => {
-    console.log(listingId)
-    try {
-      // Skip if not requested
-      if (!lookup.requestedIds.has(listingId)) return;
-
-      // Optimistically update the UI
-      setLookup(prev => ({
-        ...prev,
-        requestedIds: new Set([...prev.requestedIds].filter(id => id !== listingId))
-      }));
-
-      const result = await optimisticRemoveApplyDb(trip.id, listingId);
-
-      if (!result.success) {
-        // Rollback on failure
-        setLookup(prev => ({
-          ...prev,
-          requestedIds: new Set([...prev.requestedIds, listingId])
-        }));
-      }
-    } catch (error) {
-      console.error('Failed to remove application:', error);
-      // Rollback on error
-      setLookup(prev => ({
-        ...prev,
-        requestedIds: new Set([...prev.requestedIds, listingId])
       }));
     }
   }, [trip, lookup]);

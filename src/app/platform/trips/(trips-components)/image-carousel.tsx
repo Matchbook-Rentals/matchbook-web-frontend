@@ -35,13 +35,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden md:flex flex-row space-x-4 w-full h-[40vh]">
+      <div className="hidden md:flex flex-row space-x-4 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           <img
             src={listingImages[activeImage]?.url}
             alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-            className="w-full h-full object-cover rounded-lg"
+            className="w-full h-full object-cover rounded-[30px]"
           />
         </div>
 
@@ -50,18 +50,18 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
-                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[40vh] px-4">
+                <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4">
                   <div className="grid grid-cols-2 grid-rows-2 gap-4">
                     {chunk.map((image, idx) => (
                       <div
                         key={`image-${image.id}-${idx}`}
-                        className="relative cursor-pointer h-[19vh] overflow-hidden rounded-lg"
+                        className="relative cursor-pointer h-[24vh] overflow-hidden rounded-[30px]"
                         onClick={() => handleImageClick(uniqueImages.indexOf(image))}
                       >
                         <img
                           src={image.url}
                           alt={`${image.category} image ${image.rank}`}
-                          className="object-cover w-full h-full rounded-lg"
+                          className="object-cover w-full h-full rounded-[30px]"
                         />
                       </div>
                     ))}
@@ -82,7 +82,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <img
             src={listingImages[activeImage]?.url}
             alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-            className="w-full h-full object-cover rounded-lg"
+            className="w-full h-full object-cover rounded-[30px]"
           />
           <Dialog>
             <DialogTrigger asChild>
@@ -100,7 +100,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                     <img
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
-                      className="w-full h-auto rounded-lg shadow-sm"
+                      className="w-full h-auto rounded-[30px] shadow-sm"
                     />
                     <p className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
                       {index + 1} / {uniqueImages.length}
@@ -122,8 +122,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
         {/* Mobile horizontal thumbnail carousel */}
         <div className="w-full">
-          <Carousel opts={{ loop: true }} className="w-full">
-            <CarouselContent>
+          <Carousel
+            opts={{
+              loop: true,
+              dragFree: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
               {uniqueImages.map((image, index) => (
                 <CarouselItem key={image.id} className="basis-1/4 pl-4">
                   <div
