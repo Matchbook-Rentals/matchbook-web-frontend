@@ -4,6 +4,7 @@ import { MoreHorizontal, Star, X, Heart, HelpCircle, ChevronLeft, ChevronRight }
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
+import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components'
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import { QuestionMarkIcon } from '@/components/icons'
 
 enum Status {
   Favorite = 'favorite',
@@ -49,42 +51,41 @@ export default function SearchListingCard({ listing, status, className, detailsC
   const getStatusStyles = (status: Status) => {
     switch (status) {
       case Status.Favorite:
-        return ''
-      case Status.Dislike:
-        return ''
       case Status.Applied:
-        return ''
+        return 'bg-primaryBrand'
+      case Status.Dislike:
+        return 'bg-pinkBrand'
       case Status.Maybe:
-        return ''
+        return 'bg-yellowBrand'
       case Status.None:
       default:
-        return ''
+        return 'bg-white/60'
     }
   }
 
   const getStatusIcon = (status: Status) => {
     switch (status) {
       case Status.Favorite:
-        return <Heart className="w-5 h-5" />
+        return <BrandHeart className="w-5 h-5" />
       case Status.Applied:
-        return <Heart className="w-5 h-5" />
+        return <BrandHeart className="w-4 h-4 " />
       case Status.Dislike:
-        return <X className="w-5 h-5" />
+        return <RejectIcon className="w-5 h-5 text-white" />
       case Status.Maybe:
-        return <HelpCircle className="w-5 h-5" />
+        return <QuestionMarkIcon className="w-5 h-5" />
       default:
-        return <MoreHorizontal className="w-5 h-5" />
+        return <MoreHorizontal className="w-7 h-7" />
     }
   }
 
   return (
     <Card
-      className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${getStatusStyles(status)} ${className || ''}`}
+      className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${className || ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
-        <Carousel className="w-full h-full">
+        <Carousel className="w-full h-full" opts={{ loop: true }}>
           <CarouselContent>
             {listing.listingImages.map((image, index) => (
               <CarouselItem key={index} className="relative">
@@ -119,15 +120,14 @@ export default function SearchListingCard({ listing, status, className, detailsC
           </div>
         ) : (
           <div className="absolute top-2 right-2">
-            <div className={`bg-white/60 rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'w-8 h-36' : 'w-8 h-8'
-              }`}>
+            <div className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[51px] h-[207px]' : 'w-[51px] h-[51px]'}`}>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="w-8 h-8 flex items-center rounded-full justify-center hover:bg-gray-100"
+                className={`w-[51px] h-[51px] flex items-center rounded-full justify-center hover:bg-gray-100 mx-auto ${getStatusStyles(status)}`}
               >
                 {getStatusIcon(status)}
               </button>
-              <div className={`flex flex-col items-center  ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
+              <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
                     if (status === Status.Favorite) {
@@ -137,12 +137,20 @@ export default function SearchListingCard({ listing, status, className, detailsC
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
+                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative"
                 >
-                  <Heart className="w-5 h-5" />
+                  <BrandHeart className="w-4 h-4" />
+                  {status === Status.Favorite && (
+                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
+                  )}
                 </button>
-                <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5" />
+                <button
+                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative"
+                >
+                  <QuestionMarkIcon className="w-4 h-4 text-white" />
+                  {status === Status.Maybe && (
+                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
+                  )}
                 </button>
                 <button
                   onClick={() => {
@@ -153,9 +161,12 @@ export default function SearchListingCard({ listing, status, className, detailsC
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
+                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative"
                 >
-                  <X className="w-5 h-5" />
+                  <RejectIcon className="w-5 h-5 text-pinkBrand" />
+                  {status === Status.Dislike && (
+                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
+                  )}
                 </button>
               </div>
             </div>
