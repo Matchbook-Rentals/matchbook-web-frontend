@@ -112,9 +112,9 @@ const MatchViewTab: React.FC = () => {
         {/* Left Column */}
         <div className="w-full md:w-1/2 sticky top-[50px] md:top-0">
           {/* Button Controls */}
-          <div className={`button-control-box ${isScrolledDeep ? 'bg-background' : 'bg-transparent'}
+          <div className={`button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
                    sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
-                   lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 w-full
+                   lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 md:pt-4 w-full
                    ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-transform duration-500`}>
             <ButtonControl
               handleClick={() => handleReject(showListings[0])}

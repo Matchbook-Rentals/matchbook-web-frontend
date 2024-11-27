@@ -133,13 +133,13 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               {uniqueImages.map((image, index) => (
                 <CarouselItem key={image.id} className="basis-1/4 pl-4">
                   <div
-                    className="relative cursor-pointer h-20 rounded-[30px]"
+                    className="relative cursor-pointer h-20 rounded-lg"
                     onClick={() => handleImageClick(index)}
                   >
                     <img
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
-                      className="w-full h-full object-cover rounded-[30px]"
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
                 </CarouselItem>

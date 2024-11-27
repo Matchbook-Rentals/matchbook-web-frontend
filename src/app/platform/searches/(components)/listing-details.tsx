@@ -186,7 +186,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
               {listing.category === 'singleFamily' && <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />}
               {listing.category === 'townhouse' && <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />}
               {listing.category === 'singleRoom' && <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />}
-              {listing.category === 'apartment' && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />}
+              {(listing.category === 'apartment' || listing.category === 'condo') && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />}
 
               {/* Furnished Status */}
               {listing.furnished ? (

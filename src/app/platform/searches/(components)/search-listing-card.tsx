@@ -130,7 +130,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
               <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
-                    if (status === Status.Favorite) {
+                    if (status === Status.Favorite || status === Status.Applied) {
                       optimisticRemoveLike(listing.id);
                     } else {
                       optimisticLike(listing.id);
@@ -140,7 +140,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
                   className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative"
                 >
                   <BrandHeart className="w-4 h-4" />
-                  {status === Status.Favorite && (
+                  {(status === Status.Favorite || status === Status.Applied) && (
                     <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
                   )}
                 </button>
