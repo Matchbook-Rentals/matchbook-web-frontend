@@ -28,6 +28,7 @@ const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialo
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
+        xOnRight
         className="
         w-[95%] sm:w-4/5 md:w-3/5 
         h-[70vh] sm:h-[84vh] md:h-[77vh] px-6 sm:px-10 pt-4 
@@ -57,66 +58,66 @@ import { Button } from "@/components/ui/button";
 const rentMarketingItems = [
   {
     number: 1,
-    title: "Find a place, all in one place.",
+    title: "Find a Place, All In One Place.",
     description:
-      "Sick of clicking through tabs? Us too. Here, you can find a place you love on a singular website, with verified landlords.",
+      "Tired of endless tabs and sketchy listings? Us too. On MatchBook, you can find mid-term, long-term, and furnished rental properties you’ll love, all on one site—with verified landlords you can trust.",
   },
   {
     number: 2,
-    title: "Swipe to find your perfect match.",
+    title: "Get Your Perfect Match",
     description:
-      "Swipe through places that match your preferences, and match with landlords who like your renting history back! It's like online dating, but without a fear of commitment.",
+      "Search for rental properties that match your preferences and connect with landlords who love your renting history! It's like online dating, but without a fear of commitment.",
   },
   {
     number: 3,
-    title: "One application, unlimited options.",
+    title: "One Application, Unlimited Options.",
     description:
-      "No more paying $50 fees just to be rejected; unless you're into that kind of thing? With Matchbook, you fill out one application, for FREE. That's it.",
+      "No more paying $50 fees per application, just to be rejected (unless you’re into that kind of thing?). With MatchBook, you fill out one rental application for access to unlimited furnished or unfurnished, mid-term and long-term rental options. Simple, fast, and frustration-free.",
   },
   {
     number: 4,
-    title: "Transparent pricing.",
+    title: "Transparent Pricing.",
     description:
-      "Unlike those other renting websites (dare us to @ them?), what you see on the listing, is what you pay. We're not here to play games.",
+      "No hidden fees, no surprises. Unlike those other renting websites (dare us to @ them?), what you see on the listing is exactly what you’ll pay. We’re not here to play games. ",
   },
   {
     number: 5,
-    title: "Rate your landlord.",
+    title: "Rate Your Landlord.",
     description:
-      "Why do landlords get to call your references but you can't call theirs? Ring ring! Welcome to the future. You finally get to see what other renters thought of their stay.",
+      "Why do landlords get to call your references, but you can't call theirs? Ring ring- it's the future calling! You finally get to see what other renters thought of their stay",
   },
 ];
 
 const listMarketingItems = [
   {
     number: 1,
-    title: "Manage your place, all in one place",
+    title: "Manage Your Place, All in One Place",
     description:
-      "Gone are the days of listing, managing, and taking payments all separately. On MatchBook you can list your property, view applications, match with potential guests, manage your bookings, and collect payment all in a single intuitive location.",
+      "Gone are the days of juggling different platforms for listing, managing, and taking payments. With MatchBook, you can list your rental property, view tenant applications, match with potential guests, manage bookings, and collect rent—all in one seamless and intuitive platform designed for mid-term, long-term, and furnished rentals.",
   },
   {
     number: 2,
-    title: "List for free",
+    title: "List for Free",
     description:
-      "List your property for free and pay only after your first booking. The fee? Only 1%",
+      "List your furnished or unfurnished rental property for free and start earning without upfront costs. Pay only after your first booking, with a low fee of just 1%. Perfect for landlords managing mid-term or long-term rentals!",
   },
   {
     number: 3,
     title: "Connect with MatchBook Verified Tenants",
     description:
-      "MatchBook Verified tenants are pre-screened and ready to match! Enjoy easy to understand screenings with insight on prospects credit, eviction, and criminal history.",
+      "MatchBook Verified tenants are pre-screened, so you don’t have to worry about surprises. Quickly review tenant credit, eviction, and criminal history with easy-to-understand screening reports. Find the perfect match for your rental property faster.",
   },
   {
     number: 4,
-    title: "Rent automatically collected",
+    title: "Rent Automatically Collected",
     description:
-      "No more sending awkward texts. Rent is automatically collected each month from your tenant's bank and transferred to yours, completely free.",
+      "No more chasing rent or sending awkward texts. With MatchBook, rent is automatically collected each month from your tenant’s bank account or credit card and securely transferred to you. It’s free, easy, and stress-free for landlords and tenants alike.",
   },
   {
     number: 5,
-    title: "Manage your Calendar",
+    title: "Manage Your Calendar",
     description:
-      "Easily view your property's performance, track move-in and move-out all from your property dashboard.",
+      "Effortlessly track move-in and move-out dates, monitor your property’s performance, and stay on top of bookings with MatchBook’s property management dashboard. Simplify your rental management, all from one convenient calendar.",
   },
 ];
 
