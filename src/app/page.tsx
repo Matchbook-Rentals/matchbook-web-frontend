@@ -58,7 +58,7 @@ import { Button } from "@/components/ui/button";
 const rentMarketingItems = [
   {
     number: 1,
-    title: "Find a Place, All In One Place.",
+    title: "Find a Place, All in One Place",
     description:
       "Tired of endless tabs and sketchy listings? Us too. On MatchBook, you can find mid-term, long-term, and furnished rental properties you’ll love, all on one site—with verified landlords you can trust.",
   },
@@ -70,19 +70,19 @@ const rentMarketingItems = [
   },
   {
     number: 3,
-    title: "One Application, Unlimited Options.",
+    title: "One Application, Unlimited Options",
     description:
       "No more paying $50 fees per application, just to be rejected (unless you’re into that kind of thing?). With MatchBook, you fill out one rental application for access to unlimited furnished or unfurnished, mid-term and long-term rental options. Simple, fast, and frustration-free.",
   },
   {
     number: 4,
-    title: "Transparent Pricing.",
+    title: "Transparent Pricing",
     description:
       "No hidden fees, no surprises. Unlike those other renting websites (dare us to @ them?), what you see on the listing is exactly what you’ll pay. We’re not here to play games. ",
   },
   {
     number: 5,
-    title: "Rate Your Landlord.",
+    title: "Rate Your Landlord",
     description:
       "Why do landlords get to call your references, but you can't call theirs? Ring ring- it's the future calling! You finally get to see what other renters thought of their stay",
   },
@@ -129,14 +129,6 @@ interface Tab {
   className?: string;
   textSize?: string;
 }
-const ApartmentImage = ({ className }) => {
-  return (
-    <img
-      className={`h-20 w-20 ${className}`}
-      src="/img/listing-type/apartment_icon.png"
-    />
-  );
-};
 
 const tabs: Tab[] = [
   {
@@ -148,7 +140,7 @@ const tabs: Tab[] = [
     content: (
       <MarketingList
         title="Looking to rent?"
-        Icon={ApartmentImage}
+        Icon={ApartmentIcon}
         marketingItems={rentMarketingItems}
         brandColor="primary"
       />
