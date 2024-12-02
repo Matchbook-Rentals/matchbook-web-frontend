@@ -12,7 +12,6 @@ export default function ClerkLayout({ children }: { children: React.ReactNode })
     <>
       <PlatformNavbar />
       <div className={montserrat.className}>{children}</div>
-      <Footer />
     </>
   )
 }

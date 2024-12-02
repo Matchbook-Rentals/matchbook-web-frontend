@@ -5,6 +5,18 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+##02DEC24- [X] Credit Intelligence Filtering 
+- [ ] Maybes 
+- [ ] Images for trips page 
+- [ ] Button control Box safari attempt
+- [ ] Apply button behavior and details on list view (table) 
+- [ ] Sharepoint 
+- [ ] Unlock search container on beta user, send to new york regardless 
+- [ ] redo split point on listingdetails
+- [ ] deeper scroll point on button box, probalby as percent of display height 
+- [ ] see more button on desktop image carousel
+- [ ] fix height on control bar siblings 
+- [ ] Create flowchart
 
 ##13NOV24
 - [X] Credit Intelligence Filtering 

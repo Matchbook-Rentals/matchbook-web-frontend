@@ -25,7 +25,7 @@ const MatchViewTab: React.FC = () => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
-  const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike } = actions;
+  const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike, optimisticMaybe, optimisticRemoveMaybe } = actions;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isScrolledDeep, setIsScrolledDeep] = useState(false);
   const MAX_HISTORY = 50; // Maximum number of actions to remember
@@ -33,8 +33,7 @@ const MatchViewTab: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      setIsScrolledDeep(window.scrollY > 900);
+      setIsScrolled(window.scrollY > 500);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -45,18 +44,27 @@ const MatchViewTab: React.FC = () => {
   const handleLike = async (listing: ListingAndImages) => {
     await optimisticLike(listing.id);
     setViewedListings(prev => {
-        const newState = [...prev, { listing, action: 'favorite', actionId: '' }];
-        console.log('Viewed listings after like:', newState);
-        return newState.slice(-MAX_HISTORY);
+      const newState = [...prev, { listing, action: 'favorite', actionId: '' }];
+      console.log('Viewed listings after like:', newState);
+      return newState.slice(-MAX_HISTORY);
     });
   };
 
   const handleReject = async (listing: ListingAndImages) => {
     await optimisticDislike(listing.id);
     setViewedListings(prev => {
-        const newState = [...prev, { listing, action: 'dislike', actionId: '' }];
-        console.log('Viewed listings after dislike:', newState);
-        return newState.slice(-MAX_HISTORY);
+      const newState = [...prev, { listing, action: 'dislike', actionId: '' }];
+      console.log('Viewed listings after dislike:', newState);
+      return newState.slice(-MAX_HISTORY);
+    });
+  };
+
+  const handleMaybe = async (listing: ListingAndImages) => {
+    await optimisticMaybe(listing.id);
+    setViewedListings(prev => {
+      const newState = [...prev, { listing, action: 'maybe', actionId: '' }];
+      console.log('Viewed listings after maybe:', newState);
+      return newState.slice(-MAX_HISTORY);
     });
   };
 
@@ -64,21 +72,23 @@ const MatchViewTab: React.FC = () => {
     if (viewedListings.length === 0 || isProcessing) return;
 
     try {
-        setIsProcessing(true);
-        const lastAction = viewedListings[viewedListings.length - 1];
+      setIsProcessing(true);
+      const lastAction = viewedListings[viewedListings.length - 1];
 
-        if (lastAction.action === 'favorite') {
-            await optimisticRemoveLike(lastAction.listing.id);
-        } else if (lastAction.action === 'dislike') {
-            await optimisticRemoveDislike(lastAction.listing.id);
-        }
+      if (lastAction.action === 'favorite') {
+        await optimisticRemoveLike(lastAction.listing.id);
+      } else if (lastAction.action === 'dislike') {
+        await optimisticRemoveDislike(lastAction.listing.id);
+      } else if (lastAction.action === 'maybe') {
+        await optimisticRemoveMaybe(lastAction.listing.id);
+      }
 
-        setViewedListings(prev => prev.slice(0, -1));
+      setViewedListings(prev => prev.slice(0, -1));
     } catch (error) {
-        console.error('Error during back operation:', error);
-        // Optionally add error handling UI here
+      console.error('Error during back operation:', error);
+      // Optionally add error handling UI here
     } finally {
-        setIsProcessing(false);
+      setIsProcessing(false);
     }
   };
 
@@ -144,7 +154,7 @@ const MatchViewTab: React.FC = () => {
             />
 
             <ButtonControl
-              handleClick={() => console.log('Help clicked')}
+              handleClick={() => handleMaybe(showListings[0])}
               Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full' />}
               className={`
               bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square

@@ -17,6 +17,7 @@ import {
   Booking,
   Lease,
   BoldSignLease,
+  Maybe,
 } from "@prisma/client";
 
 export interface TripAndMatches extends Trip {
@@ -53,6 +54,7 @@ export interface TripAndMatches extends Trip {
   matches: Match[]
   housingRequests: HousingRequest[]
   dislikes: Dislike[]
+  maybes: Maybe[]
 };
 
 export interface ListingAndImages extends Listing {
