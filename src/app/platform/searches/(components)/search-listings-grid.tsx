@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { ListingStatus } from '@/constants/enums';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -29,21 +30,24 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (state.lookup.requestedIds.has(listing.id)) {
-      return 'applied'
+      return ListingStatus.Applied;
     }
     if (state.lookup.dislikedIds.has(listing.id)) {
-      return 'dislike'
+      return ListingStatus.Dislike;
     }
     if (state.lookup.favIds.has(listing.id)) {
-      return 'favorite'
+      return ListingStatus.Favorite;
     }
-    return 'none'
-  }
+    if (state.lookup.maybeIds.has(listing.id)) {
+      return ListingStatus.Maybe;
+    }
+    return ListingStatus.None;
+  };
 
-  const getCallToAction = (listing: ListingAndImages, status: string) => {
+  const getCallToAction = (listing: ListingAndImages, status: ListingStatus) => {
     if (!withCallToAction) return undefined;
 
-    return status === 'applied'
+    return status === ListingStatus.Applied
       ? {
         label: 'Cancel Application',
         action: () => optimisticRemoveApply(listing.id),

@@ -18,7 +18,7 @@ export default function ShortListTab() {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
-  const { likedListings, requestedListings, lookup } = state;
+  const { likedListings, requestedListings, maybedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
@@ -143,7 +143,7 @@ export default function ShortListTab() {
 
           {viewMode === 'grid' ? (
             <SearchListingsGrid
-              listings={[...requestedListings, ...likedListings]}
+              listings={[...requestedListings, ...likedListings, ...maybedListings]}
               withCallToAction={true}
               cardActions={listing => lookup.requestedIds.has(listing.id) ?
                 generateRequestedCardActions(listing) :

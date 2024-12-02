@@ -13,20 +13,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { QuestionMarkIcon } from '@/components/icons'
-
-enum Status {
-  Favorite = 'favorite',
-  Dislike = 'dislike',
-  Applied = 'applied',
-  Maybe = 'maybe',
-  None = 'none'
-}
+import { ListingStatus } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 30
 
 interface SearchListingCardProps {
   listing: ListingAndImages
-  status: Status
+  status: ListingStatus
   className?: string
   detailsClassName?: string
   callToAction?: {
@@ -48,30 +41,30 @@ export default function SearchListingCard({ listing, status, className, detailsC
   const { state, actions } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
 
-  const getStatusStyles = (status: Status) => {
+  const getStatusStyles = (status: ListingStatus) => {
     switch (status) {
-      case Status.Favorite:
-      case Status.Applied:
+      case ListingStatus.Favorite:
+      case ListingStatus.Applied:
         return 'bg-primaryBrand'
-      case Status.Dislike:
+      case ListingStatus.Dislike:
         return 'bg-pinkBrand'
-      case Status.Maybe:
+      case ListingStatus.Maybe:
         return 'bg-yellowBrand'
-      case Status.None:
+      case ListingStatus.None:
       default:
         return 'bg-white/60'
     }
   }
 
-  const getStatusIcon = (status: Status) => {
+  const getStatusIcon = (status: ListingStatus) => {
     switch (status) {
-      case Status.Favorite:
+      case ListingStatus.Favorite:
         return <BrandHeart className="w-5 h-5" />
-      case Status.Applied:
+      case ListingStatus.Applied:
         return <BrandHeart className="w-4 h-4 " />
-      case Status.Dislike:
+      case ListingStatus.Dislike:
         return <RejectIcon className="w-5 h-5 text-white" />
-      case Status.Maybe:
+      case ListingStatus.Maybe:
         return <QuestionMarkIcon className="w-5 h-5" />
       default:
         return <MoreHorizontal className="w-7 h-7" />
@@ -130,7 +123,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
               <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
-                    if (status === Status.Favorite || status === Status.Applied) {
+                    if (status === ListingStatus.Favorite || status === ListingStatus.Applied) {
                       optimisticRemoveLike(listing.id);
                     } else {
                       optimisticLike(listing.id);
@@ -140,7 +133,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
                   className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative"
                 >
                   <BrandHeart className="w-4 h-4" />
-                  {(status === Status.Favorite || status === Status.Applied) && (
+                  {(status === ListingStatus.Favorite || status === ListingStatus.Applied) && (
                     <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
                   )}
                 </button>
@@ -148,13 +141,13 @@ export default function SearchListingCard({ listing, status, className, detailsC
                   className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative"
                 >
                   <QuestionMarkIcon className="w-4 h-4 text-white" />
-                  {status === Status.Maybe && (
+                  {status === ListingStatus.Maybe && (
                     <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
                   )}
                 </button>
                 <button
                   onClick={() => {
-                    if (status === Status.Dislike) {
+                    if (status === ListingStatus.Dislike) {
                       optimisticRemoveDislike(listing.id);
                     } else {
                       optimisticDislike(listing.id);
@@ -164,7 +157,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
                   className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative"
                 >
                   <RejectIcon className="w-5 h-5 text-pinkBrand" />
-                  {status === Status.Dislike && (
+                  {status === ListingStatus.Dislike && (
                     <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
                   )}
                 </button>
