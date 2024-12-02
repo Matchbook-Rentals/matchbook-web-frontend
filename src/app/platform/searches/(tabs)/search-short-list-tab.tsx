@@ -143,7 +143,7 @@ export default function ShortListTab() {
 
           {viewMode === 'grid' ? (
             <SearchListingsGrid
-              listings={[...requestedListings, ...likedListings, ...maybedListings]}
+              listings={[ ...likedListings, ...maybedListings]}
               withCallToAction={true}
               cardActions={listing => lookup.requestedIds.has(listing.id) ?
                 generateRequestedCardActions(listing) :

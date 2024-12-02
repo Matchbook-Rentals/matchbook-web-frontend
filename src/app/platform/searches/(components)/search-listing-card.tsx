@@ -39,17 +39,22 @@ export default function SearchListingCard({ listing, status, className, detailsC
   const [isHovered, setIsHovered] = useState(false)
 
   const { state, actions } = useTripContext();
+  const { lookup } = state;
+  const { favIds, dislikedIds, maybeIds } = lookup;
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike, optimisticRemoveMaybe, optimisticMaybe } = actions;
 
   const getStatusStyles = (status: ListingStatus) => {
+    if (favIds.has(listing.id)) {
+      return 'bg-primaryBrand'
+    } else if (maybeIds.has(listing.id)) {
+      return 'bg-yellowBrand hover:bg-yellowBrand/80'
+    } else if (dislikedIds.has(listing.id)) {
+      return 'bg-pinkBrand'
+    }
+
     switch (status) {
-      case ListingStatus.Favorite:
       case ListingStatus.Applied:
         return 'bg-primaryBrand'
-      case ListingStatus.Dislike:
-        return 'bg-pinkBrand'
-      case ListingStatus.Maybe:
-        return 'bg-yellowBrand hover:bg-yellowBrand/80'
       case ListingStatus.None:
       default:
         return 'bg-transparent hover:bg-white/60'
@@ -57,15 +62,17 @@ export default function SearchListingCard({ listing, status, className, detailsC
   }
 
   const getStatusIcon = (status: ListingStatus) => {
+    if (favIds.has(listing.id)) {
+      return <BrandHeart className="w-5 h-5" />
+    } else if (maybeIds.has(listing.id)) {
+      return <QuestionMarkIcon className="w-5 h-5" />
+    } else if (dislikedIds.has(listing.id)) {
+      return <RejectIcon className="w-5 h-5 text-white" />
+    }
+
     switch (status) {
-      case ListingStatus.Favorite:
-        return <BrandHeart className="w-5 h-5" />
       case ListingStatus.Applied:
-        return <BrandHeart className="w-4 h-4 " />
-      case ListingStatus.Dislike:
-        return <RejectIcon className="w-5 h-5 text-white" />
-      case ListingStatus.Maybe:
-        return <QuestionMarkIcon className="w-5 h-5" />
+        return <BrandHeart className="w-4 h-4" />
       default:
         return <MoreHorizontal className="w-7 h-7" />
     }
@@ -126,7 +133,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
               <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
-                    if (status === ListingStatus.Favorite || status === ListingStatus.Applied) {
+                    if (favIds.has(listing.id)) {
                       optimisticRemoveLike(listing.id);
                     } else {
                       optimisticLike(listing.id);
@@ -139,8 +146,8 @@ export default function SearchListingCard({ listing, status, className, detailsC
                 </button>
                 <button
                   onClick={() => {
-                    if (status === ListingStatus.Maybe) {
-                      optimisticRemoveMaybe(listing.id,)
+                    if (maybeIds.has(listing.id)) {
+                      optimisticRemoveMaybe(listing.id)
                     } else {
                       optimisticMaybe(listing.id);
                     }
