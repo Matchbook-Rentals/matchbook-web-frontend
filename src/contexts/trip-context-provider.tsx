@@ -436,18 +436,31 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         return { success: true };
       }
 
+      // Check if the listing is liked
+      const wasLiked = lookup.favIds.has(listingId);
+
+      // If the listing was liked, remove the like first
+      if (wasLiked) {
+        await optimisticRemoveFavorite(trip.id, listingId);
+      }
+
+      // Optimistically update the UI
       setLookup(prev => ({
         ...prev,
-        maybeIds: new Set([...prev.maybeIds, listingId])
+        maybeIds: new Set([...prev.maybeIds, listingId]),
+        favIds: new Set([...prev.favIds].filter(id => id !== listingId))
       }));
 
       const result = await optimisticMaybeDb(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback on failure
+        // Rollback to the exact previous state
         setLookup(prev => ({
           ...prev,
-          maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId))
+          maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId)),
+          favIds: wasLiked
+            ? new Set([...prev.favIds, listingId])
+            : prev.favIds
         }));
       }
     } catch (error) {
@@ -455,7 +468,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // Rollback on error
       setLookup(prev => ({
         ...prev,
-        maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId))
+        maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId)),
+        favIds: lookup.favIds.has(listingId)
+          ? new Set([...prev.favIds, listingId])
+          : prev.favIds
       }));
     }
   }, [trip, lookup]);

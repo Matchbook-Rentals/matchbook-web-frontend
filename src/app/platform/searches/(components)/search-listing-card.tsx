@@ -39,7 +39,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
   const [isHovered, setIsHovered] = useState(false)
 
   const { state, actions } = useTripContext();
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike, optimisticRemoveMaybe, optimisticMaybe } = actions;
 
   const getStatusStyles = (status: ListingStatus) => {
     switch (status) {
@@ -49,10 +49,10 @@ export default function SearchListingCard({ listing, status, className, detailsC
       case ListingStatus.Dislike:
         return 'bg-pinkBrand'
       case ListingStatus.Maybe:
-        return 'bg-yellowBrand'
+        return 'bg-yellowBrand hover:bg-yellowBrand/80'
       case ListingStatus.None:
       default:
-        return 'bg-white/60'
+        return 'bg-transparent hover:bg-white/60'
     }
   }
 
@@ -113,13 +113,16 @@ export default function SearchListingCard({ listing, status, className, detailsC
           </div>
         ) : (
           <div className="absolute top-2 right-2">
-            <div className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[51px] h-[207px]' : 'w-[51px] h-[51px]'}`}>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`w-[51px] h-[51px] flex items-center rounded-full justify-center hover:bg-gray-100 mx-auto ${getStatusStyles(status)}`}
+            <div
+              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[48px] h-[207px]' : 'w-[48px] h-[48px]'}`}
+              onMouseEnter={() => setIsMenuOpen(true)}
+              onMouseLeave={() => setIsMenuOpen(false)}
+            >
+              <div
+                className={`w-[48px] h-[48px] cursor-pointer flex items-center rounded-full justify-center hover:opacity-80 mx-auto ${getStatusStyles(status)}`}
               >
                 {getStatusIcon(status)}
-              </button>
+              </div>
               <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
@@ -130,20 +133,22 @@ export default function SearchListingCard({ listing, status, className, detailsC
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative"
+                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <BrandHeart className="w-4 h-4" />
-                  {(status === ListingStatus.Favorite || status === ListingStatus.Applied) && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
                 </button>
                 <button
-                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative"
+                  onClick={() => {
+                    if (status === ListingStatus.Maybe) {
+                      optimisticRemoveMaybe(listing.id,)
+                    } else {
+                      optimisticMaybe(listing.id);
+                    }
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <QuestionMarkIcon className="w-4 h-4 text-white" />
-                  {status === ListingStatus.Maybe && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
                 </button>
                 <button
                   onClick={() => {
@@ -154,7 +159,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative"
+                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <RejectIcon className="w-5 h-5 text-pinkBrand" />
                   {status === ListingStatus.Dislike && (

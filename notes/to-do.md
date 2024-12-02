@@ -7,6 +7,9 @@ ACH PLAID API
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [ ] Maybes 
+- [ ] Get rid of X 
+- [ ] carousel circle behind chevron and updated chevron 
+- [ ] hide alerts
 - [ ] Images for trips page 
 - [ ] Button control Box safari attempt
 - [ ] Apply button behavior and details on list view (table) 

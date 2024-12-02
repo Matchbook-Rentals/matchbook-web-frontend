@@ -107,7 +107,7 @@ export default function ShortListTab() {
     return [{ label: 'Unapply', action: () => handleUnapply(listing) }]
   }
 
-  if (likedListings.length === 0 && requestedListings.length === 0) {
+  if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
     return <div>No favorites found for this trip.</div>;
   }
 
