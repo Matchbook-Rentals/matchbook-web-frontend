@@ -4,8 +4,7 @@ import { TripContextProvider } from '@/contexts/trip-context-provider';
 import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
-
-
+import LoadingSkeleton from './LoadingSkeleton';
 
 export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
   const trip = await getTripById(params.tripId);
@@ -13,8 +12,11 @@ export default async function TripLayout({ children, params }: { children: React
 
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
   const application = await getUserApplication();
-  // check if application is truthy or falsy and assign that value
   const hasApplicationData = !!application;
+
+  if (!trip || !listings || !application) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <TripContextProvider

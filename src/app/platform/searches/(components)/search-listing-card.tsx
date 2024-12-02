@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, X, Heart, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { MoreHorizontal, Star, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
@@ -169,9 +169,6 @@ export default function SearchListingCard({ listing, status, className, detailsC
                   className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <RejectIcon className="w-5 h-5 text-pinkBrand" />
-                  {status === ListingStatus.Dislike && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
                 </button>
               </div>
             </div>

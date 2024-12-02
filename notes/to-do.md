@@ -6,7 +6,7 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 ##02DEC24- [X] Credit Intelligence Filtering 
-- [ ] Maybes 
+- [x] Maybes 
 - [ ] Get rid of X 
 - [ ] carousel circle behind chevron and updated chevron 
 - [ ] hide alerts
