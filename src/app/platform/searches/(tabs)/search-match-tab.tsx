@@ -205,22 +205,19 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-[1/1] md:w-[150px]
-                flex items-center justify-center p-4 rounded-full text-center text-white
-                text-sm transition-all duration-200`}
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[150px]
+                  flex items-center justify-center p-4 rounded-full text-center text-white
+                  text-sm transition-all duration-200 relative before:content-['']
+                  before:float-left before:pb-[100%]`}
               />
 
               <ButtonControl
-                handleClick={
-                  viewedListings.length === 0
-                    ? () => console.log('No previous listing')
-                    : handleBack
-                }
+                handleClick={handleBack}
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
-                className={`
-                bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1]
-                md:w-[100px] self-center rounded-full text-center flex items-center
-                justify-center text-white text-sm transition-all duration-200 `}
+                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw]
+                  md:w-[100px] self-center rounded-full text-center flex items-center
+                  justify-center text-white text-sm transition-all duration-200 relative
+                  before:content-[''] before:float-left before:pb-[100%]`}
               />
 
               <ButtonControl
