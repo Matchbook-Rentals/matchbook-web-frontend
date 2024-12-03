@@ -12,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import { QuestionMarkIcon } from '@/components/icons'
+import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 30
@@ -102,9 +102,9 @@ export default function SearchListingCard({ listing, status, className, detailsC
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <CarouselPrevious Icon={ChevronLeft} className="left-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
-            <CarouselNext Icon={ChevronRight} className="right-2 text-white border-none hover:text-white bg-transparent scale-150 hover:bg-transparent " />
+          <div className={`transition-opacity duration-300 ${(isHovered && !isMenuOpen) ? 'opacity-100' : 'opacity-0'}`}>
+            <CarouselPrevious Icon={ArrowLeft} className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] scale-125" />
+            <CarouselNext Icon={ArrowRight} className="right-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pr-[4px] scale-125" />
           </div>
         </Carousel>
 

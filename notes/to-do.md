@@ -10,7 +10,7 @@ ACH PLAID API
 - [X] Get rid of X 
 - [ ] carousel circle behind chevron and updated chevron 
 - [ ] hide alerts
-- [ ] Images for trips page 
+- [x] Images for trips page 
 - [ ] Hamburger menu update for platform Navbar (not normal navbar due to brevo dialog) 
 - [ ] Button control Box safari attempt
 - [ ] Apply button behavior and details on list view (table) 
@@ -19,7 +19,7 @@ ACH PLAID API
 - [X] redo split point on listingdetails
 - [X] deeper scroll point on button box, probalby as percent of display height 
 - [ ] see more button on desktop image carousel
-- [ ] fix height on control bar siblings 
+- [x] fix height on control bar siblings 
 - [ ] Isabelle icon updates from figma 
 - [ ] Create flowchart
 
