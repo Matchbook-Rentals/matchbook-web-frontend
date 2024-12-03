@@ -75,6 +75,14 @@ export default async function AdminDashboard(params: {
                       </Button>
                     </form>
 
+                    <form action={setRole}>
+                      <Input type="hidden" value={user.id} name="id" />
+                      <Input type="hidden" value="beta_user" name="role" />
+                      <Button type="submit" variant="secondary" className="w-full">
+                        Make Beta User
+                      </Button>
+                    </form>
+
                     <form action={removeRole}>
                       <Input type="hidden" value={user.id} name="id" />
                       <Button type="submit" variant="destructive" className="w-full">
