@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { ListingAndImages } from '@/types';
 import SearchListingCard from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,6 +17,8 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   withCallToAction = false
 }) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
+  const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
+  const gridRef = useRef<HTMLDivElement>(null);
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +29,46 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     const endIndex = startIndex + listingsPerPage;
     setDisplayedListings(listings.slice(startIndex, endIndex));
   }, [listings, currentPage]);
+
+  const updateMaxDetailsHeight = useCallback(() => {
+    if (gridRef.current) {
+      setMaxDetailsHeight(0);
+
+      setTimeout(() => {
+        const detailsSections = gridRef.current?.getElementsByClassName('listing-details');
+        if (!detailsSections) return;
+
+        let tallestDetails = 0;
+
+        Array.from(detailsSections).forEach((section) => {
+          const height = section.getBoundingClientRect().height;
+          tallestDetails = Math.max(tallestDetails, height);
+        });
+
+        if (tallestDetails > 0) {
+          setMaxDetailsHeight(tallestDetails);
+        }
+      }, 0);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateMaxDetailsHeight();
+
+    const handleResize = () => {
+      updateMaxDetailsHeight();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [updateMaxDetailsHeight]);
+
+  useEffect(() => {
+    updateMaxDetailsHeight();
+  }, [displayedListings, updateMaxDetailsHeight]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (state.lookup.requestedIds.has(listing.id)) {
@@ -91,7 +133,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   return (
     <div className="relative">
       <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-12">
+        <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
           {displayedListings.map((listing) => {
             const status = getListingStatus(listing);
             return (
@@ -100,6 +142,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                 listing={listing}
                 status={status}
                 callToAction={getCallToAction(listing, status)}
+                className="listing-card"
+                detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
+                detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
               />
             );
           })}

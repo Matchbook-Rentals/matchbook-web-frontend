@@ -21,7 +21,9 @@ interface SearchListingCardProps {
   listing: ListingAndImages
   status: ListingStatus
   className?: string
+  style?: React.CSSProperties
   detailsClassName?: string
+  detailsStyle?: React.CSSProperties
   callToAction?: {
     label: string
     action: () => void
@@ -34,7 +36,7 @@ interface SearchListingCardProps {
   }
 }
 
-export default function SearchListingCard({ listing, status, className, detailsClassName, callToAction, contextLabel }: SearchListingCardProps) {
+export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -81,6 +83,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
   return (
     <Card
       className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${className || ''}`}
+      style={style}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -176,7 +179,10 @@ export default function SearchListingCard({ listing, status, className, detailsC
         )}
       </div>
 
-      <div className={` pt-1 flex flex-col  sm:min-h-[80px] ${detailsClassName || ''}`}>
+      <div
+        className={`pt-1 flex flex-col sm:min-h-[80px] ${detailsClassName || ''}`}
+        style={detailsStyle}
+      >
         <div className="flex justify-between gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
@@ -189,7 +195,7 @@ export default function SearchListingCard({ listing, status, className, detailsC
           </div>
         </div>
 
-        <div className="flex items-center justify-between mt-auto">
+        <div className="flex pt-2 items-center justify-between mt-auto">
           <div className="text-base">
             ${listing.price || 2350}
             <span className=""> month</span>
