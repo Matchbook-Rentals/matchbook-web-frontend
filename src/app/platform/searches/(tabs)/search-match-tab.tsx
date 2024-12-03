@@ -34,6 +34,7 @@ const MatchViewTab: React.FC = () => {
   const controlBoxRef = useRef<HTMLDivElement>(null);
   const [titleBoxHeight, setTitleBoxHeight] = useState<number>(0);
   const titleBoxRef = useRef<HTMLDivElement>(null);
+  const [totalBoxHeight, setTotalBoxHeight] = useState<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,6 +75,29 @@ const MatchViewTab: React.FC = () => {
     window.addEventListener('resize', updateTitleHeight);
     return () => window.removeEventListener('resize', updateTitleHeight);
   }, []);
+
+  // Update the useEffect to calculate the total height
+  useEffect(() => {
+    const updateTotalBoxHeight = () => {
+      const bedroomPriceBox = document.querySelector('.bedroom-price-box');
+      const sqftDepositBox = document.querySelector('.sqft-deposit-box');
+
+      if (bedroomPriceBox && sqftDepositBox) {
+        const bedroomPriceHeight = bedroomPriceBox.getBoundingClientRect().height;
+        const sqftDepositHeight = sqftDepositBox.getBoundingClientRect().height;
+        setTotalBoxHeight(bedroomPriceHeight + sqftDepositHeight);
+      }
+    };
+
+    updateTotalBoxHeight();
+    window.addEventListener('resize', updateTotalBoxHeight);
+    window.addEventListener('scroll', updateTotalBoxHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateTotalBoxHeight);
+      window.removeEventListener('scroll', updateTotalBoxHeight);
+    };
+  }, [showListings]);
 
   // Add this helper function near other function declarations
   const scrollToTop = () => {
@@ -241,8 +265,8 @@ const MatchViewTab: React.FC = () => {
         <div className="flex flex-col md:flex-row w-full">
           {/* Left side - Info Labels (Desktop only) */}
           <div className={`hidden md:block w-full md:w-1/2 md:pr-2 transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : ''}`}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
+              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : 'md:translate-y-[calc(var(--total-box-height))]'}`}
+            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight/2}px` } as React.CSSProperties}>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
                 <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-charcoalBrand font-medium">Address</span>
@@ -254,12 +278,12 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - All Stats for Mobile, Bedroom/Bath for Desktop */}
-          <div className="w-full md:w-1/2 md:pl-2 bg-background transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : ''}"
+          <div className={`w-full md:w-1/2 md:pl-2 bg-background transition-transform duration-500
+              md:-translate-y-[calc(var(--control-box-height)/2)]`}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col">
               {/* Bedroom and Price */}
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center bedroom-price-box">
                 <div>
                   <h2 className="text-2xl md:text-[28px] lg:text-[32px] md:mb-2 pl-[2px] font-medium">3 BR | 2 BA</h2>
                 </div>
@@ -269,9 +293,9 @@ const MatchViewTab: React.FC = () => {
               </div>
 
               {/* Sqft and Deposit - Only show on mobile */}
-              <div className="flex justify-between items-center md:hidden">
+              <div className="flex justify-between items-center md:hidden ">
                 <div>
-                  <p className="text-lg text-gray-600">1,500 Sqft</p>
+                  <p className="text-lg text-gray-600">{showListings[0]?.squareFootage || '1,500'} Sqft</p>
                 </div>
                 <div className="text-right">
                   <p className="text-lg">${titleBoxHeight} Dep.</p>
@@ -282,11 +306,14 @@ const MatchViewTab: React.FC = () => {
         </div>
 
         {/* Third flex container - Address Info and Sqft/Deposit */}
-        <div className="flex flex-col border-b pb-3 border-black mt-2 md:mt-0 md:flex-row w-full">
+        {/* Use ref to track y position of bottom border of this container */}
+        <div
+          className="flex flex-col border-b md:border-none pb-3 border-black mt-2 md:mt-0 md:flex-row w-full"
+        >
           {/* Left side - Address Info Values */}
           <div className={`w-full md:w-1/2 pr-2 transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : ''}`}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
+              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : 'md:translate-y-[calc(var(--total-box-height))]'}`}
+            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight/2}px` } as React.CSSProperties}>
             <div className="flex flex-col md:flex-row justify-between items-center">
               {/* Mobile-only labels */}
               <div className="md:hidden w-full">
@@ -297,7 +324,7 @@ const MatchViewTab: React.FC = () => {
               </div>
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate  max-w-[300px]">
+                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate max-w-[300px]">
                   {showListings[0].locationString}
                 </span>
                 <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-3xl">
@@ -308,13 +335,13 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - Sqft and Deposit (Desktop only) */}
-          <div className="hidden md:block w-full md:w-1/2 pl-2 bg-background transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : ''}"
+          <div className={`hidden md:block w-full   sqft-deposit-box md:w-1/2 pl-2 bg-background transition-transform duration-500
+              md:-translate-y-[calc(var(--control-box-height)/2)]`}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col border-b pb-5 border-black">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg md:text-2xl text-gray-600">1,500 Sqft</p>
+                  <p className="text-lg md:text-2xl text-gray-600">{totalBoxHeight} Sqft</p>
                 </div>
                 <div className="text-right">
                   <p className="text-lg md:text-2xl">${titleBoxHeight} Dep.</p>
@@ -330,7 +357,7 @@ const MatchViewTab: React.FC = () => {
         {/* Left side - Map and Address */}
         <div className="w-full md:w-1/2 pr-2">
           <div
-            className={`md:block sticky pt-6 md:pt-0 md:z-10 ${!isScrolled ? '' : 'md:translate-y-[00px]'} transition-transform duration-500`}
+            className={`md:block sticky pt-6 md:pt-0 md:z-10 ${!isScrolled ? '' : 'md:translate-y-[30px]'} transition-transform duration-500`}
             style={{ top: `${controlBoxHeight + 60}px` }}
           >
             <SearchMap

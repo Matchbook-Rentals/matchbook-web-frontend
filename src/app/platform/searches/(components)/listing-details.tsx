@@ -3,10 +3,10 @@ import { ListingAndImages } from '@/types';
 import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car, Wifi, Coffee, Snowflake, Waves, Dumbbell, Lock, UtensilsCrossed, Bath, Warehouse } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import Tile from '@/components/ui/tile';
 import { amenities, iconAmenities, highlightAmenities } from '@/lib/amenities-list';
 import { Montserrat } from 'next/font/google';
@@ -119,17 +119,19 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
 
         <div className="flex items-center gap-2 flex-col">
           <p className="hidden sm:block md:hidden lg:block text-xl truncate ">23 stays</p>
-          <HoverCard>
-            <HoverCardTrigger>
-              <div className="flex items-center gap-1 cursor-default">
+
+          {/* Change this one to a popover instead as hovering on mobile is not easy */}
+          <Popover>
+            <PopoverTrigger>
+              <div className="flex items-center gap-1 cursor-pointer">
                 <Star className="fill-current text-gray-700" size={24} />
-                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden md:inline lg:hidden align-sub text-sm">(23)</span></span>
+                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden md:inline lg:hidden  text-sm">(23)</span></span>
               </div>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-auto">
+            </PopoverTrigger>
+            <PopoverContent className="w-auto">
               <p className="text-sm">Raw Score: {listing?.uScore?.toFixed(3)}</p>
-            </HoverCardContent>
-          </HoverCard>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
