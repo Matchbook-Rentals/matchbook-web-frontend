@@ -43,14 +43,14 @@ const MatchmakerTab: React.FC = () => {
         <div className="flex justify-evenly w-full md:w-auto">
           <div className="flex border shadow-lg rounded-full">
             <button
-              className={`py-2  rounded-l-full  h-12 w-[78px] flex items-center justify-center ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
+              className={`py-2  rounded-l-full  h-10 w-[78px] flex items-center justify-center ${viewMode === 'swipe' ? 'bg-gray-200' : ''}`}
               onClick={() => setViewMode('swipe')}
             >
               <img src='/icon_png/match-view-icon.png' alt='heart' className='w-[20px] h-[20px]' />
             </button>
             <Separator className='h-10' />
             <button
-              className={`py-2  rounded-r-full w-[78px] h-12 flex items-center justify-center ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
+              className={`py-2  rounded-r-full w-[78px] h-10 flex items-center justify-center ${viewMode === 'map' ? 'bg-gray-200' : ''}`}
               onClick={() => setViewMode('map')}
             >
               <MapViewIcon className='w-[31px]' />

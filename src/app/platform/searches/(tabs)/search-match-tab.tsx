@@ -205,9 +205,9 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] aspect-square md:w-[150px]
-                flex items-center justify-center p-4 rounded-full text-center text-white
-                text-sm transition-all duration-200`}
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand h-[20vw] w-[20vw]
+                md:h-[150px] md:w-[150px] flex items-center justify-center p-4
+                rounded-full text-center text-white text-sm transition-all duration-200`}
               />
 
               <ButtonControl
@@ -217,35 +217,25 @@ const MatchViewTab: React.FC = () => {
                     : handleBack
                 }
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
-                className={`
-                bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-square
-                md:w-[100px] self-center rounded-full text-center flex items-center
-                justify-center text-white text-sm transition-all duration-200
-              `}
+                className={`bg-orangeBrand/70 hover:bg-orangeBrand h-[13vw] w-[13vw]
+                md:h-[100px] md:w-[100px] self-center rounded-full text-center flex
+                items-center justify-center text-white text-sm transition-all duration-200`}
               />
 
               <ButtonControl
                 handleClick={() => handleMaybe(showListings[0])}
                 Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full' />}
-                className={`
-                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-square
-                md:w-[100px] self-center rounded-full text-center flex items-center
-                justify-center text-white text-sm transition-all duration-200
-              `}
+                className={`bg-yellowBrand/80 hover:bg-yellowBrand h-[13vw] w-[13vw]
+                md:h-[100px] md:w-[100px] self-center rounded-full text-center flex
+                items-center justify-center text-white text-sm transition-all duration-200`}
               />
 
               <ButtonControl
                 handleClick={() => handleLike(showListings[0])}
-                Icon={
-                  <BrandHeart
-                    className='h-[70%] w-[70%] aspect-square md:w-[50%] rounded-2xl'
-                  />
-                }
-                className={`
-                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-square
-                md:w-[150px] flex items-center justify-center p-4 rounded-full text-center
-                text-white text-sm transition-all duration-200
-              `}
+                Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-2xl' />}
+                className={`bg-primaryBrand/75 hover:bg-primaryBrand/95 h-[20vw] w-[20vw]
+                md:h-[150px] md:w-[150px] flex items-center justify-center p-4
+                rounded-full text-center text-white text-sm transition-all duration-200`}
               />
             </div>
           </div>
