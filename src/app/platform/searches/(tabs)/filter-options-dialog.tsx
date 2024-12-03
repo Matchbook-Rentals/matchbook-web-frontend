@@ -56,9 +56,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className={`flex items-center rounded-full p-2 ${className}`}>
-          <FilterIcon size={24} className="mr-2 text-charcoalBrand/80" />
-          <span className='text-charcoalBrand/80'>Filters</span>
+        <Button variant="outline" className={`flex items-center rounded-full p-2 w-[156px] ${className}`}>
+          <FilterIcon className="mr-2 w-[28px] h-[15px] text-charcoalBrand/80" />
+          <span className='text-charcoalBrand/80' style={{ color: 'var(--Major-Text, #404040)', fontFamily: 'Montserrat', fontSize: '24px', fontStyle: 'normal', fontWeight: '500', lineHeight: 'normal' }}>Filters</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
