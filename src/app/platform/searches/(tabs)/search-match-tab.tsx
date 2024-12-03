@@ -204,11 +204,10 @@ const MatchViewTab: React.FC = () => {
               ref={controlBoxRef}>
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
-                Icon={<RejectIcon className='h-[60%] w-[60%] md:h-[50%] md:w-[50%] rounded-full' />}
+                Icon={<RejectIcon className='h-[52%] md:w-[52%] rounded-full' />}
                 className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[150px]
                   flex items-center justify-center p-4 rounded-full text-center text-white
-                  text-sm transition-all duration-200 relative before:content-['']
-                  before:float-left before:pb-[100%]`}
+                  text-sm transition-all duration-200 relative`}
               />
 
               <ButtonControl
@@ -216,8 +215,7 @@ const MatchViewTab: React.FC = () => {
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full' />}
                 className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw]
                   md:w-[100px] self-center rounded-full text-center flex items-center
-                  justify-center text-white text-sm transition-all duration-200 relative
-                  before:content-[''] before:float-left before:pb-[100%]`}
+                  justify-center text-white text-sm transition-all duration-200 relative `}
               />
 
               <ButtonControl
@@ -231,7 +229,7 @@ const MatchViewTab: React.FC = () => {
 
               <ButtonControl
                 handleClick={() => handleLike(showListings[0])}
-                Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-2xl' />}
+                Icon={<BrandHeart className='w-[52%] h-[52%] rounded-2xl' />}
                 className={`
                 bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-[1/1]
                 md:w-[150px] flex items-center justify-center p-4 rounded-full text-center
