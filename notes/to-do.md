@@ -19,6 +19,7 @@ ACH PLAID API
 - [ ] deeper scroll point on button box, probalby as percent of display height 
 - [ ] see more button on desktop image carousel
 - [ ] fix height on control bar siblings 
+- [ ] Isabelle icon updates from figma 
 - [ ] Create flowchart
 
 ##13NOV24

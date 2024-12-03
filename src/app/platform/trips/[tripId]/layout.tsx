@@ -1,6 +1,6 @@
 import React from 'react'
 import { TripContextProvider } from '@/contexts/trip-context-provider';
-import LoadingSkeleton from './LoadingSkeleton';
+import LoadingTabs from './LoadingTabs';
 import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
@@ -15,6 +15,9 @@ async function TripDataWrapper({ children, params }: {
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
   const application = await getUserApplication();
   const hasApplicationData = !!application;
+
+  //UnComment this line to force permanent render of Suspense
+  //await new Promise(() => { });
 
   return (
     <TripContextProvider
@@ -36,7 +39,7 @@ export default function TripLayout({
   params: { tripId: string }
 }) {
   return (
-    <React.Suspense fallback={<LoadingSkeleton />}>
+    <React.Suspense fallback={<LoadingTabs />}>
       <TripDataWrapper params={params}>
         {children}
       </TripDataWrapper>
