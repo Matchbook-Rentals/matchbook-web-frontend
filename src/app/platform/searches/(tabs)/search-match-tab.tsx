@@ -39,7 +39,7 @@ const MatchViewTab: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPercentage = (window.scrollY / window.innerHeight) * 100;
-      setIsScrolled(scrollPercentage > 20);
+      setIsScrolled(scrollPercentage > 40);
     };
 
     window.addEventListener('scroll', handleScroll);
