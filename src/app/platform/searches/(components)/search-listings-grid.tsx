@@ -150,63 +150,71 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   return (
     <div className="relative">
-      <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
-        <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3  gap-8 pb-12">
-          {displayedListings.map((listing) => {
-            const status = getListingStatus(listing);
-            return (
-              <SearchListingCard
-                key={listing.id}
-                listing={listing}
-                status={status}
-                callToAction={getCallToAction(listing, status)}
-                className="listing-card"
-                detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
-                detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
-              />
-            );
-          })}
+      {listings.length === 0 ? (
+        <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
+          No listings to display
         </div>
-      </ScrollArea>
-      <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-white border-t flex items-center justify-center gap-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setCurrentPage(1)}
-          disabled={currentPage === 1}
-        >
-          <ChevronsLeft className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        {renderPageNumbers()}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => setCurrentPage(totalPages)}
-          disabled={currentPage === totalPages}
-        >
-          <ChevronsRight className="h-4 w-4" />
-        </Button>
-      </div>
+      ) : (
+        <>
+          <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
+            <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3  gap-8 pb-12">
+              {displayedListings.map((listing) => {
+                const status = getListingStatus(listing);
+                return (
+                  <SearchListingCard
+                    key={listing.id}
+                    listing={listing}
+                    status={status}
+                    callToAction={getCallToAction(listing, status)}
+                    className="listing-card"
+                    detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
+                    detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
+                  />
+                );
+              })}
+            </div>
+          </ScrollArea>
+          <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-white border-t flex items-center justify-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            {renderPageNumbers()}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

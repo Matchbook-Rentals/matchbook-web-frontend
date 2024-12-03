@@ -49,22 +49,24 @@ const MapView: React.FC = () => {
 
   return (
     <div className=''>
-      <div className='px-2 w-full mb-2 flex justify-between'>
-        <h2 className='text-left text-xl'>
-          {showRejected
-            ? 'A second chance perhaps?'
-            : `Listings for ${state.trip.locationString}`}
-        </h2>
-        <h2
-          className='text-left text-base font-medium underline cursor-pointer'
-          onClick={() => setShowRejected(!showRejected)}
-        >
-          {showRejected ? 'Show All Properties' : 'Show Rejected Properties'}
-        </h2>
-      </div>
 
-      <div className="mx-auto px-2 w-full flex flex-col-reverse md:flex-row items-center gap-x-4">
+      <div className="mx-auto  w-full flex flex-col-reverse md:flex-row items-center gap-x-4">
+
         <div className="w-full md:w-2/3">
+
+          <div className=' w-full mb-2 pr-4 flex justify-between'>
+            <h2 className='text-left text-xl'>
+              {showRejected
+                ? 'A second chance perhaps?'
+                : `Listings for ${state.trip.locationString}`}
+            </h2>
+            <h2
+              className='text-left text-base font-medium underline cursor-pointer'
+              onClick={() => setShowRejected(!showRejected)}
+            >
+              {showRejected ? 'Show All Properties' : 'Show Rejected Properties'}
+            </h2>
+          </div>
           <SearchListingsGrid
             listings={displayListings}
           />
