@@ -48,7 +48,7 @@ const MapView: React.FC = () => {
     : state.listings.filter(listing => !state.lookup.dislikedIds.has(listing.id));
 
   return (
-    <div className='h-[100vh]'>
+    <div className=''>
       <div className='px-2 w-full mb-2 flex justify-between'>
         <h2 className='text-left text-xl'>
           {showRejected

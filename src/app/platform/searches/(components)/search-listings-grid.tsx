@@ -22,13 +22,14 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
   const [currentPage, setCurrentPage] = useState(1);
-  const listingsPerPage = 9;
+  const [gridColumns, setGridColumns] = useState(1);
+  const listingsPerPage = gridColumns * 3;
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * listingsPerPage;
     const endIndex = startIndex + listingsPerPage;
     setDisplayedListings(listings.slice(startIndex, endIndex));
-  }, [listings, currentPage]);
+  }, [listings, currentPage, listingsPerPage]);
 
   const updateMaxDetailsHeight = useCallback(() => {
     if (gridRef.current) {
@@ -129,6 +130,23 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     }
     return pages;
   };
+
+  useEffect(() => {
+    const updateGridColumns = () => {
+      const width = window.innerWidth;
+      if (width >= 1100) {
+        setGridColumns(3);
+      } else if (width >= 640) {
+        setGridColumns(2);
+      } else {
+        setGridColumns(1);
+      }
+    };
+
+    updateGridColumns();
+    window.addEventListener('resize', updateGridColumns);
+    return () => window.removeEventListener('resize', updateGridColumns);
+  }, []);
 
   return (
     <div className="relative">
