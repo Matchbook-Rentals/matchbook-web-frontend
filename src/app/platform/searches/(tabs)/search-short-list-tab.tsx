@@ -18,7 +18,7 @@ export default function ShortListTab() {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
-  const { likedListings, requestedListings, lookup } = state;
+  const { likedListings, requestedListings, maybedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
@@ -107,7 +107,7 @@ export default function ShortListTab() {
     return [{ label: 'Unapply', action: () => handleUnapply(listing) }]
   }
 
-  if (likedListings.length === 0 && requestedListings.length === 0) {
+  if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
     return <div>No favorites found for this trip.</div>;
   }
 
@@ -143,7 +143,11 @@ export default function ShortListTab() {
 
           {viewMode === 'grid' ? (
             <SearchListingsGrid
-              listings={[...requestedListings, ...likedListings]}
+              listings={[...likedListings, ...maybedListings].sort((a, b) => {
+                const aRequested = lookup.requestedIds.has(a.id);
+                const bRequested = lookup.requestedIds.has(b.id);
+                return bRequested ? 1 : aRequested ? -1 : 0;
+              })}
               withCallToAction={true}
               cardActions={listing => lookup.requestedIds.has(listing.id) ?
                 generateRequestedCardActions(listing) :

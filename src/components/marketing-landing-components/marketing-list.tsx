@@ -11,28 +11,37 @@ interface MarketingListProps {
   title: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   marketingItems: MarketingItem[];
-  brandColor: 'primary' | 'blue';
+  brandColor: "primary" | "secondary";
 }
 
-export default function MarketingList({ title, Icon, marketingItems, brandColor }: MarketingListProps) {
-  const bgColorClass = brandColor === 'primary' ? 'bg-primaryBrand' : 'bg-blueBrand';
+export default function MarketingList({
+  title,
+  Icon,
+  marketingItems,
+  brandColor,
+}: MarketingListProps) {
+
+  const bgColorClass =
+    brandColor === "primary" ? "bg-primaryBrand" : "bg-blueBrand";
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-2 ">
-      <div className="flex items-center justify-start space-x-4 ">
-        <Icon className="h-20 w-20" />
-        <div>
-
-          <h1 className="text-6xl z-10 font-semibold" style={{ position: 'relative', top: '-50%', left: '' }}>{title}</h1>
-          <div className={`${bgColorClass} transform -translate-y-2/3 -translate-x-[2%] w-[110%] h-[30px]`}>
-          </div>
+    <div className="w-full mx-auto ">
+      <div>
+        <div className="flex items-end mb-1">
+          <Icon className="w-[80px] h-[80px] sm:w-[80px] sm:h-[80px] md:w-[115px] md:h-[115px] mr-3" />
+          <h1
+            className="text-[6.2vw] xs:text-[6.6vw] md:text-[59px] leading-none  font-medium"
+          >
+            {title}
+          </h1>
         </div>
+        <div className={`${bgColorClass} mb-[-5px] sm:mb-[-10px] md:mb-[-20px]  h-[26px]`} />
       </div>
-      <div className="" >
+      <div className="">
         {marketingItems.map((item, index) => (
           <MarketingItem key={index} {...item} brandColor={brandColor} />
         ))}
       </div>
     </div>
-  )
+  );
 }

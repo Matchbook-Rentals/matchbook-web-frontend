@@ -5,6 +5,23 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+##02DEC24- [X] Credit Intelligence Filtering 
+- [x] Maybes 
+- [X] Get rid of X 
+- [ ] carousel circle behind chevron and updated chevron 
+- [ ] hide alerts
+- [ ] Images for trips page 
+- [ ] Hamburger menu update for platform Navbar (not normal navbar due to brevo dialog) 
+- [ ] Button control Box safari attempt
+- [ ] Apply button behavior and details on list view (table) 
+- [ ] Sharepoint 
+- [ ] Unlock search container on beta user, send to new york regardless 
+- [X] redo split point on listingdetails
+- [X] deeper scroll point on button box, probalby as percent of display height 
+- [ ] see more button on desktop image carousel
+- [ ] fix height on control bar siblings 
+- [ ] Isabelle icon updates from figma 
+- [ ] Create flowchart
 
 ##13NOV24
 - [X] Credit Intelligence Filtering 

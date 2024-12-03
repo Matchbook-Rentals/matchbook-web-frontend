@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, X, Heart, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { MoreHorizontal, Star, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
@@ -13,20 +13,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { QuestionMarkIcon } from '@/components/icons'
-
-enum Status {
-  Favorite = 'favorite',
-  Dislike = 'dislike',
-  Applied = 'applied',
-  Maybe = 'maybe',
-  None = 'none'
-}
+import { ListingStatus } from '@/constants/enums'
 
 const TITLE_MAX_LENGTH = 30
 
 interface SearchListingCardProps {
   listing: ListingAndImages
-  status: Status
+  status: ListingStatus
   className?: string
   detailsClassName?: string
   callToAction?: {
@@ -46,33 +39,40 @@ export default function SearchListingCard({ listing, status, className, detailsC
   const [isHovered, setIsHovered] = useState(false)
 
   const { state, actions } = useTripContext();
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  const { lookup } = state;
+  const { favIds, dislikedIds, maybeIds } = lookup;
+  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike, optimisticRemoveMaybe, optimisticMaybe } = actions;
 
-  const getStatusStyles = (status: Status) => {
+  const getStatusStyles = (status: ListingStatus) => {
+    if (favIds.has(listing.id)) {
+      return 'bg-primaryBrand'
+    } else if (maybeIds.has(listing.id)) {
+      return 'bg-yellowBrand hover:bg-yellowBrand/80'
+    } else if (dislikedIds.has(listing.id)) {
+      return 'bg-pinkBrand'
+    }
+
     switch (status) {
-      case Status.Favorite:
-      case Status.Applied:
+      case ListingStatus.Applied:
         return 'bg-primaryBrand'
-      case Status.Dislike:
-        return 'bg-pinkBrand'
-      case Status.Maybe:
-        return 'bg-yellowBrand'
-      case Status.None:
+      case ListingStatus.None:
       default:
-        return 'bg-white/60'
+        return 'bg-transparent hover:bg-white/60'
     }
   }
 
-  const getStatusIcon = (status: Status) => {
+  const getStatusIcon = (status: ListingStatus) => {
+    if (favIds.has(listing.id)) {
+      return <BrandHeart className="w-5 h-5" />
+    } else if (maybeIds.has(listing.id)) {
+      return <QuestionMarkIcon className="w-5 h-5" />
+    } else if (dislikedIds.has(listing.id)) {
+      return <RejectIcon className="w-5 h-5 text-white" />
+    }
+
     switch (status) {
-      case Status.Favorite:
-        return <BrandHeart className="w-5 h-5" />
-      case Status.Applied:
-        return <BrandHeart className="w-4 h-4 " />
-      case Status.Dislike:
-        return <RejectIcon className="w-5 h-5 text-white" />
-      case Status.Maybe:
-        return <QuestionMarkIcon className="w-5 h-5" />
+      case ListingStatus.Applied:
+        return <BrandHeart className="w-4 h-4" />
       default:
         return <MoreHorizontal className="w-7 h-7" />
     }
@@ -120,53 +120,55 @@ export default function SearchListingCard({ listing, status, className, detailsC
           </div>
         ) : (
           <div className="absolute top-2 right-2">
-            <div className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[51px] h-[207px]' : 'w-[51px] h-[51px]'}`}>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`w-[51px] h-[51px] flex items-center rounded-full justify-center hover:bg-gray-100 mx-auto ${getStatusStyles(status)}`}
+            <div
+              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[48px] h-[207px]' : 'w-[48px] h-[48px]'}`}
+              onMouseEnter={() => setIsMenuOpen(true)}
+              onMouseLeave={() => setIsMenuOpen(false)}
+            >
+              <div
+                className={`w-[48px] h-[48px] cursor-pointer flex items-center rounded-full justify-center hover:opacity-80 mx-auto ${getStatusStyles(status)}`}
               >
                 {getStatusIcon(status)}
-              </button>
+              </div>
               <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                   onClick={() => {
-                    if (status === Status.Favorite || status === Status.Applied) {
+                    if (favIds.has(listing.id)) {
                       optimisticRemoveLike(listing.id);
                     } else {
                       optimisticLike(listing.id);
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative"
+                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <BrandHeart className="w-4 h-4" />
-                  {(status === Status.Favorite || status === Status.Applied) && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
-                </button>
-                <button
-                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative"
-                >
-                  <QuestionMarkIcon className="w-4 h-4 text-white" />
-                  {status === Status.Maybe && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
                 </button>
                 <button
                   onClick={() => {
-                    if (status === Status.Dislike) {
+                    if (maybeIds.has(listing.id)) {
+                      optimisticRemoveMaybe(listing.id)
+                    } else {
+                      optimisticMaybe(listing.id);
+                    }
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative cursor-pointer"
+                >
+                  <QuestionMarkIcon className="w-4 h-4 text-white" />
+                </button>
+                <button
+                  onClick={() => {
+                    if (status === ListingStatus.Dislike) {
                       optimisticRemoveDislike(listing.id);
                     } else {
                       optimisticDislike(listing.id);
                     }
                     setIsMenuOpen(false);
                   }}
-                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative"
+                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative cursor-pointer"
                 >
                   <RejectIcon className="w-5 h-5 text-pinkBrand" />
-                  {status === Status.Dislike && (
-                    <X className="w-4 h-4 text-red-500 absolute inset-0 m-auto" />
-                  )}
                 </button>
               </div>
             </div>

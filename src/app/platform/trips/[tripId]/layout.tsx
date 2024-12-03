@@ -1,20 +1,23 @@
 import React from 'react'
 import { TripContextProvider } from '@/contexts/trip-context-provider';
-
+import LoadingTabs from './LoadingTabs';
 import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
 
-
-
-export default async function TripLayout({ children, params }: { children: React.ReactNode, params: { tripId: string } }) {
+async function TripDataWrapper({ children, params }: {
+  children: React.ReactNode,
+  params: { tripId: string }
+}) {
   const trip = await getTripById(params.tripId);
   if (!trip) { return <p> NO TRIP FOUND </p> }
 
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
   const application = await getUserApplication();
-  // check if application is truthy or falsy and assign that value
   const hasApplicationData = !!application;
+
+  //UnComment this line to force permanent render of Suspense
+  //await new Promise(() => { });
 
   return (
     <TripContextProvider
@@ -25,5 +28,21 @@ export default async function TripLayout({ children, params }: { children: React
     >
       {children}
     </TripContextProvider>
+  );
+}
+
+export default function TripLayout({
+  children,
+  params
+}: {
+  children: React.ReactNode,
+  params: { tripId: string }
+}) {
+  return (
+    <React.Suspense fallback={<LoadingTabs />}>
+      <TripDataWrapper params={params}>
+        {children}
+      </TripDataWrapper>
+    </React.Suspense>
   );
 }

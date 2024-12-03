@@ -6,6 +6,7 @@ import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
 import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
+import { optimisticMaybe as optimisticMaybeDb, optimisticRemoveMaybe as optimisticRemoveMaybeDb } from '@/app/actions/maybes';
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -30,8 +31,10 @@ interface TripContextType {
       favIds: Set<string>;
       dislikedIds: Set<string>;
       requestedIds: Set<string>;
-      matchIds: Set<string>; // Add this line
+      matchIds: Set<string>;
+      maybeIds: Set<string>;
     };
+    maybedListings: ListingAndImages[];
   };
   actions: {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
@@ -44,6 +47,8 @@ interface TripContextType {
     optimisticRemoveDislike: (listingId: string) => Promise<void>;
     optimisticApply: (listing: ListingAndImages) => Promise<void>;
     optimisticRemoveApply: (listingId: string) => Promise<void>;
+    optimisticMaybe: (listingId: string) => Promise<void>;
+    optimisticRemoveMaybe: (listingId: string) => Promise<void>;
   };
 }
 
@@ -75,7 +80,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     favIds: new Set(),
     dislikedIds: new Set(),
     requestedIds: new Set(),
-    matchIds: new Set() // Add this line
+    matchIds: new Set(),
+    maybeIds: new Set()
   });
 
   // Calculate U-Score for a listing
@@ -163,7 +169,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       favIds: new Set(trip?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
       dislikedIds: new Set(trip?.dislikes.map(dislike => dislike.listingId)),
       requestedIds: new Set(trip?.housingRequests.map(request => request.listingId)),
-      matchIds: new Set(trip?.matches.map(match => match.listingId)) // Add this line
+      matchIds: new Set(trip?.matches.map(match => match.listingId)),
+      maybeIds: new Set(trip?.maybes.map(maybe => maybe.listingId))
     });
   }, [trip]);
 
@@ -172,10 +179,11 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   // This code filters and memoizes the listings to be shown
   const showListings = useMemo(() =>
     listings.filter(listing => {
-      //Check if the listing is not favorited, disliked, or requested
+      //Check if the listing is not favorited, disliked, requested, or maybed
       const isNotFavorited = !lookup.favIds.has(listing.id);
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
       const isNotRequested = !lookup.requestedIds.has(listing.id);
+      const isNotMaybed = !lookup.maybeIds.has(listing.id);
 
       // Check if the listing is available during the trip period
       const isAvailable = !listing.unavailablePeriods?.some(period => {
@@ -193,14 +201,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       });
 
       // Return true if the listing meets all criteria
-      return isNotFavorited && isNotDisliked && isNotRequested && isAvailable;
+      return isNotFavorited && isNotDisliked && isNotRequested && isNotMaybed && isAvailable;
     }),
     [listings, lookup, trip]
   );
 
   const likedListings = useMemo(() =>
     listings
-      .filter(listing => !lookup.requestedIds.has(listing.id))
+      //.filter(listing => !lookup.requestedIds.has(listing.id))
       .filter(listing => lookup.favIds.has(listing.id))
       .sort((a, b) => getRank(a.id) - getRank(b.id)),
     [listings, lookup.favIds, lookup.requestedIds, getRank]
@@ -225,6 +233,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       .filter(listing => lookup.matchIds.has(listing.id))
       .sort((a, b) => getRank(a.id) - getRank(b.id)),
     [listings, lookup.matchIds, getRank]
+  );
+
+  const maybedListings = useMemo(() =>
+    listings
+      .filter(listing => lookup.maybeIds.has(listing.id))
+      .sort((a, b) => getRank(a.id) - getRank(b.id)),
+    [listings, lookup.maybeIds, getRank]
   );
 
   const optimisticRemoveApply = useCallback(async (listingId: string) => {
@@ -296,30 +311,39 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         return { success: true };
       }
 
-      // Store the initial dislike state before any changes
+      // Store initial states
       const wasDisliked = lookup.dislikedIds.has(listingId);
+      const wasMaybed = lookup.maybeIds.has(listingId);
 
+      // Optimistically update UI
       setLookup(prev => ({
         ...prev,
         favIds: new Set([...prev.favIds, listingId]),
-        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId)),
+        maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId))
       }));
 
-      // If the listing was disliked, remove the dislike first
+      // Handle existing states
       if (wasDisliked) {
         await optimisticRemoveDislikeDb(trip.id, listingId);
+      }
+      if (wasMaybed) {
+        await optimisticRemoveMaybeDb(trip.id, listingId);
       }
 
       const result = await optimisticFavorite(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback to the exact previous state
+        // Rollback to previous state
         setLookup(prev => ({
           ...prev,
           favIds: new Set([...prev.favIds].filter(id => id !== listingId)),
           dislikedIds: wasDisliked
             ? new Set([...prev.dislikedIds, listingId])
-            : prev.dislikedIds
+            : prev.dislikedIds,
+          maybeIds: wasMaybed
+            ? new Set([...prev.maybeIds, listingId])
+            : prev.maybeIds
         }));
       }
     } catch (error) {
@@ -407,13 +431,107 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       }
     } catch (error) {
       console.error('Failed to apply:', error);
-      // Rollback on error
+      // Rollback on erroir
       setLookup(prev => ({
         ...prev,
         requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))
       }));
     }
   }, [trip, lookup]);
+
+  const optimisticMaybe = useCallback(async (listingId: string) => {
+    try {
+      if (lookup.maybeIds.has(listingId)) {
+        return { success: true };
+      }
+
+      // Check if the listing is liked or disliked
+      const wasLiked = lookup.favIds.has(listingId);
+      const wasDisliked = lookup.dislikedIds.has(listingId);
+
+      // Update UI immediately
+      setLookup(prev => ({
+        ...prev,
+        maybeIds: new Set([...prev.maybeIds, listingId]),
+        favIds: new Set([...prev.favIds].filter(id => id !== listingId)),
+        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+      }));
+
+      // Then handle backend operations
+      if (wasLiked) {
+        await optimisticRemoveFavorite(trip.id, listingId);
+      }
+      if (wasDisliked) {
+        await optimisticRemoveDislikeDb(trip.id, listingId);
+      }
+
+      const result = await optimisticMaybeDb(trip.id, listingId);
+
+      if (!result.success) {
+        // Rollback logic remains the same
+        setLookup(prev => ({
+          ...prev,
+          maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId)),
+          favIds: wasLiked
+            ? new Set([...prev.favIds, listingId])
+            : prev.favIds,
+          dislikedIds: wasDisliked
+            ? new Set([...prev.dislikedIds, listingId])
+            : prev.dislikedIds
+        }));
+      }
+    } catch (error) {
+      // Error handling remains the same
+      console.error('Failed to maybe listing:', error);
+      setLookup(prev => ({
+        ...prev,
+        maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId)),
+        favIds: wasLiked
+          ? new Set([...prev.favIds, listingId])
+          : prev.favIds,
+        dislikedIds: wasDisliked
+          ? new Set([...prev.dislikedIds, listingId])
+          : prev.dislikedIds
+      }));
+    }
+  }, [trip, lookup]);
+
+  const optimisticRemoveMaybe = useCallback(async (listingId: string) => {
+    try {
+      // Skip if not maybed
+      if (!lookup.maybeIds.has(listingId)) return;
+
+      let isRequested = lookup.requestedIds.has(listingId);
+
+      // If there's an application, remove it first
+      if (isRequested) {
+        await optimisticRemoveApply(listingId);
+      }
+
+      // Then remove from maybes
+      setLookup(prev => ({
+        ...prev,
+        maybeIds: new Set([...prev.maybeIds].filter(id => id !== listingId))
+      }));
+
+      const result = await optimisticRemoveMaybeDb(trip.id, listingId);
+
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          maybeIds: new Set([...prev.maybeIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to remove maybe:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        maybeIds: new Set([...prev.maybeIds, listingId])
+      }));
+    }
+  }, [trip, lookup, optimisticRemoveApply]);
 
   const contextValue: TripContextType = {
     state: {
@@ -428,7 +546,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       lookup,
       hasApplication,
       application,
-      matchedListings // Add this line
+      matchedListings,
+      maybedListings
     },
     actions: {
       setViewedListings,
@@ -441,6 +560,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       optimisticRemoveDislike,
       optimisticApply,
       optimisticRemoveApply,
+      optimisticMaybe,
+      optimisticRemoveMaybe,
     }
   };
 

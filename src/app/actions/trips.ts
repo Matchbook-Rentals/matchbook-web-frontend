@@ -164,6 +164,7 @@ export async function getTripById(tripId: string): Promise<TripAndMatches | null
         matches: true,
         dislikes: true,
         favorites: true,
+        maybes: true,
         housingRequests: true,
         allParticipants: true,
       },
