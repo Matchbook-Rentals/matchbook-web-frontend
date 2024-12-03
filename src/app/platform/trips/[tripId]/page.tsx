@@ -71,7 +71,7 @@ const TripsPage: React.FC = () => {
           tabs={tabs}
           className='mx-auto w-full'
           tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex justify-between xxs:justify-center space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
+          tabsListClassName='flex justify-between xs:justify-center px-1 space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
         />
       </div>
     </div>

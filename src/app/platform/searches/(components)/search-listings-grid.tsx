@@ -133,7 +133,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   return (
     <div className="relative">
       <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
-        <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
+        <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3  gap-8 pb-12">
           {displayedListings.map((listing) => {
             const status = getListingStatus(listing);
             return (
