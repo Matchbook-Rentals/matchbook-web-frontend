@@ -82,12 +82,12 @@ export default function SearchListingCard({ listing, status, className, style, d
 
   return (
     <Card
-      className={`w-full overflow-hidden border-0 max-w-[267px] shadow-0 shadow-none ${className || ''}`}
+      className={`w-full overflow-hidden border-0  shadow-0 shadow-none ${className || ''}`}
       style={style}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative rounded-lg max-h-[297px] max-w-[267px] mx-auto aspect-[297/266]">
+      <div className="relative rounded-lg  mx-auto aspect-[297/266]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
           <CarouselContent>
             {listing.listingImages.map((image, index) => (
