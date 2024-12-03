@@ -205,7 +205,7 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[52%] md:w-[52%] rounded-full' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[150px]
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[150px] md:max-w-[150px]
                   flex items-center justify-center p-4 rounded-full text-center text-white
                   text-sm transition-all duration-200 relative`}
               />
@@ -232,7 +232,7 @@ const MatchViewTab: React.FC = () => {
                 Icon={<BrandHeart className='w-[52%] h-[52%] rounded-full' />}
                 className={`
                 bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-[1/1]
-                md:w-[150px] flex items-center justify-center p-4 rounded-full text-center
+                md:w-[150px] md:max-w-[150px] flex items-center justify-center p-4 rounded-full text-center
                 text-white text-sm transition-all duration-200
               `}
               />
