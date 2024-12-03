@@ -205,7 +205,7 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[52%] md:w-[52%] rounded-full aspect-[1/1]' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[150px] md:max-w-[150px]
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] aspect-[1/1]
                   flex items-center justify-center rounded-full text-center text-white
                   text-sm transition-all duration-200 relative`}
               />
@@ -214,7 +214,7 @@ const MatchViewTab: React.FC = () => {
                 handleClick={handleBack}
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
                 className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1]
-                  md:w-[100px] self-center rounded-full text-center flex items-center
+                  md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                   justify-center text-white text-sm transition-all duration-200 relative `}
               />
 
@@ -223,16 +223,16 @@ const MatchViewTab: React.FC = () => {
                 Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
                 className={`
                 bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1]
-                md:w-[100px] self-center rounded-full text-center flex items-center
+                md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                 justify-center text-white text-sm transition-all duration-200 `}
               />
 
               <ButtonControl
                 handleClick={() => handleLike(showListings[0])}
-                Icon={<BrandHeart className='w-[52%] h-[52%] rounded-xl aspect-[1/1]' />}
+                Icon={<BrandHeart className='w-[50%] w-[50%] rounded-xl aspect-[1/1]' />}
                 className={`
                 bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-[1/1]
-                md:w-[150px] md:max-w-[150px] flex items-center justify-center rounded-full text-center
+                md:w-[9vw] md:h-[9vw] flex items-center justify-center rounded-full text-center
                 text-white text-sm transition-all duration-200
               `}
               />
