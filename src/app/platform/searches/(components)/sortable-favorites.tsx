@@ -26,13 +26,42 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
 
-  // Combine and sort listings
-  const combinedListings: ListingAndImages[] = [
+  // Add sorting state
+  const [sortConfig, setSortConfig] = React.useState<{
+    key: keyof ListingAndImages | null;
+    direction: 'asc' | 'desc';
+  }>({ key: null, direction: 'asc' });
+
+  // Add sorting function
+  const sortListings = (listings: ListingAndImages[]) => {
+    if (!sortConfig.key) return listings;
+
+    return [...listings].sort((a, b) => {
+      if (a[sortConfig.key!] < b[sortConfig.key!]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key!] > b[sortConfig.key!]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+
+  // Add click handler for table headers
+  const requestSort = (key: keyof ListingAndImages) => {
+    setSortConfig({
+      key,
+      direction: sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc',
+    });
+  };
+
+  // Modify the combined listings to include sorting
+  const combinedListings: ListingAndImages[] = sortListings([
     ...state.requestedListings,
     ...state.likedListings.filter(listing =>
       !state.lookup.requestedIds.has(listing.id)
     )
-  ];
+  ]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (state.lookup.maybeIds.has(listing.id)) {
@@ -63,12 +92,42 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
           <TableRow>
             <TableHead className="w-12">Status</TableHead>
             <TableHead className="w-24">Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="w-20">Rent</TableHead>
-            <TableHead className="w-16">Rating</TableHead>
-            <TableHead className="w-12">Beds</TableHead>
-            <TableHead className="w-12">Baths</TableHead>
-            <TableHead className="w-20">Distance</TableHead>
+            <TableHead
+              className="cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('title')}
+            >
+              Name {sortConfig.key === 'title' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
+            <TableHead
+              className="w-20 cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('calculatedPrice')}
+            >
+              Rent {sortConfig.key === 'calculatedPrice' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
+            <TableHead
+              className="w-16 cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('rating')}
+            >
+              Rating {sortConfig.key === 'rating' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
+            <TableHead
+              className="w-12 cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('roomCount')}
+            >
+              Beds {sortConfig.key === 'roomCount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
+            <TableHead
+              className="w-12 cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('bathroomCount')}
+            >
+              Baths {sortConfig.key === 'bathroomCount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
+            <TableHead
+              className="w-20 cursor-pointer hover:bg-gray-100"
+              onClick={() => requestSort('distance')}
+            >
+              Distance {sortConfig.key === 'distance' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+            </TableHead>
             <TableHead className="w-20">Action</TableHead>
           </TableRow>
         </TableHeader>
