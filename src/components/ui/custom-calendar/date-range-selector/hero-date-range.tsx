@@ -17,8 +17,8 @@ interface HeroDateRangeProps {
 }
 
 const HeroDateRange: React.FC<HeroDateRangeProps> = ({ start, end, handleChange }) => {
-  const [leftDate, setLeftDate] = useState(new Date());
-  const [rightDate, setRightDate] = useState(addMonths(new Date(), 1));
+  const [leftDate, setLeftDate] = useState(start);
+  const [rightDate, setRightDate] = useState(end);
   const [dateRange, setDateRange] = useState<DateRange>({ startDate: start, endDate: end });
 
   const handleDateClick = (date: Date) => {
