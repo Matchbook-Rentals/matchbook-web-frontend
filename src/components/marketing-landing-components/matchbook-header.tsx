@@ -25,7 +25,7 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
     const checkAccess = async () => {
       if (isSignedIn && user) {
         const userRole = user.publicMetadata.role as string;
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta');
+        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
       }
     };
 
