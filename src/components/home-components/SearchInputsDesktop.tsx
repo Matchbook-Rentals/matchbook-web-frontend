@@ -4,18 +4,34 @@ import { FaSearch } from "react-icons/fa";
 import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
 import { toast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "./HeroLocationSuggest";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 interface SearchInputsDesktopProps {
-  hasAccess: boolean;
   dateRangeContent?: React.ReactNode;
   guestsContent?: React.ReactNode;
 }
 
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
-  hasAccess,
   dateRangeContent,
   guestsContent = <h1>Guests</h1>
 }) => {
+  const [hasAccess, setHasAccess] = React.useState(false);
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+
+  React.useEffect(() => {
+    const checkAccess = async () => {
+      if (isSignedIn && user) {
+        const userRole = user.publicMetadata.role as string;
+        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
+      } else {
+        setHasAccess(false);
+      }
+    };
+
+    checkAccess();
+  }, [isSignedIn, user]);
+
   const [activeContent, setActiveContent] = React.useState<React.ReactNode | null>(null);
   const [totalGuests, setTotalGuests] = React.useState<number>(1);
   const [dateRange, setDateRange] = React.useState<{ start: Date; end: Date }>({
@@ -45,6 +61,52 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const handleLocationSelect = (location: string) => {
     setSelectedLocation(location);
   };
+
+  // Render different versions based on hasAccess
+  if (!hasAccess) {
+    return (
+      <div ref={containerRef}>
+        <div className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden">
+          <input
+            type="text"
+            placeholder="Where to?"
+            value={selectedLocation.description}
+            className={inputClasses}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Move in:"
+            value={formatDate(dateRange.start)}
+            className={inputClasses}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Move out:"
+            value={formatDate(dateRange.end)}
+            className={inputClasses}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Who?"
+            value={`${totalGuests} guest${totalGuests !== 1 ? 's' : ''}`}
+            className={`${inputClasses} sm:border-r-0`}
+            readOnly
+          />
+          <div className="flex-shrink-0">
+            <button
+              disabled
+              className="w-auto p-3 cursor-not-allowed opacity-50 bg-primaryBrand rounded-full"
+            >
+              <FaSearch className="text-white mx-auto" size={20} />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef}>
