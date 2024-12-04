@@ -86,3 +86,9 @@ export interface MatchWithRelations extends Match {
   listing: Listing
   trip: Trip
 }
+
+export interface SuggestedLocation {
+  description: string;
+  lat: number;
+  lng: number;
+}

@@ -57,7 +57,7 @@ export default function ContactPage() {
                   href="mailto:supports@matchbookrentals.com"
                   className="text-gray-600 hover:underline text-lg"
                 >
-                  support@matchbookrentals.com
+                  info@matchbookrentals.com
                 </a>
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function ContactPage() {
                   href="mailto:info@matchbookrentals.com"
                   className="text-gray-600 hover:underline text-lg"
                 >
-                  info@matchbookrentals.com
+                  support@matchbookrentals.com
                 </a>
               </div>
             </div>

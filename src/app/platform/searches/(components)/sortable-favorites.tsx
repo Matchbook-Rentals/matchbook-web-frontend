@@ -86,7 +86,7 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
   };
 
   return (
-    <ScrollArea className="w-full h-[600px] border rounded-lg">
+    <div className="w-full border rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
@@ -131,50 +131,54 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
             <TableHead className="w-20">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {combinedListings.map((listing) => (
-            <TableRow key={listing.id}>
-              <TableCell>{getStatusIcon(getListingStatus(listing))}</TableCell>
-              <TableCell>
-                {listing.listingImages[0] && (
-                  <div className="relative w-[80px] h-[60px]">
-                    <Image
-                      src={listing.listingImages[0].url}
-                      alt={listing.title}
-                      fill
-                      className="object-cover rounded"
-                    />
-                  </div>
-                )}
-              </TableCell>
-              <TableCell className="max-w-28">{listing.title}</TableCell>
-              <TableCell>${listing.calculatedPrice}</TableCell>
-              <TableCell>{listing.rating || 4.9}/5</TableCell>
-              <TableCell>{listing.roomCount}</TableCell>
-              <TableCell>{listing.bathroomCount}</TableCell>
-              <TableCell>{listing.distance.toFixed(1)}mi</TableCell>
-              <TableCell>
-                {state.lookup.requestedIds.has(listing.id) ? (
-                  <Button
-                    className="bg-pinkBrand text-white w-full"
-                    onClick={() => optimisticRemoveApply(listing.id)}
-                  >
-                    Remove
-                  </Button>
-                ) : (
-                  <Button
-                    className="bg-blueBrand text-white w-full"
-                    onClick={() => optimisticApply(listing)}
-                  >
-                    Apply
-                  </Button>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
       </Table>
-    </ScrollArea>
+      <ScrollArea className="h-[600px]">
+        <Table>
+          <TableBody>
+            {combinedListings.map((listing) => (
+              <TableRow key={listing.id}>
+                <TableCell>{getStatusIcon(getListingStatus(listing))}</TableCell>
+                <TableCell>
+                  {listing.listingImages[0] && (
+                    <div className="relative w-[80px] h-[60px]">
+                      <Image
+                        src={listing.listingImages[0].url}
+                        alt={listing.title}
+                        fill
+                        className="object-cover rounded"
+                      />
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell className="max-w-28">{listing.title}</TableCell>
+                <TableCell>${listing.calculatedPrice}</TableCell>
+                <TableCell>{listing.rating || 4.9}/5</TableCell>
+                <TableCell>{listing.roomCount}</TableCell>
+                <TableCell>{listing.bathroomCount}</TableCell>
+                <TableCell>{listing.distance.toFixed(1)}mi</TableCell>
+                <TableCell>
+                  {state.lookup.requestedIds.has(listing.id) ? (
+                    <Button
+                      className="bg-pinkBrand text-white w-full"
+                      onClick={() => optimisticRemoveApply(listing.id)}
+                    >
+                      Remove
+                    </Button>
+                  ) : (
+                    <Button
+                      className="bg-blueBrand text-white w-full"
+                      onClick={() => optimisticApply(listing)}
+                    >
+                      Apply
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ScrollArea>
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
+import { SuggestedLocation } from "@/types";
 
 interface Suggestion {
   place_id: string;
@@ -13,7 +14,7 @@ interface HeroLocationSuggestProps {
   hasAccess: boolean;
   triggerClassName?: string;
   contentClassName?: string;
-  onLocationSelect?: (location: { description: string; lat: number; lng: number }) => void;
+  onLocationSelect?: (location: SuggestedLocation) => void;
 }
 
 export default function HeroLocationSuggest({

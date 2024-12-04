@@ -39,7 +39,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     end: new Date(new Date().setMonth(new Date().getMonth() + 1))
   });
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedLocation, setSelectedLocation] = React.useState<string>('');
+  const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lon: null });
 
   const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
@@ -58,7 +58,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const handleLocationSelect = (location: string) => {
+  const handleLocationSelect = (location: any) => {
     setSelectedLocation(location);
   };
 
