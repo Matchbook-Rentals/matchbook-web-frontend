@@ -33,10 +33,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   }, [isSignedIn, user]);
 
   const [activeContent, setActiveContent] = React.useState<React.ReactNode | null>(null);
-  const [totalGuests, setTotalGuests] = React.useState<number>(1);
-  const [dateRange, setDateRange] = React.useState<{ start: Date; end: Date }>({
-    start: new Date(),
-    end: new Date(new Date().setMonth(new Date().getMonth() + 1))
+  const [totalGuests, setTotalGuests] = React.useState<number>(null);
+  const [dateRange, setDateRange] = React.useState<{ start: Date | null; end: Date | null }>({
+    start: null,
+    end: null,
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lon: null });
@@ -47,14 +47,15 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   // Replace separate moveIn/moveOut content with single dateRangeContent
   dateRangeContent = dateRangeContent ?? (
     <HeroDateRange
-      start={dateRange.start}
-      end={dateRange.end}
+      start={dateRange.start || new Date()}
+      end={dateRange.end || new Date()}
       handleChange={(start, end) => setDateRange({ start, end })}
     />
   );
 
   // Format the dates for display
   const formatDate = (date: Date) => {
+    if (!date) return null
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
@@ -77,14 +78,14 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           <input
             type="text"
             placeholder="Move in:"
-            value={formatDate(dateRange.start)}
+            value={dateRange.start ? formatDate(dateRange.start) : null}
             className={inputClasses}
             readOnly
           />
           <input
             type="text"
             placeholder="Move out:"
-            value={formatDate(dateRange.end)}
+            value={dateRange.end ? formatDate(dateRange.end) : null}
             className={inputClasses}
             readOnly
           />
@@ -140,7 +141,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             <input
               type="text"
               placeholder="Who?"
-              value={`${totalGuests} guest${totalGuests !== 1 ? 's' : ''}`}
+              value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
               className={`${inputClasses} sm:border-r-0`}
               readOnly={!hasAccess}
               onClick={() => setActiveContent(guestsContent)}
