@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FaSearch } from "react-icons/fa";
 import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
 import { toast } from "@/components/ui/use-toast";
@@ -40,6 +39,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lon: null });
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
@@ -63,11 +63,43 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     setSelectedLocation(location);
   };
 
+  // Add new state to track the arrow position
+  const [arrowPosition, setArrowPosition] = React.useState(5); // Default left position in rem
+
+  // Add refs for each input
+  const locationInputRef = useRef<HTMLInputElement>(null);
+  const moveInInputRef = useRef<HTMLInputElement>(null);
+  const moveOutInputRef = useRef<HTMLInputElement>(null);
+  const guestsInputRef = useRef<HTMLInputElement>(null);
+
+  // Update click handler to calculate exact position
+  const handleInputClick = (e: React.MouseEvent, content: React.ReactNode, inputRef: React.RefObject<HTMLInputElement>) => {
+    e.stopPropagation();
+    if (activeContent !== content) {
+      setActiveContent(content);
+      setIsOpen(true);
+
+      if (containerRef.current && inputRef.current) {
+        const containerLeft = containerRef.current.getBoundingClientRect().left;
+        const inputRect = inputRef.current.getBoundingClientRect();
+        const inputLeft = inputRect.left;
+        const inputCenter = inputLeft + (inputRect.width / 2);
+
+        // Calculate the percentage position relative to the container
+        const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+        setArrowPosition(position);
+      }
+    }
+  };
+
   // Render different versions based on hasAccess
   if (!hasAccess) {
     return (
-      <div ref={containerRef}>
-        <div className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden">
+      <div ref={containerRef} className="relative">
+        <div
+          className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <input
             type="text"
             placeholder="Where to?"
@@ -105,67 +137,84 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             </button>
           </div>
         </div>
+
+        {isOpen && (
+          <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
+            before:content-[''] before:absolute before:-top-2 before:left-5 before:w-4 before:h-4
+            before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200">
+            {activeContent}
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div ref={containerRef}>
-      <Popover>
-        <PopoverTrigger className="w-full">
-          <div className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden">
-            <input
-              type="text"
-              placeholder="Where to?"
-              value={selectedLocation.description}
-              className={inputClasses}
-              readOnly
-              onClick={() => setActiveContent(<HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} />)}
-            />
-            <input
-              type="text"
-              placeholder="Move in:"
-              value={formatDate(dateRange.start)}
-              className={inputClasses}
-              readOnly={!hasAccess}
-              onClick={() => setActiveContent(dateRangeContent)}
-            />
-            <input
-              type="text"
-              placeholder="Move out:"
-              value={formatDate(dateRange.end)}
-              className={inputClasses}
-              readOnly={!hasAccess}
-              onClick={() => setActiveContent(dateRangeContent)}
-            />
-            <input
-              type="text"
-              placeholder="Who?"
-              value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
-              className={`${inputClasses} sm:border-r-0`}
-              readOnly={!hasAccess}
-              onClick={() => setActiveContent(guestsContent)}
-            />
-            <div className="flex-shrink-0">
-              <button
-                disabled={!hasAccess}
-                className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-                  } bg-primaryBrand rounded-full`}
-              >
-                <FaSearch className="text-white mx-auto" size={20} />
-              </button>
-            </div>
-          </div>
-        </PopoverTrigger>
+    <div ref={containerRef} className="relative">
+      <div
+        className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
+        onClick={() => !isOpen && setIsOpen(true)}
+      >
+        <input
+          ref={locationInputRef}
+          type="text"
+          placeholder="Where to?"
+          value={selectedLocation.description}
+          className={inputClasses}
+          readOnly
+          onClick={(e) => handleInputClick(e,
+            <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} />,
+            locationInputRef
+          )}
+        />
+        <input
+          ref={moveInInputRef}
+          type="text"
+          placeholder="Move in:"
+          value={formatDate(dateRange.start)}
+          className={inputClasses}
+          readOnly={!hasAccess}
+          onClick={(e) => handleInputClick(e, dateRangeContent, moveInInputRef)}
+        />
+        <input
+          ref={moveOutInputRef}
+          type="text"
+          placeholder="Move out:"
+          value={formatDate(dateRange.end)}
+          className={inputClasses}
+          readOnly={!hasAccess}
+          onClick={(e) => handleInputClick(e, dateRangeContent, moveOutInputRef)}
+        />
+        <input
+          ref={guestsInputRef}
+          type="text"
+          placeholder="Who?"
+          value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+          className={`${inputClasses} sm:border-r-0`}
+          readOnly={!hasAccess}
+          onClick={(e) => handleInputClick(e, guestsContent, guestsInputRef)}
+        />
+        <div className="flex-shrink-0">
+          <button
+            disabled={!hasAccess}
+            className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+              } bg-primaryBrand rounded-full`}
+          >
+            <FaSearch className="text-white mx-auto" size={20} />
+          </button>
+        </div>
+      </div>
 
-        <PopoverContent
-          className="w-[--radix-popover-trigger-width] p-0 rounded-xl"
-          align="start"
-          sideOffset={8}
-        >
+      {isOpen && (
+        <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
+          before:content-[''] before:absolute before:-top-2 before:left-[var(--arrow-position)] before:w-4 before:h-4
+          before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200
+          transform origin-top transition-all duration-200 ease-out
+          animate-in fade-in slide-in-from-top-2"
+          style={{ '--arrow-position': `${arrowPosition}%` } as React.CSSProperties}>
           {activeContent}
-        </PopoverContent>
-      </Popover>
+        </div>
+      )}
     </div>
   );
 };
