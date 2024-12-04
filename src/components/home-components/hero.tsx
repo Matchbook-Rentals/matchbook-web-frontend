@@ -16,7 +16,7 @@ const Hero: React.FC = () => {
       {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
 
       {/* Content */}
-      <SearchContainer className="md:pt-[5%] pt-[5%] sm:w-[90%] md:w-[70%] relative" />
+      <SearchContainer className="md:pt-[5%] pt-[5%] sm:w-[90%] lg:w-[70%] relative" />
     </div>
   );
 };
