@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import SearchMap from '../(components)/search-map';
@@ -107,6 +107,20 @@ export default function ShortListTab() {
     return [{ label: 'Unapply', action: () => handleUnapply(listing) }]
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1280 && viewMode === 'list') {
+        setViewMode('grid');
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [viewMode]);
+
   if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
     return <div>No favorites found for this trip.</div>;
   }
@@ -116,7 +130,7 @@ export default function ShortListTab() {
       <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 py-8">
         <div className="w-full md:w-2/3 md:pr-4">
           <div className="flex justify-between items-center mb-4">
-            <div className="flex border shadow-lg rounded-full">
+            <div className="hidden xl:flex border shadow-lg rounded-full">
               <button
                 className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
                 onClick={() => setViewMode('grid')}
