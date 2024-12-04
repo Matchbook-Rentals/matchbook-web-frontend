@@ -93,37 +93,37 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
             <TableHead className="w-12">Status</TableHead>
             <TableHead className="w-24">Image</TableHead>
             <TableHead
-              className="cursor-pointer hover:bg-gray-100"
+              className="cursor-pointer  max-w-24 hover:bg-gray-100"
               onClick={() => requestSort('title')}
             >
               Name {sortConfig.key === 'title' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </TableHead>
             <TableHead
-              className="w-20 cursor-pointer hover:bg-gray-100"
+              className=" cursor-pointer hover:bg-gray-100"
               onClick={() => requestSort('calculatedPrice')}
             >
               Rent {sortConfig.key === 'calculatedPrice' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </TableHead>
             <TableHead
-              className="w-16 cursor-pointer hover:bg-gray-100"
+              className=" cursor-pointer hover:bg-gray-100"
               onClick={() => requestSort('rating')}
             >
               Rating {sortConfig.key === 'rating' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </TableHead>
             <TableHead
-              className="w-12 cursor-pointer hover:bg-gray-100"
+              className=" cursor-pointer hover:bg-gray-100"
               onClick={() => requestSort('roomCount')}
             >
               Beds {sortConfig.key === 'roomCount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </TableHead>
             <TableHead
-              className="w-12 cursor-pointer hover:bg-gray-100"
+              className=" cursor-pointer hover:bg-gray-100"
               onClick={() => requestSort('bathroomCount')}
             >
               Baths {sortConfig.key === 'bathroomCount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
             </TableHead>
             <TableHead
-              className="w-20 cursor-pointer hover:bg-gray-100"
+              className=" cursor-pointer hover:bg-gray-100"
               onClick={() => requestSort('distance')}
             >
               Distance {sortConfig.key === 'distance' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
@@ -147,7 +147,7 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
                   </div>
                 )}
               </TableCell>
-              <TableCell>{listing.title}</TableCell>
+              <TableCell className="max-w-28">{listing.title}</TableCell>
               <TableCell>${listing.calculatedPrice}</TableCell>
               <TableCell>{listing.rating || 4.9}/5</TableCell>
               <TableCell>{listing.roomCount}</TableCell>
