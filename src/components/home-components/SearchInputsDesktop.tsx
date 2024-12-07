@@ -125,28 +125,28 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           <input
             type="text"
             placeholder="Where to?"
-            value={selectedLocation.description}
+            value={""}
             className={inputClasses}
             readOnly
           />
           <input
             type="text"
             placeholder="Move in:"
-            value={dateRange.start ? formatDate(dateRange.start) : null}
+            value={""}
             className={inputClasses}
             readOnly
           />
           <input
             type="text"
             placeholder="Move out:"
-            value={dateRange.end ? formatDate(dateRange.end) : null}
+            value={""}
             className={inputClasses}
             readOnly
           />
           <input
             type="text"
             placeholder="Who?"
-            value={`${totalGuests} guest${totalGuests !== 1 ? 's' : ''}`}
+            value={""}
             className={`${inputClasses} sm:border-r-0`}
             readOnly
           />
