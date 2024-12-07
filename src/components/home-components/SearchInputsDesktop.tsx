@@ -4,15 +4,17 @@ import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/h
 import { toast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useAuth, useUser } from "@clerk/nextjs";
+import GuestTypeCounter from "./GuestTypeCounter";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
   guestsContent?: React.ReactNode;
 }
 
+// Add this type definition
+type ActiveContentType = 'location' | 'date' | 'guests' | null;
+
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
-  dateRangeContent,
-  guestsContent = <h1>Guests</h1>
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -31,12 +33,14 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     checkAccess();
   }, [isSignedIn, user]);
 
-  const [activeContent, setActiveContent] = React.useState<React.ReactNode | null>(null);
+  // Replace activeContent state with new type
+  const [activeContent, setActiveContent] = React.useState<ActiveContentType>(null);
   const [totalGuests, setTotalGuests] = React.useState<number>(null);
   const [dateRange, setDateRange] = React.useState<{ start: Date | null; end: Date | null }>({
     start: null,
     end: null,
   });
+  const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 0 })
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lon: null });
   const [isOpen, setIsOpen] = React.useState(false);
@@ -44,14 +48,11 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
 
-  // Replace separate moveIn/moveOut content with single dateRangeContent
-  dateRangeContent = dateRangeContent ?? (
-    <HeroDateRange
-      start={dateRange.start || new Date()}
-      end={dateRange.end || new Date()}
-      handleChange={(start, end) => setDateRange({ start, end })}
-    />
-  );
+  // Add this effect to update totalGuests whenever guests state changes
+  React.useEffect(() => {
+    const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
+    setTotalGuests(total);
+  }, [guests]);
 
   // Format the dates for display
   const formatDate = (date: Date) => {
@@ -72,8 +73,28 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const moveOutInputRef = useRef<HTMLInputElement>(null);
   const guestsInputRef = useRef<HTMLInputElement>(null);
 
-  // Update click handler to calculate exact position
-  const handleInputClick = (e: React.MouseEvent, content: React.ReactNode, inputRef: React.RefObject<HTMLInputElement>) => {
+  // Add this function to render content based on active type
+  const renderActiveContent = () => {
+    switch (activeContent) {
+      case 'location':
+        return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} />;
+      case 'date':
+        return (
+          <HeroDateRange
+            start={dateRange.start || new Date()}
+            end={dateRange.end || new Date()}
+            handleChange={(start, end) => setDateRange({ start, end })}
+          />
+        );
+      case 'guests':
+        return <GuestTypeCounter guests={guests} setGuests={setGuests} />;
+      default:
+        return null;
+    }
+  };
+
+  // Update handleInputClick to use string types
+  const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
     e.stopPropagation();
     if (activeContent !== content) {
       setActiveContent(content);
@@ -84,11 +105,12 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         const inputRect = inputRef.current.getBoundingClientRect();
         const inputLeft = inputRect.left;
         const inputCenter = inputLeft + (inputRect.width / 2);
-
-        // Calculate the percentage position relative to the container
         const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
         setArrowPosition(position);
       }
+    } else {
+      setIsOpen(false);
+      setActiveContent(null);
     }
   };
 
@@ -142,7 +164,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
             before:content-[''] before:absolute before:-top-2 before:left-5 before:w-4 before:h-4
             before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200">
-            {activeContent}
+            {renderActiveContent()}
           </div>
         )}
       </div>
@@ -162,10 +184,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           value={selectedLocation.description}
           className={inputClasses}
           readOnly
-          onClick={(e) => handleInputClick(e,
-            <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} />,
-            locationInputRef
-          )}
+          onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
         />
         <input
           ref={moveInInputRef}
@@ -174,7 +193,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           value={formatDate(dateRange.start)}
           className={inputClasses}
           readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, dateRangeContent, moveInInputRef)}
+          onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
         />
         <input
           ref={moveOutInputRef}
@@ -183,7 +202,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           value={formatDate(dateRange.end)}
           className={inputClasses}
           readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, dateRangeContent, moveOutInputRef)}
+          onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
         />
         <input
           ref={guestsInputRef}
@@ -192,7 +211,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
           className={`${inputClasses} sm:border-r-0`}
           readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, guestsContent, guestsInputRef)}
+          onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
         />
         <div className="flex-shrink-0">
           <button
@@ -212,7 +231,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           transform origin-top transition-all duration-200 ease-out
           animate-in fade-in slide-in-from-top-2"
           style={{ '--arrow-position': `${arrowPosition}%` } as React.CSSProperties}>
-          {activeContent}
+          {renderActiveContent()}
         </div>
       )}
     </div>
@@ -220,3 +239,5 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 };
 
 export default SearchInputsDesktop;
+
+
