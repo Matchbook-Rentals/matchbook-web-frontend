@@ -2,6 +2,7 @@
 import prisma from '@/lib/prismadb';
 import { TripAndMatches } from '@/types/';
 import { auth } from '@clerk/nextjs/server';
+import { Trip } from '@prisma/client';
 
 export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
   const { userId } = auth();
@@ -174,6 +175,47 @@ export async function getTripById(tripId: string): Promise<TripAndMatches | null
   } catch (error) {
     console.error('Error fetching trip by ID:', error);
     throw new Error('Failed to fetch trip');
+  }
+}
+
+interface CreateTripResponse {
+  success: boolean;
+  trip?: Trip;
+  error?: string;
+}
+
+export async function createTrip(tripData: {
+  location: string;
+  startDate?: Date;
+  endDate?: Date;
+  numAdults?: number;
+  numChildren?: number;
+  numPets?: number;
+}): Promise<CreateTripResponse> {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const newTrip = await prisma.trip.create({
+      data: {
+        ...tripData,
+        userId,
+        tripStatus: 'searching', // Set default status
+      },
+    });
+
+    return {
+      success: true,
+      trip: newTrip,
+    };
+  } catch (error) {
+    console.error('Error creating trip:', error);
+    return {
+      success: false,
+      error: 'Failed to create trip',
+    };
   }
 }
 

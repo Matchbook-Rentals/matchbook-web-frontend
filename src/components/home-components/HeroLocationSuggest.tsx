@@ -31,7 +31,7 @@ export default function HeroLocationSuggest({
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    if (newValue.length > 2) {
+    if (newValue.length > 0) {
       try {
         const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(newValue)}`);
         const data = await response.json();
@@ -86,6 +86,7 @@ export default function HeroLocationSuggest({
           placeholder="Where's the party?"
           type="text"
           className="w-full h-full text-2xl focus:outline-none"
+          autoFocus={true}
         />
         {suggestions.length > 0 && (
           <ul className="mt-5">

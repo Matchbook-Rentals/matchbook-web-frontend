@@ -90,7 +90,7 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
                         variant="ghost"
                         className="w-full justify-start p-2"
                       >
-                        Trips
+                        Searches
                       </Button>
                     </Link>
                   )}
