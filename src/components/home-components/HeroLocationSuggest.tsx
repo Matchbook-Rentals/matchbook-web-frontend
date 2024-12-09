@@ -57,6 +57,7 @@ export default function HeroLocationSuggest({
 
   const handleSelect = async (description: string, place_id: string) => {
     const trimmedDescription = description.slice(0, -5); // Remove country code
+    onLocationSelect(null);
     setDisplayValue(trimmedDescription);
 
     // Start timing
@@ -71,6 +72,7 @@ export default function HeroLocationSuggest({
       const data = await response.json();
       if (data.results && data.results.length > 0) {
         const { lat, lng } = data.results[0].geometry.location;
+        console.log(lat)
 
         if (onLocationSelect) {
           onLocationSelect({ description: trimmedDescription, lat, lng });
@@ -91,34 +93,33 @@ export default function HeroLocationSuggest({
     }
   };
 
-  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none ${
-    hasAccess ? '' : 'cursor-not-allowed opacity-50'
-  } bg-transparent`;
+  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+    } bg-transparent`;
 
   return (
 
-      <div className={`p-4 rounded-2xl ${contentClassName}`}>
-        <input
-          value={inputValue}
-          onChange={handleInput}
-          placeholder="Where's the party?"
-          type="text"
-          className="w-full h-full text-2xl focus:outline-none"
-          autoFocus={true}
-        />
-        {suggestions.length > 0 && (
-          <ul className="mt-5">
-            {suggestions.map((suggestion) => (
-              <li
-                className="hover:bg-primaryBrand p-2 cursor-pointer"
-                key={suggestion.place_id}
-                onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
-                onMouseEnter={() => prefetchGeocode(suggestion.description)}
-              >
-                {suggestion.description.slice(0, -5)}
-              </li>
-            ))}
-          </ul>
+    <div className={`p-4 rounded-2xl ${contentClassName}`}>
+      <input
+        value={inputValue}
+        onChange={handleInput}
+        placeholder="Where's the party?"
+        type="text"
+        className="w-full h-full text-2xl focus:outline-none"
+        autoFocus={true}
+      />
+      {suggestions.length > 0 && (
+        <ul className="mt-5">
+          {suggestions.map((suggestion) => (
+            <li
+              className="hover:bg-primaryBrand p-2 cursor-pointer"
+              key={suggestion.place_id}
+              onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
+              onMouseEnter={() => prefetchGeocode(suggestion.description)}
+            >
+              {suggestion.description.slice(0, -5)}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

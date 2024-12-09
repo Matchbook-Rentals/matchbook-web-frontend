@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useAuth, useUser } from "@clerk/nextjs";
 import GuestTypeCounter from "./GuestTypeCounter";
+import { ImSpinner8 } from "react-icons/im";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -122,12 +123,12 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   };
 
   const handleSubmit = () => {
-    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.destination) {
+    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
       setIsOpen(true);
       setActiveContent('location');
       toast({
         variant: "destructive",
-        description: "You must select a location",
+        description: `No lat/lng found for destination`,
       });
       return;
     }
@@ -239,12 +240,19 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             disabled={!hasAccess}
             onClick={(e) => {
               e.stopPropagation();
-              handleSubmit();
+              // Only run handleSubmit if we're not in a loading state
+              if (!(locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng))) {
+                handleSubmit();
+              }
             }}
             className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
               } bg-primaryBrand rounded-full`}
           >
-            <FaSearch className="text-white mx-auto" size={20} />
+            {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
+              <ImSpinner8 className="text-white mx-auto animate-spin" size={20} />
+            ) : (
+              <FaSearch className="text-white mx-auto" size={20} />
+            )}
           </button>
         </div>
       </div>
