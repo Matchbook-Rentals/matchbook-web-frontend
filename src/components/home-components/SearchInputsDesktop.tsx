@@ -7,6 +7,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import GuestTypeCounter from "./GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { createTrip } from "@/app/actions/trips";
+import { useRouter } from "next/navigation";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -22,6 +23,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const { toast } = useToast();
+  const router = useRouter();
 
   React.useEffect(() => {
     const checkAccess = async () => {
@@ -141,7 +143,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     });
 
     if (response.success && response.trip) {
-      window.location.href = `/platform/trips/${response.trip.id}`;
+      router.push(`/platform/trips/${response.trip.id}`);
     } else {
       toast({
         variant: "destructive",
