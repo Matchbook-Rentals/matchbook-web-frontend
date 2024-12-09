@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Lora, Montserrat } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 const lora = Lora({ subsets: ["latin"], variable: '--font-lora' });
@@ -28,7 +29,12 @@ export default function RootLayout({
           />
           <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer></script>
         </head>
-        <body className={lora.className}>{children}</body>
+        <body className={lora.className}>
+          <main>
+            {children}
+          </main>
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );

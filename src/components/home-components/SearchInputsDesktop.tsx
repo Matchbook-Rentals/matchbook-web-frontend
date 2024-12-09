@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useAuth, useUser } from "@clerk/nextjs";
 import GuestTypeCounter from "./GuestTypeCounter";
@@ -19,6 +19,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
   const { user } = useUser();
+  const { toast } = useToast();
 
   React.useEffect(() => {
     const checkAccess = async () => {
@@ -42,7 +43,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 0 })
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lon: null });
+  const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lng: null });
   const [isOpen, setIsOpen] = React.useState(false);
 
   const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
@@ -112,6 +113,20 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       setIsOpen(false);
       setActiveContent(null);
     }
+  };
+
+  const handleSubmit = () => {
+    if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.destination) {
+      setIsOpen(true);
+      setActiveContent('location');
+      toast({
+        variant: "destructive",
+        description: "You must select a location",
+      });
+      return;
+    }
+
+    alert('true'); // temporary alert for testing
   };
 
   // Render different versions based on hasAccess
@@ -216,6 +231,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         <div className="flex-shrink-0">
           <button
             disabled={!hasAccess}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSubmit();
+            }}
             className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
               } bg-primaryBrand rounded-full`}
           >
