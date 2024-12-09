@@ -136,19 +136,36 @@ export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMa
   }
 }
 
-export async function deleteTrip(tripId: string): Promise<void> {
+interface DeleteTripResponse {
+  success: boolean;
+  trip?: Trip;
+  message?: string;
+}
+
+export async function deleteTrip(tripId: string): Promise<DeleteTripResponse> {
   const { userId } = auth();
   if (!userId) {
-    throw new Error('Unauthorized');
+    return {
+      success: false,
+      message: 'Unauthorized'
+    };
   }
 
   try {
-    await prisma.trip.delete({
+    const deletedTrip = await prisma.trip.delete({
       where: { id: tripId },
     });
+
+    return {
+      success: true,
+      trip: deletedTrip
+    };
   } catch (error) {
     console.error('Error deleting trip:', error);
-    throw new Error('Failed to delete trip');
+    return {
+      success: false,
+      message: 'Failed to delete trip'
+    };
   }
 }
 

@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 
 const getState = (stateInput: string): string => {
@@ -62,23 +63,48 @@ const getState = (stateInput: string): string => {
   return stateMap[normalized] || stateInput;
 };
 
-const TripCard = ({
+interface TripCardProps {
+  imageSrc?: string;
+  city?: string;
+  state?: string;
+  startDate?: string;
+  endDate?: string;
+  tripId: string;
+  onDelete: (tripId: string) => void;
+}
+
+const TripCard: React.FC<TripCardProps> = ({
   imageSrc = "/api/placeholder/400/320",
   city = "Seattle",
   state = "WA",
   startDate = "06/08/24",
-  endDate = "06/12/24"
+  endDate = "06/12/24",
+  tripId,
+  onDelete
 }) => {
   const stateName = getState(state);
   const statePhotoPath = `/State Photos/${stateName}.jpg`;
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent the Link navigation
+    e.stopPropagation();
+    onDelete(tripId);
+  };
+
   return (
-    <div className="relative  max-w-[300px] rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="relative max-w-[300px] rounded-lg overflow-hidden duration-300 group" data-trip-id={tripId}>
+      <div className="relative">
         <img
           src={statePhotoPath || imageSrc}
           alt={`${city}, ${state}`}
           className="aspect-[297/276] object-cover"
         />
+        <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div onClick={handleDeleteClick} className="bg-black/50 rounded-full w-8 h-8 flex items-center justify-center">
+            <div className="text-red-500 hover:text-red-800 text-3xl font-bold cursor-pointer leading-none flex items-center justify-center" style={{ marginTop: '-2px' }}>✕</div>
+          </div>
+        </div>
+      </div>
       <div className="p-2 bg-white">
         <div className="text-[30px] font-medium text-[#404040] font-montserrat">
           {city}, {state}
