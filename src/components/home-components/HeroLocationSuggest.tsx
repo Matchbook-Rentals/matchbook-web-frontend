@@ -12,6 +12,7 @@ interface Suggestion {
 
 interface HeroLocationSuggestProps {
   hasAccess: boolean;
+  setDisplayValue: (value: string) => void;
   triggerClassName?: string;
   contentClassName?: string;
   onLocationSelect?: (location: SuggestedLocation) => void;
@@ -21,12 +22,21 @@ export default function HeroLocationSuggest({
   hasAccess,
   triggerClassName = "",
   contentClassName = "",
-  onLocationSelect
+  onLocationSelect,
+  setDisplayValue
 }: HeroLocationSuggestProps) {
   const [inputValue, setInputValue] = useState("");
-  const [displayValue, setDisplayValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
+
+  const prefetchGeocode = async (description: string) => {
+    try {
+      const trimmedDescription = description.slice(0, -5);
+      await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
+    } catch (error) {
+      console.error("Error prefetching geocode:", error);
+    }
+  };
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -48,6 +58,10 @@ export default function HeroLocationSuggest({
   const handleSelect = async (description: string, place_id: string) => {
     const trimmedDescription = description.slice(0, -5); // Remove country code
     setDisplayValue(trimmedDescription);
+
+    // Start timing
+    const startTime = performance.now();
+
     setInputValue("");
     setSuggestions([]);
     setOpen(false);
@@ -62,9 +76,13 @@ export default function HeroLocationSuggest({
           onLocationSelect({ description: trimmedDescription, lat, lng });
         }
 
+        // Calculate elapsed time
+        const endTime = performance.now();
+        const elapsedMs = Math.round(endTime - startTime);
+
         toast({
           title: "Location selected",
-          description: trimmedDescription,
+          description: `${trimmedDescription} (processed in ${elapsedMs}ms)`,
           style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' }
         });
       }
@@ -95,6 +113,7 @@ export default function HeroLocationSuggest({
                 className="hover:bg-primaryBrand p-2 cursor-pointer"
                 key={suggestion.place_id}
                 onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
+                onMouseEnter={() => prefetchGeocode(suggestion.description)}
               >
                 {suggestion.description.slice(0, -5)}
               </li>

@@ -89,6 +89,6 @@ export interface MatchWithRelations extends Match {
 
 export interface SuggestedLocation {
   description: string;
-  lat: number;
-  lng: number;
+  lat: number | null;
+  lng: number | null;
 }

@@ -43,8 +43,14 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   });
   const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 0 })
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedLocation, setSelectedLocation] = React.useState({ destination: '', lat: null, lng: null });
+  const [selectedLocation, setSelectedLocation] = React.useState({
+    destination: '',
+    description: '',
+    lat: null,
+    lng: null
+  });
   const [isOpen, setIsOpen] = React.useState(false);
+  const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
   const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
@@ -78,7 +84,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const renderActiveContent = () => {
     switch (activeContent) {
       case 'location':
-        return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} />;
+        return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
       case 'date':
         return (
           <HeroDateRange
@@ -196,7 +202,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           ref={locationInputRef}
           type="text"
           placeholder="Where to?"
-          value={selectedLocation.description}
+          value={locationDisplayValue}
           className={inputClasses}
           readOnly
           onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
