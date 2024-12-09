@@ -6,6 +6,7 @@ import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useAuth, useUser } from "@clerk/nextjs";
 import GuestTypeCounter from "./GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
+import { createTrip } from "@/app/actions/trips";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
@@ -122,7 +123,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedLocation.lat || !selectedLocation.lng || !selectedLocation.description) {
       setIsOpen(true);
       setActiveContent('location');
@@ -133,7 +134,20 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       return;
     }
 
-    alert('true'); // temporary alert for testing
+    const response = await createTrip({
+      locationString: selectedLocation.description,
+      latitude: selectedLocation.lat,
+      longitude: selectedLocation.lng,
+    });
+
+    if (response.success && response.trip) {
+      window.location.href = `/platform/trips/${response.trip.id}`;
+    } else {
+      toast({
+        variant: "destructive",
+        description: response?.message || "Failed to create trip",
+      });
+    }
   };
 
   // Render different versions based on hasAccess

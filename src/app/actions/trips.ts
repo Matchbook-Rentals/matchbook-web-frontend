@@ -185,7 +185,9 @@ interface CreateTripResponse {
 }
 
 export async function createTrip(tripData: {
-  location: string;
+  locationString: string;
+  latitude: number;
+  longitude: number;
   startDate?: Date;
   endDate?: Date;
   numAdults?: number;
@@ -198,11 +200,31 @@ export async function createTrip(tripData: {
   }
 
   try {
+    // Handle date logic
+    let { startDate, endDate } = tripData;
+    const today = new Date();
+
+    if (!startDate && !endDate) {
+      // If neither date is provided, start next month and end the month after
+      startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+      endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
+    } else if (startDate && !endDate) {
+      // If only start date is provided, end date is start date + 1 month
+      endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+    } else if (!startDate && endDate) {
+      // If only end date is provided, start date is end date - 1 month
+      startDate = new Date(endDate);
+      startDate.setMonth(startDate.getMonth() - 1);
+    }
+
     const newTrip = await prisma.trip.create({
       data: {
         ...tripData,
+        startDate,
+        endDate,
         userId,
-        tripStatus: 'searching', // Set default status
+        tripStatus: 'searching',
       },
     });
 
