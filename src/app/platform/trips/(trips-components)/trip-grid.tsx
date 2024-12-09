@@ -34,8 +34,7 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
       // Success! Show toast and clean up
       toast({
         title: `Trip to ${tripToDelete?.locationString} deleted`,
-        // non-destructive
-        variant: "default",
+        variant: "warning",
       });
       setDeletingTrips(prev => {
         const next = new Set(prev);
