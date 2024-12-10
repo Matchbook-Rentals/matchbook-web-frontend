@@ -73,8 +73,7 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-      <h1>
-        <h1 className="text-black font-montserrat text-[32px] font-medium leading-normal">
+        <h1 className=" text-black font-montserrat text-[32px] font-medium leading-normal">
           <span className="cursor-pointer hover:underline">
             <a href="/platform/trips">Searches</a>
           </span>
@@ -83,11 +82,11 @@ const TripsPage: React.FC = () => {
             {state.trip.locationString}
           </span>
         </h1>
-      </h1>
       <div className="flex w-full">
         <TabSelector
           useUrlParams
           tabs={tabs}
+          defaultTab={currentTab || 'overview'}
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto'
           tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'

@@ -18,7 +18,7 @@ export default function PlatformNavbar() {
 
   return (
     <motion.nav
-      className="bg-background sticky top-0 z-50 border-b mb-9"
+      className="bg-background sticky top-0 z-50 border-b mb-6"
       layout="position"
       transition={{ duration: 0.2 }}
     >

@@ -53,10 +53,10 @@ export default function TabSelector({
   }, [useUrlParams, searchParams, tabs, router])
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value)
     if (useUrlParams) {
       router.replace(`?tab=${value}`, { scroll: false })
     }
+    setActiveTab(value)
   }
 
   return (

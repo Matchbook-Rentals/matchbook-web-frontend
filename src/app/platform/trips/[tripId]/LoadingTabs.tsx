@@ -19,8 +19,22 @@ const LoadingTabs: React.FC = () => {
   const tabTriggerStyles = 'p-0 xxs:px-1 sm:px-2';
   const tabs: Tab[] = [
     {
+      label: 'Overview',
+      value: 'overview',
+      content: <LoadingSkeleton />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+    },
+    {
       label: 'Matchmaker',
       value: 'matchmaker',
+      content: <LoadingSkeleton />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+    },
+    {
+      label: 'Map',
+      value: 'map',
       content: <LoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
@@ -52,7 +66,6 @@ const LoadingTabs: React.FC = () => {
     <div className="flex flex-col items-center w-full mx-auto">
       <div className="flex w-full">
         <TabSelector
-          useUrlParams
           tabs={tabs}
           className='mx-auto w-full'
           tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
