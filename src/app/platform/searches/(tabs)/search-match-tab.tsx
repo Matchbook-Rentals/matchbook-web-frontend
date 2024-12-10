@@ -35,6 +35,8 @@ const MatchViewTab: React.FC = () => {
   const [titleBoxHeight, setTitleBoxHeight] = useState<number>(0);
   const titleBoxRef = useRef<HTMLDivElement>(null);
   const [totalBoxHeight, setTotalBoxHeight] = useState<number>(0);
+  const controlBoxParentRef = useRef<HTMLDivElement>(null);
+  const [controlBoxParentHeight, setControlBoxParentHeight] = useState<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,6 +100,18 @@ const MatchViewTab: React.FC = () => {
       window.removeEventListener('scroll', updateTotalBoxHeight);
     };
   }, [showListings]);
+
+  useEffect(() => {
+    const updateParentHeight = () => {
+      if (controlBoxParentRef.current) {
+        setControlBoxParentHeight(controlBoxParentRef.current.offsetHeight);
+      }
+    };
+
+    updateParentHeight();
+    window.addEventListener('resize', updateParentHeight);
+    return () => window.removeEventListener('resize', updateParentHeight);
+  }, []);
 
   // Add this helper function near other function declarations
   const scrollToTop = () => {
@@ -192,20 +206,20 @@ const MatchViewTab: React.FC = () => {
       />
 
       {/* Sticky container for all three flex sections */}
-      <div className="sticky top-[50px] md:top-[60px] z-10 bg-background md:bg-transparent">
+      <div ref={controlBoxParentRef} className="sticky top-[50px] md:top-[55px] z-10 bg-background md:bg-transparent">
         {/* First flex container - Controls and Title */}
-        <div className="flex flex-col md:flex-row w-full ">
+        <div className="flex flex-col md:flex-row w-full" >
           {/* Left side - Button Controls */}
-          <div className="w-full md:w-1/2">
-            <div className={`button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
+          <div className="w-full md:w-1/2 ">
+            <div className={` button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
                      sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
-                     lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 md:pt-4 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2' : 'scale-90'} gap-2 transition-transform duration-500`}
+                     lg:justify-center lg:gap-x-8 pb-0 pt-3 md:px-5 md:pt-4 w-full
+                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-110' : ''} gap-2 transition-transform duration-500`}
               ref={controlBoxRef}>
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-full aspect-[1/1]' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[130px] max-h-[130px] aspect-[1/1]
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[115px] max-h-[115px] aspect-[1/1]
                   flex items-center justify-center rounded-full text-center text-white
                   text-sm transition-all duration-200 relative`}
               />
@@ -213,7 +227,7 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={handleBack}
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
-                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[86px] max-h-[86px]
+                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[78px] max-h-[78px]
                   md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                   justify-center text-white text-sm transition-all duration-200 relative `}
               />
@@ -222,7 +236,7 @@ const MatchViewTab: React.FC = () => {
                 handleClick={() => handleMaybe(showListings[0])}
                 Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
                 className={`
-                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[86px] max-h-[86px]
+                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[78px] max-h-[78px]
                 md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                 justify-center text-white text-sm transition-all duration-200 `}
               />
@@ -231,7 +245,7 @@ const MatchViewTab: React.FC = () => {
                 handleClick={() => handleLike(showListings[0])}
                 Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-xl aspect-[1/1]' />}
                 className={`
-                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[130px] max-h-[130px] aspect-[1/1]
+                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[115px] max-h-[115px] aspect-[1/1]
                 md:w-[9vw] md:h-[9vw] flex items-center justify-center rounded-full text-center
                 text-white text-sm transition-all duration-200
               `}
@@ -254,7 +268,7 @@ const MatchViewTab: React.FC = () => {
         <div className="flex flex-col md:flex-row w-full">
           {/* Left side - Info Labels (Desktop only) */}
           <div className={`hidden md:block w-full md:w-1/2 md:pr-2 transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : 'md:translate-y-[calc(var(--total-box-height))]'}`}
+              ${!isScrolled ? '' : ''}`}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight / 2}px` } as React.CSSProperties}>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
@@ -268,7 +282,7 @@ const MatchViewTab: React.FC = () => {
 
           {/* Right side - All Stats for Mobile, Bedroom/Bath for Desktop */}
           <div className={`w-full md:w-1/2 md:pl-2 bg-background transition-transform duration-500
-              md:-translate-y-[calc(var(--control-box-height)/2)]`}
+              `}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col">
               {/* Bedroom and Price */}
@@ -297,12 +311,12 @@ const MatchViewTab: React.FC = () => {
         {/* Third flex container - Address Info and Sqft/Deposit */}
         {/* Use ref to track y position of bottom border of this container */}
         <div
-          className="flex flex-col border-b md:border-none pb-3 border-black mt-2 md:mt-0 md:flex-row w-full"
+          className="flex flex-col border-b md:border-none border-black mt-2 md:mt-0 md:flex-row w-full"
         >
           {/* Left side - Address Info Values */}
           <div className={`w-full md:w-1/2 pr-2 transition-transform duration-500
-              ${!isScrolled ? 'md:-translate-y-[calc(var(--control-box-height)/2)]' : 'md:translate-y-[calc(var(--total-box-height))]'}`}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight / 2}px` } as React.CSSProperties}>
+              ${!isScrolled ? '' : ''}`}
+            >
             <div className="flex flex-col md:flex-row justify-between items-center">
               {/* Mobile-only labels */}
               <div className="md:hidden w-full">
@@ -325,15 +339,15 @@ const MatchViewTab: React.FC = () => {
 
           {/* Right side - Sqft and Deposit (Desktop only) */}
           <div className={`hidden md:block w-full   sqft-deposit-box md:w-1/2 pl-2 bg-background transition-transform duration-500
-              md:-translate-y-[calc(var(--control-box-height)/2)]`}
+              `}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
-            <div className="flex flex-col border-b pb-5 border-black">
+            <div className="flex flex-col border-b pb-3 border-black">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-lg md:text-2xl text-gray-600">{totalBoxHeight} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg md:text-2xl">${titleBoxHeight} Dep.</p>
+                  <p className="text-lg md:text-2xl">${controlBoxParentHeight} Dep.</p>
                 </div>
               </div>
             </div>
@@ -346,8 +360,8 @@ const MatchViewTab: React.FC = () => {
         {/* Left side - Map and Address */}
         <div className="w-full md:w-1/2 pr-2">
           <div
-            className={`md:block sticky pt-6 md:pt-0 md:z-10 ${!isScrolled ? '' : 'md:translate-y-[30px]'} transition-transform duration-500`}
-            style={{ top: `${controlBoxHeight + 60}px` }}
+            className={`md:block  sticky pt-0 md:pt-0 md:z-10 ${!isScrolled ? '' : ''} transition-transform duration-500`}
+            style={{ top: `${controlBoxParentHeight + 52}px` }}
           >
             <SearchMap
               markers={[{
@@ -358,14 +372,14 @@ const MatchViewTab: React.FC = () => {
                 lat: showListings[0]?.latitude,
                 lng: showListings[0]?.longitude
               }}
-              zoom={12}
+              zoom={13}
             />
           </div>
         </div>
 
         {/* Right side - Listing Details */}
         <div className={`w-full md:w-1/2 pl-2 transition-transform duration-500
-            md:-translate-y-[calc(var(--control-box-height)/2)]`}
+            `}
           style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
           <ListingDetails listing={showListings[0]} />
         </div>
