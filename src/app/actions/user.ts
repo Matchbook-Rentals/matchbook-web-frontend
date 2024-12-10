@@ -1,4 +1,3 @@
-
 'use server'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
@@ -28,9 +27,10 @@ export async function createUser() {
 
 
 export async function updateUserImage() {
+  'use server'
+
   const clerkUser = await currentUser();
 
-  console.log("CALLED")
   try {
     if (!clerkUser?.id) {
       throw new Error('User ID is missing')
@@ -41,20 +41,23 @@ export async function updateUserImage() {
     })
 
     if (!dbUser) {
-      createUser();
-      throw new Error('User not found in database')
+      await createUser();
+      return { success: true };
     }
 
     if (clerkUser.imageUrl !== dbUser.imageUrl) {
-      console.log("NOT SAME")
-      let result = await prisma?.user.update({ where: { id: dbUser.id }, data: { imageUrl: clerkUser.imageUrl } })
-
-      console.log(result)
+      await prisma?.user.update({
+        where: { id: dbUser.id },
+        data: { imageUrl: clerkUser.imageUrl }
+      });
+      return { success: true };
     }
 
+    return { success: true };
+
   } catch (error) {
-    console.error('Error fetching user data:', error)
-    return { error: 'Failed to fetch user data' }
+    console.error('Error updating user image:', error)
+    return { success: false, error: 'Failed to update user image' }
   }
 }
 

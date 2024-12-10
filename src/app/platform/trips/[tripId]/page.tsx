@@ -42,6 +42,13 @@ const TripsPage: React.FC = () => {
 
     },
     {
+      label: 'Map',
+      value: 'map',
+      content: <ApplicationTab />,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+    },
+    {
       label: 'Favorites',
       value: 'favorites',
       content: <ShortListTab />,
@@ -55,17 +62,21 @@ const TripsPage: React.FC = () => {
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },
-    {
-      label: 'Application',
-      value: 'application',
-      content: <ApplicationTab />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-    },
   ];
 
   return (
     <div className="flex flex-col w-full mx-auto">
+      <h1>
+        <h1 className="text-black font-montserrat text-[32px] font-medium leading-normal">
+          <span className="cursor-pointer hover:underline">
+            <a href="/platform/trips">Searches</a>
+          </span>
+          <span className="mx-2">&gt;</span>
+          <span className="cursor-pointer hover:underline">
+            {state.trip.locationString}
+          </span>
+        </h1>
+      </h1>
       <div className="flex w-full">
         <TabSelector
           useUrlParams
