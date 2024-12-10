@@ -5,6 +5,7 @@ import TabSelector from '@/components/ui/tab-selector';
 import MatchmakerTab from '../../searches/(tabs)/search-matchmaker-tab';
 import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
 import ApplicationTab from './(tabs)/application-tab';
+import MapView from '../../searches/(tabs)/search-map-tab';
 import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
@@ -47,7 +48,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Map',
       value: 'map',
-      content: <ApplicationTab />,
+      content: <MapView />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },
@@ -73,15 +74,15 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-        <h1 className=" text-black font-montserrat text-[32px] leading-normal">
-          <span className="cursor-pointer hover:underline font-medium ">
-            <a href="/platform/trips">Searches</a>
-          </span>
-          <span className="mx-2">&gt;</span>
-          <span className="cursor-pointer hover:underline">
-            {state.trip.locationString}
-          </span>
-        </h1>
+      <h1 className=" text-black font-montserrat text-[32px] leading-normal">
+        <span className="cursor-pointer hover:underline font-medium ">
+          <a href="/platform/trips">Searches</a>
+        </span>
+        <span className="mx-2">&gt;</span>
+        <span className="cursor-pointer hover:underline">
+          {state.trip.locationString}
+        </span>
+      </h1>
       <div className="flex w-full">
         <TabSelector
           useUrlParams
