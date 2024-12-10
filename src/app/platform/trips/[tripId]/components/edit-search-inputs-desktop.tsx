@@ -6,6 +6,7 @@ import HeroLocationSuggest from "@/components/home-components/HeroLocationSugges
 import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { useTripContext } from "@/contexts/trip-context-provider";
+import { Check, X } from "lucide-react";
 
 type ActiveContentType = 'location' | 'dateStart' | 'dateEnd' | 'guests' | null;
 
@@ -112,6 +113,41 @@ const EditSearchInputsDesktop: React.FC = () => {
     }
   };
 
+  const hasChanges = () => {
+    const locationChanged = locationDisplayValue !== state.trip?.locationString;
+    const startDateChanged = dateRange.start?.toISOString() !== (state.trip?.startDate ? new Date(state.trip.startDate).toISOString() : null);
+    const endDateChanged = dateRange.end?.toISOString() !== (state.trip?.endDate ? new Date(state.trip.endDate).toISOString() : null);
+    const guestsChanged =
+      guests.adults !== state.trip?.numAdults ||
+      guests.children !== state.trip?.numChildren ||
+      guests.pets !== state.trip?.numPets;
+
+    return locationChanged || startDateChanged || endDateChanged || guestsChanged;
+  };
+
+  const handleReset = () => {
+    setLocationDisplayValue(state.trip?.locationString || '');
+    setSelectedLocation({
+      destination: state.trip?.locationString || '',
+      description: state.trip?.locationString || '',
+      lat: state.trip?.latitude || null,
+      lng: state.trip?.longitude || null
+    });
+    setDateRange({
+      start: state.trip?.startDate ? new Date(state.trip.startDate) : null,
+      end: state.trip?.endDate ? new Date(state.trip.endDate) : null,
+    });
+    setGuests({
+      adults: state.trip?.numAdults || 0,
+      children: state.trip?.numChildren || 0,
+      pets: state.trip?.numPets || 0
+    });
+  };
+
+  const handleSave = () => {
+    alert('placeholder');
+  };
+
   return (
     <div ref={containerRef} className="relative">
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
@@ -171,11 +207,28 @@ const EditSearchInputsDesktop: React.FC = () => {
             />
           </div>
         </div>
-        <div className="flex-shrink-0 p-2">
+        <div className="flex-shrink-0 p-2 flex gap-2">
           <button
-            className="w-auto p-2 bg-primaryBrand rounded-full hover:bg-primaryBrand/90 transition-colors"
+            onClick={handleReset}
+            disabled={!hasChanges()}
+            className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+              ${hasChanges()
+                ? 'text-red-500 hover:bg-red-50'
+                : 'text-gray-300'
+              }`}
           >
-            <FaSearch className="text-white mx-auto" size={20} />
+            <X className="h-5 w-5" />
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={!hasChanges()}
+            className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+              ${hasChanges()
+                ? 'text-green-500 hover:bg-green-50'
+                : 'text-gray-300'
+              }`}
+          >
+            <Check className="h-5 w-5" />
           </button>
         </div>
       </div>
