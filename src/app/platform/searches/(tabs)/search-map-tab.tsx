@@ -48,31 +48,30 @@ const MapView: React.FC = () => {
     : state.listings.filter(listing => !state.lookup.dislikedIds.has(listing.id));
 
   return (
-    <div className=''>
+      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
+        {/*Grid container*/}
+        <div className="w-full md:w-2/3 md:pr-4">
 
-      <div className="mx-auto  w-full flex flex-col-reverse md:flex-row items-center gap-x-4">
-
-        <div className="w-full md:w-2/3">
-          <SearchListingsGrid
-            listings={displayListings}
-          />
+        <SearchListingsGrid
+          listings={displayListings}
+        />
         </div>
 
-        <div className="w-full md:w-1/3 h-[640px]">
-          <SearchMap
-            center={mapCenter}
-            zoom={10}
-            markers={markers.map((marker) => ({
-              ...marker,
-              lat: marker.lat,
-              lng: marker.lng
+        {/*Map container*/}
+        <div className="w-full md:w-1/3 mt-4 md:mt-0">
 
-            }))}
-          />
+        <SearchMap
+          center={mapCenter}
+          zoom={10}
+          markers={markers.map((marker) => ({
+            ...marker,
+            lat: marker.lat,
+            lng: marker.lng
+
+          }))}
+        />
         </div>
       </div>
-    </div>
-
   );
 };
 

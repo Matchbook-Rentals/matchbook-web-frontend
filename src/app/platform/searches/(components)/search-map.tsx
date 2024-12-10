@@ -22,7 +22,7 @@ const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, mark
 
   const mapContainerStyle = {
     width: '100%',
-    height,
+    height: '100%',
     minHeight: '200px',
     flex: '1 1 auto',
     display: 'block',

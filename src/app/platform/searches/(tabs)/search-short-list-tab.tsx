@@ -126,36 +126,9 @@ export default function ShortListTab() {
   }
 
   return (
-    <>
-      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 py-8">
+      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
         <div className="w-full md:w-2/3 md:pr-4">
-          <div className="flex justify-between items-center mb-4">
-            <div className="hidden xl:flex border shadow-lg rounded-full">
-              <button
-                className={`p-2 px-4 rounded-l-full w-auto h-12 flex items-center justify-center ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
-                onClick={() => setViewMode('grid')}
-              >
-                <LayoutGrid className='w-[20px] h-[20px]' />
-              </button>
-              <Separator orientation="vertical" className='h-10 my-auto' />
-              <button
-                className={`p-2 px-4 rounded-r-full w-auto h-12 flex items-center justify-center ${viewMode === 'list' ? 'bg-gray-200' : ''}`}
-                onClick={() => setViewMode('list')}
-              >
-                <List className='w-[20px] h-[20px]' />
-              </button>
-            </div>
-            <h2 className='text-2xl font-semibold hidden md:inline'>These ones caught your eye</h2>
-            <FilterOptionsDialog
-              isOpen={isOpen}
-              onOpenChange={setIsOpen}
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              className=""
-            />
-          </div>
 
-          {viewMode === 'grid' ? (
             <SearchListingsGrid
               listings={[...likedListings, ...maybedListings].sort((a, b) => {
                 const aRequested = lookup.requestedIds.has(a.id);
@@ -168,9 +141,6 @@ export default function ShortListTab() {
                 generateLikedCardActions(listing)
               }
             />
-          ) : (
-            <SortableFavorites listings={likedListings.map((listing, idx) => ({ ...listing, rank: idx + 1 }))} />
-          )}
         </div>
         <div className="w-full md:w-1/3 mt-4 md:mt-0">
           <SearchMap
@@ -180,6 +150,5 @@ export default function ShortListTab() {
           />
         </div>
       </div>
-    </>
   );
 }

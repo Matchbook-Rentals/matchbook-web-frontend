@@ -4,7 +4,6 @@ import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import MatchmakerTab from '../../searches/(tabs)/search-matchmaker-tab';
 import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
-import ApplicationTab from './(tabs)/application-tab';
 import MapView from '../../searches/(tabs)/search-map-tab';
 import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';

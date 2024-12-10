@@ -5,14 +5,9 @@ import ListingImageCarousel from '../../trips/(trips-components)/image-carousel'
 import ButtonControl from '../../trips/(trips-components)/button-controls';
 import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import { amenities } from '@/lib/amenities-list';
-import { DescriptionAndAmenities } from '../../trips/(trips-components)/description-and-amenities';
-//import { useSearchContext } from '@/contexts/search-context-provider';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
-import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/spinner';
-import { deleteDbDislike, createDbDislike } from '@/app/actions/dislikes';
-import { deleteDbFavorite, createDbFavorite } from '@/app/actions/favorites';
 import { Montserrat } from 'next/font/google';
 import SearchMap from '../(components)/search-map';
 import ListingDetails from '../(components)/listing-details';

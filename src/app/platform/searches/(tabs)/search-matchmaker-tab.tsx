@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { MapIcon, FilterIcon } from 'lucide-react';
-import MapView from './search-map-tab';
 import MatchViewTab from './search-match-tab';
-import SearchControlBar from '../(components)/search-control-bar';
-import FilterOptionsDialog from './filter-options-dialog';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { Separator } from '@radix-ui/react-select';
-import { MapViewIcon, MatchViewIcon } from '@/components/svgs/svg-components';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 const MatchmakerTab: React.FC = () => {
