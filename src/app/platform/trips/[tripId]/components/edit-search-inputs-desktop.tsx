@@ -97,57 +97,65 @@ const EditSearchInputsDesktop: React.FC = () => {
   return (
     <div ref={containerRef} className="relative">
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-3">
-          <div className="absolute top-1 left-4 text-xs text-gray-500">Location</div>
-          <input
-            ref={locationInputRef}
-            type="text"
-            placeholder="Where to?"
-            value={locationDisplayValue}
-            className="w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 bg-transparent"
-            readOnly
-            onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
-          />
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+          <div className="flex flex-col space-y-1">
+            <span className="text-xs text-gray-500 px-4">Location</span>
+            <input
+              ref={locationInputRef}
+              type="text"
+              placeholder="Where to?"
+              value={locationDisplayValue}
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              readOnly
+              onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
+            />
+          </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-3">
-          <div className="absolute top-1 left-4 text-xs text-gray-500">Move In</div>
-          <input
-            ref={moveInInputRef}
-            type="text"
-            placeholder="Move in:"
-            value={formatDate(dateRange.start)}
-            className="w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 bg-transparent"
-            readOnly
-            onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
-          />
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+          <div className="flex flex-col space-y-1">
+            <span className="text-xs text-gray-500 px-4">Move In</span>
+            <input
+              ref={moveInInputRef}
+              type="text"
+              placeholder="Move in:"
+              value={formatDate(dateRange.start)}
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              readOnly
+              onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
+            />
+          </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-3">
-          <div className="absolute top-1 left-4 text-xs text-gray-500">Move Out</div>
-          <input
-            ref={moveOutInputRef}
-            type="text"
-            placeholder="Move out:"
-            value={formatDate(dateRange.end)}
-            className="w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 bg-transparent"
-            readOnly
-            onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
-          />
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+          <div className="flex flex-col space-y-1">
+            <span className="text-xs text-gray-500 px-4">Move Out</span>
+            <input
+              ref={moveOutInputRef}
+              type="text"
+              placeholder="Move out:"
+              value={formatDate(dateRange.end)}
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              readOnly
+              onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
+            />
+          </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-3">
-          <div className="absolute top-1 left-4 text-xs text-gray-500">Guests</div>
-          <input
-            ref={guestsInputRef}
-            type="text"
-            placeholder="Who?"
-            value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
-            className="w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 bg-transparent"
-            readOnly
-            onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
-          />
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2">
+          <div className="flex flex-col space-y-1">
+            <span className="text-xs text-gray-500 px-4">Guests</span>
+            <input
+              ref={guestsInputRef}
+              type="text"
+              placeholder="Who?"
+              value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              readOnly
+              onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
+            />
+          </div>
         </div>
-        <div className="flex-shrink-0 p-3">
+        <div className="flex-shrink-0 p-2">
           <button
-            className="w-auto p-3 bg-primaryBrand rounded-full hover:bg-primaryBrand/90 transition-colors"
+            className="w-auto p-2 bg-primaryBrand rounded-full hover:bg-primaryBrand/90 transition-colors"
           >
             <FaSearch className="text-white mx-auto" size={20} />
           </button>
