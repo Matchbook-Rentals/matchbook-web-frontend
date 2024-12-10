@@ -57,8 +57,8 @@ const getAmenityIcon = (amenity: string) => {
     case 'keylessEntry': return { icon: AmenitiesIcons.KeylessEntryIcon, label: 'Keyless Entry' };
     case 'gatedEntry': return { icon: AmenitiesIcons.GatedEntryIcon, label: 'Gated Entry' };
     case 'alarmSystem': return { icon: AmenitiesIcons.AlarmSystemIcon, label: 'Alarm System' };
-    case 'smokeDetector': return { icon: AmenitiesIcons.SmokeDetectorIcon, label: 'Smoke Detector' };
-    case 'carbonMonoxideDetector': return { icon: AmenitiesIcons.CarbonMonoxideDetectorIcon, label: 'Carbon Monoxide Det' };
+    case 'smokeDetector': return { icon: AmenitiesIcons.SmokeDetectorIcon, label: 'Smoke Det' };
+    case 'carbonMonoxideDetector': return { icon: AmenitiesIcons.CarbonMonoxideDetectorIcon, label: 'CO Detector'};
 
     // Kitchen
     case 'garbageDisposal': return { icon: AmenitiesIcons.GarbageDisposalIcon, label: 'Garbage Disposal' };
@@ -81,26 +81,23 @@ const getAmenityIcon = (amenity: string) => {
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
 
-  // Add this function to get 6 random amenities
   const getRandomAmenities = () => {
     const shuffled = [...iconAmenities].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 6);
   };
 
-  // Get random highlights for the collapsed view
   const getRandomHighlights = () => {
     const baseHighlights = [
-      { type: 'category', value: listing.category },
-      { type: 'furnished', value: listing.furnished },
-      { type: 'utilities', value: listing.utilitiesIncluded },
-      { type: 'pets', value: listing.petFriendly }
+      { type: "category", value: listing.category },
+      { type: "furnished", value: listing.furnished },
+      { type: "utilities", value: listing.utilitiesIncluded },
+      { type: "pets", value: listing.petFriendly },
     ];
-    return baseHighlights.slice(0, 4); // Show all base highlights in collapsed view
+    return baseHighlights.slice(0, 4);
   };
 
   return (
     <div className={`w-full ${montserrat.className}`}>
-
       {/* Host Information */}
       <div className="flex items-center justify-between pb-1 mt-6">
         <div className="flex items-center gap-4">
@@ -111,21 +108,29 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className=''>
+          <div>
             <p className="text-xl md:text-lg lg:text-xl">Hosted by Daniel</p>
-            <p className="text-gray-600 md:text-lg lg:text-xl">2 years on Matchbook</p>
+            <p className="text-gray-600 md:text-lg lg:text-xl">
+              2 years on Matchbook
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-col">
-          <p className="hidden sm:block md:hidden lg:block text-xl truncate ">23 stays</p>
+          <p className="hidden sm:block md:hidden lg:block text-xl truncate">
+            23 stays
+          </p>
 
-          {/* Change this one to a popover instead as hovering on mobile is not easy */}
           <Popover>
             <PopoverTrigger>
               <div className="flex items-center gap-1 cursor-pointer">
                 <Star className="fill-current text-gray-700" size={24} />
-                <span className="text-xl">{(listing?.uScore / 10).toFixed(1)}<span className="sm:hidden md:inline lg:hidden  text-sm">(23)</span></span>
+                <span className="text-xl">
+                  {(listing?.uScore / 10).toFixed(1)}
+                  <span className="sm:hidden md:inline lg:hidden text-sm">
+                    (23)
+                  </span>
+                </span>
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-auto">
@@ -156,54 +161,160 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           <span className='font-semibold'>Hallmark Host</span>
         </div>
       </div>
-
       {/* Property Highlights */}
       <div className="mt-6">
         <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           {!showAllAmenities ? (
-            // Show real values when collapsed
             <>
               {/* Property Type */}
-              {listing.category === 'singleFamily' && <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />}
-              {listing.category === 'townhouse' && <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />}
-              {listing.category === 'singleRoom' && <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />}
-              {(listing.category === 'apartment' || listing.category === 'condo') && <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />}
+              {listing.category === "singleFamily" && (
+                <Tile
+
+                  icon={<AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />}
+                  label="Single Family"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              )}
+              {listing.category === "townhouse" && (
+                <Tile
+                  icon={<AmenitiesIcons.TownhouseIcon className="p-1 mt-2" />}
+                  label="Townhouse"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              )}
+              {listing.category === "singleRoom" && (
+                <Tile
+                  icon={<AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" />}
+                  label="Single Room"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              )}
+              {(listing.category === "apartment" || listing.category === "condo") && (
+                <Tile
+                  icon={<AmenitiesIcons.ApartmentIcon className="p-1 mt-2" />}
+                  label="Apartment"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              )}
 
               {/* Furnished Status */}
               {listing.furnished ? (
-                <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
+                <Tile
+                  icon={<AmenitiesIcons.FurnishedIcon className="mt-4" />}
+                  label="Furnished"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
               ) : (
-                <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
+                <Tile
+                  icon={<AmenitiesIcons.UnfurnishedIcon className="mt-4" />}
+                  label="Unfurnished"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
               )}
 
               {/* Utilities */}
               {listing.utilitiesIncluded ? (
-                <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities included" />
+                <Tile
+                  icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />}
+                  label="Utilities Included"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                  />
               ) : (
-                <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
+                <Tile
+                  icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />}
+                  label="No Utilities"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                  />
               )}
 
               {/* Pets */}
               {listing.petFriendly ? (
-                <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
+                <Tile
+                  icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />}
+                  label="Pets Allowed"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
               ) : (
-                <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+                <Tile
+                  icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />}
+                  label="No Pets"
+                  className="h-[155px] w-[155px]"
+                  labelClassNames="text-[16px] text-[#2D2F2E80]"
+                  />
               )}
             </>
           ) : (
-            // Show all possible highlights when expanded
             <>
-              <Tile icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />} label="Single Family" />
-              <Tile icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />} label="Townhouse" />
-              <Tile icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />} label="Single Room" />
-              <Tile icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />} label="Apartment" />
-              <Tile icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />} label="Furnished" />
-              <Tile icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />} label="Not Furnished" />
-              <Tile icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />} label="Utilities Included" />
-              <Tile icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />} label="Utilities Not Included" />
-              <Tile icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />} label="Pets Allowed" />
-              <Tile icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />} label="No Pets Allowed" />
+              <Tile
+                icon={<AmenitiesIcons.SingleFamilyIcon className="mt-4" />}
+                label="Single Family"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.TownhouseIcon className="mt-4" />}
+                label="Townhouse"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.SingleRoomIcon className="mt-4" />}
+                label="Single Room"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.ApartmentIcon className="mt-4" />}
+                label="Apartment"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.FurnishedIcon className="mt-6" />}
+                label="Furnished"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.UnfurnishedIcon className="mt-6" />}
+                label="Not Furnished"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.UtilitiesIncludedIcon className="mt-4" />}
+                label="Utilities Included"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              <Tile
+                icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />}
+                label="Utilities Not Included"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+                />
+              <Tile
+                icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />}
+                label="Pets Allowed"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
+              <Tile
+                icon={<AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />}
+                label="No Pets"
+                className="h-[155px] w-[155px]"
+                labelClassNames="text-[16px] text-[#2D2F2E80]"
+              />
             </>
           )}
         </div>
@@ -279,15 +390,23 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="mt-6">
         <h3
-          className="text-2xl font-semibold mb-4 cursor-pointer hover:text-primaryBrand transition-colors"
+          className="text-2xl font-semibold mb-4 cursor-pointer"
           onClick={() => setShowAllAmenities(!showAllAmenities)}
         >
-          Amenities {showAllAmenities ? '(show less)' : ''}
+          Amenities {showAllAmenities ? '(show less)' : '(show more)'}
         </h3>
-        <div className="grid grid-cols-[repeat(auto-fit,170px)] gap-6 justify-between">
+        <div className="grid grid-cols-[repeat(auto-fit,104px)] gap-6 justify-between">
           {(showAllAmenities ? iconAmenities : getRandomAmenities()).map((amenity) => {
             const { icon: Icon, label } = getAmenityIcon(amenity.code);
-            return <Tile key={amenity.code} icon={<Icon className='mt-4' />} label={label} />;
+            return (
+              <Tile
+                key={amenity.code}
+                icon={<Icon className="max-h-[40px] max-w-[40px]" />}
+                label={label}
+                labelClassNames="text-[14px] text-[#404040]"
+                className="h-[104px] w-[104px]"
+              />
+            );
           })}
         </div>
       </div>

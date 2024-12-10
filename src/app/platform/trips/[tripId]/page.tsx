@@ -73,8 +73,8 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-        <h1 className=" text-black font-montserrat text-[32px] font-medium leading-normal">
-          <span className="cursor-pointer hover:underline">
+        <h1 className=" text-black font-montserrat text-[32px] leading-normal">
+          <span className="cursor-pointer hover:underline font-medium ">
             <a href="/platform/trips">Searches</a>
           </span>
           <span className="mx-2">&gt;</span>

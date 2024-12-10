@@ -206,7 +206,7 @@ const MatchViewTab: React.FC = () => {
       />
 
       {/* Sticky container for all three flex sections */}
-      <div ref={controlBoxParentRef} className="sticky top-[50px] md:top-[55px] z-10 bg-background md:bg-transparent">
+      <div ref={controlBoxParentRef} className="sticky top-[50px] md:top-[55px] z-10 bg-background ">
         {/* First flex container - Controls and Title */}
         <div className="flex flex-col md:flex-row w-full" >
           {/* Left side - Button Controls */}
@@ -214,12 +214,12 @@ const MatchViewTab: React.FC = () => {
             <div className={` button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
                      sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
                      lg:justify-center lg:gap-x-8 pb-0 pt-3 md:px-5 md:pt-4 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-110' : ''} gap-2 transition-transform duration-500`}
+                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-125' : ''} gap-2 transition-transform duration-500`}
               ref={controlBoxRef}>
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-full aspect-[1/1]' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[115px] max-h-[115px] aspect-[1/1]
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[100px] max-h-[100px] aspect-[1/1]
                   flex items-center justify-center rounded-full text-center text-white
                   text-sm transition-all duration-200 relative`}
               />
@@ -227,7 +227,7 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={handleBack}
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
-                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[78px] max-h-[78px]
+                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[66px] max-h-[66px]
                   md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                   justify-center text-white text-sm transition-all duration-200 relative `}
               />
@@ -236,16 +236,15 @@ const MatchViewTab: React.FC = () => {
                 handleClick={() => handleMaybe(showListings[0])}
                 Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
                 className={`
-                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[78px] max-h-[78px]
+                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[66px] max-h-[66px]
                 md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                 justify-center text-white text-sm transition-all duration-200 `}
               />
-
-              <ButtonControl
+<ButtonControl
                 handleClick={() => handleLike(showListings[0])}
                 Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-xl aspect-[1/1]' />}
                 className={`
-                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[115px] max-h-[115px] aspect-[1/1]
+                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[100px] max-h-[100px] aspect-[1/1]
                 md:w-[9vw] md:h-[9vw] flex items-center justify-center rounded-full text-center
                 text-white text-sm transition-all duration-200
               `}
@@ -265,17 +264,17 @@ const MatchViewTab: React.FC = () => {
         </div>
 
         {/* Second flex container - Labels and Property Stats */}
-        <div className="flex flex-col md:flex-row w-full">
+        <div className="flex flex-col md:flex-row w-full mb-2">
           {/* Left side - Info Labels (Desktop only) */}
           <div className={`hidden md:block w-full md:w-1/2 md:pr-2 transition-transform duration-500
               ${!isScrolled ? '' : ''}`}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight / 2}px` } as React.CSSProperties}>
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-charcoalBrand font-medium">Address</span>
+                <span className="text-[24px] text-[#404040] font-montserrat font-medium">Address</span>
               </div>
               <div className="flex flex-col text-right">
-                <span className="text-sm xxs:text-lg md:text-md lg:text-lg xl:text-xl text-charcoalBrand font-medium">Distance</span>
+                <span className="text-[24px] text-[#404040] font-montserrat font-medium">Distance</span>
               </div>
             </div>
           </div>
@@ -288,20 +287,20 @@ const MatchViewTab: React.FC = () => {
               {/* Bedroom and Price */}
               <div className="flex justify-between items-center bedroom-price-box">
                 <div>
-                  <h2 className="text-2xl md:text-[28px] lg:text-[32px] md:mb-2 pl-[2px] font-medium">3 BR | 2 BA</h2>
+                  <h2 className="text-[24px] text-[#404040] font-montserrat font-medium">3 BR | 2 BA</h2>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl md:text-[28px] lg:text-[32px] md:mb-2 font-medium">${controlBoxHeight} / Mo</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat font-medium">${controlBoxHeight} / Mo</p>
                 </div>
               </div>
 
               {/* Sqft and Deposit - Only show on mobile */}
               <div className="flex justify-between items-center md:hidden ">
                 <div>
-                  <p className="text-lg text-gray-600">{showListings[0]?.squareFootage || '1,500'} Sqft</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat ">{showListings[0]?.squareFootage || '1,500'} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg">${titleBoxHeight} Dep.</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat ">${controlBoxHeight} Dep.</p>
                 </div>
               </div>
             </div>
@@ -316,21 +315,21 @@ const MatchViewTab: React.FC = () => {
           {/* Left side - Address Info Values */}
           <div className={`w-full md:w-1/2 pr-2 transition-transform duration-500
               ${!isScrolled ? '' : ''}`}
-            >
+          >
             <div className="flex flex-col md:flex-row justify-between items-center">
               {/* Mobile-only labels */}
               <div className="md:hidden w-full">
                 <div className="flex justify-between">
-                  <span className="text-lg text-charcoalBrand font-medium">Address</span>
-                  <span className="text-lg text-charcoalBrand font-medium">Distance</span>
+                  <span className="text-[24px] text-[#404040] font-montserrat font-medium">Address</span>
+                  <span className="text-[24px] text-[#404040] font-montserrat font-medium">Distance</span>
                 </div>
               </div>
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-2xl truncate max-w-[300px]">
+                <span className="text-[24px] text-[#404040] font-montserrat font-medium truncate max-w-[300px]">
                   {showListings[0].locationString}
                 </span>
-                <span className="text-lg xxs:text-xl md:text-xl lg:text-xl xl:text-3xl">
+                <span className="text-[24px] text-[#404040] font-montserrat">
                   {showListings[0].distance?.toFixed(0)} miles
                 </span>
               </div>
@@ -344,10 +343,10 @@ const MatchViewTab: React.FC = () => {
             <div className="flex flex-col border-b pb-3 border-black">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg md:text-2xl text-gray-600">{totalBoxHeight} Sqft</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat">{totalBoxHeight} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg md:text-2xl">${controlBoxParentHeight} Dep.</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxParentHeight} Dep.</p>
                 </div>
               </div>
             </div>
