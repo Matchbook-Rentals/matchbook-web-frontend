@@ -6,9 +6,9 @@ const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:
 
 export const DisabledDesktopInputs: React.FC = () => {
   return (
-    <div className="relative test">
+    <div className="relative ">
       <div
-        className="flex flex-row no-wrap p-3 test items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
+        className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
       >
         <input
           type="text"
@@ -19,7 +19,7 @@ export const DisabledDesktopInputs: React.FC = () => {
         />
         <input
           type="text"
-          placeholder="Move on in:"
+          placeholder="Move in:"
           value={""}
           className={inputClasses}
           readOnly
@@ -47,14 +47,6 @@ export const DisabledDesktopInputs: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {isOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
-            before:content-[''] before:absolute before:-top-2 before:left-5 before:w-4 before:h-4
-            before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200">
-          {renderActiveContent()}
-        </div>
-      )}
     </div>
 
   );
