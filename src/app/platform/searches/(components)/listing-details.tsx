@@ -10,6 +10,7 @@ import {
 import Tile from '@/components/ui/tile';
 import { amenities, iconAmenities, highlightAmenities } from '@/lib/amenities-list';
 import { Montserrat } from 'next/font/google';
+import { MatchbookVerified } from '@/components/icons';
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -58,7 +59,7 @@ const getAmenityIcon = (amenity: string) => {
     case 'gatedEntry': return { icon: AmenitiesIcons.GatedEntryIcon, label: 'Gated Entry' };
     case 'alarmSystem': return { icon: AmenitiesIcons.AlarmSystemIcon, label: 'Alarm System' };
     case 'smokeDetector': return { icon: AmenitiesIcons.SmokeDetectorIcon, label: 'Smoke Det' };
-    case 'carbonMonoxideDetector': return { icon: AmenitiesIcons.CarbonMonoxideDetectorIcon, label: 'CO Detector'};
+    case 'carbonMonoxideDetector': return { icon: AmenitiesIcons.CarbonMonoxideDetectorIcon, label: 'CO Detector' };
 
     // Kitchen
     case 'garbageDisposal': return { icon: AmenitiesIcons.GarbageDisposalIcon, label: 'Garbage Disposal' };
@@ -140,30 +141,35 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         </div>
       </div>
 
+
       {/* Host Badges */}
       <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 mt-6">
         <div className="flex items-center gap-2 ">
           <div className="w-7 h-7" >
             <img src='/badges_png/matchbook-verified.png' alt='Matchbook Verified Badge' />
           </div>
-          <span className='font-semibold'>Verified</span>
+          <span className=' text-[20px] font-medium'>Verified</span>
         </div>
         <div className="flex items-center gap-2 ">
           <div className="w-7 h-7" >
             <img src='/badges_png/trailblazer.png' alt='Trailblazer Badge' />
           </div>
-          <span className='font-semibold'>Trailblazer</span>
+          <span className=' text-[20px] font-medium'>Trailblazer</span>
         </div>
         <div className="flex items-center gap-2 ">
           <div className="w-7 h-7" >
             <img src='/badges_png/hallmark-host.png' alt='Hallmark Host Badge' />
           </div>
-          <span className='font-semibold'>Hallmark Host</span>
+          <span className=' text-[20px] font-medium'>Hallmark Host</span>
         </div>
       </div>
       {/* Property Highlights */}
       <div className="mt-6">
-        <h3 className="text-2xl font-semibold mb-4">Highlights</h3>
+        <h3 className="text-[32px] text-[#404040] font-medium mb-4">Highlights</h3>
+      <div className='flex space-x-4 items-center mb-4'>
+        <MatchbookVerified />
+        <h3 className="text-black text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
+      </div>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           {!showAllAmenities ? (
             <>
@@ -226,14 +232,14 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                   label="Utilities Included"
                   className="h-[155px] w-[155px]"
                   labelClassNames="text-[16px] text-[#2D2F2E80]"
-                  />
+                />
               ) : (
                 <Tile
                   icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />}
                   label="No Utilities"
                   className="h-[155px] w-[155px]"
                   labelClassNames="text-[16px] text-[#2D2F2E80]"
-                  />
+                />
               )}
 
               {/* Pets */}
@@ -250,7 +256,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                   label="No Pets"
                   className="h-[155px] w-[155px]"
                   labelClassNames="text-[16px] text-[#2D2F2E80]"
-                  />
+                />
               )}
             </>
           ) : (
@@ -296,13 +302,13 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                 label="Utilities Included"
                 className="h-[155px] w-[155px]"
                 labelClassNames="text-[16px] text-[#2D2F2E80]"
-                />
+              />
               <Tile
                 icon={<AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-4" />}
                 label="Utilities Not Included"
                 className="h-[155px] w-[155px]"
                 labelClassNames="text-[16px] text-[#2D2F2E80]"
-                />
+              />
               <Tile
                 icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />}
                 label="Pets Allowed"
