@@ -23,8 +23,7 @@ interface TabSelectorProps {
   tabsListClassName?: string;
   useUrlParams?: boolean;
   defaultTab?: string;
-  buttonLabel?: string;
-  buttonAction?: () => void;
+  secondaryButton?: React.ReactNode;
 }
 
 export default function TabSelector({
@@ -34,8 +33,7 @@ export default function TabSelector({
   tabsClassName,
   useUrlParams = false,
   defaultTab,
-  buttonLabel,
-  buttonAction
+  secondaryButton,
 }: TabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -66,13 +64,8 @@ export default function TabSelector({
         value={activeTab}
         onValueChange={handleTabChange}
       >
-        <div className="flex items-start justify-between space-x-4 ">
-          {buttonLabel && buttonAction && (
-            <Button onClick={buttonAction} className="mt-2" size='sm'>
-              {buttonLabel}
-            </Button>
-          )}
-          <TabsList className={cn("flex justify-start mb-4 pt-6 pb-8 border-b-2 border-gray-300 space-x-2", tabsListClassName)}>
+        <div className="flex items-start p-0 justify-between mb-4 space-x-4 border-b-2 border-gray-300">
+          <TabsList className={cn("flex justify-start  pt-6 pb-8 space-x-2", tabsListClassName)}>
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.value}
@@ -89,10 +82,7 @@ export default function TabSelector({
               </TabsTrigger>
             ))}
           </TabsList>
-          {buttonLabel && buttonAction && (
-            <div className="px-3">
-            </div>
-          )}
+          {secondaryButton}
         </div>
         {tabs.map((tab) => (
           <TabsContent key={tab.value} className={tabsClassName} value={tab.value} forceMount={tab.forceMount || undefined}>

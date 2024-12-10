@@ -196,7 +196,10 @@ const EditSearchInputsDesktop: React.FC = () => {
   return (
     <div ref={containerRef} className="relative">
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
+        <div
+          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
+        >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Location</span>
             <input
@@ -206,11 +209,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={locationDisplayValue}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
-              onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
+        <div
+          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'dateStart', moveInInputRef)}
+        >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move In</span>
             <input
@@ -220,11 +225,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={formatDate(dateRange.start)}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
-              onClick={(e) => handleInputClick(e, 'dateStart', moveInInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
+        <div
+          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'dateEnd', moveOutInputRef)}
+        >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move Out</span>
             <input
@@ -234,11 +241,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={formatDate(dateRange.end)}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
-              onClick={(e) => handleInputClick(e, 'dateEnd', moveOutInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 cursor-pointer">
+        <div
+          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
+        >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Guests</span>
             <input
@@ -248,7 +257,6 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
-              onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
             />
           </div>
         </div>

@@ -10,6 +10,10 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import { useSearchParams } from 'next/navigation';
 import OverviewTab from './(tabs)/overview-tab';
+import { Button } from '@/components/ui/button';
+import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
+import { FilterOptions } from '@/lib/consts/options';
+import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 interface Tab {
   value: string;
@@ -25,6 +29,28 @@ const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab') || 'overview';
+
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+  const [filters, setFilters] = React.useState<FilterOptions>({
+    ...DEFAULT_FILTER_OPTIONS,
+    moveInDate: state.trip?.startDate || new Date(),
+    moveOutDate: state.trip?.endDate || new Date(),
+    flexibleMoveInStart: state.trip?.startDate || new Date(),
+    flexibleMoveInEnd: state.trip?.startDate || new Date(),
+    flexibleMoveOutStart: state.trip?.endDate || new Date(),
+    flexibleMoveOutEnd: state.trip?.endDate || new Date(),
+  });
+
+  // Updated handleFilterChange function to handle all filter changes, including arrays
+  const handleFilterChange = (
+      key: keyof FilterOptions,
+      value: string | number | boolean | string[] | Date
+    ) => {
+      setFilters(prevFilters => ({
+      ...prevFilters,
+      [key]: value,
+    }));
+  };
 
   const tabTriggerTextStyles = 'text-md xxs:text-[16px] sm:text-xl'
   const tabTriggerStyles = 'p-0 '
@@ -90,6 +116,16 @@ const TripsPage: React.FC = () => {
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto'
           tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
+          secondaryButton={
+            ['matchmaker', 'map'].includes(currentTab) ? (
+              <FilterOptionsDialog
+                isOpen={isFilterOpen}
+                onOpenChange={setIsFilterOpen}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+              />
+            ) : undefined
+          }
         />
       </div>
     </div>

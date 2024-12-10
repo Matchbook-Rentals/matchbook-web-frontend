@@ -7,11 +7,7 @@ import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
-import SortableFavorites from '../(components)/sortable-favorites';
-import { Separator } from "@/components/ui/separator";
-import { LayoutGrid, List } from "lucide-react";
 import SearchListingsGrid from '../(components)/search-listings-grid';
-import FilterOptionsDialog from '../(tabs)/filter-options-dialog';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
 export default function ShortListTab() {
@@ -126,29 +122,29 @@ export default function ShortListTab() {
   }
 
   return (
-      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
-        <div className="w-full md:w-2/3 md:pr-4">
+    <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
+      <div className="w-full md:w-2/3 md:pr-4">
 
-            <SearchListingsGrid
-              listings={[...likedListings, ...maybedListings].sort((a, b) => {
-                const aRequested = lookup.requestedIds.has(a.id);
-                const bRequested = lookup.requestedIds.has(b.id);
-                return bRequested ? 1 : aRequested ? -1 : 0;
-              })}
-              withCallToAction={true}
-              cardActions={listing => lookup.requestedIds.has(listing.id) ?
-                generateRequestedCardActions(listing) :
-                generateLikedCardActions(listing)
-              }
-            />
-        </div>
-        <div className="w-full md:w-1/3 mt-4 md:mt-0">
-          <SearchMap
-            center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
-            zoom={10}
-            markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
-          />
-        </div>
+        <SearchListingsGrid
+          listings={[...likedListings, ...maybedListings].sort((a, b) => {
+            const aRequested = lookup.requestedIds.has(a.id);
+            const bRequested = lookup.requestedIds.has(b.id);
+            return bRequested ? 1 : aRequested ? -1 : 0;
+          })}
+          withCallToAction={true}
+          cardActions={listing => lookup.requestedIds.has(listing.id) ?
+            generateRequestedCardActions(listing) :
+            generateLikedCardActions(listing)
+          }
+        />
       </div>
+      <div className="w-full md:w-1/3 mt-4 md:mt-0">
+        <SearchMap
+          center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
+          zoom={10}
+          markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
+        />
+      </div>
+    </div>
   );
 }

@@ -36,7 +36,7 @@ interface FilterOptionsDialogProps {
   onOpenChange: (open: boolean) => void;
   filters: FilterOptions;
   onFilterChange: (key: keyof FilterOptions, value: string | number | boolean | string[]) => void;
-  className: string;
+  className?: string;
 }
 
 const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
@@ -56,9 +56,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className={`flex items-center rounded-full p-2 w-[156px] ${className}`}>
-          <FilterIcon className="mr-2 w-[28px] h-[15px] text-charcoalBrand/80" />
-          <span className='text-charcoalBrand/80' style={{ color: 'var(--Major-Text, #404040)', fontFamily: 'Montserrat', fontSize: '24px', fontStyle: 'normal', fontWeight: '500', lineHeight: 'normal' }}>Filters</span>
+        <Button variant="outline" className={`flex items-center rounded-full p-2 px-4 ${className}`}>
+          <span className="text-[#404040] text-center font-montserrat text-[16px] font-medium">Filters</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
@@ -101,9 +100,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <div className="flex flex-col items-center">
                     <Label htmlFor="move-in-date" className="mb-2">Move in date</Label>
                     <DateDaySelector
-                      id="move-in-date"
-                      selectedDate={filters.moveInDate}
-                      tripDate={filters.moveInDate}
+                      key="move-in-date"
+                      selectedDate={filters.moveInDate || new Date()}
+                      tripDate={filters.moveInDate || new Date()}
                       onDateSelect={(dates) => {
                         onFilterChange('flexibleMoveInStart', dates[0]);
                         onFilterChange('flexibleMoveInEnd', dates[1]);
@@ -114,7 +113,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <div className="flex flex-col items-center">
                     <Label htmlFor="move-out-date" className="mb-2">Move out date</Label>
                     <DateDaySelector
-                      id="move-out-date"
+                      key="move-out-date"
                       selectedDate={filters.moveOutDate}
                       tripDate={filters.moveOutDate}
                       onDateSelect={(dates) => {
