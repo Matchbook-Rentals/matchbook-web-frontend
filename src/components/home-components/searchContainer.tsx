@@ -1,6 +1,6 @@
 import React from "react";
-import SearchInputsDesktop from "./SearchInputsDesktop";
-import SearchInputsMobile from "./SearchInputsMobile";
+import SearchInputsDesktop from "./search-inputs-desktop";
+import SearchInputsMobile from "./search-inputs-mobile";
 
 interface SearchContainerProps {
   className?: string;

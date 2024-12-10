@@ -1,14 +1,16 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { DisabledMobileInputs } from "./disabled-inputs";
 
 interface SearchInputsMobileProps {
   hasAccess: boolean;
 }
 
 const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) => {
-  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${
-    hasAccess ? '' : 'cursor-not-allowed opacity-50'
-  } bg-transparent`;
+  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+    } bg-transparent`;
+
+  if (!hasAccess) return <DisabledMobileInputs />;
 
   return (
     <div className="flex flex-col p-3 items-center bg-gray-100 rounded-3xl shadow-md overflow-hidden">
@@ -38,14 +40,14 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       />
       <button
         disabled={!hasAccess}
-        className={`w-full mt-3 p-3 ${
-          hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-        } bg-primaryBrand rounded-full`}
+        className={`w-full mt-3 p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+          } bg-primaryBrand rounded-full`}
       >
         <FaSearch className="text-white mx-auto" size={20} />
       </button>
     </div>
-  );
+
+  )
 };
 
 export default SearchInputsMobile;
