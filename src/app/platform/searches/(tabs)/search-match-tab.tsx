@@ -235,7 +235,7 @@ const MatchViewTab: React.FC = () => {
                 md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                 justify-center text-white text-sm transition-all duration-200 `}
               />
-<ButtonControl
+              <ButtonControl
                 handleClick={() => handleLike(showListings[0])}
                 Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-xl aspect-[1/1]' />}
                 className={`
@@ -321,7 +321,7 @@ const MatchViewTab: React.FC = () => {
               </div>
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-[24px] text-[#404040] font-montserrat font-medium truncate max-w-[300px]">
+                <span className="text-[24px] text-[#404040] font-montserrat font-medium w-2/3 truncate">
                   {showListings[0].locationString}
                 </span>
                 <span className="text-[24px] text-[#404040] font-montserrat">
@@ -354,7 +354,7 @@ const MatchViewTab: React.FC = () => {
         {/* Left side - Map and Address */}
         <div className="w-full md:w-1/2 pr-2">
           <div
-            className={`md:block  sticky pt-0 md:pt-0 md:z-10 ${!isScrolled ? '' : ''} transition-transform duration-500`}
+            className={`md:block h-[640px] sticky pt-0 md:pt-0 md:z-10 ${!isScrolled ? '' : ''} transition-transform duration-500`}
             style={{ top: `${controlBoxParentHeight + 52}px` }}
           >
             <SearchMap

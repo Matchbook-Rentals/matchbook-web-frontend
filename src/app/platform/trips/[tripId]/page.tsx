@@ -9,6 +9,7 @@ import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import { useSearchParams } from 'next/navigation';
+import OverviewTab from './(tabs)/overview-tab';
 
 interface Tab {
   value: string;
@@ -31,10 +32,9 @@ const TripsPage: React.FC = () => {
     {
       label: 'Overview',
       value: 'overview',
-      content: state.trip ? (<h1>OVERVIEW </h1>) : null,
+      content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-
     },
     {
       label: 'Matchmaker',
