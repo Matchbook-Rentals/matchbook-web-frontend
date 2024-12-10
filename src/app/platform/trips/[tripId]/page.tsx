@@ -26,6 +26,14 @@ const TripsPage: React.FC = () => {
   const tabTriggerStyles = 'p-0 xxs:px-1 sm:px-2 '
   const tabs: Tab[] = [
     {
+      label: 'Overview',
+      value: 'overview',
+      content: state.trip ? (<h1>OVERVIEW </h1>) : null,
+      textSize: tabTriggerTextStyles,
+      className: tabTriggerStyles,
+
+    },
+    {
       label: 'Matchmaker',
       value: 'matchmaker',
       content: state.trip ? <MatchmakerTab /> : null,
@@ -33,13 +41,6 @@ const TripsPage: React.FC = () => {
       className: tabTriggerStyles,
 
     },
-    // {
-    //   label: 'Map View',
-    //   value: 'map-view',
-    //   content: state.trip ? <MapView /> : null,
-    //   textSize: tabTriggerTextStyles,
-    //   className: tabTriggerStyles,
-    // },
     {
       label: 'Favorites',
       value: 'favorites',
@@ -64,14 +65,14 @@ const TripsPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center w-full mx-auto">
-      <div className="flex w-full ">
+    <div className="flex flex-col w-full mx-auto">
+      <div className="flex w-full">
         <TabSelector
           useUrlParams
           tabs={tabs}
-          className='mx-auto w-full'
+          className='mx-auto '
           tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex justify-between xs:justify-center px-1 space-x-0 md:space-x-2 md:gap-x-4 w-full mx-auto'
+          tabsListClassName='flex  justify-start w-full  px-1 space-x-0 md:space-x-2 md:gap-x-4'
         />
       </div>
     </div>
