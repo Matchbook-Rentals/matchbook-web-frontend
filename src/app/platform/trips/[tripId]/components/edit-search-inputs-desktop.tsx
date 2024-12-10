@@ -1,12 +1,11 @@
 import React, { useRef } from "react";
-import { FaSearch } from "react-icons/fa";
 import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
 import { useToast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "@/components/home-components/HeroLocationSuggest";
 import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
-import { ImSpinner8 } from "react-icons/im";
 import { useTripContext } from "@/contexts/trip-context-provider";
 import { Check, X } from "lucide-react";
+import { editTrip } from "@/app/actions/trips";
 
 type ActiveContentType = 'location' | 'dateStart' | 'dateEnd' | 'guests' | null;
 
@@ -39,8 +38,6 @@ const EditSearchInputsDesktop: React.FC = () => {
   const moveInInputRef = useRef<HTMLInputElement>(null);
   const moveOutInputRef = useRef<HTMLInputElement>(null);
   const guestsInputRef = useRef<HTMLInputElement>(null);
-
-  const inputClasses = "w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 bg-transparent hover:bg-gray-100 transition-colors group";
 
   React.useEffect(() => {
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
@@ -144,14 +141,62 @@ const EditSearchInputsDesktop: React.FC = () => {
     });
   };
 
-  const handleSave = () => {
-    alert('placeholder');
+  const handleSave = async () => {
+    if (!state.trip?.id) {
+      toast({
+        variant: "destructive",
+        description: "No trip ID found",
+      });
+      return;
+    }
+
+    const response = await editTrip(state.trip.id, {
+      locationString: locationDisplayValue,
+      latitude: selectedLocation.lat || undefined,
+      longitude: selectedLocation.lng || undefined,
+      startDate: dateRange.start || undefined,
+      endDate: dateRange.end || undefined,
+      numAdults: guests.adults,
+      numChildren: guests.children,
+      numPets: guests.pets,
+    });
+
+    if (response.success) {
+      toast({
+        description: "Trip updated successfully. Page will refresh...",
+      });
+
+      // Wait 1.5 seconds then do a full page reload
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      toast({
+        variant: "destructive",
+        description: response.error || "Failed to update trip",
+      });
+    }
   };
+
+  // Add escape key handler
+  React.useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        setActiveContent(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, []); // Only re-run if isOpen changes
 
   return (
     <div ref={containerRef} className="relative">
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Location</span>
             <input
@@ -159,13 +204,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               type="text"
               placeholder="Where to?"
               value={locationDisplayValue}
-              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
               onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move In</span>
             <input
@@ -173,13 +218,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               type="text"
               placeholder="Move in:"
               value={formatDate(dateRange.start)}
-              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
               onClick={(e) => handleInputClick(e, 'dateStart', moveInInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer">
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move Out</span>
             <input
@@ -187,13 +232,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               type="text"
               placeholder="Move out:"
               value={formatDate(dateRange.end)}
-              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
               onClick={(e) => handleInputClick(e, 'dateEnd', moveOutInputRef)}
             />
           </div>
         </div>
-        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2">
+        <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 cursor-pointer">
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Guests</span>
             <input
@@ -201,7 +246,7 @@ const EditSearchInputsDesktop: React.FC = () => {
               type="text"
               placeholder="Who?"
               value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
-              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
+              className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
               onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
             />

@@ -258,3 +258,56 @@ export async function createTrip(tripData: {
   }
 }
 
+interface EditTripResponse {
+  success: boolean;
+  trip?: Trip;
+  error?: string;
+}
+
+export async function editTrip(tripId: string, tripData: {
+  locationString?: string;
+  latitude?: number;
+  longitude?: number;
+  startDate?: Date;
+  endDate?: Date;
+  numAdults?: number;
+  numChildren?: number;
+  numPets?: number;
+}): Promise<EditTripResponse> {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    // First verify the trip belongs to the user
+    const existingTrip = await prisma.trip.findUnique({
+      where: { id: tripId },
+    });
+
+    if (!existingTrip) {
+      return { success: false, error: 'Trip not found' };
+    }
+
+    if (existingTrip.userId !== userId) {
+      return { success: false, error: 'Unauthorized to edit this trip' };
+    }
+
+    const updatedTrip = await prisma.trip.update({
+      where: { id: tripId },
+      data: tripData,
+    });
+
+    return {
+      success: true,
+      trip: updatedTrip,
+    };
+  } catch (error) {
+    console.error('Error editing trip:', error);
+    return {
+      success: false,
+      error: 'Failed to edit trip',
+    };
+  }
+}
+
