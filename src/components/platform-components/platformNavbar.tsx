@@ -7,6 +7,7 @@ import Link from "next/link";
 import SlidingHeart from "./sliding-heart";
 import { PAGE_MARGIN, APP_PAGE_MARGIN } from "@/constants/styles";
 import { useSearchParams } from 'next/navigation';
+import { motion } from "framer-motion";
 
 export default function PlatformNavbar() {
   const searchParams = useSearchParams();
@@ -16,9 +17,17 @@ export default function PlatformNavbar() {
   const { isSignedIn } = useUser();
 
   return (
-    <nav className="bg-background sticky top-0 z-50 border-b  mb-9">
-      <div className={`flex mx-auto items-center justify-between ${marginClass}`}>
-        <div className="w-1/3">
+    <motion.nav
+      className="bg-background sticky top-0 z-50 border-b mb-9"
+      layout="position"
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
+        className={`flex mx-auto items-center justify-between ${marginClass}`}
+        layout="position"
+        transition={{ duration: 0.2 }}
+      >
+        <motion.div className="w-1/3" layout="position" transition={{ duration: 0.2 }}>
           <Link href={"/"}>
             <img
               src="/navbar-logo-full.png"
@@ -31,18 +40,20 @@ export default function PlatformNavbar() {
               className="sm:hidden h-10 w-10"
             />
           </Link>
-        </div>
-        <div className="w-1/3 flex justify-center">
+        </motion.div>
+
+        <motion.div className="w-1/3 flex justify-center" layout="position" transition={{ duration: 0.2 }}>
           <img
             src="/svg/heart-header.svg"
             className="h-8 w-8 hidden md:flex"
             alt="MatchBook Heart"
           />
-        </div>
-        <div className="w-1/3 flex justify-end">
+        </motion.div>
+
+        <motion.div className="w-1/3 flex justify-end" layout="position" transition={{ duration: 0.2 }}>
           <UserMenu color="black" isSignedIn={isSignedIn} />
-        </div>
-      </div>
-    </nav>
+        </motion.div>
+      </motion.div>
+    </motion.nav>
   );
 }
