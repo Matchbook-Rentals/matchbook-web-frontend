@@ -186,7 +186,7 @@ const MatchViewTab: React.FC = () => {
 
   // Main component render
   return (
-    <div className={`w-full`}>
+    <div className={`w-full lg:max-w-[80vw] mx-auto`}>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
@@ -200,12 +200,12 @@ const MatchViewTab: React.FC = () => {
             <div className={`button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
                      sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
                      lg:justify-center lg:gap-x-8 pb-2 pt-3 md:px-5 md:pt-4 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2' : ''} gap-2 transition-transform duration-500`}
+                     ${!isScrolled ? 'md:-translate-y-1/2' : 'scale-90'} gap-2 transition-transform duration-500`}
               ref={controlBoxRef}>
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
                 Icon={<RejectIcon className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-full aspect-[1/1]' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] aspect-[1/1]
+                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[130px] max-h-[130px] aspect-[1/1]
                   flex items-center justify-center rounded-full text-center text-white
                   text-sm transition-all duration-200 relative`}
               />
@@ -213,7 +213,7 @@ const MatchViewTab: React.FC = () => {
               <ButtonControl
                 handleClick={handleBack}
                 Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
-                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1]
+                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[86px] max-h-[86px]
                   md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                   justify-center text-white text-sm transition-all duration-200 relative `}
               />
@@ -222,7 +222,7 @@ const MatchViewTab: React.FC = () => {
                 handleClick={() => handleMaybe(showListings[0])}
                 Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
                 className={`
-                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1]
+                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[86px] max-h-[86px]
                 md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
                 justify-center text-white text-sm transition-all duration-200 `}
               />
@@ -231,7 +231,7 @@ const MatchViewTab: React.FC = () => {
                 handleClick={() => handleLike(showListings[0])}
                 Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-xl aspect-[1/1]' />}
                 className={`
-                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] aspect-[1/1]
+                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[130px] max-h-[130px] aspect-[1/1]
                 md:w-[9vw] md:h-[9vw] flex items-center justify-center rounded-full text-center
                 text-white text-sm transition-all duration-200
               `}
