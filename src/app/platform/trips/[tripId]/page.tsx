@@ -7,7 +7,8 @@ import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
 import ApplicationTab from './(tabs)/application-tab';
 import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { APP_PAGE_MARGIN } from '@/constants/styles';
+import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
+import { useSearchParams } from 'next/navigation';
 
 interface Tab {
   value: string;
@@ -21,9 +22,11 @@ interface Tab {
 
 const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get('tab') || 'overview';
 
   const tabTriggerTextStyles = 'text-md xxs:text-[16px] sm:text-xl'
-  const tabTriggerStyles = 'p-0 xxs:px-1 sm:px-2 '
+  const tabTriggerStyles = 'p-0 '
   const tabs: Tab[] = [
     {
       label: 'Overview',
@@ -64,8 +67,12 @@ const TripsPage: React.FC = () => {
     },
   ];
 
+  const marginClass = ['map', 'favorites'].includes(currentTab)
+    ? APP_PAGE_MARGIN
+    : PAGE_MARGIN;
+
   return (
-    <div className="flex flex-col w-full mx-auto">
+    <div className={`flex flex-col ${marginClass} mx-auto`}>
       <h1>
         <h1 className="text-black font-montserrat text-[32px] font-medium leading-normal">
           <span className="cursor-pointer hover:underline">
@@ -81,9 +88,9 @@ const TripsPage: React.FC = () => {
         <TabSelector
           useUrlParams
           tabs={tabs}
-          className='mx-auto '
-          tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
-          tabsListClassName='flex  justify-start w-full  px-1 space-x-0 md:space-x-2 md:gap-x-4'
+          className='mx-auto w-full'
+          tabsClassName='w-full mx-auto'
+          tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
         />
       </div>
     </div>
