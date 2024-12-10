@@ -7,7 +7,7 @@ import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { useTripContext } from "@/contexts/trip-context-provider";
 
-type ActiveContentType = 'location' | 'date' | 'guests' | null;
+type ActiveContentType = 'location' | 'dateStart' | 'dateEnd' | 'guests' | null;
 
 const EditSearchInputsDesktop: React.FC = () => {
   const { state } = useTripContext();
@@ -57,29 +57,47 @@ const EditSearchInputsDesktop: React.FC = () => {
 
   const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
     e.stopPropagation();
-    if (activeContent !== content) {
-      setActiveContent(content);
-      setIsOpen(true);
 
-      if (containerRef.current && inputRef.current) {
-        const containerLeft = containerRef.current.getBoundingClientRect().left;
-        const inputRect = inputRef.current.getBoundingClientRect();
-        const inputLeft = inputRect.left;
-        const inputCenter = inputLeft + (inputRect.width / 2);
-        const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-        setArrowPosition(position);
-      }
-    } else {
+    if (activeContent === content) {
       setIsOpen(false);
       setActiveContent(null);
+      return;
     }
+
+
+    if (containerRef.current && inputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = inputRef.current.getBoundingClientRect();
+      const inputLeft = inputRect.left;
+      const inputCenter = inputLeft + (inputRect.width / 2);
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
+    }
+
+    setActiveContent(content);
+    setIsOpen(true);
   };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setActiveContent(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const renderActiveContent = () => {
     switch (activeContent) {
       case 'location':
         return <HeroLocationSuggest hasAccess={true} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
-      case 'date':
+      case 'dateStart':
+      case 'dateEnd':
         return (
           <HeroDateRange
             start={dateRange.start || new Date()}
@@ -99,7 +117,7 @@ const EditSearchInputsDesktop: React.FC = () => {
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
         <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-4">Location</span>
+            <span className="text-xs text-gray-500 px-3">Location</span>
             <input
               ref={locationInputRef}
               type="text"
@@ -113,7 +131,7 @@ const EditSearchInputsDesktop: React.FC = () => {
         </div>
         <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-4">Move In</span>
+            <span className="text-xs text-gray-500 px-3">Move In</span>
             <input
               ref={moveInInputRef}
               type="text"
@@ -121,13 +139,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={formatDate(dateRange.start)}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
               readOnly
-              onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
+              onClick={(e) => handleInputClick(e, 'dateStart', moveInInputRef)}
             />
           </div>
         </div>
         <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300">
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-4">Move Out</span>
+            <span className="text-xs text-gray-500 px-3">Move Out</span>
             <input
               ref={moveOutInputRef}
               type="text"
@@ -135,13 +153,13 @@ const EditSearchInputsDesktop: React.FC = () => {
               value={formatDate(dateRange.end)}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
               readOnly
-              onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
+              onClick={(e) => handleInputClick(e, 'dateEnd', moveOutInputRef)}
             />
           </div>
         </div>
         <div className="flex-1 relative hover:bg-gray-100 transition-colors p-2">
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-4">Guests</span>
+            <span className="text-xs text-gray-500 px-3">Guests</span>
             <input
               ref={guestsInputRef}
               type="text"
