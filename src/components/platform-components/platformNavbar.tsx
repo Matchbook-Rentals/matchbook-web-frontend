@@ -6,13 +6,16 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import SlidingHeart from "./sliding-heart";
 import { PAGE_MARGIN, APP_PAGE_MARGIN } from "@/constants/styles";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { motion } from "framer-motion";
 
 export default function PlatformNavbar() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const tab = searchParams.get('tab');
-  const marginClass = tab === 'map' || tab === 'favorites' ? APP_PAGE_MARGIN : PAGE_MARGIN;
+  const marginClass = tab === 'map' || tab === 'favorites' || pathname === '/platform/trips'
+    ? APP_PAGE_MARGIN
+    : PAGE_MARGIN;
 
   const { isSignedIn } = useUser();
 
