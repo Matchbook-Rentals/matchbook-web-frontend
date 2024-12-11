@@ -43,16 +43,16 @@ const TripsPage: React.FC = () => {
 
   // Updated handleFilterChange function to handle all filter changes, including arrays
   const handleFilterChange = (
-      key: keyof FilterOptions,
-      value: string | number | boolean | string[] | Date
-    ) => {
-      setFilters(prevFilters => ({
+    key: keyof FilterOptions,
+    value: string | number | boolean | string[] | Date
+  ) => {
+    setFilters(prevFilters => ({
       ...prevFilters,
       [key]: value,
     }));
   };
 
-  const tabTriggerTextStyles = 'text-md xxs:text-[16px] sm:text-xl'
+  const tabTriggerTextStyles = 'text-md xxs:text-[16px]'
   const tabTriggerStyles = 'p-0 '
   const tabs: Tab[] = [
     {
@@ -99,8 +99,8 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-      <h1 className=" text-black font-montserrat text-[32px] leading-normal">
-        <span className="cursor-pointer hover:underline font-medium ">
+      <h1 className=" text-black font-montserrat text-[16px] leading-normal">
+        <span className="cursor-pointer hover:underline  ">
           <a href="/platform/trips">Searches</a>
         </span>
         <span className="mx-2">&gt;</span>
