@@ -101,7 +101,7 @@ export default function HeroLocationSuggest({
       <input
         value={inputValue}
         onChange={handleInput}
-        placeholder="Where's the party?"
+        placeholder="Enter an address or city"
         type="text"
         className="w-full h-full text-2xl focus:outline-none"
         autoFocus={true}

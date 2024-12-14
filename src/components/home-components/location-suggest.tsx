@@ -84,7 +84,7 @@ export default function LocationSuggest({ setDestination }) {
           value={inputValue}
           onChange={handleInput}
           disabled={!ready}
-          placeholder="Where's the party?"
+          placeholder="Enter an address or city"
           type="text"
           className="w-full h-full text-2xl focus:outline-none"
         />
