@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Input parameter is required' }, { status: 400 });
   }
 
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&types=(regions)&components=country:us&key=${apiKey}`;
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&components=country:us&key=${apiKey}`;
 
   try {
     const response = await fetch(url);
