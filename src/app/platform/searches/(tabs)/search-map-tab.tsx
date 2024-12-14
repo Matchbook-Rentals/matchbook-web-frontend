@@ -48,17 +48,17 @@ const MapView: React.FC = () => {
     : state.listings.filter(listing => !state.lookup.dislikedIds.has(listing.id));
 
   return (
-      <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
-        {/*Grid container*/}
-        <div className="w-full md:w-2/3 md:pr-4">
+    <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
+      {/*Grid container*/}
+      <div className="w-full md:w-3/5 md:pr-4">
 
         <SearchListingsGrid
           listings={displayListings}
         />
-        </div>
+      </div>
 
-        {/*Map container*/}
-        <div className="w-full md:w-1/3 mt-4 md:mt-0">
+      {/*Map container*/}
+      <div className="w-full md:w-2/5 mt-4 md:mt-0">
 
         <SearchMap
           center={mapCenter}
@@ -70,8 +70,8 @@ const MapView: React.FC = () => {
 
           }))}
         />
-        </div>
       </div>
+    </div>
   );
 };
 

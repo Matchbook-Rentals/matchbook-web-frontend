@@ -123,7 +123,7 @@ export default function ShortListTab() {
 
   return (
     <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
-      <div className="w-full md:w-2/3 md:pr-4">
+      <div className="w-full md:w-3/5 md:pr-4">
 
         <SearchListingsGrid
           listings={[...likedListings, ...maybedListings].sort((a, b) => {
@@ -138,7 +138,7 @@ export default function ShortListTab() {
           }
         />
       </div>
-      <div className="w-full md:w-1/3 mt-4 md:mt-0">
+      <div className="w-full md:w-2/5 mt-4 md:mt-0">
         <SearchMap
           center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
           zoom={10}
