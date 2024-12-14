@@ -8,25 +8,16 @@ import { Label } from "@/components/ui/label"
 import PriceFilter from '../(components)/PriceFilter';
 import CategoryFilter from '../(components)/CategoryFilter';
 import FurnitureFilter from '../(components)/FurnitureFilter';
-import DateDaySelector from '@/components/ui/custom-calendar/date-day-selector/date-day-selector';
 import FilterGrouping from '../(components)/FilterGrouping';
 
 interface FilterOptions {
   minPrice: number;
   maxPrice: number;
-  moveInDate: Date;
-  moveOutDate: Date;
-  flexibleMoveInStart: Date;
-  flexibleMoveInEnd: Date;
-  flexibleMoveOutStart: Date;
-  flexibleMoveOutEnd: Date;
   bedrooms: string;
   beds: string;
   baths: string;
   furnished: boolean;
   unfurnished: boolean;
-  flexibleMoveIn: boolean;
-  flexibleMoveOut: boolean;
   utilities: string[];
   propertyTypes: string[];
 }
@@ -60,71 +51,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <span className="text-[#404040] text-center font-montserrat text-[16px] font-medium">Filters</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[100vw] sm:h-[100vh] sm:m-0 p-0">
+      <DialogContent className="sm:max-w-[551px] sm:h-[90vh] sm:m-0 p-0">
         <div className="p-6 h-full overflow-y-auto flex flex-col items-center">
           <div className="w-full ">
-            <div className="flex justify-center items-center mb-6">
-              <h2 className="text-3xl font-semibold">Filters</h2>
+            <div className="flex justify-center border-b border-gray-300 items-center mb-6">
+              <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
             </div>
 
             <div className="space-y-6 ">
-              <div className="flex justify-between max-w-md mx-auto items-center">
-                <div className="flex flex-col items-center">
-                  <Label htmlFor="flexible-move-in" className="mb-2">Flexible move in</Label>
-                  <Switch
-                    id="flexible-move-in"
-                    checked={filters.flexibleMoveIn}
-                    onCheckedChange={(checked) => onFilterChange('flexibleMoveIn', checked)}
-                    className="data-[state=checked]:bg-primaryBrand"
-                  />
-                  <span className="text-sm text-gray-500 mt-1">
-                    {filters.flexibleMoveIn ? 'On' : 'Off'}
-                  </span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <Label htmlFor="flexible-move-out" className="mb-2">Flexible move out</Label>
-                  <Switch
-                    id="flexible-move-out"
-                    checked={filters.flexibleMoveOut}
-                    onCheckedChange={(checked) => onFilterChange('flexibleMoveOut', checked)}
-                    className="data-[state=checked]:bg-primaryBrand"
-                  />
-                  <span className="text-sm text-gray-500 mt-1">
-                    {filters.flexibleMoveOut ? 'On' : 'Off'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center w-full">
-                <div className="flex justify-center w-full space-x-4">
-                  <div className="flex flex-col items-center">
-                    <Label htmlFor="move-in-date" className="mb-2">Move in date</Label>
-                    <DateDaySelector
-                      key="move-in-date"
-                      selectedDate={filters.moveInDate || new Date()}
-                      tripDate={filters.moveInDate || new Date()}
-                      onDateSelect={(dates) => {
-                        onFilterChange('flexibleMoveInStart', dates[0]);
-                        onFilterChange('flexibleMoveInEnd', dates[1]);
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex flex-col items-center">
-                    <Label htmlFor="move-out-date" className="mb-2">Move out date</Label>
-                    <DateDaySelector
-                      key="move-out-date"
-                      selectedDate={filters.moveOutDate}
-                      tripDate={filters.moveOutDate}
-                      onDateSelect={(dates) => {
-                        onFilterChange('flexibleMoveOutStart', dates[0]);
-                        onFilterChange('flexibleMoveOutEnd', dates[1]);
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
               <PriceFilter
                 minPrice={filters.minPrice}
                 maxPrice={filters.maxPrice}
