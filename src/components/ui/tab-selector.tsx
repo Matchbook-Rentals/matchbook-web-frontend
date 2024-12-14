@@ -4,7 +4,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from "@/components/ui/button" // Add this import
 
 interface Tab {
   value: string;
@@ -65,7 +64,7 @@ export default function TabSelector({
         onValueChange={handleTabChange}
       >
         <div className="flex items-start p-0 justify-between mb-4 space-x-4 border-b-2 border-gray-300">
-          <TabsList className={cn("flex justify-start  pt-6 pb-8 space-x-2", tabsListClassName)}>
+          <TabsList className={cn("flex justify-start pt-6 pb-8 space-x-2", tabsListClassName)}>
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.value}

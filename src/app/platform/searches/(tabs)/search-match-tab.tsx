@@ -195,7 +195,7 @@ const MatchViewTab: React.FC = () => {
 
   // Main component render
   return (
-    <div className={`w-full lg:max-w-[80vw] mx-auto`}>
+    <div className={`w-full mx-auto`}>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />

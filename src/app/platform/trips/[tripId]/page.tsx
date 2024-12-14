@@ -93,13 +93,11 @@ const TripsPage: React.FC = () => {
     },
   ];
 
-  const marginClass = ['map', 'favorites'].includes(currentTab)
-    ? APP_PAGE_MARGIN
-    : PAGE_MARGIN;
+  const marginClass = APP_PAGE_MARGIN;
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-      <h1 className=" text-black font-montserrat text-[16px] leading-normal">
+      <h1 className=" text-[#404040] font-montserrat text-[16px] leading-normal">
         <span className="cursor-pointer hover:underline  ">
           <a href="/platform/trips">Searches</a>
         </span>
