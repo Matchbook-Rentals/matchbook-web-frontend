@@ -168,7 +168,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         <h3 className="text-[32px] text-[#404040] font-medium mb-4">Highlights</h3>
         <div className='flex space-x-4 items-center mb-4'>
           <MatchbookVerified />
-          <h3 className="text-black text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
+          <h3 className="text-[#404040] text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
         </div>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           {!showAllAmenities ? (

@@ -251,7 +251,7 @@ const MatchViewTab: React.FC = () => {
           <div className="w-full md:w-1/2 bg-background md:pl-2 md:pb-1">
             <h2
               ref={titleBoxRef}
-              className={`text-[32px] pb-2 md:pb-4 lg:pb-0 text-black  md:mt-8`}
+              className={`text-[32px] pb-2 md:pb-4 lg:pb-0  md:mt-8`}
             >
               {showListings[0].title}
             </h2>

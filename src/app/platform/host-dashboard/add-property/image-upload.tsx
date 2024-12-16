@@ -62,7 +62,7 @@ const ImageUploadForm: React.FC<InfoFormProps> = ({ propertyDetails, setProperty
         onClientUploadComplete={handleUploadFinish}
         onUploadError={(error) => alert(error.message)}
         className="p-0 mt-5"
-        appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
+        appearance={{ button: 'bg-parent border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
       />
       <ImageDragDrop
         listingImages={listingImages}

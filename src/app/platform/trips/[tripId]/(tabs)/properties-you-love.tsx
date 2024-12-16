@@ -102,7 +102,7 @@ export default function PropertiesYouLoveTab() {
         <>
           <h3 className='text-center text-xl'>Applied for all liked listing, please return to new possibilites tab to find more listings!</h3>
           <Button
-            className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center text-black block mt-5 mx-auto"
+            className="bg-primaryBrand/80 hover:bg-primaryBrand text-xl font-semibold py-3 pb-10 flex items-center  block mt-5 mx-auto"
             onClick={() => router.push(`${pathname}?tab=properties-you-love`)}
           >
             Back to New Possibilites

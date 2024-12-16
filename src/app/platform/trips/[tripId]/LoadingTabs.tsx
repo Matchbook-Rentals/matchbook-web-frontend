@@ -67,7 +67,7 @@ const LoadingTabs: React.FC = () => {
     <div className={`flex flex-col items-center ${APP_PAGE_MARGIN}`}>
       <h1 className=" text-[#404040] font-montserrat text-[16px] mr-auto leading-normal">
         <span className="cursor-pointer hover:underline  ">
-          <a href="/platform/trips">Searches</a>
+          <span>Searches</span>
         </span>
         <span className="mx-2">&gt;</span>
         <span className="cursor-pointer hover:underline">

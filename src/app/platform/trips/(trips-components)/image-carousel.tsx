@@ -87,7 +87,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
           <Dialog>
             <DialogTrigger asChild>
               <Button
-                className="absolute bottom-4 right-4 flex justify-between gap-x-2 bg-white text-black hover:bg-gray-200"
+                className="absolute bottom-4 right-4 flex justify-between gap-x-2 bg-white hover:bg-gray-200"
               >
                 <img src='/picture-icon.png' className='h-5 w-5' />
                 <p>Show All</p>
