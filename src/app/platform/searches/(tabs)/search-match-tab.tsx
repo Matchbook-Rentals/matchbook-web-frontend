@@ -251,7 +251,7 @@ const MatchViewTab: React.FC = () => {
           <div className="w-full md:w-1/2 bg-background md:pl-2 md:pb-1">
             <h2
               ref={titleBoxRef}
-              className={`text-[36px] pb-2 md:pb-4 lg:pb-0 text-black font-medium md:mt-8`}
+              className={`text-[32px] pb-2 md:pb-4 lg:pb-0 text-black  md:mt-8`}
             >
               {showListings[0].title}
             </h2>
@@ -282,10 +282,10 @@ const MatchViewTab: React.FC = () => {
               {/* Bedroom and Price */}
               <div className="flex justify-between items-center bedroom-price-box">
                 <div>
-                  <h2 className="text-[24px] text-[#404040] font-montserrat font-medium">3 BR | 2 BA</h2>
+                  <h2 className="text-[24px] text-[#404040] font-montserrat">3 Beds | 2 Bath</h2>
                 </div>
                 <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat font-medium">${controlBoxHeight} / Mo</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxHeight} / Mo</p>
                 </div>
               </div>
 

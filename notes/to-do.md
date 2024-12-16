@@ -5,6 +5,12 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+
+- [ ]  dialog finish, control active state for property type selection
+- [ ] Adults 1 minimum and defualt start
+- [ ] go through FIGMA text sizes and weights 
+- [ ] Reset default text to 404040 instead of black
+
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 
 - [X] Get rid of X 

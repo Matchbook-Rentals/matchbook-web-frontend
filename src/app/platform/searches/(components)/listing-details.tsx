@@ -110,7 +110,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
             />
           </div>
           <div>
-            <p className="text-xl md:text-lg lg:text-xl">Hosted by Daniel</p>
+            <p className="text-xl md:text-[24px] text-[#404040] font-medium font-montserrat">Hosted by Daniel</p>
             <p className="text-gray-600 md:text-lg lg:text-xl">
               2 years on Matchbook
             </p>
@@ -166,10 +166,10 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Highlights */}
       <div className="mt-6">
         <h3 className="text-[32px] text-[#404040] font-medium mb-4">Highlights</h3>
-      <div className='flex space-x-4 items-center mb-4'>
-        <MatchbookVerified />
-        <h3 className="text-black text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
-      </div>
+        <div className='flex space-x-4 items-center mb-4'>
+          <MatchbookVerified />
+          <h3 className="text-black text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
+        </div>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           {!showAllAmenities ? (
             <>

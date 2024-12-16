@@ -53,7 +53,7 @@ const TripsPage: React.FC = () => {
   };
 
   const tabTriggerTextStyles = 'text-md xxs:text-[16px]'
-  const tabTriggerStyles = 'p-0 '
+  const tabTriggerStyles = 'p-0'
   const tabs: Tab[] = [
     {
       label: 'Overview',
