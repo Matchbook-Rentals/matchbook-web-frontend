@@ -10,6 +10,15 @@ ACH PLAID API
 - [ ] Adults 1 minimum and defualt start
 - [ ] go through FIGMA text sizes and weights 
 - [ ] Reset default text to 404040 instead of black
+- [ ] Number of properties to show on filters 
+- [ ] Actually filter by properties 
+- [ ] Matchmaker blocks and separation 
+- [ ] Search page
+- [ ] Default tab matchmaker 
+- [ ] Reset platform navbar to be narrow on trips page.  
+- [ ] Delete green scrollbar  
+- [ ] Seed db to 10000 listings 
+
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 
