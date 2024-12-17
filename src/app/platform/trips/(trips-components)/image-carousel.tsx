@@ -35,7 +35,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden md:flex flex-row space-x-4 w-full h-[50vh]">
+      <div className="hidden md:flex flex-row space-x-8 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           <img

@@ -263,7 +263,7 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - Listing Title */}
-          <div className="w-full md:w-1/2 bg-background md:pl-2 md:pb-1">
+          <div className="w-full md:w-1/2 bg-background md:pl-4 md:pb-1">
             <h2
               ref={titleBoxRef}
               className={`text-[32px] pb-2 md:pb-4 lg:pb-0  md:mt-8`}
@@ -276,7 +276,7 @@ const MatchViewTab: React.FC = () => {
         {/* Second flex container - Labels and Property Stats */}
         <div className="flex flex-col md:flex-row w-full mb-2">
           {/* Left side - Info Labels (Desktop only) */}
-          <div className={`hidden md:block w-full md:w-1/2 md:pr-2 transition-transform duration-500
+          <div className={`hidden md:block w-full md:w-1/2 md:pr-4 transition-transform duration-500
               ${!isScrolled ? '' : ''}`}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight / 2}px` } as React.CSSProperties}>
             <div className="flex justify-between items-center">
@@ -290,7 +290,7 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - All Stats for Mobile, Bedroom/Bath for Desktop */}
-          <div className={`w-full md:w-1/2 md:pl-2 bg-background transition-transform duration-500
+          <div className={`w-full md:w-1/2 md:pl-4 bg-background transition-transform duration-500
               `}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col">
@@ -323,7 +323,7 @@ const MatchViewTab: React.FC = () => {
           className="flex flex-col border-b md:border-none border-black mt-2 md:mt-0 md:flex-row w-full"
         >
           {/* Left side - Address Info Values */}
-          <div className={`w-full md:w-1/2 pr-2 transition-transform duration-500
+          <div className={`w-full md:w-1/2 pr-4 transition-transform duration-500
               ${!isScrolled ? '' : ''}`}
           >
             <div className="flex flex-col md:flex-row justify-between items-center">
@@ -347,7 +347,7 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - Sqft and Deposit (Desktop only) */}
-          <div className={`hidden md:block w-full   sqft-deposit-box md:w-1/2 pl-2 bg-background transition-transform duration-500
+          <div className={`hidden md:block w-full   sqft-deposit-box md:w-1/2 pl-4 bg-background transition-transform duration-500
               `}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col border-b pb-3 border-black">
@@ -367,7 +367,7 @@ const MatchViewTab: React.FC = () => {
       {/* Second flex container - Map/Address and Listing Details */}
       <div className="flex flex-col-reverse md:flex-row w-full">
         {/* Left side - Map and Address */}
-        <div className="w-full md:w-1/2 pr-2">
+        <div className="w-full md:w-1/2 pr-4">
           <div
             className={`md:block sticky pt-0 md:p-0  ${!isScrolled ? '' : ''} transition-transform duration-500`}
             style={{
@@ -390,7 +390,7 @@ const MatchViewTab: React.FC = () => {
         </div>
 
         {/* Right side - Listing Details */}
-        <div className={`w-full md:w-1/2 pl-2 transition-transform duration-500 `}
+        <div className={`w-full md:w-1/2 pl-4 transition-transform duration-500 `}
         >
           <ListingDetails listing={showListings[0]} />
         </div>
