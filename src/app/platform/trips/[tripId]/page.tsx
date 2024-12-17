@@ -106,12 +106,12 @@ const TripsPage: React.FC = () => {
           {state.trip.locationString}
         </span>
       </h1>
-      <div className="flex w-full">
+      <div className="flex w-full pb-0">
         <TabSelector
           useUrlParams
           tabs={tabs}
           defaultTab={currentTab || 'overview'}
-          className='mx-auto w-full'
+          className='mx-auto w-full pb-0 mb-0'
           tabsClassName='w-full mx-auto'
           tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
           secondaryButton={
