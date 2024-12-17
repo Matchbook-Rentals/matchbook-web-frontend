@@ -19,6 +19,7 @@ ACH PLAID API
 - [ ] Delete green scrollbar  
 - [ ] Seed db to 10000 listings 
 - [ ] REDO prop availability section 
+- [ ]  Gap in carousel + beteween columns on match desktop 
 
 
 ##02DEC24- [X] Credit Intelligence Filtering 

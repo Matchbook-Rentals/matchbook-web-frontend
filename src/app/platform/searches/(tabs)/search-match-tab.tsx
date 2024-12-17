@@ -15,6 +15,7 @@ import { QuestionMarkIcon } from '@radix-ui/react-icons';
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
+const PLATFORM_NAVBAR_HEIGHT = 50; // Add this constant for the navbar height
 
 const MatchViewTab: React.FC = () => {
   const { state, actions } = useTripContext();
@@ -99,14 +100,28 @@ const MatchViewTab: React.FC = () => {
   useEffect(() => {
     const updateParentHeight = () => {
       if (controlBoxParentRef.current) {
-        setControlBoxParentHeight(controlBoxParentRef.current.offsetHeight);
+        // Force a reflow to ensure all children are rendered
+        requestAnimationFrame(() => {
+          const height = controlBoxParentRef.current?.getBoundingClientRect().height || 0;
+          setControlBoxParentHeight(height);
+        });
       }
     };
 
-    updateParentHeight();
-    window.addEventListener('resize', updateParentHeight);
-    return () => window.removeEventListener('resize', updateParentHeight);
-  }, []);
+    // Initial measurement after a short delay to ensure rendering
+    const initialTimer = setTimeout(updateParentHeight, 100);
+
+    // Add resize observer for more reliable height updates
+    const resizeObserver = new ResizeObserver(updateParentHeight);
+    if (controlBoxParentRef.current) {
+      resizeObserver.observe(controlBoxParentRef.current);
+    }
+
+    return () => {
+      clearTimeout(initialTimer);
+      resizeObserver.disconnect();
+    };
+  }, [showListings]); // Add showListings as dependency to recalculate when content changes
 
   // Add this helper function near other function declarations
   const scrollToTop = () => {
@@ -195,13 +210,13 @@ const MatchViewTab: React.FC = () => {
 
   // Main component render
   return (
-    <div className={`w-full mx-auto`}>
+    <div className={`w-full mx-auto pb-0`}>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
 
       {/* Sticky container for all three flex sections */}
-      <div ref={controlBoxParentRef} className="sticky top-[50px] md:top-[55px] z-10 bg-background ">
+      <div ref={controlBoxParentRef} className={`sticky top-[${PLATFORM_NAVBAR_HEIGHT}px] md:top-[${PLATFORM_NAVBAR_HEIGHT + 5}px] z-10 bg-background`}>
         {/* First flex container - Controls and Title */}
         <div className="flex flex-col md:flex-row w-full" >
           {/* Left side - Button Controls */}
@@ -209,7 +224,7 @@ const MatchViewTab: React.FC = () => {
             <div className={` button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
                      sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
                      lg:justify-center lg:gap-x-8 pb-0 pt-3 md:px-5 md:pt-4 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-125' : ''} gap-2 transition-transform duration-500`}
+                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-110 xl:scale-125' : ''} gap-2 transition-transform duration-500`}
               ref={controlBoxRef}>
               <ButtonControl
                 handleClick={() => handleReject(showListings[0])}
@@ -338,10 +353,10 @@ const MatchViewTab: React.FC = () => {
             <div className="flex flex-col border-b pb-3 border-black">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-[24px] text-[#404040] font-montserrat">{totalBoxHeight} Sqft</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat">{totalBoxHeight.toFixed(0)} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxParentHeight} Dep.</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxParentHeight.toFixed(0)} Dep.</p>
                 </div>
               </div>
             </div>
@@ -354,8 +369,11 @@ const MatchViewTab: React.FC = () => {
         {/* Left side - Map and Address */}
         <div className="w-full md:w-1/2 pr-2">
           <div
-            className={`md:block h-[640px] sticky pt-0 md:pt-0 md:z-10 ${!isScrolled ? '' : ''} transition-transform duration-500`}
-            style={{ top: `${controlBoxParentHeight + 52}px` }}
+            className={`md:block sticky pt-0 md:p-0  ${!isScrolled ? '' : ''} transition-transform duration-500`}
+            style={{
+              top: `${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT + 5}px`,
+              height: `calc(100vh - ${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT + 5}px)`
+            }}
           >
             <SearchMap
               markers={[{
@@ -372,9 +390,8 @@ const MatchViewTab: React.FC = () => {
         </div>
 
         {/* Right side - Listing Details */}
-        <div className={`w-full md:w-1/2 pl-2 transition-transform duration-500
-            `}
-          style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
+        <div className={`w-full md:w-1/2 pl-2 transition-transform duration-500 `}
+        >
           <ListingDetails listing={showListings[0]} />
         </div>
       </div>
