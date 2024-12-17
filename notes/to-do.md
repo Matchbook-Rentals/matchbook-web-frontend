@@ -18,6 +18,7 @@ ACH PLAID API
 - [ ] Reset platform navbar to be narrow on trips page.  
 - [ ] Delete green scrollbar  
 - [ ] Seed db to 10000 listings 
+- [ ] REDO prop availability section 
 
 
 ##02DEC24- [X] Credit Intelligence Filtering 

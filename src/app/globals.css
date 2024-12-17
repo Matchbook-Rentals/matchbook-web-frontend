@@ -100,7 +100,6 @@
   }
 }
 
-
 .cl-userButtonTrigger {
   position: relative;
   z-index: 2;
@@ -130,7 +129,7 @@
 
 .cl-userButtonPopoverCard {
   border: 1px gray solid;
-  margin-top: 6px
+  margin-top: 6px;
 }
 
 .cl-userButtonPopoverCard * {
@@ -145,35 +144,34 @@
 .custom-scrollbar {
   scrollbar-width: thin;
   /* For Firefox */
-  scrollbar-color: #a3b899 transparent;
-  scroll-behavior: smooth;
+  /*scrollbar-color: #a3b899 transparent;*/
+  /*scroll-behavior: smooth;*/
   /* For Firefox */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  /*width: 4px;*/
   /* Width of the scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  /*background: transparent;*/
   /* Background of the scrollbar track */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #a3b899;
+  /*background-color: #a3b899;*/
   /* Color of the scrollbar thumb */
-  border-radius: 2px;
+  /*border-radius: 2px;*/
   /* Completely rounded corners for the scrollbar thumb */
 }
 
 .custom-scrollbar::-moz-scrollbar-thumb {
-  background-color: #a3b899;
+  /*background-color: #a3b899;*/
   /* Color of the scrollbar thumb */
-  border-radius: 2px;
+  /*border-radius: 2px;*/
   /* Completely rounded corners for the scrollbar thumb */
 }
-
 
 .test {
   border-width: 2px;
@@ -201,3 +199,4 @@
   border-width: 2px;
   border-color: black;
 }
+
