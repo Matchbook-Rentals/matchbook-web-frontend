@@ -20,7 +20,7 @@ ACH PLAID API
 - [ ] Seed db to 10000 listings 
 - [ ] REDO prop availability section 
 - [ ]  Gap in carousel + beteween columns on match desktop 
-
+- [ ]  Move bedroom bathroom count to below listing title
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 

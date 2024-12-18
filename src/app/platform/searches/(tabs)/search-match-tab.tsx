@@ -216,7 +216,7 @@ const MatchViewTab: React.FC = () => {
       />
 
       {/* Sticky container for all three flex sections */}
-      <div ref={controlBoxParentRef} className={`sticky top-[${PLATFORM_NAVBAR_HEIGHT}px] md:top-[${PLATFORM_NAVBAR_HEIGHT + 5}px] z-10 bg-background`}>
+      <div ref={controlBoxParentRef} className={`sticky top-[40px] md:top-[${PLATFORM_NAVBAR_HEIGHT + 5}px] z-5 bg-background`}>
         {/* First flex container - Controls and Title */}
         <div className="flex flex-col md:flex-row w-full" >
           {/* Left side - Button Controls */}
@@ -263,59 +263,21 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - Listing Title */}
-          <div className="w-full md:w-1/2 bg-background md:pl-4 md:pb-1">
+          <div className="w-full md:w-1/2 bg-background md:pl-4 md:pb-0">
             <h2
               ref={titleBoxRef}
-              className={`text-[32px] pb-2 md:pb-4 lg:pb-0  md:mt-8`}
+              className={`text-[32px] pb-2 md:pb-2 lg:pb-2  md:mt-8`}
             >
               {showListings[0].title}
             </h2>
+            <div className='flex justify-between pb-0 md:pb-1'>
+              <h3 className='text-[24px]'> 3 Beds | 2 Baths </h3>
+              <h3 className='text-[24px]'> $2,350 / Mo </h3>
+            </div>
           </div>
         </div>
 
         {/* Second flex container - Labels and Property Stats */}
-        <div className="flex flex-col md:flex-row w-full mb-2">
-          {/* Left side - Info Labels (Desktop only) */}
-          <div className={`hidden md:block w-full md:w-1/2 md:pr-4 transition-transform duration-500
-              ${!isScrolled ? '' : ''}`}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px`, '--total-box-height': `${totalBoxHeight / 2}px` } as React.CSSProperties}>
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col">
-                <span className="text-[24px] text-[#404040] font-montserrat font-medium">Address</span>
-              </div>
-              <div className="flex flex-col text-right">
-                <span className="text-[24px] text-[#404040] font-montserrat font-medium">Distance</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right side - All Stats for Mobile, Bedroom/Bath for Desktop */}
-          <div className={`w-full md:w-1/2 md:pl-4 bg-background transition-transform duration-500
-              `}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
-            <div className="flex flex-col">
-              {/* Bedroom and Price */}
-              <div className="flex justify-between items-center bedroom-price-box">
-                <div>
-                  <h2 className="text-[24px] text-[#404040] font-montserrat">3 Beds | 2 Bath</h2>
-                </div>
-                <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxHeight} / Mo</p>
-                </div>
-              </div>
-
-              {/* Sqft and Deposit - Only show on mobile */}
-              <div className="flex justify-between items-center md:hidden ">
-                <div>
-                  <p className="text-[24px] text-[#404040] font-montserrat ">{showListings[0]?.squareFootage || '1,500'} Sqft</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat ">${controlBoxHeight} Dep.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Third flex container - Address Info and Sqft/Deposit */}
         {/* Use ref to track y position of bottom border of this container */}
@@ -328,15 +290,9 @@ const MatchViewTab: React.FC = () => {
           >
             <div className="flex flex-col md:flex-row justify-between items-center">
               {/* Mobile-only labels */}
-              <div className="md:hidden w-full">
-                <div className="flex justify-between">
-                  <span className="text-[24px] text-[#404040] font-montserrat font-medium">Address</span>
-                  <span className="text-[24px] text-[#404040] font-montserrat font-medium">Distance</span>
-                </div>
-              </div>
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-[24px] text-[#404040] font-montserrat font-medium w-2/3 truncate">
+                <span className="text-[24px] text-[#404040] font-montserrat w-2/3 truncate">
                   {showListings[0].locationString}
                 </span>
                 <span className="text-[24px] text-[#404040] font-montserrat">
