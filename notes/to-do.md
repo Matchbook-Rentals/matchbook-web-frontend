@@ -21,6 +21,7 @@ ACH PLAID API
 - [ ] REDO prop availability section 
 - [ ]  Gap in carousel + beteween columns on match desktop 
 - [ ]  Move bedroom bathroom count to below listing title
+- [ ]  Popover for mobile view
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 

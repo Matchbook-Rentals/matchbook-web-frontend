@@ -37,7 +37,7 @@ const TripListingCard = ({
 
   if (!listing.title || !listing.locationString) {
     return (
-      <div className={cn("max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-white", className)}>
+      <div className={cn("max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-background", className)}>
         <p className="p-4">Incomplete listing data</p>
       </div>
     );
@@ -72,7 +72,7 @@ const TripListingCard = ({
   };
 
   return (
-    <div className={cn("max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-white", className)}>
+    <div className={cn("max-w-sm flex flex-col justify-between rounded overflow-hidden shadow-lg bg-background", className)}>
       <img
         className="w-full"
         style={{ height: `${IMAGE_HEIGHT}px` }}

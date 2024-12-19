@@ -52,7 +52,7 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-md xxs:text-[16px]'
+  const tabTriggerTextStyles = 'text-[10px] xs:text-[12px] md:text-[16px]'
   const tabTriggerStyles = 'p-0'
   const tabs: Tab[] = [
     {
@@ -113,7 +113,7 @@ const TripsPage: React.FC = () => {
           defaultTab={currentTab || 'overview'}
           className='mx-auto w-full pb-0 mb-0'
           tabsClassName='w-full mx-auto'
-          tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
+          tabsListClassName='flex justify-between space-x-2 md:space-x-2 md:gap-x-4'
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
               <FilterOptionsDialog
