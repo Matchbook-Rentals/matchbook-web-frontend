@@ -54,13 +54,6 @@ const LoadingTabs: React.FC = () => {
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },
-    {
-      label: 'Application',
-      value: 'application',
-      content: <LoadingSkeleton />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-    },
   ];
 
   return (
@@ -77,6 +70,7 @@ const LoadingTabs: React.FC = () => {
       <div className="flex w-full">
         <TabSelector
           tabs={tabs}
+          defaultTab='matchmaker'
           className='mx-auto w-full'
           tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
           tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
