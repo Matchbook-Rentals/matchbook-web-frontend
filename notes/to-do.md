@@ -12,16 +12,17 @@ ACH PLAID API
 - [ ] Reset default text to 404040 instead of black
 - [ ] Number of properties to show on filters 
 - [ ] Actually filter by properties 
-- [ ] Matchmaker blocks and separation 
+- [x] Matchmaker blocks and separation 
 - [ ] Search page
-- [ ] Default tab matchmaker 
+- [x] Default tab matchmaker 
 - [ ] Reset platform navbar to be narrow on trips page.  
-- [ ] Delete green scrollbar  
+- [x] Delete green scrollbar  
 - [ ] Seed db to 10000 listings 
 - [ ] REDO prop availability section 
-- [ ]  Gap in carousel + beteween columns on match desktop 
-- [ ]  Move bedroom bathroom count to below listing title
+- [x]  Gap in carousel + beteween columns on match desktop 
+- [x]  Move bedroom bathroom count to below listing title
 - [ ]  Popover for mobile view
+- [ ]  Tab selector mboile view
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 

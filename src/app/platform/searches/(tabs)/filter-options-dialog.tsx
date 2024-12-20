@@ -2,12 +2,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { FilterIcon } from '@/components/icons/actions';
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import PriceFilter from '../(components)/PriceFilter';
 import CategoryFilter from '../(components)/CategoryFilter';
-import FurnitureFilter from '../(components)/FurnitureFilter';
 import FilterGrouping from '../(components)/FilterGrouping';
 import Tile from "@/components/ui/tile";
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -62,6 +58,39 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
 
             <div className="space-y-6 ">
+              <div className="space-y-4">
+                <h3 className="text-[18px] font-medium text-[#404040]">Property Type</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: 'Single Family', icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" /> },
+                    { label: 'Apartment', icon: <AmenitiesIcons.ApartmentIcon className="p-1 mt-2" /> },
+                    { label: 'Single Room', icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" /> },
+                    { label: 'Townhouse', icon: <AmenitiesIcons.TownhouseIcon className="p-1 mt-2" /> },
+                  ].map(({ label, icon }) => {
+                    const isSelected = safeFilters.propertyTypes.includes(label);
+                    return (
+                      <Tile
+                        key={label}
+                        icon={icon}
+                        label={label}
+                        className={`h-[100px] w-[100px] cursor-pointer ${
+                          isSelected ? 'border-[#2D2F2E]' : 'border-[#2D2F2E40]'
+                        }`}
+                        labelClassNames={`text-[14px] ${
+                          isSelected ? 'text-[#2D2F2E]' : 'text-[#2D2F2E80]'
+                        }`}
+                        onClick={() => {
+                          const updatedPropertyTypes = isSelected
+                            ? safeFilters.propertyTypes.filter(type => type !== label)
+                            : [...safeFilters.propertyTypes, label];
+                          onFilterChange('propertyTypes', updatedPropertyTypes);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+
               <PriceFilter
                 minPrice={filters.minPrice}
                 maxPrice={filters.maxPrice}
@@ -107,38 +136,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   onFilterChange('utilities', updatedUtilities);
                 }}
               />
-              <div className="space-y-4">
-                <h3 className="text-[18px] font-medium text-[#404040]">Property Type</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { label: 'Single Family', icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" /> },
-                    { label: 'Apartment', icon: <AmenitiesIcons.ApartmentIcon className="p-1 mt-2" /> },
-                    { label: 'Single Room', icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" /> },
-                    { label: 'Townhouse', icon: <AmenitiesIcons.TownhouseIcon className="p-1 mt-2" /> },
-                  ].map(({ label, icon }) => {
-                    const isSelected = safeFilters.propertyTypes.includes(label);
-                    return (
-                      <Tile
-                        key={label}
-                        icon={icon}
-                        label={label}
-                        className={`h-[100px] w-[100px] cursor-pointer ${
-                          isSelected ? 'border-[#2D2F2E]' : 'border-[#2D2F2E40]'
-                        }`}
-                        labelClassNames={`text-[14px] ${
-                          isSelected ? 'text-[#2D2F2E]' : 'text-[#2D2F2E80]'
-                        }`}
-                        onClick={() => {
-                          const updatedPropertyTypes = isSelected
-                            ? safeFilters.propertyTypes.filter(type => type !== label)
-                            : [...safeFilters.propertyTypes, label];
-                          onFilterChange('propertyTypes', updatedPropertyTypes);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
 
             </div>
           </div>
