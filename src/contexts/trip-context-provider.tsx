@@ -230,10 +230,40 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesPropertyType = filters.propertyTypes.length === 0 ||
         filters.propertyTypes.includes(listing.category);
 
+      // Price filter - use calculatedPrice
+      const price = listing.calculatedPrice || 0;
+      const matchesPrice = price >= filters.minPrice && price <= filters.maxPrice;
+
+      // Room filters
+      const matchesBedrooms = !filters.bedrooms || listing.bedrooms === filters.bedrooms;
+      const matchesBeds = !filters.beds || listing.beds === filters.beds;
+      const matchesBaths = !filters.baths || listing.baths === filters.baths;
+
+      // Furniture filter
+      const matchesFurniture =
+        (!filters.furnished && !filters.unfurnished) ||
+        (filters.furnished && listing.furnished) ||
+        (filters.unfurnished && !listing.furnished);
+
+      // Utilities filter
+      const matchesUtilities = filters.utilities.length === 0 ||
+        filters.utilities.every(utility => listing.utilities?.includes(utility));
+
       // Return true if the listing meets all criteria
-      return isNotFavorited && isNotDisliked && isNotRequested && isNotMaybed && isAvailable && matchesPropertyType;
+      return isNotFavorited &&
+             isNotDisliked &&
+             isNotRequested &&
+             isNotMaybed &&
+             isAvailable &&
+             matchesPropertyType &&
+             matchesPrice &&
+             matchesBedrooms &&
+             matchesBeds &&
+             matchesBaths &&
+             matchesFurniture &&
+             matchesUtilities;
     }),
-    [listings, lookup, trip, filters.propertyTypes]
+    [listings, lookup, trip, filters]
   );
 
   const likedListings = useMemo(() =>

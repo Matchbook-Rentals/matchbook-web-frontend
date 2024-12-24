@@ -273,7 +273,7 @@ const MatchViewTab: React.FC = () => {
             </h2>
             <div className='flex justify-between pb-0 md:pb-1'>
               <h3 className='text-[24px]'> 3 Beds | 2 Baths </h3>
-              <h3 className='text-[24px]'> $2,350 / Mo </h3>
+              <h3 className='text-[24px]'> {showListings[0].calculatedPrice} / Mo </h3>
             </div>
           </div>
         </div>

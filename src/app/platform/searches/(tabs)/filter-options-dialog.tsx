@@ -35,6 +35,10 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 }) => {
   const { state: { filters: contextFilters, listings }, actions: { updateFilters } } = useTripContext();
   const [localFilters, setLocalFilters] = useState(contextFilters);
+  const [priceInputs, setPriceInputs] = useState({
+    min: localFilters.minPrice.toString(),
+    max: localFilters.maxPrice.toString()
+  });
 
   const propertyTypeOptions = [
     {
@@ -66,8 +70,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesPropertyType = localFilters.propertyTypes.length === 0 ||
         localFilters.propertyTypes.includes(listing.category);
 
-      // Price filter
-      const price = listing.price || 0;
+      // Price filter - use calculatedPrice instead of price
+      const price = listing.calculatedPrice || 0;
       const matchesPrice = price >= localFilters.minPrice && price <= localFilters.maxPrice;
 
       // Room filters
@@ -99,6 +103,10 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   useEffect(() => {
     if (isOpen) {
       setLocalFilters(contextFilters);
+      setPriceInputs({
+        min: contextFilters.minPrice.toString(),
+        max: contextFilters.maxPrice.toString()
+      });
     }
   }, [isOpen, contextFilters]);
 
@@ -117,6 +125,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   const handleSave = () => {
     updateFilters(localFilters);
     onOpenChange(false);
+  };
+
+  // Handle price input changes
+  const handlePriceChange = (type: 'min' | 'max', value: string) => {
+    // Allow empty string or numbers only
+    if (value === '' || /^\d*$/.test(value)) {
+      setPriceInputs(prev => ({
+        ...prev,
+        [type]: value
+      }));
+
+      // Convert empty string to 0 for filter
+      const numValue = value === '' ? 0 : parseInt(value);
+      handleLocalFilterChange(
+        type === 'min' ? 'minPrice' : 'maxPrice',
+        numValue
+      );
+    }
   };
 
   return (
@@ -162,11 +188,32 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 </div>
               </div>
 
-              <PriceFilter
-                minPrice={localFilters.minPrice}
-                maxPrice={localFilters.maxPrice}
-                onFilterChange={handleLocalFilterChange}
-              />
+              <div className="space-y-4">
+                <h3 className="text-[18px] font-medium text-[#404040]">Price Range</h3>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={priceInputs.min}
+                      onChange={(e) => handlePriceChange('min', e.target.value)}
+                      className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
+                      placeholder="Minimum"
+                    />
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2">$</span>
+                  </div>
+                  <div className="border-t-2 w-6 border-[#404040]" />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={priceInputs.max}
+                      onChange={(e) => handlePriceChange('max', e.target.value)}
+                      className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
+                      placeholder="Maximum"
+                    />
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2">$</span>
+                  </div>
+                </div>
+              </div>
 
               {['bedrooms', 'beds', 'baths'].map((category) => (
                 <CategoryFilter
