@@ -14,6 +14,18 @@ interface ViewedListing {
   actionId: string;
 }
 
+interface FilterOptions {
+  propertyTypes: string[];
+  minPrice: number;
+  maxPrice: number;
+  bedrooms: string;
+  beds: string;
+  baths: string;
+  furnished: boolean;
+  unfurnished: boolean;
+  utilities: string[];
+}
+
 interface TripContextType {
   state: {
     trip: TripAndMatches;
@@ -35,6 +47,7 @@ interface TripContextType {
       maybeIds: Set<string>;
     };
     maybedListings: ListingAndImages[];
+    filters: FilterOptions;
   };
   actions: {
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
@@ -49,6 +62,8 @@ interface TripContextType {
     optimisticRemoveApply: (listingId: string) => Promise<void>;
     optimisticMaybe: (listingId: string) => Promise<void>;
     optimisticRemoveMaybe: (listingId: string) => Promise<void>;
+    updateFilter: (key: keyof FilterOptions, value: any) => void;
+    updateFilters: (newFilters: FilterOptions) => void;
   };
 }
 
@@ -82,6 +97,17 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     requestedIds: new Set(),
     matchIds: new Set(),
     maybeIds: new Set()
+  });
+  const [filters, setFilters] = useState<FilterOptions>({
+    propertyTypes: [],
+    minPrice: 0,
+    maxPrice: 10000,
+    bedrooms: '',
+    beds: '',
+    baths: '',
+    furnished: false,
+    unfurnished: false,
+    utilities: [],
   });
 
   // Calculate U-Score for a listing
@@ -200,10 +226,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         );
       });
 
+      // Property type filter
+      const matchesPropertyType = filters.propertyTypes.length === 0 ||
+        filters.propertyTypes.includes(listing.category);
+
       // Return true if the listing meets all criteria
-      return isNotFavorited && isNotDisliked && isNotRequested && isNotMaybed && isAvailable;
+      return isNotFavorited && isNotDisliked && isNotRequested && isNotMaybed && isAvailable && matchesPropertyType;
     }),
-    [listings, lookup, trip]
+    [listings, lookup, trip, filters.propertyTypes]
   );
 
   const likedListings = useMemo(() =>
@@ -533,6 +563,17 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
   }, [trip, lookup, optimisticRemoveApply]);
 
+  const updateFilter = useCallback((key: keyof FilterOptions, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  }, []);
+
+  const updateFilters = useCallback((newFilters: FilterOptions) => {
+    setFilters(newFilters);
+  }, []);
+
   const contextValue: TripContextType = {
     state: {
       trip,
@@ -547,7 +588,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       hasApplication,
       application,
       matchedListings,
-      maybedListings
+      maybedListings,
+      filters,
     },
     actions: {
       setViewedListings,
@@ -562,6 +604,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       optimisticRemoveApply,
       optimisticMaybe,
       optimisticRemoveMaybe,
+      updateFilter,
+      updateFilters,
     }
   };
 

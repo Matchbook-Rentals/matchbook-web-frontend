@@ -23,6 +23,7 @@ ACH PLAID API
 - [x]  Move bedroom bathroom count to below listing title
 - [ ]  Popover for mobile view
 - [ ]  Tab selector mboile view
+- [ ] Highlight display for single family 
 
 ##02DEC24- [X] Credit Intelligence Filtering 
 - [x] Maybes 

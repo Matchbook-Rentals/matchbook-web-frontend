@@ -267,6 +267,7 @@ const MatchViewTab: React.FC = () => {
             <h2
               ref={titleBoxRef}
               className={`text-[32px] pb-2 md:pb-2 lg:pb-2  md:mt-8`}
+              onClick={() => console.log(showListings[0])}
             >
               {showListings[0].title}
             </h2>
