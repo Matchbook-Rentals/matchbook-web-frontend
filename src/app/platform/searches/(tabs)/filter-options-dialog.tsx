@@ -191,26 +191,30 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
               <div className="space-y-4">
                 <h3 className="text-[18px] font-medium text-[#404040]">Price Range</h3>
                 <div className="flex items-center justify-center gap-4">
-                  <div className="relative">
+                  <div className="relative flex flex-col">
+                    <label htmlFor="min-price" className="text-sm text-gray-600 pl-[2px] mb-1">Minimum</label>
                     <input
+                      id="min-price"
                       type="text"
                       value={priceInputs.min}
                       onChange={(e) => handlePriceChange('min', e.target.value)}
                       className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
-                      placeholder="Minimum"
+                      placeholder="0"
                     />
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2">$</span>
+                    <span className="absolute left-3 top-[60%] transform -translate-y-1/2">$</span>
                   </div>
-                  <div className="border-t-2 w-6 border-[#404040]" />
-                  <div className="relative">
+                  <div className="border-t-2 w-6 border-[#404040] mt-6" />
+                  <div className="relative flex flex-col">
+                    <label htmlFor="max-price" className="text-sm text-gray-600 pl-[2px] mb-1">Maximum</label>
                     <input
+                      id="max-price"
                       type="text"
                       value={priceInputs.max}
                       onChange={(e) => handlePriceChange('max', e.target.value)}
                       className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
-                      placeholder="Maximum"
+                      placeholder="10000"
                     />
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2">$</span>
+                    <span className="absolute left-3 top-[60%] transform -translate-y-1/2">$</span>
                   </div>
                 </div>
               </div>
