@@ -29,7 +29,7 @@ export default function RootLayout({
           />
           <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer></script>
         </head>
-        <body className={lora.className}>
+        <body className={`${lora.className} ${montserrat.variable}`}>
           <main>
             {children}
           </main>

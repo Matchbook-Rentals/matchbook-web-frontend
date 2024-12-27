@@ -1,34 +1,27 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
-import { Montserrat } from 'next/font/google';
-import { cn } from "@/lib/utils";
-
-const montserrat = Montserrat({ subsets: ["latin"] });
+import { Card, CardContent } from '@/components/ui/card';
 
 interface PaddleProps {
-  Icon: LucideIcon;
-  title: string;
-  onClick?: () => void;
+  label: string;
+  icon: React.ReactNode;
   className?: string;
-  iconClassName?: string;
-  textClassName?: string;
+  labelClassNames?: string;
+  onClick?: () => void;
 }
 
-const Paddle: React.FC<PaddleProps> = ({ Icon, title, onClick, className, iconClassName, textClassName }) => {
+const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames, onClick }) => {
   return (
-    <button
+    <Card
+      className={`w-[155px] h-[175px] text-charcoal flex flex-col items-center justify-between py-2 border-[2px] border-[#E3E3E3] rounded-[30px] ${className || ''}`}
       onClick={onClick}
-      className={cn(
-        "flex flex-col items-center justify-center w-[250px] h-[385px] rounded-3xl border-[2px] border-black transition-all duration-200 p-4",
-        onClick && "hover:shadow-lg hover:border-gray-300 cursor-pointer",
-        className
-      )}
     >
-      <div className="flex-1 flex items-center justify-center">
-        <Icon className={cn("w-16 h-16 text-charcoalBrand", iconClassName)} />
-      </div>
-      <span className={cn("text-subtext text-lg font-normal mt-2", montserrat.className, textClassName)}>{title}</span>
-    </button>
+      <CardContent className="flex flex-col items-center space-y-1 justify-start h-full w-full pb-5  ">
+        {icon}
+        <div className={`text-center w-full ${labelClassNames || ''}`}>
+          {label}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
