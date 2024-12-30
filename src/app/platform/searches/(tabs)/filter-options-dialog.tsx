@@ -23,6 +23,8 @@ interface FilterOptions {
   unfurnished: boolean;
   utilities: string[];
   propertyTypes: string[];
+  pets: string[];
+  searchRadius: number;
 }
 
 interface FilterOptionsDialogProps {
@@ -166,8 +168,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
               </div>
 
-              <div className="space-y-6">
-                <div className="space-y-4">
+              <div className="">
+                <div className="space-y-4 border-b-2 pb-3">
                   <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
                   <div className="flex justify-around gap-4">
                     {propertyTypeOptions.map(({ value, label, icon }) => {
@@ -177,14 +179,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${
-                            isSelected
-                              ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                              : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                          }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${
-                            isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                          }`}
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                            ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                            : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                            }`}
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                            }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
                               ? localFilters.propertyTypes.filter(type => type !== value)
@@ -197,8 +197,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-[18px] font-medium text-[#404040]">Price Range</h3>
+                <div className="space-y-4  border-b-2 py-6">
+                  <h3 className="text-[18px] font-montserrat-medium text-[#404040]">Price Range</h3>
                   <div className="flex items-center justify-center gap-4">
                     <CurrencyInput
                       id="min-price"
@@ -218,48 +218,181 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   </div>
                 </div>
 
-                {['bedrooms', 'beds', 'baths'].map((category) => (
-                  <CategoryFilter
-                    key={category}
-                    category={category}
-                    value={localFilters[category as keyof FilterOptions] as string}
-                    onFilterChange={handleLocalFilterChange}
-                  />
-                ))}
+                <div className="space-y-4 border-b-2 py-6">
+                  <h3 className="text-[18px] font-medium text-[#404040]">Furnishings</h3>
+                  <div className="flex justify-start gap-4">
+                    {[
+                      {
+                        value: 'furnished',
+                        label: 'Furnished',
+                        icon: <AmenitiesIcons.FurnishedIcon className="mt-4" />
+                      },
+                      {
+                        value: 'unfurnished',
+                        label: 'Unfurnished',
+                        icon: <AmenitiesIcons.UnfurnishedIcon className="mt-4" />
+                      }
+                    ].map(({ value, label, icon }) => {
+                      const isSelected = value === 'furnished' ? localFilters.furnished : localFilters.unfurnished;
+                      return (
+                        <Tile
+                          key={value}
+                          icon={icon}
+                          label={label}
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                            ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                            : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                            }`}
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                            }`}
+                          onClick={() => {
+                            if (value === 'furnished') {
+                              handleLocalFilterChange('furnished', !localFilters.furnished);
+                            } else {
+                              handleLocalFilterChange('unfurnished', !localFilters.unfurnished);
+                            }
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
 
-                <FilterGrouping
-                  title='Furniture'
-                  options={[
-                    { label: 'Furnished', imageSrc: '/icon_png/furnished.png', height: 90, width: 120 },
-                    { label: 'Unfurnished', imageSrc: '/icon_png/unfurnished.png', height: 90, width: 90 },
-                  ]}
-                  selectedOptions={[
-                    ...(localFilters.furnished ? ['Furnished'] : []),
-                    ...(localFilters.unfurnished ? ['Unfurnished'] : []),
-                  ]}
-                  onFilterChange={(label, checked) => {
-                    if (label === 'Furnished') {
-                      handleLocalFilterChange('furnished', checked);
-                    } else if (label === 'Unfurnished') {
-                      handleLocalFilterChange('unfurnished', checked);
-                    }
-                  }}
-                />
+                <div className="space-y-4 border-b-2 py-6">
+                  <h3 className="text-[18px] font-medium text-[#404040]">Utilities</h3>
+                  <div className="flex justify-start gap-4">
+                    {[
+                      {
+                        value: 'included',
+                        label: 'Utilities Included',
+                        icon: <AmenitiesIcons.UtilitiesIncludedIcon className="mt-1" />
+                      },
+                      {
+                        value: 'not_included',
+                        label: 'Utilities Not Included',
+                        icon: <AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-1" />
+                      }
+                    ].map(({ value, label, icon }) => {
+                      const isSelected = value === 'included'
+                        ? localFilters.utilities.includes('Included In Rent')
+                        : localFilters.utilities.includes('Not Included In Rent');
+                      return (
+                        <Tile
+                          key={value}
+                          icon={icon}
+                          label={label}
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                            ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                            : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                            }`}
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                            }`}
+                          onClick={() => {
+                            const optionValue = value === 'included' ? 'Included In Rent' : 'Not Included In Rent';
+                            const updatedUtilities = isSelected
+                              ? localFilters.utilities.filter(item => item !== optionValue)
+                              : [...localFilters.utilities, optionValue];
+                            handleLocalFilterChange('utilities', updatedUtilities);
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
 
-                <FilterGrouping
-                  title='Utilities'
-                  options={[{ label: 'Included In Rent', imageSrc: '/icon_png/utilites.png', height: 90, width: 90 }]}
-                  selectedOptions={localFilters.utilities}
-                  onFilterChange={(label, checked) => {
-                    const updatedUtilities = checked
-                      ? [...localFilters.utilities, label]
-                      : localFilters.utilities.filter(item => item !== label);
-                    handleLocalFilterChange('utilities', updatedUtilities);
-                  }}
-                />
+                <div className="space-y-4 border-b-2 py-6">
+                  <h3 className="text-[18px] font-medium text-[#404040]">Pets</h3>
+                  <div className="flex justify-start gap-4">
+                    {[
+                      {
+                        value: 'allowed',
+                        label: 'Pets Allowed',
+                        icon: <AmenitiesIcons.PetFriendlyIcon className="mt-4" />
+                      },
+                      {
+                        value: 'not_allowed',
+                        label: 'No Pets',
+                        icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />
+                      }
+                    ].map(({ value, label, icon }) => {
+                      const isSelected = value === 'allowed'
+                        ? localFilters.pets?.includes('Allowed')
+                        : localFilters.pets?.includes('Not Allowed');
+                      return (
+                        <Tile
+                          key={value}
+                          icon={icon}
+                          label={label}
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                            ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                            : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                            }`}
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                            }`}
+                          onClick={() => {
+                            const optionValue = value === 'allowed' ? 'Allowed' : 'Not Allowed';
+                            const updatedPets = isSelected
+                              ? localFilters.pets?.filter(item => item !== optionValue) || []
+                              : [...(localFilters.pets || []), optionValue];
+                            handleLocalFilterChange('pets', updatedPets);
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="space-y-4 border-b-2 py-6">
+                  <h3 className="text-[18px] font-montserrat-medium text-[#404040]">Search Radius</h3>
+                  <div className="px-4">
+                    <div className="flex justify-end ">
+                      <span className="font-montserrat-medium text-[14px] text-[#2D2F2E80]">
+                        {localFilters.searchRadius || 50} miles
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="1"
+                      max="100"
+                      value={localFilters.searchRadius || 50}
+                      onChange={(e) => handleLocalFilterChange('searchRadius', parseInt(e.target.value))}
+                      className={`
+                        w-full
+                        h-2
+                        bg-gray-200
+                        rounded-lg
+                        appearance-none
+                        cursor-pointer
+                        accent-[#4F4F4F]
+                        [&::-webkit-slider-thumb]:appearance-none
+                        [&::-webkit-slider-thumb]:w-6
+                        [&::-webkit-slider-thumb]:h-6
+                        [&::-webkit-slider-thumb]:rounded-full
+                        [&::-webkit-slider-thumb]:bg-[#4F4F4F]
+                        [&::-moz-range-thumb]:w-6
+                        [&::-moz-range-thumb]:h-6
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-[#4F4F4F]
+                        [&::-moz-range-thumb]:border-0
+                      `}
+                    />
+                    <div className="text-center mt-2">
+                    </div>
+                  </div>
+                </div>
 
               </div>
             </div>
+          </div>
+          <div className='border-b-2 py-6'>
+            {['bedrooms', 'beds', 'baths'].map((category) => (
+              <CategoryFilter
+                key={category}
+                category={category}
+                value={localFilters[category as keyof FilterOptions] as string}
+                onFilterChange={handleLocalFilterChange}
+              />
+            ))}
           </div>
         </ScrollArea>
 

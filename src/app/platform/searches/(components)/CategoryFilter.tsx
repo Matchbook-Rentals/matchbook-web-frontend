@@ -12,7 +12,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ category, value, onFilt
 
   return (
     <div className="text-center">
-      <h3 className="text-lg font-semibold mb-2">{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+      <h3 className="text-lg text-left font-montserrat-medium mb-2">{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
       <div className="flex flex-wrap justify-center gap-2">
         {options.map((option) => (
           <Button
