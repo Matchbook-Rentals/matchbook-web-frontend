@@ -46,17 +46,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'single_family',
       label: 'Single Family',
-      icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2 w-[72px] h-[65px]" />
+      icon: <AmenitiesIcons.SingleFamilyIcon className=" w-[72px] h-[65px]" />
     },
     {
       value: 'apartment',
       label: 'Apartment',
-      icon: <AmenitiesIcons.ApartmentIcon className="p-1 mt-2 w-[88px] h-[88px] " />
+      icon: <AmenitiesIcons.ApartmentIcon className="w-[88px] h-[88px] " />
     },
     {
       value: 'private_room',
       label: 'Private Room',
-      icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2 w-[97px] h-[64px]" />
+      icon: <AmenitiesIcons.SingleRoomIcon className=" w-[97px] h-[64px]" />
     },
     {
       value: 'townhouse',
@@ -154,7 +154,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <span className="text-[#404040] text-center font-lora text-[16px] font-medium">Filters</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[651px] sm:h-[90vh] sm:m-0 p-0 flex flex-col">
+      <DialogContent className="sm:max-w-[651px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
         <ScrollArea className="flex-1">
           <div className="p-6">
             <div className="w-full">
@@ -164,7 +164,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-[18px] font-medium text-[#404040]">Property Type</h3>
+                  <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
                   <div className="flex justify-around gap-4">
                     {propertyTypeOptions.map(({ value, label, icon }) => {
                       const isSelected = localFilters.propertyTypes.includes(value);
@@ -175,7 +175,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           label={label}
                           className={`h-[213px] w-[141px] cursor-pointer ${isSelected ? 'border-[#2D2F2E] border-[3px]' : 'border-[#2D2F2E40]'
                             }`}
-                          labelClassNames={`text-[19px] font-medium ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[20px] font-montserrat font-medium ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
