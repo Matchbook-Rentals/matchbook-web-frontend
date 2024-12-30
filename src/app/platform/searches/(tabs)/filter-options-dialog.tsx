@@ -177,10 +177,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer  ${isSelected ? 'border-[#2D2F2E] border-[3px] ' : 'border-[#2D2F2E40] border-[2px]'
-                            }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                            }`}
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${
+                            isSelected
+                              ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                              : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                          }`}
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${
+                            isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
                               ? localFilters.propertyTypes.filter(type => type !== value)
