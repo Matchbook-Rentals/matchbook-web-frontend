@@ -11,6 +11,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
+import { CheckboxDemo } from '@/app/platform/preferences/custom-checkbox';
 
 
 interface FilterOptions {
@@ -25,6 +26,7 @@ interface FilterOptions {
   propertyTypes: string[];
   pets: string[];
   searchRadius: number;
+  laundry?: string[];
 }
 
 interface FilterOptionsDialogProps {
@@ -376,7 +378,33 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         [&::-moz-range-thumb]:border-0
                       `}
                     />
-                    <div className="text-center mt-2">
+                  </div>
+                </div>
+
+                <div className="space-y-4 border-b-2 py-6">
+                  <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 flex-col">
+                      <AmenitiesIcons.WasherIcon className="w-8 h-8" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {['In Unit', 'In Complex', 'Not Available'].map((option) => (
+                        <CheckboxDemo
+                          key={option}
+                          label={option}
+                          isChecked={localFilters.laundry?.includes(option)}
+                          handleChange={() => {
+                            const updatedLaundry = localFilters.laundry?.includes(option)
+                              ? localFilters.laundry?.filter(item => item !== option) || []
+                              : [...(localFilters.laundry || []), option];
+                            handleLocalFilterChange('laundry', updatedLaundry);
+                          }}
+                          details={{ id: option }}
+                          checkOnLeft={true}
+                          labelClassName="text-[14px] text-[#2D2F2E80]"
+                          checkboxClassName="rounded-[15px] border-gray-300"
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
