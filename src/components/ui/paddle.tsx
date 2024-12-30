@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from "@/lib/utils";
 
 interface PaddleProps {
   label: string;
@@ -12,16 +13,22 @@ interface PaddleProps {
 const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames, onClick }) => {
   return (
     <Card
-      className={`w-[155px] h-[175px] text-charcoal flex flex-col items-center justify-between py-2 border-[1px] border-[#E3E3E3] rounded-[30px] ${className || ''}`}
+      className={cn(
+        "w-[155px] h-[175px] text-charcoal flex flex-col items-center justify-between py-2 border-[1px] border-[#E3E3E3] rounded-[30px]",
+        className
+      )}
       onClick={onClick}
     >
       <CardContent className="flex flex-col items-center h-full w-full px-0 pt-12">
-        <div className="flex-1 flex h-1/2  items-end">{icon}</div>
-        <div className={`text-center  w-[80%] h-1/2 pt-4 leading-tight flex-1 flex justify-center items-start ${labelClassNames || ''}`}>
+        <div className="flex-1 flex h-1/2 items-end">{icon}</div>
+        <div className={cn(
+          "text-center w-[80%] h-1/2 pt-4 leading-none flex-1 flex justify-center items-start",
+          labelClassNames
+        )}>
           {label}
         </div>
       </CardContent>
-    </Card >
+    </Card>
   );
 };
 

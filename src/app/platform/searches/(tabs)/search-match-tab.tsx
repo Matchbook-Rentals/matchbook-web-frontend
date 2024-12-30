@@ -272,8 +272,8 @@ const MatchViewTab: React.FC = () => {
               {showListings[0].title}
             </h2>
             <div className='flex justify-between pb-0 md:pb-1'>
-              <h3 className='text-[24px]'> 3 Beds | 2 Baths </h3>
-              <h3 className='text-[24px]'> {showListings[0].calculatedPrice} / Mo </h3>
+              <h3 className='text-[24px] font-medium'> {showListings[0].roomCount} Beds | {showListings[0].bathroomCount} Baths </h3>
+              <h3 className='text-[24px] font-medium'> ${showListings[0].calculatedPrice} / Mo </h3>
             </div>
           </div>
         </div>
@@ -304,16 +304,16 @@ const MatchViewTab: React.FC = () => {
           </div>
 
           {/* Right side - Sqft and Deposit (Desktop only) */}
-          <div className={`hidden md:block w-full   sqft-deposit-box md:w-1/2 pl-4 bg-background transition-transform duration-500
+          <div className={`hidden md:block w-full sqft-deposit-box md:w-1/2 pl-4 bg-background transition-transform duration-500
               `}
             style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
             <div className="flex flex-col border-b pb-3 border-black">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-[24px] text-[#404040] font-montserrat">{totalBoxHeight.toFixed(0)} Sqft</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat-regular ">{showListings[0].squareFootage} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat">${controlBoxParentHeight.toFixed(0)} Dep.</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat-regular">${showListings[0].depositSize} Dep.</p>
                 </div>
               </div>
             </div>

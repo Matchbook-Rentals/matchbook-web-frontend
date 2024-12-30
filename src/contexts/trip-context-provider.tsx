@@ -16,8 +16,8 @@ interface ViewedListing {
 
 interface FilterOptions {
   propertyTypes: string[];
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
   bedrooms: string;
   beds: string;
   baths: string;
@@ -100,8 +100,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   });
   const [filters, setFilters] = useState<FilterOptions>({
     propertyTypes: [],
-    minPrice: 0,
-    maxPrice: 10000,
+    minPrice: null,
+    maxPrice: null,
     bedrooms: '',
     beds: '',
     baths: '',
@@ -230,9 +230,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesPropertyType = filters.propertyTypes.length === 0 ||
         filters.propertyTypes.includes(listing.category);
 
-      // Price filter - use calculatedPrice
+      // Price filter - only apply if min or max price is set
       const price = listing.calculatedPrice || 0;
-      const matchesPrice = price >= filters.minPrice && price <= filters.maxPrice;
+      const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
+                          (filters.maxPrice === null || price <= filters.maxPrice);
 
       // Room filters
       const matchesBedrooms = !filters.bedrooms || listing.bedrooms === filters.bedrooms;
@@ -251,17 +252,17 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
       // Return true if the listing meets all criteria
       return isNotFavorited &&
-             isNotDisliked &&
-             isNotRequested &&
-             isNotMaybed &&
-             isAvailable &&
-             matchesPropertyType &&
-             matchesPrice &&
-             matchesBedrooms &&
-             matchesBeds &&
-             matchesBaths &&
-             matchesFurniture &&
-             matchesUtilities;
+        isNotDisliked &&
+        isNotRequested &&
+        isNotMaybed &&
+        isAvailable &&
+        matchesPropertyType &&
+        matchesPrice &&
+        matchesBedrooms &&
+        matchesBeds &&
+        matchesBaths &&
+        matchesFurniture &&
+        matchesUtilities;
     }),
     [listings, lookup, trip, filters]
   );

@@ -1,63 +1,60 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Input } from './input';
+import React from 'react';
 import { cn } from '@/lib/utils';
-import { Label } from './label';
 
 interface CurrencyInputProps {
-  value: number;
-  onChange: (value: number) => void;
-  step?: number;
-  onBlur?: () => void;
-  className?: string;
   id: string;
-  label?: string;
-  styleWithLabel?: string; // New prop
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
 }
 
-const CurrencyInput: React.FC<CurrencyInputProps> = ({ value, onChange, step = 5, onBlur, className, id, label, styleWithLabel }) => {
-  const [rawValue, setRawValue] = useState(value.toString());
-  const [isFocus, setIsFocus] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+const CurrencyInput: React.FC<CurrencyInputProps> = ({
+  id,
+  label,
+  value,
+  onChange,
+  placeholder = "$0",
+  className
+}) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
 
-  const handleChange = (e) => {
-    const newValue = e.target.value.replace(/[^0-9.-]+/g, "");
-    setRawValue(newValue);
-    onChange(parseFloat(newValue) || 0);
-  };
+    // If the input starts with '$', remove it for processing
+    const valueToProcess = inputValue.startsWith('$') ? inputValue.slice(1) : inputValue;
 
-  const handleBlur = () => {
-    const roundedValue = Math.round(parseFloat(rawValue) / step) * step;
-    onChange(roundedValue);
-    setRawValue(roundedValue.toString());
-    setIsFocus(false);
-    if (onBlur) onBlur();
-  };
+    // Remove any non-digits
+    const numericValue = valueToProcess.replace(/[^\d]/g, '');
 
-  const handleFocus = () => {
-    setIsFocus(true);
-    if (inputRef.current) {
-      const length = inputRef.current.value.length;
-      inputRef.current.setSelectionRange(length, length);
+    // Allow empty string or numbers only
+    if (numericValue === '' || /^\d*$/.test(numericValue)) {
+      // Always add '$' prefix, even for empty string
+      onChange(`$${numericValue}`);
     }
   };
 
-  const formatCurrency = (value: number) => {
-    return `$${value.toFixed(2)}`;
-  };
+  // Display value will be empty if it's just "$", showing placeholder instead
+  const displayValue = value === '$' ? '' : value;
 
   return (
-    <div className="flex flex-col justify-center">
-      {label && <Label className={cn('text-center', styleWithLabel)} htmlFor={id}>{label}</Label>}
-      <Input
-        ref={inputRef}
+    <div className="relative flex flex-col">
+      <label
+        htmlFor={id}
+        className="text-sm text-gray-600 pl-[2px] mb-1"
+      >
+        {label}
+      </label>
+      <input
         id={id}
         type="text"
-        value={isFocus ? rawValue : formatCurrency(value)}
+        value={displayValue}
         onChange={handleChange}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        step={step}
-        className={cn("ml-2 w-24 border border-gray-300 text-center", className, styleWithLabel)}
+        className={cn(
+          "w-[200px] bg-background p-3 font-montserrat-light rounded-lg border border-gray-300",
+          className
+        )}
+        placeholder={placeholder}
       />
     </div>
   );

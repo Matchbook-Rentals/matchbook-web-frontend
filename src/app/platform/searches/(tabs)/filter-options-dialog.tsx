@@ -10,6 +10,7 @@ import Paddle from "@/components/ui/paddle";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
+import CurrencyInput from '@/components/ui/currency-input';
 
 
 interface FilterOptions {
@@ -38,30 +39,30 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   const { state: { filters: contextFilters, listings }, actions: { updateFilters } } = useTripContext();
   const [localFilters, setLocalFilters] = useState(contextFilters);
   const [priceInputs, setPriceInputs] = useState({
-    min: localFilters.minPrice.toString(),
-    max: localFilters.maxPrice.toString()
+    min: `$${contextFilters.minPrice || ''}`,
+    max: `$${contextFilters.maxPrice || ''}`
   });
 
   const propertyTypeOptions = [
     {
       value: 'single_family',
       label: 'Single Family',
-      icon: <AmenitiesIcons.SingleFamilyIcon className=" w-[72px] h-[65px]" />
+      icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />
     },
     {
       value: 'apartment',
       label: 'Apartment',
-      icon: <AmenitiesIcons.ApartmentIcon className="w-[88px] h-[88px] " />
+      icon: <AmenitiesIcons.ApartmentIcon className=" mt-2" />
     },
     {
       value: 'private_room',
       label: 'Private Room',
-      icon: <AmenitiesIcons.SingleRoomIcon className=" w-[97px] h-[64px]" />
+      icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" />
     },
     {
       value: 'townhouse',
       label: 'Townhouse',
-      icon: <AmenitiesIcons.TownhouseIcon className=" w-[130px]" />
+      icon: <AmenitiesIcons.TownhouseIcon className="p-1 mt-2" />
     },
   ];
 
@@ -74,7 +75,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
       // Price filter - use calculatedPrice instead of price
       const price = listing.calculatedPrice || 0;
-      const matchesPrice = price >= localFilters.minPrice && price <= localFilters.maxPrice;
+      const matchesPrice = (
+        (!localFilters.minPrice && !localFilters.maxPrice) || // No price filters set
+        (localFilters.minPrice && !localFilters.maxPrice && price >= localFilters.minPrice) || // Only min price set
+        (!localFilters.minPrice && localFilters.maxPrice && price <= localFilters.maxPrice) || // Only max price set
+        (localFilters.minPrice && localFilters.maxPrice && price >= localFilters.minPrice && price <= localFilters.maxPrice) // Both prices set
+      );
 
       // Room filters
       const matchesBedrooms = !localFilters.bedrooms || listing.bedrooms === localFilters.bedrooms;
@@ -106,8 +112,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     if (isOpen) {
       setLocalFilters(contextFilters);
       setPriceInputs({
-        min: contextFilters.minPrice.toString(),
-        max: contextFilters.maxPrice.toString()
+        min: `$${contextFilters.minPrice || ''}`,
+        max: `$${contextFilters.maxPrice || ''}`
       });
     }
   }, [isOpen, contextFilters]);
@@ -131,20 +137,18 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   // Handle price input changes
   const handlePriceChange = (type: 'min' | 'max', value: string) => {
-    // Allow empty string or numbers only
-    if (value === '' || /^\d*$/.test(value)) {
-      setPriceInputs(prev => ({
-        ...prev,
-        [type]: value
-      }));
+    // Update the price inputs state
+    setPriceInputs(prev => ({
+      ...prev,
+      [type]: value
+    }));
 
-      // Convert empty string to 0 for filter
-      const numValue = value === '' ? 0 : parseInt(value);
-      handleLocalFilterChange(
-        type === 'min' ? 'minPrice' : 'maxPrice',
-        numValue
-      );
-    }
+    // Extract numeric value for filters
+    const numericValue = parseInt(value.replace(/[$,\s]/g, '')) || 0;
+    handleLocalFilterChange(
+      type === 'min' ? 'minPrice' : 'maxPrice',
+      numericValue
+    );
   };
 
   return (
@@ -154,12 +158,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <span className="text-[#404040] text-center font-lora text-[16px] font-medium">Filters</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[651px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
+      <DialogContent className="sm:max-w-[536px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
         <ScrollArea className="flex-1">
           <div className="p-6">
             <div className="w-full">
               <div className="flex justify-center border-b border-gray-300 items-center mb-6">
-                <h2 className="text-[36px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
+                <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
               </div>
 
               <div className="space-y-6">
@@ -169,13 +173,13 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     {propertyTypeOptions.map(({ value, label, icon }) => {
                       const isSelected = localFilters.propertyTypes.includes(value);
                       return (
-                        <Paddle
+                        <Tile
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[213px] w-[141px] cursor-pointer ${isSelected ? 'border-[#2D2F2E] border-[3px]' : 'border-[#2D2F2E40]'
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer  ${isSelected ? 'border-[#2D2F2E] border-[3px] ' : 'border-[#2D2F2E40] border-[2px]'
                             }`}
-                          labelClassNames={`text-[20px] font-montserrat font-medium ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
@@ -192,31 +196,21 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 <div className="space-y-4">
                   <h3 className="text-[18px] font-medium text-[#404040]">Price Range</h3>
                   <div className="flex items-center justify-center gap-4">
-                    <div className="relative flex flex-col">
-                      <label htmlFor="min-price" className="text-sm text-gray-600 pl-[2px] mb-1">Minimum</label>
-                      <input
-                        id="min-price"
-                        type="text"
-                        value={priceInputs.min}
-                        onChange={(e) => handlePriceChange('min', e.target.value)}
-                        className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
-                        placeholder="0"
-                      />
-                      <span className="absolute left-3 top-[60%] transform -translate-y-1/2">$</span>
-                    </div>
+                    <CurrencyInput
+                      id="min-price"
+                      label="Minimum"
+                      value={priceInputs.min}
+                      onChange={(value) => handlePriceChange('min', value)}
+                      placeholder="$0"
+                    />
                     <div className="border-t-2 w-6 border-[#404040] mt-6" />
-                    <div className="relative flex flex-col">
-                      <label htmlFor="max-price" className="text-sm text-gray-600 pl-[2px] mb-1">Maximum</label>
-                      <input
-                        id="max-price"
-                        type="text"
-                        value={priceInputs.max}
-                        onChange={(e) => handlePriceChange('max', e.target.value)}
-                        className="w-[200px] p-3 rounded-lg border border-gray-300 pl-8"
-                        placeholder="10000"
-                      />
-                      <span className="absolute left-3 top-[60%] transform -translate-y-1/2">$</span>
-                    </div>
+                    <CurrencyInput
+                      id="max-price"
+                      label="Maximum"
+                      value={priceInputs.max}
+                      onChange={(value) => handlePriceChange('max', value)}
+                      placeholder="$10000"
+                    />
                   </div>
                 </div>
 

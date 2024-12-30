@@ -12,7 +12,7 @@ const config = {
   prefix: "",
   theme: {
     container: {
-      center: 'true',
+      center: true,
       padding: '2rem',
       screens: {
         '2xl': '1400px'
@@ -148,6 +148,13 @@ const config = {
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],
       },
+      fontWeight: {
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      }
     }
   },
   plugins: [require("tailwindcss-animate")],
