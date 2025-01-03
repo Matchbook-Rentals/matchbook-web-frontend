@@ -82,9 +82,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
   };
 
   return (
-    <div className='flex max-w-[300px] '>
+    <div className='flex max-w-[320px] active:bg-gray-300 pr-2 border-background hover:border-gray-300 border rounded-[15px] transition-colors duration-100'>
       <Image src={statePhotoPath} height={400} width={400} className='h-[134px] w-[143px] rounded-[15px] ' />
-      <div className='flex flex-col justify-between max-w-[150px] ml-4'>
+      <div className='flex flex-col justify-between max-w-[150px] ml-4 pt-1'>
         <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
         <h2 className='truncate'>50 miles (m)</h2>
         <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
