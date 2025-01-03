@@ -25,6 +25,12 @@ interface FilterOptions {
   pets: string[];
   searchRadius: number;
   laundry?: string[];
+  accessibility: string[];
+  location: string[];
+  parking: string[];
+  kitchen: string[];
+  climateControl: string[];
+  luxury: string[];
 }
 
 interface FilterOptionsDialogProps {
@@ -367,7 +373,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -429,7 +435,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -472,7 +478,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -515,7 +521,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -604,18 +610,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {accessibilityOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.accessibility?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.accessibility || []).filter(item => item !== value)
+                          : [...(localFilters.accessibility || []), value];
+                        handleLocalFilterChange('accessibility', updatedAmenities);
+                      }}
                     />
                   );
                 })}
@@ -628,18 +640,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-between gap-4">
                 {locationOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.location?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] hover:bg-gray-100 transition-[background-color] duration-200 p-1 cursor-pointer box-border ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.location || []).filter(item => item !== value)
+                          : [...(localFilters.location || []), value];
+                        handleLocalFilterChange('location', updatedAmenities);
+                      }}
                     />
                   );
                 })}
@@ -652,18 +670,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {parkingOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.parking?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.parking || []).filter(item => item !== value)
+                          : [...(localFilters.parking || []), value];
+                        handleLocalFilterChange('parking', updatedAmenities);
+                      }}
                     />
                   );
                 })}
@@ -676,18 +700,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {kitchenOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.kitchen?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.kitchen || []).filter(item => item !== value)
+                          : [...(localFilters.kitchen || []), value];
+                        handleLocalFilterChange('kitchen', updatedAmenities);
+                      }}
                     />
                   );
                 })}
@@ -701,18 +731,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {climateControlOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.climateControl?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.climateControl || []).filter(item => item !== value)
+                          : [...(localFilters.climateControl || []), value];
+                        handleLocalFilterChange('climateControl', updatedAmenities);
+                      }}
                     />
                   );
                 })}
@@ -726,18 +762,24 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {luxuryOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.propertyTypes.includes(value);
+                  const isSelected = localFilters.luxury?.includes(value);
                   return (
                     <Tile
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.luxury || []).filter(item => item !== value)
+                          : [...(localFilters.luxury || []), value];
+                        handleLocalFilterChange('luxury', updatedAmenities);
+                      }}
                     />
                   );
                 })}
