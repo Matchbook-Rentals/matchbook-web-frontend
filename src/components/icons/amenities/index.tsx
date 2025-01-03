@@ -854,7 +854,7 @@ export const GarbageDisposalIcon = (props: IconProps) => (
   </svg>
 )
 
-export const Dishwasher = (props: IconProps) => (
+export const DishwasherIcon = (props: IconProps) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="89" height="98" viewBox="0 0 89 98" fill="none">
     <g clip-path="url(#clip0_2140_1187)">
       <path opacity="0.8" d="M62.4151 84.9324C58.4065 84.9324 55.1504 81.6594 55.1504 77.6136C55.1504 73.5678 58.3993 70.2947 62.4151 70.2947" stroke="#231F20" stroke-width="3" stroke-linejoin="round" />
@@ -897,6 +897,298 @@ export const Dishwasher = (props: IconProps) => (
   </svg>
 )
 
+export const FridgeIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={41}
+    viewBox="0 0 24 41"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M23.1927 1.4248H0.796875V14.9477H23.1927V1.4248Z"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.35938 6.20605V10.167"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M23.1927 16.2578H0.796875V37.9235H23.1927V16.2578Z"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.35938 25.1104V29.0713"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.33802 37.9238H1.63477V40.1049H5.33802V37.9238Z"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M22.2677 37.9238H18.5645V40.1049H22.2677V37.9238Z"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.4297 14.8486V15.7435"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12.4297 14.8486V15.7435"
+      stroke="#4D4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const OvenIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={39}
+    height={44}
+    viewBox="0 0 39 44"
+    fill="none"
+    {...props}
+  >
+    <g clipPath="url(#clip0_2388_1471)">
+      <path
+        d="M37.8387 1.22559H1.22656V41.0927H37.8387V1.22559Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M1.45312 9.51855H37.6075"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M28.9146 3.24414H10.1523V7.06408H28.9146V3.24414Z"
+        fill="url(#paint0_radial_2388_1471)"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M34.2898 38.9992H4.77148V35.6377H34.2898V38.9992Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M32.9927 6.68095C33.8336 6.68095 34.5186 5.99824 34.5186 5.15297C34.5186 4.30771 33.8336 3.625 32.9927 3.625C32.1518 3.625 31.4668 4.30771 31.4668 5.15297C31.4668 5.99824 32.1518 6.68095 32.9927 6.68095Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M34.2898 12.3633H4.77148V33.9012H34.2898V12.3633Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.65487 41.5811H4.94727V43.2066H9.65487V41.5811Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M32.9498 41.5811H28.2422V43.2066H32.9498V41.5811Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.23047 27.8613L25.3986 18.5146"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.4258 28.6744L29.8375 19.7666"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <radialGradient
+        id="paint0_radial_2388_1471"
+        cx={0}
+        cy={0}
+        r={1}
+        gradientUnits="userSpaceOnUse"
+        gradientTransform="translate(19.5318 5.15248) scale(24.7555 24.7889)"
+      >
+        <stop stopColor="#4D4D4D" stopOpacity={0.5} />
+        <stop offset={1} stopColor="#B3B2B3" />
+      </radialGradient>
+      <clipPath id="clip0_2388_1471">
+        <rect
+          width={37.5861}
+          height={42.9556}
+          fill="white"
+          transform="translate(0.740234 0.738281)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const KitchenEssentialsIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={33}
+    height={40}
+    viewBox="0 0 33 40"
+    fill="none"
+    {...props}
+  >
+    <g clipPath="url(#clip0_2388_1146)">
+      <path
+        d="M7.43322 26.2021H4V39.1278H7.43322V26.2021Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.7168 14.4932V26.2019"
+        stroke="#4C4C4C"
+        strokeWidth={3}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.6217 1.09766H0.8125V14.0233H10.6217V1.09766Z"
+        stroke="#4C4C4C"
+        strokeWidth={3}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.7168 14.4932V26.2019"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.6217 9.11871V6.00226C10.6217 3.29352 8.42584 1.09766 5.7171 1.09766C3.00836 1.09766 0.8125 3.29352 0.8125 6.00226V9.11871C0.8125 11.8274 3.00836 14.0233 5.7171 14.0233C8.42584 14.0233 10.6217 11.8274 10.6217 9.11871Z"
+        fill="#4C4C4C"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.33927 3.06836H8.17578V12.0533H8.33927V3.06836Z"
+        fill="white"
+        stroke="white"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.7631 3.06836H5.59961V12.0533H5.7631V3.06836Z"
+        fill="white"
+        stroke="white"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.18302 3.06836H3.01953V12.0533H3.18302V3.06836Z"
+        fill="white"
+        stroke="white"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M28.5348 26.4033H25.1016V39.329H28.5348V26.4033Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M26.8184 14.6914V26.4033"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M26.8184 14.6914V26.4033"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21.5859 7.67653C21.5859 3.93439 23.9271 0.898438 26.8175 0.898438C29.708 0.898438 32.0491 3.93439 32.0491 7.67653C32.0491 11.4187 26.8175 14.4546 26.8175 14.4546C26.8175 14.4546 21.5859 11.4187 21.5859 7.67653Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M24.2012 7.46169C24.2012 3.94024 25.3717 1.08398 26.817 1.08398C28.2622 1.08398 29.4327 3.94024 29.4327 7.46169C29.4327 10.9831 26.817 13.8394 26.817 13.8394C26.817 13.8394 24.2012 10.9831 24.2012 7.46169Z"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_2388_1146">
+        <rect
+          width={32.2167}
+          height={39.376}
+          fill="white"
+          transform="translate(0.322266 0.425781)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
 export const GrillIcon = (props: IconProps) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="98" height="92" viewBox="0 0 98 92" fill="none">
@@ -955,7 +1247,7 @@ export const ParkingIcon = (props: IconProps) => (
   </svg>
 );
 
-export const EvCharginIcon = (props: IconProps) => (
+export const EvChargingIcon = (props: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={90}
@@ -1211,7 +1503,7 @@ export const GarageIcon = (props: IconProps) => (
   </svg>
 );
 
-export const WasherIcon = (props: IconProps) => (
+export const DryerIcon = (props: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={97}
@@ -1261,6 +1553,87 @@ export const WasherIcon = (props: IconProps) => (
       fill="#231F20"
       fillOpacity={0.8}
     />
+  </svg>
+);
+
+export const WasherIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={51}
+    height={56}
+    viewBox="0 0 51 56"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M50.2177 1H1V54.5243H50.2177V1Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <g opacity={0.5}>
+      <path
+        d="M21.2246 37.2703C17.7917 36.5566 20.8514 37.9429 13.3334 37.1841C7.87843 36.6345 19.0221 49.7962 26.0398 49.7962C33.0574 49.7962 38.7462 44.1485 38.7462 37.1841C38.7462 30.2198 24.1654 37.8404 21.4256 37.2703"
+        fill="#4C4C4C"
+      />
+      <path
+        d="M21.2246 37.2703C17.7917 36.5566 20.8514 37.9429 13.3334 37.1841C7.87843 36.6345 19.0221 49.7962 26.0398 49.7962C33.0574 49.7962 38.7462 44.1485 38.7462 37.1841C38.7462 30.2198 24.1654 37.8404 21.4256 37.2703"
+        stroke="#4C4C4C"
+        strokeWidth={1.5}
+        strokeMiterlimit={10}
+      />
+    </g>
+    <path
+      d="M25.6093 49.7947C33.3816 49.7947 39.6815 43.4949 39.6815 35.7226C39.6815 27.9503 33.3816 21.6504 25.6093 21.6504C17.837 21.6504 11.5371 27.9503 11.5371 35.7226C11.5371 43.4949 17.837 49.7947 25.6093 49.7947Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M1 15.1822L50.5418 15.0879"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M36.7852 1.42969V15.1819"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M21.9176 5.57031H5.92188V11.1073H21.9176V5.57031Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M29.3535 10.7694C30.7111 10.7694 31.8144 9.66613 31.8144 8.30854C31.8144 6.95095 30.7111 5.84766 29.3535 5.84766C27.9959 5.84766 26.8926 6.95095 26.8926 8.30854C26.8926 9.66613 27.9959 10.7694 29.3535 10.7694Z"
+      fill="url(#paint0_radial_2388_862)"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+    />
+    <path
+      d="M11.877 35.5149C17.1309 40.7689 35.8747 30.8515 39.6604 35.5149"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <defs>
+      <radialGradient
+        id="paint0_radial_2388_862"
+        cx={0}
+        cy={0}
+        r={1}
+        gradientUnits="userSpaceOnUse"
+        gradientTransform="translate(29.3535 8.30854) scale(0.205074)"
+      >
+        <stop stopColor="#4D4D4D" stopOpacity={0.5} />
+        <stop offset={1} stopColor="#B3B3B3" />
+      </radialGradient>
+    </defs>
   </svg>
 );
 
@@ -4627,3 +5000,533 @@ export const CityViewIcon = (props: IconProps) => (
   </svg>
 );
 
+export const FireplaceIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={46}
+    height={47}
+    viewBox="0 0 46 47"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M41.4481 6.52539H4.16797V41.6224H41.4481V6.52539Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M44.0523 41.6211H1.56641V45.4834H44.0523V41.6211Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M44.5559 1.6543H1.0625V6.52422H44.5559V1.6543Z"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M4.16797 9.5752H12.776"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M4.20898 13.6035H9.91855"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M37.4204 26.6865L37.3633 41.1284"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="square"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8.25827 26.6865L8.20117 41.1284"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="square"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M22.8105 11.1621C30.8644 11.1621 37.3901 17.8927 37.3901 26.1917"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8.23242 26.1917C8.23242 17.8927 14.7615 11.1621 22.812 11.1621"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M22.8103 37.1511C17.7086 37.1511 13.5742 33.3761 13.5742 28.7178"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="square"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M32.1709 27.791C32.1709 32.9599 27.9794 37.1513 22.8105 37.1513"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="square"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M29.9863 22.418C31.1148 23.8622 32.1694 24.8227 32.1694 27.7917"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M29.8158 22.5879C29.5706 24.4049 29.6411 25.8524 27.4883 27.6224"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M13.5702 28.2712C13.503 26.4979 15.3301 24.0663 16.3007 23.1494"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.1998 28.6871C16.6741 27.0985 16.5331 24.5662 16.3047 23.1455"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.2951 28.7194C17.4412 17.1894 24.4673 18.9594 26.2574 17.1055"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M27.4916 27.6245C25.4798 24.5716 25.3253 20.0207 26.2623 17.1055"
+      stroke="#4C4C4C"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const HeaterIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={28}
+    height={39}
+    viewBox="0 0 28 39"
+    fill="none"
+    {...props}
+  >
+    <g opacity={0.8}>
+      <path
+        d="M10.185 12.1573L10.185 12.1574C9.95354 15.2929 10.4686 18.2848 11.1704 21.2995C12.3925 26.5406 13.1159 31.8872 11.9634 37.4254C11.9611 37.4364 11.9567 37.4719 11.9584 37.5319C11.96 37.5885 11.9665 37.6511 11.977 37.7096C11.9781 37.7157 11.9792 37.7216 11.9803 37.7273C12.0004 37.7258 12.0158 37.7221 12.0254 37.7188C12.0267 37.7183 12.0278 37.7179 12.0287 37.7176C12.7462 37.0885 13.4423 36.4213 14.1688 35.7249C14.3663 35.5356 14.566 35.3442 14.769 35.1508C16.2541 33.2756 17.2588 31.0906 17.7207 28.4733L17.7207 28.4732C18.3137 25.1151 18.0257 21.8039 17.2552 18.522C16.5183 15.3848 15.7651 12.1649 15.7403 8.78478L10.185 12.1573ZM10.185 12.1573C10.5728 6.89598 12.7053 3.34484 16.0318 0.939369C16.0352 0.938072 16.0406 0.936187 16.0482 0.934164C16.0521 0.933135 16.0561 0.932176 16.0602 0.931294C16.0709 0.972623 16.0813 1.02425 16.0898 1.08706C16.1098 1.23523 16.1136 1.40233 16.1057 1.55309L16.1056 1.55515M10.185 12.1573L16.1056 1.55515M16.1056 1.55515C16.0666 2.3672 16.0089 3.19132 15.9508 4.02144M16.1056 1.55515L15.9508 4.02144M15.9508 4.02144C15.8403 5.60147 15.7282 7.2032 15.7403 8.78464L15.9508 4.02144Z"
+        fill="#4F4F4F"
+        stroke="black"
+      />
+      <path
+        d="M4.96162 6.48984L4.96139 6.4945C4.93239 7.06412 4.88993 7.64623 4.847 8.2347C4.76291 9.3874 4.67704 10.5645 4.68717 11.72C4.70592 14.1822 5.2781 16.5201 5.83234 18.7818L5.83241 18.782C6.41038 21.1347 6.6217 23.501 6.18185 25.8989C5.83976 27.7623 5.09618 29.311 3.99289 30.6459C3.87271 30.7559 3.75408 30.865 3.6366 30.9729C3.11248 31.4546 2.61148 31.9151 2.10015 32.3518C2.9545 28.3464 2.40371 24.4828 1.48719 20.7145C0.962067 18.5422 0.581804 16.4033 0.752042 14.1641C1.03642 10.4809 2.56478 7.98055 4.9609 6.26971C4.966 6.34179 4.96596 6.41812 4.96162 6.48984Z"
+        fill="#4F4F4F"
+        stroke="black"
+      />
+      <path
+        d="M27.217 25.8862C26.8739 27.755 26.127 29.3073 25.0185 30.6447C24.9026 30.7508 24.7882 30.856 24.6748 30.9602C24.1507 31.4419 23.6497 31.9024 23.1383 32.3391C23.9927 28.3336 23.4419 24.4699 22.5253 20.7015L22.5253 20.7014C21.9973 18.5328 21.6169 16.3907 21.7872 14.1514C22.0716 10.4682 23.5999 7.96786 25.996 6.25701C26.0011 6.32909 26.0011 6.40543 25.9968 6.47714L25.9965 6.48181C25.9675 7.05143 25.9251 7.63354 25.8821 8.22201C25.7981 9.37471 25.7122 10.5518 25.7223 11.7073C25.7411 14.1695 26.3132 16.5074 26.8675 18.7691L26.8676 18.7693C27.4455 21.1221 27.6568 23.4883 27.217 25.8862Z"
+        fill="#4F4F4F"
+        stroke="black"
+      />
+    </g>
+  </svg>
+);
+
+export const DedicatedWorkspaceIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={36}
+    height={35}
+    viewBox="0 0 36 35"
+    fill="none"
+    {...props}
+  >
+    <g clipPath="url(#clip0_2394_401)">
+      <path
+        d="M35.5931 15.1133H0.408203V19.0962H35.5931V15.1133Z"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M32.4079 19.0957H22.8984V22.5292H32.4079V19.0957Z"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M32.4079 22.5293H22.8984V25.9628H32.4079V22.5293Z"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.59375 19.0957V34.0878"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M32.4082 19.4258V34.0883"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M26.4629 24.2461H28.9679"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M26.4629 20.8125H28.9679"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M27.3741 0.412109H8.62695V12.7728H27.3741V0.412109Z"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.9727 12.7725V15.1127"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21.0254 12.7725V15.1127"
+        stroke="#4C4C4C"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_2394_401">
+        <rect width={36} height={34.5} fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const AirConditioningIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={37}
+    height={37}
+    viewBox="0 0 37 37"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M18.666 5.1182L21.0662 2.73438"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M16.0605 2.73438L18.4607 5.1182"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M18.6738 1.63672V35.6432"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M1.52734 18.6396H35.8155"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M18.7832 10.8418L21.1834 8.45801"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M16.1719 8.45801L18.572 10.8418"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M32.1836 18.6865L34.5838 21.0703"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M34.5838 16.1016L32.1836 18.482"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M26.4141 18.7998L28.8142 21.1803"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M28.8142 16.2109L26.4141 18.5948"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M18.572 32.0098L16.1719 34.3936"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M21.1834 34.3936L18.7832 32.0098"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M18.4607 26.2871L16.0605 28.6709"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M21.0662 28.6709L18.666 26.2871"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M5.30447 18.5948L2.9043 16.2109"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M2.9043 21.1803L5.30447 18.7998"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M11.076 18.482L8.67578 16.1016"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M8.67578 21.0703L11.076 18.6865"
+      stroke="#4F4F4F"
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M30.795 6.61621L6.54883 30.6632"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M6.54883 6.61621L30.795 30.6632"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M28.3047 9.07227H31.6996"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M28.1602 5.56152V8.9285"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M24.3008 13.1973H27.6956"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M24.1562 9.68652V13.0535"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M28.1895 28.1494V31.5164"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M31.7328 28.002H28.3379"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M24.0312 24.1777V27.5447"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M27.5746 24.0332H24.1797"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M9.06674 28.0225H5.67188"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M9.21484 31.534V28.167"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M13.0648 23.8984H9.66992"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M13.2148 27.4099V24.043"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M9.25977 9.22831V5.86133"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M5.7168 9.37695H9.11166"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M13.416 13.2019V9.83496"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+    <path
+      d="M9.87305 13.3457H13.2679"
+      stroke="#231F20"
+      strokeOpacity={0.8}
+      strokeWidth={1.5}
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+    />
+  </svg>
+);
