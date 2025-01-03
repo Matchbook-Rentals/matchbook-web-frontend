@@ -1,15 +1,32 @@
 import React from 'react';
 import { getAllUserTrips } from '@/app/actions/trips';
 import TripGrid from './(trips-components)/trip-grid';
-import { APP_PAGE_MARGIN } from '@/constants/styles';
+import { PAGE_MARGIN } from '@/constants/styles';
+import Image from 'next/image';
 
 const TripsPage: React.FC = async () => {
   const trips = await getAllUserTrips();
 
   return (
-    <div className={`bg-background ${APP_PAGE_MARGIN}`}>
-      <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--Major-Text, #404040)', fontFamily: 'Lora', fontSize: '36px', fontStyle: 'normal', fontWeight: '500', lineHeight: 'normal' }}>Searches</h1>
+    <div className={`bg-background ${PAGE_MARGIN} mx-auto`}>
+      <h1
+        className="font-montserrat-regular text-[14px]"
+      >
+        Searches
+      </h1>
+
+      <div className="w-full mx-auto mb-4">
+        <Image
+          src="/milwaukee-downtown.png"
+          alt="Village footer"
+          width={1200}
+          height={516}
+          className="w-[1000px] h-[216px] mx-auto p-0 my-0"
+        />
+        <div className='bg-[#5C9AC5] rounded-md w-full h-[21px] -translate-y-[2px]' />
+      </div>
       <TripGrid initialTrips={trips} />
+
     </div>
   );
 };
