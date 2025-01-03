@@ -602,7 +602,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Accessiblity and Safety</h3>
             <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex flex-wrap justify-start gap-4">
                 {accessibilityOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.propertyTypes.includes(value);
                   return (
@@ -650,7 +650,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Parking</h3>
             <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex flex-wrap justify-start gap-4">
                 {parkingOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.propertyTypes.includes(value);
                   return (
@@ -674,7 +674,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Kitchen</h3>
             <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex flex-wrap justify-start gap-4">
                 {kitchenOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.propertyTypes.includes(value);
                   return (
@@ -699,7 +699,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Climate Control</h3>
             <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex flex-wrap justify-start gap-4">
                 {climateControlOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.propertyTypes.includes(value);
                   return (
@@ -724,7 +724,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Luxury</h3>
             <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex flex-wrap justify-start gap-4">
                 {luxuryOptions.map(({ value, label, icon }) => {
                   const isSelected = localFilters.propertyTypes.includes(value);
                   return (

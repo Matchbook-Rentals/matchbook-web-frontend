@@ -41,7 +41,7 @@ const getAmenityIcon = (amenity: string) => {
     case 'uncoveredParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Uncovered Parking Free' };
     case 'garageParking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Garage Parking' };
     case 'garageParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Garage Parking Free' };
-    case 'evCharging': return { icon: AmenitiesIcons.ChargingIcon, label: 'EV Charging' };
+    case 'evCharging': return { icon: AmenitiesIcons.EvChargingIcon, label: 'EV Charging' };
 
     // Structural Amenities
     case 'gym': return { icon: AmenitiesIcons.GymIcon, label: 'Gym' };
@@ -63,7 +63,7 @@ const getAmenityIcon = (amenity: string) => {
 
     // Kitchen
     case 'garbageDisposal': return { icon: AmenitiesIcons.GarbageDisposalIcon, label: 'Garbage Disposal' };
-    case 'dishwasher': return { icon: AmenitiesIcons.Dishwasher, label: 'Dishwasher' };
+    case 'dishwasher': return { icon: AmenitiesIcons.DishwasherIcon, label: 'Dishwasher' };
 
     // Furnished
     case 'tv': return { icon: Dumbbell, label: 'TV' };
