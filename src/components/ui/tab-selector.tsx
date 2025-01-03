@@ -76,7 +76,7 @@ export default function TabSelector({
                 </div>
                 <div className="flex flex-col">
                   <span className={cn("text-sm", tab.textSize)}>{tab.label}</span>
-                  {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-black rounded-full" layout layoutId="underline"></motion.div>}
+                  {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-[#404040] rounded-full" layout layoutId="underline"></motion.div>}
                 </div>
               </TabsTrigger>
             ))}

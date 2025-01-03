@@ -97,7 +97,7 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto`}>
-      <h1 className=" text-[#404040] font-montserrat text-[16px] leading-normal">
+      <h1 className=" text-[#404040] font-montserrat-regular text-[14px] leading-normal">
         <span className="cursor-pointer hover:underline  ">
           <Link href="/platform/trips" className="hover:underline">
             Searches
