@@ -168,7 +168,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         <h3 className="text-[32px] text-[#404040] font-medium mb-4">Highlights</h3>
         <div className='flex space-x-4 items-center mb-4'>
           <MatchbookVerified />
-          <h3 className="text-[#404040] text-[24px] font-medium"> Matchbook Verified Guests Preferred </h3>
+          <h3 className="text-[#404040] text-[24px]"> Matchbook Verified Guests Preferred </h3>
         </div>
         <div className="flex flex-wrap gap-y-6 gap-x-1 justify-between">
           {!showAllAmenities ? (
@@ -328,7 +328,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
 
       {/* Property Description */}
       <div className="py-12 border-b border-[#D8D9D8]">
-        <h3 className="text-2xl font-semibold mb-4">Description</h3>
+        <h3 className="text-2xl font-medium mb-4">Description</h3>
         <p className="text-gray-600 leading-relaxed">
           Our spacious home, located just a 20-minute drive from ski resorts and a 2-minute drive from downtown Ogden, is the perfect centrally located home for your Utah stay. With modern updates, a private front porch *with mountain views*, and a wonderfully manicured backyard with a gas fire pit and outdoor dining area, this home is well equipped to host large Families, or even guests just looking for a peaceful getaway.
         </p>
@@ -337,7 +337,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="py-12">
         <h3
-          className="text-2xl font-semibold mb-4 cursor-pointer"
+          className="text-2xl font-medium mb-4 cursor-pointer"
           onClick={() => setShowAllAmenities(!showAllAmenities)}
         >
           Amenities {showAllAmenities ? '(show less)' : '(show more)'}

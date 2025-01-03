@@ -272,8 +272,8 @@ const MatchViewTab: React.FC = () => {
               {showListings[0].title}
             </h2>
             <div className='flex justify-between pb-0 md:pb-1'>
-              <h3 className='text-[24px] font-medium'> {showListings[0].roomCount} Beds | {showListings[0].bathroomCount} Baths </h3>
-              <h3 className='text-[24px] font-medium'> ${showListings[0].calculatedPrice} / Mo </h3>
+              <h3 className='text-[24px]'> {showListings[0].roomCount} Beds | {showListings[0].bathroomCount} Baths </h3>
+              <h3 className='text-[24px]'> ${showListings[0].calculatedPrice} / Mo </h3>
             </div>
           </div>
         </div>
@@ -293,10 +293,10 @@ const MatchViewTab: React.FC = () => {
               {/* Mobile-only labels */}
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-[24px] text-[#404040] font-montserrat w-2/3 truncate">
+                <span className="text-[24px] text-[#404040] font-montserrat-regular w-2/3 truncate">
                   {showListings[0].locationString}
                 </span>
-                <span className="text-[24px] text-[#404040] font-montserrat">
+                <span className="text-[24px] text-[#404040] font-montserrat-regular">
                   {showListings[0].distance?.toFixed(0)} miles
                 </span>
               </div>
@@ -328,7 +328,7 @@ const MatchViewTab: React.FC = () => {
           <div
             className={`md:block sticky pt-0 md:p-0  ${!isScrolled ? '' : ''} transition-transform duration-500`}
             style={{
-              top: `${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT + 5}px`,
+              top: `${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT - 10}px`,
               height: `calc(100vh - ${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT + 5}px)`
             }}
           >
