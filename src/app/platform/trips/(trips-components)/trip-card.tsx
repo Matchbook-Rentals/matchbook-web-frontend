@@ -1,4 +1,6 @@
 'use client';
+import { Trip } from '@prisma/client';
+import Image from 'next/image';
 import React from 'react';
 
 const getState = (stateInput: string): string => {
@@ -64,56 +66,32 @@ const getState = (stateInput: string): string => {
 };
 
 interface TripCardProps {
-  imageSrc?: string;
-  city?: string;
-  state?: string;
-  startDate?: string;
-  endDate?: string;
-  tripId: string;
+  trip: Trip;
   onDelete: (tripId: string) => void;
 }
 
-const TripCard: React.FC<TripCardProps> = ({
-  imageSrc = "/api/placeholder/400/320",
-  city = "Seattle",
-  state = "WA",
-  startDate = "06/08/24",
-  endDate = "06/12/24",
-  tripId,
-  onDelete
-}) => {
-  const stateName = getState(state);
+const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
+  const locationElements = trip.locationString.split(',');
+  const stateName = getState(locationElements[locationElements.length - 1]);
   const statePhotoPath = `/State Photos/${stateName}.jpg`;
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the Link navigation
     e.stopPropagation();
-    onDelete(tripId);
+    onDelete(trip.id);
   };
 
   return (
-    <div className="relative max-w-[300px] rounded-lg overflow-hidden duration-300 group" data-trip-id={tripId}>
-      <div className="relative">
-        <img
-          src={statePhotoPath || imageSrc}
-          alt={`${city}, ${state}`}
-          className="aspect-[297/276] object-cover"
-        />
-        <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div onClick={handleDeleteClick} className="bg-black/50 rounded-full w-8 h-8 flex items-center justify-center">
-            <div className="text-red-500 hover:text-red-800 text-3xl font-bold cursor-pointer leading-none flex items-center justify-center" style={{ marginTop: '-2px' }}>✕</div>
-          </div>
-        </div>
+    <div className='flex max-w-[300px] '>
+      <Image src={statePhotoPath} height={400} width={400} className='h-[134px] w-[143px] rounded-[15px] ' />
+      <div className='flex flex-col justify-between max-w-[150px] ml-4'>
+        <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
+        <h2 className='truncate'>50 miles (m)</h2>
+        <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
+        <h2 className='truncate'>$ any</h2>
+
       </div>
-      <div className="p-2 bg-white">
-        <div className="text-[30px] font-medium text-[#404040] font-montserrat">
-          {city}, {state}
-        </div>
-        <div className="text-[26px] text-[#404040] font-montserrat">
-          {startDate} - {endDate}
-        </div>
-      </div>
-    </div>
+    </div >
   );
 };
 

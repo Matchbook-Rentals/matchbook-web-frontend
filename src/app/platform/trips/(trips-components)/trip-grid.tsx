@@ -69,11 +69,7 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
           className="block hover:no-underline"
         >
           <TripCard
-            city={trip?.city || trip.locationString.split(',')[0]}
-            state={trip?.state || trip.locationString.split(',')[1]?.trim()}
-            startDate={trip.startDate?.toLocaleDateString()}
-            endDate={trip.endDate?.toLocaleDateString()}
-            tripId={trip.id}
+            trip={trip}
             onDelete={handleDelete}
           />
         </Link>

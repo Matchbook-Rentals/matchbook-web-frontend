@@ -6,6 +6,13 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 
+- [ ] mobile popover
+- [ ] calendars
+- [ ] Search page
+--- add ability to save filters to trip in db, either add tripFilters model or pick and choose the best
+- [ ] Filters 
+
+
 - [ ]  dialog finish, control active state for property type selection
 - [ ] Adults 1 minimum and defualt start
 - [ ] go through FIGMA text sizes and weights 

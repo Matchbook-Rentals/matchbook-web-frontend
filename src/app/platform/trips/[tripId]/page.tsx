@@ -10,10 +10,10 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import { useSearchParams } from 'next/navigation';
 import OverviewTab from './(tabs)/overview-tab';
-import { Button } from '@/components/ui/button';
 import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
+import Link from 'next/link';
 
 interface Tab {
   value: string;
@@ -99,7 +99,9 @@ const TripsPage: React.FC = () => {
     <div className={`flex flex-col ${marginClass} mx-auto`}>
       <h1 className=" text-[#404040] font-montserrat text-[16px] leading-normal">
         <span className="cursor-pointer hover:underline  ">
-          <a href="/platform/trips">Searches</a>
+          <Link href="/platform/trips" className="hover:underline">
+            Searches
+          </Link>
         </span>
         <span className="mx-2">&gt;</span>
         <span className="cursor-pointer hover:underline">
