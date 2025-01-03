@@ -174,7 +174,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           {!showAllAmenities ? (
             <>
               {/* Property Type */}
-              {listing.category === "singleFamily" && (
+              {listing.category === "singleFamily" || "single_family" && (
                 <Tile
 
                   icon={<AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />}
