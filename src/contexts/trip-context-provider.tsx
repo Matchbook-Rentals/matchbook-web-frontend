@@ -117,7 +117,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     furnished: false,
     unfurnished: false,
     utilities: [] as ('included' | 'notIncluded')[],
-    pets: [],
+    pets: [] as ('allowed' | 'notAllowed')[],
     searchRadius: 0,
     accessibility: [],
     location: [],
@@ -270,6 +270,12 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         (filters.utilities.includes('included') && listing.utilitiesIncluded === true) ||
         (filters.utilities.includes('notIncluded') && listing.utilitiesIncluded === false);
 
+      // Pets filter
+      const matchesPets =
+        filters.pets.length === 0 || filters.pets.length === 2 ||
+        (filters.pets.includes('allowed') && listing.petsAllowed) ||
+        (filters.pets.includes('notAllowed') && !listing.petsAllowed);
+
       // Amenity filters
       const matchesAccessibility = filters.accessibility?.length === 0 ||
         filters.accessibility?.every(amenity => listing.amenities?.includes(amenity));
@@ -305,6 +311,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesBaths &&
         matchesFurniture &&
         matchesUtilities &&
+        matchesPets &&
         matchesAccessibility &&
         matchesLocation &&
         matchesParking &&

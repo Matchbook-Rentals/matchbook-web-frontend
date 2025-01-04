@@ -287,6 +287,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         (localFilters.utilities.includes('included') && listing.utilitiesIncluded) ||
         (localFilters.utilities.includes('notIncluded') && !listing.utilitiesIncluded);
 
+      // Utilities filter
+      const matchesPets =
+        localFilters.pets.length === 0 || localFilters.utilities.length === 2 ||
+        (localFilters.pets.includes('allowed') && listing.utilitiesIncluded) ||
+        (localFilters.pets.includes('notAllowed') && !listing.utilitiesIncluded);
+
       // Amenity filters
       const matchesAccessibility = localFilters.accessibility?.length === 0 ||
         localFilters.accessibility?.every(option => listing[option]);
@@ -316,6 +322,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         matchesBaths &&
         matchesFurniture &&
         matchesUtilities &&
+        matchesPets &&
         matchesAccessibility &&
         matchesLocation &&
         matchesParking &&
@@ -537,14 +544,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         icon: <AmenitiesIcons.PetFriendlyIcon className="mt-4" />
                       },
                       {
-                        value: 'not_allowed',
+                        value: 'notAllowed',
                         label: 'No Pets',
                         icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />
                       }
                     ].map(({ value, label, icon }) => {
-                      const isSelected = value === 'allowed'
-                        ? localFilters.pets?.includes('Allowed')
-                        : localFilters.pets?.includes('Not Allowed');
+                      const isSelected = localFilters.pets.includes(value);
                       return (
                         <Tile
                           key={value}
@@ -557,10 +562,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
-                            const optionValue = value === 'allowed' ? 'Allowed' : 'Not Allowed';
                             const updatedPets = isSelected
-                              ? localFilters.pets?.filter(item => item !== optionValue) || []
-                              : [...(localFilters.pets || []), optionValue];
+                              ? localFilters.pets?.filter(item => item !== value) || []
+                              : [...(localFilters.pets || []), value];
                             handleLocalFilterChange('pets', updatedPets);
                           }}
                         />
