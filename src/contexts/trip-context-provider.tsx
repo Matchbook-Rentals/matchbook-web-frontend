@@ -116,7 +116,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     baths: '',
     furnished: false,
     unfurnished: false,
-    utilities: [],
+    utilities: [] as ('included' | 'notIncluded')[],
     pets: [],
     searchRadius: 0,
     accessibility: [],
@@ -251,7 +251,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // Price filter - only apply if min or max price is set
       const price = listing.calculatedPrice || 0;
       const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
-                          (filters.maxPrice === null || price <= filters.maxPrice);
+        (filters.maxPrice === null || price <= filters.maxPrice);
 
       // Room filters
       const matchesBedrooms = !filters.bedrooms || listing.bedrooms === filters.bedrooms;
@@ -265,8 +265,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         (filters.unfurnished && !listing.furnished);
 
       // Utilities filter
-      const matchesUtilities = filters.utilities.length === 0 ||
-        filters.utilities.every(utility => listing.utilities?.includes(utility));
+      const matchesUtilities =
+        filters.utilities.length === 0 || filters.utilities.length === 2 ||
+        (filters.utilities.includes('included') && listing.utilitiesIncluded === true) ||
+        (filters.utilities.includes('notIncluded') && listing.utilitiesIncluded === false);
 
       // Amenity filters
       const matchesAccessibility = filters.accessibility?.length === 0 ||

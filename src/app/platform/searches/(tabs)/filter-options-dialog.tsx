@@ -280,9 +280,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         (localFilters.furnished && listing.furnished) ||
         (localFilters.unfurnished && !listing.furnished);
 
+
       // Utilities filter
-      const matchesUtilities = localFilters.utilities.length === 0 ||
-        localFilters.utilities.every(utility => listing.utilities?.includes(utility));
+      const matchesUtilities =
+        localFilters.utilities.length === 0 || localFilters.utilities.length === 2 ||
+        (localFilters.utilities.includes('included') && listing.utilitiesIncluded) ||
+        (localFilters.utilities.includes('notIncluded') && !listing.utilitiesIncluded);
 
       // Amenity filters
       const matchesAccessibility = localFilters.accessibility?.length === 0 ||
@@ -431,7 +434,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       onChange={(value) => handlePriceChange('min', value)}
                       placeholder="$0"
                     />
-                    <div className="border-t-2 w-6 border-[#404040] mt-6" />
+                    <div className="border w-10  border-[#404040] mt-6" />
                     <CurrencyInput
                       id="max-price"
                       label="Maximum"
@@ -464,7 +467,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -494,14 +497,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         icon: <AmenitiesIcons.UtilitiesIncludedIcon className="mt-1" />
                       },
                       {
-                        value: 'not_included',
+                        value: 'notIncluded',
                         label: 'Utilities Not Included',
                         icon: <AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-1" />
                       }
                     ].map(({ value, label, icon }) => {
-                      const isSelected = value === 'included'
-                        ? localFilters.utilities.includes('Included In Rent')
-                        : localFilters.utilities.includes('Not Included In Rent');
+                      const isSelected = localFilters.utilities.includes(value);
                       return (
                         <Tile
                           key={value}
@@ -514,10 +515,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
-                            const optionValue = value === 'included' ? 'Included In Rent' : 'Not Included In Rent';
                             const updatedUtilities = isSelected
-                              ? localFilters.utilities.filter(item => item !== optionValue)
-                              : [...localFilters.utilities, optionValue];
+                              ? localFilters.utilities.filter(item => item !== value) // Remove if selected
+                              : [...localFilters.utilities, value]; // Add if not selected
                             handleLocalFilterChange('utilities', updatedUtilities);
                           }}
                         />
@@ -630,10 +630,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-
-
           {/* Tiles Section */}
-
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Accessiblity and Safety</h3>
             <div className='flex flex-wrap'>
@@ -754,7 +751,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Climate Control</h3>
             <div className='flex flex-wrap'>
@@ -785,7 +781,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Luxury</h3>
             <div className='flex flex-wrap'>
@@ -815,8 +810,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
               </div>
             </div>
           </div>
-
-
 
           {/* Room Details Section */}
           <div className='border-b-2 py-6'>
