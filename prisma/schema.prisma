@@ -143,6 +143,7 @@ model Listing {
   shortestLeasePrice     Int      @default(4000)
   longestLeasePrice      Int      @default(3500)
   furnished              Boolean  @default(false)
+  utilitiesIncluded      Boolean  @default(false)
 
   // General Amenities
   airConditioning    Boolean @default(false)
