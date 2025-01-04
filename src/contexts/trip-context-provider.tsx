@@ -24,6 +24,15 @@ interface FilterOptions {
   furnished: boolean;
   unfurnished: boolean;
   utilities: string[];
+  pets: string[];
+  searchRadius: number;
+  accessibility: string[];
+  location: string[];
+  parking: string[];
+  kitchen: string[];
+  climateControl: string[];
+  luxury: string[];
+  laundry: string[];
 }
 
 interface TripContextType {
@@ -108,6 +117,15 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     furnished: false,
     unfurnished: false,
     utilities: [],
+    pets: [],
+    searchRadius: 0,
+    accessibility: [],
+    location: [],
+    parking: [],
+    kitchen: [],
+    climateControl: [],
+    luxury: [],
+    laundry: [],
   });
 
   // Calculate U-Score for a listing
@@ -250,6 +268,28 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesUtilities = filters.utilities.length === 0 ||
         filters.utilities.every(utility => listing.utilities?.includes(utility));
 
+      // Amenity filters
+      const matchesAccessibility = filters.accessibility?.length === 0 ||
+        filters.accessibility?.every(amenity => listing.amenities?.includes(amenity));
+
+      const matchesLocation = filters.location?.length === 0 ||
+        filters.location?.every(feature => listing.amenities?.includes(feature));
+
+      const matchesParking = filters.parking?.length === 0 ||
+        filters.parking?.every(option => listing.amenities?.includes(option));
+
+      const matchesKitchen = filters.kitchen?.length === 0 ||
+        filters.kitchen?.every(appliance => listing.amenities?.includes(appliance));
+
+      const matchesClimateControl = filters.climateControl?.length === 0 ||
+        filters.climateControl?.every(control => listing.amenities?.includes(control));
+
+      const matchesLuxury = filters.luxury?.length === 0 ||
+        filters.luxury?.every(amenity => listing.amenities?.includes(amenity));
+
+      const matchesLaundry = filters.laundry?.length === 0 ||
+        filters.laundry?.every(option => listing.amenities?.includes(option));
+
       // Return true if the listing meets all criteria
       return isNotFavorited &&
         isNotDisliked &&
@@ -262,7 +302,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesBeds &&
         matchesBaths &&
         matchesFurniture &&
-        matchesUtilities;
+        matchesUtilities &&
+        matchesAccessibility &&
+        matchesLocation &&
+        matchesParking &&
+        matchesKitchen &&
+        matchesClimateControl &&
+        matchesLuxury &&
+        matchesLaundry;
     }),
     [listings, lookup, trip, filters]
   );

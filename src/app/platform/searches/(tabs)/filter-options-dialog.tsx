@@ -13,24 +13,24 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 
 interface FilterOptions {
-  minPrice: number;
-  maxPrice: number;
+  propertyTypes: string[];
+  minPrice: number | null;
+  maxPrice: number | null;
   bedrooms: string;
   beds: string;
   baths: string;
   furnished: boolean;
   unfurnished: boolean;
   utilities: string[];
-  propertyTypes: string[];
   pets: string[];
   searchRadius: number;
-  laundry?: string[];
   accessibility: string[];
   location: string[];
   parking: string[];
   kitchen: string[];
   climateControl: string[];
   luxury: string[];
+  laundry: string[];
 }
 
 interface FilterOptionsDialogProps {
@@ -284,13 +284,42 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesUtilities = localFilters.utilities.length === 0 ||
         localFilters.utilities.every(utility => listing.utilities?.includes(utility));
 
+      // Amenity filters
+      const matchesAccessibility = localFilters.accessibility?.length === 0 ||
+        localFilters.accessibility?.every(option => listing[option]);
+
+      const matchesLocation = localFilters.location?.length === 0 ||
+        localFilters.location?.every(option => listing[option]);
+
+      const matchesParking = localFilters.parking?.length === 0 ||
+        localFilters.parking?.every(option => listing[option]);
+
+      const matchesKitchen = localFilters.kitchen?.length === 0 ||
+        localFilters.kitchen?.every(option => listing[option]);
+
+      const matchesClimateControl = localFilters.climateControl?.length === 0 ||
+        localFilters.climateControl?.every(option => listing[option]);
+
+      const matchesLuxury = localFilters.luxury?.length === 0 ||
+        localFilters.luxury?.every(option => listing[option]);
+
+      const matchesLaundry = localFilters.laundry?.length === 0 ||
+        localFilters.laundry?.every(option => listing[option]);
+
       return matchesPropertyType &&
         matchesPrice &&
         matchesBedrooms &&
         matchesBeds &&
         matchesBaths &&
         matchesFurniture &&
-        matchesUtilities;
+        matchesUtilities &&
+        matchesAccessibility &&
+        matchesLocation &&
+        matchesParking &&
+        matchesKitchen &&
+        matchesClimateControl &&
+        matchesLuxury &&
+        matchesLaundry;
     }).length;
   }, [listings, localFilters]);
 
