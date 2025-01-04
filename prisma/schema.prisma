@@ -144,6 +144,7 @@ model Listing {
   longestLeasePrice      Int      @default(3500)
   furnished              Boolean  @default(false)
   utilitiesIncluded      Boolean  @default(false)
+  petsAllowed        Boolean @default(false)
 
   // General Amenities
   airConditioning    Boolean @default(false)
@@ -160,7 +161,6 @@ model Listing {
   iron               Boolean @default(false)
   heating            Boolean @default(false)
   hotTub             Boolean @default(false)
-  petsAllowed        Boolean @default(false)
   smokingAllowed     Boolean @default(false)
   eventsAllowed      Boolean @default(false)
   privateEntrance    Boolean @default(false)
