@@ -41,7 +41,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
     <div className="relative flex flex-col">
       <label
         htmlFor={id}
-        className="text-sm text-gray-600 pl-[2px] mb-1"
+        className="text-sm text-[#40404080] font-montserrat-light  pl-[2px] mb-1 "
       >
         {label}
       </label>
