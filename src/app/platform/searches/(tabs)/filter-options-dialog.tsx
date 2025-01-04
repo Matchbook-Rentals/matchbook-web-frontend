@@ -16,6 +16,7 @@ interface FilterOptions {
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
+  maxPrice: number | null;
   bedrooms: string;
   beds: string;
   baths: string;
@@ -269,6 +270,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         (localFilters.minPrice && localFilters.maxPrice && price >= localFilters.minPrice && price <= localFilters.maxPrice) // Both prices set
       );
 
+      const matchesRadius = localFilters.searchRadius === 0 || listing.distance < localFilters.searchRadius;
+
       // Room filters
       const matchesBedrooms = !localFilters.bedrooms || listing.bedrooms === localFilters.bedrooms;
       const matchesBeds = !localFilters.beds || listing.beds === localFilters.beds;
@@ -317,6 +320,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
       return matchesPropertyType &&
         matchesPrice &&
+        matchesRadius &&
         matchesBedrooms &&
         matchesBeds &&
         matchesBaths &&

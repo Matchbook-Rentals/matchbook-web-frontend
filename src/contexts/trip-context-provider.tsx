@@ -253,6 +253,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
         (filters.maxPrice === null || price <= filters.maxPrice);
 
+      const matchesRadius = filters.searchRadius === 0 || listing.distance < filters.searchRadius;
+
       // Room filters
       const matchesBedrooms = !filters.bedrooms || listing.bedrooms === filters.bedrooms;
       const matchesBeds = !filters.beds || listing.beds === filters.beds;
@@ -306,6 +308,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         isAvailable &&
         matchesPropertyType &&
         matchesPrice &&
+        matchesRadius &&
         matchesBedrooms &&
         matchesBeds &&
         matchesBaths &&
