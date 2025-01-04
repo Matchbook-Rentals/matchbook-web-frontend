@@ -58,7 +58,9 @@ const LoadingTabs: React.FC = () => {
 
   return (
     <div className={`flex flex-col items-center ${APP_PAGE_MARGIN}`}>
-      <h1 className=" text-[#404040] font-montserrat text-[16px] mr-auto leading-normal">
+
+      {/* Breadcrumb Navigation */}
+      <h1 className=" text-[#404040] font-montserrat-regular text-[14px] mr-auto leading-normal">
         <span className="cursor-pointer hover:underline  ">
           <span>Searches</span>
         </span>
@@ -67,6 +69,7 @@ const LoadingTabs: React.FC = () => {
           ???
         </span>
       </h1>
+
       <div className="flex w-full">
         <TabSelector
           tabs={tabs}
