@@ -329,65 +329,122 @@ model Trip {
   postalCode     String?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @default(now()) @updatedAt
+  isSponsored    Boolean    @default(false)
+  sponsorID      String?
   startDate      DateTime?
   endDate        DateTime?
-  minPrice       Int?
-  maxPrice       Int?
-  minBedroom     Int?
-  minBathroom    Int?
-  searchRadius   Float?     @default(50)
-  isSponsored    Boolean    @default(false)
   numAdults      Int        @default(1)
   numPets        Int        @default(0)
   numChildren    Int        @default(0)
-  sponsorID      String?
   userId         String
   tripStatus     TripStatus @default(searching)
 
-  // Filter preferences
-  furnished         Boolean?
-  utilitiesIncluded Boolean?
-  petsAllowed       Boolean?
+  //Num Filters
+  minPrice     Int?
+  maxPrice     Int?
+  minBeds      Int?
+  minBedroom   Int?
+  minBathroom  Int?
+  searchRadius Int? @default(50)
+
+  // Highlight Filters 
+  furnished            Boolean? @default(false)
+  unfurnished          Boolean? @default(false)
+  utilitiesIncluded    Boolean? @default(false)
+  utilitiesNotIncluded Boolean? @default(false)
+  petsAllowed          Boolean? @default(false)
+  petsNotAllowed       Boolean? @default(false)
+  singleFamily         Boolean? @default(false)
+  privateRoom          Boolean? @default(false)
+  townhouse            Boolean? @default(false)
+  apartment            Boolean? @default(false)
 
   // General Amenities
-  airConditioner     Boolean?
-  laundryFacilities  Boolean?
-  fitnessCenter      Boolean?
-  elevator           Boolean?
-  wheelchairAccess   Boolean?
-  doorman            Boolean?
-  parking            Boolean?
-  wifi               Boolean?
-  kitchen            Boolean?
-  dedicatedWorkspace Boolean?
-  hairDryer          Boolean?
-  iron               Boolean?
-  heater             Boolean?
-  hotTub             Boolean?
+  airConditioner     Boolean? @default(false)
+  laundryFacilities  Boolean? @default(false)
+  fitnessCenter      Boolean? @default(false)
+  elevator           Boolean? @default(false)
+  wheelchairAccess   Boolean? @default(false)
+  doorman            Boolean? @default(false)
+  parking            Boolean? @default(false)
+  wifi               Boolean? @default(false)
+  kitchen            Boolean? @default(false)
+  dedicatedWorkspace Boolean? @default(false)
+  hairDryer          Boolean? @default(false)
+  iron               Boolean? @default(false)
+  heater             Boolean? @default(false)
+  hotTub             Boolean? @default(false)
+  smokingAllowed     Boolean? @default(false)
+  eventsAllowed      Boolean? @default(false)
+  privateEntrance    Boolean? @default(false)
+  security           Boolean? @default(false)
+  waterfront         Boolean? @default(false)
+  beachfront         Boolean? @default(false)
+  mountainView       Boolean? @default(false)
+  cityView           Boolean? @default(false)
+  waterView          Boolean? @default(false)
 
-  // Washer and Dryer Preferences
-  washerInUnit    Boolean?
-  washerInComplex Boolean?
-  dryerInUnit     Boolean?
-  dryerInComplex  Boolean?
+  // Washer and Dryer Options
+  washerInUnit       Boolean? @default(false)
+  washerHookup       Boolean? @default(false)
+  washerNotAvailable Boolean? @default(false)
+  washerInComplex    Boolean? @default(false)
+  dryerInUnit        Boolean? @default(false)
+  dryerHookup        Boolean? @default(false)
+  dryerNotAvailable  Boolean? @default(false)
+  dryerInComplex     Boolean? @default(false)
 
-  // Parking Preferences
-  offStreetParking Boolean?
-  streetParking    Boolean?
-  coveredParking   Boolean?
-  garageParking    Boolean?
+  // Parking Options
+  offStreetParking     Boolean? @default(false)
+  streetParking        Boolean? @default(false)
+  streetParkingFree    Boolean? @default(false)
+  coveredParking       Boolean? @default(false)
+  coveredParkingFree   Boolean? @default(false)
+  uncoveredParking     Boolean? @default(false)
+  uncoveredParkingFree Boolean? @default(false)
+  garageParking        Boolean? @default(false)
+  garageParkingFree    Boolean? @default(false)
+  evCharging           Boolean? @default(false)
 
-  // Pet Preferences
-  allowDogs Boolean?
-  allowCats Boolean?
+  // Pet Policies
+  allowDogs Boolean? @default(false)
+  allowCats Boolean? @default(false)
 
   // Structural Amenities
-  gym        Boolean?
-  balcony    Boolean?
-  patio      Boolean?
-  pool       Boolean?
-  fireplace  Boolean?
-  dishwasher Boolean?
+  gym             Boolean? @default(false)
+  balcony         Boolean? @default(false)
+  patio           Boolean? @default(false)
+  sunroom         Boolean? @default(false)
+  fireplace       Boolean? @default(false)
+  firepit         Boolean? @default(false)
+  pool            Boolean? @default(false)
+  sauna           Boolean? @default(false)
+  jacuzzi         Boolean? @default(false)
+  grill           Boolean? @default(false)
+  oven            Boolean? @default(false)
+  stove           Boolean? @default(false)
+  wheelAccessible Boolean? @default(false)
+  fencedInYard    Boolean? @default(false)
+  secureLobby     Boolean? @default(false)
+  keylessEntry    Boolean? @default(false)
+  alarmSystem     Boolean? @default(false)
+  storageShed     Boolean? @default(false)
+  gatedEntry      Boolean? @default(false)
+  smokeDetector   Boolean? @default(false)
+  carbonMonoxide  Boolean? @default(false)
+
+  // Kitchen
+  garbageDisposal Boolean? @default(false)
+  dishwasher      Boolean? @default(false)
+  fridge          Boolean? @default(false)
+
+  // Furnished
+  tv                Boolean? @default(false)
+  workstation       Boolean? @default(false)
+  microwave         Boolean? @default(false)
+  kitchenEssentials Boolean? @default(false)
+  linens            Boolean? @default(false)
+  privateBathroom   Boolean? @default(false)
 
   allParticipants User[] @relation("TripParticipants")
 

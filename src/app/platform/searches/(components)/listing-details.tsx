@@ -127,10 +127,10 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
                   labelClassNames="text-[16px] text-[#2D2F2E80]"
                 />
               )}
-              {listing.category === "singleRoom" && (
+              {listing.category === "privateRoom" && (
                 <Tile
                   icon={<AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" />}
-                  label="Single Room"
+                  label="Private Room"
                   className="h-[155px] w-[155px]"
                   labelClassNames="text-[16px] text-[#2D2F2E80]"
                 />
