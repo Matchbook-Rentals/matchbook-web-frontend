@@ -282,25 +282,25 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
       // Amenity filters
       const matchesAccessibility = filters.accessibility?.length === 0 ||
-        filters.accessibility?.every(amenity => listing.amenities?.includes(amenity));
+        filters.accessibility?.every(amenity => listing[amenity]);
 
       const matchesLocation = filters.location?.length === 0 ||
-        filters.location?.every(feature => listing.amenities?.includes(feature));
+        filters.location?.every(feature => listing[feature]);
 
       const matchesParking = filters.parking?.length === 0 ||
-        filters.parking?.every(option => listing.amenities?.includes(option));
+        filters.parking?.every(option => listing[option]);
 
       const matchesKitchen = filters.kitchen?.length === 0 ||
-        filters.kitchen?.every(appliance => listing.amenities?.includes(appliance));
+        filters.kitchen?.every(appliance => listing[appliance]);
 
       const matchesClimateControl = filters.climateControl?.length === 0 ||
-        filters.climateControl?.every(control => listing.amenities?.includes(control));
+        filters.climateControl?.every(control => listing[control]);
 
       const matchesLuxury = filters.luxury?.length === 0 ||
-        filters.luxury?.every(amenity => listing.amenities?.includes(amenity));
+        filters.luxury?.every(amenity => listing[amenity]);
 
       const matchesLaundry = filters.laundry?.length === 0 ||
-        filters.laundry?.every(option => listing.amenities?.includes(option));
+        filters.laundry?.every(option => listing[option]);
 
       // Return true if the listing meets all criteria
       return isNotFavorited &&
