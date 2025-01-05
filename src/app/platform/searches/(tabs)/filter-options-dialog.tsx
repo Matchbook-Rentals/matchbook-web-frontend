@@ -54,7 +54,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const propertyTypeOptions = [
     {
-      value: 'single_family',
+      value: 'singleFamily',
       label: 'Single Family',
       icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />
     },
@@ -64,7 +64,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.ApartmentIcon className=" mt-2" />
     },
     {
-      value: 'private_room',
+      value: 'privateRoom',
       label: 'Private Room',
       icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" />
     },
@@ -77,37 +77,37 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const accessibilityOptions = [
     {
-      value: 'wheelchair_accessible',
+      value: 'wheelchairAccess',
       label: 'Wheelchair Accessible',
       icon: <AmenitiesIcons.WheelchairAccessibleIcon className="p-1 mt-2" />
     },
     {
-      value: 'fenced_yard',
+      value: 'fencedInYard',
       label: 'Fenced Yard',
       icon: <AmenitiesIcons.FencedYardIcon className="p-1 mt-2" />
     },
     {
-      value: 'keyless_entry',
+      value: 'keylessEntry',
       label: 'Keyless Entry',
       icon: <AmenitiesIcons.KeylessEntryIcon className="p-1 mt-2" />
     },
     {
-      value: 'alarm_system',
+      value: 'alarmSystem',
       label: 'Alarm System',
       icon: <AmenitiesIcons.AlarmSystemIcon className="p-1 mt-2" />
     },
     {
-      value: 'gated_entry',
+      value: 'gatedEntry',
       label: 'Gated Entry',
       icon: <AmenitiesIcons.GatedEntryIcon className="p-1 mt-2" />
     },
     {
-      value: 'smoke_detector',
+      value: 'smokeDetector',
       label: 'Smoke Detector',
       icon: <AmenitiesIcons.SmokeDetectorIcon className="p-1 mt-2" />
     },
     {
-      value: 'carbon_monoxide',
+      value: 'carbonMonoxide',
       label: 'Carbon Monoxide Detector',
       icon: <AmenitiesIcons.CarbonMonoxideDetectorIcon className="p-1 mt-2" />
     },
@@ -120,12 +120,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const locationOptions = [
     {
-      value: 'mountain_view',
+      value: 'mountainView',
       label: 'Mountain View',
       icon: <AmenitiesIcons.MountainViewIcon className="p-1 mt-2" />
     },
     {
-      value: 'city_view',
+      value: 'cityView',
       label: 'City View',
       icon: <AmenitiesIcons.CityViewIcon className="p-1 mt-2" />
     },
@@ -135,7 +135,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.WaterfrontIcon className="p-1 mt-2" />
     },
     {
-      value: 'water_view',
+      value: 'waterView',
       label: 'Water View',
       icon: <AmenitiesIcons.WaterViewIcon className="p-1 mt-2" />
     }
@@ -143,17 +143,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const parkingOptions = [
     {
-      value: 'off_street',
+      value: 'offStreet',
       label: 'Off Street',
       icon: <AmenitiesIcons.ParkingIcon className="p-1 mt-2" />
     },
     {
-      value: 'ev_charging',
+      value: 'evCharging',
       label: 'EV Charging',
       icon: <AmenitiesIcons.EvChargingIcon className="p-1 mt-2" />
     },
     {
-      value: 'garage',
+      value: 'garageParking',
       label: 'Garage',
       icon: <AmenitiesIcons.GarageIcon className="p-1 mt-2" />
     }
@@ -161,7 +161,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const kitchenOptions = [
     {
-      value: 'garbage_disposal',
+      value: 'garbageDisposal',
       label: 'Garbage Disposal',
       icon: <AmenitiesIcons.GarbageDisposalIcon className="p-1 mt-2" />
     },
@@ -186,7 +186,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.GrillIcon className="p-1 mt-2" />
     },
     {
-      value: 'kitchen_essentials',
+      value: 'kitchenEssentials',
       label: 'Kitchen Essentials',
       icon: <AmenitiesIcons.KitchenEssentialsIcon className="p-1 mt-2" />
     }
@@ -204,12 +204,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.HeaterIcon className="p-1 mt-2" />
     },
     {
-      value: 'workspace',
+      value: 'dedicatedWorkspace',
       label: 'Dedicated Workspace',
       icon: <AmenitiesIcons.DedicatedWorkspaceIcon className="p-1 mt-2" />
     },
     {
-      value: 'ac',
+      value: 'airConditoner',
       label: 'Air Conditioning',
       icon: <AmenitiesIcons.AirConditioningIcon className="p-1 mt-2" />
     }
@@ -237,7 +237,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.PoolIcon className="p-1 mt-2" />
     },
     {
-      value: 'hot_tub',
+      value: 'hotTub',
       label: 'Hot Tub',
       icon: <AmenitiesIcons.HotTubIcon className="p-1 mt-2" />
     },

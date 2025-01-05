@@ -118,7 +118,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     unfurnished: false,
     utilities: [] as ('included' | 'notIncluded')[],
     pets: [] as ('allowed' | 'notAllowed')[],
-    searchRadius: 0,
+    searchRadius: 50,
     accessibility: [],
     location: [],
     parking: [],

@@ -72,7 +72,7 @@ model UserPreferences {
   bedroomCount       Int
   bathroomCount      Int
   furnished          Boolean  @default(false)
-  airCondition       Boolean  @default(false)
+  airConditioner       Boolean  @default(false)
   laundryFacilites   Boolean  @default(false)
   inUnitWasher       Boolean  @default(false)
   inUnitDryer        Boolean  @default(false)
@@ -159,15 +159,17 @@ model Listing {
   dedicatedWorkspace Boolean @default(false)
   hairDryer          Boolean @default(false)
   iron               Boolean @default(false)
-  heating            Boolean @default(false)
+  heater            Boolean @default(false)
   hotTub             Boolean @default(false)
   smokingAllowed     Boolean @default(false)
   eventsAllowed      Boolean @default(false)
   privateEntrance    Boolean @default(false)
-  secure             Boolean @default(false)
+  security             Boolean @default(false)
   waterfront         Boolean @default(false)
   beachfront         Boolean @default(false)
   mountainView       Boolean @default(false)
+  cityView       Boolean @default(false)
+  waterView         Boolean @default(false)
 
   // Washer and Dryer Options
   washerInUnit       Boolean @default(false)
@@ -180,6 +182,8 @@ model Listing {
   dryerInComplex     Boolean @default(false)
 
   // Parking Options
+
+  offStreetParking     Boolean @default(false)
   streetParking        Boolean @default(false)
   streetParkingFree    Boolean @default(false)
   coveredParking       Boolean @default(false)
@@ -202,6 +206,7 @@ model Listing {
   fireplace       Boolean @default(false)
   firepit         Boolean @default(false)
   pool            Boolean @default(false)
+  sauna            Boolean @default(false)
   jacuzzi         Boolean @default(false)
   grill           Boolean @default(false)
   oven            Boolean @default(false)
@@ -212,16 +217,21 @@ model Listing {
   keylessEntry    Boolean @default(false)
   alarmSystem     Boolean @default(false)
   storageShed     Boolean @default(false)
+  gatedEntry      Boolean @default(false)
+  smokeDetector   Boolean @default(false)
+  carbonMonoxide  Boolean @default(false)
 
   // Kitchen
   garbageDisposal Boolean @default(false)
   dishwasher      Boolean @default(false)
+  fridge          Boolean @default(false)
+
 
   //Furnished
   tv                Boolean @default(false)
   workstation       Boolean @default(false)
   microwave         Boolean @default(false)
-  kitchenEssentails Boolean @default(false)
+  kitchenEssentials Boolean @default(false)
   linens            Boolean @default(false)
   privateBathroom   Boolean @default(false)
 
