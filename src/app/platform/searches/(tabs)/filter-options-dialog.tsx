@@ -143,7 +143,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
   const parkingOptions = [
     {
-      value: 'offStreet',
+      value: 'offStreetParking',
       label: 'Off Street',
       icon: <AmenitiesIcons.ParkingIcon className="p-1 mt-2" />
     },
@@ -209,7 +209,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.DedicatedWorkspaceIcon className="p-1 mt-2" />
     },
     {
-      value: 'airConditoner',
+      value: 'airConditioner',
       label: 'Air Conditioning',
       icon: <AmenitiesIcons.AirConditioningIcon className="p-1 mt-2" />
     }
@@ -657,6 +657,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
+                        console.log(localFilters)
                         const updatedAmenities = isSelected
                           ? (localFilters.accessibility || []).filter(item => item !== value)
                           : [...(localFilters.accessibility || []), value];

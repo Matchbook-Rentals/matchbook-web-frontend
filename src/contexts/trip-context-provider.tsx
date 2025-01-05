@@ -7,6 +7,8 @@ import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favo
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
 import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
 import { optimisticMaybe as optimisticMaybeDb, optimisticRemoveMaybe as optimisticRemoveMaybeDb } from '@/app/actions/maybes';
+import { updateTrip, updateTripFilters } from '@/app/actions/trips';
+import { tripFilters } from '@/constants/filters';
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -18,9 +20,9 @@ interface FilterOptions {
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
-  bedrooms: string;
-  beds: string;
-  baths: string;
+  bedrooms: number;
+  beds: number | null;
+  baths: number;
   furnished: boolean;
   unfurnished: boolean;
   utilities: string[];
@@ -111,9 +113,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     propertyTypes: [],
     minPrice: null,
     maxPrice: null,
-    bedrooms: '',
-    beds: '',
-    baths: '',
+    bedrooms: 0,
+    beds: 0,
+    baths: 0,
     furnished: false,
     unfurnished: false,
     utilities: [] as ('included' | 'notIncluded')[],
@@ -660,8 +662,15 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }));
   }, []);
 
-  const updateFilters = useCallback((newFilters: FilterOptions) => {
+  const updateFilters = useCallback(async (newFilters: FilterOptions) => {
     setFilters(newFilters);
+    const newTripFilters = {};
+    newTripFilters.maxPrice = newFilters.maxPrice
+    newTripFilters.minPrice = newFilters.minPrice
+    newTripFilters.searchRadius = newFilters.searchRadius
+    newTripFilters.searchRadius = newFilters.searchRadius
+
+    await updateTripFilters(trip.id, newTripFilters);
   }, []);
 
   const contextValue: TripContextType = {

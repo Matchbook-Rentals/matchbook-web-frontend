@@ -11,6 +11,8 @@ ACH PLAID API
 - [X] Search page
 --- add ability to save filters to trip in db, either add tripFilters model or pick and choose the best
 - [ ] Filters 
+- [ ] min adults 1 
+
 
 
 - [ ]  dialog finish, control active state for property type selection

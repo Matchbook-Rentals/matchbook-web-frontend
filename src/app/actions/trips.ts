@@ -1,4 +1,5 @@
 'use server'
+import { tripFilters } from '@/constants/filters';
 import prisma from '@/lib/prismadb';
 import { TripAndMatches } from '@/types/';
 import { auth } from '@clerk/nextjs/server';
@@ -115,7 +116,7 @@ export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMa
     const { id, ...tripData } = updatedTrip;
 
     // Remove related fields that can't be directly updated
-    const { matches, dislikes, favorites, housingRequests, allParticipants, ...updateData } = tripData;
+    const { matches, dislikes, favorites, housingRequests, maybes, allParticipants, ...updateData } = tripData;
 
     const updated = await prisma.trip.update({
       where: { id },
@@ -124,6 +125,7 @@ export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMa
         matches: true,
         dislikes: true,
         favorites: true,
+        maybes: true,
         housingRequests: true,
         allParticipants: true,
       },
@@ -132,7 +134,7 @@ export async function updateTrip(updatedTrip: TripAndMatches): Promise<TripAndMa
     return updated;
   } catch (error) {
     console.error('Error updating trip:', error);
-    throw new Error('Failed to update trip');
+    throw new Error(`Failed to update trip: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
   }
 }
 
@@ -311,3 +313,25 @@ export async function editTrip(tripId: string, tripData: {
   }
 }
 
+export const updateTripFilters = async (tripId: string, filters: Object): Promise<TripAndMatches> => {
+  // Check authentication
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    // Update trip with new filters
+    const updatedTrip = await prisma.trip.update({
+      where: { id: tripId },
+      data: { ...filters },
+    });
+
+    return updatedTrip;
+
+  } catch (error) {
+    console.log('FILTERS', filters)
+    console.error('Error updating trip filters:', error);
+    throw new Error('Failed to update trip filters');
+  }
+}

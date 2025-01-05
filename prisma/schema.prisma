@@ -72,7 +72,7 @@ model UserPreferences {
   bedroomCount       Int
   bathroomCount      Int
   furnished          Boolean  @default(false)
-  airConditioner       Boolean  @default(false)
+  airConditioner     Boolean  @default(false)
   laundryFacilites   Boolean  @default(false)
   inUnitWasher       Boolean  @default(false)
   inUnitDryer        Boolean  @default(false)
@@ -144,10 +144,10 @@ model Listing {
   longestLeasePrice      Int      @default(3500)
   furnished              Boolean  @default(false)
   utilitiesIncluded      Boolean  @default(false)
-  petsAllowed        Boolean @default(false)
+  petsAllowed            Boolean  @default(false)
 
   // General Amenities
-  airConditioning    Boolean @default(false)
+  airConditioner     Boolean @default(false)
   laundryFacilities  Boolean @default(false)
   fitnessCenter      Boolean @default(false)
   elevator           Boolean @default(false)
@@ -159,17 +159,17 @@ model Listing {
   dedicatedWorkspace Boolean @default(false)
   hairDryer          Boolean @default(false)
   iron               Boolean @default(false)
-  heater            Boolean @default(false)
+  heater             Boolean @default(false)
   hotTub             Boolean @default(false)
   smokingAllowed     Boolean @default(false)
   eventsAllowed      Boolean @default(false)
   privateEntrance    Boolean @default(false)
-  security             Boolean @default(false)
+  security           Boolean @default(false)
   waterfront         Boolean @default(false)
   beachfront         Boolean @default(false)
   mountainView       Boolean @default(false)
-  cityView       Boolean @default(false)
-  waterView         Boolean @default(false)
+  cityView           Boolean @default(false)
+  waterView          Boolean @default(false)
 
   // Washer and Dryer Options
   washerInUnit       Boolean @default(false)
@@ -206,7 +206,7 @@ model Listing {
   fireplace       Boolean @default(false)
   firepit         Boolean @default(false)
   pool            Boolean @default(false)
-  sauna            Boolean @default(false)
+  sauna           Boolean @default(false)
   jacuzzi         Boolean @default(false)
   grill           Boolean @default(false)
   oven            Boolean @default(false)
@@ -225,7 +225,6 @@ model Listing {
   garbageDisposal Boolean @default(false)
   dishwasher      Boolean @default(false)
   fridge          Boolean @default(false)
-
 
   //Furnished
   tv                Boolean @default(false)
@@ -321,28 +320,76 @@ model Booking {
 }
 
 model Trip {
-  id              String     @id @default(uuid())
-  locationString  String
-  latitude        Float      @default(0)
-  longitude       Float      @default(0)
-  city            String?
-  state           String?
-  postalCode      String?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @default(now()) @updatedAt
-  startDate       DateTime?
-  endDate         DateTime?
-  maxPrice        Int?
-  minBedroom      Int?
-  minBathroom     Int?
-  isSponsored     Boolean    @default(false)
-  numAdults       Int        @default(1)
-  numPets         Int        @default(0)
-  numChildren     Int        @default(0)
-  sponsorID       String?
-  userId          String
-  tripStatus      TripStatus @default(searching)
-  allParticipants User[]     @relation("TripParticipants")
+  id             String     @id @default(uuid())
+  locationString String
+  latitude       Float      @default(0)
+  longitude      Float      @default(0)
+  city           String?
+  state          String?
+  postalCode     String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now()) @updatedAt
+  startDate      DateTime?
+  endDate        DateTime?
+  minPrice       Int?
+  maxPrice       Int?
+  minBedroom     Int?
+  minBathroom    Int?
+  searchRadius   Float?     @default(50)
+  isSponsored    Boolean    @default(false)
+  numAdults      Int        @default(1)
+  numPets        Int        @default(0)
+  numChildren    Int        @default(0)
+  sponsorID      String?
+  userId         String
+  tripStatus     TripStatus @default(searching)
+
+  // Filter preferences
+  furnished         Boolean?
+  utilitiesIncluded Boolean?
+  petsAllowed       Boolean?
+
+  // General Amenities
+  airConditioner     Boolean?
+  laundryFacilities  Boolean?
+  fitnessCenter      Boolean?
+  elevator           Boolean?
+  wheelchairAccess   Boolean?
+  doorman            Boolean?
+  parking            Boolean?
+  wifi               Boolean?
+  kitchen            Boolean?
+  dedicatedWorkspace Boolean?
+  hairDryer          Boolean?
+  iron               Boolean?
+  heater             Boolean?
+  hotTub             Boolean?
+
+  // Washer and Dryer Preferences
+  washerInUnit    Boolean?
+  washerInComplex Boolean?
+  dryerInUnit     Boolean?
+  dryerInComplex  Boolean?
+
+  // Parking Preferences
+  offStreetParking Boolean?
+  streetParking    Boolean?
+  coveredParking   Boolean?
+  garageParking    Boolean?
+
+  // Pet Preferences
+  allowDogs Boolean?
+  allowCats Boolean?
+
+  // Structural Amenities
+  gym        Boolean?
+  balcony    Boolean?
+  patio      Boolean?
+  pool       Boolean?
+  fireplace  Boolean?
+  dishwasher Boolean?
+
+  allParticipants User[] @relation("TripParticipants")
 
   // Relationships
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
