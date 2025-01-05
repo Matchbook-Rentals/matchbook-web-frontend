@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 
 interface FilterOptions {
+  laundry: string[];
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
@@ -617,17 +618,61 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 <div className="space-y-4 border-b-2 py-6">
                   <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
                   <div className="flex items-center gap-4">
-                    <div className=" flex-col border-black space-y-[3px] ">
+                    <div className="flex-col border-black space-y-[3px]">
                       <AmenitiesIcons.DryerIcon className="w-[49px] h-[53px]" />
                       <AmenitiesIcons.WasherIcon className="w-[49px] h-[53px]" />
                     </div>
-                    <div className="flex flex-col justify-between space-y-3 ">
-                      {['In Unit', 'In Complex', 'Not Available'].map((option) => (
-                        <div className='flex items-center gap-x-2'>
-                          <Checkbox className='w-[25px] h-[25px] border-[#70707045] border-2' checkSize='h-5 w-5' />
-                          <p className='text-[#2D2F2E80] font-montserrat-medium'> {option} </p>
-                        </div>
-                      ))}
+                    <div className="flex flex-col justify-between space-y-3">
+                      {[
+                        { id: 'inUnit', label: 'In Unit', value: 'inUnit' },
+                        { id: 'inComplex', label: 'In Complex', value: 'inComplex' },
+                        { id: 'notAvailable', label: 'Not Available', value: 'notAvailable' }
+                      ].map((option, index) => {
+                        // Calculate if this option should be checked based on cascading logic
+                        const selectedOptions = localFilters.laundry || [];
+                        const isChecked = selectedOptions.includes(option.value);
+                        // If any lower option is selected, this one should be too
+                        const isCascadeChecked = selectedOptions.some((selected) => {
+                          const selectedIndex = ['inUnit', 'inComplex', 'notAvailable'].indexOf(selected);
+                          return selectedIndex >= index;
+                        });
+
+                        return (
+                          <div key={option.id} className='flex items-center gap-x-2'>
+                            <Checkbox
+                              id={option.id}
+                              checked={isChecked || isCascadeChecked}
+                              className='w-[25px] h-[25px] border-[#70707045] border-2'
+                              checkSize='h-5 w-5'
+                              onCheckedChange={(checked) => {
+                                let updatedLaundry = [...(localFilters.laundry || [])];
+
+                                if (checked) {
+                                  // When checking an option, add all options from this one up
+                                  const optionsToAdd = ['inUnit', 'inComplex', 'notAvailable']
+                                    .slice(0, index + 1)
+                                    .filter(opt => !updatedLaundry.includes(opt));
+                                  updatedLaundry = [...updatedLaundry, ...optionsToAdd];
+                                } else {
+                                  // When unchecking, remove this option and all worse options
+                                  updatedLaundry = updatedLaundry.filter((opt) => {
+                                    const optIndex = ['inUnit', 'inComplex', 'notAvailable'].indexOf(opt);
+                                    return optIndex < index;
+                                  });
+                                }
+
+                                handleLocalFilterChange('laundry', updatedLaundry);
+                              }}
+                            />
+                            <label
+                              htmlFor={option.id}
+                              className='text-[#2D2F2E80] font-montserrat-medium cursor-pointer'
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

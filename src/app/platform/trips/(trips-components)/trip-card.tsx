@@ -88,7 +88,15 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
         <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
         <h2 className='truncate'>{trip.searchRadius || '50 miles (m)'}</h2>
         <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
-        <h2 className='truncate'>{trip.maxPrice || '$ any'}</h2>
+        <h2 className='truncate'>
+          {/* Price display logic: shows range or 'any' if no prices set */}
+          {(() => {
+            if (!trip.minPrice && !trip.maxPrice) return '$ any';
+            if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice} - $${trip.maxPrice}`;
+            if (trip.minPrice) return `$${trip.minPrice} or more`;
+            if (trip.maxPrice) return `$${trip.maxPrice} or less`;
+          })()}
+        </h2>
 
       </div>
     </div >
