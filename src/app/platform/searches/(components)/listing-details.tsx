@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ListingAndImages } from '@/types';
-import { Home, Sofa, Zap, Dog, Star, Mountain, Trees, Tv, Car, Wifi, Coffee, Snowflake, Waves, Dumbbell, Lock, UtensilsCrossed, Bath, Warehouse } from 'lucide-react';
+import { Star } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import {
   Popover,
@@ -18,72 +18,11 @@ interface ListingDetailsProps {
   listing: ListingAndImages;
 }
 
-const getAmenityIcon = (amenity: string) => {
-  switch (amenity) {
-    // General Amenities
-    case 'laundryFacilities': return { icon: AmenitiesIcons.WasherIcon, label: 'Laundry Facilities' };
-    case 'fitnessCenter': return { icon: AmenitiesIcons.GymIcon, label: 'Fitness Center' };
-    case 'wheelchairAccess': return { icon: AmenitiesIcons.WheelchairAccessibleIcon, label: 'Wheelchair Access' };
-    case 'parking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Parking' };
-    case 'hotTub': return { icon: AmenitiesIcons.HotTubIcon, label: 'Hot Tub' };
-    case 'secure': return { icon: AmenitiesIcons.SecurityIcon, label: 'Secure' };
-    case 'waterfront': return { icon: AmenitiesIcons.WaterfrontIcon, label: 'Waterfront' };
-    case 'mountainView': return { icon: AmenitiesIcons.MountainViewIcon, label: 'Mountain View' };
-    case 'waterView': return { icon: AmenitiesIcons.WaterViewIcon, label: 'Water View' };
-    case 'cityView': return { icon: AmenitiesIcons.CityViewIcon, label: 'City View' };
-
-    // Parking Options
-    case 'streetParking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Street Parking' };
-    case 'streetParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Street Parking Free' };
-    case 'coveredParking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Covered Parking' };
-    case 'coveredParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Covered Parking Free' };
-    case 'uncoveredParking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Uncovered Parking' };
-    case 'uncoveredParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Uncovered Parking Free' };
-    case 'garageParking': return { icon: AmenitiesIcons.ParkingIcon, label: 'Garage Parking' };
-    case 'garageParkingFree': return { icon: AmenitiesIcons.ParkingIcon, label: 'Garage Parking Free' };
-    case 'evCharging': return { icon: AmenitiesIcons.EvChargingIcon, label: 'EV Charging' };
-
-    // Structural Amenities
-    case 'gym': return { icon: AmenitiesIcons.GymIcon, label: 'Gym' };
-    case 'balcony': return { icon: AmenitiesIcons.BalconyIcon, label: 'Balcony' };
-    case 'patio': return { icon: AmenitiesIcons.PatioIcon, label: 'Patio' };
-    case 'sunroom': return { icon: AmenitiesIcons.SunroomIcon, label: 'Sunroom' };
-    case 'pool': return { icon: AmenitiesIcons.PoolIcon, label: 'Pool' };
-    case 'hottub': return { icon: AmenitiesIcons.HotTubIcon, label: 'Hot Tub' };
-    case 'sauna': return { icon: AmenitiesIcons.SaunaIcon, label: 'Sauna' };
-    case 'grill': return { icon: AmenitiesIcons.GrillIcon, label: 'Grill' };
-    case 'wheelAccessible': return { icon: AmenitiesIcons.WheelchairAccessibleIcon, label: 'Wheel Accessible' };
-    case 'fencedInYard': return { icon: AmenitiesIcons.FencedYardIcon, label: 'Fenced In Yard' };
-    case 'security': return { icon: AmenitiesIcons.SecurityIcon, label: 'Secure Lobby' };
-    case 'keylessEntry': return { icon: AmenitiesIcons.KeylessEntryIcon, label: 'Keyless Entry' };
-    case 'gatedEntry': return { icon: AmenitiesIcons.GatedEntryIcon, label: 'Gated Entry' };
-    case 'alarmSystem': return { icon: AmenitiesIcons.AlarmSystemIcon, label: 'Alarm System' };
-    case 'smokeDetector': return { icon: AmenitiesIcons.SmokeDetectorIcon, label: 'Smoke Det' };
-    case 'carbonMonoxideDetector': return { icon: AmenitiesIcons.CarbonMonoxideDetectorIcon, label: 'CO Detector' };
-
-    // Kitchen
-    case 'garbageDisposal': return { icon: AmenitiesIcons.GarbageDisposalIcon, label: 'Garbage Disposal' };
-    case 'dishwasher': return { icon: AmenitiesIcons.DishwasherIcon, label: 'Dishwasher' };
-
-    // Furnished
-    case 'tv': return { icon: Dumbbell, label: 'TV' };
-    case 'workstation': return { icon: Dumbbell, label: 'Workstation' };
-    case 'microwave': return { icon: Dumbbell, label: 'Microwave' };
-    case 'kitchenEssentails': return { icon: Dumbbell, label: 'Kitchen Essentials' };
-    case 'linens': return { icon: Dumbbell, label: 'Linens' };
-    case 'privateBathroom': return { icon: Dumbbell, label: 'Private Bathroom' };
-    case 'washerInUnit': return { icon: AmenitiesIcons.WasherIcon, label: 'In Unit' };
-    case 'washerInComplex': return { icon: AmenitiesIcons.WasherIcon, label: 'In Complex' };
-
-    default: return { icon: Dumbbell, label: amenity };
-  }
-};
-
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
 
 
-  const getRandomAmenities = () => {
+  const getListingAmenities = () => {
     const displayAmenities = [];
     for (let amenity of iconAmenities) {
       if (listing[amenity.code]) {
@@ -100,7 +39,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <img
-              src={listing.user.imageUrl}
+              src={listing.user?.imageUrl}
               alt="Host"
               className="w-full h-full object-cover"
             />
@@ -341,13 +280,14 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           Amenities {showAllAmenities ? '(show less)' : '(show more)'}
         </h3>
         <div className="grid grid-cols-[repeat(auto-fit,104px)] gap-6 justify-between">
-          {(showAllAmenities ? iconAmenities : getRandomAmenities()).map((amenity) => {
-            const { icon: Icon, label } = getAmenityIcon(amenity.code);
+          {(showAllAmenities ? iconAmenities : getListingAmenities()).map((amenity) => {
+            const { icon: Icon, label } = amenity;
+
             return (
               <Tile
                 key={amenity.code}
-                icon={<Icon className="max-h-[40px] max-w-[40px]" />}
-                label={label}
+                icon={Icon ? <Icon className="max-h-[40px] max-w-[40px]" /> : <Star className="text-red-500 max-h-[40px] max-w-[40px]" />}
+                label={Icon ? label : `Missing: ${label}`}
                 labelClassNames="text-[14px] text-[#404040]"
                 className="h-[104px] w-[104px]"
               />

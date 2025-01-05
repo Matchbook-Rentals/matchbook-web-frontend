@@ -11,6 +11,7 @@ ACH PLAID API
 - [X] Search page
 --- add ability to save filters to trip in db, either add tripFilters model or pick and choose the best
 - [ ] Filters 
+-------laundry
 - [ ] min adults 1 
 
 

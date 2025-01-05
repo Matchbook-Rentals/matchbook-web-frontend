@@ -8,14 +8,12 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
-import { CheckboxDemo } from '@/app/platform/preferences/custom-checkbox';
 import { Checkbox } from '@/components/ui/checkbox';
 
 
 interface FilterOptions {
   propertyTypes: string[];
   minPrice: number | null;
-  maxPrice: number | null;
   maxPrice: number | null;
   bedrooms: string;
   beds: string;
