@@ -1,133 +1,133 @@
 type FilterType = 'boolean' | 'number' | 'string' | 'datetime';
 
+export enum CategoryType {
+  HIGHLIGHT = 'highlight',
+  PROPERTY_TYPE = 'propertyType',
+  ACCESSIBILITY = 'accessibility',
+  LOCATION = 'location',
+  PARKING = 'parking',
+  KITCHEN = 'kitchen',
+  CLIMATE_CONTROL = 'climateControl',
+  LUXURY = 'luxury',
+  WASHER_DRYER = 'washerDryer',
+  PETS = 'pets',
+  GENERAL = 'general'
+}
+
 interface Filter {
   name: string;
   type: FilterType;
+  category: 'highlight' | 'propertyType' | 'accessibility' | 'location' | 'parking' | 'kitchen' | 'climateControl' | 'luxury' | 'washerDryer' | 'pets' | 'general';
 }
 
 export const filters: Filter[] = [
-  // Location and Basic Info
-  { name: 'locationString', type: 'string' },
-  { name: 'latitude', type: 'number' },
-  { name: 'longitude', type: 'number' },
-  { name: 'city', type: 'string' },
-  { name: 'state', type: 'string' },
-  { name: 'postalCode', type: 'string' },
-  { name: 'startDate', type: 'datetime' },
-  { name: 'endDate', type: 'datetime' },
-  { name: 'numAdults', type: 'number' },
-  { name: 'numPets', type: 'number' },
-  { name: 'numChildren', type: 'number' },
-
   // Numeric Filters
-  { name: 'minPrice', type: 'number' },
-  { name: 'maxPrice', type: 'number' },
-  { name: 'minBeds', type: 'number' },
-  { name: 'minBedroom', type: 'number' },
-  { name: 'minBathroom', type: 'number' },
-  { name: 'searchRadius', type: 'number' },
+  { name: 'minPrice', type: 'number', category: 'general' },
+  { name: 'maxPrice', type: 'number', category: 'general' },
+  { name: 'minBeds', type: 'number', category: 'general' },
+  { name: 'minBedroom', type: 'number', category: 'general' },
+  { name: 'minBathroom', type: 'number', category: 'general' },
+  { name: 'searchRadius', type: 'number', category: 'general' },
 
   // Highlight Filters
-  { name: 'furnished', type: 'boolean' },
-  { name: 'unfurnished', type: 'boolean' },
-  { name: 'utilitiesIncluded', type: 'boolean' },
-  { name: 'utilitiesNotIncluded', type: 'boolean' },
-  { name: 'petsAllowed', type: 'boolean' },
-  { name: 'petsNotAllowed', type: 'boolean' },
+  { name: 'furnished', type: 'boolean', category: 'highlight' },
+  { name: 'unfurnished', type: 'boolean', category: 'highlight' },
+  { name: 'utilitiesIncluded', type: 'boolean', category: 'highlight' },
+  { name: 'utilitiesNotIncluded', type: 'boolean', category: 'highlight' },
+  { name: 'petsAllowed', type: 'boolean', category: 'highlight' },
+  { name: 'petsNotAllowed', type: 'boolean', category: 'highlight' },
 
-  // General Amenities
-  { name: 'airConditioner', type: 'boolean' },
-  { name: 'laundryFacilities', type: 'boolean' },
-  { name: 'fitnessCenter', type: 'boolean' },
-  { name: 'elevator', type: 'boolean' },
-  { name: 'wheelchairAccess', type: 'boolean' },
-  { name: 'doorman', type: 'boolean' },
-  { name: 'parking', type: 'boolean' },
-  { name: 'wifi', type: 'boolean' },
-  { name: 'kitchen', type: 'boolean' },
-  { name: 'dedicatedWorkspace', type: 'boolean' },
-  { name: 'hairDryer', type: 'boolean' },
-  { name: 'iron', type: 'boolean' },
-  { name: 'heater', type: 'boolean' },
-  { name: 'hotTub', type: 'boolean' },
-  { name: 'smokingAllowed', type: 'boolean' },
-  { name: 'eventsAllowed', type: 'boolean' },
-  { name: 'privateEntrance', type: 'boolean' },
-  { name: 'security', type: 'boolean' },
-  { name: 'waterfront', type: 'boolean' },
-  { name: 'beachfront', type: 'boolean' },
-  { name: 'mountainView', type: 'boolean' },
-  { name: 'cityView', type: 'boolean' },
-  { name: 'waterView', type: 'boolean' },
+  // Property Type
+  { name: 'singleFamily', type: 'boolean', category: 'propertyType' },
+  { name: 'privateRoom', type: 'boolean', category: 'propertyType' },
+  { name: 'apartment', type: 'boolean', category: 'propertyType' },
+  { name: 'townhouse', type: 'boolean', category: 'propertyType' },
+
+  // Accessibility
+  { name: 'wheelchairAccess', type: 'boolean', category: 'accessibility' },
+  { name: 'fencedInYard', type: 'boolean', category: 'accessibility' },
+  { name: 'keylessEntry', type: 'boolean', category: 'accessibility' },
+  { name: 'alarmSystem', type: 'boolean', category: 'accessibility' },
+  { name: 'gatedEntry', type: 'boolean', category: 'accessibility' },
+  { name: 'smokeDetector', type: 'boolean', category: 'accessibility' },
+  { name: 'carbonMonoxide', type: 'boolean', category: 'accessibility' },
+  { name: 'security', type: 'boolean', category: 'accessibility' },
+
+  // Location
+  { name: 'mountainView', type: 'boolean', category: 'location' },
+  { name: 'cityView', type: 'boolean', category: 'location' },
+  { name: 'waterfront', type: 'boolean', category: 'location' },
+  { name: 'waterView', type: 'boolean', category: 'location' },
+  { name: 'beachfront', type: 'boolean', category: 'location' },
+
+  // Climate Control
+  { name: 'fireplace', type: 'boolean', category: 'climateControl' },
+  { name: 'heater', type: 'boolean', category: 'climateControl' },
+  { name: 'dedicatedWorkspace', type: 'boolean', category: 'climateControl' },
+  { name: 'airConditioner', type: 'boolean', category: 'climateControl' },
+
+  // Luxury
+  { name: 'gym', type: 'boolean', category: 'luxury' },
+  { name: 'sauna', type: 'boolean', category: 'luxury' },
+  { name: 'balcony', type: 'boolean', category: 'luxury' },
+  { name: 'pool', type: 'boolean', category: 'luxury' },
+  { name: 'hotTub', type: 'boolean', category: 'luxury' },
+  { name: 'patio', type: 'boolean', category: 'luxury' },
+  { name: 'sunroom', type: 'boolean', category: 'luxury' },
 
   // Washer and Dryer Options
-  { name: 'washerInUnit', type: 'boolean' },
-  { name: 'washerHookup', type: 'boolean' },
-  { name: 'washerNotAvailable', type: 'boolean' },
-  { name: 'washerInComplex', type: 'boolean' },
-  { name: 'dryerInUnit', type: 'boolean' },
-  { name: 'dryerHookup', type: 'boolean' },
-  { name: 'dryerNotAvailable', type: 'boolean' },
-  { name: 'dryerInComplex', type: 'boolean' },
+  { name: 'washerInUnit', type: 'boolean', category: 'washerDryer' },
+  { name: 'washerHookup', type: 'boolean', category: 'washerDryer' },
+  { name: 'washerNotAvailable', type: 'boolean', category: 'washerDryer' },
+  { name: 'washerInComplex', type: 'boolean', category: 'washerDryer' },
+  { name: 'dryerInUnit', type: 'boolean', category: 'washerDryer' },
+  { name: 'dryerHookup', type: 'boolean', category: 'washerDryer' },
+  { name: 'dryerNotAvailable', type: 'boolean', category: 'washerDryer' },
+  { name: 'dryerInComplex', type: 'boolean', category: 'washerDryer' },
 
   // Parking Options
-  { name: 'offStreetParking', type: 'boolean' },
-  { name: 'streetParking', type: 'boolean' },
-  { name: 'streetParkingFree', type: 'boolean' },
-  { name: 'coveredParking', type: 'boolean' },
-  { name: 'coveredParkingFree', type: 'boolean' },
-  { name: 'uncoveredParking', type: 'boolean' },
-  { name: 'uncoveredParkingFree', type: 'boolean' },
-  { name: 'garageParking', type: 'boolean' },
-  { name: 'garageParkingFree', type: 'boolean' },
-  { name: 'evCharging', type: 'boolean' },
-
-  // Pet Policies
-  { name: 'allowDogs', type: 'boolean' },
-  { name: 'allowCats', type: 'boolean' },
-
-  // Structural Amenities
-  { name: 'gym', type: 'boolean' },
-  { name: 'balcony', type: 'boolean' },
-  { name: 'patio', type: 'boolean' },
-  { name: 'sunroom', type: 'boolean' },
-  { name: 'fireplace', type: 'boolean' },
-  { name: 'firepit', type: 'boolean' },
-  { name: 'pool', type: 'boolean' },
-  { name: 'sauna', type: 'boolean' },
-  { name: 'jacuzzi', type: 'boolean' },
-  { name: 'grill', type: 'boolean' },
-  { name: 'oven', type: 'boolean' },
-  { name: 'stove', type: 'boolean' },
-  { name: 'wheelAccessible', type: 'boolean' },
-  { name: 'fencedInYard', type: 'boolean' },
-  { name: 'secureLobby', type: 'boolean' },
-  { name: 'keylessEntry', type: 'boolean' },
-  { name: 'alarmSystem', type: 'boolean' },
-  { name: 'storageShed', type: 'boolean' },
-  { name: 'gatedEntry', type: 'boolean' },
-  { name: 'smokeDetector', type: 'boolean' },
-  { name: 'carbonMonoxide', type: 'boolean' },
+  { name: 'offStreetParking', type: 'boolean', category: 'parking' },
+  { name: 'evCharging', type: 'boolean', category: 'parking' },
+  { name: 'garageParking', type: 'boolean', category: 'parking' },
 
   // Kitchen
-  { name: 'garbageDisposal', type: 'boolean' },
-  { name: 'dishwasher', type: 'boolean' },
-  { name: 'fridge', type: 'boolean' },
+  { name: 'garbageDisposal', type: 'boolean', category: 'kitchen' },
+  { name: 'dishwasher', type: 'boolean', category: 'kitchen' },
+  { name: 'fridge', type: 'boolean', category: 'kitchen' },
+  { name: 'oven', type: 'boolean', category: 'kitchen' },
+  { name: 'grill', type: 'boolean', category: 'kitchen' },
+  { name: 'kitchenEssentials', type: 'boolean', category: 'kitchen' },
 
-  // Furnished
-  { name: 'tv', type: 'boolean' },
-  { name: 'workstation', type: 'boolean' },
-  { name: 'microwave', type: 'boolean' },
-  { name: 'kitchenEssentials', type: 'boolean' },
-  { name: 'linens', type: 'boolean' },
-  { name: 'privateBathroom', type: 'boolean' }
+  // General Amenities (remaining items that don't fit specific categories)
+  { name: 'laundryFacilities', type: 'boolean', category: 'general' },
+  { name: 'elevator', type: 'boolean', category: 'general' },
+  { name: 'doorman', type: 'boolean', category: 'general' },
+  { name: 'wifi', type: 'boolean', category: 'general' },
+  { name: 'hairDryer', type: 'boolean', category: 'general' },
+  { name: 'iron', type: 'boolean', category: 'general' },
+  { name: 'smokingAllowed', type: 'boolean', category: 'general' },
+  { name: 'eventsAllowed', type: 'boolean', category: 'general' },
+  { name: 'privateEntrance', type: 'boolean', category: 'general' },
+  { name: 'tv', type: 'boolean', category: 'general' },
+  { name: 'workstation', type: 'boolean', category: 'general' },
+  { name: 'microwave', type: 'boolean', category: 'general' },
+  { name: 'linens', type: 'boolean', category: 'general' },
+  { name: 'privateBathroom', type: 'boolean', category: 'general' },
+  { name: 'storageShed', type: 'boolean', category: 'general' },
+  { name: 'secureLobby', type: 'boolean', category: 'general' },
+  { name: 'firepit', type: 'boolean', category: 'general' },
+  { name: 'jacuzzi', type: 'boolean', category: 'general' },
+
+  // Pet Policies
+  { name: 'allowDogs', type: 'boolean', category: 'pets' },
+  { name: 'allowCats', type: 'boolean', category: 'pets' }
 ];
 
 // Helper type for filter names
 export type FilterName = typeof filters[number]['name'];
 
 // Helper functions to get filters by type
-export const getFiltersByType = (type: FilterType) =>
+export const getFiltersByType = (type: FilterType): { name: string, type: string }[] =>
   filters.filter(filter => filter.type === type);
 
 export const getBooleanFilters = () => getFiltersByType('boolean');
@@ -136,18 +136,7 @@ export const getStringFilters = () => getFiltersByType('string');
 export const getDateFilters = () => getFiltersByType('datetime');
 
 // Helper function to get filters by category
-export const getFiltersByCategory = (category: string) => {
-  const categories: { [key: string]: string[] } = {
-    'highlight': ['furnished', 'unfurnished', 'utilitiesIncluded', 'utilitiesNotIncluded', 'petsAllowed', 'petsNotAllowed'],
-    'general': ['airConditioner', 'laundryFacilities', 'fitnessCenter', /* ... */],
-    'washerDryer': ['washerInUnit', 'washerHookup', 'washerNotAvailable', /* ... */],
-    'parking': ['offStreetParking', 'streetParking', 'streetParkingFree', /* ... */],
-    'pets': ['allowDogs', 'allowCats'],
-    'structural': ['gym', 'balcony', 'patio', /* ... */],
-    'kitchen': ['garbageDisposal', 'dishwasher', 'fridge'],
-    'furnished': ['tv', 'workstation', 'microwave', /* ... */]
-  };
-
-  return filters.filter(filter => categories[category]?.includes(filter.name));
+export const getFiltersByCategory = (category: CategoryType) => {
+  return filters.filter(filter => filter.category === category);
 };
 

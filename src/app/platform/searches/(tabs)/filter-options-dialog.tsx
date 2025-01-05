@@ -106,7 +106,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     },
     {
       value: 'carbonMonoxide',
-      label: 'Carbon Monoxide Detector',
+      label: 'CO Detector',
       icon: <AmenitiesIcons.CarbonMonoxideDetectorIcon className="p-1 mt-2" />
     },
     {

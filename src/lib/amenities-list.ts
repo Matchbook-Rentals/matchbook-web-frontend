@@ -72,7 +72,7 @@ const amenities = [
   { code: 'storageShed', label: 'Storage Shed', icon: Dumbbell },
   { code: 'gatedEntry', label: 'Gated Entry', icon: AmenitiesIcons.GatedEntryIcon },
   { code: 'smokeDetector', label: 'Smoke Detector', icon: AmenitiesIcons.SmokeDetectorIcon },
-  { code: 'carbonMonoxide', label: 'Carbon Monoxide Detector', icon: AmenitiesIcons.CarbonMonoxideDetectorIcon },
+  { code: 'carbonMonoxide', label: 'CO Detector', icon: AmenitiesIcons.CarbonMonoxideDetectorIcon },
 
   // Kitchen
   { code: 'garbageDisposal', label: 'Garbage Disposal', icon: AmenitiesIcons.GarbageDisposalIcon },

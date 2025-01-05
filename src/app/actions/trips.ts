@@ -1,6 +1,6 @@
 'use server'
-import { tripFilters } from '@/constants/filters';
 import prisma from '@/lib/prismadb';
+import { revalidateTag } from 'next/cache';
 import { TripAndMatches } from '@/types/';
 import { auth } from '@clerk/nextjs/server';
 import { Trip } from '@prisma/client';
@@ -325,7 +325,20 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
     const updatedTrip = await prisma.trip.update({
       where: { id: tripId },
       data: { ...filters },
+      include: {
+        matches: true,
+        dislikes: true,
+        favorites: true,
+        maybes: true,
+        housingRequests: true,
+        allParticipants: true,
+      },
     });
+
+    // Revalidate the cache for this specific trip
+    await Promise.all([
+      revalidateTag(`trip-${tripId}`),
+    ]);
 
     return updatedTrip;
 

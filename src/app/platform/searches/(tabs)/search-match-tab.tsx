@@ -296,7 +296,7 @@ const MatchViewTab: React.FC = () => {
                 <span className="text-[24px] text-[#404040] font-montserrat-regular w-2/3 truncate">
                   {showListings[0].locationString}
                 </span>
-                <span className="text-[24px] text-[#404040] font-montserrat-regular">
+                <span onClick={() => console.log(state.trip)} className="text-[24px] text-[#404040] font-montserrat-regular">
                   {showListings[0].distance?.toFixed(0)} miles
                 </span>
               </div>

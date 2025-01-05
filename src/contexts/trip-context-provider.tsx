@@ -8,7 +8,7 @@ import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/di
 import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housing-requests';
 import { optimisticMaybe as optimisticMaybeDb, optimisticRemoveMaybe as optimisticRemoveMaybeDb } from '@/app/actions/maybes';
 import { updateTrip, updateTripFilters } from '@/app/actions/trips';
-import { tripFilters } from '@/constants/filters';
+import { CategoryType, getBooleanFilters, getFiltersByCategory, tripFilters } from '@/constants/filters';
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -110,25 +110,65 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     maybeIds: new Set()
   });
   const [filters, setFilters] = useState<FilterOptions>({
-    propertyTypes: [],
-    minPrice: null,
-    maxPrice: null,
+    minPrice: tripData.minPrice || null,
+    maxPrice: tripData.maxPrice || null,
     bedrooms: 0,
     beds: 0,
     baths: 0,
-    furnished: false,
-    unfurnished: false,
-    utilities: [] as ('included' | 'notIncluded')[],
-    pets: [] as ('allowed' | 'notAllowed')[],
-    searchRadius: 50,
-    accessibility: [],
-    location: [],
-    parking: [],
-    kitchen: [],
-    climateControl: [],
-    luxury: [],
-    laundry: [],
+    furnished: tripData.furnished || false,
+    unfurnished: tripData.unfurnished || false,
+    propertyTypes: [
+      ...getFiltersByCategory(CategoryType.PROPERTY_TYPE)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    utilities: [
+      ...(tripData.utilitiesIncluded ? ['included'] : []),
+      ...(tripData.utilitiesNotIncluded ? ['notIncluded'] : [])
+    ] as ('included' | 'notIncluded')[],
+    pets: [
+      ...(tripData.petsAllowed ? ['allowed'] : []),
+      ...(tripData.petsNotAllowed ? ['notAllowed'] : [])
+    ] as ('allowed' | 'notAllowed')[],
+    searchRadius: tripData.searchRadius || 50,
+    accessibility: [
+      ...getFiltersByCategory(CategoryType.ACCESSIBILITY)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    location: [
+      ...getFiltersByCategory(CategoryType.LOCATION)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    parking: [
+      ...getFiltersByCategory(CategoryType.PARKING)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    kitchen: [
+      ...getFiltersByCategory(CategoryType.KITCHEN)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    climateControl: [
+      ...getFiltersByCategory(CategoryType.CLIMATE_CONTROL)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    luxury: [
+      ...getFiltersByCategory(CategoryType.LUXURY)
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
+    laundry: [
+      ...getFiltersByCategory('laundry')
+        .filter(amen => tripData[amen.name])
+        .map(amen => amen.name)
+    ],
   });
+
+
 
   // Calculate U-Score for a listing
   const calculateUScore = (
@@ -271,8 +311,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // Utilities filter
       const matchesUtilities =
         filters.utilities.length === 0 || filters.utilities.length === 2 ||
-        (filters.utilities.includes('included') && listing.utilitiesIncluded === true) ||
-        (filters.utilities.includes('notIncluded') && listing.utilitiesIncluded === false);
+        (filters.utilities.includes('included') && listing.utilitiesIncluded) ||
+        (filters.utilities.includes('notIncluded') && !listing.utilitiesIncluded);
 
       // Pets filter
       const matchesPets =
@@ -664,13 +704,36 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const updateFilters = useCallback(async (newFilters: FilterOptions) => {
     setFilters(newFilters);
-    const newTripFilters = {};
-    newTripFilters.maxPrice = newFilters.maxPrice
-    newTripFilters.minPrice = newFilters.minPrice
-    newTripFilters.searchRadius = newFilters.searchRadius
-    newTripFilters.searchRadius = newFilters.searchRadius
+    const dbFilters = {
+      maxPrice: newFilters.maxPrice,
+      minPrice: newFilters.minPrice,
+      searchRadius: newFilters.searchRadius,
+      furnished: newFilters.furnished,
+      unfurnished: newFilters.unfurnished
+    };
 
-    await updateTripFilters(trip.id, newTripFilters);
+    // Initialize all boolean filters to false first
+    const boolFilters = getBooleanFilters();
+    boolFilters.forEach(filter => {
+      dbFilters[filter.name] = false;
+    });
+
+    // Then set true for the ones that are selected in any array
+    for (const [key, value] of Object.entries(newFilters)) {
+      if (Array.isArray(value)) {
+        // For each selected value in the array
+        value.forEach(selectedValue => {
+          // Find the matching filter and set it to true
+          const matchingFilter = boolFilters.find(filter => filter.name === selectedValue);
+          if (matchingFilter) {
+            dbFilters[matchingFilter.name] = true;
+          }
+        });
+      }
+    }
+
+
+    await updateTripFilters(trip.id, dbFilters);
   }, []);
 
   const contextValue: TripContextType = {
