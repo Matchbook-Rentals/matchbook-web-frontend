@@ -82,19 +82,15 @@ const getAmenityIcon = (amenity: string) => {
 const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
 
-  const getRandomAmenities = () => {
-    const shuffled = [...iconAmenities].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 6);
-  };
 
-  const getRandomHighlights = () => {
-    const baseHighlights = [
-      { type: "category", value: listing.category },
-      { type: "furnished", value: listing.furnished },
-      { type: "utilities", value: listing.utilitiesIncluded },
-      { type: "pets", value: listing.petFriendly },
-    ];
-    return baseHighlights.slice(0, 4);
+  const getRandomAmenities = () => {
+    const displayAmenities = [];
+    for (let amenity of iconAmenities) {
+      if (listing[amenity.code]) {
+        displayAmenities.push(amenity);
+      }
+    }
+    return displayAmenities
   };
 
   return (
@@ -110,7 +106,8 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
             />
           </div>
           <div className=''>
-            <p className="text-xl md:text-[24px] text-[#404040] font-medium pb-2 font-montserrat">Hosted by Daniel</p>
+            <p className="text-xl md:text-[24px] text-[#404040] font-medium pb-2 font-montserrat">
+              Hosted by {listing.user?.firstName || listing.user?.email}</p>
             <p className="text-gray-600 md:text-lg lg:text-xl">
               2 years on Matchbook
             </p>
@@ -174,7 +171,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           {!showAllAmenities ? (
             <>
               {/* Property Type */}
-              {listing.category === "singleFamily" || "single_family" && (
+              {listing.category === "singleFamily" && (
                 <Tile
 
                   icon={<AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />}
@@ -243,7 +240,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
               )}
 
               {/* Pets */}
-              {listing.petFriendly ? (
+              {listing.petsAllowed ? (
                 <Tile
                   icon={<AmenitiesIcons.PetFriendlyIcon className="mt-4" />}
                   label="Pets Allowed"
@@ -330,7 +327,8 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       <div className="py-12 border-b border-[#D8D9D8]">
         <h3 className="text-2xl font-medium mb-4">Description</h3>
         <p className="text-gray-600 leading-relaxed">
-          Our spacious home, located just a 20-minute drive from ski resorts and a 2-minute drive from downtown Ogden, is the perfect centrally located home for your Utah stay. With modern updates, a private front porch *with mountain views*, and a wonderfully manicured backyard with a gas fire pit and outdoor dining area, this home is well equipped to host large Families, or even guests just looking for a peaceful getaway.
+          {listing.description ||
+            'Our spacious home, located just a 20-minute drive from ski resorts and a 2-minute drive from downtown Ogden, is the perfect centrally located home for your Utah stay. With modern updates, a private front porch *with mountain views*, and a wonderfully manicured backyard with a gas fire pit and outdoor dining area, this home is well equipped to host large Families, or even guests just looking for a peaceful getaway. '}
         </p>
       </div>
 
