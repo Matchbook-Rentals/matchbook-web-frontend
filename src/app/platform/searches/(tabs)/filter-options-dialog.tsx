@@ -1,7 +1,7 @@
 //Imports
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import CategoryFilter from '../(components)/CategoryFilter';
 import Tile from "@/components/ui/tile";
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -390,13 +390,10 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       </DialogTrigger>
 
       {/* Main Dialog Content */}
-      <DialogContent className="sm:max-w-[536px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
-        {/* Dialog Header */}
-        <div className="px-4 pt-2">
-          <div className="flex justify-center border-b border-gray-300 items-center mb-0">
-            <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
-          </div>
-        </div>
+      <DialogContent aria-describedby='Filter selection modal' className="sm:max-w-[536px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
+        <DialogTitle className='px-4 py-4 border-b border-gray-300'>
+          <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
+        </DialogTitle>
         {/* Scrollable Filter Content Area */}
         <ScrollArea className="flex-1 px-6">
           <div className="">
