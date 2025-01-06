@@ -9,11 +9,11 @@ ACH PLAID API
 - [ ] mobile popover
 - [ ] calendars
 - [X] Search page
---- add ability to save filters to trip in db, either add tripFilters model or pick and choose the best
 - [ ] Filters 
 -------laundry
 - [ ] min adults 1 
-
+- [ ] Double check all icon sizing in detials tiles and filter tiles 
+- [ ] Maps over to free maps
 
 
 - [ ]  dialog finish, control active state for property type selection

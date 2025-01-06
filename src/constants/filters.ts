@@ -9,7 +9,7 @@ export enum CategoryType {
   KITCHEN = 'kitchen',
   CLIMATE_CONTROL = 'climateControl',
   LUXURY = 'luxury',
-  WASHER_DRYER = 'washerDryer',
+  LAUNDRY = 'laundry',
   PETS = 'pets',
   GENERAL = 'general'
 }
@@ -17,7 +17,7 @@ export enum CategoryType {
 interface Filter {
   name: string;
   type: FilterType;
-  category: 'highlight' | 'propertyType' | 'accessibility' | 'location' | 'parking' | 'kitchen' | 'climateControl' | 'luxury' | 'washerDryer' | 'pets' | 'general';
+  category: 'highlight' | 'propertyType' | 'accessibility' | 'location' | 'parking' | 'kitchen' | 'climateControl' | 'luxury' | 'laundry' | 'pets' | 'general';
 }
 
 export const filters: Filter[] = [
@@ -76,14 +76,14 @@ export const filters: Filter[] = [
   { name: 'sunroom', type: 'boolean', category: 'luxury' },
 
   // Washer and Dryer Options
-  { name: 'washerInUnit', type: 'boolean', category: 'washerDryer' },
-  { name: 'washerHookup', type: 'boolean', category: 'washerDryer' },
-  { name: 'washerNotAvailable', type: 'boolean', category: 'washerDryer' },
-  { name: 'washerInComplex', type: 'boolean', category: 'washerDryer' },
-  { name: 'dryerInUnit', type: 'boolean', category: 'washerDryer' },
-  { name: 'dryerHookup', type: 'boolean', category: 'washerDryer' },
-  { name: 'dryerNotAvailable', type: 'boolean', category: 'washerDryer' },
-  { name: 'dryerInComplex', type: 'boolean', category: 'washerDryer' },
+  { name: 'washerInUnit', type: 'boolean', category: 'laundry' },
+  { name: 'washerHookup', type: 'boolean', category: 'laundry' },
+  { name: 'washerNotAvailable', type: 'boolean', category: 'laundry' },
+  { name: 'washerInComplex', type: 'boolean', category: 'laundry' },
+  { name: 'dryerInUnit', type: 'boolean', category: 'laundry' },
+  { name: 'dryerHookup', type: 'boolean', category: 'laundry' },
+  { name: 'dryerNotAvailable', type: 'boolean', category: 'laundry' },
+  { name: 'dryerInComplex', type: 'boolean', category: 'laundry' },
 
   // Parking Options
   { name: 'offStreetParking', type: 'boolean', category: 'parking' },

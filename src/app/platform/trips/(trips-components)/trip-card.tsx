@@ -108,7 +108,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             onClick={handleDeleteClick}
             className="absolute opacity-0 group-hover:opacity-100 flex top-2 left-2 p-1.5 bg-background/60 rounded-full cursor-pointer hover:bg-background transition-opacity duration-200 ease-in-out"
           >
-            <Trash2 className="w-4 h-4 text-[#404040]" />
+            <Trash2 className="w-5 h-5 text-[#404040]" />
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()} className='absolute z-50'>
@@ -119,13 +119,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                 Are you sure you want to delete this search and any matches you&apos;ve made? This action cannot be undone.
               </p>
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={(e) => {
+                <Button className='bg-background hover:bg-gray-100 text-[#404040] font-montserrat font-medium border rounded-md' onClick={(e) => {
                   e.stopPropagation();
                   setIsDeleteDialogOpen(false);
                 }}>
                   Cancel
                 </Button>
-                <Button variant="destructive" className='text-background' onClick={(e) => {
+                <Button className='bg-red-700 hover:bg-red-600 font-montserrat font-semibold' onClick={(e) => {
                   e.stopPropagation();
                   confirmDelete();
                 }}>

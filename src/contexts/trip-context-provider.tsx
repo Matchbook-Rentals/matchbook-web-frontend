@@ -162,7 +162,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         .map(amen => amen.name)
     ],
     laundry: [
-      ...getFiltersByCategory('laundry')
+      ...getFiltersByCategory(CategoryType.LAUNDRY)
         .filter(amen => tripData[amen.name])
         .map(amen => amen.name)
     ],
@@ -339,8 +339,11 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesLuxury = filters.luxury?.length === 0 ||
         filters.luxury?.every(amenity => listing[amenity]);
 
-      const matchesLaundry = filters.laundry?.length === 0 ||
-        filters.laundry?.every(option => listing[option]);
+      // Reason for filter.laundry.length ===3 is right now we are only doing a check for 
+      // (inComplex, inUnit, notAvailable). If we need to add dryer or
+      // another category this must change
+      const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
+        filters.laundry?.some(option => listing[option]);
 
       // Return true if the listing meets all criteria
       return isNotFavorited &&

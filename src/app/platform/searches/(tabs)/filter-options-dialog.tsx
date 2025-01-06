@@ -314,8 +314,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesLuxury = localFilters.luxury?.length === 0 ||
         localFilters.luxury?.every(option => listing[option]);
 
-      const matchesLaundry = localFilters.laundry?.length === 0 ||
-        localFilters.laundry?.every(option => listing[option]);
+      // Reason for filter.laundry.length ===3 is right now we are only doing a check for 
+      // (inComplex, inUnit, notAvailable). If we need to add dryer or
+      // another category this must change
+      const matchesLaundry = localFilters.laundry?.length === 0 || localFilters.laundry?.length === 3 ||
+        localFilters.laundry?.some(option => listing[option]);
 
       return matchesPropertyType &&
         matchesPrice &&
@@ -621,9 +624,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     </div>
                     <div className="flex flex-col justify-between space-y-3">
                       {[
-                        { id: 'inUnit', label: 'In Unit', value: 'inUnit' },
-                        { id: 'inComplex', label: 'In Complex', value: 'inComplex' },
-                        { id: 'notAvailable', label: 'Not Available', value: 'notAvailable' }
+                        { id: 'inUnit', label: 'In Unit', value: 'washerInUnit' },
+                        { id: 'inComplex', label: 'In Complex', value: 'washerInComplex' },
+                        { id: 'notAvailable', label: 'Not Available', value: 'washerNotAvailable' }
                       ].map((option, index) => {
                         // Calculate if this option should be checked based on cascading logic
                         const selectedOptions = localFilters.laundry || [];
@@ -646,14 +649,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
                                 if (checked) {
                                   // When checking an option, add all options from this one up
-                                  const optionsToAdd = ['inUnit', 'inComplex', 'notAvailable']
+                                  const optionsToAdd = ['washerInUnit', 'washerInComplex', 'washerNotAvailable']
                                     .slice(0, index + 1)
                                     .filter(opt => !updatedLaundry.includes(opt));
                                   updatedLaundry = [...updatedLaundry, ...optionsToAdd];
                                 } else {
                                   // When unchecking, remove this option and all worse options
                                   updatedLaundry = updatedLaundry.filter((opt) => {
-                                    const optIndex = ['inUnit', 'inComplex', 'notAvailable'].indexOf(opt);
+                                    const optIndex = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'].indexOf(opt);
                                     return optIndex < index;
                                   });
                                 }

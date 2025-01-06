@@ -61,7 +61,7 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-between gap-y-6 gap-x-1">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-between gap-y-6 ">
       {trips.map((trip) => (
         <Link
           href={`/platform/trips/${trip.id}?tab=matchmaker`}
