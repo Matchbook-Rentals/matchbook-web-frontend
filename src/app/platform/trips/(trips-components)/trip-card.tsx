@@ -2,6 +2,16 @@
 import { Trip } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
+import { Trash2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -75,32 +85,76 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
   const stateName = getState(locationElements[locationElements.length - 1]);
   const statePhotoPath = `/State Photos/${stateName}.jpg`;
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the Link navigation
     e.stopPropagation();
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
     onDelete(trip.id);
+    setIsDeleteDialogOpen(false);
   };
 
   return (
-    <div className='flex max-w-[320px] active:bg-gray-300 pr-2 border-background hover:border-gray-300 border rounded-[15px] transition-colors duration-100'>
-      <Image src={statePhotoPath} height={400} width={400} className='h-[134px] w-[143px] rounded-[15px] ' />
-      <div className='flex flex-col justify-between max-w-[150px] ml-4 pt-1'>
-        <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
-        <h2 className='truncate'>{trip.searchRadius || '50 miles (m)'}</h2>
-        <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
-        <h2 className='truncate'>
-          {/* Price display logic: shows range or 'any' if no prices set */}
-          {(() => {
-            if (!trip.minPrice && !trip.maxPrice) return '$ any';
-            if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice} - $${trip.maxPrice}`;
-            if (trip.minPrice) return `$${trip.minPrice} or more`;
-            if (trip.maxPrice) return `$${trip.maxPrice} or less`;
-          })()}
-        </h2>
+    <>
+      <div className='group flex max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
 
-      </div>
-    </div >
-  );
-};
+        <div className="relative group">
+          <Image src={statePhotoPath} height={400} width={400} className='h-[134px] w-[143px] rounded-[15px]' />
+          <div
+            onClick={handleDeleteClick}
+            className="absolute opacity-0 group-hover:opacity-100 flex top-2 left-2 p-1.5 bg-background/60 rounded-full cursor-pointer hover:bg-background transition-opacity duration-200 ease-in-out"
+          >
+            <Trash2 className="w-4 h-4 text-[#404040]" />
+          </div>
+        </div>
+        <div onClick={(e) => e.stopPropagation()} className='absolute z-50'>
+          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <DialogContent className='bg-background' onClick={(e) => e.stopPropagation()}>
+              <DialogTitle className='w-full text-center'><p className='font-montserrat-medium text-[#404040] text-xl font-normal'>Delete Search</p></DialogTitle>
+              <p className='font-montserrat-normal text-lg text-[#404040]'>
+                Are you sure you want to delete this search and any matches you&apos;ve made? This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDeleteDialogOpen(false);
+                }}>
+                  Cancel
+                </Button>
+                <Button variant="destructive" className='text-background' onClick={(e) => {
+                  e.stopPropagation();
+                  confirmDelete();
+                }}>
+                  Delete
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div className='flex flex-col justify-between max-w-[150px] ml-4 pt-1'>
+          <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
+          <h2 className='truncate'>{trip.searchRadius || '50 miles (m)'}</h2>
+          <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
+          <h2 className='truncate'>
+            {/* Price display logic: shows range or 'any' if no prices set */}
+            {(() => {
+              if (!trip.minPrice && !trip.maxPrice) return '$ any';
+              if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice} - $${trip.maxPrice}`;
+              if (trip.minPrice) return `$${trip.minPrice} or more`;
+              if (trip.maxPrice) return `$${trip.maxPrice} or less`;
+            })()}
+          </h2>
+
+        </div>
+      </div >
+
+    </>
+  )
+}
+
 
 export default TripCard;

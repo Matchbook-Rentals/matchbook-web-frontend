@@ -32,7 +32,7 @@ export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
   }
 }
 
-export async function getAllUserTrips(): Promise<TripAndMatches[]> {
+export async function getAllUserTrips(options?: { next?: { tags?: string[] } }): Promise<TripAndMatches[]> {
   const { userId } = auth();
   if (!userId) {
     throw new Error('Unauthorized');
@@ -158,6 +158,9 @@ export async function deleteTrip(tripId: string): Promise<DeleteTripResponse> {
       where: { id: tripId },
     });
 
+    // Invalidate the cache for getAllUserTrips when a trip is deleted
+    await revalidateTag('user-trips');
+
     return {
       success: true,
       trip: deletedTrip
@@ -171,7 +174,7 @@ export async function deleteTrip(tripId: string): Promise<DeleteTripResponse> {
   }
 }
 
-export async function getTripById(tripId: string): Promise<TripAndMatches | null> {
+export async function getTripById(tripId: string, options?: { next?: { tags?: string[] } }): Promise<TripAndMatches | null> {
   const { userId } = auth();
   if (!userId) {
     throw new Error('Unauthorized');
@@ -247,6 +250,10 @@ export async function createTrip(tripData: {
       },
     });
 
+
+    // Invalidate the cache for getAllUserTrips
+    await revalidateTag('user-trips');
+
     return {
       success: true,
       trip: newTrip,
@@ -299,6 +306,13 @@ export async function editTrip(tripId: string, tripData: {
       where: { id: tripId },
       data: tripData,
     });
+
+
+    // Invalidate both the specific trip and user trips list
+    await Promise.all([
+      revalidateTag('user-trips'),
+      revalidateTag(`trip-${tripId}`)
+    ]);
 
     return {
       success: true,

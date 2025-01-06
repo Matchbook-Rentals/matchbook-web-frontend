@@ -5,7 +5,7 @@ import { PAGE_MARGIN } from '@/constants/styles';
 import Image from 'next/image';
 
 const TripsPage: React.FC = async () => {
-  const trips = await getAllUserTrips();
+  const trips = await getAllUserTrips({ next: { tags: ['user-trips'] } });
 
   return (
     <div className={`bg-background ${PAGE_MARGIN} mx-auto`}>

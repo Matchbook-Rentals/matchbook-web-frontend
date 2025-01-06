@@ -9,7 +9,7 @@ async function TripDataWrapper({ children, params }: {
   children: React.ReactNode,
   params: { tripId: string }
 }) {
-  const trip = await getTripById(params.tripId);
+  const trip = await getTripById(params.tripId, { next: { tags: [`trip-${params.tripId}`, 'user-trips'] } });
   if (!trip) { return <p> NO TRIP FOUND </p> }
 
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
