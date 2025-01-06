@@ -73,7 +73,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Map',
       value: 'map',
-      content: <MapView />,
+      content: <MapView setIsFilterOpen={setIsFilterOpen} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },

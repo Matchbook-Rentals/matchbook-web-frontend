@@ -214,6 +214,27 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     }
   ];
 
+  const laundryOptions = [
+    {
+      value: 'washerInUnit',
+      label: 'In Unit',
+      id: 'inUnit',
+      index: 0
+    },
+    {
+      value: 'washerInComplex',
+      label: 'In Complex',
+      id: 'inComplex',
+      index: 1
+    },
+    {
+      value: 'washerNotAvailable',
+      label: 'Not Available',
+      id: 'notAvailable',
+      index: 2
+    }
+  ];
+
   const luxuryOptions = [
     {
       value: 'gym',
@@ -623,18 +644,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       <AmenitiesIcons.WasherIcon className="w-[49px] h-[53px]" />
                     </div>
                     <div className="flex flex-col justify-between space-y-3">
-                      {[
-                        { id: 'inUnit', label: 'In Unit', value: 'washerInUnit' },
-                        { id: 'inComplex', label: 'In Complex', value: 'washerInComplex' },
-                        { id: 'notAvailable', label: 'Not Available', value: 'washerNotAvailable' }
-                      ].map((option, index) => {
+                      {laundryOptions.map((option) => {
                         // Calculate if this option should be checked based on cascading logic
                         const selectedOptions = localFilters.laundry || [];
                         const isChecked = selectedOptions.includes(option.value);
                         // If any lower option is selected, this one should be too
                         const isCascadeChecked = selectedOptions.some((selected) => {
-                          const selectedIndex = ['inUnit', 'inComplex', 'notAvailable'].indexOf(selected);
-                          return selectedIndex >= index;
+                          const selectedOption = laundryOptions.find(opt => opt.value === selected);
+                          return selectedOption && selectedOption.index >= option.index;
                         });
 
                         return (
@@ -649,15 +666,16 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
                                 if (checked) {
                                   // When checking an option, add all options from this one up
-                                  const optionsToAdd = ['washerInUnit', 'washerInComplex', 'washerNotAvailable']
-                                    .slice(0, index + 1)
+                                  const optionsToAdd = laundryOptions
+                                    .filter(opt => opt.index <= option.index)
+                                    .map(opt => opt.value)
                                     .filter(opt => !updatedLaundry.includes(opt));
                                   updatedLaundry = [...updatedLaundry, ...optionsToAdd];
                                 } else {
                                   // When unchecking, remove this option and all worse options
                                   updatedLaundry = updatedLaundry.filter((opt) => {
-                                    const optIndex = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'].indexOf(opt);
-                                    return optIndex < index;
+                                    const selectedOption = laundryOptions.find(o => o.value === opt);
+                                    return selectedOption && selectedOption.index < option.index;
                                   });
                                 }
 
