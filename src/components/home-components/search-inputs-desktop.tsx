@@ -21,6 +21,7 @@ type ActiveContentType = 'location' | 'date' | 'guests' | null;
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
+  const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const { toast } = useToast();
@@ -46,8 +47,9 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     start: null,
     end: null,
   });
-  const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 0 })
+  const [guests, setGuests] = React.useState({ pets: 0, children: 0, adults: 1 })
   const containerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({
     destination: '',
     description: '',
@@ -65,6 +67,25 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
     setTotalGuests(total);
   }, [guests]);
+
+  // Add click outside handler
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isOpen &&
+        containerRef.current &&
+        popoverRef.current &&
+        !containerRef.current.contains(event.target as Node) &&
+        !popoverRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setActiveContent(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   // Format the dates for display
   const formatDate = (date: Date) => {
@@ -108,21 +129,25 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   // Update handleInputClick to use string types
   const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
     e.stopPropagation();
-    if (activeContent !== content) {
-      setActiveContent(content);
-      setIsOpen(true);
 
-      if (containerRef.current && inputRef.current) {
-        const containerLeft = containerRef.current.getBoundingClientRect().left;
-        const inputRect = inputRef.current.getBoundingClientRect();
-        const inputLeft = inputRect.left;
-        const inputCenter = inputLeft + (inputRect.width / 2);
-        const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
-        setArrowPosition(position);
-      }
-    } else {
+    // If clicking the same input that's already active, close the popover
+    if (activeContent === content && isOpen) {
       setIsOpen(false);
       setActiveContent(null);
+      return;
+    }
+
+    // Otherwise, open the popover with the new content
+    setActiveContent(content);
+    setIsOpen(true);
+
+    if (containerRef.current && inputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = inputRef.current.getBoundingClientRect();
+      const inputLeft = inputRect.left;
+      const inputCenter = inputLeft + (inputRect.width / 2);
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
     }
   };
 
@@ -163,8 +188,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   return (
     <div ref={containerRef} className="relative">
       <div
-        className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
-        onClick={() => !isOpen && setIsOpen(true)}
+        className="flex flex-row no-wrap p-3 items-center bg-background rounded-full shadow-md overflow-hidden"
+
       >
         <input
           ref={locationInputRef}
@@ -197,10 +222,15 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           ref={guestsInputRef}
           type="text"
           placeholder="Who?"
-          value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+          value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+
           className={`${inputClasses} sm:border-r-0`}
           readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
+          onClick={(e) => {
+            setHasBeenSelected(true);
+            handleInputClick(e, 'guests', guestsInputRef)
+          }
+          }
         />
         <div className="flex-shrink-0">
           <button
@@ -225,7 +255,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
+        <div ref={popoverRef} className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
           before:content-[''] before:absolute before:-top-2 before:left-[var(--arrow-position)] before:w-4 before:h-4
           before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200
           transform origin-top transition-all duration-200 ease-out

@@ -9,18 +9,17 @@ ACH PLAID API
 
 - [ ] MYMOO
 - [ ] mobile popover
+- [ ] pretty up the control bar on home page (it allows for edge clicks that do nothing, clicking off doesn't remove the popover)
 - [ ] calendars
 - [X] Search page
-- [ ] Filters 
--------laundry
+- [x] Filters 
 - [ ] min adults 1 
 - [ ] Double check all icon sizing in detials tiles and filter tiles 
 - [ ] Maps over to free maps
-- [ ] bed bath
+- [x] bed bath
 - [ ] tab selector carousel? arrows? two layers?
 
-
-- [ ]  dialog finish, control active state for property type selection
+- [x]  dialog finish, control active state for property type selection
 - [ ] Adults 1 minimum and defualt start
 - [ ] go through FIGMA text sizes and weights 
 - [ ] Reset default text to 404040 instead of black
