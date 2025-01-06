@@ -1,6 +1,6 @@
 'use client'
 //IMports
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
 import ButtonControl from '../../trips/(trips-components)/button-controls';
 import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
@@ -12,12 +12,19 @@ import { Montserrat } from 'next/font/google';
 import SearchMap from '../(components)/search-map';
 import ListingDetails from '../(components)/listing-details';
 import { QuestionMarkIcon } from '@radix-ui/react-icons';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const PLATFORM_NAVBAR_HEIGHT = 50; // Add this constant for the navbar height
 
-const MatchViewTab: React.FC = () => {
+// Add prop interface
+interface MatchViewTabProps {
+  setIsFilterOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+// Update component definition to receive props
+const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
@@ -33,6 +40,9 @@ const MatchViewTab: React.FC = () => {
   const [totalBoxHeight, setTotalBoxHeight] = useState<number>(0);
   const controlBoxParentRef = useRef<HTMLDivElement>(null);
   const [controlBoxParentHeight, setControlBoxParentHeight] = useState<number>(0);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -193,6 +203,14 @@ const MatchViewTab: React.FC = () => {
     }
     return listingAmenities;
   };
+
+  const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
+    const params = new URLSearchParams(searchParams);
+    params.set('tab', 'favorites');
+    const url = `${pathname}?${params.toString()}`;
+    router[action](url);
+  };
+
   // Early returns for edge cases
   if (state.isLoading) {
     return <LoadingSpinner />;
@@ -202,10 +220,29 @@ const MatchViewTab: React.FC = () => {
   }
   if (showListings.length === 0) {
     return (
-      <div onClick={() => console.log(state.listings)}>
-        No listings available. {listings.length} {state.trip?.id}
+      <div className='flex flex-col items-center justify-center h-[50vh]'>
+        {(() => {
+          handleTabChange('prefetch');
+          return null;
+        })()}
+        <p>You have {state.likedListings.length + state.maybedListings.length} listings in your favorites
+          & {listings.length - state.likedListings.length - state.maybedListings.length} listings filtered out.</p>
+        <div className='flex justify-center gap-x-2'>
+          <button
+            onClick={() => handleTabChange()}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            View Favorites
+          </button>
+          <button
+            onClick={() => setIsFilterOpen(true)}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          >
+            Adjust Filters
+          </button>
+        </div>
       </div>
-    )
+    );
   }
 
   // Main component render
