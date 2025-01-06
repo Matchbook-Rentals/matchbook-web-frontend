@@ -68,18 +68,28 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       <div className="w-full md:w-3/5 md:pr-4">
         {displayListings.length > 0 ? (
           <SearchListingsGrid listings={[...showListings]} />
+        ) : listings.length === 0 ? (
+          <div className='flex flex-col items-center justify-center h-[50vh]'>
+            <p className="text-gray-600 text-center">
+              Sorry, we couldn't find any listings in this area right now.
+              <br />
+              Please check again later or try different dates.
+            </p>
+          </div>
         ) : (
           <div className='flex flex-col items-center justify-center h-[50vh]'>
             {(() => {
               handleTabChange('prefetch');
               return null;
             })()}
-            <p>You have {likedListings.length + maybedListings.length} listings in your favorites
+            <p className='font-montserrat-regular text-2xl mb-5'>You're out of listings!</p>
+            <p>You can look at your favorites or alter your filters to see more.</p>
+            <p className='mt-3'>You have {likedListings.length + maybedListings.length} listings in your favorites
               & {listings.length - likedListings.length - maybedListings.length} listings filtered out.</p>
-            <div className='flex justify-center gap-x-2'>
+            <div className='flex justify-center gap-x-2 mt-2'>
               <button
                 onClick={() => handleTabChange()}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                className="px-3 py-2 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2 "
               >
                 View Favorites
               </button>

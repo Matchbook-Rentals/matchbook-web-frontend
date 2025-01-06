@@ -218,6 +218,17 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   if (showListings === undefined) {
     return null;
   }
+  if (listings.length === 0) {
+    return (
+      <div className='flex flex-col items-center justify-center h-[50vh]'>
+        <p className="text-gray-600 text-center">
+          Sorry, we couldn't find any listings in this area right now.
+          <br />
+          Please check again later or try different dates.
+        </p>
+      </div>
+    );
+  }
   if (showListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
@@ -225,12 +236,14 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           handleTabChange('prefetch');
           return null;
         })()}
+        <p className='font-montserrat-regular text-2xl mb-5'>You're out of listings!</p>
+        <p className='mb-3'>You can look at your favorites or alter your filters to see more.</p>
         <p>You have {state.likedListings.length + state.maybedListings.length} listings in your favorites
           & {listings.length - state.likedListings.length - state.maybedListings.length} listings filtered out.</p>
         <div className='flex justify-center gap-x-2'>
           <button
             onClick={() => handleTabChange()}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="px-3 py-2 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2 "
           >
             View Favorites
           </button>
