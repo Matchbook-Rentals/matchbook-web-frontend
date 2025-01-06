@@ -20,9 +20,9 @@ interface FilterOptions {
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
-  bedrooms: number;
-  beds: number | null;
-  baths: number;
+  minBedrooms: number;
+  minBeds: number | null;
+  minBathrooms: number;
   furnished: boolean;
   unfurnished: boolean;
   utilities: string[];
@@ -112,9 +112,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const [filters, setFilters] = useState<FilterOptions>({
     minPrice: tripData.minPrice || null,
     maxPrice: tripData.maxPrice || null,
-    bedrooms: 0,
-    beds: 0,
-    baths: 0,
+    minBeds: tripData.minBeds || 0,
+    minBedrooms: tripData.minBedrooms || 0,
+    minBathrooms: tripData.minBathrooms || 0,
     furnished: tripData.furnished || false,
     unfurnished: tripData.unfurnished || false,
     propertyTypes: [
@@ -295,12 +295,11 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesPrice = (filters.minPrice === null || price >= filters.minPrice) &&
         (filters.maxPrice === null || price <= filters.maxPrice);
 
-      const matchesRadius = filters.searchRadius === 0 || listing.distance < filters.searchRadius;
+      const matchesRadius = filters.searchRadius === 0 || (listing.distance || 100) < filters.searchRadius;
 
       // Room filters
-      const matchesBedrooms = !filters.bedrooms || listing.bedrooms === filters.bedrooms;
-      const matchesBeds = !filters.beds || listing.beds === filters.beds;
-      const matchesBaths = !filters.baths || listing.baths === filters.baths;
+      const matchesBedrooms = !filters.minBedrooms || (listing.bedrooms?.length || 0) >= filters.minBedrooms;
+      const matchesBaths = !filters.minBathrooms || listing.bathroomCount >= filters.minBathrooms;
 
       // Furniture filter
       const matchesFurniture =
@@ -355,7 +354,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesPrice &&
         matchesRadius &&
         matchesBedrooms &&
-        matchesBeds &&
         matchesBaths &&
         matchesFurniture &&
         matchesUtilities &&
@@ -710,9 +708,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     const dbFilters = {
       maxPrice: newFilters.maxPrice,
       minPrice: newFilters.minPrice,
+      minBedrooms: newFilters.minBedrooms,
+      minBathrooms: newFilters.minBathrooms,
       searchRadius: newFilters.searchRadius,
-      //furnished: newFilters.furnished,
-      //unfurnished: newFilters.unfurnished
     };
 
     // Initialize all boolean filters to false first

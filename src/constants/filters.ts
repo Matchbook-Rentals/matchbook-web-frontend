@@ -25,8 +25,8 @@ export const filters: Filter[] = [
   { name: 'minPrice', type: 'number', category: 'general' },
   { name: 'maxPrice', type: 'number', category: 'general' },
   { name: 'minBeds', type: 'number', category: 'general' },
-  { name: 'minBedroom', type: 'number', category: 'general' },
-  { name: 'minBathroom', type: 'number', category: 'general' },
+  { name: 'minBedrooms', type: 'number', category: 'general' },
+  { name: 'minBathrooms', type: 'number', category: 'general' },
   { name: 'searchRadius', type: 'number', category: 'general' },
 
   // Highlight Filters

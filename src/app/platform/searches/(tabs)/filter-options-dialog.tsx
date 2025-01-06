@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import CategoryFilter from '../(components)/CategoryFilter';
 import Tile from "@/components/ui/tile";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
@@ -15,9 +14,9 @@ interface FilterOptions {
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
-  bedrooms: string;
-  beds: string;
-  baths: string;
+  minBedrooms: number;
+  minBeds: number;
+  minBathrooms: number;
   furnished: boolean;
   unfurnished: boolean;
   utilities: string[];
@@ -272,6 +271,26 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     }
   ];
 
+  const minimumOptions = [
+    {
+      key: 'minBedrooms',
+      label: 'Bedrooms',
+    },
+    {
+      key: 'minBathrooms',
+      label: 'Bathrooms',
+    }
+  ];
+
+  const MINIMUM_OPTIONS = [
+    { label: 'Any', value: 0 },
+    { label: '1+', value: 1 },
+    { label: '2+', value: 2 },
+    { label: '3+', value: 3 },
+    { label: '4+', value: 4 },
+    { label: '5+', value: 5 },
+    { label: '6+', value: 6 },
+  ];
 
   // Calculate filtered listings count based on local filters
   const filteredListingsCount = useMemo(() => {
@@ -289,12 +308,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         (localFilters.minPrice && localFilters.maxPrice && price >= localFilters.minPrice && price <= localFilters.maxPrice) // Both prices set
       );
 
-      const matchesRadius = localFilters.searchRadius === 0 || listing.distance < localFilters.searchRadius;
+      const matchesRadius = localFilters.searchRadius === 0 || (listing.distance || 100) < localFilters.searchRadius;
 
       // Room filters
-      const matchesBedrooms = !localFilters.bedrooms || listing.bedrooms === localFilters.bedrooms;
-      const matchesBeds = !localFilters.beds || listing.beds === localFilters.beds;
-      const matchesBaths = !localFilters.baths || listing.baths === localFilters.baths;
+      const matchesBedrooms = !localFilters.minBedrooms || (listing.bedrooms?.length || 0) >= localFilters.minBedrooms;
+      const matchesBaths = !localFilters.minBathrooms || listing.bathroomCount >= localFilters.minBathrooms;
 
       // Furniture filter
       const matchesFurniture =
@@ -344,7 +362,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         matchesPrice &&
         matchesRadius &&
         matchesBedrooms &&
-        matchesBeds &&
         matchesBaths &&
         matchesFurniture &&
         matchesUtilities &&
@@ -408,9 +425,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       propertyTypes: [],
       minPrice: null,
       maxPrice: null,
-      bedrooms: 0,
-      beds: 0,
-      baths: 0,
+      minBedrooms: 0,
+      minBeds: 0,
+      minBathrooms: 0,
       furnished: false,
       unfurnished: false,
       utilities: [],
@@ -909,16 +926,36 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-          {/* Room Details Section */}
+          {/* Minimum Requirements Section */}
           <div className='border-b-2 py-6'>
-            {['bedrooms', 'beds', 'baths'].map((category) => (
-              <CategoryFilter
-                key={category}
-                category={category}
-                value={localFilters[category as keyof FilterOptions] as string}
-                onFilterChange={handleLocalFilterChange}
-              />
-            ))}
+            <h3 className="text-[18px] font-medium text-[#404040] mb-6">Minimum Requirements</h3>
+            <div className="space-y-4">
+              {minimumOptions.map(({ key, label }) => (
+                <div key={key} className="text-center">
+                  <h4 className="text-[16px] text-[#404040] text-left mb-2">{label}</h4>
+                  <div className="flex flex-wrap justify-start gap-2">
+                    {MINIMUM_OPTIONS.map(({ label: optionLabel, value }) => (
+                      <Button
+                        key={value}
+                        variant={localFilters[key] === value ? "default" : "outline"}
+                        className="rounded-full"
+                        onClick={() => {
+                          if (localFilters[key] === value) {
+                            if (value === 0) { return; }
+                            handleLocalFilterChange(key, 0);
+                          }
+                          else {
+                            handleLocalFilterChange(key, value)
+                          }
+                        }}
+                      >
+                        {optionLabel}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </ScrollArea>
 
@@ -927,7 +964,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         <div className="border-t border-gray-200 bg-background py-2 px-6 mt-auto">
           <div className="flex justify-between items-center">
             <span
-              className="text-md text-[#404040] font-montserrat font-medium tracking-wide cursor-pointer hover:text-[#606060]"
+
               onClick={clearFilters}
             >
               Clear filters

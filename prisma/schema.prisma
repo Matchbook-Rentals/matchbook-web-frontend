@@ -343,8 +343,8 @@ model Trip {
   minPrice     Int?
   maxPrice     Int?
   minBeds      Int?
-  minBedroom   Int?
-  minBathroom  Int?
+  minBedrooms   Int?
+  minBathrooms  Int?
   searchRadius Int? @default(50)
 
   // Highlight Filters 
