@@ -123,13 +123,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         .map(amen => amen.name)
     ],
     utilities: [
-      ...(tripData.utilitiesIncluded ? ['included'] : []),
-      ...(tripData.utilitiesNotIncluded ? ['notIncluded'] : [])
-    ] as ('included' | 'notIncluded')[],
+      ...(tripData.utilitiesIncluded ? ['utilitiesIncluded'] : []),
+      ...(tripData.utilitiesNotIncluded ? ['utilitiesNotIncluded'] : [])
+    ] as ('utilitiesIncluded' | 'utilitiesNotIncluded')[],
     pets: [
-      ...(tripData.petsAllowed ? ['allowed'] : []),
-      ...(tripData.petsNotAllowed ? ['notAllowed'] : [])
-    ] as ('allowed' | 'notAllowed')[],
+      ...(tripData.petsAllowed ? ['petsAllowed'] : []),
+      ...(tripData.petsNotAllowed ? ['petsNotAllowed'] : [])
+    ] as ('petsAllowed' | 'petsNotAllowed')[],
     searchRadius: tripData.searchRadius || 50,
     accessibility: [
       ...getFiltersByCategory(CategoryType.ACCESSIBILITY)
@@ -711,14 +711,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       maxPrice: newFilters.maxPrice,
       minPrice: newFilters.minPrice,
       searchRadius: newFilters.searchRadius,
-      furnished: newFilters.furnished,
-      unfurnished: newFilters.unfurnished
+      //furnished: newFilters.furnished,
+      //unfurnished: newFilters.unfurnished
     };
 
     // Initialize all boolean filters to false first
     const boolFilters = getBooleanFilters();
     boolFilters.forEach(filter => {
-      dbFilters[filter.name] = false;
+      dbFilters[filter.name] = !!newFilters[filter.name]
     });
 
     // Then set true for the ones that are selected in any array
@@ -733,6 +733,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
           }
         });
       }
+      newFilters.pets
     }
 
 

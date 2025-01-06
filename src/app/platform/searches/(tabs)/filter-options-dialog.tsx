@@ -12,7 +12,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 
 interface FilterOptions {
-  laundry: string[];
   propertyTypes: string[];
   minPrice: number | null;
   maxPrice: number | null;
@@ -307,14 +306,14 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       // Utilities filter
       const matchesUtilities =
         localFilters.utilities.length === 0 || localFilters.utilities.length === 2 ||
-        (localFilters.utilities.includes('included') && listing.utilitiesIncluded) ||
-        (localFilters.utilities.includes('notIncluded') && !listing.utilitiesIncluded);
+        (localFilters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
+        (localFilters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
 
       // Utilities filter
       const matchesPets =
         localFilters.pets.length === 0 || localFilters.utilities.length === 2 ||
-        (localFilters.pets.includes('allowed') && listing.utilitiesIncluded) ||
-        (localFilters.pets.includes('notAllowed') && !listing.utilitiesIncluded);
+        (localFilters.pets.includes('petsAllowed') && listing.petsAllowed) ||
+        (localFilters.pets.includes('petsNotAllowed') && !listing.petsAllowed);
 
       // Amenity filters
       const matchesAccessibility = localFilters.accessibility?.length === 0 ||
@@ -335,7 +334,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesLuxury = localFilters.luxury?.length === 0 ||
         localFilters.luxury?.every(option => listing[option]);
 
-      // Reason for filter.laundry.length ===3 is right now we are only doing a check for 
+      // Reason for filter.laundry.length ===3 is right now we are only doing a check for
       // (inComplex, inUnit, notAvailable). If we need to add dryer or
       // another category this must change
       const matchesLaundry = localFilters.laundry?.length === 0 || localFilters.laundry?.length === 3 ||
@@ -402,6 +401,35 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       type === 'min' ? 'minPrice' : 'maxPrice',
       numericValue
     );
+  };
+
+  const clearFilters = () => {
+    const defaultFilters = {
+      propertyTypes: [],
+      minPrice: null,
+      maxPrice: null,
+      bedrooms: 0,
+      beds: 0,
+      baths: 0,
+      furnished: false,
+      unfurnished: false,
+      utilities: [],
+      pets: [],
+      searchRadius: 50,
+      accessibility: [],
+      location: [],
+      parking: [],
+      kitchen: [],
+      climateControl: [],
+      luxury: [],
+      laundry: []
+    };
+
+    setLocalFilters(defaultFilters);
+    setPriceInputs({
+      min: '',
+      max: ''
+    });
   };
 
   return (
@@ -523,12 +551,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <div className="flex justify-start gap-4">
                     {[
                       {
-                        value: 'included',
+                        value: 'utilitiesIncluded',
                         label: 'Utilities Included',
                         icon: <AmenitiesIcons.UtilitiesIncludedIcon className="mt-1" />
                       },
                       {
-                        value: 'notIncluded',
+                        value: 'utilitiesNotIncluded',
                         label: 'Utilities Not Included',
                         icon: <AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-1" />
                       }
@@ -563,12 +591,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   <div className="flex justify-start gap-4">
                     {[
                       {
-                        value: 'allowed',
+                        value: 'petsAllowed',
                         label: 'Pets Allowed',
                         icon: <AmenitiesIcons.PetFriendlyIcon className="mt-4" />
                       },
                       {
-                        value: 'notAllowed',
+                        value: 'petsNotAllowed',
                         label: 'No Pets',
                         icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />
                       }
@@ -898,12 +926,16 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         {/* Footer Actions Section */}
         <div className="border-t border-gray-200 bg-background py-2 px-6 mt-auto">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">
-              {filteredListingsCount} listings
+            <span
+              className="text-md text-[#404040] font-montserrat font-medium tracking-wide cursor-pointer hover:text-[#606060]"
+              onClick={clearFilters}
+            >
+              Clear filters
             </span>
             <div className="flex space-x-4">
               <Button
                 variant="outline"
+                className='rounded-full'
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
@@ -911,8 +943,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges}
+                className='py-0 rounded-full'
               >
-                Apply
+                Show {filteredListingsCount} listings
               </Button>
             </div>
           </div>
