@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import SearchMap from '../(components)/search-map';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
+import { Button } from '@/components/ui/button';
 
 export default function SearchFavoritesTab() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function SearchFavoritesTab() {
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
@@ -37,6 +39,13 @@ export default function SearchFavoritesTab() {
       ...prevFilters,
       [key]: value,
     }));
+  };
+
+  const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
+    const params = new URLSearchParams(searchParams);
+    params.set('tab', 'matchmaker');
+    const url = `${pathname}?${params.toString()}`;
+    router[action](url);
   };
 
   const handleApply = async (listing: ListingAndImages) => {
@@ -118,7 +127,24 @@ export default function SearchFavoritesTab() {
   }, [viewMode]);
 
   if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
-    return <div>No favorites found for this trip.</div>;
+    return (
+      <div className='flex flex-col items-center justify-center h-[50vh]'>
+        {(() => {
+          handleTabChange('prefetch');
+          return null;
+        })()}
+        <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t liked any listings!</p>
+        <p className='mt-3'> Let&apos;s get you a match! </p>
+        <div className='flex justify-center gap-x-2 mt-2'>
+          <button
+            onClick={() => handleTabChange()}
+            className="px-4 py-2 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
+          >
+            Try Matchmaker
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

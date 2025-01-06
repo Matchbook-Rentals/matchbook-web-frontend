@@ -62,6 +62,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     router[action](url);
   };
 
+  // Calculate the number of liked/maybed and filtered out listings
+  const numFavorites = likedListings.length + maybedListings.length;
+  const numFilteredOut = listings.length - likedListings.length - maybedListings.length;
+
   return (
     <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2">
       {/*Grid container*/}
@@ -79,26 +83,40 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         ) : (
           <div className='flex flex-col items-center justify-center h-[50vh]'>
             {(() => {
-              handleTabChange('prefetch');
+              if (numFavorites > 0) {
+                handleTabChange('prefetch');
+              }
               return null;
             })()}
-            <p className='font-montserrat-regular text-2xl mb-5'>You're out of listings!</p>
-            <p>You can look at your favorites or alter your filters to see more.</p>
-            <p className='mt-3'>You have {likedListings.length + maybedListings.length} listings in your favorites
-              & {listings.length - likedListings.length - maybedListings.length} listings filtered out.</p>
+            <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
+            <p>You can {numFavorites > 0 ? 'look at your favorites' : ''}{numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}{numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
+
+            {(numFavorites > 0 || numFilteredOut > 0) && (
+              <p className='mt-3'>
+                {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
+                {numFavorites > 0 && numFilteredOut > 0 && ' & '}
+                {numFilteredOut > 0 && `${numFilteredOut} listings filtered out`}
+                .
+              </p>
+            )}
+
             <div className='flex justify-center gap-x-2 mt-2'>
-              <button
-                onClick={() => handleTabChange()}
-                className="px-3 py-2 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2 "
-              >
-                View Favorites
-              </button>
-              <button
-                onClick={() => setIsFilterOpen(true)}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-              >
-                Adjust Filters
-              </button>
+              {numFilteredOut > 0 && (
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
+                >
+                  Adjust Filters
+                </button>
+              )}
+              {numFavorites > 0 && (
+                <button
+                  onClick={() => handleTabChange()}
+                  className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
+                >
+                  View Favorites
+                </button>
+              )}
             </div>
           </div>
         )}

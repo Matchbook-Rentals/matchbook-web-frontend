@@ -963,12 +963,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         {/* Footer Actions Section */}
         <div className="border-t border-gray-200 bg-background py-2 px-6 mt-auto">
           <div className="flex justify-between items-center">
-            <span
-
-              onClick={clearFilters}
-            >
+            <Button variant='outline' className='rounded-full text-md' onClick={clearFilters} >
               Clear filters
-            </span>
+            </Button>
             <div className="flex space-x-4">
               <Button
                 variant="outline"

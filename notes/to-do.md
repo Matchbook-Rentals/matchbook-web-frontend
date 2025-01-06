@@ -17,6 +17,7 @@ ACH PLAID API
 - [ ] Double check all icon sizing in detials tiles and filter tiles 
 - [ ] Maps over to free maps
 - [ ] bed bath
+- [ ] tab selector carousel? arrows? two layers?
 
 
 - [ ]  dialog finish, control active state for property type selection
