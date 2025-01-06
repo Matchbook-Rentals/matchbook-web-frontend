@@ -142,7 +142,7 @@ export default function SearchFavoritesTab() {
         <SearchMap
           center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
           zoom={10}
-          markers={likedListings.map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
+          markers={[...likedListings, ...maybedListings].map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
         />
       </div>
     </div>
