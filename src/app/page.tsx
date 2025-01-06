@@ -132,7 +132,7 @@ const tabs: Tab[] = [
     value: "rent",
     label: "For Guests",
     className:
-      "bg-primaryBrand/80 hover:bg-primaryBrand hover:text-black  w-1/2",
+      "bg-primaryBrand/80 hover:bg-primaryBrand text-[#404040] hover:text-black  w-1/2",
     textSize: "text-lg",
     content: (
       <MarketingList
@@ -146,7 +146,7 @@ const tabs: Tab[] = [
   {
     value: "list",
     label: "For Hosts",
-    className: "bg-blueBrand/80 hover:bg-blueBrand hover:text-black w-1/2",
+    className: "bg-blueBrand/80 hover:bg-blueBrand text-[#404040] hover:text-black  w-1/2",
     textSize: "text-lg",
     content: (
       <MarketingList
@@ -180,7 +180,10 @@ const WebHomePage = () => {
         tabsListClassName="justify-center w-full border-b-0 mx-auto mb-12"
       />
       <div className="justify-center flex border-b-0 mx-auto w-1/2 p-6">
-        <Button className={`bg-blueBrand px-16 mt-2 py-2 text-background text-xl rounded-sm ${montserrat.className}`} onClick={() => setIsOpen(true)}> Get Notified </Button>
+        <Button
+          className={`bg-blueBrand/90 hover:bg-blueBrand px-16 mt-2 py-2 text-background 
+                      text-xl rounded-sm ${montserrat.className}`}
+          onClick={() => setIsOpen(true)}> Get Notified </Button>
       </div>
       <div className="flex w-full justify-center"> <img className="h-20 mb-36 mt-36" src="/heart-logo.png" /> </div>
       <RentEasyCopy />
