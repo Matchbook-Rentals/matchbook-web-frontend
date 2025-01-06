@@ -14,6 +14,7 @@ ACH PLAID API
 - [ ] min adults 1 
 - [ ] Double check all icon sizing in detials tiles and filter tiles 
 - [ ] Maps over to free maps
+- [ ] bed bath
 
 
 - [ ]  dialog finish, control active state for property type selection

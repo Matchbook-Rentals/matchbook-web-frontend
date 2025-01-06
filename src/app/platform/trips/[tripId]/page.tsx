@@ -3,7 +3,7 @@
 import React from 'react';
 import TabSelector from '@/components/ui/tab-selector';
 import MatchmakerTab from '../../searches/(tabs)/search-matchmaker-tab';
-import ShortListTab from '../../searches/(tabs)/search-short-list-tab';
+import SearchFavoriteTab from '../../searches/(tabs)/search-favorites-tab';
 import MapView from '../../searches/(tabs)/search-map-tab';
 import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
@@ -14,6 +14,7 @@ import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
+import SearchFavoritesTab from '../../searches/(tabs)/search-favorites-tab';
 
 interface Tab {
   value: string;
@@ -80,7 +81,7 @@ const TripsPage: React.FC = () => {
     {
       label: 'Favorites',
       value: 'favorites',
-      content: <ShortListTab />,
+      content: <SearchFavoritesTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },

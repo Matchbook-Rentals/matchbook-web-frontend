@@ -5,7 +5,7 @@ import SearchCarousel from './(components)/search-carousel';
 import TabSelector from '@/components/ui/tab-selector';
 import { useSearchContext } from '@/contexts/search-context-provider';
 import MatchmakerTab from './(tabs)/search-matchmaker-tab';
-import ShortListTab from './(tabs)/search-short-list-tab';
+import SearchFavoritesTab from './(tabs)/search-favorites-tab';
 import ApplicationTab from '../trips/[tripId]/(tabs)/application-tab';
 import { SearchMatchbookTab } from './(tabs)/search-matchbook-tab';
 import { addUnavailability, updateListing } from '@/app/actions/listings';
@@ -35,7 +35,7 @@ const SearchesPage: React.FC = () => {
   const tabs: Tab[] = [
     { label: 'Matchmaker', value: 'matchmaker', content: state.currentSearch ? <MatchmakerTab /> : null, textSize: tabSize },
     // { label: 'Map View', value: 'map-view', content: state.currentSearch ? <MapView /> : null, textSize: tabSize },
-    { label: 'Favorites', value: 'favorites', content: <ShortListTab />, textSize: tabSize },
+    { label: 'Favorites', value: 'favorites', content: <SearchFavoritesTab />, textSize: tabSize },
     { label: 'Matchbook', value: 'matchbook', content: <SearchMatchbookTab />, textSize: tabSize },
     { label: 'Application', value: 'application', content: <ApplicationTab />, textSize: tabSize },
   ];

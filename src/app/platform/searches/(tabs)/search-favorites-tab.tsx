@@ -10,7 +10,7 @@ import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/ho
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 
-export default function ShortListTab() {
+export default function SearchFavoritesTab() {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
