@@ -57,11 +57,9 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     // Execute query and return raw results with type
     const rawResults = await prisma.$queryRaw<RawListingResult[]>`${Prisma.sql([query])}`;
 
-    console.log('Raw results reutrn')
     return rawResults;
 
   } catch (error) {
-    console.log('ERROR', error)
     console.error('Error in pullListingsFromDb:', error);
     throw error;
   }
