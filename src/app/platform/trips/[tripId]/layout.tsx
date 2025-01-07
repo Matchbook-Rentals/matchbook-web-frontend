@@ -39,10 +39,10 @@ export default function TripLayout({
   params: { tripId: string }
 }) {
   return (
-    <React.Suspense fallback={<LoadingTabs />}>
-      <TripDataWrapper params={params}>
-        {children}
-      </TripDataWrapper>
-    </React.Suspense>
+    //<React.Suspense fallback={<LoadingTabs />}>
+    <TripDataWrapper params={params}>
+      {children}
+    </TripDataWrapper>
+    //</React.Suspense>
   );
 }
