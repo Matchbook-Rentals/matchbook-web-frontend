@@ -1,11 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
 import { TripContextProvider } from '@/contexts/trip-context-provider';
 import TripClientComponent from './TripClientComponent';
 import LoadingTabs from './LoadingTabs';
+import { RawListingResult } from '@/types/raw-listing';
 
 const createTimeout = (ms: number) => {
   return new Promise((_, reject) => {
@@ -13,6 +13,18 @@ const createTimeout = (ms: number) => {
       reject(new Error(`Operation timed out after ${ms}ms`));
     }, ms);
   });
+};
+
+const fetchListings = async (lat: number, lng: number, radiusMiles: number) => {
+  const response = await fetch(
+    `/api/listings/search?lat=${lat}&lng=${lng}&radiusMiles=${radiusMiles}`,
+    { credentials: 'include' }
+  );
+  if (!response.ok) {
+    throw new Error('Failed to fetch listings');
+  }
+  let listings = await response.json();
+  return listings;
 };
 
 export default function TripPage({
@@ -42,7 +54,7 @@ export default function TripPage({
 
         const [rawListings, application] = await Promise.race([
           Promise.all([
-            pullListingsFromDb(tripResult.latitude, tripResult.longitude, 100),
+            fetchListings(tripResult.latitude, tripResult.longitude, 100),
             getUserApplication()
           ]),
           createTimeout(15000)
