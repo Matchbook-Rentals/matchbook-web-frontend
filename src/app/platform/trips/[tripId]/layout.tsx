@@ -5,8 +5,6 @@ import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
 
-export const revalidate = 0;
-
 async function TripDataWrapper({ children, params }: {
   children: React.ReactNode,
   params: { tripId: string }
@@ -17,7 +15,6 @@ async function TripDataWrapper({ children, params }: {
   const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
   const application = await getUserApplication();
   const hasApplicationData = !!application;
-
 
   //UnComment this line to force permanent render of Suspense
   //await new Promise(() => { });
