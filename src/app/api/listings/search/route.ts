@@ -39,37 +39,32 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // First get the listing IDs within radius using raw SQL
+    // Same SQL query as before
     const query = `
-    SELECT l.id
-    FROM Listing l
-    WHERE (${earthRadiusMiles} * acos(
+    SELECT l.*,
+    (${earthRadiusMiles} * acos(
       cos(radians(${lat})) * cos(radians(l.latitude)) *
       cos(radians(l.longitude) - radians(${lng})) +
       sin(radians(${lat})) * sin(radians(l.latitude))
-    )) <= ${radiusMiles}`;
+    )) AS distance,
+    li.id AS imageId, li.url AS imageUrl,
+    b.id AS bedroomId, b.bedroomNumber, b.bedType,
+    u.id AS userId, u.firstName AS userFirstName, u.lastName AS userLastName,
+    u.fullName AS userFullName, u.email AS userEmail, u.imageUrl AS userImageUrl,
+    u.createdAt AS userCreatedAt,
+    lu.id AS unavailabilityId, lu.startDate AS unavailabilityStartDate, lu.endDate AS unavailabilityEndDate
+    FROM Listing l
+    LEFT JOIN ListingImage li ON l.id = li.listingId
+    LEFT JOIN Bedroom b ON l.id = b.listing_id
+    LEFT JOIN User u ON l.userId = u.id
+    LEFT JOIN ListingUnavailability lu ON l.id = lu.listingId
+    HAVING distance <= ${radiusMiles}
+    ORDER BY distance, l.id, li.id, b.bedroomNumber, lu.startDate`;
 
-    const listingIds = await prisma.$queryRaw<{ id: string }[]>`${Prisma.sql([query])}`;
+    // Execute query and return results
+    const rawResults = await prisma.$queryRaw<RawListingResult[]>`${Prisma.sql([query])}`;
 
-    // Then fetch complete listings with Prisma
-    const listings = await prisma.listing.findMany({
-      where: {
-        id: {
-          in: listingIds.map(row => row.id)
-        }
-      },
-      include: {
-        listingImages: true,
-        bedrooms: true,
-        user: true,
-        unavailablePeriods: true
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
-
-    return NextResponse.json(listings);
+    return NextResponse.json(rawResults);
 
   } catch (error) {
     console.error('Error in listings search:', error);
