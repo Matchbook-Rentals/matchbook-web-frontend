@@ -460,8 +460,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
       {/* Main Dialog Content */}
       <DialogContent aria-describedby='Filter selection modal' className="sm:max-w-[536px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
-        <DialogTitle className='px-4 py-4 border-b border-gray-300'>
-          <h2 className="text-[20px] text-[#404040] text-center font-montserrat font-medium">Filters</h2>
+        <DialogTitle className='px-4 py-4 border-b border-gray-300 text-[20px] text-[#404040] text-center font-montserrat font-medium'>
+          Filters
         </DialogTitle>
         {/* Scrollable Filter Content Area */}
         <ScrollArea className="flex-1 px-6">
