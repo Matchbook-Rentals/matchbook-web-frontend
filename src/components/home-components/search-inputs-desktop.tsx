@@ -13,32 +13,20 @@ import { DisabledDesktopInputs } from "./disabled-inputs";
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
   guestsContent?: React.ReactNode;
+  hasAccess: boolean;
 }
 
 // Add this type definition
 type ActiveContentType = 'location' | 'date' | 'guests' | null;
 
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
+  hasAccess
 }) => {
-  const [hasAccess, setHasAccess] = React.useState(false);
   const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
-
-  React.useEffect(() => {
-    const checkAccess = async () => {
-      if (isSignedIn && user) {
-        const userRole = user.publicMetadata.role as string;
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
-      } else {
-        setHasAccess(false);
-      }
-    };
-
-    checkAccess();
-  }, [isSignedIn, user]);
 
   // Replace activeContent state with new type
   const [activeContent, setActiveContent] = React.useState<ActiveContentType>(null);
@@ -59,7 +47,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
-  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
 
   // Add this effect to update totalGuests whenever guests state changes
