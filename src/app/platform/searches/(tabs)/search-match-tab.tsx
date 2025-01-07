@@ -204,11 +204,11 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     return listingAmenities;
   };
 
-  const handleTabChange = () => {
+  const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
     const params = new URLSearchParams(searchParams);
     params.set('tab', 'favorites');
     const url = `${pathname}?${params.toString()}`;
-    router.push(url);
+    router[action](url);
   };
 
   // Calculate the number of liked/maybed and filtered out listings
@@ -236,6 +236,12 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   if (showListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center pb-6 h-[50vh]'>
+        {(() => {
+          if (numFavorites > 0) {
+            handleTabChange('prefetch');
+          }
+          return null;
+        })()}
         <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
         <p className='mb-3'>You can
           {numFavorites > 0 ? 'look at your favorites' : ''}
