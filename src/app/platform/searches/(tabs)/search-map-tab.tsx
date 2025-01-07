@@ -55,11 +55,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const defaultCenter = { lat: 0, lng: 0 };
   const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
 
-  const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
+  const handleTabChange = () => {
     const params = new URLSearchParams(searchParams);
     params.set('tab', 'favorites');
     const url = `${pathname}?${params.toString()}`;
-    router[action](url);
+    router.push(url);
   };
 
   // Calculate the number of liked/maybed and filtered out listings
@@ -82,12 +82,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           </div>
         ) : (
           <div className='flex flex-col items-center justify-center h-[50vh]'>
-            {(() => {
-              if (numFavorites > 0) {
-                handleTabChange('prefetch');
-              }
-              return null;
-            })()}
             <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
             <p>You can {numFavorites > 0 ? 'look at your favorites' : ''}{numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}{numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
 
