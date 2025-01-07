@@ -1,7 +1,7 @@
 'use client';
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages, TripAndMatches, ApplicationWithArrays, RawListingResult } from '@/types';
+import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
@@ -81,7 +81,7 @@ interface TripContextType {
 interface TripContextProviderProps {
   children: ReactNode;
   tripData: TripAndMatches;
-  listingData: RawListingResult[];
+  listingData: ListingAndImages[];
   hasApplicationData?: boolean;
   application?: ApplicationWithArrays | null;
 }
@@ -179,67 +179,12 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({
   }, [trip]); // Add trip as dependency since it's used in calculateRent
 
   // Now we can use sortListingsByUScore in processAndSortListings
-  const processAndSortListings = useCallback((rawData: RawListingResult[]): ListingAndImages[] => {
-    // First process the raw listings
-    const processedListings = rawData.reduce((map, raw) => {
-      if (!map.has(raw.id)) {
-        map.set(raw.id, {
-          ...raw,
-          listingImages: [],
-          bedrooms: [],
-          unavailablePeriods: [],
-          user: {
-            id: raw.userId,
-            firstName: raw.userFirstName,
-            lastName: raw.userLastName,
-            fullName: raw.userFullName,
-            email: raw.userEmail,
-            imageUrl: raw.userImageUrl,
-            createdAt: raw.userCreatedAt
-          }
-        });
-      }
-
-      const listing = map.get(raw.id)!;
-
-      // Add image if not already present
-      if (raw.imageId && raw.imageUrl &&
-          !listing.listingImages.some(img => img.id === raw.imageId)) {
-        listing.listingImages.push({
-          id: raw.imageId,
-          url: raw.imageUrl
-        });
-      }
-
-      // Add bedroom if not already present
-      if (raw.bedroomId && raw.bedroomNumber && raw.bedType &&
-          !listing.bedrooms.some(bed => bed.id === raw.bedroomId)) {
-        listing.bedrooms.push({
-          id: raw.bedroomId,
-          bedroomNumber: raw.bedroomNumber,
-          bedType: raw.bedType
-        });
-      }
-
-      // Add unavailability period if not already present
-      if (raw.unavailabilityId && raw.unavailabilityStartDate && raw.unavailabilityEndDate &&
-          !listing.unavailablePeriods.some(period => period.id === raw.unavailabilityId)) {
-        listing.unavailablePeriods.push({
-          id: raw.unavailabilityId,
-          startDate: raw.unavailabilityStartDate,
-          endDate: raw.unavailabilityEndDate
-        });
-      }
-
-      return map;
-    }, new Map<string, ListingAndImages>());
-
-    const listings = Array.from(processedListings.values());
-    return sortListingsByUScore(listings);
-  }, [sortListingsByUScore]); // Add sortListingsByUScore as dependency
+  const sortListings = useCallback((listingsData: ListingAndImages[]): ListingAndImages[] => {
+    return sortListingsByUScore(listingsData);
+  }, [sortListingsByUScore]);
 
   // Initialize listings state with processed and sorted data
-  const [listings, setListings] = useState(() => processAndSortListings(rawListings));
+  const [listings, setListings] = useState(() => sortListings(rawListings));
 
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
