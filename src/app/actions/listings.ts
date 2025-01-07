@@ -3,7 +3,7 @@
 import prisma from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
-import { Listing, ListingUnavailability, Prisma } from "@prisma/client";
+import { Listing, ListingUnavailability } from "@prisma/client";
 
 const checkAuth = async () => {
   const { userId } = auth();
@@ -15,7 +15,8 @@ const checkAuth = async () => {
 
 export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number): Promise<ListingAndImages[]> => {
   const userId = await checkAuth();
-  const earthRadiusMiles = 3959;
+
+  const earthRadiusMiles = 3959; // Earth's radius in miles
 
   try {
     // Input validation
@@ -29,29 +30,6 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
       throw new Error(`Invalid radius. Must be a positive number. received ${radiusMiles}`);
     }
 
-    const query = `
-    SELECT l.*,
-    (${earthRadiusMiles} * acos(
-      cos(radians(${lat})) * cos(radians(l.latitude)) *
-      cos(radians(l.longitude) - radians(${lng})) +
-      sin(radians(${lat})) * sin(radians(l.latitude))
-    )) AS distance,
-    li.id AS imageId, li.url AS imageUrl,
-    b.id AS bedroomId, b.bedroomNumber, b.bedType,
-    u.id AS userId, u.firstName AS userFirstName, u.lastName AS userLastName,
-    u.fullName AS userFullName, u.email AS userEmail, u.imageUrl AS userImageUrl,
-    u.createdAt AS userCreatedAt,
-    lu.id AS unavailabilityId, lu.startDate AS unavailabilityStartDate, lu.endDate AS unavailabilityEndDate
-    FROM Listing l
-    LEFT JOIN ListingImage li ON l.id = li.listingId
-    LEFT JOIN Bedroom b ON l.id = b.listing_id
-    LEFT JOIN User u ON l.userId = u.id
-    LEFT JOIN ListingUnavailability lu ON l.id = lu.listingId
-    HAVING distance <= ${radiusMiles}
-    ORDER BY distance, l.id, li.id, b.bedroomNumber, lu.startDate`;
-
-    console.log('Executing SQL query:', query);
-
     const listingsWithDistanceAndBedrooms = await prisma.$queryRaw<(ListingAndImages & {
       distance: number,
       bedroomId: string | null,
@@ -64,7 +42,27 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
       userEmail: string | null,
       userImageUrl: string | null,
       userCreatedAt: Date
-    })[]>`${Prisma.sql([query])}`;
+    })[]>`
+    SELECT l.*, 
+    (${earthRadiusMiles} * acos(
+      cos(radians(${lat})) * cos(radians(l.latitude)) *
+      cos(radians(l.longitude) - radians(${lng})) +
+      sin(radians(${lat})) * sin(radians(l.latitude))
+    )) AS distance,
+    li.id AS imageId, li.url AS imageUrl,
+    b.id AS bedroomId, b.bedroomNumber, b.bedType,
+    u.id AS userId, u.firstName AS userFirstName, u.lastName AS userLastName, 
+    u.fullName AS userFullName, u.email AS userEmail, u.imageUrl AS userImageUrl,
+    u.createdAt AS userCreatedAt,
+    lu.id AS unavailabilityId, lu.startDate AS unavailabilityStartDate, lu.endDate AS unavailabilityEndDate
+    FROM Listing l
+    LEFT JOIN ListingImage li ON l.id = li.listingId
+    LEFT JOIN Bedroom b ON l.id = b.listing_id
+    LEFT JOIN User u ON l.userId = u.id
+    LEFT JOIN ListingUnavailability lu ON l.id = lu.listingId
+    HAVING distance <= ${radiusMiles}
+    ORDER BY distance, l.id, li.id, b.bedroomNumber, lu.startDate
+    `;
 
     if (listingsWithDistanceAndBedrooms.length === 0) {
       console.log('No listings found within the specified radius.');
