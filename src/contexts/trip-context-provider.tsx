@@ -1,7 +1,7 @@
 'use client';
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages, TripAndMatches, ApplicationWithArrays, RawListingResult } from '@/types';
+import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
@@ -80,8 +80,8 @@ interface TripContextType {
 
 interface TripContextProviderProps {
   children: ReactNode;
-  tripData: TripAndMatches;
-  listingData: RawListingResult[];
+  tripData: TripAndMatches
+  listingData: ListingAndImages[];
   hasApplicationData?: boolean;
   application?: ApplicationWithArrays | null;
 }
@@ -96,151 +96,9 @@ export const useTripContext = () => {
   return context;
 };
 
-export const TripContextProvider: React.FC<TripContextProviderProps> = ({
-  children,
-  listingData: rawListings,
-  tripData,
-  application,
-  hasApplicationData
-}) => {
-  // Function declaration gets hoisted
-  function calculateUScore(
-    listing: ListingAndImages & { calculatedPrice: number },
-    lowestPrice: number,
-    highestPrice: number,
-    highestDistance: number,
-    highestSquareFootage: number,
-    highestRoomCount: number,
-    highestBathroomCount: number
-  ): number {
-    const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
-    const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
-    const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
-    const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
-    const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
-
-    return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
-  }
-
+export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children, listingData, tripData, application, hasApplicationData }) => {
+  const [listings, setListings] = useState(listingData);
   const [trip, setTrip] = useState(tripData);
-
-  const sortListingsByUScore = useCallback((listings: ListingAndImages[]) => {
-    // Pre-calculate prices for all listings
-    const listingsWithPrices = listings.map(listing => {
-      const calculatedPrice = calculateRent({ listing, trip });
-      return {
-        ...listing,
-        calculatedPrice,
-      };
-    });
-
-    let lowestPrice = Infinity;
-    let highestPrice = 0;
-    let highestDistance = 0;
-    let highestSquareFootage = 0;
-    let highestRoomCount = 0;
-    let highestBathroomCount = 0;
-
-    listingsWithPrices.forEach(listing => {
-      if (listing.calculatedPrice < lowestPrice) {
-        lowestPrice = listing.calculatedPrice;
-      }
-      if (listing.calculatedPrice > highestPrice) {
-        highestPrice = listing.calculatedPrice;
-      }
-      if (listing.distance && listing.distance > highestDistance) {
-        highestDistance = listing.distance;
-      }
-      if (listing.squareFootage && listing.squareFootage > highestSquareFootage) {
-        highestSquareFootage = listing.squareFootage;
-      }
-      if (listing.roomCount && listing.roomCount > highestRoomCount) {
-        highestRoomCount = listing.roomCount;
-      }
-      if (listing.bathroomCount && listing.bathroomCount > highestBathroomCount) {
-        highestBathroomCount = listing.bathroomCount;
-      }
-    });
-
-    const updatedListings = listingsWithPrices.map(listing => {
-      const uScore = calculateUScore(
-        listing,
-        lowestPrice,
-        highestPrice,
-        highestDistance,
-        highestSquareFootage,
-        highestRoomCount,
-        highestBathroomCount
-      );
-      return { ...listing, price: listing.calculatedPrice, uScore };
-    });
-
-    return updatedListings.sort((a, b) => b.uScore - a.uScore);
-  }, [trip]); // Add trip as dependency since it's used in calculateRent
-
-  // Now we can use sortListingsByUScore in processAndSortListings
-  const processAndSortListings = useCallback((rawData: RawListingResult[]): ListingAndImages[] => {
-    // First process the raw listings
-    const processedListings = rawData.reduce((map, raw) => {
-      if (!map.has(raw.id)) {
-        map.set(raw.id, {
-          ...raw,
-          listingImages: [],
-          bedrooms: [],
-          unavailablePeriods: [],
-          user: {
-            id: raw.userId,
-            firstName: raw.userFirstName,
-            lastName: raw.userLastName,
-            fullName: raw.userFullName,
-            email: raw.userEmail,
-            imageUrl: raw.userImageUrl,
-            createdAt: raw.userCreatedAt
-          }
-        });
-      }
-
-      const listing = map.get(raw.id)!;
-
-      // Add image if not already present
-      if (raw.imageId && raw.imageUrl &&
-          !listing.listingImages.some(img => img.id === raw.imageId)) {
-        listing.listingImages.push({
-          id: raw.imageId,
-          url: raw.imageUrl
-        });
-      }
-
-      // Add bedroom if not already present
-      if (raw.bedroomId && raw.bedroomNumber && raw.bedType &&
-          !listing.bedrooms.some(bed => bed.id === raw.bedroomId)) {
-        listing.bedrooms.push({
-          id: raw.bedroomId,
-          bedroomNumber: raw.bedroomNumber,
-          bedType: raw.bedType
-        });
-      }
-
-      // Add unavailability period if not already present
-      if (raw.unavailabilityId && raw.unavailabilityStartDate && raw.unavailabilityEndDate &&
-          !listing.unavailablePeriods.some(period => period.id === raw.unavailabilityId)) {
-        listing.unavailablePeriods.push({
-          id: raw.unavailabilityId,
-          startDate: raw.unavailabilityStartDate,
-          endDate: raw.unavailabilityEndDate
-        });
-      }
-
-      return map;
-    }, new Map<string, ListingAndImages>());
-
-    const listings = Array.from(processedListings.values());
-    return sortListingsByUScore(listings);
-  }, [sortListingsByUScore]); // Add sortListingsByUScore as dependency
-
-  // Initialize listings state with processed and sorted data
-  const [listings, setListings] = useState(() => processAndSortListings(rawListings));
-
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasApplication, setHasApplication] = useState(hasApplicationData);
@@ -309,6 +167,88 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({
         .map(amen => amen.name)
     ],
   });
+
+
+
+  // Calculate U-Score for a listing
+  const calculateUScore = (
+    listing: ListingAndImages & { calculatedPrice: number },
+    lowestPrice: number,
+    highestPrice: number,
+    highestDistance: number,
+    highestSquareFootage: number,
+    highestRoomCount: number,
+    highestBathroomCount: number
+  ): number => {
+    const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
+    const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
+    const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
+    const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
+    const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
+
+    return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
+  };
+
+  const sortListingsByUScore = (listings: ListingAndImages[]) => {
+    // Pre-calculate prices for all listings
+    const listingsWithPrices = listings.map(listing => {
+      const calculatedPrice = calculateRent({ listing, trip });
+      return {
+        ...listing,
+        calculatedPrice,
+      };
+    });
+
+    let lowestPrice = Infinity;
+    let highestPrice = 0;
+    let highestDistance = 0;
+    let highestSquareFootage = 0;
+    let highestRoomCount = 0;
+    let highestBathroomCount = 0;
+
+    listingsWithPrices.forEach(listing => {
+      if (listing.calculatedPrice < lowestPrice) {
+        lowestPrice = listing.calculatedPrice;
+      }
+      if (listing.calculatedPrice > highestPrice) {
+        highestPrice = listing.calculatedPrice;
+      }
+      if (listing.distance && listing.distance > highestDistance) {
+        highestDistance = listing.distance;
+      }
+      if (listing.squareFootage && listing.squareFootage > highestSquareFootage) {
+        highestSquareFootage = listing.squareFootage;
+      }
+      if (listing.roomCount && listing.roomCount > highestRoomCount) {
+        highestRoomCount = listing.roomCount;
+      }
+      if (listing.bathroomCount && listing.bathroomCount > highestBathroomCount) {
+        highestBathroomCount = listing.bathroomCount;
+      }
+    });
+
+    const updatedListings = listingsWithPrices.map(listing => {
+      const uScore = calculateUScore(
+        listing,
+        lowestPrice,
+        highestPrice,
+        highestDistance,
+        highestSquareFootage,
+        highestRoomCount,
+        highestBathroomCount
+      );
+      return { ...listing, price: listing.calculatedPrice, uScore };
+    });
+
+    const sortedListings = updatedListings.sort((a, b) => b.uScore - a.uScore);
+
+    return sortedListings;
+  }
+
+  useEffect(() => {
+    const sortedListings = sortListingsByUScore(listingData);
+    setListings(sortedListings);
+  }, [])
 
   useEffect(() => {
     setLookup({
@@ -398,7 +338,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({
       const matchesLuxury = filters.luxury?.length === 0 ||
         filters.luxury?.every(amenity => listing[amenity]);
 
-      // Reason for filter.laundry.length ===3 is right now we are only doing a check for
+      // Reason for filter.laundry.length ===3 is right now we are only doing a check for 
       // (inComplex, inUnit, notAvailable). If we need to add dryer or
       // another category this must change
       const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
