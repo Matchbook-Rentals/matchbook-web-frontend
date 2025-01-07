@@ -226,7 +226,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
         <p className="text-gray-600 text-center">
-          Sorry, we couldn't find any listings in this area right now.
+          Sorry, we couldn&apos;t find any listings in this area right now.
           <br />
           Please check again later or try different dates.
         </p>
@@ -243,7 +243,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           return null;
         })()}
         <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
-        <p className='mb-3'>You can {numFavorites > 0 ? 'look at your favorites' : ''}{numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}{numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
+        <p className='mb-3'>You can
+          {numFavorites > 0 ? 'look at your favorites' : ''}
+          {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
+          {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
 
         {(numFavorites > 0 || numFilteredOut > 0) && (
           <p>
