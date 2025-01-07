@@ -14,39 +14,6 @@ import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-
-// Error Boundary Component
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean; error: Error | null }
-> {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Alert variant="destructive" className="max-w-2xl mx-auto mt-8">
-          <ExclamationTriangleIcon className="h-4 w-4" />
-          <AlertTitle>Something went wrong</AlertTitle>
-          <AlertDescription>
-            {this.state.error?.message || "An unexpected error occurred. Please try refreshing the page."}
-          </AlertDescription>
-        </Alert>
-      );
-    }
-
-    return this.props.children;
-  }
-}
 
 interface Tab {
   value: string;
@@ -129,41 +96,39 @@ const TripsPage: React.FC = () => {
   const marginClass = APP_PAGE_MARGIN;
 
   return (
-    <ErrorBoundary>
-      <div className={`flex flex-col ${marginClass} mx-auto`}>
-        <h1 className=" text-[#404040] font-montserrat-regular text-[14px] leading-normal">
-          <span className="cursor-pointer hover:underline  ">
-            <Link href="/platform/trips" className="hover:underline">
-              Searches
-            </Link>
-          </span>
-          <span className="mx-2">&gt;</span>
-          <span className="cursor-pointer hover:underline">
-            {state.trip.locationString}
-          </span>
-        </h1>
-        <div className="flex w-full pb-0">
-          <TabSelector
-            useUrlParams
-            tabs={tabs}
-            defaultTab={currentTab || 'overview'}
-            className='mx-auto w-full pb-0 mb-0'
-            tabsClassName='w-full mx-auto'
-            tabsListClassName='flex justify-between space-x-2 md:space-x-2 md:gap-x-4'
-            secondaryButton={
-              ['matchmaker', 'map'].includes(currentTab) ? (
-                <FilterOptionsDialog
-                  isOpen={isFilterOpen}
-                  onOpenChange={setIsFilterOpen}
-                  filters={filters}
-                  onFilterChange={handleFilterChange}
-                />
-              ) : undefined
-            }
-          />
-        </div>
+    <div className={`flex flex-col ${marginClass} mx-auto`}>
+      <h1 className=" text-[#404040] font-montserrat-regular text-[14px] leading-normal">
+        <span className="cursor-pointer hover:underline  ">
+          <Link href="/platform/trips" className="hover:underline">
+            Searches
+          </Link>
+        </span>
+        <span className="mx-2">&gt;</span>
+        <span className="cursor-pointer hover:underline">
+          {state.trip.locationString}
+        </span>
+      </h1>
+      <div className="flex w-full pb-0">
+        <TabSelector
+          useUrlParams
+          tabs={tabs}
+          defaultTab={currentTab || 'overview'}
+          className='mx-auto w-full pb-0 mb-0'
+          tabsClassName='w-full mx-auto'
+          tabsListClassName='flex justify-between space-x-2 md:space-x-2 md:gap-x-4'
+          secondaryButton={
+            ['matchmaker', 'map'].includes(currentTab) ? (
+              <FilterOptionsDialog
+                isOpen={isFilterOpen}
+                onOpenChange={setIsFilterOpen}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+              />
+            ) : undefined
+          }
+        />
       </div>
-    </ErrorBoundary>
+    </div>
   );
 };
 
