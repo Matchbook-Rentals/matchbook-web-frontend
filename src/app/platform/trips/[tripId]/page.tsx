@@ -18,12 +18,9 @@ export default async function TripPage({
   params: { tripId: string }
 }) {
   try {
-    // To test timeout, replace getTripById with this line that never resolves
-    // const getTripTest = () => new Promise(() => {});
-    // set this to return either a Trip or null
     const tripResult = await Promise.race([
       getTripById(params.tripId, { next: { tags: [`trip-${params.tripId}`, 'user-trips'] } }),
-      createTimeout(5000) // 5 second timeout
+      createTimeout(5000)
     ]);
 
     if (!tripResult) {
@@ -32,22 +29,20 @@ export default async function TripPage({
 
     const trip = tripResult;
 
-    // Run these promises in parallel with timeout
-    const [listings, application] = await Promise.race([
+    const [rawListings, application] = await Promise.race([
       Promise.all([
         pullListingsFromDb(trip.latitude, trip.longitude, 100),
         getUserApplication()
       ]),
-      createTimeout(15000) // 10 second timeout
-      //createTimeout(100) // .1 second timeout
-    ]) as [typeof listings, typeof application];
+      createTimeout(15000)
+    ]) as [RawListingResult[], typeof application];
 
     const hasApplicationData = !!application;
 
     return (
       <TripContextProvider
         tripData={trip}
-        listingData={listings}
+        listingData={rawListings}
         hasApplicationData={hasApplicationData}
         application={application || null}
       >
