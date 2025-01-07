@@ -16,6 +16,7 @@ import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { GlobalErrorBoundary } from '@/components/error-boundary';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
@@ -129,7 +130,7 @@ const TripsPage: React.FC = () => {
   const marginClass = APP_PAGE_MARGIN;
 
   return (
-    <ErrorBoundary>
+    <GlobalErrorBoundary>
       <div className={`flex flex-col ${marginClass} mx-auto`}>
         <h1 className=" text-[#404040] font-montserrat-regular text-[14px] leading-normal">
           <span className="cursor-pointer hover:underline  ">
@@ -163,7 +164,7 @@ const TripsPage: React.FC = () => {
           />
         </div>
       </div>
-    </ErrorBoundary>
+    </GlobalErrorBoundary>
   );
 };
 
