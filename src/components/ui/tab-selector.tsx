@@ -60,7 +60,7 @@ export default function TabSelector({
         const activeTabRect = activeTabElement.getBoundingClientRect()
 
         const scrollLeft = (activeTabRect.left + activeTabRect.width / 2) -
-                          (tabsListRect.left + tabsListRect.width / 2)
+          (tabsListRect.left + tabsListRect.width / 2)
 
         tabsList.scrollTo({
           left: tabsList.scrollLeft + scrollLeft,
@@ -88,7 +88,7 @@ export default function TabSelector({
           <TabsList
             ref={tabsListRef}
             className={cn(
-              "flex justify-start pt-6 pb-8 space-x-2 overflow-x-auto scrollbar-none",
+              "flex : justify-start pt-6 pb-8 space-x-2 overflow-x-auto overflow-y-hidden scrollbar-none",
               tabsListClassName
             )}>
             {tabs.map((tab) => (
@@ -102,7 +102,7 @@ export default function TabSelector({
                 </div>
                 <div className="flex flex-col">
                   <span className={cn("text-sm", tab.textSize)}>{tab.label}</span>
-                  {activeTab === tab.value && <motion.div className="h-[2px] w-full bg-[#404040] rounded-full" layout layoutId="underline"></motion.div>}
+                  {activeTab === tab.value && <motion.div className="h-[1px] w-full bg-[#404040] rounded-full" layout layoutId="underline"></motion.div>}
                 </div>
               </TabsTrigger>
             ))}

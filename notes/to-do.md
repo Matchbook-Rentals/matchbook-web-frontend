@@ -5,6 +5,9 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+scale of village footer expanding in to search bar
+fitler is dead on mobile
+set one month minimuj on calendar
 
 
 - [ ] MYMOO

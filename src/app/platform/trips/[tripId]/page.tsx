@@ -14,6 +14,9 @@ import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 interface Tab {
   value: string;
@@ -52,7 +55,7 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-[14px] md:text-[16px]'
+  const tabTriggerTextStyles = 'text-[14px] md:text-[16px] font-normal'
   const tabTriggerStyles = 'p-0'
   const tabs: Tab[] = [
     {
@@ -96,8 +99,8 @@ const TripsPage: React.FC = () => {
   const marginClass = APP_PAGE_MARGIN;
 
   return (
-    <div className={`flex flex-col ${marginClass} mx-auto`}>
-      <h1 className=" text-[#404040] font-montserrat-regular text-[14px] leading-normal">
+    <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>
+      <h1 className=" text-[#404040] text-[14px] leading-normal">
         <span className="cursor-pointer hover:underline  ">
           <Link href="/platform/trips" className="hover:underline">
             Searches
@@ -115,7 +118,7 @@ const TripsPage: React.FC = () => {
           defaultTab={currentTab || 'overview'}
           className='mx-auto w-full pb-0 mb-0'
           tabsClassName='w-full mx-auto'
-          tabsListClassName='flex justify-between w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
+          tabsListClassName='flex justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4 '
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
               <FilterOptionsDialog
