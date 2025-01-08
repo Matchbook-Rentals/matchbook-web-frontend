@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisabledMobileInputs } from "./disabled-inputs";
@@ -8,6 +8,9 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 
 interface Suggestion {
   place_id: string;
@@ -39,8 +42,26 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
     lat: null,
     lng: null
   });
+  const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({
+    start: null,
+    end: null
+  });
   const router = useRouter();
   const { toast } = useToast();
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+        setActiveInput(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const inputClasses = `w-full px-4 py-3 font-medium text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
@@ -82,7 +103,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
     });
     setInputValue("");
     setSuggestions([]);
-    setActiveInput(null);
+    setActiveInput(3);
 
     try {
       const response = await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
@@ -110,15 +131,19 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
   };
 
   const handleInputClick = (index: number) => {
-    setActiveInput(activeInput === index ? null : index);
+    if (index === 2) {
+      setActiveInput(3);
+    } else {
+      setActiveInput(activeInput === index ? null : index);
+    }
   };
 
   const renderSlidingComponent = (index: number) => {
-    if (index === 0) return null; // Skip for location input as it has its own renderer
+    if (index === 0) return null;
 
     return (
       <AnimatePresence>
-        {activeInput === index && (
+        {(activeInput === index || (index === 2 && activeInput === 3)) && (
           <motion.div
             initial={{ maxHeight: 0, opacity: 0 }}
             animate={{ maxHeight: "500px", opacity: 1 }}
@@ -126,8 +151,18 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="w-full bg-background border-t border-b border-gray-200 overflow-hidden"
           >
-            <div className="p-4">
-              Sliding content for input {index + 1}
+            <div className="p-0">
+              {(index === 3) && (
+                <MobileDateRange
+                  dateRange={dateRange}
+                  onDateRangeChange={setDateRange}
+                  onClose={() => setActiveInput(null)}
+                  onProceed={() => setActiveInput(4)}
+                />
+              )}
+              {index === 4 && (
+                <div>Guest selector content</div>
+              )}
             </div>
           </motion.div>
         )}
@@ -144,7 +179,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
             animate={{ maxHeight: "500px", opacity: 1 }}
             exit={{ maxHeight: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-background border-t border-b border-gray-200 overflow-hidden"
+            className="bg-background border-t border-b border-gray-200 overflow-hidden w-full"
           >
             <div className="px-4 py-2 w-full">
               <input
@@ -170,7 +205,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
                         });
                         setInputValue("");
                         setSuggestions([]);
-                        setActiveInput(null);
+                        setActiveInput(3);
                       }}
                     >
                       {city.description}
@@ -207,10 +242,21 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       return;
     }
 
+    if (!dateRange.start || !dateRange.end) {
+      setActiveInput(3);
+      toast({
+        variant: "destructive",
+        description: `Please select move-in and move-out dates`,
+      });
+      return;
+    }
+
     const response = await createTrip({
       locationString: selectedLocation.description,
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
+      startDate: dateRange.start,
+      endDate: dateRange.end,
     });
 
     if (response.success && response.trip) {
@@ -218,7 +264,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
     } else {
       toast({
         variant: "destructive",
-        description: response?.message || "Failed to create trip",
+        description: "Failed to create trip",
       });
     }
   };
@@ -227,8 +273,10 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
 
   return (
     <motion.div
+      ref={componentRef}
       className="flex flex-col p-3 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw]"
       animate={{
+        width: activeInput !== null ? '85vw' : '60vw'
       }}
       transition={{
         duration: 0.3,
@@ -248,29 +296,29 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       <input
         type="text"
         placeholder="Move in:"
-        className={inputClasses}
-        readOnly={!hasAccess}
-        onClick={() => handleInputClick(1)}
-      />
-      {renderSlidingComponent(1)}
-
-      <input
-        type="text"
-        placeholder="Move out:"
+        value={dateRange.start ? format(dateRange.start, 'MMM d, yyyy') : ''}
         className={inputClasses}
         readOnly={!hasAccess}
         onClick={() => handleInputClick(2)}
       />
-      {renderSlidingComponent(2)}
+      <input
+        type="text"
+        placeholder="Move out:"
+        value={dateRange.end ? format(dateRange.end, 'MMM d, yyyy') : ''}
+        className={inputClasses}
+        readOnly={!hasAccess}
+        onClick={() => handleInputClick(3)}
+      />
+      {renderSlidingComponent(3)}
 
       <input
         type="text"
         placeholder="Who?"
         className={`${inputClasses} sm:border-r-0`}
         readOnly={!hasAccess}
-        onClick={() => handleInputClick(3)}
+        onClick={() => handleInputClick(4)}
       />
-      {renderSlidingComponent(3)}
+      {renderSlidingComponent(4)}
 
       <button
         disabled={!hasAccess || !selectedLocation.lat || !selectedLocation.lng}
