@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -37,6 +37,7 @@ export default function TabSelector({
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.value)
+  const tabsListRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (useUrlParams) {
@@ -48,6 +49,26 @@ export default function TabSelector({
       }
     }
   }, [useUrlParams, searchParams, tabs, router])
+
+  useEffect(() => {
+    if (tabsListRef.current) {
+      const tabsList = tabsListRef.current
+      const activeTabElement = tabsList.querySelector(`[data-state="active"]`)
+
+      if (activeTabElement) {
+        const tabsListRect = tabsList.getBoundingClientRect()
+        const activeTabRect = activeTabElement.getBoundingClientRect()
+
+        const scrollLeft = (activeTabRect.left + activeTabRect.width / 2) -
+                          (tabsListRect.left + tabsListRect.width / 2)
+
+        tabsList.scrollTo({
+          left: tabsList.scrollLeft + scrollLeft,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }, [activeTab])
 
   const handleTabChange = (value: string) => {
     if (useUrlParams) {
@@ -64,7 +85,12 @@ export default function TabSelector({
         onValueChange={handleTabChange}
       >
         <div className="flex items-start p-0 justify-between mb-4 space-x-4 border-b-2 border-gray-300">
-          <TabsList className={cn("flex justify-start pt-6 pb-8 space-x-2", tabsListClassName)}>
+          <TabsList
+            ref={tabsListRef}
+            className={cn(
+              "flex justify-start pt-6 pb-8 space-x-2 overflow-x-auto scrollbar-none",
+              tabsListClassName
+            )}>
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.value}

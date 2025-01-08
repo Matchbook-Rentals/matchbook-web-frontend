@@ -15,15 +15,15 @@ const TripsPage: React.FC = async () => {
         Searches
       </h1>
 
-      <div className="w-full mx-auto mb-4">
+      <div className="w-full mx-auto my-4 sm:mb-4">
         <Image
           src="/milwaukee-downtown.png"
           alt="Village footer"
           width={1200}
           height={516}
-          className="w-[1000px] h-[216px] mx-auto p-0 my-0"
+          className="w-full max-w-[1000px] h-auto object-cover mx-auto p-0 my-0"
         />
-        <div className='bg-[#5C9AC5] rounded-md w-full h-[21px] -translate-y-[2px]' />
+        <div className='bg-[#5C9AC5] rounded-md w-full h-[14px] sm:h-[21px] -translate-y-[2px]' />
       </div>
       <TripGrid initialTrips={trips} />
 
