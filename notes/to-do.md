@@ -8,7 +8,14 @@ ACH PLAID API
 scale of village footer expanding in to search bar
 fitler is dead on mobile
 set one month minimuj on calendar
-
+help widget to hamburger menu on platform routes
+add gesture suppor to mbile caledar (swipe to next)
+TONIGHT --- remove test from mobiile calender
+expand to full page on 
+mirror bottom padding on matchbook header
+trip delete, lanuage change edit button to populate trashcans
+new serach button opens full screen serach modal, differetn from desktop behaviour
+skeleton adjustment, 
 
 - [ ] MYMOO
 - [ ] mobile popover

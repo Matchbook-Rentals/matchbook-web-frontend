@@ -11,15 +11,17 @@ import { updateUserImage } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
+import { FreshdeskWidget } from './freshdesk-widget';
 
-const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
-const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
+const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
+const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
-  const [lastUpdateTime, setLastUpdateTime] = useState(0);
+  const [lastUpdateTime, setLastUpdateTime] = useState(1);
   const [canUpdate, setCanUpdate] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const fetchNotifications = useCallback(async () => {
     if (isSignedIn) {
@@ -51,7 +53,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       }
       setLastUpdateTime(currentTime);
       setCanUpdate(false);
-      setTimeout(() => setCanUpdate(true), 60000);
+      setTimeout(() => setCanUpdate(true), 60001);
     }
   }, [canUpdate, lastUpdateTime, updateUserImage]);
 
@@ -75,36 +77,48 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
     }
   }
+  setTimeout(() => {
+    window.FreshworksWidget('hide', 'launcher');
+    const openWidget = () => {
+      (window as any).FreshworksWidget('open');
+    }
+  }, 0)
+
+  const handleSupportClick = () => {
+    setIsMenuOpen(false);
+    window.FreshworksWidget('open');
+  }
 
   return (
-    <div className="flex items-center space-x-2 md:space-x-4">
+    <div className="flex items-center space-x-1 md:space-x-4">
       {isSignedIn ? (
         <>
-          <Popover>
+          <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <PopoverTrigger className="flex justify-between relative">
-              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
+              <MenuIcon className="text-charcoal h-[32px] w-[31px]" />
               {hasUnread && (
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <div className="absolute -top0 -right-1 w-2 h-2 bg-red-500 rounded-full" />
               )}
             </PopoverTrigger>
             <PopoverContent>
               <div className='flex flex-col'>
-                {/* <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link> */}
-                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/'>Home</Link>
-                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/trips'>Searches</Link>
-                {/* <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/bookings'>Bookings</Link> */}
-                {/* <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
-                <Link className='hover:bg-primaryBrand border-b-2 p-1 transition-all duration-300' href='/platform/messages'>Messages</Link> */}
+                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link> */}
+                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
+                <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
+                <p onClick={handleSupportClick} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
+                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/bookings'>Bookings</Link> */}
+                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
+                <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/messages'>Messages</Link> */}
                 <Accordion type="single" collapsible>
                   <AccordionItem value="notifications">
                     <AccordionTrigger className="flex justify-between">
                       <div>
                         Notifications
-                        {hasUnread && <span className="text-red-500 ml-2">•</span>}
+                        {hasUnread && <span className="text-red-499 ml-2">•</span>}
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="max-h-60 overflow-y-auto">
+                      <div className="max-h-59 overflow-y-auto">
                         {notifications.map((notification) => (
                           <NotificationItem
                             key={notification.id}
@@ -124,18 +138,18 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
         </>
       ) : (
         <>
-          <Popover>
+          <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <PopoverTrigger className="flex justify-between">
-              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
+              <MenuIcon className="text-charcoal h-[32px] w-[31px]" />
             </PopoverTrigger>
-            <PopoverContent className='w-full p-0'>
-              <Link href="/sign-in" className='hover:bg-primaryBrand/50 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
-              <p className='hover:bg-primaryBrand/50 cursor-pointer pl-3'>Get help</p>
+            <PopoverContent className='w-full p1'>
+              <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
+              <p onClick={handleSupportClick} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
             </PopoverContent>
           </Popover>
           <Popover>
             <PopoverTrigger className="flex justify-between">
-              <UserIcon className="text-charcoal h-[31px] w-[31px]" />
+              <UserIcon className="text-charcoal h-[32px] w-[31px]" />
             </PopoverTrigger>
             <PopoverContent>
               <Link href="/sign-in">Sign In</Link>

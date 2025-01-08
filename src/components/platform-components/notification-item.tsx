@@ -17,16 +17,16 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onCli
   };
 
   return (
-    <div className="flex items-center py-2 group">
-      <Link 
-        href={notification.url} 
+    <div className="flex items-center hover:bg-gray-200 py-2 group">
+      <Link
+        href={notification.url}
         className="flex-grow flex items-center"
         onClick={() => onClick(notification.id)}
       >
         {notification.unread && <div className="w-2 h-2 bg-red-500 rounded-full mr-2" />}
         <p className="flex-grow">{notification.content}</p>
       </Link>
-      <button 
+      <button
         onClick={handleDelete}
         className="p-1 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
       >

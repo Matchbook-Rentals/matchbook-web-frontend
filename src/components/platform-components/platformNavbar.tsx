@@ -15,7 +15,6 @@ export default function PlatformNavbar() {
 
   narrowPathNames.includes(pathName) ? marginClass = PAGE_MARGIN : marginClass = APP_PAGE_MARGIN;
 
-
   return (
     <motion.nav
       className="bg-background sticky top-0 z-50 border-b mb-6"
