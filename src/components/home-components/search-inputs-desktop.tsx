@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { FaSearch } from "react-icons/fa";
-import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
+import { DesktopDateRange } from "@/components/ui/custom-calendar/date-range-selector/desktop-date-range";
 import { useToast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "./HeroLocationSuggest";
 import { useAuth, useUser } from "@clerk/nextjs";
@@ -101,9 +101,9 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         return <HeroLocationSuggest hasAccess={hasAccess} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
       case 'date':
         return (
-          <HeroDateRange
-            start={dateRange.start || new Date()}
-            end={dateRange.end || new Date()}
+          <DesktopDateRange
+            start={dateRange.start || null}
+            end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
           />
         );

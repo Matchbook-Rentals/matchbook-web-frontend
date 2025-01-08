@@ -11,6 +11,7 @@ import { createTrip } from "@/app/actions/trips";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
+import GuestTypeCounter from "./GuestTypeCounter";
 
 interface Suggestion {
   place_id: string;
@@ -49,6 +50,9 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
   const router = useRouter();
   const { toast } = useToast();
   const componentRef = useRef<HTMLDivElement>(null);
+  const [hasBeenSelected, setHasBeenSelected] = useState(false);
+  const [guests, setGuests] = useState({ pets: 0, children: 0, adults: 1 });
+  const [totalGuests, setTotalGuests] = useState(1);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -62,6 +66,11 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
+    setTotalGuests(total);
+  }, [guests]);
 
   const inputClasses = `w-full px-4 py-3 font-medium text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
@@ -161,7 +170,12 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
                 />
               )}
               {index === 4 && (
-                <div>Guest selector content</div>
+                <div className="p-4">
+                  <GuestTypeCounter
+                    guests={guests}
+                    setGuests={setGuests}
+                  />
+                </div>
               )}
             </div>
           </motion.div>
@@ -251,12 +265,24 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       return;
     }
 
+    if (guests.adults < 1) {
+      setActiveInput(4);
+      toast({
+        variant: "destructive",
+        description: `Please select at least one adult guest`,
+      });
+      return;
+    }
+
     const response = await createTrip({
       locationString: selectedLocation.description,
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
       startDate: dateRange.start,
       endDate: dateRange.end,
+      numAdults: guests.adults,
+      numChildren: guests.children,
+      numPets: guests.pets,
     });
 
     if (response.success && response.trip) {
@@ -314,9 +340,13 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       <input
         type="text"
         placeholder="Who?"
+        value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
         className={`${inputClasses} sm:border-r-0`}
         readOnly={!hasAccess}
-        onClick={() => handleInputClick(4)}
+        onClick={() => {
+          setHasBeenSelected(true);
+          handleInputClick(4);
+        }}
       />
       {renderSlidingComponent(4)}
 
