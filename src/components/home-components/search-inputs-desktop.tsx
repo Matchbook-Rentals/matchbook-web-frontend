@@ -106,6 +106,20 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const moveOutInputRef = useRef<HTMLInputElement>(null);
   const guestsInputRef = useRef<HTMLInputElement>(null);
 
+  const handleProceed = () => {
+    setActiveContent('guests');
+
+    // Update arrow position for guests input
+    if (containerRef.current && guestsInputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = guestsInputRef.current.getBoundingClientRect();
+      const inputLeft = inputRect.left;
+      const inputCenter = inputLeft + (inputRect.width / 2);
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
+    }
+  };
+
   // Add this function to render content based on active type
   const renderActiveContent = () => {
     switch (activeContent) {
@@ -117,6 +131,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             start={dateRange.start || null}
             end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
+            onProceed={handleProceed}
+            onClear={() => setDateRange({ start: null, end: null })}
           />
         );
       case 'guests':

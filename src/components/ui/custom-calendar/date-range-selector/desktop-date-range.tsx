@@ -12,6 +12,8 @@ interface DesktopDateRangeProps {
   end: Date | null;
   handleChange: (start: Date | null, end: Date | null) => void;
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null, end: 'exact' | number | null }) => void;
+  onProceed?: () => void;
+  onClear?: () => void;
 }
 
 interface CalendarMonthProps {
@@ -31,6 +33,7 @@ interface CalendarDayProps {
   isStartDate?: boolean;
   isEndDate?: boolean;
   onClick: () => void;
+  isDisabled?: boolean;
 }
 
 interface FlexibleSelectorProps {
@@ -39,7 +42,7 @@ interface FlexibleSelectorProps {
   onSelect: (type: 'start' | 'end', option: 'exact' | number | null) => void;
 }
 
-function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick }: CalendarDayProps) {
+function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isDisabled }: CalendarDayProps) {
   const hasCompleteRange = isInRange || isEndDate;
   const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
@@ -47,13 +50,18 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
 
   return (
     <button
-      className="aspect-square w-full flex items-center justify-center text-base hover:bg-gray-100 relative"
+      className={`
+        aspect-square w-full flex items-center justify-center text-base relative
+        ${!isDisabled ? 'hover:bg-gray-100' : 'cursor-not-allowed'}
+      `}
       onClick={onClick}
+      disabled={isDisabled}
     >
       <span className={`
-                z-10
-                ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center text-base' : ''}
-            `}>
+        z-10
+        ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center text-base' : ''}
+        ${isDisabled && !isSelected ? 'line-through text-gray-300' : ''}
+      `}>
         {day}
       </span>
       {showRangeBackground && (
@@ -100,6 +108,16 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
     if (!dateRange.end) return false;
     const currentDate = new Date(year, month, day);
     return currentDate.getTime() === dateRange.end.getTime();
+  };
+
+  const isDateDisabled = (day: number) => {
+    if (!dateRange.start || dateRange.end) return false;
+
+    const currentDate = new Date(year, month, day);
+    const startDate = dateRange.start;
+    const daysDifference = Math.abs((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    return daysDifference <= 30;
   };
 
   return (
@@ -154,6 +172,7 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
               isInRange={isDateInRange(day)}
               isStartDate={isStartDate(day)}
               isEndDate={isEndDate(day)}
+              isDisabled={isDateDisabled(day)}
               onClick={() => onDateSelect(day, month, year)}
             />
           );
@@ -203,7 +222,14 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   );
 }
 
-export function DesktopDateRange({ start, end, handleChange, onFlexibilityChange }: DesktopDateRangeProps) {
+export function DesktopDateRange({
+  start,
+  end,
+  handleChange,
+  onFlexibilityChange,
+  onProceed,
+  onClear
+}: DesktopDateRangeProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
@@ -232,8 +258,8 @@ export function DesktopDateRange({ start, end, handleChange, onFlexibilityChange
     start: 'exact' | number | null;
     end: 'exact' | number | null;
   }>({
-    start: null,
-    end: null
+    start: 'exact',
+    end: 'exact'
   });
 
   // Helper to check if a month/year combination is before current month
@@ -316,10 +342,11 @@ export function DesktopDateRange({ start, end, handleChange, onFlexibilityChange
   const handleDateSelect = (day: number, month: number, year: number) => {
     const selectedDate = new Date(year, month, day);
 
-    // If selected date matches start or end, deselect it
+    // If selected date matches start, move end date to start and clear end
     if (start?.getTime() === selectedDate.getTime()) {
-      return handleChange(null, end);
+      return handleChange(end, null);
     }
+    // If selected date matches end, just clear end date
     if (end?.getTime() === selectedDate.getTime()) {
       return handleChange(start, null);
     }
@@ -399,6 +426,20 @@ export function DesktopDateRange({ start, end, handleChange, onFlexibilityChange
             />
           </div>
         </div>
+      </div>
+
+      {/* Add buttons at the bottom */}
+      <div className="mt-6 flex justify-center gap-3">
+        <button
+          onClick={onProceed}
+          disabled={!(start && end)}
+          className={`px-4 py-2 w-full rounded-lg ${start && end
+            ? 'bg-[#404040] opacity-90 hover:opacity-100'
+            : 'bg-gray-300 cursor-not-allowed'
+            } text-white`}
+        >
+          Proceed
+        </button>
       </div>
     </div>
   );
