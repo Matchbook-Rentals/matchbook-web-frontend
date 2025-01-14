@@ -10,14 +10,15 @@ const OverviewTab: React.FC = () => {
   return (
     <>
       <div className="w-full mx-auto bg-[#869A7D]/50">
-        <div className="w-[80%] h-[400px] mx-auto relative ">
+        <div className="w-full h-[520px] mx-auto flex flex-col justify-between ">
+
           <SearchEditBar />
           <Image
             src="/village-footer-opaque.png"
             alt="Village footer"
             width={1200}
             height={200}
-            className="w-full h-auto bottom-0 absolute"
+            className="w-[70%] mx-auto h-auto max-h-[70%]"
           />
         </div>
       </div>

@@ -9,7 +9,7 @@ interface SearchEditBarProps {
 const SearchEditBar: React.FC<SearchEditBarProps> = ({ className }) => {
   return (
     <>
-      <div className={`mx-auto hidden sm:block p-2 ${className || ""}`}>
+      <div className={`mx-auto w-[80%] hidden sm:block p-2 ${className || ""}`}>
         <div className="relative mt-6">
           <EditSearchInputsDesktop />
         </div>
