@@ -61,3 +61,35 @@ export async function updateUserImage() {
   }
 }
 
+
+export async function updateUserLogin(timestamp: Date) {
+  'use server'
+
+  const clerkUser = await currentUser();
+
+  try {
+    if (!clerkUser?.id) {
+      throw new Error('User ID is missing')
+    }
+
+    const dbUser = await prisma.user.findUnique({
+      where: { id: clerkUser.id }
+    })
+
+    if (!dbUser) {
+      await createUser();
+    }
+
+    await prisma.user.update({
+      where: { id: clerkUser.id },
+      data: { lastLogin: timestamp }
+    });
+
+    return { success: true };
+
+  } catch (error) {
+    console.error('Error updating user login timestamp:', error)
+    return { success: false, error: 'Failed to update login timestamp' }
+  }
+}
+

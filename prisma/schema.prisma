@@ -39,6 +39,7 @@ model User {
   hashedPassword  String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  lastLogin       DateTime?  
   verifiedAt      DateTime? // Timestamp of when user was verified
   hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
   trailblazerAt   DateTime? // Timestamp of when user became trailblazer

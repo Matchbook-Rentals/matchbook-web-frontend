@@ -117,7 +117,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
         </button>
       </div>
 
-      <div className="overflow-hidden relative test" style={{ minHeight: '250px' }}>
+      <div className="overflow-hidden relative" style={{ minHeight: '250px' }}>
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentMonth + '-' + currentYear}

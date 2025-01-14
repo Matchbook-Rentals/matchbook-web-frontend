@@ -11,6 +11,7 @@ interface DesktopDateRangeProps {
   start: Date | null;
   end: Date | null;
   handleChange: (start: Date | null, end: Date | null) => void;
+  onFlexibilityChange?: (flexibility: { start: 'exact' | number | null, end: 'exact' | number | null }) => void;
 }
 
 interface CalendarMonthProps {
@@ -30,6 +31,12 @@ interface CalendarDayProps {
   isStartDate?: boolean;
   isEndDate?: boolean;
   onClick: () => void;
+}
+
+interface FlexibleSelectorProps {
+  type: 'start' | 'end';
+  selectedOption: { start: 'exact' | number | null, end: 'exact' | number | null };
+  onSelect: (type: 'start' | 'end', option: 'exact' | number | null) => void;
 }
 
 function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick }: CalendarDayProps) {
@@ -102,11 +109,10 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
         <button
           onClick={onPrevMonth}
           disabled={isPrevDisabled}
-          className={`text-sm px-2 py-1 hover:bg-gray-100 rounded-md ${
-            isPrevDisabled
-              ? 'text-gray-300 cursor-not-allowed hover:bg-transparent'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`text-sm px-2 py-1 hover:bg-gray-100 rounded-md ${isPrevDisabled
+            ? 'text-gray-300 cursor-not-allowed hover:bg-transparent'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           Prev
         </button>
@@ -157,7 +163,47 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
   );
 }
 
-export function DesktopDateRange({ start, end, handleChange }: DesktopDateRangeProps) {
+function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelectorProps) {
+  const flexibleDays = [1, 3, 5, 7, 14];
+  const currentValue = type === 'start' ? selectedOption.start : selectedOption.end;
+
+  const handleOptionSelect = (option: 'exact' | number) => {
+    onSelect(type, currentValue === option ? null : option);
+  };
+
+  return (
+    <div className="flex gap-1 font-montserrat-light flex-wrap">
+      <button
+        className={`
+          px-3 py-1 text-sm rounded-full border-2 hover:bg-gray-100
+          ${currentValue === 'exact' ? 'border-[#404040]' : 'border-gray-200'}
+        `}
+        onClick={() => handleOptionSelect('exact')}
+      >
+        Exact dates
+      </button>
+      {flexibleDays.map(days => (
+        <button
+          key={days}
+          className={`
+            px-3 py-1 text-sm flex items-center hover:bg-gray-100 gap-1 rounded-full border-2
+            ${currentValue === days ? 'border-[#404040]' : 'border-gray-200'}
+          `}
+          onClick={() => handleOptionSelect(days)}
+        >
+          <div className="flex flex-col">
+            <span className="h-[8px] ">+</span>
+            <span className="h-[8px] ">-</span>
+            <span className="h-[8px] "></span>
+          </div>
+          <span>{days}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function DesktopDateRange({ start, end, handleChange, onFlexibilityChange }: DesktopDateRangeProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
@@ -166,7 +212,7 @@ export function DesktopDateRange({ start, end, handleChange }: DesktopDateRangeP
   const [rightMonth, setRightMonth] = useState(() => {
     // If end date exists and is valid (after start date and different month)
     if (end && (!start || (end > start &&
-        (end.getMonth() !== start.getMonth() || end.getFullYear() !== start.getFullYear())))) {
+      (end.getMonth() !== start.getMonth() || end.getFullYear() !== start.getFullYear())))) {
       return end.getMonth();
     }
     // Default to next month
@@ -175,11 +221,19 @@ export function DesktopDateRange({ start, end, handleChange }: DesktopDateRangeP
   const [rightYear, setRightYear] = useState(() => {
     // If end date exists and is valid (after start date and different month)
     if (end && (!start || (end > start &&
-        (end.getMonth() !== start.getMonth() || end.getFullYear() !== start.getFullYear())))) {
+      (end.getMonth() !== start.getMonth() || end.getFullYear() !== start.getFullYear())))) {
       return end.getFullYear();
     }
     // Default to current year (or next year if December)
     return currentMonth === 11 ? currentYear + 1 : currentYear;
+  });
+
+  const [flexibility, setFlexibility] = useState<{
+    start: 'exact' | number | null;
+    end: 'exact' | number | null;
+  }>({
+    start: null,
+    end: null
   });
 
   // Helper to check if a month/year combination is before current month
@@ -309,6 +363,18 @@ export function DesktopDateRange({ start, end, handleChange }: DesktopDateRangeP
             onNextMonth={handleLeftNextMonth}
             isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
           />
+          <div className="mt-4">
+            <h3 className="text-xs mb-1">Flexible Start Date</h3>
+            <FlexibleDateSelector
+              type="start"
+              selectedOption={flexibility}
+              onSelect={(type, option) => {
+                const newFlexibility = { ...flexibility, [type]: option };
+                setFlexibility(newFlexibility);
+                onFlexibilityChange?.(newFlexibility);
+              }}
+            />
+          </div>
         </div>
         <div className="flex-1">
           <CalendarMonth
@@ -320,6 +386,18 @@ export function DesktopDateRange({ start, end, handleChange }: DesktopDateRangeP
             onNextMonth={handleRightNextMonth}
             isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
           />
+          <div className="mt-4">
+            <h3 className="text-xs mb-1">Flexible End Date</h3>
+            <FlexibleDateSelector
+              type="end"
+              selectedOption={flexibility}
+              onSelect={(type, option) => {
+                const newFlexibility = { ...flexibility, [type]: option };
+                setFlexibility(newFlexibility);
+                onFlexibilityChange?.(newFlexibility);
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

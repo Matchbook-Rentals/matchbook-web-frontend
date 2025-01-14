@@ -83,6 +83,18 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   const handleLocationSelect = (location: any) => {
     setSelectedLocation(location);
+    // Automatically switch to date selector after location is selected
+    setActiveContent('date');
+
+    // Update arrow position for the date input
+    if (containerRef.current && moveInInputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = moveInInputRef.current.getBoundingClientRect();
+      const inputLeft = inputRect.left;
+      const inputCenter = inputLeft + (inputRect.width / 2);
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
+    }
   };
 
   // Add new state to track the arrow position

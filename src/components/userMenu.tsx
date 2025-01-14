@@ -7,11 +7,10 @@ import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
-import { updateUserImage } from '@/app/actions/user';
+import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
-import { FreshdeskWidget } from './freshdesk-widget';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
@@ -22,6 +21,11 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
   const [canUpdate, setCanUpdate] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    updateUserLogin(new Date());
+
+  }, []);
 
   const fetchNotifications = useCallback(async () => {
     if (isSignedIn) {
