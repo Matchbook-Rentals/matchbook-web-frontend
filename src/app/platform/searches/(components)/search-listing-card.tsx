@@ -15,7 +15,7 @@ import {
 import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
 
-const TITLE_MAX_LENGTH = 30
+const TITLE_MAX_LENGTH = 40
 
 interface SearchListingCardProps {
   listing: ListingAndImages
@@ -180,24 +180,32 @@ export default function SearchListingCard({ listing, status, className, style, d
       </div>
 
       <div
-        className={`pt-1 flex flex-col sm:min-h-[80px] ${detailsClassName || ''}`}
+        className={`pt-1 flex flex-col text-[14px] sm:min-h-[80px] ${detailsClassName || ''}`}
         style={detailsStyle}
       >
-        <div className="flex justify-between gap-x-2 items-start">
+        {/* Listing Title */}
+        <div className="flex justify-between text-[14px]  font-medium gap-x-2 items-start">
           <h3 className="">
             {listing.title.length > TITLE_MAX_LENGTH
               ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
               : listing.title}
           </h3>
+        </div>
+
+        {/* Listing Category and Rating */}
+        <div className='flex justify-between mt-2'>
+          {`${listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in 
+            ${listing.locationString.split(',').at(-2)?.trim() || listing.locationString}`}
           <div className="flex items-center">
-            <Star className="w-5 h-5 fill-charcoalBrand text-charcoalBrand" />
-            <span className="ml-1 text-base font-semibold">{listing.rating || 4.9}</span>
+            <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
+            <span className="">{listing.rating || 4.9}</span>
           </div>
         </div>
 
-        <div className="flex pt-2 items-center justify-between mt-auto">
-          <div className="text-base">
-            ${listing.price || 2350}
+        {/* Listing Price and beds */}
+        <div className="flex items-center justify-between mt-2">
+          <div className="">
+            ${listing.price?.toLocaleString() || 2350}
             <span className=""> month</span>
           </div>
           <div className="">

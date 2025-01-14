@@ -174,7 +174,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               })}
             </div>
           </ScrollArea>
-          <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-white border-t flex items-center justify-center gap-1">
+          <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
             <Button
               variant="ghost"
               size="icon"
