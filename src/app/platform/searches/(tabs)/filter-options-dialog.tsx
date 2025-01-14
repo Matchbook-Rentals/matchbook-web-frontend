@@ -129,7 +129,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'waterfront',
       label: 'Waterfront',
-      icon: <AmenitiesIcons.WaterfrontIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.WaterfrontIcon className="p-0 mt-2" />
     },
     {
       value: 'waterView',
@@ -160,22 +160,22 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'garbageDisposal',
       label: 'Garbage Disposal',
-      icon: <AmenitiesIcons.GarbageDisposalIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.GarbageDisposalIcon className="p-1 my-1" />
     },
     {
       value: 'dishwasher',
       label: 'Dishwasher',
-      icon: <AmenitiesIcons.DishwasherIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.DishwasherIcon className="p-0 mt-2" />
     },
     {
       value: 'fridge',
       label: 'Refrigerator',
-      icon: <AmenitiesIcons.FridgeIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.FridgeIcon className="p-0 mt-0 scale-110" />
     },
     {
       value: 'oven',
       label: 'Oven/Stove',
-      icon: <AmenitiesIcons.OvenIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.OvenIcon className="p-0 mt-2" />
     },
     {
       value: 'grill',
@@ -185,7 +185,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'kitchenEssentials',
       label: 'Kitchen Essentials',
-      icon: <AmenitiesIcons.KitchenEssentialsIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.KitchenEssentialsIcon className="p-0 mt-0" />
     }
   ];
 
@@ -198,17 +198,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'heater',
       label: 'Heater',
-      icon: <AmenitiesIcons.HeaterIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.HeaterIcon className="p-0 mt-0" />
     },
     {
       value: 'dedicatedWorkspace',
       label: 'Dedicated Workspace',
-      icon: <AmenitiesIcons.DedicatedWorkspaceIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.DedicatedWorkspaceIcon className="p-0 mt-0" />
     },
     {
       value: 'airConditioner',
       label: 'Air Conditioning',
-      icon: <AmenitiesIcons.AirConditioningIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.AirConditioningIcon className="p-0 mt-0" />
     }
   ];
 
@@ -237,7 +237,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'gym',
       label: 'Gym',
-      icon: <AmenitiesIcons.GymIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.GymIcon className="p-3 mt-2" />
     },
     {
       value: 'sauna',
@@ -252,7 +252,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'pool',
       label: 'Pool',
-      icon: <AmenitiesIcons.PoolIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.PoolIcon className="p-0 mt-2" />
     },
     {
       value: 'hotTub',
@@ -610,12 +610,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       {
                         value: 'petsAllowed',
                         label: 'Pets Allowed',
-                        icon: <AmenitiesIcons.PetFriendlyIcon className="mt-4" />
+                        icon: <AmenitiesIcons.PetFriendlyIcon className=" mt-2" />
                       },
                       {
                         value: 'petsNotAllowed',
                         label: 'No Pets',
-                        icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-4" />
+                        icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-1" />
                       }
                     ].map(({ value, label, icon }) => {
                       const isSelected = localFilters.pets.includes(value);

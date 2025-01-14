@@ -100,10 +100,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
 
   return (
     <>
-      <div className='group flex max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
+      <div className='group flex w-[95vw] sm:max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
 
         <div className="relative group">
-          <Image src={statePhotoPath} height={400} width={400} className='h-[134px]  min-w-[143px] w-[143px] rounded-[15px]' />
+          <Image src={statePhotoPath} height={400} width={400} className='h-[134px] min-w-[193px]  sm:min-w-[143px] w-1/2 sm:w-[143px] rounded-[15px]' />
           <div
             onClick={handleDeleteClick}
             className="absolute xs:opacity-0 group-hover:opacity-100 flex top-2 left-2 p-1.5 bg-background/60 rounded-full cursor-pointer hover:bg-background transition-opacity duration-200 ease-in-out"
@@ -135,17 +135,25 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             </DialogContent>
           </Dialog>
         </div>
-        <div className='flex flex-col justify-between max-w-[200px] sm:max-w-[150px] ml-4 pt-1'>
+        <div className='flex flex-col justify-between w-1/2  sm:max-w-[150px] ml-4 pt-1'>
           <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
-          <h2 className='truncate'>{trip.searchRadius || '50 miles (m)'}</h2>
-          <h2 className='truncate'>{trip.startDate?.toLocaleDateString()} - {trip.endDate?.toLocaleDateString()}</h2>
+          <h2 className='truncate'>{'Within ' + trip.searchRadius + ' miles' || '50 miles (m)'}</h2>
+          <h2 className='truncate'>
+            {trip.startDate?.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric'
+            })} - {trip.endDate?.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric'
+            })}
+          </h2>
           <h2 className='truncate'>
             {/* Price display logic: shows range or 'any' if no prices set */}
             {(() => {
-              if (!trip.minPrice && !trip.maxPrice) return '$ any';
-              if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice} - $${trip.maxPrice}`;
-              if (trip.minPrice) return `$${trip.minPrice} or more`;
-              if (trip.maxPrice) return `$${trip.maxPrice} or less`;
+              if (!trip.minPrice && !trip.maxPrice) return 'No price range';
+              if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice.toLocaleString()} - $${trip.maxPrice.toLocaleString()}`;
+              if (trip.minPrice) return `$${trip.minPrice.toLocaleString()} or more`;
+              if (trip.maxPrice) return `$${trip.maxPrice.toLocaleString()} or less`;
             })()}
           </h2>
 

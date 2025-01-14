@@ -22,7 +22,7 @@ const OverviewTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-between w-full test mx-auto mt-8 gap-4">
+      <div className="flex flex-wrap justify-between w-full  mx-auto mt-8 gap-4">
         <div className="flex-1 p-6 border rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3">
             <div className="text-gray-600">

@@ -16,8 +16,10 @@ export default function Tile({ label, icon, className, labelClassNames, onClick 
       onClick={onClick}
     >
       <CardContent className="flex flex-col items-center space-y-1 justify-between h-full w-full p-0 ">
-        {icon}
-        <div className={`text-center pb-2 w-[98%] ${labelClassNames || ''}`}>
+        <div className='flex flex-col h-[60%] justify-center items-center'>
+          {icon}
+        </div>
+        <div className={`text-center pb-2 w-[98%] h-[30%] flex flex-col justify-center items-center ${labelClassNames || ''}`}>
           {label}
         </div>
       </CardContent>
