@@ -115,6 +115,10 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
 
     const currentDate = new Date(year, month, day);
     const startDate = dateRange.start;
+
+    // Don't disable the start date itself
+    if (currentDate.getTime() === startDate.getTime()) return false;
+
     const daysDifference = Math.abs((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
     return daysDifference <= 30;
