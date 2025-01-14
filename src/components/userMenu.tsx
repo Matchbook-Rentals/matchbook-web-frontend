@@ -82,15 +82,21 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }
   setTimeout(() => {
-    window.FreshworksWidget('hide', 'launcher');
+    if (window.FreshworksWidget) {
+      window.FreshworksWidget('hide', 'launcher');
+    }
     const openWidget = () => {
-      (window as any).FreshworksWidget('open');
+      if (window.FreshworksWidget) {
+        (window as any).FreshworksWidget('open');
+      }
     }
   }, 0)
 
   const handleSupportClick = () => {
     setIsMenuOpen(false);
-    window.FreshworksWidget('open');
+    if (window.FreshworksWidget) {
+      window.FreshworksWidget('open');
+    }
   }
 
   return (

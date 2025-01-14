@@ -37,7 +37,9 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
   }
 
   setTimeout(() => {
-    window.FreshworksWidget('show', 'launcher');
+    if (window.FreshworksWidget) {
+      window.FreshworksWidget('show', 'launcher');
+    }
   })
 
   return (
