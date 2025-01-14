@@ -81,23 +81,24 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       setHasUnread(notifications.some(notification => notification.id !== notificationId && notification.unread));
     }
   }
-  setTimeout(() => {
-    if (window.FreshworksWidget) {
-      window.FreshworksWidget('hide', 'launcher');
-    }
-    const openWidget = () => {
-      if (window.FreshworksWidget) {
-        (window as any).FreshworksWidget('open');
-      }
-    }
-  }, 0)
 
-  const handleSupportClick = () => {
-    setIsMenuOpen(false);
-    if (window.FreshworksWidget) {
-      window.FreshworksWidget('open');
-    }
-  }
+  //setTimeout(() => {
+  //  if (window?.FreshworksWidget) {
+  //    window?.FreshworksWidget('hide', 'launcher');
+  //  }
+  //  const openWidget = () => {
+  //    if (window?.FreshworksWidget) {
+  //      window?.FreshworksWidget('open');
+  //    }
+  //  }
+  //}, 0)
+
+  //const handleSupportClick = () => {
+  //  setIsMenuOpen(false);
+  //  if (window?.FreshworksWidget) {
+  //    window?.FreshworksWidget('open');
+  //  }
+  //}
 
   return (
     <div className="flex items-center space-x-1 md:space-x-4">

@@ -36,11 +36,11 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
     setDefaultIsOpen(true);
   }
 
-  setTimeout(() => {
-    if (window.FreshworksWidget) {
-      window.FreshworksWidget('show', 'launcher');
-    }
-  })
+  //setTimeout(() => {
+  //  if (window?.FreshworksWidget) {
+  //    window?.FreshworksWidget('show', 'launcher');
+  //  }
+  //}, 300)
 
   return (
     <div className="sticky mb-0 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b">
