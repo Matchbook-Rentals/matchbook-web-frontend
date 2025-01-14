@@ -303,7 +303,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       className="flex flex-col p-3 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw]"
       animate={{
         width: activeInput !== null ? '85vw' : '60vw',
-        height: activeInput !== null ? 'auto' : '60vh'
+        height: activeInput !== null ? 'auto' : 'auto'
       }}
       transition={{
         duration: 0.3,

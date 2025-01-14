@@ -32,6 +32,7 @@ interface CalendarDayProps {
   isEndDate?: boolean;
   onClick: () => void;
   isMobile?: boolean;
+  isDisabled?: boolean;
 }
 
 interface FlexibleSelectorProps {
@@ -97,6 +98,20 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 
   const getMonthName = (monthIndex: number) => {
     return new Date(2024, monthIndex).toLocaleString('default', { month: 'short' });
+  };
+
+  const isDateDisabled = (day: number) => {
+    if (!dateRange.start || dateRange.end) return false;
+
+    const currentDate = new Date(currentYear, currentMonth, day);
+    const startDate = dateRange.start;
+
+    // Don't disable the start date itself
+    if (currentDate.getTime() === startDate.getTime()) return false;
+
+    const daysDifference = Math.abs((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    return daysDifference <= 30;
   };
 
   return (
@@ -173,6 +188,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
                     isEndDate={isEndDate(day)}
                     onClick={() => onDateSelect(day, currentMonth, currentYear)}
                     isMobile={isMobile}
+                    isDisabled={isDateDisabled(day)}
                   />
                 );
               })}
@@ -184,7 +200,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
   );
 }
 
-function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile }: CalendarDayProps) {
+function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isMobile, isDisabled }: CalendarDayProps) {
   const hasCompleteRange = isInRange || isEndDate;
   const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
@@ -193,17 +209,20 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
   return (
     <button
       className={`
-                aspect-square w-full flex items-center justify-center
-                ${isMobile ? 'text-sm py-1' : 'text-xs hover:bg-gray-100'}
-                relative
-                touch-manipulation
-            `}
+        aspect-square w-full flex items-center justify-center
+        ${isMobile ? 'text-sm py-1' : 'text-xs hover:bg-gray-100'}
+        relative
+        touch-manipulation
+        ${isDisabled ? 'cursor-not-allowed' : ''}
+      `}
       onClick={onClick}
+      disabled={isDisabled}
     >
       <span className={`
-                z-10
-                ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center' : ''}
-            `}>
+        z-10
+        ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center' : ''}
+        ${isDisabled && !isSelected ? 'line-through text-gray-300' : ''}
+      `}>
         {day}
       </span>
       {showRangeBackground && (
