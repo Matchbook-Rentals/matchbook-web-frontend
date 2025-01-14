@@ -116,7 +116,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link> */}
                 <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
                 <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
-                <p onClick={} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
+                <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
                 {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/bookings'>Bookings</Link> */}
                 {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
                 <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/messages'>Messages</Link> */}
@@ -155,7 +155,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             </PopoverTrigger>
             <PopoverContent className='w-full p1'>
               <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
-              <p onClick={} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
+              <p onClick={() => { }} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
             </PopoverContent>
           </Popover>
           <Popover>
