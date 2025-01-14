@@ -219,7 +219,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         <input
           ref={moveInInputRef}
           type="text"
-          placeholder="Move in:"
+          placeholder="Move in"
           value={formatDate(dateRange.start)}
           className={inputClasses}
           readOnly={!hasAccess}
@@ -228,7 +228,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         <input
           ref={moveOutInputRef}
           type="text"
-          placeholder="Move out:"
+          placeholder="Move out"
           value={formatDate(dateRange.end)}
           className={inputClasses}
           readOnly={!hasAccess}

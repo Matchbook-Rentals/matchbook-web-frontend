@@ -13,8 +13,8 @@ const EditSearchInputsMobile: React.FC = () => {
 
   const getTotalGuests = () => {
     const total = (state.trip?.numAdults || 0) +
-                 (state.trip?.numChildren || 0) +
-                 (state.trip?.numPets || 0);
+      (state.trip?.numChildren || 0) +
+      (state.trip?.numPets || 0);
     return total ? `${total} Guest${total !== 1 ? 's' : ''}` : '';
   };
 
@@ -37,7 +37,7 @@ const EditSearchInputsMobile: React.FC = () => {
           <span className="text-xs text-gray-500 px-4">Move In</span>
           <input
             type="text"
-            placeholder="Move in:"
+            placeholder="Move in"
             value={formatDate(state.trip?.startDate)}
             className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
             readOnly
@@ -49,7 +49,7 @@ const EditSearchInputsMobile: React.FC = () => {
           <span className="text-xs text-gray-500 px-4">Move Out</span>
           <input
             type="text"
-            placeholder="Move out:"
+            placeholder="Move out"
             value={formatDate(state.trip?.endDate)}
             className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent"
             readOnly

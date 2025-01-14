@@ -155,7 +155,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
         {(activeInput === index || (index === 2 && activeInput === 3)) && (
           <motion.div
             initial={{ maxHeight: 0, opacity: 0 }}
-            animate={{ maxHeight: "500px", opacity: 1 }}
+            animate={{ maxHeight: "1500px", opacity: 1 }}
             exit={{ maxHeight: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="w-full bg-background border-t border-b border-gray-200 overflow-hidden"
@@ -190,7 +190,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
         {activeInput === 0 && (
           <motion.div
             initial={{ maxHeight: 0, opacity: 0 }}
-            animate={{ maxHeight: "500px", opacity: 1 }}
+            animate={{ maxHeight: "1500px", opacity: 1 }}
             exit={{ maxHeight: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="bg-background border-t border-b border-gray-200 overflow-hidden w-full"
@@ -300,9 +300,10 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
   return (
     <motion.div
       ref={componentRef}
-      className="flex flex-col p-3 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw]"
+      className="flex flex-col p-3 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw]"
       animate={{
-        width: activeInput !== null ? '85vw' : '60vw'
+        width: activeInput !== null ? '85vw' : '60vw',
+        height: activeInput !== null ? 'auto' : '60vh'
       }}
       transition={{
         duration: 0.3,
@@ -321,7 +322,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
 
       <input
         type="text"
-        placeholder="Move in:"
+        placeholder="Move in"
         value={dateRange.start ? format(dateRange.start, 'MMM d, yyyy') : ''}
         className={inputClasses}
         readOnly={!hasAccess}
@@ -329,7 +330,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
       />
       <input
         type="text"
-        placeholder="Move out:"
+        placeholder="Move out"
         value={dateRange.end ? format(dateRange.end, 'MMM d, yyyy') : ''}
         className={inputClasses}
         readOnly={!hasAccess}

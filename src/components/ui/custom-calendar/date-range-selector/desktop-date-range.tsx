@@ -379,16 +379,18 @@ export function DesktopDateRange({
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
       <div className="flex gap-8">
-        <div className="flex-1">
-          <CalendarMonth
-            year={leftYear}
-            month={leftMonth}
-            dateRange={{ start, end }}
-            onDateSelect={handleDateSelect}
-            onPrevMonth={handleLeftPrevMonth}
-            onNextMonth={handleLeftNextMonth}
-            isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
-          />
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1">
+            <CalendarMonth
+              year={leftYear}
+              month={leftMonth}
+              dateRange={{ start, end }}
+              onDateSelect={handleDateSelect}
+              onPrevMonth={handleLeftPrevMonth}
+              onNextMonth={handleLeftNextMonth}
+              isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
+            />
+          </div>
           <div className="mt-4">
             <h3 className="text-xs mb-1">Flexible Start Date</h3>
             <FlexibleDateSelector
@@ -402,16 +404,18 @@ export function DesktopDateRange({
             />
           </div>
         </div>
-        <div className="flex-1">
-          <CalendarMonth
-            year={rightYear}
-            month={rightMonth}
-            dateRange={{ start, end }}
-            onDateSelect={handleDateSelect}
-            onPrevMonth={handleRightPrevMonth}
-            onNextMonth={handleRightNextMonth}
-            isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
-          />
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1">
+            <CalendarMonth
+              year={rightYear}
+              month={rightMonth}
+              dateRange={{ start, end }}
+              onDateSelect={handleDateSelect}
+              onPrevMonth={handleRightPrevMonth}
+              onNextMonth={handleRightNextMonth}
+              isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
+            />
+          </div>
           <div className="mt-4">
             <h3 className="text-xs mb-1">Flexible End Date</h3>
             <FlexibleDateSelector

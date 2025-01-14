@@ -100,7 +100,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
   };
 
   return (
-    <div className="w-full px-2">
+    <div className="w-full px-2 ">
       <div className="flex justify-between items-center mt-1 mb-2 h-12">
         <button
           onClick={handlePreviousMonth}
@@ -117,7 +117,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
         </button>
       </div>
 
-      <div className="overflow-hidden relative" style={{ minHeight: '250px' }}>
+      <div className="overflow-hidden relative" >
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentMonth + '-' + currentYear}
@@ -156,7 +156,7 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
               ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-0">
+            <div className="grid grid-cols-7  gap-0">
               {Array.from({ length: firstDayOfWeek }).map((_, index) => (
                 <div key={`empty-${index}`} className="aspect-square text-xs text-gray-400" />
               ))}
@@ -369,55 +369,53 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
 
   return (
     <div className="flex flex-col w-full">
-      <ScrollArea className="h-[450px]">
-        <div className="mb-16">
-          <div className="px-0">
-            <CalendarMonth
-              year={currentYear}
-              month={currentMonth}
-              dateRange={dateRange}
-              onDateSelect={handleDateSelect}
-              isMobile={true}
+      <div className="mb-6">
+        <div className="px-0">
+          <CalendarMonth
+            year={currentYear}
+            month={currentMonth}
+            dateRange={dateRange}
+            onDateSelect={handleDateSelect}
+            isMobile={true}
+          />
+        </div>
+
+        <div className="px-3 space-y-4">
+          <div>
+            <h3 className="text-xs mb-1">Flexible Start Date</h3>
+            <FlexibleDateSelector
+              type="start"
+              selectedOption={flexibility}
+              onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
             />
           </div>
-
-          <div className="px-3 space-y-4">
-            <div>
-              <h3 className="text-xs mb-1">Flexible Start Date</h3>
-              <FlexibleDateSelector
-                type="start"
-                selectedOption={flexibility}
-                onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
-              />
-            </div>
-            <div>
-              <h3 className="text-xs mb-1">Flexible End Date</h3>
-              <FlexibleDateSelector
-                type="end"
-                selectedOption={flexibility}
-                onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
-              />
-            </div>
-          </div>
-
-          <div className="px-3 mt-4">
-            <div className="flex gap-x-4">
-              <button
-                onClick={handleClear}
-                className="flex-1 px-2 py-2 text-sm rounded-full border-2 border-gray-200 hover:bg-gray-100"
-              >
-                Clear
-              </button>
-              <button
-                onClick={onProceed}
-                className="flex-1 bg-[#404040]/90 hover:bg-[#404040] text-white rounded-full py-2 text-sm"
-              >
-                Proceed
-              </button>
-            </div>
+          <div>
+            <h3 className="text-xs mb-1">Flexible End Date</h3>
+            <FlexibleDateSelector
+              type="end"
+              selectedOption={flexibility}
+              onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
+            />
           </div>
         </div>
-      </ScrollArea>
+
+        <div className="px-3 mt-4">
+          <div className="flex gap-x-4">
+            <button
+              onClick={handleClear}
+              className="flex-1 px-2 py-2 text-sm rounded-full border-2 border-gray-200 hover:bg-gray-100"
+            >
+              Clear
+            </button>
+            <button
+              onClick={onProceed}
+              className="flex-1 bg-[#404040]/90 hover:bg-[#404040] text-white rounded-full py-2 text-sm"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
 
     </div>
   );
