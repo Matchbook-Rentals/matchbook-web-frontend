@@ -264,19 +264,11 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
       {flexibleDays.map(days => (
         <button
           key={days}
-          className={`
-                        px-4 py-1 text-sm flex items-center gap-1 rounded-full border-2
-                        ${currentValue === days
-              ? 'border-[#404040]'
-              : 'border-gray-200'}
-                    `}
+          className={` px-4 py-1 text-sm flex items-center gap-1 rounded-full
+            border-2 ${currentValue === days ? 'border-[#404040]' : 'border-gray-200'} `}
           onClick={() => handleOptionSelect(days)}
         >
-          <div className="flex flex-col leading-[0.75] text-sm">
-            <span className="h-[8px]">+</span>
-            <span className="h-[8px]">-</span>
-          </div>
-          <span>{days}</span>
+          &#177;{days}
         </button>
       ))}
     </div>

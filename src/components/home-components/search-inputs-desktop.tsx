@@ -47,7 +47,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
-  const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent`;
 
   // Add this effect to update totalGuests whenever guests state changes
@@ -204,7 +204,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   return (
     <div ref={containerRef} className="relative">
       <div
-        className="flex flex-row no-wrap p-3 items-center bg-background rounded-full shadow-md overflow-hidden"
+        className="flex flex-row no-wrap px-3 py-1 xl:px-3 xl:py-3 items-center bg-background rounded-full shadow-md overflow-hidden"
 
       >
         <input

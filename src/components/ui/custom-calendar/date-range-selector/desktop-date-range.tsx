@@ -214,12 +214,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
           `}
           onClick={() => handleOptionSelect(days)}
         >
-          <div className="flex flex-col">
-            <span className="h-[8px] ">+</span>
-            <span className="h-[8px] ">-</span>
-            <span className="h-[8px] "></span>
-          </div>
-          <span>{days}</span>
+          &#177; {days}
         </button>
       ))}
     </div>
