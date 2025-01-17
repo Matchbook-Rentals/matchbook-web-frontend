@@ -9,18 +9,23 @@ import { ImSpinner8 } from "react-icons/im";
 import { createTrip } from "@/app/actions/trips";
 import { useRouter } from "next/navigation";
 import { DisabledDesktopInputs } from "./disabled-inputs";
+import { cn } from "@/lib/utils";
 
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
   guestsContent?: React.ReactNode;
   hasAccess: boolean;
+  className?: string;
+  inputClassName?: string;
 }
 
 // Add this type definition
 type ActiveContentType = 'location' | 'date' | 'guests' | null;
 
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
-  hasAccess
+  hasAccess,
+  className,
+  inputClassName
 }) => {
   const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -48,7 +53,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
   const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
-    } bg-transparent`;
+    } bg-white ${inputClassName || ''}`;
 
   // Add this effect to update totalGuests whenever guests state changes
   React.useEffect(() => {
@@ -185,7 +190,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     });
 
     if (response.success && response.trip) {
-      router.push(`/platform/trips/${response.trip.id}`);
+      router.push(`/platform/trips/${response.trip.id}?tab=matchmaker`);
     } else {
       toast({
         variant: "destructive",
@@ -204,8 +209,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   return (
     <div ref={containerRef} className="relative">
       <div
-        className="flex flex-row no-wrap px-3 py-1 xl:px-3 xl:py-3 items-center bg-background rounded-full shadow-md overflow-hidden"
-
+        className={cn('flex flex-row no-wrap px-3 py-1 xl:px-3 xl:py-3 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
         <input
           ref={locationInputRef}

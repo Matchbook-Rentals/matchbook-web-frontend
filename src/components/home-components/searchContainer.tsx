@@ -5,9 +5,15 @@ import { useAuth, useUser } from "@clerk/nextjs";
 
 interface SearchContainerProps {
   className?: string;
+  containerStyles?: string;
+  inputStyles?: string;
 }
 
-const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
+const SearchContainer: React.FC<SearchContainerProps> = ({
+  className,
+  containerStyles,
+  inputStyles
+}) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
   const { user } = useUser();
@@ -28,13 +34,13 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ className }) => {
   return (
     <>
       <div className={`mx-auto hidden sm:block p-2 ${className || ""}`}>
-        <div className="relative">
-          <SearchInputsDesktop hasAccess={hasAccess} />
+        <div className={`relative`}>
+          <SearchInputsDesktop hasAccess={hasAccess} inputClassName={inputStyles} className={containerStyles} />
         </div>
       </div>
       <div className={`mx-auto block sm:hidden p-2 ${className || ""}`}>
-        <div className="relative">
-          <SearchInputsMobile hasAccess={hasAccess} />
+        <div className={`relative ${containerStyles || ""}`}>
+          <SearchInputsMobile hasAccess={hasAccess} inputClassName={inputStyles} className={containerStyles} />
         </div>
       </div>
     </>

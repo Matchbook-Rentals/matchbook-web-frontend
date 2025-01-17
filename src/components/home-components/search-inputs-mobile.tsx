@@ -20,6 +20,8 @@ interface Suggestion {
 
 interface SearchInputsMobileProps {
   hasAccess: boolean;
+  className?: string;
+  inputClassName?: string;
 }
 
 const PRESET_CITIES = [
@@ -30,7 +32,11 @@ const PRESET_CITIES = [
   { description: "Miami, FL", lat: 25.7617, lng: -80.1918 },
 ];
 
-const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) => {
+const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
+  hasAccess,
+  className,
+  inputClassName
+}) => {
   const [activeInput, setActiveInput] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -73,7 +79,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
   }, [guests]);
 
   const inputClasses = `w-full px-4 py-3 font-medium text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
-    } bg-transparent`;
+    } bg-transparent ${inputClassName || ''}`;
 
   const prefetchGeocode = async (description: string) => {
     try {
@@ -286,7 +292,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
     });
 
     if (response.success && response.trip) {
-      router.push(`/platform/trips/${response.trip.id}`);
+      router.push(`/platform/trips/${response.trip.id}?tab=matchmaker`);
     } else {
       toast({
         variant: "destructive",
@@ -300,7 +306,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({ hasAccess }) =>
   return (
     <motion.div
       ref={componentRef}
-      className="flex flex-col p-3 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw]"
+      className={`flex flex-col p-3 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw] ${className || ''}`}
       animate={{
         width: activeInput !== null ? '85vw' : '60vw',
         height: activeInput !== null ? 'auto' : 'auto'

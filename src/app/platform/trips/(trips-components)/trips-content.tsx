@@ -6,6 +6,7 @@ import TripGrid from './trip-grid';
 import { PAGE_MARGIN } from '@/constants/styles';
 import { Trip } from '@prisma/client';
 import SearchContainer from '@/components/home-components/searchContainer';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface TripsContentProps {
   trips: Trip[];
@@ -15,7 +16,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
   const [showSearch, setShowSearch] = useState(false);
 
   return (
-    <div className={`bg-background ${PAGE_MARGIN} mx-auto`}>
+    <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
       <div className='flex justify-between'>
         <h1 className="font-montserrat-regular text-[14px]">Searches</h1>
         <p
@@ -26,14 +27,24 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         </p>
       </div>
 
-      {/* Search container with slide animation */}
-      <div
-        className={`overflow-hidden transition-all duration-300 flex justify-center ease-in-out ${
-          showSearch ? 'h-[750px] opacity-100 my-4' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <SearchContainer className="z-100" />
-      </div>
+      {/* Search container with Framer Motion animation */}
+      <AnimatePresence>
+        {showSearch && (
+          <motion.div
+            initial={{ height: 0, opacity: 0, scale: 0.9 }}
+            animate={{ height: 150, opacity: 1, scale: 1 }}
+            exit={{ height: 0, opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex justify-center my-4 "
+          >
+            <SearchContainer
+              className="z-100"
+              containerStyles='bg-white border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+              inputStyles='bg-white'
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="w-full mx-auto my-4 sm:mb-4">
         <Image
