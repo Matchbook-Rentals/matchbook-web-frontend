@@ -124,7 +124,8 @@ export default function SearchListingCard({ listing, status, className, style, d
         ) : (
           <div className="absolute top-2 right-2">
             <div
-              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out bg-white/60 ${isMenuOpen ? 'w-[48px] h-[207px]' : 'w-[48px] h-[48px]'}`}
+              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out 
+              bg-white/60 ${isMenuOpen ? 'w-[48px] h-[188px]' : 'w-[48px] h-[48px]'}`}
               onMouseEnter={() => setIsMenuOpen(true)}
               onMouseLeave={() => setIsMenuOpen(false)}
             >

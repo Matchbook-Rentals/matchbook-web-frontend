@@ -39,7 +39,7 @@ model User {
   hashedPassword  String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  lastLogin       DateTime?  
+  lastLogin       DateTime?
   verifiedAt      DateTime? // Timestamp of when user was verified
   hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
   trailblazerAt   DateTime? // Timestamp of when user became trailblazer
@@ -117,18 +117,22 @@ model Account {
 }
 
 model Listing {
-  id                     String   @id @default(uuid())
-  status                 String   @default("available")
+  id                     String    @id @default(uuid())
+  isApproved             Boolean   @default(false)
+  createdAt              DateTime  @default(now())
+  lastModified           DateTime  @default(now())
+  lastApprovalDecision   DateTime?
+  lastDecisionComment    String?   @db.Text
+  status                 String    @default("available")
   title                  String
   description            String
   imageSrc               String?
-  createdAt              DateTime @default(now())
   category               String?
   roomCount              Int
   bathroomCount          Int
   guestCount             Int?
-  latitude               Float    @default(0)
-  longitude              Float    @default(0)
+  latitude               Float     @default(0)
+  longitude              Float     @default(0)
   locationString         String?
   city                   String?
   state                  String?
@@ -136,16 +140,16 @@ model Listing {
   streetAddress2         String?
   postalCode             String?
   userId                 String
-  squareFootage          Int      @default(0)
+  squareFootage          Int       @default(0)
   depositSize            Int?
-  requireBackgroundCheck Boolean  @default(false)
-  shortestLeaseLength    Int      @default(1)
-  longestLeaseLength     Int      @default(12)
-  shortestLeasePrice     Int      @default(4000)
-  longestLeasePrice      Int      @default(3500)
-  furnished              Boolean  @default(false)
-  utilitiesIncluded      Boolean  @default(false)
-  petsAllowed            Boolean  @default(false)
+  requireBackgroundCheck Boolean   @default(false)
+  shortestLeaseLength    Int       @default(1)
+  longestLeaseLength     Int       @default(12)
+  shortestLeasePrice     Int       @default(4000)
+  longestLeasePrice      Int       @default(3500)
+  furnished              Boolean   @default(false)
+  utilitiesIncluded      Boolean   @default(false)
+  petsAllowed            Boolean   @default(false)
 
   // General Amenities
   airConditioner     Boolean @default(false)
@@ -344,8 +348,8 @@ model Trip {
   minPrice     Int?
   maxPrice     Int?
   minBeds      Int?
-  minBedrooms   Int?
-  minBathrooms  Int?
+  minBedrooms  Int?
+  minBathrooms Int?
   searchRadius Int? @default(50)
 
   // Highlight Filters 
