@@ -215,21 +215,18 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   const laundryOptions = [
     {
       value: 'washerInUnit',
-      label: 'In Unit',
+      label: 'In-Unit Laundry',
       id: 'inUnit',
-      index: 0
     },
     {
       value: 'washerInComplex',
-      label: 'In Complex',
+      label: 'In-Unit or On-Site Laundry',
       id: 'inComplex',
-      index: 1
     },
     {
       value: 'washerNotAvailable',
-      label: 'Not Available',
+      label: 'No Laundry Preference',
       id: 'notAvailable',
-      index: 2
     }
   ];
 
@@ -689,53 +686,54 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       <AmenitiesIcons.WasherIcon className="w-[49px] h-[53px]" />
                     </div>
                     <div className="flex flex-col justify-between space-y-3">
-                      {laundryOptions.map((option) => {
-                        // Calculate if this option should be checked based on cascading logic
-                        const selectedOptions = localFilters.laundry || [];
-                        const isChecked = selectedOptions.includes(option.value);
-                        // If any lower option is selected, this one should be too
-                        const isCascadeChecked = selectedOptions.some((selected) => {
-                          const selectedOption = laundryOptions.find(opt => opt.value === selected);
-                          return selectedOption && selectedOption.index >= option.index;
-                        });
+                      {laundryOptions.map((option) => (
+                        <div key={option.id} className='flex items-center gap-x-2'>
+                          <input
+                            type="radio"
+                            id={option.id}
+                            name="laundry"
+                            checked={
+                              (option.value === 'washerInUnit' && localFilters.laundry?.length === 1) ||
+                              (option.value === 'washerInComplex' && localFilters.laundry?.length === 2) ||
+                              (option.value === 'washerNotAvailable' && localFilters.laundry?.length === 3)
+                            }
+                            className='appearance-none w-[25px] h-[25px] border-[#70707045] border rounded-full cursor-pointer
+                             relative flex items-center justify-center before:content-[""] before:w-[15px] before:h-[15px] before:rounded-full
+                             checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] hover:border-[#4F4F4F] transition-colors'
+                            onChange={() => {}}
+                            onClick={() => {
+                              // If clicking the currently selected option, clear the selection
+                              if (
+                                (option.value === 'washerInUnit' && localFilters.laundry?.length === 1) ||
+                                (option.value === 'washerInComplex' && localFilters.laundry?.length === 2) ||
+                                (option.value === 'washerNotAvailable' && localFilters.laundry?.length === 3)
+                              ) {
+                                handleLocalFilterChange('laundry', []);
+                                return;
+                              }
 
-                        return (
-                          <div key={option.id} className='flex items-center gap-x-2'>
-                            <Checkbox
-                              id={option.id}
-                              checked={isChecked || isCascadeChecked}
-                              className='w-[25px] h-[25px] border-[#70707045] border-2'
-                              checkSize='h-5 w-5'
-                              onCheckedChange={(checked) => {
-                                let updatedLaundry = [...(localFilters.laundry || [])];
-
-                                if (checked) {
-                                  // When checking an option, add all options from this one up
-                                  const optionsToAdd = laundryOptions
-                                    .filter(opt => opt.index <= option.index)
-                                    .map(opt => opt.value)
-                                    .filter(opt => !updatedLaundry.includes(opt));
-                                  updatedLaundry = [...updatedLaundry, ...optionsToAdd];
-                                } else {
-                                  // When unchecking, remove this option and all worse options
-                                  updatedLaundry = updatedLaundry.filter((opt) => {
-                                    const selectedOption = laundryOptions.find(o => o.value === opt);
-                                    return selectedOption && selectedOption.index < option.index;
-                                  });
-                                }
-
-                                handleLocalFilterChange('laundry', updatedLaundry);
-                              }}
-                            />
-                            <label
-                              htmlFor={option.id}
-                              className='text-[#2D2F2E80] font-montserrat-medium cursor-pointer'
-                            >
-                              {option.label}
-                            </label>
-                          </div>
-                        );
-                      })}
+                              // Handle different selections
+                              switch (option.value) {
+                                case 'washerInUnit':
+                                  handleLocalFilterChange('laundry', ['washerInUnit']);
+                                  break;
+                                case 'washerInComplex':
+                                  handleLocalFilterChange('laundry', ['washerInUnit', 'washerInComplex']);
+                                  break;
+                                case 'washerNotAvailable':
+                                  handleLocalFilterChange('laundry', ['washerInUnit', 'washerInComplex', 'washerNotAvailable']);
+                                  break;
+                              }
+                            }}
+                          />
+                          <label
+                            htmlFor={option.id}
+                            className='text-[#2D2F2E80] font-montserrat-medium cursor-pointer'
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>

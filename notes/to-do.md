@@ -5,6 +5,19 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
+- [ ] Deselect laundry
+- [ ]  kill tiles move to text and icon in single file (needs dialog)
+- [ ]  FIX SEARCH CONTAINER DIFF COLORS ON HOME PAGE
+- [ ]  Mobile view
+
+
+
+
+
+
+
+
+
 scale of village footer expanding in to search bar
 fitler is dead on mobile
 set one month minimuj on calendar
@@ -16,6 +29,7 @@ mirror bottom padding on matchbook header
 trip delete, lanuage change edit button to populate trashcans
 new serach button opens full screen serach modal, differetn from desktop behaviour
 skeleton adjustment, 
+
 
 - [ ] MYMOO
 - [ ] mobile popover
