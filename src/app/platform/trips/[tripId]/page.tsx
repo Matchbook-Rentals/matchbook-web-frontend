@@ -96,7 +96,7 @@ const TripsPage: React.FC = () => {
     },
   ];
 
-  const marginClass = APP_PAGE_MARGIN;
+  const marginClass = PAGE_MARGIN;
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>

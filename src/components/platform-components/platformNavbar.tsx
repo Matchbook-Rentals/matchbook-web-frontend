@@ -10,10 +10,13 @@ import { usePathname } from "next/navigation";
 export default function PlatformNavbar() {
   const pathName = usePathname()
   const { isSignedIn } = useUser();
-  const narrowPathNames = ['/platform/trips', '/platform/searches'];
+
   let marginClass;
 
-  narrowPathNames.includes(pathName) ? marginClass = PAGE_MARGIN : marginClass = APP_PAGE_MARGIN;
+  const pathSegments = pathName.split('/');
+  const isNarrowPath = pathSegments.includes('trips') || pathSegments.includes('searches');
+
+  isNarrowPath ? marginClass = PAGE_MARGIN : marginClass = APP_PAGE_MARGIN;
 
   return (
     <motion.nav
