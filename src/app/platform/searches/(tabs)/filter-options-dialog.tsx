@@ -53,22 +53,22 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'singleFamily',
       label: 'Single Family',
-      icon: <AmenitiesIcons.SingleFamilyIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="p-1 mt-0" />
     },
     {
       value: 'apartment',
       label: 'Apartment',
-      icon: <AmenitiesIcons.ApartmentIcon className=" mt-2" />
+      icon: <AmenitiesIcons.UpdatedApartmentIcon className="p-1" />
     },
     {
       value: 'privateRoom',
       label: 'Private Room',
-      icon: <AmenitiesIcons.SingleRoomIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="p-1 mt-0" />
     },
     {
       value: 'townhouse',
       label: 'Townhouse',
-      icon: <AmenitiesIcons.TownhouseIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="p-1 mt-0" />
     },
   ];
 
@@ -76,42 +76,43 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'wheelchairAccess',
       label: 'Wheelchair Accessible',
-      icon: <AmenitiesIcons.WheelchairAccessibleIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-1 mt-0" />
+      //icon: <AmenitiesIcons.UpdatedWheelchairAccessibleIcon className="p-0 mt-0" />
     },
     {
       value: 'fencedInYard',
       label: 'Fenced Yard',
-      icon: <AmenitiesIcons.FencedYardIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedFencedYardIcon className="p-1 mt-0" />
     },
     {
       value: 'keylessEntry',
       label: 'Keyless Entry',
-      icon: <AmenitiesIcons.KeylessEntryIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedKeylessEntryIcon className="p-1 mt-0" />
     },
     {
       value: 'alarmSystem',
       label: 'Alarm System',
-      icon: <AmenitiesIcons.AlarmSystemIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedAlarmSystemIcon className="p-1 mt-0" />
     },
     {
       value: 'gatedEntry',
       label: 'Gated Entry',
-      icon: <AmenitiesIcons.GatedEntryIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedGatedEntryIcon className="p-1 mt-0" />
     },
     {
       value: 'smokeDetector',
       label: 'Smoke Detector',
-      icon: <AmenitiesIcons.SmokeDetectorIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSmokeDetectorIcon className="p-1 mt-0" />
     },
     {
       value: 'carbonMonoxide',
       label: 'CO Detector',
-      icon: <AmenitiesIcons.CarbonMonoxideDetectorIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedCarbonMonoxideDetectorIcon className="p-1 mt-0" />
     },
     {
       value: 'security',
       label: 'Security System',
-      icon: <AmenitiesIcons.SecurityIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSecurityIcon className="p-1 mt-0" />
     }
   ];
 
@@ -119,22 +120,22 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'mountainView',
       label: 'Mountain View',
-      icon: <AmenitiesIcons.MountainViewIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedMountainViewIcon className="p-1 mt-0" />
     },
     {
       value: 'cityView',
       label: 'City View',
-      icon: <AmenitiesIcons.CityViewIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedCityViewIcon className="p-1 mt-0" />
     },
     {
       value: 'waterfront',
       label: 'Waterfront',
-      icon: <AmenitiesIcons.WaterfrontIcon className="p-0 mt-2" />
+      icon: <AmenitiesIcons.UpdatedWaterfrontIcon className="p-0 mt-1" />
     },
     {
       value: 'waterView',
       label: 'Water View',
-      icon: <AmenitiesIcons.WaterViewIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedWaterViewIcon className="p-1 mt-0" />
     }
   ];
 
@@ -142,17 +143,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'offStreetParking',
       label: 'Off Street',
-      icon: <AmenitiesIcons.ParkingIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedParkingIcon className="p-1 mt-0" />
     },
     {
       value: 'evCharging',
       label: 'EV Charging',
-      icon: <AmenitiesIcons.EvChargingIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-3" />
     },
     {
       value: 'garageParking',
       label: 'Garage',
-      icon: <AmenitiesIcons.GarageIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedGarageIcon className="p-1 mt-0" />
     }
   ];
 
@@ -160,32 +161,32 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'garbageDisposal',
       label: 'Garbage Disposal',
-      icon: <AmenitiesIcons.GarbageDisposalIcon className="p-1 my-1" />
+      icon: <AmenitiesIcons.UpdatedGarbageDisposalIcon className="p-1 my-0" />
     },
     {
       value: 'dishwasher',
       label: 'Dishwasher',
-      icon: <AmenitiesIcons.DishwasherIcon className="p-0 mt-2" />
+      icon: <AmenitiesIcons.UpdatedDishwasherIcon className="p-1 mt-0" />
     },
     {
       value: 'fridge',
       label: 'Refrigerator',
-      icon: <AmenitiesIcons.FridgeIcon className="p-0 mt-0 scale-110" />
+      icon: <AmenitiesIcons.UpdatedFridgeIcon className="p-1 mt-0 " />
     },
     {
       value: 'oven',
       label: 'Oven/Stove',
-      icon: <AmenitiesIcons.OvenIcon className="p-0 mt-2" />
+      icon: <AmenitiesIcons.UpdatedOvenIcon className="p-1 mt-0" />
     },
     {
       value: 'grill',
       label: 'Grill',
-      icon: <AmenitiesIcons.GrillIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedGrillIcon className="p-1" />
     },
     {
       value: 'kitchenEssentials',
       label: 'Kitchen Essentials',
-      icon: <AmenitiesIcons.KitchenEssentialsIcon className="p-0 mt-0" />
+      icon: <AmenitiesIcons.UpdatedKitchenEssentialsIcon className="p-1 mt-0" />
     }
   ];
 
@@ -193,22 +194,22 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'fireplace',
       label: 'Fireplace',
-      icon: <AmenitiesIcons.FireplaceIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" />
     },
     {
       value: 'heater',
       label: 'Heater',
-      icon: <AmenitiesIcons.HeaterIcon className="p-0 mt-0" />
+      icon: <AmenitiesIcons.UpdatedHeaterIcon className="p-1 mt-0" />
     },
     {
       value: 'dedicatedWorkspace',
       label: 'Dedicated Workspace',
-      icon: <AmenitiesIcons.DedicatedWorkspaceIcon className="p-0 mt-0" />
+      icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" />
     },
     {
       value: 'airConditioner',
       label: 'Air Conditioning',
-      icon: <AmenitiesIcons.AirConditioningIcon className="p-0 mt-0" />
+      icon: <AmenitiesIcons.UpdatedAirConditioningIcon className="p-1 mt-0" />
     }
   ];
 
@@ -234,17 +235,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'gym',
       label: 'Gym',
-      icon: <AmenitiesIcons.GymIcon className="p-3 mt-2" />
+      icon: <AmenitiesIcons.UpdatedGymIcon className="p-1 mt-0" />
     },
     {
       value: 'sauna',
       label: 'Sauna',
-      icon: <AmenitiesIcons.SaunaIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSaunaIcon className="p-1 mt-0" />
     },
     {
       value: 'balcony',
       label: 'Balcony',
-      icon: <AmenitiesIcons.BalconyIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedBalconyIcon className="p-1 mt-0" />
     },
     {
       value: 'pool',
@@ -254,17 +255,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'hotTub',
       label: 'Hot Tub',
-      icon: <AmenitiesIcons.HotTubIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedHotTubIcon className="p-1 mt-0" />
     },
     {
       value: 'patio',
       label: 'Patio',
-      icon: <AmenitiesIcons.PatioIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedPatioIcon className="p-1 mt-0" />
     },
     {
       value: 'sunroom',
       label: 'Sunroom',
-      icon: <AmenitiesIcons.SunroomIcon className="p-1 mt-2" />
+      icon: <AmenitiesIcons.UpdatedSunroomIcon className="p-1 mt-0" />
     }
   ];
 
@@ -526,12 +527,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       {
                         value: 'furnished',
                         label: 'Furnished',
-                        icon: <AmenitiesIcons.FurnishedIcon className="mt-4" />
+                        icon: <AmenitiesIcons.UpdatedFurnishedIcon className="p-1" />
                       },
                       {
                         value: 'unfurnished',
                         label: 'Unfurnished',
-                        icon: <AmenitiesIcons.UnfurnishedIcon className="mt-4" />
+                        icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="p-1" />
                       }
                     ].map(({ value, label, icon }) => {
                       const isSelected = value === 'furnished' ? localFilters.furnished : localFilters.unfurnished;
@@ -567,12 +568,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       {
                         value: 'utilitiesIncluded',
                         label: 'Utilities Included',
-                        icon: <AmenitiesIcons.UtilitiesIncludedIcon className="mt-1" />
+                        icon: <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="p-1" />
                       },
                       {
                         value: 'utilitiesNotIncluded',
                         label: 'Utilities Not Included',
-                        icon: <AmenitiesIcons.UtilitiesNotIncludedIcon className="mt-1" />
+                        icon: <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="p-1" />
                       }
                     ].map(({ value, label, icon }) => {
                       const isSelected = localFilters.utilities.includes(value);
@@ -607,12 +608,12 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       {
                         value: 'petsAllowed',
                         label: 'Pets Allowed',
-                        icon: <AmenitiesIcons.PetFriendlyIcon className=" mt-2" />
+                        icon: <AmenitiesIcons.UpdatedPetFriendlyIcon className="mt-1" />
                       },
                       {
                         value: 'petsNotAllowed',
                         label: 'No Pets',
-                        icon: <AmenitiesIcons.PetUnfriendlyIcon className="mt-1" />
+                        icon: <AmenitiesIcons.UpdatedPetUnfriendlyIcon className="" />
                       }
                     ].map(({ value, label, icon }) => {
                       const isSelected = localFilters.pets.includes(value);
@@ -700,7 +701,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             className='appearance-none w-[25px] h-[25px] border-[#70707045] border rounded-full cursor-pointer
                              relative flex items-center justify-center before:content-[""] before:w-[15px] before:h-[15px] before:rounded-full
                              checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] hover:border-[#4F4F4F] transition-colors'
-                            onChange={() => {}}
+                            onChange={() => { }}
                             onClick={() => {
                               // If clicking the currently selected option, clear the selection
                               if (

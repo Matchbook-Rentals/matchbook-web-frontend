@@ -331,14 +331,14 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           <div className="w-full md:w-1/2 bg-background md:pl-4 md:pb-0">
             <h2
               ref={titleBoxRef}
-              className={`text-[32px] pb-2 md:pb-2 lg:pb-2  md:mt-8`}
+              className={`text-[32px] font-medium  pb-2 md:pb-2 lg:pb-2  md:mt-8`}
               onClick={() => console.log(showListings[0])}
             >
               {showListings[0].title}
             </h2>
             <div className='flex justify-between pb-0 md:pb-1'>
               <h3 className='text-[24px]'> {showListings[0].roomCount} Beds | {showListings[0].bathroomCount} Baths </h3>
-              <h3 className='text-[24px]'> ${showListings[0].calculatedPrice} / Mo </h3>
+              <h3 className='text-[24px] ' j> ${showListings[0].calculatedPrice?.toLocaleString()} / Mo </h3>
             </div>
           </div>
         </div>
@@ -358,7 +358,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
               {/* Mobile-only labels */}
               {/* Values */}
               <div className="w-full flex justify-between">
-                <span className="text-[24px] text-[#404040] font-montserrat-regular w-2/3 truncate">
+                <span className="text-[24px] text-[#404040] w-2/3 truncate">
                   {showListings[0].locationString}
                 </span>
                 <span onClick={() => console.log(state.trip)} className="text-[24px] text-[#404040] font-montserrat-regular">
@@ -375,10 +375,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
             <div className="flex flex-col border-b pb-3 border-black">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-[24px] text-[#404040] font-montserrat-regular ">{showListings[0].squareFootage} Sqft</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat-regular ">{showListings[0].squareFootage.toLocaleString()} Sqft</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat-regular">${showListings[0].depositSize} Dep.</p>
+                  <p className="text-[24px] text-[#404040] font-montserrat-regular">${showListings[0].depositSize?.toLocaleString()} Dep.</p>
                 </div>
               </div>
             </div>

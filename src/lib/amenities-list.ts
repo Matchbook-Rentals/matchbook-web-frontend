@@ -7,7 +7,7 @@ const amenities = [
   { code: 'laundryFacilities', label: 'Laundry Facilities', icon: AmenitiesIcons.WasherIcon },
   { code: 'fitnessCenter', label: 'Fitness Center', icon: AmenitiesIcons.GymIcon },
   { code: 'elevator', label: 'Elevator', icon: Dumbbell },
-  { code: 'wheelchairAccess', label: 'Wheelchair Access', icon: AmenitiesIcons.WheelchairAccessibleIcon },
+  { code: 'wheelchairAccess', label: 'Wheelchair Access', icon: AmenitiesIcons.UpdatedWheelchairAccessibleIcon },
   { code: 'doorman', label: 'Doorman', icon: Dumbbell },
   { code: 'parking', label: 'Parking', icon: AmenitiesIcons.ParkingIcon },
   { code: 'wifi', label: 'WiFi', icon: Dumbbell },
