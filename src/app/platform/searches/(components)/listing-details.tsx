@@ -33,6 +33,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
   };
 
   const displayAmenities = calculateDisplayAmenities();
+  const initialDisplayCount = 4;
 
   const calculateTimeOnMatchbook = () => {
     if (!listing.user?.createdAt) return 'New to Matchbook';
@@ -71,6 +72,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
             </p>
           </div>
         </div>
+
 
         <div className="flex items-center gap-2 flex-col">
           <p className="hidden sm:block md:hidden lg:block text-[24px] truncate pb-2">
@@ -129,44 +131,44 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           {/* Property Type */}
           {listing.category === "singleFamily" && (
             <AmenityListItem
-              icon={AmenitiesIcons.SingleFamilyIcon}
+              icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
               label="Single Family"
             />
           )}
           {listing.category === "townhouse" && (
             <AmenityListItem
-              icon={AmenitiesIcons.TownhouseIcon}
+              icon={AmenitiesIcons.UpdatedTownhouseIcon}
               label="Townhouse"
             />
           )}
           {listing.category === "privateRoom" && (
             <AmenityListItem
-              icon={AmenitiesIcons.SingleRoomIcon}
+              icon={AmenitiesIcons.UpdatedSingleRoomIcon}
               label="Private Room"
             />
           )}
           {(listing.category === "apartment" || listing.category === "condo") && (
             <AmenityListItem
-              icon={AmenitiesIcons.ApartmentIcon}
+              icon={AmenitiesIcons.UpdatedApartmentIcon}
               label="Apartment"
             />
           )}
 
           {/* Furnished Status */}
           <AmenityListItem
-            icon={listing.furnished ? AmenitiesIcons.FurnishedIcon : AmenitiesIcons.UnfurnishedIcon}
+            icon={listing.furnished ? AmenitiesIcons.UpdatedFurnishedIcon : AmenitiesIcons.UpdatedUnfurnishedIcon}
             label={listing.furnished ? "Furnished" : "Unfurnished"}
           />
 
           {/* Utilities */}
           <AmenityListItem
-            icon={listing.utilitiesIncluded ? AmenitiesIcons.UtilitiesIncludedIcon : AmenitiesIcons.UtilitiesNotIncludedIcon}
+            icon={listing.utilitiesIncluded ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon}
             label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
           />
 
           {/* Pets */}
           <AmenityListItem
-            icon={listing.petsAllowed ? AmenitiesIcons.PetFriendlyIcon : AmenitiesIcons.PetUnfriendlyIcon}
+            icon={listing.petsAllowed ? AmenitiesIcons.UpdatedPetFriendlyIcon : AmenitiesIcons.UpdatedPetUnfriendlyIcon}
             label={listing.petsAllowed ? "Pets Allowed" : "No Pets"}
           />
         </div>
@@ -182,27 +184,24 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
 
       {/* Property Amenities */}
       <div className="py-12">
-        <h3
-          className="text-2xl font-medium mb-4 cursor-pointer"
-          onClick={() => setShowAllAmenities(!showAllAmenities)}
-        >
-          Amenities {showAllAmenities ? '(show less)' : '(show more)'}
-        </h3>
-        <div className="grid grid-cols-[repeat(auto-fit,104px)] gap-6 justify-between">
-          {(showAllAmenities ? iconAmenities : displayAmenities).map((amenity) => {
-            const { icon: Icon, label } = amenity;
-
-            return (
-              <Tile
-                key={amenity.code}
-                icon={Icon ? <Icon className="max-h-[40px] max-w-[40px]" /> : <Star className="text-red-500 max-h-[40px] max-w-[40px]" />}
-                label={Icon ? label : `Missing: ${label}`}
-                labelClassNames="text-[14px] text-[#404040]"
-                className="h-[104px] w-[104px]"
-              />
-            );
-          })}
+        <h3 className="text-[24px] text-[#404040] font-medium mb-4">Amenities</h3>
+        <div className="flex flex-col space-y-2">
+          {(showAllAmenities ? displayAmenities : displayAmenities.slice(0, initialDisplayCount)).map((amenity) => (
+            <AmenityListItem
+              key={amenity.code}
+              icon={amenity.icon || Star}
+              label={amenity.label}
+            />
+          ))}
         </div>
+        {displayAmenities.length > initialDisplayCount && (
+          <button
+            onClick={() => setShowAllAmenities(!showAllAmenities)}
+            className="mt-4 text-[#404040] text-[20px] font-medium hover:underline"
+          >
+            {showAllAmenities ? 'Show less' : `Show all ${displayAmenities.length} amenities`}
+          </button>
+        )}
       </div>
 
     </div>
