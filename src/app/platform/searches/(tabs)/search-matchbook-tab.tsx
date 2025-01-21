@@ -84,7 +84,7 @@ export function SearchMatchbookTab() {
   return (
     <>
       {matchedListings.length > 0 && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid justify-center gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {matchedListings.map((listing) => (
             <SearchListingCard
               key={listing.id}
@@ -105,7 +105,7 @@ export function SearchMatchbookTab() {
       {/* Test Cards Section */}
       <div className="mt-8 border-t pt-8">
         <h2 className="mb-4 text-lg font-semibold">Test Cards</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid justify-center gap-4 md:grid-cols-2 lg:grid-cols-4">
           {state.listings.slice(-4).map((listing, index) => (
             <SearchListingCard
               key={`test-${listing.id}`}
