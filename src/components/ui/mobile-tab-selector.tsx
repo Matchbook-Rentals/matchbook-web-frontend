@@ -41,16 +41,25 @@ export default function MobileTabSelector({
       const tabFromUrl = searchParams.get('tab')
       if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
         setActiveTab(tabFromUrl)
-      } else if (activeTab) {
-        router.replace(`?tab=${activeTab}`, { scroll: false })
+
       }
     }
-  }, [useUrlParams, searchParams, tabs, router, activeTab])
+  }, [useUrlParams, searchParams, tabs])
+
+  useEffect(() => {
+    if (useUrlParams && activeTab) {
+      const currentTab = searchParams.get('tab')
+      if (currentTab !== activeTab) {
+        // Use setTimeout to defer URL update until after the tab change animation
+        setTimeout(() => {
+          router.replace(`?tab=${activeTab}`, { scroll: false })
+        }, 0)
+      }
+    }
+  }, [activeTab, useUrlParams, router, searchParams])
 
   const handleTabChange = (value: string) => {
-    if (useUrlParams) {
-      router.replace(`?tab=${value}`, { scroll: false })
-    }
+
     setActiveTab(value)
   }
 
@@ -97,19 +106,19 @@ export default function MobileTabSelector({
             <div className="flex flex-col items-center pb-1 justify-center gap-0 space-0">
               <span className={cn(
                 "text-xs text-gray-500 font-normal",
-                 tab.value === activeTab ? "text-[#404040] font-medium"
-                 : "", tab.textSize)} style={{lineHeight: '1'}}>
+                tab.value === activeTab ? "text-[#404040] font-medium"
+                  : "", tab.textSize)} style={{ lineHeight: '1' }}>
                 {tab.label}
-              {tab.value === activeTab && (
-                <motion.div
-                  className=" h-[2px] bg-primary"
-                  layoutId="activeTab"
-                  transition={{
-                    duration: 0.4,
-                    ease: "easeInOut"
-                  }}
-                />
-              )}
+                {tab.value === activeTab && (
+                  <motion.div
+                    className=" h-[2px] bg-primary"
+                    layoutId="activeTab"
+                    transition={{
+                      duration: 0.4,
+                      ease: "easeInOut"
+                    }}
+                  />
+                )}
               </span>
             </div>
           </TabsTrigger>
