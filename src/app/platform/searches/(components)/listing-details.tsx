@@ -57,13 +57,6 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Host Information */}
       <div className="flex items-center justify-between pt-8 pb-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden">
-            <img
-              src={listing.user?.imageUrl}
-              alt="Host"
-              className="w-full h-full object-cover"
-            />
-          </div>
           <div className=''>
             <p className="md:text-[24px] text-[#404040]  font-medium  pb-2 ">
               Hosted by {listing.user?.firstName || listing.user?.email}</p>
