@@ -15,6 +15,9 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
 import { Montserrat } from 'next/font/google';
+import { BrandHeartOutline, MapViewIcon, MatchmakerTabIcon, OverviewTabIcon } from '@/components/icons';
+import MobileTabSelector from '@/components/ui/mobile-tab-selector';
+import { BookIcon } from 'lucide-react';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -55,7 +58,7 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-[14px] md:text-[16px] font-normal'
+  const tabTriggerTextStyles = 'text-[12px] font-medium sm:text-[16px] sm:font-normal'
   const tabTriggerStyles = 'p-0'
   const tabs: Tab[] = [
     {
@@ -64,6 +67,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
+      Icon: OverviewTabIcon
     },
     {
       label: 'Matchmaker',
@@ -71,6 +75,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
+      Icon: MatchmakerTabIcon
 
     },
     {
@@ -79,6 +84,7 @@ const TripsPage: React.FC = () => {
       content: <MapView setIsFilterOpen={setIsFilterOpen} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
+      Icon: MapViewIcon
     },
     {
       label: 'Favorites',
@@ -86,6 +92,7 @@ const TripsPage: React.FC = () => {
       content: <SearchFavoritesTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
+      Icon: BrandHeartOutline
     },
     {
       label: 'Matchbook',
@@ -93,6 +100,7 @@ const TripsPage: React.FC = () => {
       content: <SearchMatchbookTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
+      Icon: BookIcon
     },
   ];
 
@@ -111,7 +119,7 @@ const TripsPage: React.FC = () => {
           {state.trip.locationString}
         </span>
       </h1>
-      <div className="flex w-full pb-0">
+      <div className="hidden sm:block w-full pb-0">
         <TabSelector
           useUrlParams
           tabs={tabs}
@@ -129,6 +137,15 @@ const TripsPage: React.FC = () => {
               />
             ) : undefined
           }
+        />
+      </div>
+      <div className="sm:hidden w-full">
+        <MobileTabSelector
+          useUrlParams
+          tabs={tabs}
+          defaultTab={currentTab || 'overview'}
+          className='mx-auto w-full'
+          tabsClassName='w-full mx-auto'
         />
       </div>
     </div>

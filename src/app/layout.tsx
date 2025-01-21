@@ -22,12 +22,6 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.fwSettings={'widget_id':157000000242};!function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()`
-            }}
-          />
-          <script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer></script>
         </head>
         <body className={`${lora.className} ${montserrat.variable}`}>
           <main>
@@ -39,3 +33,10 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
+
+//<script
+//  dangerouslySetInnerHTML={{
+//    __html: `window.fwSettings={'widget_id':157000000242};!function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()`
+//  }}
+///>
+//<script type='text/javascript' src='https://widget.freshworks.com/widgets/157000000242.js' async defer></script>
