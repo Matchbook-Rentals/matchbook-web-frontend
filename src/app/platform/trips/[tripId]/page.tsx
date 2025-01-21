@@ -18,6 +18,8 @@ import { Montserrat } from 'next/font/google';
 import { BrandHeartOutline, MapViewIcon, MatchmakerTabIcon, OverviewTabIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import { BookIcon } from 'lucide-react';
+import Breadcrumbs from '@/components/ui/breadcrumbs';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
@@ -106,27 +108,32 @@ const TripsPage: React.FC = () => {
 
   const marginClass = PAGE_MARGIN;
 
+  const breadcrumbLinks = [
+    {
+      label: 'Searches',
+      url: '/platform/trips'
+    },
+    {
+      label: state.trip.locationString,
+      url: undefined // or remove the url property entirely
+    }
+  ];
+
+  const { width } = useWindowSize();
+  const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
+
   return (
     <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>
-      <h1 className=" text-[#404040] text-[14px] leading-normal">
-        <span className="cursor-pointer hover:underline  ">
-          <Link href="/platform/trips" className="hover:underline">
-            Searches
-          </Link>
-        </span>
-        <span className="mx-2">&gt;</span>
-        <span className="cursor-pointer hover:underline">
-          {state.trip.locationString}
-        </span>
-      </h1>
-      <div className="hidden sm:block w-full pb-0">
+      <Breadcrumbs links={breadcrumbLinks} />
+
+      {!isMobile ? (
         <TabSelector
           useUrlParams
           tabs={tabs}
-          defaultTab={currentTab || 'overview'}
+          defaultTab={currentTab || 'matchmaker'}
           className='mx-auto w-full pb-0 mb-0'
           tabsClassName='w-full mx-auto'
-          tabsListClassName='flex justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4 '
+          tabsListClassName='flex justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
               <FilterOptionsDialog
@@ -138,16 +145,15 @@ const TripsPage: React.FC = () => {
             ) : undefined
           }
         />
-      </div>
-      <div className="sm:hidden w-full">
+      ) : (
         <MobileTabSelector
           useUrlParams
           tabs={tabs}
-          defaultTab={currentTab || 'overview'}
+          defaultTab={currentTab || 'matchmaker'}
           className='mx-auto w-full'
-          tabsClassName='w-full mx-auto'
+          tabsClassName='w-full mx-auto pb-28'
         />
-      </div>
+      )}
     </div>
   );
 };

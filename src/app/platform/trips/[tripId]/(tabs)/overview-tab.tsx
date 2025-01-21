@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import SearchEditBar from '@/components/home-components/search-edit-bar';
 import { MatchbookVerified } from '@/components/icons/views';
 import { DeniedPaperIcon, PaperIcon, RejectIcon } from '@/components/icons/actions';
@@ -11,13 +13,15 @@ interface BigButtonProps {
   text: string;
   iconClassName?: string;
   iconWrapperClassName?: string;
+  href: string;
 }
 
 const BigButton: React.FC<BigButtonProps> = ({
   Icon,
   text,
   iconClassName = '',
-  iconWrapperClassName = ''
+  iconWrapperClassName = '',
+  href
 }) => {
   const buttonStyles = `
     w-2/3 sm:w-1/3 md:w-1/5 px-6 py-2 border
@@ -26,16 +30,16 @@ const BigButton: React.FC<BigButtonProps> = ({
 
   // Added responsive border colors and made wrapper div relative
   const iconStyles = `
-  lg:max-h-[55px] lg:max-w-[55px] 
-  md:max-h-[50px] md:max-w-[50px]  
-  sm:max-h-[43px] sm:max-w-[45px] 
-  max-h-[30px] max-w-[30px] 
+  lg:max-h-[55px] lg:max-w-[55px]
+  md:max-h-[50px] md:max-w-[50px]
+  sm:max-h-[43px] sm:max-w-[45px]
+  max-h-[30px] max-w-[30px]
   w-full  relative
   transition-all duration-200 ease-in-out
 `;
 
   return (
-    <div className={buttonStyles}>
+    <Link href={href} className={buttonStyles}>
       <div className={`shrink-0 ${iconWrapperClassName}`}>
         <Icon className={`${iconStyles} ${iconClassName}`} />
       </div>
@@ -44,16 +48,18 @@ const BigButton: React.FC<BigButtonProps> = ({
           {text}
         </span>
       </div>
-    </div>
+    </Link>
   );
 };
 
 const OverviewTab: React.FC = () => {
+  const params = useParams();
+  const tripId = params.tripId as string;
+
   return (
     <>
       <div className="w-full mx-auto bg-[#869A7D]/50">
         <div className="w-full  mx-auto flex flex-col justify-between ">
-
           <SearchEditBar />
           <Image
             src="/village-footer-opaque.png"
@@ -65,19 +71,29 @@ const OverviewTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap  items-center justify-around md:justify-between w-full mx-auto mt-8 gap-4">
-        <BigButton Icon={PaperIcon} text="Application" />
+      <div className="flex flex-wrap items-center justify-around md:justify-between w-full mx-auto mt-8 gap-4">
+        <BigButton
+          Icon={PaperIcon}
+          text="Application"
+          href={`/platform/trips/${tripId}/application`}
+        />
         <BigButton
           Icon={MatchbookVerified}
           text="Matchbook Verification"
           iconWrapperClassName="text-[#869A7D]"
+          href={`/platform/trips/${tripId}/verification`}
         />
         <BigButton
           Icon={RejectIcon}
           text="Disliked Properties"
           iconClassName="bg-pinkBrand rounded-full p-[25%] "
+          href={`/platform/trips/${tripId}/dislikes`}
         />
-        <BigButton Icon={DeniedPaperIcon} text="Declined Applications" />
+        <BigButton
+          Icon={DeniedPaperIcon}
+          text="Declined Applications"
+          href={`/platform/trips/${tripId}/declined`}
+        />
       </div>
     </>
   );

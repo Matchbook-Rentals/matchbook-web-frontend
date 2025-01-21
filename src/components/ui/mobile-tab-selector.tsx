@@ -72,7 +72,7 @@ export default function MobileTabSelector({
       {tabs.map((tab) => (
         <TabsContent
           key={tab.value}
-          className={tabsClassName + 'pb-16'}
+          className={tabsClassName}
           value={tab.value}
         >
           {tab.content}
