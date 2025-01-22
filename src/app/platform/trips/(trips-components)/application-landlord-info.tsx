@@ -30,10 +30,10 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Landlord/Property Manager Contact Information</h3>
+      <h3 className="text-[24px]  mb-2 mt-6">Property Manager Information</h3>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="landlordFirstName">First Name</Label>
+          <Label className="font-normal text-[20px]" htmlFor="landlordFirstName">First Name</Label>
           <Input
             id="landlordFirstName"
             name="landlordFirstName"
@@ -42,7 +42,7 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="landlordLastName">Last Name</Label>
+          <Label className="font-normal text-[20px]" htmlFor="landlordLastName">Last Name</Label>
           <Input
             id="landlordLastName"
             name="landlordLastName"
@@ -51,7 +51,7 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="landlordEmail">Email Address</Label>
+          <Label className="font-normal text-[20px]" htmlFor="landlordEmail">Email Address</Label>
           <Input
             id="landlordEmail"
             name="landlordEmail"
@@ -60,7 +60,7 @@ export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLan
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="landlordPhoneNumber">Phone Number</Label>
+          <Label className="font-normal text-[20px]" htmlFor="landlordPhoneNumber">Phone Number</Label>
           <Input
             id="landlordPhoneNumber"
             name="landlordPhoneNumber"

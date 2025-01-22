@@ -21,6 +21,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import CurrencyInput from "@/components/ui/currency-input";
+import { ApplicationItemLabelStyles } from '@/constants/styles';
 
 interface UploadData {
   name: string;
@@ -82,12 +84,11 @@ export const Income: React.FC<{
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Income</h3>
       {incomes.map((item, index) => (
         <div key={index} className="mb-4 p-4 border rounded">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor={`incomeSource-${index}`}>Income Source {index + 1}</Label>
+              <Label className={ApplicationItemLabelStyles} htmlFor={`incomeSource-${index}`}>Income Source {index + 1}</Label>
               <Input
                 id={`incomeSource-${index}`}
                 value={item.source}
@@ -95,12 +96,13 @@ export const Income: React.FC<{
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor={`monthlyAmount-${index}`}>Monthly Amount {index + 1}</Label>
-              <Input
-                type='number'
+              <Label className={ApplicationItemLabelStyles} htmlFor={`monthlyAmount-${index}`}>Monthly Amount {index + 1}</Label>
+              <CurrencyInput
                 id={`monthlyAmount-${index}`}
+                label=""
                 value={item.monthlyAmount}
-                onChange={(e) => handleInputChange(index, 'monthlyAmount', e.target.value)}
+                onChange={(value) => handleInputChange(index, 'monthlyAmount', value)}
+                className="w-full"
               />
             </div>
           </div>

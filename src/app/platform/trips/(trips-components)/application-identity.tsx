@@ -20,6 +20,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ImageCategory } from '@prisma/client';
+import { ApplicationItemLabelStyles } from '@/constants/styles';
 
 interface UploadData {
   name: string;
@@ -71,16 +72,15 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Identification</h3>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="idType">Select ID type</Label>
+          <Label htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
           <Select
             value={ids?.idType}
             onValueChange={(value) => setIds(prev => ({ ...prev, idType: value }))}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select ID type" />
+              <SelectValue placeholder="Select Id type" />
             </SelectTrigger>
             <SelectContent>
               {ID_TYPES.map((type) => (
@@ -92,7 +92,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="idNumber">ID Number</Label>
+          <Label htmlFor="idNumber" className={ApplicationItemLabelStyles}>Id Number</Label>
           <Input
             id="idNumber"
             value={ids.idNumber}
@@ -101,7 +101,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
         </div>
       </div>
       <div className="mt-2">
-        <Label>Please upload a photo of your ID</Label>
+        <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
         <UploadButton
           endpoint="idUploader"
           onClientUploadComplete={handleUploadFinish}
@@ -112,21 +112,21 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
       </div>
       {verificationImages.length > 0 && (
         <>
-          <Label className="mt-4">ID image uploads</Label>
+          <Label className={ApplicationItemLabelStyles}>Id image uploads</Label>
           <div className="grid grid-cols-2 gap-4 mt-2">
             {verificationImages.map((img, idx) => (
               <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
                 <DialogTrigger asChild>
                   <img
                     src={img.url}
-                    alt={`ID image ${idx + 1}`}
+                    alt={`Id image ${idx + 1}`}
                     className="w-full h-auto cursor-pointer"
                     onClick={() => handleImageClick(idx)}
                   />
                 </DialogTrigger>
                 <DialogContent className="max-w-3xl">
                   <DialogHeader>
-                    <DialogTitle>ID Images</DialogTitle>
+                    <DialogTitle>Id Images</DialogTitle>
                     <DialogDescription>Use arrows to navigate between images</DialogDescription>
                   </DialogHeader>
                   <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
@@ -135,7 +135,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
                         <CarouselItem key={index}>
                           <Card>
                             <CardContent className="flex aspect-square items-center justify-center p-6">
-                              <img src={image.url} alt={`ID image ${index + 1}`} className="w-full h-auto" />
+                              <img src={image.url} alt={`Id image ${index + 1}`} className="w-full h-auto" />
                             </CardContent>
                           </Card>
                         </CarouselItem>
