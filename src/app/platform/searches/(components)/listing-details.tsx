@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ListingAndImages } from '@/types';
 import { Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import {
   Popover,
@@ -12,6 +13,12 @@ import { amenities, iconAmenities, highlightAmenities } from '@/lib/amenities-li
 import { Montserrat } from 'next/font/google';
 import { MatchbookVerified } from '@/components/icons';
 import AmenityListItem from './amenity-list-item';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { TallDialogContent, TallDialogTitle } from "@/constants/styles";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -178,8 +185,8 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
       {/* Property Amenities */}
       <div className="py-12">
         <h3 className="text-[24px] text-[#404040] font-medium mb-4">Amenities</h3>
-        <div className="flex flex-col space-y-2">
-          {(showAllAmenities ? displayAmenities : displayAmenities.slice(0, initialDisplayCount)).map((amenity) => (
+        <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
+          {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
             <AmenityListItem
               key={amenity.code}
               icon={amenity.icon || Star}
@@ -188,12 +195,44 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           ))}
         </div>
         {displayAmenities.length > initialDisplayCount && (
-          <button
-            onClick={() => setShowAllAmenities(!showAllAmenities)}
-            className="mt-4 text-[#404040] text-[20px] font-medium hover:underline"
-          >
-            {showAllAmenities ? 'Show less' : `Show all ${displayAmenities.length} amenities`}
-          </button>
+          <Dialog>
+            <DialogTrigger className=" mt-2">
+              <Button variant="outline" className='text-[16px]' >
+                Show all {displayAmenities.length} amenities
+              </Button>
+            </DialogTrigger>
+            <DialogContent className={TallDialogContent}>
+              <h2 className={TallDialogTitle}>All Amenities</h2>
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex flex-col">
+                  {Object.entries(
+                    displayAmenities.reduce((acc, amenity) => {
+                      const category = amenity.category || 'Other';
+                      if (!acc[category]) acc[category] = [];
+                      acc[category].push(amenity);
+                      return acc;
+                    }, {} as Record<string, typeof displayAmenities>)
+                  ).map(([category, amenities]) => (
+                    <div key={category} className="mb-6">
+                      <h3 className="text-[17px] font-medium text-[#404040] mb-2">
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </h3>
+                      {amenities.map((amenity) => (
+                        <AmenityListItem
+                          key={amenity.code}
+                          icon={amenity.icon || Star}
+                          label={amenity.label}
+                          iconClassNames='h-[24px] w-[24px]'
+                          labelClassNames='md:text-[16px]'
+                          className='py-2 border-b border-[#40404080] space-y-2'
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 

@@ -105,7 +105,7 @@ const SubscriptionForm = () => {
           </label>
           <input
             type="email"
-            className="w-full px-3 py-2 border rounded-md"
+            className="w-full px-3 py-2 border rounded-md bg-background"
             placeholder="e.g abc@xyz.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -120,7 +120,7 @@ const SubscriptionForm = () => {
           </label>
           <div className="flex gap-2">
             <select
-              className="w-20 bg-white px-2 py-2 border rounded-md"
+              className="w-20 bg-background px-2 py-2 border rounded-md"
               value={formData.countryCode}
               onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
             >
@@ -130,7 +130,7 @@ const SubscriptionForm = () => {
             </select>
             <input
               type="tel"
-              className="flex-1 px-3 py-2 border rounded-md"
+              className="flex-1 px-3 py-2 bg-background border rounded-md"
               placeholder="Phone number"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}

@@ -16,7 +16,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
-const PLATFORM_NAVBAR_HEIGHT = 50; // Add this constant for the navbar height
+const PLATFORM_NAVBAR_HEIGHT = 0; // Add this constant for the navbar height
 
 // Add prop interface
 interface MatchViewTabProps {
@@ -281,7 +281,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       />
 
       {/* Sticky container for all three flex sections */}
-      <div ref={controlBoxParentRef} className={`sticky top-[40px] md:top-[${PLATFORM_NAVBAR_HEIGHT + 5}px] z-5 bg-background`}>
+      <div ref={controlBoxParentRef} className={`sticky top-[0px]  z-5 bg-background`}>
         {/* First flex container - Controls and Title */}
         <div className="flex flex-col md:flex-row w-full" >
           {/* Left side - Button Controls */}

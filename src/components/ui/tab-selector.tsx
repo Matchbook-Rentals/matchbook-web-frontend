@@ -23,6 +23,7 @@ interface TabSelectorProps {
   useUrlParams?: boolean;
   defaultTab?: string;
   secondaryButton?: React.ReactNode;
+  useIcons?: boolean;
 }
 
 export default function TabSelector({
@@ -33,6 +34,7 @@ export default function TabSelector({
   useUrlParams = false,
   defaultTab,
   secondaryButton,
+  useIcons = false,
 }: TabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -97,9 +99,11 @@ export default function TabSelector({
                 value={tab.value}
                 className={cn("flex flex-col items-center hover:bg-gray-300", tab.className)}
               >
-                <div className={cn("flex items-center justify-center", tab.Icon ? 'h-8 w-8' : '')}>
-                  {tab.Icon && <tab.Icon className="h-2 w-2 text-sm" />}
-                </div>
+                {useIcons && tab.Icon && (
+                  <div className={cn("flex items-center justify-center h-8 w-8")}>
+                    <tab.Icon className="h-2 w-2 text-sm" />
+                  </div>
+                )}
                 <div className="flex flex-col">
                   <span className={cn("text-sm", tab.textSize)}>{tab.label}</span>
                   {activeTab === tab.value && <motion.div className="h-[1px] w-full bg-[#404040] rounded-full" layout layoutId="underline"></motion.div>}

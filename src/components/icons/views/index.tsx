@@ -1,9 +1,113 @@
 import React from "react";
 import { IconProps } from "../types";
 
-export const MapViewIcon = (props: IconProps) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 21" fill="none">
-    {/* MapViewIcon paths */}
+export const MapViewIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={36}
+    height={35}
+    viewBox="0 0 36 35"
+    fill="none"
+    {...props}
+  >
+    <g filter="url(#filter0_d_2668_1532)">
+      <path
+        d="M5 7.95268L14.7511 4.03125"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 26.0013L14.7511 22.082"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M22.0156 25.9979L29.9601 22.4102"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.75 22.0508L22.0169 25.9998"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.4062 4.05664L22.3653 8.13543"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 7.95117V25.7726"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.75 4.20703V22.0284"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M22.3633 8.13477V25.4696"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M30.3242 8.13477L30.3243 22.03"
+        stroke="#4F4F4F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M26.9135 1.0084C26.6958 0.996356 26.5114 0.998077 26.2902 1.0084C17.2803 1.45921 26.6027 12.2167 26.6027 12.2167C26.6027 12.2167 35.6847 1.48158 26.9152 1.0084H26.9135Z"
+        stroke="#4F4F4F"
+        strokeMiterlimit={10}
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_2668_1532"
+        x={0.5}
+        y={0.5}
+        width={34.7324}
+        height={34.002}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy={4} />
+        <feGaussianBlur stdDeviation={2} />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_2668_1532"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_2668_1532"
+          result="shape"
+        />
+      </filter>
+    </defs>
   </svg>
 );
 
@@ -23,7 +127,6 @@ export const MatchMakerBadge = (props: IconProps) => (
     <path d="M39.2202 18.02L25.44 36.613" stroke="white" strokeWidth="4" strokeLinecap="round" />
   </svg>
 );
-
 
 export const MatchbookVerified = (props: IconProps) => (
   <svg

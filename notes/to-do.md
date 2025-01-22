@@ -5,10 +5,12 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
-- [ ] Deselect laundry
-- [ ]  kill tiles move to text and icon in single file (needs dialog)
-- [ ]  FIX SEARCH CONTAINER DIFF COLORS ON HOME PAGE
-- [ ]  Mobile view
+- [x]Deselect laundry
+- [x] kill tiles move to text and icon in single file (needs dialog)
+- [x] FIX SEARCH CONTAINER DIFF COLORS ON HOME PAGE
+- [ ] Mobile view
+- [ ] Overview tab working
+- [ ] Begin work on new matchmaker
 
 
 

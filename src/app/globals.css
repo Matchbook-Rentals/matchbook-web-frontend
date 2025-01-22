@@ -1,11 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /*--background: 0 100% 99.6%;*/
-    --background: 0 100% 99.2%;
+    --background: 0 100% 99.6%;
+    /*--background: 0 100% 99.2%;*/
     --foreground: 0 0% 25.1%;
 
     --card: 0 100% 99.6%;

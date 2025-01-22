@@ -7,8 +7,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
-import { Checkbox } from '@/components/ui/checkbox';
-
+import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 
 interface FilterOptions {
   propertyTypes: string[];
@@ -457,8 +456,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       </DialogTrigger>
 
       {/* Main Dialog Content */}
-      <DialogContent aria-describedby='Filter selection modal' className="sm:max-w-[536px] sm:h-[90vh] sm:m-0 p-0 flex flex-col font-montserrat">
-        <DialogTitle className='px-4 py-4 border-b border-gray-300 text-[20px] text-[#404040] text-center font-montserrat font-medium'>
+      <DialogContent aria-describedby='Filter selection modal' className={TallDialogContent}>
+        <DialogTitle className={TallDialogTitle}>
           Filters
         </DialogTitle>
         {/* Scrollable Filter Content Area */}
@@ -483,7 +482,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
@@ -499,7 +498,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
                 {/* Price Range Section */}
                 <div className="space-y-4 border-b-2 py-6">
-                  <h3 className="text-[18px] font-montserrat-medium text-[#404040]">Price Range</h3>
+                  <h3 className="text-[18px] font-montserrat font-medium text-[#404040]">Price Range</h3>
                   <div className="flex items-center justify-between gap-4">
                     <CurrencyInput
                       id="min-price"
@@ -545,7 +544,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             if (value === 'furnished') {
@@ -586,7 +585,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedUtilities = isSelected
@@ -626,7 +625,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPets = isSelected
@@ -642,10 +641,10 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
                 {/* Search Radius Section */}
                 <div className="space-y-4 border-b-2 py-6">
-                  <h3 className="text-[18px] font-montserrat-medium text-[#404040]">Search Radius</h3>
+                  <h3 className="text-[18px] font-montserrat font-medium text-[#404040]">Search Radius</h3>
                   <div className="px-4">
                     <div className="flex justify-end ">
-                      <span className="font-montserrat-medium text-[14px] text-[#2D2F2E80]">
+                      <span className="font-montserrat font-medium text-[14px] text-[#2D2F2E80]">
                         {localFilters.searchRadius || 50} miles
                       </span>
                     </div>
@@ -729,7 +728,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           />
                           <label
                             htmlFor={option.id}
-                            className='text-[#2D2F2E80] font-montserrat-medium cursor-pointer'
+                            className='text-[#2D2F2E80] font-montserrat font-medium cursor-pointer'
                           >
                             {option.label}
                           </label>
@@ -759,7 +758,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         console.log(localFilters)
@@ -790,7 +789,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -820,7 +819,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -850,7 +849,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -880,7 +879,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -910,7 +909,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px] font-montserrat-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px] font-montserrat font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -931,7 +930,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             <div className="space-y-4">
               {minimumOptions.map(({ key, label }) => (
                 <div key={key} className="text-center">
-                  <h4 className="text-[16px] text-[#404040] text-left mb-2">{label}</h4>
+                  <h4 className="text-[16px] font-normal text-[#404040] text-left mb-2 font-200">{label}</h4>
                   <div className="flex flex-wrap justify-start gap-2">
                     {MINIMUM_OPTIONS.map(({ label: optionLabel, value }) => (
                       <Button

@@ -5,10 +5,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 
 interface QuestionnaireAnswers {
+  felony?: boolean;
+  felonyExplanation?: string;
   evicted?: boolean;
-  brokenLease?: boolean;
-  landlordDispute?: boolean;
-  explanation?: string;
+  evictedExplanation?: string;
 }
 
 interface QuestionnaireProps {
@@ -21,58 +21,62 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ answers, setAnswers }) =>
     setAnswers(prev => ({ ...prev, [question]: value }));
   };
 
-  const RadioQuestion = ({ question, label }) => (
-    <div className="mb-4">
-      <Label className="text-base block text-center mb-2">{label}</Label>
-      <RadioGroup
-        onValueChange={(value) => handleChange(question, value === 'true')}
-        value={answers[question]?.toString()}
-        className="flex justify-center space-x-8 mt-2"
-      >
-        <div className="flex flex-col items-center space-y-1">
-          <RadioGroupItem value="true" id={`${question}-yes`} />
-          <Label htmlFor={`${question}-yes`}>Yes</Label>
+  const RadioQuestion = ({ number, question, label, explanationKey }) => (
+    <div className="mb-6">
+      <div className="flex mb-2">
+        <div className="w-4/5 flex items-center">
+          <span className="font-bold text-[54px] mr-6"> {number}.</span>
+          <span className="font-medium text-[26px]">{label}</span>
         </div>
-        <div className="flex flex-col items-center space-y-1">
-          <RadioGroupItem value="false" id={`${question}-no`} />
-          <Label htmlFor={`${question}-no`}>No</Label>
-        </div>
-      </RadioGroup>
+        <RadioGroup
+          onValueChange={(value) => handleChange(question, value === 'true')}
+          value={answers[question]?.toString()}
+          className=" flex justify-center space-x-8"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="true" id={`${question}-yes`} />
+            <Label className='text-[26px] cursor-pointer font-normal' htmlFor={`${question}-yes`}>Yes</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="false" id={`${question}-no`} />
+            <Label className='text-[26px] cursor-pointer font-normal' htmlFor={`${question}-no`}>No</Label>
+          </div>
+        </RadioGroup>
+      </div>
+      <div className="mt-2">
+        <Label htmlFor={explanationKey} className="text-[24px] font-medium">
+          {question === 'felony'
+            ? "Please provide the date, and nature of the conviction."
+            : "Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome."}
+        </Label>
+        <Textarea
+          id={explanationKey}
+          className="mt-1"
+          value={answers[explanationKey] || ''}
+          onChange={(e) => handleChange(explanationKey, e.target.value)}
+          placeholder=""
+        />
+      </div>
     </div>
   );
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Questionnaire</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="w-full">
+      <div>
         <RadioQuestion
+          number="1"
+          question="felony"
+          explanationKey="felonyExplanation"
+          label="Have you been convicted of a felony or misdemeanor offense in the past 7 years?"
+        />
+        <RadioQuestion
+          number="2"
           question="evicted"
-          label="Have you ever been evicted?"
+          explanationKey="evictedExplanation"
+          label="Have you been evicted from a rental property in the past 7 years?"
         />
-        <RadioQuestion
-          question="brokenLease"
-          label="Have you ever broken a lease?"
-        />
-        <RadioQuestion
-          question="landlordDispute"
-          label="Have you ever been involved in a dispute with a landlord?"
-        />
-        <div className="mt-6">
-          <Label htmlFor="explanation" className="text-base">
-            Please explain any Yes answers above
-          </Label>
-          <Textarea
-            id="explanation"
-            className="mt-2"
-            value={answers.explanation || ''}
-            onChange={(e) => handleChange('explanation', e.target.value)}
-            placeholder="Explanation"
-          />
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
