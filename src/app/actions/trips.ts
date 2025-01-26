@@ -49,7 +49,8 @@ export async function getAllUserTrips(options?: { next?: { tags?: string[] } }):
         favorites: true,
         housingRequests: true,
         allParticipants: true,
-        applications: true,
+        //TO DO: FIND OUT WHY THIS BREAKS
+        //applications: true,
       },
     });
     return userTrips;
