@@ -599,7 +599,7 @@ model Application {
   updatedAt DateTime @updatedAt
   isDefault Boolean?  @default(false)
   tripId    String?
-  userId    String?
+  userId    String
   isComplete Boolean @default(false)
 
   // Personal Info
