@@ -146,7 +146,7 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif'],
+        montserrat: ['Poppins', 'sans-serif'],
       },
       fontWeight: {
         light: '300',

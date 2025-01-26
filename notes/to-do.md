@@ -16,8 +16,8 @@ ACH PLAID API
 - [ ] Remove trips from breadcrumbs
 - [ ] Navigation sizes as subheader for source of truth
 - [ ] Four different forms approach
-
-
+- [ ] only 5 applications out
+- [ ] text size on cards
 
 
 

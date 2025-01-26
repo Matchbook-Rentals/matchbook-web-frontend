@@ -120,6 +120,7 @@ const ListingDetails: React.FC<ListingDetailsProps> = ({ listing }) => {
           <span className=' text-[20px] font-medium font-montserrat'>Hallmark Host</span>
         </div>
       </div>
+      ,
       {/* Property Highlights */}
       <div className="py-12 border-b border-[#D8D9D8]">
         <h3 className="text-[24px] text-[#404040] font-medium mb-4">Highlights</h3>

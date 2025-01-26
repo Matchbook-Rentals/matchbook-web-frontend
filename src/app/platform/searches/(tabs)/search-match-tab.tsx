@@ -8,14 +8,12 @@ import { amenities } from '@/lib/amenities-list';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
-import { Montserrat } from 'next/font/google';
-import SearchMap from '../(components)/search-map';
 import ListingDetails from '../(components)/listing-details';
-import { QuestionMarkIcon } from '@radix-ui/react-icons';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import ListingDescription from '../../trips/(trips-components)/listing-info';
+import ListingDetailsBox from '../(components)/ListingDetailsBox';
 
 
-const montserrat = Montserrat({ subsets: ["latin"] });
 const PLATFORM_NAVBAR_HEIGHT = 0; // Add this constant for the navbar height
 
 // Add prop interface
@@ -44,10 +42,27 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Add new state for sticky behavior
+  const [stickyOffset, setStickyOffset] = useState<number | null>(null);
+  const locationSectionRef = useRef<HTMLDivElement>(null);
+  const detailsBoxRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPercentage = (window.scrollY / window.innerHeight) * 100;
-      setIsScrolled(scrollPercentage > 40);
+      if (detailsBoxRef.current && locationSectionRef.current) {
+        const detailsBoxRect = detailsBoxRef.current.getBoundingClientRect();
+        const locationSectionRect = locationSectionRef.current.getBoundingClientRect();
+
+        // Calculate when the location section is about to overlap with the details box
+        if (locationSectionRect.top < window.innerHeight) {
+          // When location section is in view, stop following
+          setStickyOffset(null);
+        } else {
+          // Calculate the offset to keep the box centered
+          const offset = Math.max(0, window.scrollY - detailsBoxRect.top);
+          setStickyOffset(offset);
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -236,7 +251,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   if (showListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center pb-6 h-[50vh]'>
-        <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
+        <p className=' text-2xl mb-5'>You&apos;re out of listings!</p>
         <p className='mb-3'>You can
           {numFavorites > 0 ? 'look at your favorites' : ''}
           {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
@@ -275,148 +290,38 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    <div className={`w-full mx-auto pb-0`}>
+    <div className={`w-full mx-auto pb-6`}>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      {/* Sticky container for all three flex sections */}
-      <div ref={controlBoxParentRef} className={`sticky top-[0px]  z-5 bg-background`}>
-        {/* First flex container - Controls and Title */}
-        <div className="flex flex-col md:flex-row w-full" >
-          {/* Left side - Button Controls */}
-          <div className="w-full md:w-1/2 ">
-            <div className={` button-control-box bg-background ${isScrolledDeep ? 'md:bg-background' : 'md:bg-transparent'}
-                     sticky top-[0px] md:top-[60px] z-10 flex justify-evenly
-                     lg:justify-center lg:gap-x-8 pb-0 pt-3 md:px-5 md:pt-4 w-full
-                     ${!isScrolled ? 'md:-translate-y-1/2 md:scale-110 xl:scale-125' : ''} gap-2 transition-transform duration-500`}
-              ref={controlBoxRef}>
-              <ButtonControl
-                handleClick={() => handleReject(showListings[0])}
-                Icon={<RejectIcon className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-full aspect-[1/1]' />}
-                className={`bg-pinkBrand/70 hover:bg-pinkBrand w-[20vw] md:w-[9vw] md:h-[9vw] max-w-[100px] max-h-[100px] aspect-[1/1]
-                  flex items-center justify-center rounded-full text-center text-white
-                  text-sm transition-all duration-200 relative`}
-              />
-
-              <ButtonControl
-                handleClick={handleBack}
-                Icon={<ReturnIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
-                className={`bg-orangeBrand/70 hover:bg-orangeBrand w-[13vw] aspect-[1/1] max-w-[66px] max-h-[66px]
-                  md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
-                  justify-center text-white text-sm transition-all duration-200 relative `}
-              />
-
-              <ButtonControl
-                handleClick={() => handleMaybe(showListings[0])}
-                Icon={<QuestionMarkIcon className='h-[60%] w-[60%] rounded-full aspect-[1/1]' />}
-                className={`
-                bg-yellowBrand/80 hover:bg-yellowBrand w-[13vw] aspect-[1/1] max-w-[66px] max-h-[66px]
-                md:w-[6vw] md:h-[6vw] self-center rounded-full text-center flex items-center
-                justify-center text-white text-sm transition-all duration-200 `}
-              />
-              <ButtonControl
-                handleClick={() => handleLike(showListings[0])}
-                Icon={<BrandHeart className='h-[70%] w-[70%] md:w-[50%] md:h-[50%] rounded-xl aspect-[1/1]' />}
-                className={`
-                bg-primaryBrand/75 hover:bg-primaryBrand/95 w-[20vw] max-w-[100px] max-h-[100px] aspect-[1/1]
-                md:w-[9vw] md:h-[9vw] flex items-center justify-center rounded-full text-center
-                text-white text-sm transition-all duration-200
-              `}
-              />
-            </div>
-          </div>
-
-          {/* Right side - Listing Title */}
-          <div className="w-full md:w-1/2 bg-background md:pl-4 md:pb-0">
-            <h2
-              ref={titleBoxRef}
-              className={`text-[32px] font-medium  pb-2 md:pb-2 lg:pb-2  md:mt-8`}
-              onClick={() => console.log(showListings[0])}
-            >
-              {showListings[0].title}
-            </h2>
-            <div className='flex justify-between pb-0 md:pb-1'>
-              <h3 className='text-[24px]'> {showListings[0].roomCount} Beds | {showListings[0].bathroomCount} Baths </h3>
-              <h3 className='text-[24px] ' j> ${showListings[0].calculatedPrice?.toLocaleString()} / Mo </h3>
-            </div>
-          </div>
-        </div>
-
-        {/* Second flex container - Labels and Property Stats */}
-
-        {/* Third flex container - Address Info and Sqft/Deposit */}
-        {/* Use ref to track y position of bottom border of this container */}
+      <div className='flex justify-between gap-x-2 relative'>
+        <ListingDescription listing={showListings[0]} />
         <div
-          className="flex flex-col border-b md:border-none border-black mt-2 md:mt-0 md:flex-row w-full"
+          className="w-1/2 h-fit lg:w-3/5 sticky top-[10%]"
         >
-          {/* Left side - Address Info Values */}
-          <div className={`w-full md:w-1/2 pr-4 transition-transform duration-500
-              ${!isScrolled ? '' : ''}`}
-          >
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              {/* Mobile-only labels */}
-              {/* Values */}
-              <div className="w-full flex justify-between">
-                <span className="text-[24px] text-[#404040] w-2/3 truncate">
-                  {showListings[0].locationString}
-                </span>
-                <span onClick={() => console.log(state.trip)} className="text-[24px] text-[#404040] font-montserrat-regular">
-                  {showListings[0].distance?.toFixed(0)} miles
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right side - Sqft and Deposit (Desktop only) */}
-          <div className={`hidden md:block w-full sqft-deposit-box md:w-1/2 pl-4 bg-background transition-transform duration-500
-              `}
-            style={{ '--control-box-height': `${controlBoxHeight - titleBoxHeight}px` } as React.CSSProperties}>
-            <div className="flex flex-col border-b pb-3 border-black">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-[24px] text-[#404040] font-montserrat-regular ">{showListings[0].squareFootage.toLocaleString()} Sqft</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[24px] text-[#404040] font-montserrat-regular">${showListings[0].depositSize?.toLocaleString()} Dep.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ListingDetailsBox
+            listing={showListings[0]}
+          />
         </div>
       </div>
 
-      {/* Second flex container - Map/Address and Listing Details */}
-      <div className="flex flex-col-reverse md:flex-row w-full">
-        {/* Left side - Map and Address */}
-        <div className="w-full md:w-1/2 pr-4">
-          <div
-            className={`md:block sticky pt-0 md:p-0  ${!isScrolled ? '' : ''} transition-transform duration-500`}
-            style={{
-              top: `${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT - 10}px`,
-              height: `calc(100vh - ${controlBoxParentHeight + PLATFORM_NAVBAR_HEIGHT + 5}px)`
-            }}
-          >
-            <SearchMap
-              markers={[{
-                lat: showListings[0]?.latitude,
-                lng: showListings[0]?.longitude
-              }]}
-              center={{
-                lat: showListings[0]?.latitude,
-                lng: showListings[0]?.longitude
-              }}
-              zoom={13}
-            />
-          </div>
-        </div>
+      {/* Location section */}
+      <div className="pb-3 border-b mt-3" ref={locationSectionRef}>
+        <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
-        {/* Right side - Listing Details */}
-        <div className={`w-full md:w-1/2 pl-4 transition-transform duration-500 `}
-        >
-          <ListingDetails listing={showListings[0]} />
+        <div className="flex justify-between border-b pb-3 text-[#404040] text-[20px] font-normal">
+          <p> {showListings[0].locationString} </p>
+          <p> {showListings[0].distance} </p>
         </div>
+        <img
+          src={`/api/map/static?latitude=${showListings[0].latitude}&longitude=${showListings[0].longitude}`}
+          alt="Property location map"
+          className="w-full h-[526px] mt-4"
+        />
       </div>
+
+
     </div>
   );
 };
