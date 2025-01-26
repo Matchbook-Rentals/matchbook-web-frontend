@@ -86,7 +86,7 @@ export default function TabSelector({
         value={activeTab}
         onValueChange={handleTabChange}
       >
-        <div className="flex items-start p-0 justify-between mb-4 space-x-4 border-b-2 border-gray-300">
+        <div className="flex items-start p-0 justify-between space-x-4 border-gray-300">
           <TabsList
             ref={tabsListRef}
             className={cn(

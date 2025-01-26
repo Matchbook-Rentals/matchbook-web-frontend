@@ -92,7 +92,7 @@ export default function LocationSuggest({ setDestination }) {
           <ul className="mt-5">
             {suggestions.map(({ place_id, description }) => (
               <li
-                className="hover:bg-primaryBrand"
+                className="hover:bg-gray-100"
                 key={place_id}
                 onClick={() => handleSelect(description.slice(0, -5), place_id)}
               >
