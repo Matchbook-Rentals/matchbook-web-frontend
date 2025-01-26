@@ -135,13 +135,13 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             >
               <SelectTrigger id="durationOfTenancy" className="w-1/2 md:w-full">
                 <SelectValue placeholder="How long have you lived here?" />
-            </SelectTrigger>
-            <SelectContent>
-              {[...Array(12)].map((_, i) => (
-                <SelectItem key={i + 1} value={`${i + 1} months`}>
-                  {i + 1} {i + 1 === 1 ? 'month' : 'months'}
-                </SelectItem>
-              ))}
+              </SelectTrigger>
+              <SelectContent>
+                {[...Array(12)].map((_, i) => (
+                  <SelectItem key={i + 1} value={`${i + 1} months`}>
+                    {i + 1} {i + 1 === 1 ? 'month' : 'months'}
+                  </SelectItem>
+                ))}
                 <SelectItem value="&gt;12 months">&gt;12 months</SelectItem>
               </SelectContent>
             </Select>
@@ -156,11 +156,11 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             className="space-y-2 est"
           >
             <div className="flex items-center  space-x-2">
-              <RadioGroupItem value="rent" id="rent" />
+              <RadioGroupItem value="rent" id="rent" className='mb-2' />
               <Label className='text-[20px] font-normal' htmlFor="rent">I rent this property</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="own" id="own" />
+              <RadioGroupItem value="own" id="own" className='mb-2' />
               <Label className='text-[20px] font-normal' htmlFor="own">I own this property</Label>
             </div>
           </RadioGroup>

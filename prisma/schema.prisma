@@ -352,7 +352,7 @@ model Trip {
   minBathrooms Int?
   searchRadius Int? @default(50)
 
-  // Highlight Filters 
+  // Highlight Filters
   furnished            Boolean? @default(false)
   unfurnished          Boolean? @default(false)
   utilitiesIncluded    Boolean? @default(false)
@@ -597,23 +597,24 @@ model Application {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  isDefault Boolean  @default(false)
+  isDefault Boolean?  @default(false)
   tripId    String?
-  userId    String
+  userId    String?
+  isComplete Boolean @default(false)
 
   // Personal Info
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
 
   // Residential History
-  currentStreet     String
+  currentStreet     String?
   currentApt        String?
-  currentCity       String
-  currentState      String
-  currentZipCode    String
-  housingStatus     String
-  monthlyPayment    String
-  durationOfTenancy String
+  currentCity       String?
+  currentState      String?
+  currentZipCode    String?
+  housingStatus     String?
+  monthlyPayment    String?
+  durationOfTenancy String?
 
   // Landlord Info
   landlordFirstName   String?
@@ -621,11 +622,12 @@ model Application {
   landlordEmail       String?
   landlordPhoneNumber String?
 
-  // Comments to explain Yes answeres
-  evicted         Boolean?
-  brokenLease     Boolean?
-  landlordDispute Boolean?
-  explanation     String?
+  // Comments to explain Yes answers
+  evicted            Boolean?
+  brokenLease        Boolean?
+  landlordDispute    Boolean?
+  evictedExplanation String?
+  felonyExplanation  String?
 
   // Relationships
   user               User                @relation(fields: [userId], references: [id])
