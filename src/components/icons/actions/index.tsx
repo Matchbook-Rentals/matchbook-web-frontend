@@ -1,9 +1,50 @@
 import React from "react";
 import { IconProps } from "../types";
 
-export const ReturnIcon = (props: any) => (
-  <svg {...props} viewBox="0 0 65 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* ReturnIcon paths */}
+export const ReturnIcon = (props: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={45}
+    height={31}
+    viewBox="0 0 45 31"
+    fill="none"
+    {...props}
+  >
+    <path
+      d="M42.0247 18.7005C42.0247 28.9363 33.2482 27.6523 22.4259 27.6523"
+      stroke="white"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M42.0204 18.7006C42.0204 8.04646 32.9363 9.38405 21.7278 9.38405"
+      stroke="white"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3 9.32645L21.7297 9.38009"
+      stroke="white"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3 9.3267L10.7608 3"
+      stroke="white"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3 9.32645L10.7608 15.6567"
+      stroke="white"
+      strokeWidth={5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
