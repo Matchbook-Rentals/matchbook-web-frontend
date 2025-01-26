@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const locationIqUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.LOCATIONIQ_API_KEY}&center=${latitude},${longitude}&zoom=8&size=1330x526&markers=icon:small-red-cutout|${latitude},${longitude}`;
+  const locationIqUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.LOCATIONIQ_API_KEY}&center=${latitude},${longitude}&zoom=12&size=1330x526&markers=icon:small-red-cutout|${latitude},${longitude}`;
 
   try {
     const response = await fetch(locationIqUrl);
