@@ -110,7 +110,7 @@ export default function HeroLocationSuggest({
         <ul className="mt-5">
           {suggestions.map((suggestion) => (
             <li
-              className="hover:bg-primaryBrand p-2 cursor-pointer"
+              className="hover:bg-gray-100 p-2 cursor-pointer"
               key={suggestion.place_id}
               onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
               onMouseEnter={() => prefetchGeocode(suggestion.description)}
