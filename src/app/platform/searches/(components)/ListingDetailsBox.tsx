@@ -45,7 +45,7 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
         </button>
 
         <button
-          className="w-[120px] h-[120px] flex items-center justify-center rounded-full bg-gradient-to-br from-[#869A7DE5] to-[#6E7E66E5] hover:opacity-90 transition-opacity"
+          className="w-[120px] h-[120px] flex items-center justify-center rounded-full bg-gradient-to-br from-[#A3B899] to-[#5F6F58] hover:opacity-90 transition-opacity"
         >
           <BrandHeart className='h-[44px] w-[44px]' />
 
@@ -55,10 +55,10 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
       {/* Pricing Information Section */}
       <div className='flex justify-between items-center mb-4'>
         <div className='text-center'>
-          <p className='text-[36px] font-medium'>${listing.price?.toLocaleString()} <span className='text-[24px] underline'>month</span></p>
+          <p className='text-[36px] font-medium'>${listing.price?.toLocaleString()} <span className='text-[24px] font-normal underline'>month</span></p>
         </div>
         <div className='text-center'>
-          <p className='text-[36px] font-medium'>${listing.depositSize?.toLocaleString()} <span className='text-[24px] underline'>deposit</span></p>
+          <p className='text-[36px] font-medium'>${listing.depositSize?.toLocaleString()} <span className='text-[24px] font-normal underline'>deposit</span></p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
           <p className='text-[24px] '>{listing?.stays || 23} stays</p>
         </div>
         <div className='flex items-center justify-between'>
-          <p className='text-[24px]'>{calculateTimeOnMatchbook()}</p>
+          <p className='text-[24px] font-normal'>{calculateTimeOnMatchbook()}</p>
           <p className='text-[24px] flex gap-x-2 items-center '><StarIcon /> {listing?.rating || listing.uScore?.toFixed(1)}</p>
         </div>
       </div>
