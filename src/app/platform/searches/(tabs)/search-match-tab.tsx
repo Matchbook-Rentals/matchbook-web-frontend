@@ -295,7 +295,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         listingImages={showListings[0]?.listingImages || []}
       />
 
-      <div className='flex justify-between gap-x-2 relative'>
+      <div className='flex justify-between gap-x-6 relative'>
         <ListingDescription listing={showListings[0]} />
         <div
           className="w-1/2 h-fit lg:w-3/5 sticky top-[10%]"
@@ -312,7 +312,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
         <div className="flex justify-between border-b pb-3 text-[#404040] text-[20px] font-normal">
           <p> {showListings[0].locationString} </p>
-          <p> {showListings[0].distance} </p>
+          <p> {showListings[0].distance?.toFixed(1)} miles </p>
         </div>
         <img
           src={`/api/map/static?latitude=${showListings[0].latitude}&longitude=${showListings[0].longitude}`}

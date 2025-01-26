@@ -11,6 +11,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 
+const sectionStyles = 'border-b pb-5 mt-5';
+const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
+
 interface ListingDescriptionProps {
   listing: ListingAndImages
 }
@@ -33,16 +36,16 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
       <h1 className="text-[#404040] border-b mt-6 mb-3 text-[32px] font-normal">
         Ogden Mountain Home
       </h1>
-      <div className="flex justify-between border-b pb-3 text-[#404040] text-[24px] font-normal">
+      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[24px] font-normal`}>
         <p> 8 beds | 2 Baths </p>
         <p> 1,000 sqft </p>
       </div>
 
 
-      {/* Highlights   */}
-      <div className='border-b'>
+      {/* Highlights Section   */}
+      <div className={sectionStyles}>
 
-        <h3 className="text-[#404040] text-[24px] my-3  font-medium"> Highlights </h3>
+        <h3 className={sectionHeaderStyles}> Highlights </h3>
 
         <AmenityListItem
           icon={MatchbookVerified}
@@ -122,14 +125,14 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
 
 
       {/* Description section */}
-      <div className='pb-3 border-b'>
-        <h3 className="text-[#404040] text-[24px] mt-3 mb-6 font-medium"> Description </h3>
+      <div className={sectionStyles}>
+        <h3 className={sectionHeaderStyles}> Description </h3>
         <p className='text-[20px] font-normal'> {listing.description + listing.description + listing.description + listing.description} </p>
       </div>
 
-      {/* Description section */}
-      <div className="pb-3 border-b mt-3">
-        <h3 className="text-[24px] text-[#404040] font-medium mb-4">Amenities</h3>
+      {/* Amenity section */}
+      <div className={`${sectionStyles}`}>
+        <h3 className={sectionHeaderStyles}>Amenities</h3>
         <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
           {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
             <AmenityListItem
