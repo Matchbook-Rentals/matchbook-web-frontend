@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
+import { Star } from 'lucide-react';
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
@@ -41,17 +42,17 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
         <div className="md:hidden w-full flex flex-col space-y-2">
           <div className="w-full flex justify-between">
-            <p>8 beds | 2 Baths</p>
-            <p>$2,500/month</p>
+            <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
+            <p>${listing.price?.toLocaleString()}/month</p>
           </div>
           <div className="w-full flex justify-between">
-            <p>1,000 sqft</p>
-            <p>$1,000 deposit</p>
+            <p>{listing.squareFootage.toLocaleString()} sqft</p>
+            <p>${listing.depositSize.toLocaleString()} deposit</p>
           </div>
         </div>
         <div className="hidden md:flex w-full justify-between">
-          <p>8 beds | 2 Baths</p>
-          <p>1,000 sqft</p>
+          <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
+          <p>{listing.depositSize} sqft</p>
         </div>
       </div>
 
