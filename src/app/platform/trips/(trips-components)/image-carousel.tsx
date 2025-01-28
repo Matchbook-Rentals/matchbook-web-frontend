@@ -3,6 +3,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { RejectIcon } from '@/components/icons';
 
 interface ListingImageCarouselProps {
   listingImages: ListingImage[]
@@ -108,14 +109,16 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[#404040]'>Show All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[90vh] pt-16 pb-4 overflow-y-auto ">
-              <div className="flex flex-col space-y-4">
+            <DialogContent className="max-w-[95vw] max-h-[90vh] pt-16 pb-4 overflow-y-auto">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 px-4"
+              >
                 {uniqueImages.map((image, index) => (
-                  <div key={image.id} className="relative w-full">
+                  <div key={image.id} className="relative w-full bg-gray-100  rounded-[20px] overflow-hidden">
                     <img
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
-                      className="w-full h-auto rounded-[30px] shadow-sm"
+                      className="object-contain w-full h-full min-h-[200px] max-h-[400px]"
                     />
                     <p className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
                       {index + 1} / {uniqueImages.length}
@@ -125,8 +128,9 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               </div>
               <Button
                 onClick={() => setIsDialogOpen(false)}
-                className="w-1/3 text-[16px] mx-auto rounded-full bg-charcoalBrand sticky bottom-0 text-background  "
+                className="w-1/3 max-w-[300px] text-[16px] sticky bottom-0 mx-auto mt-4 rounded-full bg-charcoalBrand text-background"
               >
+                <RejectIcon className='h-full p-1 mr-2 hidden xxs:inline' />
                 Close
               </Button>
             </DialogContent>
