@@ -46,6 +46,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const [stickyOffset, setStickyOffset] = useState<number | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
   const detailsBoxRef = useRef<HTMLDivElement>(null);
+  const [isDetailsVisible, setIsDetailsVisible] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -296,7 +297,50 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
+      {/* Conditionally rendered top control box */}
+      {!isDetailsVisible && showListings[0] && (
+        <div className="sticky test top-0 bg-background z-50 p-4 border-b-2 border-gray-200">
+          <div className='flex justify-between items-center'>
+            <div className='flex flex-col'>
+              <p className='text-lg font-medium'>{showListings[0].title}</p>
+              <p className='text-sm'>Hosted by {showListings[0].user?.firstName}</p>
+            </div>
+            <div className='flex items-center gap-x-4'>
+              <p className='text-lg font-medium'>${showListings[0].price?.toLocaleString()}/month</p>
+              <div className="flex items-center gap-x-3">
+                <button
+                  onClick={() => handleReject(showListings[0])}
+                  className={`w-[50px] drop-shadow aspect-square
+               flex items-center justify-center rounded-full
+            hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
+                >
+                  <RejectIcon className={`w-[60%] h-[60%] text-white`} />
+                </button>
 
+                <button
+                  onClick={() => handleBack()}
+                  className={`w-[40px] drop-shadow aspect-square
+               flex items-center justify-center rounded-full
+               hover:opacity-90 transition-opacity
+               bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
+                >
+                  <ReturnIcon className={`w-[60%] h-[60%] text-white`} />
+                </button>
+
+                <button
+                  onClick={() => handleLike(showListings[0])}
+                  className={`w-[50px] drop-shadow aspect-square flex
+            items-center justify-center rounded-full
+            hover:opacity-90 transition-opacity
+            bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
+                >
+                  <BrandHeart className={`w-[60%] h-[60%]`} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className='flex justify-between gap-x-8 relative'>
         <ListingDescription listing={showListings[0]} />
         <div
@@ -307,6 +351,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
             onReject={() => handleReject(showListings[0])}
             onReturn={() => handleBack()}
             onLike={() => handleLike(showListings[0])}
+            setIsDetailsVisible={setIsDetailsVisible}
           />
         </div>
       </div>

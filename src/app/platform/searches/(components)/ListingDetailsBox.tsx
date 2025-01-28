@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ListingAndImages } from '@/types';
 import { BrandHeart, ReturnIcon, RejectIcon, VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge, StarIcon } from '@/components/icons';
 
@@ -8,14 +8,15 @@ interface ListingDetailsBoxProps {
   onReject: () => void;
   onReturn: () => void;
   onLike: () => void;
+  setIsDetailsVisible: (isVisible: boolean) => void;
 }
 
-const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike }) => {
+const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike, setIsDetailsVisible }) => {
   const host = listing.user;
-
+  const detailsBoxRef = useRef<HTMLDivElement>(null);
   // Style variables
   const bigButtonControl = "max-w-[120px] min-w-[80px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
-  const smallButtonControl = "max-w-[80px] min-w-[60px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
+  const smallButtonControl = "max-w-[80px] min-w-[80px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
   const bigIcon = "w-[40%] h-[40%]";
   const smallIcon = "w-[55%] h-[55%]";
   const currencyStyles = "md:text-[24px] lg:text-[30px] xl:text-[32px] 2xl:text-[36px] font-medium";
@@ -41,8 +42,21 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject
     return `${diffYears} years on Matchbook`;
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (detailsBoxRef.current) {
+        const detailsBoxRect = detailsBoxRef.current.getBoundingClientRect();
+        const isVisible = detailsBoxRect.top >= 0;
+        setIsDetailsVisible(isVisible);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [setIsDetailsVisible]);
+
   return (
-    <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }}>
+    <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }} ref={detailsBoxRef}>
       {/* Action Buttons Section - Reject, Return, Like */}
       <div className="flex justify-center items-center gap-4 my-4">
         <button
