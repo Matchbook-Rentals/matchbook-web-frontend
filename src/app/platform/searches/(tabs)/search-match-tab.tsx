@@ -256,7 +256,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           {numFavorites > 0 ? 'look at your favorites' : ''}
           {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
           {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
-
         {(numFavorites > 0 || numFilteredOut > 0) && (
           <p>
             {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
@@ -290,7 +289,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    <div className={`w-full mx-auto pb-6`}>
+    // Below paddings are to accomdate control buttons
+    // first for buttons with mobile navigation selector
+    // second is for 'tablet' view with larger button controls
+    <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6`}>
       <ListingImageCarousel
         listingImages={showListings[0]?.listingImages || []}
       />
@@ -307,7 +309,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       </div>
 
       {/* Location section */}
-      <div className="pb-3 border-b mt-3" ref={locationSectionRef}>
+      <div className="pb-3 mt-3" ref={locationSectionRef}>
         <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
         <div className="flex justify-between pb-3 text-[#404040] text-[20px] font-normal">
