@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
@@ -21,7 +21,35 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { listings, showListings, likedListings, maybedListings } = state;
+  const { listings, showListings, likedListings, maybedListings, trip } = state;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+
+  useEffect(() => {
+    const setHeight = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newStartY = containerRect.top;
+        const newViewportHeight = window.innerHeight;
+        const newCalculatedHeight = newViewportHeight - newStartY;
+        setStartY(newStartY);
+        setViewportHeight(newViewportHeight);
+        setCalculatedHeight(newCalculatedHeight);
+        setCurrentComponentHeight(containerRef.current.offsetHeight) ;
+        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
 
   // Using this instead of showListings as we might want to add back in liked/maybed listings
   const displayListings = [...showListings];
@@ -44,7 +72,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     status: getListingStatus(listing)
   }));
 
-  const center = { lat: state.trip?.latitude, lng: state.trip?.longitude };
+  const center = { lat: trip?.latitude, lng: trip?.longitude };
   const markers: MapMarker[] = displayListings.map((listing) => ({
     title: listing.title,
     lat: listing.latitude,
@@ -67,11 +95,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const numFilteredOut = listings.length - likedListings.length - maybedListings.length;
 
   return (
-    <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2">
+    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full px-2">
       {/*Grid container*/}
       <div className="w-full md:w-3/5 md:pr-4">
         {displayListings.length > 0 ? (
-          <SearchListingsGrid listings={[...showListings]} />
+          <SearchListingsGrid listings={[...showListings]} height={calculatedHeight} />
         ) : listings.length === 0 ? (
           <div className='flex flex-col items-center justify-center h-[50vh]'>
             <p className="text-gray-600 text-center">
@@ -119,8 +147,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       {/*Map container*/}
       <div className="w-full md:w-2/5 mt-4 md:mt-0">
         <SearchMap
-          center={mapCenter}
-          zoom={10}
+          center={[mapCenter.lng, mapCenter.lat]}
+          zoom={12}
+          height={`${calculatedHeight}px`}
           markers={markers.map((marker) => ({
             ...marker,
             lat: marker.lat,

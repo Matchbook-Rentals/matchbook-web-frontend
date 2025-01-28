@@ -11,11 +11,13 @@ import HoveredListingInfo from './hovered-listing-info';
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
   withCallToAction?: boolean;
+  height?: string;
 }
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   listings,
-  withCallToAction = false
+  withCallToAction = false,
+  height
 }) => {
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
@@ -150,14 +152,17 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, []);
 
   return (
-    <div className="relative">
+    <div className={`relative min-h-[640px] h-[${height ? height : '640px'}] `}>
       {listings.length === 0 ? (
         <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings to display
         </div>
       ) : (
         <>
-          <ScrollArea className="h-[640px] w-full rounded-md pb-12 pr-4">
+          <ScrollArea
+            className={`w-full rounded-md pb-12 pr-4`}
+            style={{ height: height ? `${height}px` : '640px' }}
+          >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3  gap-8 pb-12">
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
@@ -214,7 +219,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               <ChevronsRight className="h-4 w-4" />
             </Button>
           </div>
-          <HoveredListingInfo />
         </>
       )}
     </div>

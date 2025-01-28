@@ -67,7 +67,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     if (mapRef.current && shouldPanTo) {
       mapRef.current.easeTo({
         center: [shouldPanTo.lng, shouldPanTo.lat],
-        duration: 800,
+        duration: 1500,
         zoom: zoom
       });
       clearPanTo();
