@@ -10,6 +10,17 @@ interface ListingDetailsBoxProps {
 const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
   const host = listing.user;
 
+  // Style variables
+  const bigButtonControl = "max-w-[120px] min-w-[80px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
+  const smallButtonControl = "max-w-[80px] min-w-[60px] aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity";
+  const bigIcon = "w-[40%] h-[40%]";
+  const smallIcon = "w-[55%] h-[55%]";
+  const currencyStyles = "md:text-[24px] lg:text-[30px] xl:text-[32px] 2xl:text-[36px] font-medium";
+  const currencyStylesUnderline = "md:text-[16px] lg:text-[20px] xl:text-[21px] 2xl:text-[24px] font-normal underline";
+  const badgeSpans = "flex items-center gap-2 whitespace-nowrap text-[16px] font-medium";
+  const mediumText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium";
+  const normalText = "md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal";
+
   const calculateTimeOnMatchbook = () => {
     if (!host?.createdAt) return 'New to Matchbook';
 
@@ -32,54 +43,51 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
       {/* Action Buttons Section - Reject, Return, Like */}
       <div className="flex justify-center items-center gap-4 my-4">
         <button
-          className="w-[120px] h-[120px] flex items-center justify-center rounded-full bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF] hover:opacity-90 transition-opacity"
+          className={`${bigButtonControl} bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF]`}
         >
-          <RejectIcon className='h-[48px] w-[48px] text-white' />
-
+          <RejectIcon className={`${bigIcon} text-white`} />
         </button>
 
         <button
-          className="w-[80px] h-[80px] flex items-center justify-center rounded-full bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE] hover:opacity-90 transition-opacity"
+          className={`${smallButtonControl} bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
         >
-          <ReturnIcon className='h-[44px] w-[44px] text-white' />
+          <ReturnIcon className={`${smallIcon} text-white`} />
         </button>
 
         <button
-          className="w-[120px] h-[120px] flex items-center justify-center rounded-full bg-gradient-to-br from-[#A3B899] to-[#5F6F58] hover:opacity-90 transition-opacity"
+          className={`${bigButtonControl} bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
         >
-          <BrandHeart className='h-[44px] w-[44px]' />
-
+          <BrandHeart className={bigIcon} />
         </button>
       </div>
 
       {/* Pricing Information Section */}
-      <div className='flex justify-between items-center mb-4'>
-        <div className='text-center'>
-          <p className='text-[36px] font-medium'>${listing.price?.toLocaleString()} <span className='text-[24px] font-normal underline'>month</span></p>
+      <div className='flex justify-between items-center gap-x-4 mb-4'>
+        <div className='whitespace-nowrap'>
+          <p className={currencyStyles}>${listing.price?.toLocaleString()} <span className={currencyStylesUnderline}>month</span></p>
         </div>
-        <div className='text-center'>
-          <p className='text-[36px] font-medium'>${listing.depositSize?.toLocaleString()} <span className='text-[24px] font-normal underline'>deposit</span></p>
+        <div className='whitespace-nowrap'>
+          <p className={currencyStyles}>${listing.depositSize?.toLocaleString()} <span className={currencyStylesUnderline}>deposit</span></p>
         </div>
       </div>
 
       {/* Host Information Section */}
       <div className='mb-4 space-y-2'>
         <div className='flex items-center justify-between'>
-          <p className='text-[24px] font-medium'>Hosted by {host?.firstName}</p>
-          <p className='text-[24px] '>{listing?.stays || 23} stays</p>
+          <p className={mediumText}>Hosted by {host?.firstName}</p>
+          <p className={normalText}>{listing?.stays || 23} stays</p>
         </div>
         <div className='flex items-center justify-between'>
-          <p className='text-[24px] font-normal'>{calculateTimeOnMatchbook()}</p>
-          <p className='text-[24px] flex gap-x-2 items-center '><StarIcon /> {listing?.rating || listing.uScore?.toFixed(1)}</p>
+          <p className={normalText}>{calculateTimeOnMatchbook()}</p>
+          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.rating || listing.uScore?.toFixed(1)}</p>
         </div>
       </div>
 
-
       {/* Host Badges Section */}
       <div className='flex justify-between gap-2'>
-        <span className='flex items-center gap-2'><VerifiedBadge />Verified</span>
-        <span className='flex items-center gap-2'><TrailBlazerBadge />Trail Blazer</span>
-        <span className='flex items-center gap-2'><HallmarkHostBadge />Hallmark Host</span>
+        <span className={badgeSpans}><VerifiedBadge />Verified</span>
+        <span className={badgeSpans}><TrailBlazerBadge />Trail Blazer</span>
+        <span className={badgeSpans}><HallmarkHostBadge />Hallmark Host</span>
       </div>
     </div>
   );

@@ -18,7 +18,9 @@ ACH PLAID API
 - [ ] Four different forms approach
 - [ ] only 5 applications out
 - [ ] text size on cards
-
+- [ ] Open free maps
+- [ ] applicaiton page
+- [ ] matchmaker mobile view
 
 
 

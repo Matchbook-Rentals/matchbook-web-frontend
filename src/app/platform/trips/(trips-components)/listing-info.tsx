@@ -13,6 +13,8 @@ import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTrigge
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
+const amenityTextStyle = 'text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-medium';
+const bodyTextStyle = 'text-[12px] sm:text-[14px] md:text-[16px] lg:text-[20px] font-normal';
 
 interface ListingDescriptionProps {
   listing: ListingAndImages
@@ -50,7 +52,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         <AmenityListItem
           icon={MatchbookVerified}
           label="Matchbook Verified Guests Preferred"
-          labelClassNames='text-[20px] font-medium'
+          labelClassNames={amenityTextStyle}
           iconClassNames='h-[32px] w-[32px]'
           className=' '
         />
@@ -60,7 +62,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             <AmenityListItem
               icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
               label="Single Family"
-              labelClassNames='text-[20px] font-medium'
+              labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
               className=' '
             />
@@ -69,7 +71,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             <AmenityListItem
               icon={AmenitiesIcons.UpdatedTownhouseIcon}
               label="Townhouse"
-              labelClassNames='text-[20px] font-medium'
+              labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
               className=' '
             />
@@ -78,7 +80,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             <AmenityListItem
               icon={AmenitiesIcons.UpdatedSingleRoomIcon}
               label="Private Room"
-              labelClassNames='text-[20px] font-medium'
+              labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
               className=' '
             />
@@ -87,7 +89,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             <AmenityListItem
               icon={AmenitiesIcons.UpdatedApartmentIcon}
               label="Apartment"
-              labelClassNames='text-[20px] font-medium'
+              labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
               className=' '
             />
@@ -97,7 +99,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
           <AmenityListItem
             icon={listing.furnished ? AmenitiesIcons.UpdatedFurnishedIcon : AmenitiesIcons.UpdatedUnfurnishedIcon}
             label={listing.furnished ? "Furnished" : "Unfurnished"}
-            labelClassNames='text-[20px] font-medium'
+            labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
             className=' '
           />
@@ -106,7 +108,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
           <AmenityListItem
             icon={listing.utilitiesIncluded ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon}
             label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
-            labelClassNames='text-[20px] font-medium'
+            labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
             className=' '
           />
@@ -115,7 +117,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
           <AmenityListItem
             icon={listing.petsAllowed ? AmenitiesIcons.UpdatedPetFriendlyIcon : AmenitiesIcons.UpdatedPetUnfriendlyIcon}
             label={listing.petsAllowed ? "Pets Allowed" : "No Pets"}
-            labelClassNames='text-[20px] font-medium'
+            labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
             className=' '
           />
@@ -127,7 +129,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
       {/* Description section */}
       <div className={sectionStyles}>
         <h3 className={sectionHeaderStyles}> Description </h3>
-        <p className='text-[20px] font-normal'> {listing.description + listing.description + listing.description + listing.description} </p>
+        <p className={bodyTextStyle}> {listing.description + listing.description + listing.description + listing.description} </p>
       </div>
 
       {/* Amenity section */}
@@ -139,7 +141,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
               key={amenity.code}
               icon={amenity.icon || Star}
               label={amenity.label}
-              labelClassNames='text-[20px] font-medium'
+              labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
             />
           ))}
@@ -173,7 +175,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
                           icon={amenity.icon || Star}
                           label={amenity.label}
                           iconClassNames='h-[24px] w-[24px]'
-                          labelClassNames='md:text-[16px]'
+                          labelClassNames={amenityTextStyle}
                           className='py-2 border-b border-[#40404080] space-y-2'
                         />
                       ))}
