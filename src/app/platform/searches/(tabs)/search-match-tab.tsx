@@ -12,7 +12,8 @@ import ListingDetails from '../(components)/listing-details';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ListingDescription from '../../trips/(trips-components)/listing-info';
 import ListingDetailsBox from '../(components)/ListingDetailsBox';
-
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 const PLATFORM_NAVBAR_HEIGHT = 0; // Add this constant for the navbar height
 
@@ -27,26 +28,21 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
   const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike, optimisticMaybe, optimisticRemoveMaybe } = actions;
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isScrolledDeep, setIsScrolledDeep] = useState(false);
-  const MAX_HISTORY = 50; // Maximum number of actions to remember
+  const MAX_HISTORY = 50;
   const [isProcessing, setIsProcessing] = useState(false);
-  const [controlBoxHeight, setControlBoxHeight] = useState<number>(0);
-  const controlBoxRef = useRef<HTMLDivElement>(null);
-  const [titleBoxHeight, setTitleBoxHeight] = useState<number>(0);
-  const titleBoxRef = useRef<HTMLDivElement>(null);
-  const [totalBoxHeight, setTotalBoxHeight] = useState<number>(0);
-  const controlBoxParentRef = useRef<HTMLDivElement>(null);
-  const [controlBoxParentHeight, setControlBoxParentHeight] = useState<number>(0);
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  // Add new state for sticky behavior
-  const [stickyOffset, setStickyOffset] = useState<number | null>(null);
+  // Remove unused height states and refs
   const locationSectionRef = useRef<HTMLDivElement>(null);
   const detailsBoxRef = useRef<HTMLDivElement>(null);
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
+
+  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,83 +67,38 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   }, []);
 
   useEffect(() => {
-    const updateHeight = () => {
-      if (controlBoxRef.current) {
-        setControlBoxHeight(controlBoxRef.current.offsetHeight);
-      }
-    };
-
-    // Initial measurement
-    updateHeight();
-
-    // Add resize listener
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
-
-  useEffect(() => {
-    const updateTitleHeight = () => {
-      if (titleBoxRef.current) {
-        setTitleBoxHeight(titleBoxRef.current.offsetHeight);
-      }
-    };
-
-    // Initial measurement
-    updateTitleHeight();
-
-    // Add resize listener
-    window.addEventListener('resize', updateTitleHeight);
-    return () => window.removeEventListener('resize', updateTitleHeight);
-  }, []);
-
-  // Update the useEffect to calculate the total height
-  useEffect(() => {
-    const updateTotalBoxHeight = () => {
-      const bedroomPriceBox = document.querySelector('.bedroom-price-box');
-      const sqftDepositBox = document.querySelector('.sqft-deposit-box');
-
-      if (bedroomPriceBox && sqftDepositBox) {
-        const bedroomPriceHeight = bedroomPriceBox.getBoundingClientRect().height;
-        const sqftDepositHeight = sqftDepositBox.getBoundingClientRect().height;
-        setTotalBoxHeight(bedroomPriceHeight + sqftDepositHeight);
-      }
-    };
-
-    updateTotalBoxHeight();
-    window.addEventListener('resize', updateTotalBoxHeight);
-    window.addEventListener('scroll', updateTotalBoxHeight);
-
-    return () => {
-      window.removeEventListener('resize', updateTotalBoxHeight);
-      window.removeEventListener('scroll', updateTotalBoxHeight);
-    };
+    if (showListings && showListings[0]) {
+      setMapCenter([showListings[0].longitude, showListings[0].latitude]);
+    } else {
+      // Set a default map center if showListings is empty or undefined
+      setMapCenter([-118.2437, 34.0522]); // Example: Los Angeles coordinates
+    }
   }, [showListings]);
 
   useEffect(() => {
-    const updateParentHeight = () => {
-      if (controlBoxParentRef.current) {
-        // Force a reflow to ensure all children are rendered
-        requestAnimationFrame(() => {
-          const height = controlBoxParentRef.current?.getBoundingClientRect().height || 0;
-          setControlBoxParentHeight(height);
-        });
-      }
-    };
+    if (!mapContainerRef.current || !mapCenter) return;
 
-    // Initial measurement after a short delay to ensure rendering
-    const initialTimer = setTimeout(updateParentHeight, 100);
+    const map = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: 'https://tiles.openfreemap.org/styles/bright',
+      center: mapCenter,
+      zoom: 14,
+      scrollZoom: false,
+    });
 
-    // Add resize observer for more reliable height updates
-    const resizeObserver = new ResizeObserver(updateParentHeight);
-    if (controlBoxParentRef.current) {
-      resizeObserver.observe(controlBoxParentRef.current);
-    }
+    mapRef.current = map;
+
+    new maplibregl.Marker()
+      .setLngLat(mapCenter)
+      .addTo(map);
 
     return () => {
-      clearTimeout(initialTimer);
-      resizeObserver.disconnect();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
-  }, [showListings]); // Add showListings as dependency to recalculate when content changes
+  }, [mapCenter]);
 
   // Add this helper function near other function declarations
   const scrollToTop = () => {
@@ -365,11 +316,58 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
             <p> {showListings[0].locationString} </p>
             <p> {showListings[0].distance?.toFixed(1)} miles </p>
           </div>
-          <img
-            src={`/api/map/static?latitude=${showListings[0].latitude}&longitude=${showListings[0].longitude}`}
-            alt="Property location map"
-            className="w-full h-[526px] mt-4"
-          />
+
+          <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
+            {/* Map container */}
+            <div className="absolute top-2 right-2 z-10 flex flex-col">
+              <button
+                onClick={() => {
+                  if (mapRef.current) {
+                    mapRef.current.zoomIn();
+                  }
+                }}
+                className="bg-white p-2 rounded-md shadow mb-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 6v12m6-6H6"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => {
+                  if (mapRef.current) {
+                    mapRef.current.zoomOut();
+                  }
+                }}
+                className="bg-white p-2 rounded-md shadow"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M18 12H6"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
