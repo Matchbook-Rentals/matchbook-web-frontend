@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { Montserrat } from 'next/font/google';
 import { BrandHeartOutline, MapViewIcon, MatchmakerTabIcon, OverviewTabIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
-import { BookIcon } from 'lucide-react';
+import { BookIcon, ShareIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
@@ -124,7 +124,24 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>
-      <Breadcrumbs links={breadcrumbLinks} />
+      <div className='flex justify-between items-center sm:justify-start'>
+        <Breadcrumbs links={breadcrumbLinks} />
+        {isMobile && ['matchmaker', 'map'].includes(currentTab) && (
+          <div className='flex gap-x-4 items-center'>
+            <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+              <ShareIcon className='' />
+              <p className='hidden xxs:block'>Share</p>
+            </button>
+            <FilterOptionsDialog
+              isOpen={isFilterOpen}
+              onOpenChange={setIsFilterOpen}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              className=''
+            />
+          </div>
+        )}
+      </div>
 
       {!isMobile ? (
         <TabSelector
@@ -136,12 +153,19 @@ const TripsPage: React.FC = () => {
           tabsListClassName='flex py-0 justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
-              <FilterOptionsDialog
-                isOpen={isFilterOpen}
-                onOpenChange={setIsFilterOpen}
-                filters={filters}
-                onFilterChange={handleFilterChange}
-              />
+              <div className='flex gap-x-4 items-center'>
+                <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+                  <ShareIcon className='' />
+                  <p className='underline '>Share</p>
+                </button>
+                <FilterOptionsDialog
+                  isOpen={isFilterOpen}
+                  onOpenChange={setIsFilterOpen}
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  className=''
+                />
+              </div>
             ) : undefined
           }
         />

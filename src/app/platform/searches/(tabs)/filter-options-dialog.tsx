@@ -8,6 +8,9 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
+import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
+import { ScreenShareIcon, Share2Icon, ShareIcon } from 'lucide-react';
+import { Share1Icon } from '@radix-ui/react-icons';
 
 interface FilterOptions {
   propertyTypes: string[];
@@ -57,7 +60,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'apartment',
       label: 'Apartment',
-      icon: <AmenitiesIcons.UpdatedApartmentIcon className="p-1" />
+      icon: <AmenitiesIcons.UpdatedApartmentIcon className="p-1 mt-0" />
     },
     {
       value: 'privateRoom',
@@ -450,8 +453,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       {/* Filter Button Trigger */}
       <DialogTrigger asChild>
-        <Button variant="outline" className={`flex items-center rounded-full p-2 px-4 ${className}`}>
-          <span className="text-[#404040] text-center  text-[16px] font-medium">Filters</span>
+        <Button variant="outline" className={`flex justify-between rounded-[5px] items-center gap-x-1 h-fit px-2 py-1 ${className}`}>
+          <UpdatedFilterIcon className='h-[18px]  ' />
+          <span className="text-[#404040] text-center  text-[10px] font-normal">Filters</span>
         </Button>
       </DialogTrigger>
 
@@ -461,7 +465,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           Filters
         </DialogTitle>
         {/* Scrollable Filter Content Area */}
-        <ScrollArea className="flex-1 px-6">
+        <ScrollArea className="flex-1  px-6 py-0 ">
           <div className="">
             <div className="w-full">
 
@@ -470,7 +474,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 {/* Property Types Section */}
                 <div className="space-y-4 border-b-2 pb-3">
                   <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
-                  <div className="flex justify-between gap-4">
+                  <div className="flex flex-wrap xxs:flex-nowrap justify-between gap-x-2 sm:gap-4">
                     {propertyTypeOptions.map(({ value, label, icon }) => {
                       const isSelected = localFilters.propertyTypes.includes(value);
                       return (
@@ -482,7 +486,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
@@ -506,6 +510,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       value={priceInputs.min}
                       onChange={(value) => handlePriceChange('min', value)}
                       placeholder="$0"
+                      className='w-full'
                     />
                     <div className="border w-10  border-[#404040] mt-6" />
                     <CurrencyInput
@@ -514,6 +519,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       value={priceInputs.max}
                       onChange={(value) => handlePriceChange('max', value)}
                       placeholder="$10000"
+                      className='w-full'
                     />
                   </div>
                 </div>
@@ -959,15 +965,15 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
 
 
         {/* Footer Actions Section */}
-        <div className="border-t border-gray-200 bg-background py-2 px-6 mt-auto">
-          <div className="flex justify-between items-center">
-            <Button variant='outline' className='rounded-full text-md' onClick={clearFilters} >
+        <div className="border-t border-gray-200 bg-background py-2 px-4 xxs:px-6 mt-0">
+          <div className="flex justify-between space-x-2 items-center ">
+            <Button variant='outline' className='rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4' onClick={clearFilters} >
               Clear filters
             </Button>
-            <div className="flex space-x-4">
+            <div className="flex space-x-2 xxs:space-x-4 ">
               <Button
                 variant="outline"
-                className='rounded-full'
+                className='rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4'
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
@@ -975,7 +981,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges}
-                className='py-0 rounded-full'
+                className='py-0 rounded-full text-[12px] xxs:text-[14px] px-2 xxs:px-4'
               >
                 Show {filteredListingsCount} listings
               </Button>

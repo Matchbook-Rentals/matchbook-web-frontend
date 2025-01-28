@@ -325,10 +325,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
       <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
         {/* Action Buttons Section - Reject, Return, Like */}
-        <div className="flex justify-center items-center gap-4 my-4">
+        <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
           <button
             onClick={() => handleReject(showListings[0])}
-            className={`max-w-[120px] min-w-[80px] drop-shadow aspect-square
+            className={`w-[80px] drop-shadow aspect-square
                flex items-center justify-center rounded-full
             hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
           >
@@ -337,7 +337,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
           <button
             onClick={() => handleMaybe(showListings[0])}
-            className={`max-w-[80px] min-w-[60px] drop-shadow aspect-square
+            className={`w-[54px] drop-shadow aspect-square
                flex items-center justify-center rounded-full
                hover:opacity-90 transition-opacity
                bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
@@ -347,7 +347,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
           <button
             onClick={() => handleLike(showListings[0])}
-            className={`max-w-[120px] min-w-[80px] drop-shadow aspect-square flex
+            className={`w-[80px] drop-shadow aspect-square flex
             items-center justify-center rounded-full
             hover:opacity-90 transition-opacity
             bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}

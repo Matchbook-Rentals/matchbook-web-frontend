@@ -40,7 +40,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         Ogden Mountain Home
       </h1>
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
-        <div className="md:hidden w-full flex flex-col space-y-2">
+        <div className="md:hidden w-full flex flex-col space-y-6">
           <div className="w-full flex justify-between">
             <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
             <p>${listing.price?.toLocaleString()}/month</p>
