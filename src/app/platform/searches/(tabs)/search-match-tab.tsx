@@ -158,7 +158,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     scrollToTop();
     await optimisticLike(listing.id);
     setViewedListings(prev => {
-      const newState = [...prev, { listing, action: 'favorite', actionId: '' }];
+      const newState = [...prev, { listing, action: 'favorite' as 'favorite' | 'dislike', actionId: '' }];
       console.log('Viewed listings after like:', newState);
       return newState.slice(-MAX_HISTORY);
     });
@@ -168,7 +168,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     scrollToTop();
     await optimisticDislike(listing.id);
     setViewedListings(prev => {
-      const newState = [...prev, { listing, action: 'dislike', actionId: '' }];
+      const newState = [...prev, { listing, action: 'dislike' as 'favorite' | 'dislike', actionId: '' }];
       console.log('Viewed listings after dislike:', newState);
       return newState.slice(-MAX_HISTORY);
     });
@@ -178,7 +178,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     scrollToTop();
     await optimisticMaybe(listing.id);
     setViewedListings(prev => {
-      const newState = [...prev, { listing, action: 'maybe', actionId: '' }];
+      const newState = [...prev, { listing, action: 'maybe' as 'favorite' | 'dislike', actionId: '' }];
       console.log('Viewed listings after maybe:', newState);
       return newState.slice(-MAX_HISTORY);
     });
@@ -304,6 +304,9 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         >
           <ListingDetailsBox
             listing={showListings[0]}
+            onReject={() => handleReject(showListings[0])}
+            onReturn={() => handleBack()}
+            onLike={() => handleLike(showListings[0])}
           />
         </div>
       </div>
@@ -336,7 +339,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </button>
 
           <button
-            onClick={() => handleMaybe(showListings[0])}
+            onClick={() => handleBack()}
             className={`w-[54px] drop-shadow aspect-square
                flex items-center justify-center rounded-full
                hover:opacity-90 transition-opacity

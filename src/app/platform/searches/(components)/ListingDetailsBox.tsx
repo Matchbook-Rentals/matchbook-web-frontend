@@ -5,9 +5,12 @@ import { BrandHeart, ReturnIcon, RejectIcon, VerifiedBadge, TrailBlazerBadge, Ha
 
 interface ListingDetailsBoxProps {
   listing: ListingAndImages;
+  onReject: () => void;
+  onReturn: () => void;
+  onLike: () => void;
 }
 
-const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
+const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike }) => {
   const host = listing.user;
 
   // Style variables
@@ -43,18 +46,21 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
       {/* Action Buttons Section - Reject, Return, Like */}
       <div className="flex justify-center items-center gap-4 my-4">
         <button
+          onClick={onReject}
           className={`${bigButtonControl} bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF]`}
         >
           <RejectIcon className={`${bigIcon} text-white`} />
         </button>
 
         <button
+          onClick={onReturn}
           className={`${smallButtonControl} bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
         >
           <ReturnIcon className={`${smallIcon} text-white`} />
         </button>
 
         <button
+          onClick={onLike}
           className={`${bigButtonControl} bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
         >
           <BrandHeart className={bigIcon} />
