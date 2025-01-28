@@ -35,7 +35,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden md:flex flex-row space-x-8 w-full h-[50vh]">
+      <div className="hidden md:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           <img
@@ -51,7 +51,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
             <CarouselContent>
               {chunkedImages.map((chunk, chunkIndex) => (
                 <CarouselItem key={`chunk-${chunkIndex}`} className="h-[50vh] pl-4">
-                  <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                  <div className="grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
                     {chunk.map((image, idx) => (
                       <div
                         key={`image-${image.id}-${idx}`}
@@ -79,12 +79,27 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       <div className="md:hidden flex flex-col space-y-4 w-full">
         {/* Main image with Show More button */}
         <div className="w-full h-[30vh] relative">
-          <img
-            src={listingImages[activeImage]?.url}
-            alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-            className="w-full h-full object-cover rounded-[30px]"
-          />
-          <Dialog>
+          <Carousel opts={{ loop: true }} setApi={setApi}>
+            <CarouselContent>
+              {uniqueImages.map((image, index) => (
+                <CarouselItem key={image.id} className="w-full h-[30vh]">
+                  <div className="relative w-full h-full">
+                    <img
+                      src={image.url}
+                      alt={`${image.category} image ${image.rank}`}
+                      className="w-full h-full object-cover rounded-[5px]"
+                    />
+                    <p className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                      {index + 1} / {uniqueImages.length}
+                    </p>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+            <CarouselNext className="absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
+          </Carousel>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 className="absolute bottom-4 right-4 flex justify-between gap-x-2 bg-white hover:bg-gray-200"
@@ -93,7 +108,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[#404040]'>Show All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[90vh] pt-16 overflow-y-auto ">
+            <DialogContent className="max-w-[95vw] max-h-[90vh] pt-16 pb-4 overflow-y-auto ">
               <div className="flex flex-col space-y-4">
                 {uniqueImages.map((image, index) => (
                   <div key={image.id} className="relative w-full">
@@ -108,44 +123,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                   </div>
                 ))}
               </div>
-              <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white to-transparent md:hidden">
-              </div>
               <Button
-                onClick={() => document.querySelector('[role="dialog"] button[aria-label="Close"]')?.click()}
-                className="w-full bg-black text-white hover:bg-gray-800"
+                onClick={() => setIsDialogOpen(false)}
+                className="w-1/3 text-[16px] mx-auto rounded-full bg-charcoalBrand sticky bottom-0 text-background  "
               >
                 Close
               </Button>
             </DialogContent>
           </Dialog>
-        </div>
-
-        {/* Mobile horizontal thumbnail carousel */}
-        <div className="w-full">
-          <Carousel
-            opts={{
-              loop: true,
-              dragFree: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-4">
-              {uniqueImages.map((image, index) => (
-                <CarouselItem key={image.id} className="basis-1/4 pl-4">
-                  <div
-                    className="relative cursor-pointer h-20 rounded-lg"
-                    onClick={() => handleImageClick(index)}
-                  >
-                    <img
-                      src={image.url}
-                      alt={`${image.category} image ${image.rank}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
         </div>
       </div>
     </>
