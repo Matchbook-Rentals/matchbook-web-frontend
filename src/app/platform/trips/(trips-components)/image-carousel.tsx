@@ -36,7 +36,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden md:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
+      <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
           <img
@@ -77,7 +77,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       </div>
 
       {/* Mobile Layout - Stacked */}
-      <div className="md:hidden flex flex-col space-y-4 w-full">
+      <div className="lg:hidden flex flex-col space-y-4 w-full">
         {/* Main image with Show More button */}
         <div className="w-full h-[30vh] relative">
           <Carousel opts={{ loop: true }} setApi={setApi}>

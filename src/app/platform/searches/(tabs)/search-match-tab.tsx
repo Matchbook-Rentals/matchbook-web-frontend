@@ -290,16 +290,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    // Below paddings are to accomdate control buttons
-    // first for buttons with mobile navigation selector
-    // second is for 'tablet' view with larger button controls
-    <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6`}>
-      <ListingImageCarousel
-        listingImages={showListings[0]?.listingImages || []}
-      />
+    <>
       {/* Conditionally rendered top control box */}
       {!isDetailsVisible && showListings[0] && (
-        <div className="sticky test top-0 bg-background z-50 p-4 border-b-2 border-gray-200">
+        <div className="hidden lg:block sticky top-0 bg-background z-50 p-4 border-b-2 border-gray-200">
           <div className='flex justify-between items-center'>
             <div className='flex flex-col'>
               <p className='text-lg font-medium'>{showListings[0].title}</p>
@@ -341,71 +335,78 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
         </div>
       )}
-      <div className='flex justify-between gap-x-8 relative'>
-        <ListingDescription listing={showListings[0]} />
-        <div
-          className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
-        >
-          <ListingDetailsBox
-            listing={showListings[0]}
-            onReject={() => handleReject(showListings[0])}
-            onReturn={() => handleBack()}
-            onLike={() => handleLike(showListings[0])}
-            setIsDetailsVisible={setIsDetailsVisible}
+      {/* Below paddings are to accomdate control buttons */}
+      {/* first for buttons with mobile navigation selector */}
+      {/* second is for 'tablet' view with larger button controls */}
+      <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6`}>
+        <ListingImageCarousel
+          listingImages={showListings[0]?.listingImages || []}
+        />
+        <div className='flex justify-between gap-x-8 relative'>
+          <ListingDescription listing={showListings[0]} />
+          <div
+            className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
+          >
+            <ListingDetailsBox
+              listing={showListings[0]}
+              onReject={() => handleReject(showListings[0])}
+              onReturn={() => handleBack()}
+              onLike={() => handleLike(showListings[0])}
+              setIsDetailsVisible={setIsDetailsVisible}
+            />
+          </div>
+        </div>
+
+        {/* Location section */}
+        <div className="pb-3 mt-3" ref={locationSectionRef}>
+          <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
+
+          <div className="flex justify-between pb-3 text-[#404040] text-[20px] font-normal">
+            <p> {showListings[0].locationString} </p>
+            <p> {showListings[0].distance?.toFixed(1)} miles </p>
+          </div>
+          <img
+            src={`/api/map/static?latitude=${showListings[0].latitude}&longitude=${showListings[0].longitude}`}
+            alt="Property location map"
+            className="w-full h-[526px] mt-4"
           />
         </div>
-      </div>
 
-      {/* Location section */}
-      <div className="pb-3 mt-3" ref={locationSectionRef}>
-        <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
+        <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
+          {/* Action Buttons Section - Reject, Return, Like */}
+          <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
+            <button
+              onClick={() => handleReject(showListings[0])}
+              className={`w-[80px] drop-shadow aspect-square
+                 flex items-center justify-center rounded-full
+              hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
+            >
+              <RejectIcon className={`w-[40%] h-[40%] text-white`} />
+            </button>
 
-        <div className="flex justify-between pb-3 text-[#404040] text-[20px] font-normal">
-          <p> {showListings[0].locationString} </p>
-          <p> {showListings[0].distance?.toFixed(1)} miles </p>
-        </div>
-        <img
-          src={`/api/map/static?latitude=${showListings[0].latitude}&longitude=${showListings[0].longitude}`}
-          alt="Property location map"
-          className="w-full h-[526px] mt-4"
-        />
-      </div>
+            <button
+              onClick={() => handleBack()}
+              className={`w-[54px] drop-shadow aspect-square
+                 flex items-center justify-center rounded-full
+                 hover:opacity-90 transition-opacity
+                 bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
+            >
+              <ReturnIcon className={`w-[55%] h-[55%] text-white`} />
+            </button>
 
-      <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
-        {/* Action Buttons Section - Reject, Return, Like */}
-        <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
-          <button
-            onClick={() => handleReject(showListings[0])}
-            className={`w-[80px] drop-shadow aspect-square
-               flex items-center justify-center rounded-full
-            hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
-          >
-            <RejectIcon className={`w-[40%] h-[40%] text-white`} />
-          </button>
-
-          <button
-            onClick={() => handleBack()}
-            className={`w-[54px] drop-shadow aspect-square
-               flex items-center justify-center rounded-full
-               hover:opacity-90 transition-opacity
-               bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
-          >
-            <ReturnIcon className={`w-[55%] h-[55%] text-white`} />
-          </button>
-
-          <button
-            onClick={() => handleLike(showListings[0])}
-            className={`w-[80px] drop-shadow aspect-square flex
-            items-center justify-center rounded-full
-            hover:opacity-90 transition-opacity
-            bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
-          >
-            <BrandHeart className={`w-[40%] h-[40%]`} />
-          </button>
+            <button
+              onClick={() => handleLike(showListings[0])}
+              className={`w-[80px] drop-shadow aspect-square flex
+              items-center justify-center rounded-full
+              hover:opacity-90 transition-opacity
+              bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
+            >
+              <BrandHeart className={`w-[40%] h-[40%]`} />
+            </button>
+          </div>
         </div>
       </div>
-
-    </div>
+    </>
   );
 };
 
