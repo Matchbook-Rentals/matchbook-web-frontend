@@ -13,8 +13,8 @@ import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTrigge
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
-const amenityTextStyle = 'text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px] font-medium';
-const bodyTextStyle = 'text-[12px] sm:text-[14px] md:text-[16px] lg:text-[20px] font-normal';
+const amenityTextStyle = 'text-[16px] md:text-[18px] lg:text-[20px] font-medium';
+const bodyTextStyle = 'text-[14px] md:text-[16px] lg:text-[20px] font-normal';
 
 interface ListingDescriptionProps {
   listing: ListingAndImages
@@ -35,12 +35,24 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const initialDisplayCount = 6;
   return (
     <div className='w-full  '>
-      <h1 className="text-[#404040] border-b mt-6 mb-3 text-[32px] font-normal">
+      <h1 className="text-[#404040] border-b mt-6 mb-3 text-[24px] sm:text-[32px] font-normal">
         Ogden Mountain Home
       </h1>
-      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[24px] font-normal`}>
-        <p> 8 beds | 2 Baths </p>
-        <p> 1,000 sqft </p>
+      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
+        <div className="md:hidden w-full flex flex-col space-y-2">
+          <div className="w-full flex justify-between">
+            <p>8 beds | 2 Baths</p>
+            <p>$2,500/month</p>
+          </div>
+          <div className="w-full flex justify-between">
+            <p>1,000 sqft</p>
+            <p>$1,000 deposit</p>
+          </div>
+        </div>
+        <div className="hidden md:flex w-full justify-between">
+          <p>8 beds | 2 Baths</p>
+          <p>1,000 sqft</p>
+        </div>
       </div>
 
 
