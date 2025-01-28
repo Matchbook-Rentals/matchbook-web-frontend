@@ -154,6 +154,9 @@ const config = {
         medium: '500',
         semibold: '600',
         bold: '700',
+      },
+      dropShadow: {
+        DEFAULT: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
       }
     }
   },

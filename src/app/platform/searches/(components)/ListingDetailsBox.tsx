@@ -75,11 +75,11 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
       <div className='mb-4 space-y-2'>
         <div className='flex items-center justify-between'>
           <p className={mediumText}>Hosted by {host?.firstName}</p>
-          <p className={normalText}>{listing?.stays || 23} stays</p>
+          <p className={normalText}>{listing?.numberOfStays || 23} stays</p>
         </div>
         <div className='flex items-center justify-between'>
           <p className={normalText}>{calculateTimeOnMatchbook()}</p>
-          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.rating || listing.uScore?.toFixed(1)}</p>
+          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore?.toFixed(1)}</p>
         </div>
       </div>
 
