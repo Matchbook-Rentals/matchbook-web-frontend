@@ -5,6 +5,7 @@ import { ListingAndImages } from "@/types"
 import { useState } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components'
+import { useListingHoverStore } from '@/store/listing-hover-store'
 import {
   Carousel,
   CarouselContent,
@@ -39,6 +40,7 @@ interface SearchListingCardProps {
 export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel }: SearchListingCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
 
   const { state, actions } = useTripContext();
   const { lookup } = state;
@@ -84,8 +86,14 @@ export default function SearchListingCard({ listing, status, className, style, d
     <Card
       className={`w-full overflow-hidden border-0 max-w-[317px]  shadow-0 shadow-none ${className || ''}`}
       style={style}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true)
+        setHoveredListing(listing)
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false)
+        setHoveredListing(null)
+      }}
     >
       <div className="relative rounded-lg  mx-auto max-w-[317px] aspect-[317/321]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
@@ -124,7 +132,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         ) : (
           <div className="absolute top-2 right-2">
             <div
-              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out 
+              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out
               bg-white/60 ${isMenuOpen ? 'w-[48px] h-[188px]' : 'w-[48px] h-[48px]'}`}
               onMouseEnter={() => setIsMenuOpen(true)}
               onMouseLeave={() => setIsMenuOpen(false)}
@@ -195,7 +203,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Listing Category and Rating */}
         <div className='flex justify-between mt-2'>
-          {`${listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in 
+          {`${listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in
             ${listing.locationString.split(',').at(-2)?.trim() || listing.locationString}`}
           <div className="flex items-center">
             <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />

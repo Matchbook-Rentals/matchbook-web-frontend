@@ -6,6 +6,7 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { ListingStatus } from '@/constants/enums';
+import HoveredListingInfo from './hovered-listing-info';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -213,6 +214,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               <ChevronsRight className="h-4 w-4" />
             </Button>
           </div>
+          <HoveredListingInfo />
         </>
       )}
     </div>

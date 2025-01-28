@@ -1,5 +1,7 @@
-import React from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import React, { useRef, useEffect } from 'react';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { useListingHoverStore } from '@/store/listing-hover-store';
 
 interface MapMarker {
   lat: number;
@@ -9,69 +11,122 @@ interface MapMarker {
 }
 
 interface SearchMapProps {
-  center: { lat: number; lng: number };
-  markers?: MapMarker[]; // Made optional
+  center: [number, number] | null;
+  markers?: MapMarker[];
   zoom?: number;
-  height?: string; // Height prop with default
+  height?: string;
 }
 
-const SearchMap: React.FC<SearchMapProps> = ({ center = { lat: 0, lng: 0 }, markers = [], zoom = 1, height = '600px' }) => {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-  });
+const SearchMap: React.FC<SearchMapProps> = ({
+  center,
+  markers = [],
+  zoom = 12,
+  height = '526px'
+}) => {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const { shouldPanTo, clearPanTo } = useListingHoverStore();
 
-  const mapContainerStyle = {
-    width: '100%',
-    height: '100%',
-    minHeight: '200px',
-    flex: '1 1 auto',
-    display: 'block',
-  };
+  // Initial map setup
+  useEffect(() => {
+    if (!mapContainerRef.current || !center) return;
 
-  const [map, setMap] = React.useState<google.maps.Map | null>(null);
+    const map = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: 'https://tiles.openfreemap.org/styles/bright',
+      center: center,
+      zoom: zoom,
+      scrollZoom: false,
+    });
 
-  const onLoad = React.useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+    mapRef.current = map;
 
-  const onUnmount = React.useCallback(() => {
-    setMap(null);
-  }, []);
+    markers.forEach(marker => {
+      new maplibregl.Marker({
+        color: marker.color || '#FF0000'
+      })
+        .setLngLat([marker.lng, marker.lat])
+        .addTo(map)
+        .getElement().addEventListener('click', () => {
+          if (marker.title) {
+            alert(marker.title);
+          }
+        });
+    });
 
-  const getMarkerIcon = (color: string = 'red') => {
-    return {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: color,
-      fillOpacity: 1,
-      strokeWeight: 0,
-      scale: 8,
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
-  };
+  }, [center, markers, zoom]);
 
-  if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading maps</div>;
+  // Handle panning to hovered location
+  useEffect(() => {
+    if (mapRef.current && shouldPanTo) {
+      mapRef.current.easeTo({
+        center: [shouldPanTo.lng, shouldPanTo.lat],
+        duration: 800,
+        zoom: zoom
+      });
+      clearPanTo();
+    }
+  }, [shouldPanTo, clearPanTo, zoom]);
 
   return (
-    <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      center={center}
-      zoom={zoom}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-    >
-      {markers.map((marker, index) => (
-        <Marker
-          key={index}
-          position={{ lat: marker.lat, lng: marker.lng }}
-          title={marker.title}
-          icon={getMarkerIcon(marker.color)}
+    <div style={{ height }} ref={mapContainerRef} >
+      {/* Map container */}
+      <div className="absolute top-2 right-2 z-10 flex flex-col">
+        <button
           onClick={() => {
-            alert(marker.title);
+            if (mapRef.current) {
+              mapRef.current.zoomIn();
+            }
           }}
-        />
-      ))}
-    </GoogleMap>
+          className="bg-white p-2 rounded-md shadow mb-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6v12m6-6H6"
+            />
+          </svg>
+        </button>
+        <button
+          onClick={() => {
+            if (mapRef.current) {
+              mapRef.current.zoomOut();
+            }
+          }}
+          className="bg-white p-2 rounded-md shadow"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M18 12H6"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   );
-};
+}
 
 export default SearchMap;

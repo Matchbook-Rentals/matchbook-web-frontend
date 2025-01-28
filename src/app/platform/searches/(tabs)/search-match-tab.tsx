@@ -35,10 +35,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const locationSectionRef = useRef<HTMLDivElement>(null);
   const detailsBoxRef = useRef<HTMLDivElement>(null);
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-
   const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const [stickyOffset, setStickyOffset] = useState<number | null>(null);
 
   const router = useRouter();
   const pathname = usePathname();
