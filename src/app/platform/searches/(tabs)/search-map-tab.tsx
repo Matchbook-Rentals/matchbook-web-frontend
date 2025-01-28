@@ -10,7 +10,6 @@ interface MapMarker {
   lat: number;
   lng: number;
   title?: string;
-  listing: ListingAndImages;
 }
 
 interface MapViewProps {
@@ -78,8 +77,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     title: listing.title,
     lat: listing.latitude,
     lng: listing.longitude,
-    color: getListingStatus(listing),
-    listing
+    color: getListingStatus(listing)
   }));
 
   const defaultCenter = { lat: 0, lng: 0 };

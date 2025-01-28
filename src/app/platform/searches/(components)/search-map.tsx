@@ -8,10 +8,6 @@ interface MapMarker {
   lng: number;
   title?: string;
   color?: string;
-  listing?: {
-    title: string;
-    price: number;
-  }
 }
 
 interface SearchMapProps {
@@ -46,40 +42,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
     mapRef.current = map;
 
     markers.forEach(marker => {
-      const markerElement = new maplibregl.Marker({
+      new maplibregl.Marker({
         color: marker.color || '#FF0000'
       })
         .setLngLat([marker.lng, marker.lat])
         .addTo(map)
-        .getElement()
-
-      markerElement.addEventListener('click', () => {
+        .getElement().addEventListener('click', () => {
           if (marker.title) {
             alert(marker.title);
           }
         });
-
-      if (marker.listing) {
-        markerElement.addEventListener('mouseover', (e) => {
-          const popover = document.createElement('div');
-          popover.className = 'absolute bg-white p-2 rounded shadow z-20';
-          popover.innerHTML = `
-            <p class="font-bold">${marker.listing.title}</p>
-            <p>$${marker.listing.price}</p>
-          `;
-
-          const markerRect = markerElement.getBoundingClientRect();
-          popover.style.top = `${markerRect.top - popover.offsetHeight - 5}px`;
-          popover.style.left = `${markerRect.left + markerRect.width / 2 - popover.offsetWidth / 2}px`;
-
-
-          document.body.appendChild(popover);
-
-          markerElement.addEventListener('mouseout', () => {
-            popover.remove();
-          }, { once: true });
-        });
-      }
     });
 
     return () => {
