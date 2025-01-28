@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import SearchMap from '../(components)/search-map';
@@ -20,6 +20,11 @@ export default function SearchFavoritesTab() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
@@ -126,6 +131,29 @@ export default function SearchFavoritesTab() {
     return () => window.removeEventListener('resize', handleResize);
   }, [viewMode]);
 
+  useEffect(() => {
+    const setHeight = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newStartY = containerRect.top;
+        const newViewportHeight = window.innerHeight;
+        const newCalculatedHeight = newViewportHeight - newStartY;
+        setStartY(newStartY);
+        setViewportHeight(newViewportHeight);
+        setCalculatedHeight(newCalculatedHeight);
+        setCurrentComponentHeight(containerRef.current.offsetHeight) ;
+        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
   if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
@@ -148,9 +176,8 @@ export default function SearchFavoritesTab() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
+    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
       <div className="w-full md:w-3/5 md:pr-4">
-
         <SearchListingsGrid
           listings={[...likedListings, ...maybedListings].sort((a, b) => {
             const aRequested = lookup.requestedIds.has(a.id);
@@ -162,6 +189,7 @@ export default function SearchFavoritesTab() {
             generateRequestedCardActions(listing) :
             generateLikedCardActions(listing)
           }
+          height={calculatedHeight}
         />
       </div>
       <div className="w-full md:w-2/5 mt-4 md:mt-0">
@@ -169,6 +197,7 @@ export default function SearchFavoritesTab() {
           center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
           zoom={10}
           markers={[...likedListings, ...maybedListings].map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
+          height={`${calculatedHeight}px`}
         />
       </div>
     </div>
