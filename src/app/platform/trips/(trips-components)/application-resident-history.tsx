@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import CurrencyInput from "@/components/ui/currency-input";
+import MonthSelect from "@/components/ui/month-select";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 
@@ -118,33 +119,21 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
         </div>
 
         {/* Payment and Duration */}
-        <div className="space-y-2 flex flex-col xl:flex-row">
+        <div className="space-y-2 space-x-4 py-0 flex flex-col items-end  xl:flex-row">
           <CurrencyInput
             id="monthlyPayment"
+            className="py-2"
             label="Monthly Payment"
             labelClassName={ApplicationItemLabelStyles + 'text-[#404040]'}
             value={residentialHistory.monthlyPayment}
             onChange={handleMonthlyPaymentChange}
-            className="w-full lg:w-1/2"
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <Label className={ApplicationItemLabelStyles}>Length of Stay</Label>
-            <Select
+            <MonthSelect
               value={residentialHistory.durationOfTenancy}
-              onValueChange={handleDurationChange}
-            >
-              <SelectTrigger id="durationOfTenancy" className="w-1/2 md:w-full">
-                <SelectValue placeholder="How long have you lived here?" />
-              </SelectTrigger>
-              <SelectContent>
-                {[...Array(12)].map((_, i) => (
-                  <SelectItem key={i + 1} value={`${i + 1} months`}>
-                    {i + 1} {i + 1 === 1 ? 'month' : 'months'}
-                  </SelectItem>
-                ))}
-                <SelectItem value="&gt;12 months">&gt;12 months</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={handleDurationChange}
+            />
           </div>
         </div>
 
