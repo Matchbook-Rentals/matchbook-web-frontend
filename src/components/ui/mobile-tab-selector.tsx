@@ -59,7 +59,8 @@ export default function MobileTabSelector({
   }, [activeTab, useUrlParams, router, searchParams])
 
   const handleTabChange = (value: string) => {
-
+    // Reset scroll position to top when switching tabs
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     setActiveTab(value)
   }
 
@@ -90,14 +91,14 @@ export default function MobileTabSelector({
             key={tab.value}
             value={tab.value}
             className={cn(
-              "flex flex-col items-center justify-end w-full h-full relative",
+              "flex flex-col space-y-1 items-center justify-end w-full h-full relative",
               "data-[state=active]:bg-transparent data-[state=active]:text-[#404040]",
               tab.className
             )}
           >
             {tab.Icon && (
               <tab.Icon className={cn(
-                "h-[64px] w-[64px]",
+                "h-full w-full",
                 "text-gray-500",
                 "data-[state=active]:text-primary"
               )} />

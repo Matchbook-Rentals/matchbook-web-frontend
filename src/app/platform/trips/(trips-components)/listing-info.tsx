@@ -161,8 +161,8 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         </div>
         {displayAmenities.length > initialDisplayCount && (
           <Dialog>
-            <DialogTrigger className=" mt-2">
-              <Button variant="outline" className='text-[16px]' >
+            <DialogTrigger className=" mt-2 w-full sm:w-auto">
+              <Button variant="outline" className='text-[16px] mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0' >
                 Show all {displayAmenities.length} amenities
               </Button>
             </DialogTrigger>

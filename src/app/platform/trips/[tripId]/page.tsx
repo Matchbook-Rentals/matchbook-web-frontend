@@ -61,7 +61,7 @@ const TripsPage: React.FC = () => {
   };
 
   const tabTriggerTextStyles = 'text-[12px] font-medium sm:text-[16px] sm:font-normal'
-  const tabTriggerStyles = 'p-0'
+  const tabTriggerStyles = 'pt-1 sm:p-0'
   const tabs: Tab[] = [
     {
       label: 'Overview',
@@ -126,19 +126,23 @@ const TripsPage: React.FC = () => {
     <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>
       <div className='flex justify-between items-center sm:justify-start'>
         <Breadcrumbs links={breadcrumbLinks} />
-        {isMobile && ['matchmaker', 'map'].includes(currentTab) && (
+        {isMobile && (
           <div className='flex gap-x-4 items-center'>
-            <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
-              <ShareIcon className='' />
-              <p className='hidden xxs:block'>Share</p>
-            </button>
-            <FilterOptionsDialog
-              isOpen={isFilterOpen}
-              onOpenChange={setIsFilterOpen}
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              className=''
-            />
+            {currentTab === 'matchmaker' && (
+              <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+                <ShareIcon className='' />
+                <p className='hidden xxs:block'>Share</p>
+              </button>
+            )}
+            {['matchmaker', 'map'].includes(currentTab) && (
+              <FilterOptionsDialog
+                isOpen={isFilterOpen}
+                onOpenChange={setIsFilterOpen}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                className=''
+              />
+            )}
           </div>
         )}
       </div>
@@ -154,10 +158,12 @@ const TripsPage: React.FC = () => {
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
               <div className='flex gap-x-4 items-center'>
-                <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
-                  <ShareIcon className='' />
-                  <p className='underline '>Share</p>
-                </button>
+                {currentTab === 'matchmaker' && (
+                  <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+                    <ShareIcon className='' />
+                    <p className='underline '>Share</p>
+                  </button>
+                )}
                 <FilterOptionsDialog
                   isOpen={isFilterOpen}
                   onOpenChange={setIsFilterOpen}

@@ -38,7 +38,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         setStartY(newStartY);
         setViewportHeight(newViewportHeight);
         setCalculatedHeight(newCalculatedHeight);
-        setCurrentComponentHeight(containerRef.current.offsetHeight) ;
+        setCurrentComponentHeight(containerRef.current.offsetHeight);
         containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
       }
     };
@@ -148,7 +148,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       <div className="w-full md:w-2/5 mt-4 md:mt-0">
         <SearchMap
           center={[mapCenter.lng, mapCenter.lat]}
-          zoom={12}
+          zoom={10}
           height={`${calculatedHeight}px`}
           markers={markers.map((marker) => ({
             ...marker,
