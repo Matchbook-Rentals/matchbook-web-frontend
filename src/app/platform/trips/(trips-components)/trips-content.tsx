@@ -28,20 +28,22 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
       </div>
 
       {/* Search container with Framer Motion animation */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {showSearch && (
           <motion.div
             initial={{ height: 0, opacity: 0, scale: 0.9 }}
-            animate={{ height: 150, opacity: 1, scale: 1 }}
+            animate={{ height: "auto", opacity: 1, scale: 1 }}
             exit={{ height: 0, opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="flex justify-center my-4 "
           >
-            <SearchContainer
-              className="z-100"
-              containerStyles='bg-white border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
-              inputStyles='bg-white'
-            />
+            <div className="flex w-full justify-center">
+              <SearchContainer
+                className="z-100"
+                containerStyles='bg-white border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                inputStyles='bg-white'
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
