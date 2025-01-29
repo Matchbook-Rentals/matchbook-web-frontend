@@ -33,6 +33,12 @@ const emptyResidentialHistory: ResidentialHistoryProps['residentialHistory'] = {
 };
 
 export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ residentialHistory, setResidentialHistory }) => {
+  const normalizedResidentialHistory = {
+    ...emptyResidentialHistory,
+    ...residentialHistory,
+    currentApt: residentialHistory.currentApt || ''
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setResidentialHistory(prevState => ({
@@ -49,9 +55,11 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
   };
 
   const handleMonthlyPaymentChange = (value: string) => {
+    // Strip out currency formatting (dollar signs, commas, and decimals)
+    const strippedValue = value.replace(/[$,]/g, '').split('.')[0];
     setResidentialHistory(prevState => ({
       ...prevState,
-      monthlyPayment: value
+      monthlyPayment: strippedValue
     }));
   };
 
@@ -83,7 +91,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
           <Label className={ApplicationItemLabelStyles}>Apt, Suite, Bldg</Label>
           <Input
             name="currentApt"
-            value={residentialHistory.currentApt}
+            value={normalizedResidentialHistory.currentApt}
             onChange={handleInputChange}
             placeholder="Apt, Suite, Bldg (optional)"
           />

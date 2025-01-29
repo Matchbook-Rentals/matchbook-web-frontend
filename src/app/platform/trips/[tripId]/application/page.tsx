@@ -33,42 +33,192 @@ const navigationItems = [
 
 const itemHeaderStyles = "text-[30px] font-meidum  mb-4 ";
 
+// Update the helper function to be more specific about field changes
+const getChangedFields = (current: any, initial: any) => {
+  const changes: string[] = [];
+
+  // Helper function to normalize objects for comparison
+  const normalizeObject = (obj: any) => {
+    const normalized = { ...obj };
+    Object.keys(normalized).forEach(key => {
+      if (normalized[key] === undefined || normalized[key] === null) {
+        normalized[key] = '';
+      }
+    });
+    return normalized;
+  };
+
+  // Check personal info fields
+  const personalFields = ['firstName', 'lastName'];
+  const changedPersonalFields = personalFields.filter(field =>
+    normalizeObject(current.personalInfo)[field] !== normalizeObject(initial.personalInfo)[field]
+  );
+  if (changedPersonalFields.length > 0) {
+    changes.push(`Personal Information (${changedPersonalFields.map(field =>
+      field === 'firstName' ? 'First Name' : 'Last Name'
+    ).join(', ')})`);
+  }
+
+  // Check residential history fields
+  const residentialFields = ['currentStreet', 'currentApt', 'currentCity', 'currentState', 'currentZipCode', 'housingStatus', 'monthlyPayment', 'durationOfTenancy'];
+  const changedResidentialFields = residentialFields.filter(field =>
+    normalizeObject(current.residentialHistory)[field] !== normalizeObject(initial.residentialHistory)[field]
+  );
+  if (changedResidentialFields.length > 0) {
+    changes.push(`Residential History (${changedResidentialFields.map(field => {
+      const fieldMap: { [key: string]: string } = {
+        currentStreet: 'Street Address',
+        currentApt: 'Apartment',
+        currentCity: 'City',
+        currentState: 'State',
+        currentZipCode: 'ZIP Code',
+        housingStatus: 'Housing Status',
+        monthlyPayment: 'Monthly Payment',
+        durationOfTenancy: 'Duration of Stay'
+      };
+      return fieldMap[field] || field;
+    }).join(', ')})`);
+  }
+
+  // Check landlord info fields
+  if (current.residentialHistory.housingStatus === 'rent') {
+    const landlordFields = ['landlordFirstName', 'landlordLastName', 'landlordEmail', 'landlordPhoneNumber'];
+    const changedLandlordFields = landlordFields.filter(field =>
+      normalizeObject(current.landlordInfo)[field] !== normalizeObject(initial.landlordInfo)[field]
+    );
+    if (changedLandlordFields.length > 0) {
+      changes.push(`Landlord Information (${changedLandlordFields.map(field => {
+        const fieldMap: { [key: string]: string } = {
+          landlordFirstName: 'First Name',
+          landlordLastName: 'Last Name',
+          landlordEmail: 'Email',
+          landlordPhoneNumber: 'Phone Number'
+        };
+        return fieldMap[field] || field;
+      }).join(', ')})`);
+    }
+  }
+
+  // Check income fields
+  const currentIncomes = current.incomes || [];
+  const initialIncomes = initial.incomes || [];
+
+  const hasIncomeChanges = () => {
+    if (currentIncomes.length !== initialIncomes.length) {
+      return [`Number of Income Sources (${initialIncomes.length} → ${currentIncomes.length})`];
+    }
+
+    const changes = [];
+    for (let i = 0; i < currentIncomes.length; i++) {
+      if (currentIncomes[i].source !== initialIncomes[i].source) {
+        changes.push(`Income Source ${i + 1} (${initialIncomes[i].source || 'empty'} → ${currentIncomes[i].source})`);
+      }
+      const initialAmount = (initialIncomes[i].monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0];
+      const currentAmount = (currentIncomes[i].monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0];
+      if (currentAmount !== initialAmount) {
+        changes.push(`Monthly Amount ${i + 1} ($${initialAmount || '0'} → $${currentAmount})`);
+      }
+    }
+    return [...new Set(changes)]; // Remove duplicates
+  };
+
+  const incomeChanges = hasIncomeChanges();
+  if (incomeChanges.length > 0) {
+    changes.push(`Income (${incomeChanges.join(', ')})`);
+  }
+
+  // Check questionnaire answers
+  const questionnaireFields = ['evicted', 'brokenLease', 'landlordDispute', 'explanation'];
+  const changedQuestionnaireFields = questionnaireFields.filter(field =>
+    normalizeObject(current.answers)[field] !== normalizeObject(initial.answers)[field]
+  );
+  if (changedQuestionnaireFields.length > 0) {
+    changes.push(`Questionnaire (${changedQuestionnaireFields.map(field => {
+      const fieldMap: { [key: string]: string } = {
+        evicted: 'Eviction History',
+        brokenLease: 'Lease Break History',
+        landlordDispute: 'Landlord Disputes',
+        explanation: 'Explanation'
+      };
+      return fieldMap[field] || field;
+    }).join(', ')})`);
+  }
+
+  return changes;
+};
+
 export default function ApplicationPage() {
   const params = useParams();
   const tripId = params.tripId as string;
   const { state: { trip, application, hasApplication }, actions: { setHasApplication } } = useTripContext();
   const { toast } = useToast();
 
+  // Store initial application state
+  const [initialState] = useState({
+    personalInfo: {
+      firstName: application?.firstName || '',
+      lastName: application?.lastName || ''
+    },
+    ids: application?.identifications || [{ idType: '', idNumber: '' }],
+    verificationImages: application?.verificationImages || [],
+    residentialHistory: {
+      currentStreet: application?.currentStreet || '',
+      currentApt: application?.currentApt || '',
+      currentCity: application?.currentCity || '',
+      currentState: application?.currentState || '',
+      currentZipCode: application?.currentZipCode || '',
+      housingStatus: application?.housingStatus || 'rent',
+      monthlyPayment: application?.monthlyPayment || '',
+      durationOfTenancy: application?.durationOfTenancy || '',
+    },
+    landlordInfo: {
+      landlordFirstName: application?.landlordFirstName || '',
+      landlordLastName: application?.landlordLastName || '',
+      landlordEmail: application?.landlordEmail || '',
+      landlordPhoneNumber: application?.landlordPhoneNumber || '',
+    },
+    incomes: application?.incomes?.map(income => ({
+      source: income.source || '',
+      monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0]
+    })) || [{ source: '', monthlyAmount: '' }],
+    answers: {
+      evicted: application?.evicted || false,
+      brokenLease: application?.brokenLease || false,
+      landlordDispute: application?.landlordDispute || false,
+      explanation: application?.explanation || ''
+    }
+  });
+
   // Form state
-  const [personalInfo, setPersonalInfo] = useState({
-    firstName: application?.firstName || '',
-    lastName: application?.lastName || ''
-  });
-  const [ids, setIds] = useState(application?.identifications || [{ idType: '', idNumber: '' }]);
-  const [verificationImages, setVerificationImages] = useState<Array<{ url: string, category: 'Identification' | 'Income' }>>( application?.verificationImages || []);
-  const [residentialHistory, setResidentialHistory] = useState({
-    currentStreet: application?.currentStreet || '',
-    currentApt: application?.currentApt || '',
-    currentCity: application?.currentCity || '',
-    currentState: application?.currentState || '',
-    currentZipCode: application?.currentZipCode || '',
-    housingStatus: application?.housingStatus || 'rent',
-    monthlyPayment: application?.monthlyPayment || '',
-    durationOfTenancy: application?.durationOfTenancy || '',
-  });
-  const [landlordInfo, setLandlordInfo] = useState({
-    landlordFirstName: application?.landlordFirstName || '',
-    landlordLastName: application?.landlordLastName || '',
-    landlordEmail: application?.landlordEmail || '',
-    landlordPhoneNumber: application?.landlordPhoneNumber || '',
-  });
-  const [incomes, setIncomes] = useState(application?.incomes || [{ source: '', monthlyAmount: '' }]);
-  const [answers, setAnswers] = useState({
-    evicted: application?.evicted || false,
-    brokenLease: application?.brokenLease || false,
-    landlordDispute: application?.landlordDispute || false,
-    explanation: application?.explanation || ''
-  });
+  const [personalInfo, setPersonalInfo] = useState(initialState.personalInfo);
+  const [ids, setIds] = useState(initialState.ids);
+  const [verificationImages, setVerificationImages] = useState(initialState.verificationImages);
+  const [residentialHistory, setResidentialHistory] = useState(initialState.residentialHistory);
+  const [landlordInfo, setLandlordInfo] = useState(initialState.landlordInfo);
+  const [incomes, setIncomes] = useState(initialState.incomes);
+  const [answers, setAnswers] = useState(initialState.answers);
+
+  // Add isEditing computation
+  const isEditing = useCallback(() => {
+    return JSON.stringify({
+      personalInfo,
+      ids,
+      verificationImages,
+      residentialHistory,
+      landlordInfo,
+      incomes,
+      answers
+    }) !== JSON.stringify(initialState);
+  }, [
+    personalInfo,
+    ids,
+    verificationImages,
+    residentialHistory,
+    landlordInfo,
+    incomes,
+    answers,
+    initialState
+  ]);
 
   // Carousel state
   const [api, setApi] = useState<CarouselApi>();
@@ -83,8 +233,57 @@ export default function ApplicationPage() {
 
   const onSelect = useCallback(() => {
     if (!api) return;
-    setCurrentStep(api.selectedScrollSnap());
-  }, [api]);
+    const newStep = api.selectedScrollSnap();
+
+    // Check for unsaved changes before updating step
+    if (isEditing()) {
+      const currentState = {
+        personalInfo,
+        ids,
+        verificationImages,
+        residentialHistory,
+        landlordInfo,
+        incomes,
+        answers
+      };
+
+      const changedFields = getChangedFields(currentState, initialState);
+
+      if (changedFields.length > 0) {
+        toast({
+          title: "Unsaved Changes",
+          description: (
+            <div className="flex flex-col gap-2 bg-white">
+              <div>You have unsaved changes in: {changedFields.join(', ')}</div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setPersonalInfo(initialState.personalInfo);
+                  setIds(initialState.ids);
+                  setVerificationImages(initialState.verificationImages);
+                  setResidentialHistory(initialState.residentialHistory);
+                  setLandlordInfo(initialState.landlordInfo);
+                  setIncomes(initialState.incomes);
+                  setAnswers(initialState.answers);
+                  api.scrollTo(newStep);
+                  setCurrentStep(newStep);
+                }}
+                className="bg-[#404040] text-white hover:bg-[#505050]"
+              >
+                Revert Changes
+              </Button>
+            </div>
+          ),
+          className: "bg-white",
+        });
+        // Prevent step change by scrolling back to current step
+        api.scrollTo(currentStep);
+        return;
+      }
+    }
+
+    setCurrentStep(newStep);
+  }, [api, isEditing, initialState, personalInfo, ids, verificationImages, residentialHistory, landlordInfo, incomes, answers, toast, currentStep]);
 
   const scrollToIndex = useCallback((index: number) => {
     api?.scrollTo(index);
@@ -228,8 +427,9 @@ export default function ApplicationPage() {
                   <Button
                     onClick={handleSubmit}
                     className="w-full mt-4"
+                    disabled={!isEditing()}
                   >
-                    Submit Application
+                    {isEditing() ? 'Save Changes' : 'No Changes'}
                   </Button>
                 </div>
               </CarouselItem>
@@ -240,13 +440,73 @@ export default function ApplicationPage() {
           <div className="flex justify-between ">
             <Button
               variant="outline"
-              onClick={() => api?.scrollPrev()}
+              onClick={() => {
+                if (isEditing()) {
+                  toast({
+                    title: "Unsaved Changes",
+                    description: (
+                      <div className="flex flex-col gap-2 bg-white">
+                        <div>Please save your changes before navigating</div>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setPersonalInfo(initialState.personalInfo);
+                            setIds(initialState.ids);
+                            setVerificationImages(initialState.verificationImages);
+                            setResidentialHistory(initialState.residentialHistory);
+                            setLandlordInfo(initialState.landlordInfo);
+                            setIncomes(initialState.incomes);
+                            setAnswers(initialState.answers);
+                            api?.scrollPrev();
+                          }}
+                          className="bg-[#404040] text-white hover:bg-[#505050]"
+                        >
+                          Revert Changes
+                        </Button>
+                      </div>
+                    ),
+                    className: "bg-white",
+                  });
+                  return;
+                }
+                api?.scrollPrev();
+              }}
               disabled={currentStep === 0}
             >
               Previous
             </Button>
             <Button
-              onClick={() => api?.scrollNext()}
+              onClick={() => {
+                if (isEditing()) {
+                  toast({
+                    title: "Unsaved Changes",
+                    description: (
+                      <div className="flex flex-col gap-2 bg-white">
+                        <div>Please save your changes before navigating</div>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setPersonalInfo(initialState.personalInfo);
+                            setIds(initialState.ids);
+                            setVerificationImages(initialState.verificationImages);
+                            setResidentialHistory(initialState.residentialHistory);
+                            setLandlordInfo(initialState.landlordInfo);
+                            setIncomes(initialState.incomes);
+                            setAnswers(initialState.answers);
+                            api?.scrollNext();
+                          }}
+                          className="bg-[#404040] text-white hover:bg-[#505050]"
+                        >
+                          Revert Changes
+                        </Button>
+                      </div>
+                    ),
+                    className: "bg-white",
+                  });
+                  return;
+                }
+                api?.scrollNext();
+              }}
               disabled={currentStep === navigationItems.length - 1}
             >
               Next
