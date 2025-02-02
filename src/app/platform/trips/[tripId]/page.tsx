@@ -15,7 +15,7 @@ import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import Link from 'next/link';
 import { Montserrat } from 'next/font/google';
-import { BrandHeartOutline, MapViewIcon, OverviewTabIcon, RecommendedIcon } from '@/components/icons';
+import { BrandHeartOutline, ManageSearchIcon, MapViewIcon, OverviewTabIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import { BookIcon, ShareIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
@@ -60,8 +60,8 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-[8px] font-medium sm:text-[16px] sm:font-normal'
-  const tabTriggerStyles = 'pt-1 sm:p-0'
+  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[16px] sm:font-normal'
+  const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
     {
       label: 'Overview',
@@ -69,7 +69,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: OverviewTabIcon
+      Icon: ManageSearchIcon
     },
     {
       label: 'Recommended',
