@@ -95,7 +95,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const numFilteredOut = listings.length - likedListings.length - maybedListings.length;
 
   return (
-    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full px-2">
+    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full sm:px-2">
       {/*Grid container*/}
       <div className="w-full md:w-3/5 md:pr-4">
         {displayListings.length > 0 ? (
