@@ -145,7 +145,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       </div>
 
       {/*Map container*/}
-      <div className="w-full md:w-2/5 mt-4 md:mt-0">
+      <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
         <SearchMap
           center={[mapCenter.lng, mapCenter.lat]}
           zoom={10}

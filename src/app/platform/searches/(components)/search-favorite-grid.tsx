@@ -165,7 +165,7 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
       ) : (
         <>
           <ScrollArea
-            className={`w-[104%] mx-auto sm:w-full rounded-md pb-12 px-0 pr-4  `}
+            className={`w-full mx-auto sm:w-full rounded-md pb-12 px-0 sm:pr-4  `}
             style={{ height: height ? `${height}px` : '640px' }}
           >
             <div

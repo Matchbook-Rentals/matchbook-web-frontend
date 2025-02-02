@@ -160,9 +160,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       ) : (
         <>
           <ScrollArea
-            className={`w-[103%] mx-auto sm:w-full rounded-md pb-12 px-0 pr-4`}
+            className={`w-full mx-auto sm:w-full rounded-md pb-12 px-0 sm:pr-4`}
             style={{ height: height ? `${height}px` : '640px' }}
-
+            hiddenScrollbar={true}
 
           >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
