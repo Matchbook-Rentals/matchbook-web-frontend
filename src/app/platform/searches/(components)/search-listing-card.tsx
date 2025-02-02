@@ -99,7 +99,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
   return (
     <Card
-      className={`w-full overflow-hidden border-0 max-w-[500px]  shadow-0 shadow-none ${className || ''}`}
+      className={`w-full overflow-hidden border-0 max-w-[600px]  shadow-0 shadow-none ${className || ''}`}
       style={style}
       onMouseEnter={() => {
         setIsHovered(true)
@@ -110,7 +110,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         setHoveredListing(null)
       }}
     >
-      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[500px] sm:aspect-[317/321]">
+      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[600px] sm:aspect-[317/321]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
           <CarouselContent>
             {listing.listingImages.map((image, index) => (
