@@ -92,7 +92,7 @@ export default function MobileTabSelector({
             key={tab.value}
             value={tab.value}
             className={cn(
-              "flex flex-col space-y-1 items-center justify-center w-full h-full relative",
+              "flex flex-col space-y-1  items-center justify-between w-full h-full relative",
               "data-[state=active]:bg-transparent data-[state=active]:text-[#404040]",
               tab.className
             )}
@@ -102,7 +102,7 @@ export default function MobileTabSelector({
                 "h-full w-full",
                 "text-gray-500",
                 "data-[state=active]:text-primary",
-                "flex items-center justify-center ",
+                "flex justify-center ",
                 tab.iconClassName
               )}>
                 {tab.Icon}

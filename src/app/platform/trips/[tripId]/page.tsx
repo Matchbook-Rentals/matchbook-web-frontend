@@ -69,7 +69,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <ManageSearchIcon className="mb-1 " />,
+      Icon: <ManageSearchIcon className="h-[35px] -translate-y-[7px] " />,
       iconClassName: ""
     },
     {
@@ -78,7 +78,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <RecommendedIcon className="pt-1" />,
+      Icon: <RecommendedIcon className="h-[35px]" />,
       iconClassName: ""
     },
     {
@@ -87,7 +87,7 @@ const TripsPage: React.FC = () => {
       content: <MapView setIsFilterOpen={setIsFilterOpen} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <MapViewIcon className="mb-1" />,
+      Icon: <MapViewIcon className="h-[35px] -translate-y-[6px]" />,
       iconClassName: ""
     },
     {
@@ -96,7 +96,7 @@ const TripsPage: React.FC = () => {
       content: <SearchFavoritesTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <BrandHeartOutline className="" stroke='black' />,
+      Icon: <BrandHeartOutline className="h-[35px]" stroke='black' />,
       iconClassName: ""
     },
     {
@@ -105,7 +105,7 @@ const TripsPage: React.FC = () => {
       content: <SearchMatchbookTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <MatchesIcon className="mb-1" />,
+      Icon: <MatchesIcon className="h-[35px] -translate-y-[4px]" />,
       iconClassName: ""
     },
   ];
