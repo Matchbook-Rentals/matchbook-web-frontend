@@ -69,7 +69,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <ManageSearchIcon className="h-[35px] -translate-y-[7px] " />,
+      Icon: <ManageSearchIcon className="h-[35px] scale-110 -translate-y-[5px] " />,
       iconClassName: ""
     },
     {

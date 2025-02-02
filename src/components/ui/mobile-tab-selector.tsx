@@ -102,7 +102,7 @@ export default function MobileTabSelector({
                 "h-full w-full",
                 "text-gray-500",
                 "data-[state=active]:text-primary",
-                "flex justify-center ",
+                "flex justify-center",
                 tab.iconClassName
               )}>
                 {tab.Icon}
