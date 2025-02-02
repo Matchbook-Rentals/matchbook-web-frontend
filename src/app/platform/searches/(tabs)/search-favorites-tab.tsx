@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { createDbHousingRequest, deleteDbHousingRequest } from '@/app/actions/housing-requests';
-import SearchListingsGrid from '../(components)/search-listings-grid';
+import SearchFavoriteGrid from '../(components)/search-favorite-grid';
 import { FilterOptions, DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Button } from '@/components/ui/button';
 
@@ -176,9 +176,9 @@ export default function SearchFavoritesTab() {
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
-      <div className="w-full md:pr-4">
-        <SearchListingsGrid
+    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full">
+      <div className="w-full ">
+        <SearchFavoriteGrid
           listings={[...likedListings, ...maybedListings].sort((a, b) => {
             const aRequested = lookup.requestedIds.has(a.id);
             const bRequested = lookup.requestedIds.has(b.id);

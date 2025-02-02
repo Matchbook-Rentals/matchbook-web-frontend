@@ -99,7 +99,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
   return (
     <Card
-      className={`w-full overflow-hidden border-0 max-w-[317px]  shadow-0 shadow-none ${className || ''}`}
+      className={`w-full overflow-hidden border-0 max-w-[500px]  shadow-0 shadow-none ${className || ''}`}
       style={style}
       onMouseEnter={() => {
         setIsHovered(true)
@@ -110,12 +110,12 @@ export default function SearchListingCard({ listing, status, className, style, d
         setHoveredListing(null)
       }}
     >
-      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[317px] aspect-[317/321]">
+      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[500px] sm:aspect-[317/321]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
           <CarouselContent>
             {listing.listingImages.map((image, index) => (
               <CarouselItem key={index} className="relative">
-                <div className="aspect-[317/321] relative w-full h-full">
+                <div className="aspect-[450/320] sm:aspect-[317/321] relative w-full h-full">
                   <Image
                     src={image.url}
                     alt={`${listing.title} - Image ${index + 1}`}
@@ -199,7 +199,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         <div className=" pt-0">
           <button
             onClick={() => callToAction.action()}
-            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blue-600 text-white hover:bg-blue-700'}`}
+            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand text-white hover:bg-blue-700'}`}
           >
             {callToAction.label}
           </button>
