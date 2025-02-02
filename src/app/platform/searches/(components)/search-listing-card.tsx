@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { Card } from "@/components/ui/card"
 import { MoreHorizontal, Star, ChevronLeft, ChevronRight } from "lucide-react"
 import { ListingAndImages } from "@/types"
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/carousel"
 import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
+import { BrandHeartOutline } from '@/components/icons/marketing'
 
 const TITLE_MAX_LENGTH = 40
 
@@ -38,20 +39,36 @@ interface SearchListingCardProps {
 }
 
 export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel }: SearchListingCardProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
 
+  // Create ref for the image container and state for dimensions
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (imageContainerRef.current) {
+        setDimensions({
+          width: imageContainerRef.current.clientWidth,
+          height: imageContainerRef.current.clientHeight,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
   const { state, actions } = useTripContext();
   const { lookup } = state;
-  const { favIds, dislikedIds, maybeIds } = lookup;
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike, optimisticRemoveMaybe, optimisticMaybe } = actions;
+  const { favIds, dislikedIds } = lookup;
+  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
 
   const getStatusStyles = (status: ListingStatus) => {
     if (favIds.has(listing.id)) {
       return 'bg-primaryBrand'
-    } else if (maybeIds.has(listing.id)) {
-      return 'bg-yellowBrand hover:bg-yellowBrand/80'
     } else if (dislikedIds.has(listing.id)) {
       return 'bg-pinkBrand'
     }
@@ -68,8 +85,6 @@ export default function SearchListingCard({ listing, status, className, style, d
   const getStatusIcon = (status: ListingStatus) => {
     if (favIds.has(listing.id)) {
       return <BrandHeart className="w-5 h-5" />
-    } else if (maybeIds.has(listing.id)) {
-      return <QuestionMarkIcon className="w-5 h-5" />
     } else if (dislikedIds.has(listing.id)) {
       return <RejectIcon className="w-5 h-5 text-white" />
     }
@@ -95,7 +110,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         setHoveredListing(null)
       }}
     >
-      <div className="relative rounded-lg  mx-auto max-w-[317px] aspect-[317/321]">
+      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[317px] aspect-[317/321]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
           <CarouselContent>
             {listing.listingImages.map((image, index) => (
@@ -113,14 +128,27 @@ export default function SearchListingCard({ listing, status, className, style, d
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className={`transition-opacity duration-300 ${(isHovered && !isMenuOpen) ? 'opacity-100' : 'opacity-0'}`}>
-            <CarouselPrevious Icon={ArrowLeft} className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] scale-125" />
-            <CarouselNext Icon={ArrowRight} className="right-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pr-[4px] scale-125" />
+          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <CarouselPrevious Icon={ArrowLeft} className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] " />
+            <CarouselNext Icon={ArrowRight} className="right-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pr-[4px] " />
           </div>
         </Carousel>
 
-        {/* Conditional render either context banner or action menu */}
-        {contextLabel ? (
+        {/* Action Buttons */}
+        <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`}>
+          <div className={`${favIds.has(listing.id) ? 'bg-black/50 rounded-full p-1' : 'flex items-center '}`}>
+            <BrandHeartOutline
+              className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
+              stroke={favIds.has(listing.id) ? 'white' : 'white'}
+              strokeWidth={favIds.has(listing.id) ? 1 : 1.5}
+              fill={favIds.has(listing.id) ? 'white' : 'black'}
+              onClick={() => favIds.has(listing.id) ? optimisticDislike(listing.id) : optimisticLike(listing.id)}
+            />
+          </div>
+        </div>
+
+        {/* Conditional render context banner only */}
+        {contextLabel && (
           <div className="absolute top-5 mx-auto flex justify-center  w-full">
             <button
               onClick={contextLabel.action}
@@ -128,62 +156,6 @@ export default function SearchListingCard({ listing, status, className, style, d
             >
               {contextLabel.label}
             </button>
-          </div>
-        ) : (
-          <div className="absolute top-2 right-2">
-            <div
-              className={`rounded-full shadow-md overflow-hidden transition-all duration-300 ease-in-out
-              bg-white/60 ${isMenuOpen ? 'w-[48px] h-[188px]' : 'w-[48px] h-[48px]'}`}
-              onMouseEnter={() => setIsMenuOpen(true)}
-              onMouseLeave={() => setIsMenuOpen(false)}
-            >
-              <div
-                className={`w-[48px] h-[48px] cursor-pointer flex items-center rounded-full justify-center hover:opacity-80 mx-auto ${getStatusStyles(status)}`}
-              >
-                {getStatusIcon(status)}
-              </div>
-              <div className={`flex flex-col space-y-2 items-center pt-2 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}>
-                <button
-                  onClick={() => {
-                    if (favIds.has(listing.id)) {
-                      optimisticRemoveLike(listing.id);
-                    } else {
-                      optimisticLike(listing.id);
-                    }
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-[34px] h-[34px] rounded-full bg-primaryBrand hover:bg-primaryBrand/80 flex items-center justify-center relative cursor-pointer"
-                >
-                  <BrandHeart className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (maybeIds.has(listing.id)) {
-                      optimisticRemoveMaybe(listing.id)
-                    } else {
-                      optimisticMaybe(listing.id);
-                    }
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-[34px] h-[34px] rounded-full bg-yellowBrand hover:bg-yellowBrand/80 flex items-center justify-center relative cursor-pointer"
-                >
-                  <QuestionMarkIcon className="w-4 h-4 text-white" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (status === ListingStatus.Dislike) {
-                      optimisticRemoveDislike(listing.id);
-                    } else {
-                      optimisticDislike(listing.id);
-                    }
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-[34px] h-[34px] rounded-full bg-pinkBrand hover:bg-pinkBrand/80 flex items-center justify-center relative cursor-pointer"
-                >
-                  <RejectIcon className="w-5 h-5 text-pinkBrand" />
-                </button>
-              </div>
-            </div>
           </div>
         )}
       </div>
@@ -233,6 +205,11 @@ export default function SearchListingCard({ listing, status, className, style, d
           </button>
         </div>
       )}
+
+      {/* Display the image container's dimensions at the bottom of the card */}
+      {/* <div className="text-center text-xs text-gray-500 pb-2">
+        Dimensions: {dimensions.width}px x {dimensions.height}px
+      </div> */}
     </Card>
   )
 }
