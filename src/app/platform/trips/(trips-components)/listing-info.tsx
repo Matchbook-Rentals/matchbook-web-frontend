@@ -36,11 +36,11 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const initialDisplayCount = 6;
   return (
     <div className='w-full  '>
-      <div className='flex justify-between'>
-        <h1 className="text-[#404040] border-b mt-6 mb-3 text-[24px] sm:text-[32px] font-normal">
+      <div className='flex justify-between items-center border-b mt-6 mb-3'>
+        <h1 className="text-[#404040]  text-[24px] sm:text-[32px] font-normal">
           {listing.title}
         </h1>
-        <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+        <button className='flex items-end gap-x-1 h-fit  hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
           <ShareIcon className='' />
           <p className='hidden xxs:block'>Share</p>
         </button>
