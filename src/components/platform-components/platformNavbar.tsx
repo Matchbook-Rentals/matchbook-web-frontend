@@ -25,7 +25,7 @@ export default function PlatformNavbar() {
       transition={{ duration: 0.3 }}
     >
       <motion.div
-        className={`flex mx-auto items-center justify-between ${marginClass}`}
+        className={`flex mx-auto items-center py-1 justify-between ${marginClass}`}
         layout="position"
         transition={{ duration: 0.3 }}
       >
@@ -39,7 +39,7 @@ export default function PlatformNavbar() {
             <img
               src="/House_Logo.png"
               alt="MatchBook Heart"
-              className="sm:hidden h-10 w-10"
+              className="sm:hidden h-10 w-10 pt-1"
             />
           </Link>
         </motion.div>
@@ -52,10 +52,10 @@ export default function PlatformNavbar() {
           />
         </motion.div>
 
-        <motion.div className="w-1/3 flex justify-end" layout="position" transition={{ duration: 0.3 }}>
+        <motion.div className="w-1/3 flex py-1 justify-end" layout="position" transition={{ duration: 0.3 }}>
           <UserMenu color="black" isSignedIn={isSignedIn} />
         </motion.div>
       </motion.div>
-    </motion.nav>
+    </motion.nav >
   );
 }

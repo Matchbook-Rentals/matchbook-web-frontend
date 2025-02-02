@@ -175,7 +175,8 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Listing Category and Rating */}
         <div className='flex justify-between mt-2'>
-          {`${listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in
+          {`${listing.category === 'singleFamily' ? 'Home' :
+             listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in
             ${listing.locationString.split(',').at(-2)?.trim() || listing.locationString}`}
           <div className="flex items-center">
             <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
@@ -199,7 +200,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         <div className=" pt-0">
           <button
             onClick={() => callToAction.action()}
-            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand text-white hover:bg-blue-700'}`}
+            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand/90 text-white hover:bg-blueBrand'}`}
           >
             {callToAction.label}
           </button>
