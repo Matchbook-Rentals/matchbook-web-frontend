@@ -8,11 +8,12 @@ import { motion } from "framer-motion"
 interface Tab {
   value: string;
   label: string;
-  Icon?: React.ElementType;
+  Icon?: React.ReactNode;
   content: React.ReactNode;
   className?: string;
   textSize?: string;
   forceMount?: boolean;
+  iconClassName?: string;
 }
 
 interface MobileTabSelectorProps {
@@ -91,17 +92,21 @@ export default function MobileTabSelector({
             key={tab.value}
             value={tab.value}
             className={cn(
-              "flex flex-col space-y-1 items-center justify-end w-full h-full relative",
+              "flex flex-col space-y-1 items-center justify-center w-full h-full relative",
               "data-[state=active]:bg-transparent data-[state=active]:text-[#404040]",
               tab.className
             )}
           >
             {tab.Icon && (
-              <tab.Icon className={cn(
+              <div className={cn(
                 "h-full w-full",
                 "text-gray-500",
-                "data-[state=active]:text-primary"
-              )} />
+                "data-[state=active]:text-primary",
+                "flex items-center justify-center ",
+                tab.iconClassName
+              )}>
+                {tab.Icon}
+              </div>
             )}
 
             <div className="flex flex-col items-center pb-1 justify-center gap-0 space-0">
