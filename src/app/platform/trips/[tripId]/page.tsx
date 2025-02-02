@@ -72,7 +72,7 @@ const TripsPage: React.FC = () => {
       Icon: OverviewTabIcon
     },
     {
-      label: 'Matchmaker',
+      label: 'Recommended',
       value: 'matchmaker',
       content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
       textSize: tabTriggerTextStyles,
@@ -97,7 +97,7 @@ const TripsPage: React.FC = () => {
       Icon: BrandHeartOutline
     },
     {
-      label: 'Matchbook',
+      label: 'Matches',
       value: 'matchbook',
       content: <SearchMatchbookTab />,
       textSize: tabTriggerTextStyles,
@@ -114,7 +114,7 @@ const TripsPage: React.FC = () => {
       url: '/platform/trips'
     },
     {
-      label: state.trip.locationString,
+      label: state.trip?.locationString || 'Location',
       url: undefined // or remove the url property entirely
     }
   ];
@@ -128,12 +128,7 @@ const TripsPage: React.FC = () => {
         <Breadcrumbs links={breadcrumbLinks} />
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
-            {currentTab === 'matchmaker' && (
-              <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
-                <ShareIcon className='' />
-                <p className='hidden xxs:block'>Share</p>
-              </button>
-            )}
+
             {['matchmaker', 'map'].includes(currentTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
@@ -157,21 +152,13 @@ const TripsPage: React.FC = () => {
           tabsListClassName='flex py-0 justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
-              <div className='flex gap-x-4 items-center'>
-                {currentTab === 'matchmaker' && (
-                  <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
-                    <ShareIcon className='' />
-                    <p className='underline '>Share</p>
-                  </button>
-                )}
-                <FilterOptionsDialog
-                  isOpen={isFilterOpen}
-                  onOpenChange={setIsFilterOpen}
-                  filters={filters}
-                  onFilterChange={handleFilterChange}
-                  className=''
-                />
-              </div>
+              <FilterOptionsDialog
+                isOpen={isFilterOpen}
+                onOpenChange={setIsFilterOpen}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                className=''
+              />
             ) : undefined
           }
         />

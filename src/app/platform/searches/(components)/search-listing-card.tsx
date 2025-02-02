@@ -194,7 +194,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       >
         {/* Listing Title */}
         <div className="flex justify-between text-[14px]  font-medium gap-x-2 items-start">
-          <h3 className="">
+          <h3 className="truncate whitespace-nowrap">
             {listing.title.length > TITLE_MAX_LENGTH
               ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
               : listing.title}

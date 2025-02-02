@@ -141,7 +141,7 @@ export default function SearchFavoritesTab() {
         setStartY(newStartY);
         setViewportHeight(newViewportHeight);
         setCalculatedHeight(newCalculatedHeight);
-        setCurrentComponentHeight(containerRef.current.offsetHeight) ;
+        setCurrentComponentHeight(containerRef.current.offsetHeight);
         containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
       }
     };
@@ -177,7 +177,7 @@ export default function SearchFavoritesTab() {
 
   return (
     <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full px-2 ">
-      <div className="w-full md:w-3/5 md:pr-4">
+      <div className="w-full md:pr-4">
         <SearchListingsGrid
           listings={[...likedListings, ...maybedListings].sort((a, b) => {
             const aRequested = lookup.requestedIds.has(a.id);
@@ -190,14 +190,6 @@ export default function SearchFavoritesTab() {
             generateLikedCardActions(listing)
           }
           height={calculatedHeight}
-        />
-      </div>
-      <div className="w-full md:w-2/5 mt-4 md:mt-0">
-        <SearchMap
-          center={{ lat: state.trip?.latitude || 0, lng: state.trip?.longitude || 0 }}
-          zoom={10}
-          markers={[...likedListings, ...maybedListings].map(listing => ({ lat: listing.latitude, lng: listing.longitude }))}
-          height={`${calculatedHeight}px`}
         />
       </div>
     </div>

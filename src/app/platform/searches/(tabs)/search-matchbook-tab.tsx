@@ -102,22 +102,6 @@ export function SearchMatchbookTab() {
         <p>No matched listings found.</p>
       )}
 
-      {/* Test Cards Section */}
-      <div className="mt-8 border-t pt-8">
-        <h2 className="mb-4 text-lg font-semibold">Test Cards</h2>
-        <div className="grid justify-center gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {state.listings.slice(-4).map((listing, index) => (
-            <SearchListingCard
-              key={`test-${listing.id}`}
-              listing={listing}
-              detailsClassName="min-h-[0px]"
-              status={[Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index]}
-              callToAction={getCallToAction([Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index])}
-              contextLabel={getContextLabel([Status.Applied, Status.Favorite, Status.Maybe, Status.Dislike][index])}
-            />
-          ))}
-        </div>
-      </div>
     </>
   );
 }

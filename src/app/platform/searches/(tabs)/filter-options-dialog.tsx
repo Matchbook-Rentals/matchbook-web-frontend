@@ -486,7 +486,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px] font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px] font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPropertyTypes = isSelected
@@ -550,7 +550,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             if (value === 'furnished') {
@@ -591,7 +591,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedUtilities = isSelected
@@ -631,7 +631,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
-                          labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                          labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                             }`}
                           onClick={() => {
                             const updatedPets = isSelected
@@ -764,7 +764,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         console.log(localFilters)
@@ -795,7 +795,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -825,7 +825,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -855,7 +855,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -885,7 +885,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected
@@ -915,7 +915,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
-                      labelClassNames={`text-[14px]  font-medium leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
                         const updatedAmenities = isSelected

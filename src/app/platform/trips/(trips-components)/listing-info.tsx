@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
-import { Star } from 'lucide-react';
+import { ShareIcon, Star } from 'lucide-react';
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
@@ -36,9 +36,15 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const initialDisplayCount = 6;
   return (
     <div className='w-full  '>
-      <h1 className="text-[#404040] border-b mt-6 mb-3 text-[24px] sm:text-[32px] font-normal">
-        Ogden Mountain Home
-      </h1>
+      <div className='flex justify-between'>
+        <h1 className="text-[#404040] border-b mt-6 mb-3 text-[24px] sm:text-[32px] font-normal">
+          {listing.title}
+        </h1>
+        <button className='flex items-end gap-x-1 hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
+          <ShareIcon className='' />
+          <p className='hidden xxs:block'>Share</p>
+        </button>
+      </div>
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
         <div className="lg:hidden w-full flex flex-col space-y-6">
           <div className="w-full flex justify-between">
