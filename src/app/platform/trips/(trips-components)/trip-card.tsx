@@ -100,7 +100,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
 
   return (
     <>
-      <div className='group flex w-[95vw] sm:max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
+      <div className='group flex w-[100%] sm:max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
 
         <div className="relative group">
           <Image src={statePhotoPath} height={400} width={400} className='h-[134px] min-w-[193px]  sm:min-w-[143px] w-1/2 sm:w-[143px] rounded-[15px]' />
@@ -135,8 +135,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             </DialogContent>
           </Dialog>
         </div>
-        <div className='flex flex-col justify-between w-1/2  sm:max-w-[150px] ml-4 pt-1'>
-          <h2 className='truncate font-medium  text-[16px]'>{trip.locationString}</h2>
+        <div className='flex flex-col justify-between w-1/2 overflow-hidden  sm:max-w-[150px] ml-4 pt-1'>
+          <h2 className='text-nowrap overflow-hidden overflow-ellipsis font-medium text-[16px] text-[#404040]'>{trip.locationString}</h2>
           <h2 className='truncate'>{'Within ' + trip.searchRadius + ' miles' || '50 miles (m)'}</h2>
           <h2 className='truncate'>
             {trip.startDate?.toLocaleDateString('en-US', {
