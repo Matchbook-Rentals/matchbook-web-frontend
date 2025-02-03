@@ -244,7 +244,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     <>
       {/* Conditionally rendered top control box */}
       {!isDetailsVisible && showListings[0] && (
-        <div className="hidden lg:block sticky top-0 bg-background z-50 p-4 border-b-2 border-gray-200">
+        <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
           <div className='flex justify-between items-center'>
             <div className='flex flex-col'>
               <p className='text-lg font-medium'>{showListings[0].title}</p>
