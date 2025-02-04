@@ -7,7 +7,8 @@ ACH PLAID API
 
 ## 4Feb
 - [x] New compnents in trip edit search bar 
-- [ ] Map button on mobile 
+- [x] Map button on mobile 
+- [ ] Pop up to signify like or dislike
 - [ ] finish application 
 - [ ] change card hover behcaior (map zoom level) add cards to map
 - [ ] Listing links (one for sub-trip route, one for not part of a trip, although probably just grab teh trip, when authing the user if not part of trip then we redirect to new platform/listing/[listingID] route) 

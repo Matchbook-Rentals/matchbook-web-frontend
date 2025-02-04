@@ -14,6 +14,7 @@ import ListingDescription from '../../trips/(trips-components)/listing-info';
 import ListingDetailsBox from '../(components)/ListingDetailsBox';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import ActionPopup from '../(components)/action-popup';
 
 const PLATFORM_NAVBAR_HEIGHT = 0; // Add this constant for the navbar height
 
@@ -43,6 +44,9 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [showActionPopup, setShowActionPopup] = useState(false);
+  const [currentAction, setCurrentAction] = useState<'like' | 'dislike'>('like');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,6 +112,9 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
     scrollToTop();
+    setCurrentAction('like');
+    setShowActionPopup(true);
+    setTimeout(() => setShowActionPopup(false), 600);
     await optimisticLike(listing.id);
     setViewedListings(prev => {
       const newState = [...prev, { listing, action: 'favorite' as 'favorite' | 'dislike', actionId: '' }];
@@ -118,6 +125,9 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   const handleReject = async (listing: ListingAndImages) => {
     scrollToTop();
+    setCurrentAction('dislike');
+    setShowActionPopup(true);
+    setTimeout(() => setShowActionPopup(false), 600);
     await optimisticDislike(listing.id);
     setViewedListings(prev => {
       const newState = [...prev, { listing, action: 'dislike' as 'favorite' | 'dislike', actionId: '' }];
@@ -242,6 +252,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   // Main component render
   return (
     <>
+      <ActionPopup
+        action={currentAction}
+        isVisible={showActionPopup}
+      />
       {/* Conditionally rendered top control box */}
       {!isDetailsVisible && showListings[0] && (
         <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
