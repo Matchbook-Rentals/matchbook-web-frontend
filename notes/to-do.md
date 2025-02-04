@@ -10,6 +10,7 @@ ACH PLAID API
 - [ ] Map button on mobile 
 - [ ] finish application 
 - [ ] change card hover behcaior (map zoom level) add cards to map
+- [ ] Listing links (one for sub-trip route, one for not part of a trip, although probably just grab teh trip, when authing the user if not part of trip then we redirect to new platform/listing/[listingID] route) 
 - [ ] deal with the stupid god damn overview village at mobile ( AHHHHHH)
 
 

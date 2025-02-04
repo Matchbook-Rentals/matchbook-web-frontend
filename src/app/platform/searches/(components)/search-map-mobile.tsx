@@ -12,10 +12,10 @@ interface MapMarker {
   title?: string;
   color?: string;
   listing?: {
-    listingImages: string[];
+    listingImages: { url: string }[];
     price: number;
     title: string;
-    distance: string;
+    distance: number;
   };
 }
 
@@ -85,38 +85,53 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     }
   }, [shouldPanTo, clearPanTo, zoom]);
 
-  // Debug log to show selected listing
   console.log('Selected listing:', selectedListing);
 
   return (
-    <div style={{ height }} ref={mapContainerRef}>
-      {/* Listing small Card (stretches between left and zoom controls) */}
+    <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
+      {/* Listing Card */}
       {selectedListing && selectedListing.listing && (
-        <div className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg">
-          {/* Image spanning full width on the top half */}
-          <div className="relative h-40 w-full">
+        <div className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden">
+          {/* Image Container */}
+          <div className="relative h-48 w-full">
             <Image
               src={selectedListing.listing.listingImages[0].url}
               alt={selectedListing.listing.title}
               fill
-              className="object-cover rounded-t-lg"
+              className="object-cover"
             />
           </div>
-          {/* Details in the lower half */}
-          <div className="p-4">
-            <div className="flex justify-between items-start">
-              <h3 className="font-semibold text-lg">{selectedListing.listing.title}</h3>
-              <button onClick={() => setSelectedListing(null)} className="p-2">
-                <RejectIcon className="h-4 w-4" />
+
+          {/* Content Container */}
+          <div className="p-4 space-y-2">
+            {/* Title */}
+            <h3 className="font-semibold text-xl leading-tight tracking-tight text-gray-900">
+              {selectedListing.listing.title}
+            </h3>
+
+            {/* Distance */}
+            <p className="text-sm font-medium text-gray-500">
+              {selectedListing.listing.distance.toFixed(1)} miles away
+            </p>
+
+            {/* Price and CTA Row */}
+            <div className="flex items-center justify-between pt-1">
+              <p className="text-lg font-bold text-gray-900">
+                ${selectedListing.listing.price.toLocaleString()}
+                <span className="text-sm font-normal text-gray-600">/month</span>
+              </p>
+
+              <button
+                onClick={() => setSelectedListing(null)}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+              >
+                See More
               </button>
             </div>
-            <p className="text-gray-600">{selectedListing.listing.distance}</p>
-            <p className="mt-1 font-bold">${selectedListing.listing.price}</p>
           </div>
         </div>
       )}
 
-      {/* Close button */}
       <div className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 z-10">
         <Button
           onClick={onClose}
