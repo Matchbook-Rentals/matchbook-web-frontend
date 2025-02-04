@@ -90,9 +90,9 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {/* Listing small Card (rendered as an overlay control) */}
+      {/* Listing small Card (stretches between left and zoom controls) */}
       {selectedListing && selectedListing.listing && (
-        <div className="absolute top-2 left-2 z-10 bg-white shadow-lg border border-gray-200 rounded-lg max-w-xs">
+        <div className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg">
           {/* Image spanning full width on the top half */}
           <div className="relative h-40 w-full">
             <Image
