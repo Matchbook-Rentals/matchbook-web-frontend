@@ -70,8 +70,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-            <CarouselNext className="absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
+            <CarouselPrevious className="hidden sm:block absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+            <CarouselNext className="hidden sm:block absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
           </Carousel>
         </div>
       </div>
@@ -97,8 +97,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-            <CarouselNext className="absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
+            <CarouselPrevious className="hidden sm:block absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
+            <CarouselNext className="hidden sm:block absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
           </Carousel>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -109,9 +109,9 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[#404040]'>Show All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[95vw] max-h-[90vh] pt-16 pb-4 overflow-y-auto">
+            <DialogContent hideCloseButton className="max-w-[95vw] max-h-[75vh] sm:max-h-[90vh] pt-6 pb-4 overflow-y-auto rounded-lg">
               <div
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 px-4"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4"
               >
                 {uniqueImages.map((image, index) => (
                   <div key={image.id} className="relative w-full bg-gray-100  rounded-[20px] overflow-hidden">
@@ -128,7 +128,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               </div>
               <Button
                 onClick={() => setIsDialogOpen(false)}
-                className="w-1/3 max-w-[300px] text-[16px] sticky bottom-0 mx-auto mt-4 rounded-full bg-charcoalBrand text-background"
+                className="w-1/3 max-w-[300px] text-[16px] sticky bottom-0 mx-auto mt-2 rounded-full bg-charcoalBrand text-background"
               >
                 <RejectIcon className='h-full p-1 mr-2 hidden xxs:inline' />
                 Close
