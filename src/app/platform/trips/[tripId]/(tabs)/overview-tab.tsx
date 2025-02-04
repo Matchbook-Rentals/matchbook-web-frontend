@@ -57,15 +57,19 @@ const OverviewTab: React.FC = () => {
 
   return (
     <>
-      <div className="w-full mx-auto bg-[#869A7D]/50">
-        <div className="w-full mx-auto flex flex-col justify-between ">
+      <div className="relative w-full mx-auto">
+        {/* Background gradient with reduced opacity */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,#5B96BE_00%,#61A7D8_39.5%,#6CC3FF_100%)] opacity-50" />
+
+        {/* Content that sits above the background */}
+        <div className="relative w-full mx-auto flex flex-col justify-between">
           <SearchEditBar />
           <Image
             src="/village-footer-opaque.png"
             alt="Village footer"
             width={1200}
             height={200}
-            className="w-[80%] mx-auto mt-8 sm:mt-16 h-auto max-h-[70%]"
+            className="w-[80%] mx-auto mt-8 sm:mt-16 h-auto max-h-[70%] z-10"
           />
         </div>
       </div>
