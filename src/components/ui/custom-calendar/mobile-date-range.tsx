@@ -14,6 +14,9 @@ interface MobileDateRangeProps {
   onDateRangeChange: (range: DateRange) => void;
   onClose: () => void;
   onProceed?: () => void;
+  flexibleStart?: 'exact' | number | null;
+  flexibleEnd?: 'exact' | number | null;
+  onFlexibilityChange?: (flexibility: { start: 'exact' | number | null; end: 'exact' | number | null }) => void;
 }
 
 interface CalendarMonthProps {
@@ -294,7 +297,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   );
 }
 
-export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed }: MobileDateRangeProps) {
+export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange }: MobileDateRangeProps) {
   // If a start date is provided, open the calendar at that month/year, otherwise use today's date.
   const initialDate = dateRange.start ? new Date(dateRange.start) : new Date();
   const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
@@ -303,8 +306,8 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
     start: 'exact' | number | null;
     end: 'exact' | number | null;
   }>({
-    start: null,
-    end: null
+    start: flexibleStart === 0 ? 'exact' : flexibleStart,
+    end: flexibleEnd === 0 ? 'exact' : flexibleEnd,
   });
 
   const handleDateSelect = (date: number, month: number, year: number) => {
@@ -386,6 +389,8 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
 
   const handleClear = () => {
     onDateRangeChange({ start: null, end: null });
+    setFlexibility({ start: null, end: null });
+    onFlexibilityChange?.({ start: null, end: null });
   };
 
   return (
@@ -407,7 +412,11 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
             <FlexibleDateSelector
               type="start"
               selectedOption={flexibility}
-              onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
+              onSelect={(type, option) => {
+                const updated = { ...flexibility, [type]: option };
+                setFlexibility(updated);
+                onFlexibilityChange?.(updated);
+              }}
             />
           </div>
           <div>
@@ -415,7 +424,11 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
             <FlexibleDateSelector
               type="end"
               selectedOption={flexibility}
-              onSelect={(type, option) => setFlexibility(prev => ({ ...prev, [type]: option }))}
+              onSelect={(type, option) => {
+                const updated = { ...flexibility, [type]: option };
+                setFlexibility(updated);
+                onFlexibilityChange?.(updated);
+              }}
             />
           </div>
         </div>

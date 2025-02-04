@@ -62,6 +62,10 @@ const EditSearchInputsMobile: React.FC = () => {
       (state.trip?.numPets || 0)
   );
   const [hasBeenSelected, setHasBeenSelected] = useState(false);
+  const [flexibleDates, setFlexibleDates] = useState<{ start: 'exact' | number | null; end: 'exact' | number | null }>({
+    start: state.trip?.flexibleStart ?? null,
+    end: state.trip?.flexibleEnd ?? null,
+  });
 
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -247,6 +251,9 @@ const EditSearchInputsMobile: React.FC = () => {
                   onDateRangeChange={setDateRange}
                   onClose={() => setActiveInput(null)}
                   onProceed={() => setActiveInput(4)}
+                  flexibleStart={flexibleDates.start}
+                  flexibleEnd={flexibleDates.end}
+                  onFlexibilityChange={setFlexibleDates}
                 />
               )}
               {index === 4 && (
@@ -277,6 +284,10 @@ const EditSearchInputsMobile: React.FC = () => {
       children: state.trip?.numChildren || 0,
       pets: state.trip?.numPets || 0,
     });
+    setFlexibleDates({
+      start: state.trip?.flexibleStart ?? null,
+      end: state.trip?.flexibleEnd ?? null,
+    });
     setActiveInput(null);
   };
 
@@ -298,6 +309,8 @@ const EditSearchInputsMobile: React.FC = () => {
       numAdults: guests.adults,
       numChildren: guests.children,
       numPets: guests.pets,
+      flexibleStart: flexibleDates.start,
+      flexibleEnd: flexibleDates.end,
     });
 
     if (response.success) {
@@ -327,8 +340,20 @@ const EditSearchInputsMobile: React.FC = () => {
       guests.adults !== state.trip?.numAdults ||
       guests.children !== state.trip?.numChildren ||
       guests.pets !== state.trip?.numPets;
+    const normalizedFlexibleStart = flexibleDates.start === 0 ? 'exact' : flexibleDates.start;
+    const normalizedTripFlexibleStart = state.trip?.flexibleStart === 0 ? 'exact' : state.trip?.flexibleStart;
+    const normalizedFlexibleEnd = flexibleDates.end === 0 ? 'exact' : flexibleDates.end;
+    const normalizedTripFlexibleEnd = state.trip?.flexibleEnd === 0 ? 'exact' : state.trip?.flexibleEnd;
 
-    return locationChanged || startDateChanged || endDateChanged || guestsChanged;
+    const flexibleStartChanged = normalizedFlexibleStart !== normalizedTripFlexibleStart;
+    const flexibleEndChanged = normalizedFlexibleEnd !== normalizedTripFlexibleEnd;
+
+    return locationChanged ||
+      startDateChanged ||
+      endDateChanged ||
+      guestsChanged ||
+      flexibleStartChanged ||
+      flexibleEndChanged;
   };
 
   return (
