@@ -106,6 +106,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     title: listing.title,
     lat: listing.latitude,
     lng: listing.longitude,
+    listing: listing,
     color: getListingStatus(listing)
   }));
 

@@ -4,12 +4,19 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { Button } from '@/components/ui/button';
 import { RejectIcon } from '@/components/icons';
+import Image from 'next/image';
 
 interface MapMarker {
   lat: number;
   lng: number;
   title?: string;
   color?: string;
+  listing?: {
+    listingImages: string[];
+    price: number;
+    title: string;
+    distance: string;
+  };
 }
 
 interface SearchMapProps {
@@ -30,6 +37,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
+  const [selectedListing, setSelectedListing] = React.useState<MapMarker | null>(null);
 
   // Initial map setup
   useEffect(() => {
@@ -52,9 +60,8 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         .setLngLat([marker.lng, marker.lat])
         .addTo(map)
         .getElement().addEventListener('click', () => {
-          if (marker.title) {
-            alert(marker.title);
-          }
+          console.log('Marker clicked:', marker);
+          setSelectedListing(marker);
         });
     });
 
@@ -78,15 +85,44 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     }
   }, [shouldPanTo, clearPanTo, zoom]);
 
+  // Debug log to show selected listing
+  console.log('Selected listing:', selectedListing);
+
   return (
     <div style={{ height }} ref={mapContainerRef}>
+      {/* Listing small Card (rendered as an overlay control) */}
+      {selectedListing && selectedListing.listing && (
+        <div className="absolute top-2 left-2 z-10 bg-white shadow-lg border border-gray-200 rounded-lg max-w-xs">
+          {/* Image spanning full width on the top half */}
+          <div className="relative h-40 w-full">
+            <Image
+              src={selectedListing.listing.listingImages[0].url}
+              alt={selectedListing.listing.title}
+              fill
+              className="object-cover rounded-t-lg"
+            />
+          </div>
+          {/* Details in the lower half */}
+          <div className="p-4">
+            <div className="flex justify-between items-start">
+              <h3 className="font-semibold text-lg">{selectedListing.listing.title}</h3>
+              <button onClick={() => setSelectedListing(null)} className="p-2">
+                <RejectIcon className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="text-gray-600">{selectedListing.listing.distance}</p>
+            <p className="mt-1 font-bold">${selectedListing.listing.price}</p>
+          </div>
+        </div>
+      )}
+
       {/* Close button */}
       <div className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 z-10">
         <Button
           onClick={onClose}
-          className="gap-x-2 px-5 max-w-[300px] text-[16px] rounded-full bg-charcoalBrand text-background"
+          className="gap-x-2 px-5 max-w-[300px] text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
         >
-          <RejectIcon className='h-4 w-4 p-[1px]'  />
+          <RejectIcon className="h-5 w-5 mb-[2px]" />
           Close
         </Button>
       </div>
@@ -109,11 +145,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6v12m6-6H6"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
           </svg>
         </button>
         <button
@@ -132,11 +164,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M18 12H6"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
           </svg>
         </button>
       </div>
