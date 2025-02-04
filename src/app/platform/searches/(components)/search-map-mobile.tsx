@@ -5,6 +5,7 @@ import { useListingHoverStore } from '@/store/listing-hover-store';
 import { Button } from '@/components/ui/button';
 import { RejectIcon } from '@/components/icons';
 import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 
 interface MapMarker {
   lat: number;
@@ -53,13 +54,23 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
     mapRef.current = map;
 
+    // Handler for clicking on the map background
+    const handleMapClick = () => {
+      setSelectedListing(null);
+    };
+    map.on('click', handleMapClick);
+
+    // Add marker with click handlers that stop propagation
     markers.forEach(marker => {
       new maplibregl.Marker({
         color: marker.color || '#FF0000'
       })
         .setLngLat([marker.lng, marker.lat])
         .addTo(map)
-        .getElement().addEventListener('click', () => {
+        .getElement()
+        .addEventListener('click', (e) => {
+          // Prevent the map click event from firing
+          e.stopPropagation();
           console.log('Marker clicked:', marker);
           setSelectedListing(marker);
         });
@@ -67,7 +78,8 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
     return () => {
       if (mapRef.current) {
-        mapRef.current.remove();
+        map.off('click', handleMapClick);
+        map.remove();
         mapRef.current = null;
       }
     };
@@ -92,14 +104,27 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       {/* Listing Card */}
       {selectedListing && selectedListing.listing && (
         <div className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden">
-          {/* Image Container */}
-          <div className="relative h-48 w-full">
-            <Image
-              src={selectedListing.listing.listingImages[0].url}
-              alt={selectedListing.listing.title}
-              fill
-              className="object-cover"
-            />
+          {/* Carousel Image Container */}
+          <div className="relative h-40 w-full">
+            <Carousel keyboardControls={false}>
+              <CarouselContent>
+                {selectedListing.listing.listingImages.map((image, index) => (
+                  <CarouselItem key={index} className="relative h-40 w-full">
+                    <Image
+                      src={image.url}
+                      alt={selectedListing.listing.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {/* The arrows below will only be visible from "sm" and up */}
+              <div className="hidden sm:block">
+                <CarouselPrevious className="z-20" />
+                <CarouselNext className="z-20" />
+              </div>
+            </Carousel>
           </div>
 
           {/* Content Container */}

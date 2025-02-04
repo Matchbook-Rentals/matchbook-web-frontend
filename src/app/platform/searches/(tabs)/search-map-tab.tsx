@@ -24,8 +24,14 @@ interface MapViewProps {
 
 const slideUpVariants = {
   initial: { y: "100%" },
-  animate: { y: 0 },
-  exit: { y: "100%" }
+  animate: {
+    y: 0,
+    transition: { type: "tween", duration: 0.8, ease: "easeInOut" }
+  },
+  exit: {
+    y: "100%",
+    transition: { type: "tween", duration: 0.6, ease: "easeInOut" }
+  }
 };
 
 const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
@@ -212,7 +218,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ type: "tween", duration: 0.8, ease: "easeInOut" }}
           >
             <SearchMapMobile
               center={[mapCenter.lng, mapCenter.lat]}
