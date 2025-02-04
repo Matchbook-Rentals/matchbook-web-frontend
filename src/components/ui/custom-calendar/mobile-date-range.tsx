@@ -295,8 +295,10 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
 }
 
 export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed }: MobileDateRangeProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  // If a start date is provided, open the calendar at that month/year, otherwise use today's date.
+  const initialDate = dateRange.start ? new Date(dateRange.start) : new Date();
+  const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
+  const [currentYear, setCurrentYear] = useState(initialDate.getFullYear());
   const [flexibility, setFlexibility] = useState<{
     start: 'exact' | number | null;
     end: 'exact' | number | null;
