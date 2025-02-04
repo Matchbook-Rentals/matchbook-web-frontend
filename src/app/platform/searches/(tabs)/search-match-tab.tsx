@@ -46,7 +46,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const searchParams = useSearchParams();
 
   const [showActionPopup, setShowActionPopup] = useState(false);
-  const [currentAction, setCurrentAction] = useState<'like' | 'dislike'>('like');
+  const [currentAction, setCurrentAction] = useState<'like' | 'dislike' | 'back'>('like');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -152,6 +152,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     scrollToTop();
     try {
       setIsProcessing(true);
+      setCurrentAction('back');
+      setShowActionPopup(true);
+      setTimeout(() => setShowActionPopup(false), 600);
+
       const lastAction = viewedListings[viewedListings.length - 1];
 
       if (lastAction.action === 'favorite') {

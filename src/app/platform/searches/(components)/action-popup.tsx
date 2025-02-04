@@ -1,10 +1,10 @@
 'use client'
 
-import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components';
+import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ActionPopupProps {
-  action: 'like' | 'dislike';
+  action: 'like' | 'dislike' | 'back';
   isVisible: boolean;
 }
 
@@ -35,8 +35,10 @@ const ActionPopup: React.FC<ActionPopupProps> = ({ action, isVisible }) => {
           <div className="bg-charcoalBrand rounded-full w-36 h-36 flex p-8 opacity-50 items-center justify-center">
             {action === 'like' ? (
               <BrandHeart className="w-32 h-32 text-[#A3B899]" />
-            ) : (
+            ) : action === 'dislike' ? (
               <RejectIcon className="w-32 h-32 text-[#E697A2]" />
+            ) : (
+              <ReturnIcon className="w-32 h-32 text-[#6CC3FF]" />
             )}
           </div>
         </motion.div>
