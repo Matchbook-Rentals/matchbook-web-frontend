@@ -101,12 +101,12 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
             <CarouselNext className="hidden sm:flex absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
           </Carousel>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger className='' asChild>
               <Button
-                className="absolute bottom-4 right-4 flex justify-between gap-x-2 bg-white hover:bg-gray-200"
+                className="absolute bottom-2 right-2 py-1 px-2 h-fit  flex justify-between gap-x-2 bg-white hover:bg-gray-200"
               >
-                <img src='/picture-icon.png' className='h-5 w-5' />
-                <p className='text-[#404040]'>Show All</p>
+                <img src='/picture-icon.png' className='h-4 w-4 ' />
+                <p className='text-[#404040] text-[12px] '>Show All</p>
               </Button>
             </DialogTrigger>
             <DialogContent hideCloseButton className="max-w-[95vw] max-h-[75vh] sm:max-h-[90vh] pt-6 pb-4 overflow-y-auto rounded-lg">

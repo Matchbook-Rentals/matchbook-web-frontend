@@ -1,7 +1,7 @@
 import React from "react";
 import { IconProps } from "../types";
 
-export const MapViewIcon = (props: IconProps) => (
+export const MapViewIcon = ({ stroke = "black", strokeWidth = 1.25, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={28}
@@ -12,71 +12,71 @@ export const MapViewIcon = (props: IconProps) => (
   >
     <path
       d="M1 7.95268L10.7511 4.03125"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M1 26.0013L10.7511 22.082"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M18.0156 25.9979L25.9601 22.4102"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M10.75 22.0508L18.0169 25.9998"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M10.4062 4.05664L18.3653 8.13543"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M1 7.95117V25.7726"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M10.75 4.20703V22.0284"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M18.3633 8.13477V25.4696"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M26.3242 8.13477L26.3243 22.03"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M22.9135 1.0084C22.6958 0.996356 22.5114 0.998077 22.2902 1.0084C13.2803 1.45921 22.6027 12.2167 22.6027 12.2167C22.6027 12.2167 31.6847 1.48158 22.9152 1.0084H22.9135Z"
-      stroke="black"
-      strokeWidth={1.25}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeMiterlimit={10}
     />
   </svg>

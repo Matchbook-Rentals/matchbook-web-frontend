@@ -5,6 +5,8 @@ import SearchMap from '../(components)/search-map';
 import { ListingAndImages } from '@/types';
 import FilterOptionsDialog from './filter-options-dialog';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { MapViewIcon } from '@/components/icons';
 
 interface MapMarker {
   lat: number;
@@ -111,7 +113,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         ) : (
           <div className='flex flex-col items-center justify-center h-[50vh]'>
             <p className='font-montserrat-regular text-2xl mb-5'>You&apos;re out of listings!</p>
-            <p>You can {numFavorites > 0 ? 'look at your favorites' : ''}{numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}{numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
+            <p>
+              You can {numFavorites > 0 ? 'look at your favorites' : ''}
+              {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
+              {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.
+            </p>
 
             {(numFavorites > 0 || numFilteredOut > 0) && (
               <p className='mt-3'>
@@ -143,6 +149,14 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           </div>
         )}
       </div>
+
+      {/* Mobile-only Map button */}
+      <Button
+        className="fixed md:hidden gap-x-2 px-5  max-w-[300px] text-[16px] bottom-[10vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+      >
+        <MapViewIcon stroke="white" strokeWidth={1.6} />
+        Map
+      </Button>
 
       {/*Map container*/}
       <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">

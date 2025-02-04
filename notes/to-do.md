@@ -6,10 +6,11 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 ACH PLAID API
 
 ## 4Feb
-- [ ] New compnents in trip edit search bar 
+- [x] New compnents in trip edit search bar 
 - [ ] Map button on mobile 
 - [ ] finish application 
-
+- [ ] change card hover behcaior (map zoom level) add cards to map
+- [ ] deal with the stupid god damn overview village at mobile ( AHHHHHH)
 
 
 - [x]Deselect laundry
