@@ -45,6 +45,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Remove these states since we handle popups in the context now
   const [showActionPopup, setShowActionPopup] = useState(false);
   const [currentAction, setCurrentAction] = useState<'like' | 'dislike' | 'back'>('like');
 
@@ -112,36 +113,20 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   // Functions
   const handleLike = async (listing: ListingAndImages) => {
     scrollToTop();
-    setCurrentAction('like');
-    setShowActionPopup(true);
-    setTimeout(() => setShowActionPopup(false), 600);
+    // Remove popup logic
     await optimisticLike(listing.id);
     setViewedListings(prev => {
       const newState = [...prev, { listing, action: 'favorite' as 'favorite' | 'dislike', actionId: '' }];
-      console.log('Viewed listings after like:', newState);
       return newState.slice(-MAX_HISTORY);
     });
   };
 
   const handleReject = async (listing: ListingAndImages) => {
     scrollToTop();
-    setCurrentAction('dislike');
-    setShowActionPopup(true);
-    setTimeout(() => setShowActionPopup(false), 600);
+    // Remove popup logic
     await optimisticDislike(listing.id);
     setViewedListings(prev => {
       const newState = [...prev, { listing, action: 'dislike' as 'favorite' | 'dislike', actionId: '' }];
-      console.log('Viewed listings after dislike:', newState);
-      return newState.slice(-MAX_HISTORY);
-    });
-  };
-
-  const handleMaybe = async (listing: ListingAndImages) => {
-    scrollToTop();
-    await optimisticMaybe(listing.id);
-    setViewedListings(prev => {
-      const newState = [...prev, { listing, action: 'maybe' as 'favorite' | 'dislike', actionId: '' }];
-      console.log('Viewed listings after maybe:', newState);
       return newState.slice(-MAX_HISTORY);
     });
   };
@@ -152,9 +137,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
     scrollToTop();
     try {
       setIsProcessing(true);
-      setCurrentAction('back');
-      setShowActionPopup(true);
-      setTimeout(() => setShowActionPopup(false), 600);
+      // Remove popup logic
 
       const lastAction = viewedListings[viewedListings.length - 1];
 
@@ -169,7 +152,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       setViewedListings(prev => prev.slice(0, -1));
     } catch (error) {
       console.error('Error during back operation:', error);
-      // Optionally add error handling UI here
     } finally {
       setIsProcessing(false);
     }
@@ -256,10 +238,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   // Main component render
   return (
     <>
-      <ActionPopup
-        action={currentAction}
-        isVisible={showActionPopup}
-      />
       {/* Conditionally rendered top control box */}
       {!isDetailsVisible && showListings[0] && (
         <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
