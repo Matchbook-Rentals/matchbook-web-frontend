@@ -291,11 +291,32 @@ const EditSearchInputsMobile: React.FC = () => {
     setActiveInput(null);
   };
 
+  // Helper function to check that the trip is valid before submitting.
+  const isTripValid = () => {
+    return (
+      selectedLocation.lat !== null &&
+      selectedLocation.lng !== null &&
+      locationDisplayValue.trim() !== "" &&
+      dateRange.start !== null &&
+      dateRange.end !== null &&
+      guests.adults > 0
+    );
+  };
+
   const handleSave = async () => {
     if (!state.trip?.id) {
       toast({
         variant: "destructive",
         description: "No trip ID found",
+      });
+      return;
+    }
+
+    // Prevent submission when trip is incomplete.
+    if (!isTripValid()) {
+      toast({
+        variant: "destructive",
+        description: "Trip data is incomplete.",
       });
       return;
     }
@@ -427,9 +448,9 @@ const EditSearchInputsMobile: React.FC = () => {
         </button>
         <button
           onClick={handleSave}
-          disabled={!hasChanges()}
+          disabled={!hasChanges() || !isTripValid()}
           className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed ${
-            hasChanges() ? "text-green-500 hover:bg-green-50" : "text-gray-300"
+            hasChanges() && isTripValid() ? "text-green-500 hover:bg-green-50" : "text-gray-300"
           }`}
         >
           <Check className="h-5 w-5" />
