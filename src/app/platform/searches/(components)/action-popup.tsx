@@ -32,11 +32,13 @@ const ActionPopup: React.FC<ActionPopupProps> = ({ action, isVisible }) => {
           }}
           exit={{ opacity: 0 }}
         >
-          {action === 'like' ? (
-            <BrandHeart className="w-32 h-32 text-[#A3B899]" />
-          ) : (
-            <RejectIcon className="w-32 h-32 text-[#E697A2]" />
-          )}
+          <div className="bg-charcoalBrand rounded-full w-36 h-36 flex p-8 opacity-50 items-center justify-center">
+            {action === 'like' ? (
+              <BrandHeart className="w-32 h-32 text-[#A3B899]" />
+            ) : (
+              <RejectIcon className="w-32 h-32 text-[#E697A2]" />
+            )}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
