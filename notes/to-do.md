@@ -5,8 +5,8 @@ EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
-
-- [ ]  
+## 4Feb
+- [ ] New compnents in trip edit search bar 
 
 
 - [x]Deselect laundry

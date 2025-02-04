@@ -127,7 +127,7 @@ const TripsPage: React.FC = () => {
   const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
 
   return (
-    <div className={`flex flex-col ${marginClass} mx-auto ${montserrat.className}`}>
+    <div className={`flex flex-col ${marginClass}  mx-auto `}>
       <div className='flex justify-between items-center sm:justify-start'>
         <Breadcrumbs links={breadcrumbLinks} />
         {isMobile && (
@@ -151,8 +151,8 @@ const TripsPage: React.FC = () => {
           useUrlParams
           tabs={tabs}
           defaultTab={currentTab || 'matchmaker'}
-          className='mx-auto w-full pb-0 mb-0  '
-          tabsClassName='w-full mx-auto '
+          className='mx-auto w-full pb-0 mb-0 border-none'
+          tabsClassName='w-full mx-auto  '
           tabsListClassName='flex py-0 justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (

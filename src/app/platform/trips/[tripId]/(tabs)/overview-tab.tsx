@@ -7,10 +7,12 @@ import { useParams } from 'next/navigation';
 import SearchEditBar from '@/components/home-components/search-edit-bar';
 import { MatchbookVerified } from '@/components/icons/views';
 import { DeniedPaperIcon, PaperIcon, RejectIcon } from '@/components/icons/actions';
+import { ApplicationIcon, DeclinedApplicationIcon, DeniedIcon } from '@/components/icons';
 
 interface BigButtonProps {
   Icon: React.ComponentType<{ className?: string }>;
-  text: string;
+  title: string;
+  subTitle: string;
   iconClassName?: string;
   iconWrapperClassName?: string;
   href: string;
@@ -18,34 +20,31 @@ interface BigButtonProps {
 
 const BigButton: React.FC<BigButtonProps> = ({
   Icon,
-  text,
+  title,
+  subTitle,
   iconClassName = '',
   iconWrapperClassName = '',
   href
 }) => {
   const buttonStyles = `
-    w-2/3 sm:w-1/3 md:w-1/5 px-6 py-2 border
-    rounded-lg shadow-sm cursor-pointer flex
-    items-center justify-center gap-2 hover:shadow-md transition-shadow `;
+    w-full h-full px-[10%] lg:px-[8%] xl:px-[10%] py-2 bg-background border font-montserrat drop-shadow-custom
+    hover:drop-shadow-big transition-all rounded-lg cursor-pointer flex flex-col items-start
+    gap-2 max-w-[300px] mx-auto sm:mx-0 sm:even:ml-auto sm:odd:mr-auto lg:mx-auto
+  `;
 
-  // Added responsive border colors and made wrapper div relative
-  const iconStyles = `
-  lg:max-h-[55px] lg:max-w-[55px]
-  md:max-h-[50px] md:max-w-[50px]
-  sm:max-h-[43px] sm:max-w-[45px]
-  max-h-[30px] max-w-[30px]
-  w-full  relative
-  transition-all duration-200 ease-in-out
-`;
+  const iconStyles = `h-[30px] w-[30px]`;
 
   return (
     <Link href={href} className={buttonStyles}>
-      <div className={`shrink-0 ${iconWrapperClassName}`}>
+      <div className={`shrink-0 drop-shadow-none ${iconWrapperClassName}`}>
         <Icon className={`${iconStyles} ${iconClassName}`} />
       </div>
-      <div className="flex-1 text-center">
-        <span className="text-[clamp(0.75rem,1.5vw,1.125rem)] text-green font-medium block">
-          {text}
+      <div className="flex-1 text-left my-2">
+        <span className="text-[14px] font-medium block">
+          {title}
+        </span>
+        <span className="text-[12px] text-gray-500 block">
+          {subTitle}
         </span>
       </div>
     </Link>
@@ -59,7 +58,7 @@ const OverviewTab: React.FC = () => {
   return (
     <>
       <div className="w-full mx-auto bg-[#869A7D]/50">
-        <div className="w-full  mx-auto flex flex-col justify-between ">
+        <div className="w-full mx-auto flex flex-col justify-between ">
           <SearchEditBar />
           <Image
             src="/village-footer-opaque.png"
@@ -71,27 +70,30 @@ const OverviewTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-around md:justify-between w-full mx-auto mt-8 gap-4">
+      <div className="w-full mx-auto mt-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         <BigButton
-          Icon={PaperIcon}
-          text="Application"
+          Icon={ApplicationIcon}
+          title="Application"
+          subTitle="Start your general application"
           href={`/platform/trips/${tripId}/application`}
         />
         <BigButton
           Icon={MatchbookVerified}
-          text="Matchbook Verification"
-          iconWrapperClassName="text-[#869A7D]"
+          title="Matchbook Verification"
+          subTitle="Start your screening"
+          iconClassName="scale-110"
           href={`/platform/trips/${tripId}/verification`}
         />
         <BigButton
-          Icon={RejectIcon}
-          text="Disliked Properties"
-          iconClassName="bg-pinkBrand rounded-full p-[25%] "
+          Icon={DeniedIcon}
+          title="Disliked Properties"
+          subTitle="View your disliked properties"
           href={`/platform/trips/${tripId}/dislikes`}
         />
         <BigButton
-          Icon={DeniedPaperIcon}
-          text="Declined Applications"
+          Icon={DeclinedApplicationIcon}
+          title="Declined Applications"
+          subTitle="View your declined applications"
           href={`/platform/trips/${tripId}/declined`}
         />
       </div>
