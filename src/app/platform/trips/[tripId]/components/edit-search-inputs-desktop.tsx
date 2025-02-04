@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import HeroDateRange from "@/components/ui/custom-calendar/date-range-selector/hero-date-range";
+import { DesktopDateRange } from "@/components/ui/custom-calendar/date-range-selector/desktop-date-range";
 import { useToast } from "@/components/ui/use-toast";
 import HeroLocationSuggest from "@/components/home-components/HeroLocationSuggest";
 import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
@@ -7,7 +7,7 @@ import { useTripContext } from "@/contexts/trip-context-provider";
 import { Check, X } from "lucide-react";
 import { editTrip } from "@/app/actions/trips";
 
-type ActiveContentType = 'location' | 'dateStart' | 'dateEnd' | 'guests' | null;
+type ActiveContentType = 'location' | 'date' | 'guests' | null;
 
 const EditSearchInputsDesktop: React.FC = () => {
   const { state } = useTripContext();
@@ -23,6 +23,10 @@ const EditSearchInputsDesktop: React.FC = () => {
     children: state.trip?.numChildren || 0,
     pets: state.trip?.numPets || 0
   });
+  const [flexibility, setFlexibility] = React.useState<{ start: "exact" | number | null; end: "exact" | number | null }>(() => ({
+    start: state.trip?.flexibleStart === 0 || state.trip?.flexibleStart == null ? "exact" : state.trip.flexibleStart,
+    end: state.trip?.flexibleEnd === 0 || state.trip?.flexibleEnd == null ? "exact" : state.trip.flexibleEnd,
+  }));
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedLocation, setSelectedLocation] = React.useState({
     destination: state.trip?.locationString || '',
@@ -50,7 +54,17 @@ const EditSearchInputsDesktop: React.FC = () => {
   };
 
   const handleLocationSelect = (location: any) => {
+    if (!location) return;
     setSelectedLocation(location);
+    setLocationDisplayValue(location?.description || location?.destination || '');
+    setActiveContent('date');
+    if (containerRef.current && moveInInputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = moveInInputRef.current.getBoundingClientRect();
+      const inputCenter = inputRect.left + inputRect.width / 2;
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
+    }
   };
 
   const handleInputClick = (e: React.MouseEvent, content: ActiveContentType, inputRef: React.RefObject<HTMLInputElement>) => {
@@ -94,13 +108,16 @@ const EditSearchInputsDesktop: React.FC = () => {
     switch (activeContent) {
       case 'location':
         return <HeroLocationSuggest hasAccess={true} onLocationSelect={handleLocationSelect} setDisplayValue={setLocationDisplayValue} />;
-      case 'dateStart':
-      case 'dateEnd':
+      case 'date':
         return (
-          <HeroDateRange
-            start={dateRange.start || new Date()}
-            end={dateRange.end || new Date()}
+          <DesktopDateRange
+            start={dateRange.start || null}
+            end={dateRange.end || null}
             handleChange={(start, end) => setDateRange({ start, end })}
+            onProceed={handleProceed}
+            onClear={() => setDateRange({ start: null, end: null })}
+            onFlexibilityChange={(newFlexibility) => setFlexibility(newFlexibility)}
+            initialFlexibility={flexibility}
           />
         );
       case 'guests':
@@ -119,7 +136,13 @@ const EditSearchInputsDesktop: React.FC = () => {
       guests.children !== state.trip?.numChildren ||
       guests.pets !== state.trip?.numPets;
 
-    return locationChanged || startDateChanged || endDateChanged || guestsChanged;
+    const parentFlexStart = state.trip?.flexibleStart ?? 0;
+    const parentFlexEnd = state.trip?.flexibleEnd ?? 0;
+    const currentFlexStart = flexibility.start === "exact" ? 0 : flexibility.start;
+    const currentFlexEnd = flexibility.end === "exact" ? 0 : flexibility.end;
+
+    return locationChanged || startDateChanged || endDateChanged || guestsChanged ||
+      currentFlexStart !== parentFlexStart || currentFlexEnd !== parentFlexEnd;
   };
 
   const handleReset = () => {
@@ -138,6 +161,10 @@ const EditSearchInputsDesktop: React.FC = () => {
       adults: state.trip?.numAdults || 0,
       children: state.trip?.numChildren || 0,
       pets: state.trip?.numPets || 0
+    });
+    setFlexibility({
+      start: state.trip?.flexibleStart === 0 || state.trip?.flexibleStart == null ? "exact" : state.trip.flexibleStart,
+      end: state.trip?.flexibleEnd === 0 || state.trip?.flexibleEnd == null ? "exact" : state.trip.flexibleEnd,
     });
   };
 
@@ -159,6 +186,8 @@ const EditSearchInputsDesktop: React.FC = () => {
       numAdults: guests.adults,
       numChildren: guests.children,
       numPets: guests.pets,
+      flexibleStart: flexibility.start === "exact" ? 0 : flexibility.start,
+      flexibleEnd: flexibility.end === "exact" ? 0 : flexibility.end,
     });
 
     if (response.success) {
@@ -193,6 +222,17 @@ const EditSearchInputsDesktop: React.FC = () => {
     };
   }, []); // Only re-run if isOpen changes
 
+  const handleProceed = () => {
+    setActiveContent('guests');
+    if (containerRef.current && guestsInputRef.current) {
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const inputRect = guestsInputRef.current.getBoundingClientRect();
+      const inputCenter = inputRect.left + inputRect.width / 2;
+      const position = ((inputCenter - containerLeft) / containerRef.current.offsetWidth) * 100;
+      setArrowPosition(position);
+    }
+  };
+
   return (
     <div ref={containerRef} className="relative">
       <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
@@ -213,8 +253,8 @@ const EditSearchInputsDesktop: React.FC = () => {
           </div>
         </div>
         <div
-          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
-          onClick={(e) => handleInputClick(e, 'dateStart', moveInInputRef)}
+          className="flex-1 relative max-w-[100px] xl:max-w-[1000px] hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
         >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move In</span>
@@ -229,8 +269,8 @@ const EditSearchInputsDesktop: React.FC = () => {
           </div>
         </div>
         <div
-          className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
-          onClick={(e) => handleInputClick(e, 'dateEnd', moveOutInputRef)}
+          className="flex-1 relative max-w-[100px] xl:max-w-[1000px] hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
+          onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
         >
           <div className="flex flex-col space-y-1">
             <span className="text-xs text-gray-500 px-3">Move Out</span>

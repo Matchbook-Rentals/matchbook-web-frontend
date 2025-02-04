@@ -7,6 +7,9 @@ ACH PLAID API
 
 ## 4Feb
 - [ ] New compnents in trip edit search bar 
+- [ ] Map button on mobile 
+- [ ] finish application 
+
 
 
 - [x]Deselect laundry

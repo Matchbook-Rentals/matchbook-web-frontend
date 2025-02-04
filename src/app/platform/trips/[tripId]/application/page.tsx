@@ -330,7 +330,6 @@ export default function ApplicationPage() {
     <div className={PAGE_MARGIN}>
       <Breadcrumbs
         links={[
-          { label: 'Trips', url: '/platform/trips' },
           { label: getTripLocationString(trip), url: `/platform/trips/${tripId}` },
           { label: 'Application' }
         ]}

@@ -14,6 +14,7 @@ interface DesktopDateRangeProps {
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null, end: 'exact' | number | null }) => void;
   onProceed?: () => void;
   onClear?: () => void;
+  initialFlexibility?: { start: 'exact' | number | null, end: 'exact' | number | null };
 }
 
 interface CalendarMonthProps {
@@ -227,13 +228,22 @@ export function DesktopDateRange({
   handleChange,
   onFlexibilityChange,
   onProceed,
-  onClear
+  onClear,
+  initialFlexibility
 }: DesktopDateRangeProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const [leftMonth, setLeftMonth] = useState(currentMonth);
-  const [leftYear, setLeftYear] = useState(currentYear);
+  const [leftMonth, setLeftMonth] = useState(() => {
+    if (start) return start.getMonth();
+    if (end) return end.getMonth();
+    return currentMonth;
+  });
+  const [leftYear, setLeftYear] = useState(() => {
+    if (start) return start.getFullYear();
+    if (end) return end.getFullYear();
+    return currentYear;
+  });
   const [rightMonth, setRightMonth] = useState(() => {
     // If end date exists and is valid (after start date and different month)
     if (end && (!start || (end > start &&
@@ -256,10 +266,7 @@ export function DesktopDateRange({
   const [flexibility, setFlexibility] = useState<{
     start: 'exact' | number | null;
     end: 'exact' | number | null;
-  }>({
-    start: 'exact',
-    end: 'exact'
-  });
+  }>(() => initialFlexibility ?? { start: 'exact', end: 'exact' });
 
   // Helper to check if a month/year combination is before current month
   const isBeforeCurrentMonth = (month: number, year: number) => {

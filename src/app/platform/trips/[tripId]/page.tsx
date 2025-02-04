@@ -16,7 +16,6 @@ import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat } from 'next/font/google';
 import { BrandHeartOutline, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
-import { BookIcon, ShareIcon } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
@@ -60,7 +59,7 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[16px] sm:font-normal'
+  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px]  sm:font-normal'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
     {
@@ -153,7 +152,7 @@ const TripsPage: React.FC = () => {
           defaultTab={currentTab || 'matchmaker'}
           className='mx-auto w-full pb-0 mb-0 border-none'
           tabsClassName='w-full mx-auto  '
-          tabsListClassName='flex py-0 justify-start w-2/3 md:w-full space-x-2 md:space-x-2 md:gap-x-4'
+          tabsListClassName='flex py-0 justify-start w-full space-x-4  md:gap-x-4 '
           secondaryButton={
             ['matchmaker', 'map'].includes(currentTab) ? (
               <FilterOptionsDialog
