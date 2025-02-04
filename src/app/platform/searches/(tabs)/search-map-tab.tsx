@@ -4,18 +4,17 @@ import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
 import SearchMapMobile from '../(components)/search-map-mobile';
 import { ListingAndImages } from '@/types';
-import FilterOptionsDialog from './filter-options-dialog';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import LoadingSpinner from '@/components/ui/spinner';
 
 interface MapMarker {
   lat: number;
   lng: number;
   title?: string;
   color?: string;
+  listing: ListingAndImages;
 }
 
 interface MapViewProps {
@@ -198,7 +197,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
-            zoom={10}
+            zoom={9}
             height={`${calculatedHeight}px`}
             markers={markers.map((marker) => ({
               ...marker,
