@@ -31,7 +31,7 @@ const navigationItems = [
   { id: 'questionnaire', label: 'Questionnaire' },
 ];
 
-const itemHeaderStyles = "text-[30px] font-meidum  mb-4 ";
+const itemHeaderStyles = "text-[30px] font-medium mb-4";
 
 // Update the helper function to be more specific about field changes
 const getChangedFields = (current: any, initial: any) => {
@@ -198,6 +198,24 @@ export default function ApplicationPage() {
   const [incomes, setIncomes] = useState(initialState.incomes);
   const [answers, setAnswers] = useState(initialState.answers);
 
+  // New: Error state for client-side validation (skeleton)
+  const [errors, setErrors] = useState({
+    basicInfo: {
+      personalInfo: {} as { firstName?: string; lastName?: string },
+      identification: '',
+    },
+    residentialHistory: {
+      residentialHistory: '',
+      landlordInfo: '',
+    },
+    income: {
+      income: '',
+    },
+    questionnaire: {
+      questionnaire: '',
+    },
+  });
+
   // Add isEditing computation
   const isEditing = useCallback(() => {
     return JSON.stringify({
@@ -234,60 +252,21 @@ export default function ApplicationPage() {
   const onSelect = useCallback(() => {
     if (!api) return;
     const newStep = api.selectedScrollSnap();
-
-    // Check for unsaved changes before updating step
-    if (isEditing()) {
-      const currentState = {
-        personalInfo,
-        ids,
-        verificationImages,
-        residentialHistory,
-        landlordInfo,
-        incomes,
-        answers
-      };
-
-      const changedFields = getChangedFields(currentState, initialState);
-
-      if (changedFields.length > 0) {
-        toast({
-          title: "Unsaved Changes",
-          description: (
-            <div className="flex flex-col gap-2 bg-white">
-              <div>You have unsaved changes in: {changedFields.join(', ')}</div>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setPersonalInfo(initialState.personalInfo);
-                  setIds(initialState.ids);
-                  setVerificationImages(initialState.verificationImages);
-                  setResidentialHistory(initialState.residentialHistory);
-                  setLandlordInfo(initialState.landlordInfo);
-                  setIncomes(initialState.incomes);
-                  setAnswers(initialState.answers);
-                  api.scrollTo(newStep);
-                  setCurrentStep(newStep);
-                }}
-                className="bg-[#404040] text-white hover:bg-[#505050]"
-              >
-                Revert Changes
-              </Button>
-            </div>
-          ),
-          className: "bg-white",
-        });
-        // Prevent step change by scrolling back to current step
-        api.scrollTo(currentStep);
-        return;
-      }
-    }
-
     setCurrentStep(newStep);
-  }, [api, isEditing, initialState, personalInfo, ids, verificationImages, residentialHistory, landlordInfo, incomes, answers, toast, currentStep]);
-
-  const scrollToIndex = useCallback((index: number) => {
-    api?.scrollTo(index);
   }, [api]);
+
+  const scrollToIndex = (index: number) => {
+    let isValid = validateStep(currentStep);
+    if (!isValid) {
+      toast({
+        title: "Validation Error",
+        description: "Please correct errors before navigating.",
+        variant: "destructive",
+      });
+      return;
+    }
+    api?.scrollTo(index);
+  };
 
   useEffect(() => {
     if (!api) return;
@@ -323,6 +302,145 @@ export default function ApplicationPage() {
         description: "Failed to submit application",
         variant: "destructive",
       });
+    }
+  };
+
+  // New validation functions for full form
+  const validatePersonalInfo = () => {
+    let errorObj: { firstName?: string; lastName?: string } = {};
+    if (!personalInfo.firstName.trim()) {
+      errorObj.firstName = 'First name is required.';
+    }
+    if (!personalInfo.lastName.trim()) {
+      errorObj.lastName = 'Last name is required.';
+    }
+    return errorObj;
+  };
+
+  const validateIdentification = () => {
+    let errorMsg = '';
+    if (!ids || ids.length === 0) {
+      errorMsg += 'Identification information is required. ';
+    } else {
+      const id = ids[0];
+      if (!id.idType.trim()) {
+        errorMsg += 'Identification type is required. ';
+      }
+      if (!id.idNumber.trim()) {
+        errorMsg += 'Identification number is required. ';
+      }
+    }
+    return errorMsg;
+  };
+
+  const validateResidentialHistory = () => {
+    let errorMsg = '';
+    if (!residentialHistory.currentStreet.trim()) {
+      errorMsg += 'Street address is required. ';
+    }
+    if (!residentialHistory.currentCity.trim()) {
+      errorMsg += 'City is required. ';
+    }
+    if (!residentialHistory.currentState.trim()) {
+      errorMsg += 'State is required. ';
+    }
+    if (!residentialHistory.currentZipCode.trim()) {
+      errorMsg += 'ZIP Code is required. ';
+    }
+    if (!residentialHistory.monthlyPayment.trim()) {
+      errorMsg += 'Monthly payment is required. ';
+    }
+    if (!residentialHistory.durationOfTenancy.trim()) {
+      errorMsg += 'Duration of tenancy is required. ';
+    }
+    return errorMsg;
+  };
+
+  const validateLandlordInfo = () => {
+    let errorMsg = '';
+    if (!landlordInfo.landlordFirstName.trim()) {
+      errorMsg += 'Landlord first name is required. ';
+    }
+    if (!landlordInfo.landlordLastName.trim()) {
+      errorMsg += 'Landlord last name is required. ';
+    }
+    if (!landlordInfo.landlordEmail.trim()) {
+      errorMsg += 'Landlord email is required. ';
+    }
+    if (!landlordInfo.landlordPhoneNumber.trim()) {
+      errorMsg += 'Landlord phone number is required. ';
+    }
+    return errorMsg;
+  };
+
+  const validateIncome = () => {
+    let errorMsg = '';
+    if (!incomes || incomes.length === 0) {
+      errorMsg += 'At least one income entry is required. ';
+    } else {
+      const inc = incomes[0];
+      if (!inc.source.trim()) {
+        errorMsg += 'Income source is required. ';
+      }
+      if (!inc.monthlyAmount.trim()) {
+        errorMsg += 'Monthly amount is required. ';
+      }
+    }
+    return errorMsg;
+  };
+
+  const validateQuestionnaire = () => {
+    let errorMsg = '';
+    if ((answers.evicted || answers.brokenLease || answers.landlordDispute) && !answers.explanation.trim()) {
+      errorMsg += 'Explanation is required for questionnaire responses. ';
+    }
+    return errorMsg;
+  };
+
+  const validateStep = (step: number) => {
+    switch (step) {
+      case 0: {
+        const personalInfoError = validatePersonalInfo();
+        const identificationError = validateIdentification();
+        setErrors(prev => ({
+          ...prev,
+          basicInfo: {
+            personalInfo: personalInfoError,
+            identification: identificationError,
+          },
+        }));
+        return !personalInfoError && !identificationError;
+      }
+      case 1: {
+        const residentialHistoryError = validateResidentialHistory();
+        const landlordInfoError = residentialHistory.housingStatus === 'rent' ? validateLandlordInfo() : '';
+        setErrors(prev => ({
+          ...prev,
+          residentialHistory: {
+            residentialHistory: residentialHistoryError,
+            landlordInfo: landlordInfoError
+          },
+        }));
+        return !residentialHistoryError && (!landlordInfoError || residentialHistory.housingStatus !== 'rent');
+      }
+      case 2: {
+        const incomeError = validateIncome();
+        setErrors(prev => ({
+          ...prev,
+          income: { income: incomeError },
+        }));
+        return !incomeError;
+      }
+      case 3: {
+        const questionnaireError = validateQuestionnaire();
+        setErrors(prev => ({
+          ...prev,
+          questionnaire: { questionnaire: questionnaireError },
+        }));
+        return !questionnaireError;
+      }
+      default:
+        return true;
     }
   };
 
@@ -370,10 +488,13 @@ export default function ApplicationPage() {
             <CarouselContent className="w-full">
               <CarouselItem>
                 <div className="px-6 pb-6 pt-0  min-h-[400px]">
-                  <h2 className={ApplicationItemHeaderStyles}>Basic Information</h2>
+                  <h2 className={ApplicationItemHeaderStyles}>
+                    Basic Information
+                  </h2>
                   <PersonalInfo
                     personalInfo={personalInfo}
                     setPersonalInfo={setPersonalInfo}
+                    error={errors.basicInfo.personalInfo}
                   />
                   <div className="mt-8">
                     <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
@@ -389,7 +510,9 @@ export default function ApplicationPage() {
 
               <CarouselItem>
                 <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={ApplicationItemHeaderStyles}>Residential History</h2>
+                  <h2 className={ApplicationItemHeaderStyles}>
+                    Residential History
+                  </h2>
                   <ResidentialHistory
                     residentialHistory={residentialHistory}
                     setResidentialHistory={setResidentialHistory}
@@ -406,7 +529,9 @@ export default function ApplicationPage() {
 
               <CarouselItem>
                 <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={itemHeaderStyles}>Income</h2>
+                  <h2 className={itemHeaderStyles}>
+                    Income
+                  </h2>
                   <Income
                     incomes={incomes}
                     setIncomes={setIncomes}
@@ -418,7 +543,9 @@ export default function ApplicationPage() {
 
               <CarouselItem>
                 <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={itemHeaderStyles}>Questionnaire</h2>
+                  <h2 className={itemHeaderStyles}>
+                    Questionnaire
+                  </h2>
                   <Questionnaire
                     answers={answers}
                     setAnswers={setAnswers}
@@ -440,31 +567,11 @@ export default function ApplicationPage() {
             <Button
               variant="outline"
               onClick={() => {
-                if (isEditing()) {
+                if (!validateStep(currentStep)) {
                   toast({
-                    title: "Unsaved Changes",
-                    description: (
-                      <div className="flex flex-col gap-2 bg-white">
-                        <div>Please save your changes before navigating</div>
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setPersonalInfo(initialState.personalInfo);
-                            setIds(initialState.ids);
-                            setVerificationImages(initialState.verificationImages);
-                            setResidentialHistory(initialState.residentialHistory);
-                            setLandlordInfo(initialState.landlordInfo);
-                            setIncomes(initialState.incomes);
-                            setAnswers(initialState.answers);
-                            api?.scrollPrev();
-                          }}
-                          className="bg-[#404040] text-white hover:bg-[#505050]"
-                        >
-                          Revert Changes
-                        </Button>
-                      </div>
-                    ),
-                    className: "bg-white",
+                    title: "Validation Error",
+                    description: "Please correct errors before navigating.",
+                    variant: "destructive",
                   });
                   return;
                 }
@@ -476,31 +583,11 @@ export default function ApplicationPage() {
             </Button>
             <Button
               onClick={() => {
-                if (isEditing()) {
+                if (!validateStep(currentStep)) {
                   toast({
-                    title: "Unsaved Changes",
-                    description: (
-                      <div className="flex flex-col gap-2 bg-white">
-                        <div>Please save your changes before navigating</div>
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setPersonalInfo(initialState.personalInfo);
-                            setIds(initialState.ids);
-                            setVerificationImages(initialState.verificationImages);
-                            setResidentialHistory(initialState.residentialHistory);
-                            setLandlordInfo(initialState.landlordInfo);
-                            setIncomes(initialState.incomes);
-                            setAnswers(initialState.answers);
-                            api?.scrollNext();
-                          }}
-                          className="bg-[#404040] text-white hover:bg-[#505050]"
-                        >
-                          Revert Changes
-                        </Button>
-                      </div>
-                    ),
-                    className: "bg-white",
+                    title: "Validation Error",
+                    description: "Please correct errors before navigating.",
+                    variant: "destructive",
                   });
                   return;
                 }

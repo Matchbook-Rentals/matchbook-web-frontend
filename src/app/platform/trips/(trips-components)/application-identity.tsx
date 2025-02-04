@@ -50,6 +50,7 @@ interface IdentificationProps {
   setIds: React.Dispatch<React.SetStateAction<IdentificationItem>>;
   verificationImages: VerificationImage[];
   setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>;
+  error?: { idType?: string; idNumber?: string };
 }
 
 const ID_TYPES = [
@@ -57,7 +58,7 @@ const ID_TYPES = [
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, verificationImages, setVerificationImages }) => {
+export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, verificationImages, setVerificationImages, error }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
@@ -79,7 +80,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
             value={ids?.idType}
             onValueChange={(value) => setIds(prev => ({ ...prev, idType: value }))}
           >
-            <SelectTrigger>
+            <SelectTrigger className={`${error?.idType ? 'border-red-500' : ''}`}>
               <SelectValue placeholder="Select Id type" />
             </SelectTrigger>
             <SelectContent>
@@ -90,6 +91,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
               ))}
             </SelectContent>
           </Select>
+          {error?.idType && <p className="mt-1 text-red-500 text-sm">{error.idType}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="idNumber" className={ApplicationItemLabelStyles}>Id Number</Label>
@@ -97,7 +99,9 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
             id="idNumber"
             value={ids.idNumber}
             onChange={(e) => setIds(prev => ({ ...prev, idNumber: e.target.value }))}
+            className={error?.idNumber ? "border-red-500" : ""}
           />
+          {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
         </div>
       </div>
       <div className="mt-2">
