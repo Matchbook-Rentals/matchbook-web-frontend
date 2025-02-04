@@ -97,6 +97,14 @@ export default function SearchListingCard({ listing, status, className, style, d
     }
   }
 
+  const handleLikeAction = () => {
+    if (favIds.has(listing.id)) {
+      optimisticRemoveLike(listing.id);
+    } else {
+      optimisticLike(listing.id);
+    }
+  };
+
   return (
     <Card
       className={`w-full overflow-hidden border-0 max-w-[600px]  shadow-0 shadow-none ${className || ''}`}
@@ -142,7 +150,7 @@ export default function SearchListingCard({ listing, status, className, style, d
               stroke={favIds.has(listing.id) ? 'white' : 'white'}
               strokeWidth={favIds.has(listing.id) ? 1 : 1.5}
               fill={favIds.has(listing.id) ? 'white' : 'black'}
-              onClick={() => favIds.has(listing.id) ? optimisticDislike(listing.id) : optimisticLike(listing.id)}
+              onClick={handleLikeAction}
             />
           </div>
         </div>
