@@ -358,9 +358,7 @@ export default function ApplicationPage() {
                     Residential History
                   </h2>
                   <ResidentialHistory />
-                  {residentialHistory.housingStatus === 'rent' && (
-                    <LandlordInfo />
-                  )}
+                  <LandlordInfo />
                 </div>
               </CarouselItem>
 
@@ -369,12 +367,7 @@ export default function ApplicationPage() {
                   <h2 className={itemHeaderStyles}>
                     Income
                   </h2>
-                  <Income
-                    incomes={incomes}
-                    setIncomes={setIncomes}
-                    verificationImages={verificationImages.filter(img => img.category === 'Income')}
-                    setVerificationImages={setVerificationImages}
-                  />
+                  <Income />
                 </div>
               </CarouselItem>
 
@@ -383,10 +376,7 @@ export default function ApplicationPage() {
                   <h2 className={itemHeaderStyles}>
                     Questionnaire
                   </h2>
-                  <Questionnaire
-                    answers={answers}
-                    setAnswers={setAnswers}
-                  />
+                  <Questionnaire />
                   <Button
                     onClick={handleSubmit}
                     className="w-full mt-4"

@@ -38,18 +38,6 @@ interface UploadData {
   type: string;
 }
 
-interface VerificationImage {
-  url: string;
-  category: string;
-}
-
-interface IncomeItem {
-  id?: string;
-  applicationId?: string;
-  source: string;
-  monthlyAmount: string;
-}
-
 export const Income: React.FC = () => {
   const {
     incomes,
