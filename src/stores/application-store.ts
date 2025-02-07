@@ -42,6 +42,23 @@ interface QuestionnaireAnswers {
   evictedExplanation: string;
 }
 
+interface ApplicationErrors {
+  basicInfo: {
+    personalInfo: { firstName?: string; lastName?: string };
+    identification: { idType?: string; idNumber?: string };
+  };
+  residentialHistory: {
+    residentialHistory: string;
+    landlordInfo: string;
+  };
+  income: {
+    income: string;
+  };
+  questionnaire: {
+    questionnaire: string;
+  };
+}
+
 export const initialState = {
   personalInfo: {
     firstName: '',
@@ -97,7 +114,31 @@ interface ApplicationState {
 
   // Add new property
   isEdited: () => boolean;
+
+  // Add error state
+  errors: ApplicationErrors;
+
+  // Add error actions
+  setErrors: (step: keyof ApplicationErrors, errors: ApplicationErrors[typeof step]) => void;
+  clearErrors: () => void;
 }
+
+const initialErrors: ApplicationErrors = {
+  basicInfo: {
+    personalInfo: {},
+    identification: {},
+  },
+  residentialHistory: {
+    residentialHistory: '',
+    landlordInfo: '',
+  },
+  income: {
+    income: '',
+  },
+  questionnaire: {
+    questionnaire: '',
+  },
+};
 
 export const useApplicationStore = create<ApplicationState>((set, get) => ({
   ...initialState,
@@ -163,5 +204,16 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       incomes: state.incomes,
       answers: state.answers
     }) !== JSON.stringify(initialState);
-  }
+  },
+
+  errors: initialErrors,
+
+  setErrors: (step, errors) => set(state => ({
+    errors: {
+      ...state.errors,
+      [step]: errors
+    }
+  })),
+
+  clearErrors: () => set({ errors: initialErrors }),
 }));

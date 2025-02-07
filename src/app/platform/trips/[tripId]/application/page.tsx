@@ -179,31 +179,16 @@ export default function ApplicationPage() {
     setIncomes,
     setAnswers,
     initializeFromApplication,
-    isEdited
+    isEdited,
+    errors,
+    setErrors,
+    clearErrors,
   } = useApplicationStore();
 
   // Initialize store with application data
   useEffect(() => {
     initializeFromApplication(application);
   }, [application, initializeFromApplication]);
-
-  // New: Error state for client-side validation (skeleton)
-  const [errors, setErrors] = useState({
-    basicInfo: {
-      personalInfo: {} as { firstName?: string; lastName?: string },
-      identification: {} as { idType?: string; idNumber?: string },
-    },
-    residentialHistory: {
-      residentialHistory: '',
-      landlordInfo: '',
-    },
-    income: {
-      income: '',
-    },
-    questionnaire: {
-      questionnaire: '',
-    },
-  });
 
   // Carousel state
   const [api, setApi] = useState<CarouselApi>();
@@ -272,49 +257,36 @@ export default function ApplicationPage() {
     }
   };
 
-  // Replace the validation functions with the imported ones
+  // Update validateStep function
   const validateStep = (step: number) => {
     switch (step) {
       case 0: {
-        console.log('personalInfo', personalInfo);
         const personalInfoError = validatePersonalInfo(personalInfo);
         const identificationError = validateIdentification(ids);
-        setErrors(prev => ({
-          ...prev,
-          basicInfo: {
-            personalInfo: personalInfoError,
-            identification: identificationError,
-          },
-        }));
+        setErrors('basicInfo', {
+          personalInfo: personalInfoError,
+          identification: identificationError,
+        });
         return Object.keys(personalInfoError).length === 0 &&
                Object.keys(identificationError).length === 0;
       }
       case 1: {
         const residentialHistoryError = validateResidentialHistory(residentialHistory);
         const landlordInfoError = residentialHistory.housingStatus === 'rent' ? validateLandlordInfo(landlordInfo) : '';
-        setErrors(prev => ({
-          ...prev,
-          residentialHistory: {
-            residentialHistory: residentialHistoryError,
-            landlordInfo: landlordInfoError
-          },
-        }));
+        setErrors('residentialHistory', {
+          residentialHistory: residentialHistoryError,
+          landlordInfo: landlordInfoError
+        });
         return !residentialHistoryError && (!landlordInfoError || residentialHistory.housingStatus !== 'rent');
       }
       case 2: {
         const incomeError = validateIncome(incomes);
-        setErrors(prev => ({
-          ...prev,
-          income: { income: incomeError },
-        }));
+        setErrors('income', { income: incomeError });
         return !incomeError;
       }
       case 3: {
         const questionnaireError = validateQuestionnaire(answers);
-        setErrors(prev => ({
-          ...prev,
-          questionnaire: { questionnaire: questionnaireError },
-        }));
+        setErrors('questionnaire', { questionnaire: questionnaireError });
         return !questionnaireError;
       }
       default:
@@ -369,14 +341,10 @@ export default function ApplicationPage() {
                   <h2 className={ApplicationItemHeaderStyles}>
                     Basic Information
                   </h2>
-                  <PersonalInfo
-                    error={errors.basicInfo.personalInfo}
-                  />
+                  <PersonalInfo />
                   <div className="mt-8">
                     <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
-                    <Identification
-                      error={errors.basicInfo.identification}
-                    />
+                    <Identification />
                   </div>
                 </div>
               </CarouselItem>

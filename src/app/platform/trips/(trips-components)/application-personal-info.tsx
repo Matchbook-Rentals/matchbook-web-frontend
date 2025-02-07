@@ -4,12 +4,9 @@ import { Label } from "@/components/ui/label";
 import { ApplicationItemHeaderStyles, ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 
-interface PersonalInfoProps {
-  error?: { firstName?: string; lastName?: string };
-}
-
-export const PersonalInfo: React.FC<PersonalInfoProps> = ({ error }) => {
-  const { personalInfo, setPersonalInfo } = useApplicationStore();
+export const PersonalInfo: React.FC = () => {
+  const { personalInfo, setPersonalInfo, errors } = useApplicationStore();
+  const error = errors.basicInfo.personalInfo;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

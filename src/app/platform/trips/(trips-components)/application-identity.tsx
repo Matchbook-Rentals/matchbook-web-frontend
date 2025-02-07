@@ -55,8 +55,9 @@ const ID_TYPES = [
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC<IdentificationProps> = ({ error }) => {
-  const { ids, setIds, verificationImages, setVerificationImages } = useApplicationStore();
+export const Identification: React.FC = () => {
+  const { ids, setIds, verificationImages, setVerificationImages, errors } = useApplicationStore();
+  const error = errors.basicInfo.identification;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
