@@ -283,9 +283,9 @@ export default function ApplicationPage() {
                (residentialHistory.housingStatus !== 'rent' || Object.keys(landlordInfoErrors).length === 0);
       }
       case 2: {
-        const incomeError = validateIncome(incomes);
-        setErrors('income', { income: incomeError });
-        return !incomeError;
+        const incomeErrors = validateIncome(incomes);
+        setErrors('income', incomeErrors);
+        return Object.keys(incomeErrors).length === 0;
       }
       case 3: {
         const questionnaireError = validateQuestionnaire(answers);

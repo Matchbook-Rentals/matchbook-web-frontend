@@ -62,7 +62,8 @@ interface ApplicationErrors {
     landlordPhoneNumber?: string;
   };
   income: {
-    income: string;
+    source?: string[];
+    monthlyAmount?: string[];
   };
   questionnaire: {
     questionnaire: string;
@@ -153,7 +154,8 @@ const initialErrors: ApplicationErrors = {
     landlordPhoneNumber: '',
   },
   income: {
-    income: '',
+    source: [],
+    monthlyAmount: [],
   },
   questionnaire: {
     questionnaire: '',

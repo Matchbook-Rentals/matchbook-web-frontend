@@ -97,19 +97,38 @@ export const validateLandlordInfo = (landlordInfo: any) => {
 };
 
 export const validateIncome = (incomes: { source: string; monthlyAmount: string }[]) => {
-  let errorMsg = '';
+  const errors: {
+    source?: string[];
+    monthlyAmount?: string[];
+  } = {
+    source: [],
+    monthlyAmount: []
+  };
+
   if (!incomes || incomes.length === 0) {
-    errorMsg += 'At least one income entry is required. ';
-  } else {
-    const inc = incomes[0];
-    if (!inc.source.trim()) {
-      errorMsg += 'Income source is required. ';
-    }
-    if (!inc.monthlyAmount.trim()) {
-      errorMsg += 'Monthly amount is required. ';
-    }
+    errors.source = ['At least one income entry is required'];
+    errors.monthlyAmount = ['At least one income entry is required'];
+    return errors;
   }
-  return errorMsg;
+
+  incomes.forEach((income, index) => {
+    if (!income.source.trim()) {
+      if (!errors.source) errors.source = [];
+      errors.source[index] = 'Income source is required';
+    }
+
+    // Only validate monthly amount if there's a source
+    if (income.source.trim() && !income.monthlyAmount.trim()) {
+      if (!errors.monthlyAmount) errors.monthlyAmount = [];
+      errors.monthlyAmount[index] = 'Monthly amount is required';
+    }
+  });
+
+  // Remove the arrays if there are no errors
+  if (errors.source?.every(err => !err)) delete errors.source;
+  if (errors.monthlyAmount?.every(err => !err)) delete errors.monthlyAmount;
+
+  return errors;
 };
 
 export const validateQuestionnaire = (answers: {

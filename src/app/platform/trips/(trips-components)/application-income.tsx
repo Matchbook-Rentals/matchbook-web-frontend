@@ -1,10 +1,10 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from '@uploadthing/react';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import CurrencyInput from "@/components/ui/currency-input";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
+import { useApplicationStore } from '@/stores/application-store';
 
 interface UploadData {
   name: string;
@@ -49,18 +50,23 @@ interface IncomeItem {
   monthlyAmount: string;
 }
 
-export const Income: React.FC<{
-  incomes: IncomeItem[],
-  setIncomes: React.Dispatch<React.SetStateAction<IncomeItem[]>>,
-  verificationImages: VerificationImage[],
-  setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>
-}> = ({ incomes, setIncomes, verificationImages, setVerificationImages }) => {
+export const Income: React.FC = () => {
+  const {
+    incomes,
+    setIncomes,
+    verificationImages,
+    setVerificationImages,
+    errors
+  } = useApplicationStore();
+
+  const error = errors.income;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
-  const handleInputChange = (index: number, field: keyof IncomeItem, value: string) => {
+  const handleInputChange = (index: number, field: 'source' | 'monthlyAmount', value: string) => {
     const updatedIncomes = incomes.map((item, i) => {
       if (i === index) {
-        return { ...item, [field]: value };
+        const finalValue = field === 'monthlyAmount' && value === '$' ? '' : value;
+        return { ...item, [field]: finalValue };
       }
       return item;
     });
@@ -78,32 +84,60 @@ export const Income: React.FC<{
 
   const addIncome = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newIncome: IncomeItem = { source: '', monthlyAmount: '' };
-    setIncomes([...incomes, newIncome]);
+    setIncomes([...incomes, { source: '', monthlyAmount: '' }]);
   };
+
+  const handleDelete = (index: number) => {
+    if (incomes.length > 1) {
+      setIncomes(incomes.filter((_, i) => i !== index));
+    }
+  };
+
+  const incomeImages = verificationImages.filter(img => img.category === 'Income');
 
   return (
     <div>
       {incomes.map((item, index) => (
-        <div key={index} className="mb-4 p-4 border rounded">
+        <div key={index} className="mb-4 p-4 border rounded relative">
+          {index > 0 && (
+            <button
+              onClick={() => handleDelete(index)}
+              className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+              type="button"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className={ApplicationItemLabelStyles} htmlFor={`incomeSource-${index}`}>Income Source {index + 1}</Label>
+              <Label className={ApplicationItemLabelStyles} htmlFor={`incomeSource-${index}`}>
+                Income Source {index + 1}
+              </Label>
               <Input
                 id={`incomeSource-${index}`}
                 value={item.source}
                 onChange={(e) => handleInputChange(index, 'source', e.target.value)}
+                className={error?.source?.[index] ? "border-red-500" : ""}
               />
+              {error?.source?.[index] && (
+                <p className="mt-1 text-red-500 text-sm">{error.source[index]}</p>
+              )}
             </div>
-            <div className="space-y-2">
-              <Label className={ApplicationItemLabelStyles} htmlFor={`monthlyAmount-${index}`}>Monthly Amount {index + 1}</Label>
+            <div className="space-y-2" onClick={() => console.log(item)}>
+              <Label className={ApplicationItemLabelStyles} htmlFor={`monthlyAmount-${index}`}>
+                Monthly Amount {index + 1}
+              </Label>
               <CurrencyInput
                 id={`monthlyAmount-${index}`}
                 label=""
                 value={item.monthlyAmount}
                 onChange={(value) => handleInputChange(index, 'monthlyAmount', value)}
-                className="w-full"
+                className={`w-full ${error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
+                disabled={!item.source.trim()}
               />
+              {error?.monthlyAmount?.[index] && (
+                <p className="mt-1 text-red-500 text-sm">{error.monthlyAmount[index]}</p>
+              )}
             </div>
           </div>
         </div>
