@@ -4,35 +4,29 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import CurrencyInput from "@/components/ui/currency-input";
 import MonthSelect from "@/components/ui/month-select";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
+import { useApplicationStore } from '@/stores/application-store';
 
-interface ResidentialHistoryProps {
-  residentialHistory: {
-    currentStreet: string;
-    currentApt?: string;
-    currentCity: string;
-    currentState: string;
-    currentZipCode: string;
-    housingStatus: 'rent' | 'own';
-    monthlyPayment: string;
-    durationOfTenancy: string;
-  };
-  setResidentialHistory: React.Dispatch<React.SetStateAction<ResidentialHistoryProps['residentialHistory']>>;
-}
-
-const emptyResidentialHistory: ResidentialHistoryProps['residentialHistory'] = {
+const emptyResidentialHistory = {
   currentStreet: '',
   currentApt: '',
   currentCity: '',
   currentState: '',
   currentZipCode: '',
-  housingStatus: 'rent',
+  housingStatus: 'rent' as const,
   monthlyPayment: '',
   durationOfTenancy: '',
 };
 
-export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ residentialHistory, setResidentialHistory }) => {
+export const ResidentialHistory: React.FC = () => {
+  const {
+    residentialHistory,
+    setResidentialHistory,
+    errors
+  } = useApplicationStore();
+
+  const error = errors.residentialHistory.residentialHistory;
+
   const normalizedResidentialHistory = {
     ...emptyResidentialHistory,
     ...residentialHistory,
@@ -41,33 +35,33 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setResidentialHistory(prevState => ({
-      ...prevState,
+    setResidentialHistory({
+      ...residentialHistory,
       [name]: value
-    }));
+    });
   };
 
   const handleRadioChange = (value: 'rent' | 'own') => {
-    setResidentialHistory(prevState => ({
-      ...prevState,
+    setResidentialHistory({
+      ...residentialHistory,
       housingStatus: value
-    }));
+    });
   };
 
   const handleMonthlyPaymentChange = (value: string) => {
     // Strip out currency formatting (dollar signs, commas, and decimals)
     const strippedValue = value.replace(/[$,]/g, '').split('.')[0];
-    setResidentialHistory(prevState => ({
-      ...prevState,
+    setResidentialHistory({
+      ...residentialHistory,
       monthlyPayment: strippedValue
-    }));
+    });
   };
 
   const handleDurationChange = (value: string) => {
-    setResidentialHistory(prevState => ({
-      ...prevState,
+    setResidentialHistory({
+      ...residentialHistory,
       durationOfTenancy: value
-    }));
+    });
   };
 
   return (
@@ -83,7 +77,9 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             value={residentialHistory.currentStreet}
             onChange={handleInputChange}
             placeholder="Street Address Ex: 123 Main St"
+            className={error ? "border-red-500" : ""}
           />
+          {error && <p className="mt-1 text-red-500 text-sm">{error}</p>}
         </div>
 
         {/* Apt and City */}
@@ -103,6 +99,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             value={residentialHistory.currentCity}
             onChange={handleInputChange}
             placeholder="City"
+            className={error ? "border-red-500" : ""}
           />
         </div>
 
@@ -114,6 +111,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             value={residentialHistory.currentState}
             onChange={handleInputChange}
             placeholder="State"
+            className={error ? "border-red-500" : ""}
           />
         </div>
         <div>
@@ -123,6 +121,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             value={residentialHistory.currentZipCode}
             onChange={handleInputChange}
             placeholder="ZIP Code"
+            className={error ? "border-red-500" : ""}
           />
         </div>
 
@@ -130,7 +129,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
         <div className="space-y-2 space-x-4 py-0 flex flex-col items-end  xl:flex-row">
           <CurrencyInput
             id="monthlyPayment"
-            className="py-2"
+            className={`py-2 ${error ? "border-red-500" : ""}`}
             label="Monthly Payment"
             labelClassName={ApplicationItemLabelStyles + 'text-[#404040]'}
             value={residentialHistory.monthlyPayment}
@@ -141,6 +140,7 @@ export const ResidentialHistory: React.FC<ResidentialHistoryProps> = ({ resident
             <MonthSelect
               value={residentialHistory.durationOfTenancy}
               onChange={handleDurationChange}
+              className={error ? "border-red-500" : ""}
             />
           </div>
         </div>

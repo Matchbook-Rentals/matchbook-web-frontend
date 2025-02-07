@@ -354,10 +354,7 @@ export default function ApplicationPage() {
                   <h2 className={ApplicationItemHeaderStyles}>
                     Residential History
                   </h2>
-                  <ResidentialHistory
-                    residentialHistory={residentialHistory}
-                    setResidentialHistory={setResidentialHistory}
-                  />
+                  <ResidentialHistory />
                   {residentialHistory.housingStatus === 'rent' && (
                     <LandlordInfo
                       landlordInfo={landlordInfo}
