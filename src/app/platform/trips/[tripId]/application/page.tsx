@@ -202,7 +202,7 @@ export default function ApplicationPage() {
   const [errors, setErrors] = useState({
     basicInfo: {
       personalInfo: {} as { firstName?: string; lastName?: string },
-      identification: '',
+      identification: {} as { idType?: string; idNumber?: string },
     },
     residentialHistory: {
       residentialHistory: '',
@@ -282,7 +282,7 @@ export default function ApplicationPage() {
       ...residentialHistory,
       ...answers,
       incomes,
-      identifications: [{ idType: ids.idType, idNumber: ids.idNumber }],
+      identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
       verificationImages,
       ...(residentialHistory.housingStatus === 'rent' ? landlordInfo : {})
     };
@@ -318,19 +318,22 @@ export default function ApplicationPage() {
   };
 
   const validateIdentification = () => {
-    let errorMsg = '';
+    let errorObj: { idType?: string; idNumber?: string } = {};
+
     if (!ids || ids.length === 0) {
-      errorMsg += 'Identification information is required. ';
-    } else {
-      const id = ids[0];
-      if (!id.idType.trim()) {
-        errorMsg += 'Identification type is required. ';
-      }
-      if (!id.idNumber.trim()) {
-        errorMsg += 'Identification number is required. ';
-      }
+      errorObj.idType = 'Identification information is required';
+      return errorObj;
     }
-    return errorMsg;
+
+    const id = ids[0];
+    if (!id.idType.trim()) {
+      errorObj.idType = 'Identification type is required';
+    }
+    if (!id.idNumber.trim()) {
+      errorObj.idNumber = 'Identification number is required';
+    }
+
+    return errorObj;
   };
 
   const validateResidentialHistory = () => {
@@ -409,7 +412,8 @@ export default function ApplicationPage() {
             identification: identificationError,
           },
         }));
-        return !personalInfoError && !identificationError;
+        return Object.keys(personalInfoError).length === 0 &&
+               Object.keys(identificationError).length === 0;
       }
       case 1: {
         const residentialHistoryError = validateResidentialHistory();
@@ -503,6 +507,7 @@ export default function ApplicationPage() {
                       setIds={setIds}
                       verificationImages={verificationImages.filter(img => img.category === 'Identification')}
                       setVerificationImages={setVerificationImages}
+                      error={errors.basicInfo.identification}
                     />
                   </div>
                 </div>

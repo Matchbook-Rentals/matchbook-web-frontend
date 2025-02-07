@@ -46,8 +46,8 @@ interface IdentificationItem {
 }
 
 interface IdentificationProps {
-  ids: IdentificationItem;
-  setIds: React.Dispatch<React.SetStateAction<IdentificationItem>>;
+  ids: IdentificationItem[];
+  setIds: React.Dispatch<React.SetStateAction<IdentificationItem[]>>;
   verificationImages: VerificationImage[];
   setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>;
   error?: { idType?: string; idNumber?: string };
@@ -77,8 +77,11 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
         <div className="space-y-2">
           <Label htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
           <Select
-            value={ids?.idType}
-            onValueChange={(value) => setIds(prev => ({ ...prev, idType: value }))}
+            value={ids[0]?.idType}
+            onValueChange={(value) => setIds(prev => [
+              { ...prev[0], idType: value },
+              ...prev.slice(1)
+            ])}
           >
             <SelectTrigger className={`${error?.idType ? 'border-red-500' : ''}`}>
               <SelectValue placeholder="Select Id type" />
@@ -97,8 +100,11 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
           <Label htmlFor="idNumber" className={ApplicationItemLabelStyles}>Id Number</Label>
           <Input
             id="idNumber"
-            value={ids.idNumber}
-            onChange={(e) => setIds(prev => ({ ...prev, idNumber: e.target.value }))}
+            value={ids[0]?.idNumber}
+            onChange={(e) => setIds(prev => [
+              { ...prev[0], idNumber: e.target.value },
+              ...prev.slice(1)
+            ])}
             className={error?.idNumber ? "border-red-500" : ""}
           />
           {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
