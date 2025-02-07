@@ -375,10 +375,6 @@ export default function ApplicationPage() {
                   <div className="mt-8">
                     <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
                     <Identification
-                      ids={ids}
-                      setIds={setIds}
-                      verificationImages={verificationImages.filter(img => img.category === 'Identification')}
-                      setVerificationImages={setVerificationImages}
                       error={errors.basicInfo.identification}
                     />
                   </div>

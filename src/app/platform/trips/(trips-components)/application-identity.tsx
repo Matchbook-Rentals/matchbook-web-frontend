@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/carousel";
 import { ImageCategory } from '@prisma/client';
 import { ApplicationItemLabelStyles } from '@/constants/styles';
+import { useApplicationStore } from '@/stores/application-store';
 
 interface UploadData {
   name: string;
@@ -46,10 +47,6 @@ interface IdentificationItem {
 }
 
 interface IdentificationProps {
-  ids: IdentificationItem[];
-  setIds: React.Dispatch<React.SetStateAction<IdentificationItem[]>>;
-  verificationImages: VerificationImage[];
-  setVerificationImages: React.Dispatch<React.SetStateAction<VerificationImage[]>>;
   error?: { idType?: string; idNumber?: string };
 }
 
@@ -58,18 +55,20 @@ const ID_TYPES = [
   { value: "passport", label: "Passport" }
 ];
 
-export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, verificationImages, setVerificationImages, error }) => {
+export const Identification: React.FC<IdentificationProps> = ({ error }) => {
+  const { ids, setIds, verificationImages, setVerificationImages } = useApplicationStore();
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleUploadFinish = (res: UploadData[]) => {
-    console.log(res);
     const newImages = res.map((upload) => ({ url: upload.url, category: 'Identification' as ImageCategory }));
-    setVerificationImages(prev => [...prev, ...newImages]);
+    setVerificationImages([...verificationImages, ...newImages]);
   };
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
+
+  const identificationImages = verificationImages.filter(img => img.category === 'Identification');
 
   return (
     <div>
@@ -78,9 +77,9 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
           <Label htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
           <Select
             value={ids[0]?.idType}
-            onValueChange={(value) => setIds(prev => [
-              { ...prev[0], idType: value },
-              ...prev.slice(1)
+            onValueChange={(value) => setIds([
+              { ...ids[0], idType: value },
+              ...ids.slice(1)
             ])}
           >
             <SelectTrigger className={`${error?.idType ? 'border-red-500' : ''}`}>
@@ -101,9 +100,9 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
           <Input
             id="idNumber"
             value={ids[0]?.idNumber}
-            onChange={(e) => setIds(prev => [
-              { ...prev[0], idNumber: e.target.value },
-              ...prev.slice(1)
+            onChange={(e) => setIds([
+              { ...ids[0], idNumber: e.target.value },
+              ...ids.slice(1)
             ])}
             className={error?.idNumber ? "border-red-500" : ""}
           />
@@ -112,19 +111,19 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
       </div>
       <div className="mt-2">
         <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
-        <UploadButton
+        <UploadButton<UploadData>
           endpoint="idUploader"
           onClientUploadComplete={handleUploadFinish}
-          onUploadError={(error) => alert(error.message)}
+          onUploadError={(error: Error) => alert(error.message)}
           className="p-0 mt-5"
           appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
         />
       </div>
-      {verificationImages.length > 0 && (
+      {identificationImages.length > 0 && (
         <>
           <Label className={ApplicationItemLabelStyles}>Id image uploads</Label>
           <div className="grid grid-cols-2 gap-4 mt-2">
-            {verificationImages.map((img, idx) => (
+            {identificationImages.map((img, idx) => (
               <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
                 <DialogTrigger asChild>
                   <img
@@ -141,7 +140,7 @@ export const Identification: React.FC<IdentificationProps> = ({ ids, setIds, ver
                   </DialogHeader>
                   <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
                     <CarouselContent>
-                      {verificationImages.map((image, index) => (
+                      {identificationImages.map((image, index) => (
                         <CarouselItem key={index}>
                           <Card>
                             <CardContent className="flex aspect-square items-center justify-center p-6">
