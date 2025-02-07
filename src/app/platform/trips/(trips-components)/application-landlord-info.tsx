@@ -1,74 +1,67 @@
 import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
+import { useApplicationStore } from '@/stores/application-store';
 
-interface LandlordInfo {
-  landlordFirstName: string;
-  landlordLastName: string;
-  landlordEmail: string;
-  landlordPhoneNumber: string;
-}
-
-interface LandlordInfoProps {
-  landlordInfo: LandlordInfo;
-  setLandlordInfo: React.Dispatch<React.SetStateAction<LandlordInfo>>;
-  isRenter?: boolean;
-}
-
-export const LandlordInfo: React.FC<LandlordInfoProps> = ({ landlordInfo, setLandlordInfo, isRenter = true }) => {
-  if (!isRenter) {
-    return null;
-  }
+export const LandlordInfo: React.FC = () => {
+  const { landlordInfo, setLandlordInfo, errors } = useApplicationStore();
+  const error = errors.residentialHistory.landlordInfo;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLandlordInfo(prevState => ({
-      ...prevState,
+    setLandlordInfo({
+      ...landlordInfo,
       [name]: value
-    }));
+    });
   };
 
   return (
-    <div>
-      <h3 className="text-[24px]  mb-2 mt-6">Property Manager Information</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label className="font-normal text-[20px]" htmlFor="landlordFirstName">First Name</Label>
+    <div className="mt-8">
+      <h3 className={ApplicationItemSubHeaderStyles}>Current Landlord Information</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div>
+          <Label className={ApplicationItemLabelStyles}>First Name</Label>
           <Input
-            id="landlordFirstName"
             name="landlordFirstName"
             value={landlordInfo.landlordFirstName}
             onChange={handleInputChange}
+            placeholder="Landlord's First Name"
+            className={error ? "border-red-500" : ""}
           />
         </div>
-        <div className="space-y-2">
-          <Label className="font-normal text-[20px]" htmlFor="landlordLastName">Last Name</Label>
+        <div>
+          <Label className={ApplicationItemLabelStyles}>Last Name</Label>
           <Input
-            id="landlordLastName"
             name="landlordLastName"
             value={landlordInfo.landlordLastName}
             onChange={handleInputChange}
+            placeholder="Landlord's Last Name"
+            className={error ? "border-red-500" : ""}
           />
         </div>
-        <div className="space-y-2">
-          <Label className="font-normal text-[20px]" htmlFor="landlordEmail">Email Address</Label>
+        <div>
+          <Label className={ApplicationItemLabelStyles}>Email</Label>
           <Input
-            id="landlordEmail"
             name="landlordEmail"
             value={landlordInfo.landlordEmail}
             onChange={handleInputChange}
+            placeholder="Landlord's Email"
+            className={error ? "border-red-500" : ""}
           />
         </div>
-        <div className="space-y-2">
-          <Label className="font-normal text-[20px]" htmlFor="landlordPhoneNumber">Phone Number</Label>
+        <div>
+          <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
           <Input
-            id="landlordPhoneNumber"
             name="landlordPhoneNumber"
             value={landlordInfo.landlordPhoneNumber}
             onChange={handleInputChange}
+            placeholder="Landlord's Phone Number"
+            className={error ? "border-red-500" : ""}
           />
         </div>
       </div>
+      {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
     </div>
   );
-}
+};

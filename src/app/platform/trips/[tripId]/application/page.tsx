@@ -356,11 +356,7 @@ export default function ApplicationPage() {
                   </h2>
                   <ResidentialHistory />
                   {residentialHistory.housingStatus === 'rent' && (
-                    <LandlordInfo
-                      landlordInfo={landlordInfo}
-                      setLandlordInfo={setLandlordInfo}
-                      isRenter={true}
-                    />
+                    <LandlordInfo />
                   )}
                 </div>
               </CarouselItem>
