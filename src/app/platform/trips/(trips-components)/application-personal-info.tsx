@@ -2,26 +2,21 @@ import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApplicationItemHeaderStyles, ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
+import { useApplicationStore } from '@/stores/application-store';
 
 interface PersonalInfoProps {
-  personalInfo: {
-    firstName: string;
-    lastName: string;
-  };
-  setPersonalInfo: React.Dispatch<React.SetStateAction<{
-    firstName: string;
-    lastName: string;
-  }>>;
   error?: { firstName?: string; lastName?: string };
 }
 
-export const PersonalInfo: React.FC<PersonalInfoProps> = ({ personalInfo, setPersonalInfo, error }) => {
+export const PersonalInfo: React.FC<PersonalInfoProps> = ({ error }) => {
+  const { personalInfo, setPersonalInfo } = useApplicationStore();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setPersonalInfo(prevState => ({
-      ...prevState,
+    setPersonalInfo({
+      ...personalInfo,
       [name]: value
-    }));
+    });
   };
 
   return (

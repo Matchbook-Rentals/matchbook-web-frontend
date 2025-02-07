@@ -23,6 +23,15 @@ import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import { createApplication } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
+import {
+  validatePersonalInfo,
+  validateIdentification,
+  validateResidentialHistory,
+  validateLandlordInfo,
+  validateIncome,
+  validateQuestionnaire
+} from '@/utils/application-validation';
+import { useApplicationStore } from '@/stores/application-store';
 
 const navigationItems = [
   { id: 'basic', label: 'Basic Information' },
@@ -128,7 +137,7 @@ const getChangedFields = (current: any, initial: any) => {
   }
 
   // Check questionnaire answers
-  const questionnaireFields = ['evicted', 'brokenLease', 'landlordDispute', 'explanation'];
+  const questionnaireFields = ['evicted', 'felony', 'felonyExplanation', 'evictedExplanation'];
   const changedQuestionnaireFields = questionnaireFields.filter(field =>
     normalizeObject(current.answers)[field] !== normalizeObject(initial.answers)[field]
   );
@@ -136,9 +145,9 @@ const getChangedFields = (current: any, initial: any) => {
     changes.push(`Questionnaire (${changedQuestionnaireFields.map(field => {
       const fieldMap: { [key: string]: string } = {
         evicted: 'Eviction History',
-        brokenLease: 'Lease Break History',
-        landlordDispute: 'Landlord Disputes',
-        explanation: 'Explanation'
+        felony: 'Lease Break History',
+        felonyExplanation: 'Felony Explanation',
+        evictedExplanation: 'Evicted Explanation'
       };
       return fieldMap[field] || field;
     }).join(', ')})`);
@@ -153,50 +162,30 @@ export default function ApplicationPage() {
   const { state: { trip, application, hasApplication }, actions: { setHasApplication } } = useTripContext();
   const { toast } = useToast();
 
-  // Store initial application state
-  const [initialState] = useState({
-    personalInfo: {
-      firstName: application?.firstName || '',
-      lastName: application?.lastName || ''
-    },
-    ids: application?.identifications || [{ idType: '', idNumber: '' }],
-    verificationImages: application?.verificationImages || [],
-    residentialHistory: {
-      currentStreet: application?.currentStreet || '',
-      currentApt: application?.currentApt || '',
-      currentCity: application?.currentCity || '',
-      currentState: application?.currentState || '',
-      currentZipCode: application?.currentZipCode || '',
-      housingStatus: application?.housingStatus || 'rent',
-      monthlyPayment: application?.monthlyPayment || '',
-      durationOfTenancy: application?.durationOfTenancy || '',
-    },
-    landlordInfo: {
-      landlordFirstName: application?.landlordFirstName || '',
-      landlordLastName: application?.landlordLastName || '',
-      landlordEmail: application?.landlordEmail || '',
-      landlordPhoneNumber: application?.landlordPhoneNumber || '',
-    },
-    incomes: application?.incomes?.map(income => ({
-      source: income.source || '',
-      monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0]
-    })) || [{ source: '', monthlyAmount: '' }],
-    answers: {
-      evicted: application?.evicted || false,
-      brokenLease: application?.brokenLease || false,
-      landlordDispute: application?.landlordDispute || false,
-      explanation: application?.explanation || ''
-    }
-  });
+  // Replace all individual state with store
+  const {
+    personalInfo,
+    ids,
+    verificationImages,
+    residentialHistory,
+    landlordInfo,
+    incomes,
+    answers,
+    setPersonalInfo,
+    setIds,
+    setVerificationImages,
+    setResidentialHistory,
+    setLandlordInfo,
+    setIncomes,
+    setAnswers,
+    initializeFromApplication,
+    isEdited
+  } = useApplicationStore();
 
-  // Form state
-  const [personalInfo, setPersonalInfo] = useState(initialState.personalInfo);
-  const [ids, setIds] = useState(initialState.ids);
-  const [verificationImages, setVerificationImages] = useState(initialState.verificationImages);
-  const [residentialHistory, setResidentialHistory] = useState(initialState.residentialHistory);
-  const [landlordInfo, setLandlordInfo] = useState(initialState.landlordInfo);
-  const [incomes, setIncomes] = useState(initialState.incomes);
-  const [answers, setAnswers] = useState(initialState.answers);
+  // Initialize store with application data
+  useEffect(() => {
+    initializeFromApplication(application);
+  }, [application, initializeFromApplication]);
 
   // New: Error state for client-side validation (skeleton)
   const [errors, setErrors] = useState({
@@ -215,28 +204,6 @@ export default function ApplicationPage() {
       questionnaire: '',
     },
   });
-
-  // Add isEditing computation
-  const isEditing = useCallback(() => {
-    return JSON.stringify({
-      personalInfo,
-      ids,
-      verificationImages,
-      residentialHistory,
-      landlordInfo,
-      incomes,
-      answers
-    }) !== JSON.stringify(initialState);
-  }, [
-    personalInfo,
-    ids,
-    verificationImages,
-    residentialHistory,
-    landlordInfo,
-    incomes,
-    answers,
-    initialState
-  ]);
 
   // Carousel state
   const [api, setApi] = useState<CarouselApi>();
@@ -305,106 +272,13 @@ export default function ApplicationPage() {
     }
   };
 
-  // New validation functions for full form
-  const validatePersonalInfo = () => {
-    let errorObj: { firstName?: string; lastName?: string } = {};
-    if (!personalInfo.firstName.trim()) {
-      errorObj.firstName = 'First name is required.';
-    }
-    if (!personalInfo.lastName.trim()) {
-      errorObj.lastName = 'Last name is required.';
-    }
-    return errorObj;
-  };
-
-  const validateIdentification = () => {
-    let errorObj: { idType?: string; idNumber?: string } = {};
-
-    if (!ids || ids.length === 0) {
-      errorObj.idType = 'Identification information is required';
-      return errorObj;
-    }
-
-    const id = ids[0];
-    if (!id.idType.trim()) {
-      errorObj.idType = 'Identification type is required';
-    }
-    if (!id.idNumber.trim()) {
-      errorObj.idNumber = 'Identification number is required';
-    }
-
-    return errorObj;
-  };
-
-  const validateResidentialHistory = () => {
-    let errorMsg = '';
-    if (!residentialHistory.currentStreet.trim()) {
-      errorMsg += 'Street address is required. ';
-    }
-    if (!residentialHistory.currentCity.trim()) {
-      errorMsg += 'City is required. ';
-    }
-    if (!residentialHistory.currentState.trim()) {
-      errorMsg += 'State is required. ';
-    }
-    if (!residentialHistory.currentZipCode.trim()) {
-      errorMsg += 'ZIP Code is required. ';
-    }
-    if (!residentialHistory.monthlyPayment.trim()) {
-      errorMsg += 'Monthly payment is required. ';
-    }
-    if (!residentialHistory.durationOfTenancy.trim()) {
-      errorMsg += 'Duration of tenancy is required. ';
-    }
-    return errorMsg;
-  };
-
-  const validateLandlordInfo = () => {
-    let errorMsg = '';
-    if (!landlordInfo.landlordFirstName.trim()) {
-      errorMsg += 'Landlord first name is required. ';
-    }
-    if (!landlordInfo.landlordLastName.trim()) {
-      errorMsg += 'Landlord last name is required. ';
-    }
-    if (!landlordInfo.landlordEmail.trim()) {
-      errorMsg += 'Landlord email is required. ';
-    }
-    if (!landlordInfo.landlordPhoneNumber.trim()) {
-      errorMsg += 'Landlord phone number is required. ';
-    }
-    return errorMsg;
-  };
-
-  const validateIncome = () => {
-    let errorMsg = '';
-    if (!incomes || incomes.length === 0) {
-      errorMsg += 'At least one income entry is required. ';
-    } else {
-      const inc = incomes[0];
-      if (!inc.source.trim()) {
-        errorMsg += 'Income source is required. ';
-      }
-      if (!inc.monthlyAmount.trim()) {
-        errorMsg += 'Monthly amount is required. ';
-      }
-    }
-    return errorMsg;
-  };
-
-  const validateQuestionnaire = () => {
-    let errorMsg = '';
-    if ((answers.evicted || answers.brokenLease || answers.landlordDispute) && !answers.explanation.trim()) {
-      errorMsg += 'Explanation is required for questionnaire responses. ';
-    }
-    return errorMsg;
-  };
-
+  // Replace the validation functions with the imported ones
   const validateStep = (step: number) => {
     switch (step) {
       case 0: {
-        const personalInfoError = validatePersonalInfo();
-        const identificationError = validateIdentification();
+        console.log('personalInfo', personalInfo);
+        const personalInfoError = validatePersonalInfo(personalInfo);
+        const identificationError = validateIdentification(ids);
         setErrors(prev => ({
           ...prev,
           basicInfo: {
@@ -416,8 +290,8 @@ export default function ApplicationPage() {
                Object.keys(identificationError).length === 0;
       }
       case 1: {
-        const residentialHistoryError = validateResidentialHistory();
-        const landlordInfoError = residentialHistory.housingStatus === 'rent' ? validateLandlordInfo() : '';
+        const residentialHistoryError = validateResidentialHistory(residentialHistory);
+        const landlordInfoError = residentialHistory.housingStatus === 'rent' ? validateLandlordInfo(landlordInfo) : '';
         setErrors(prev => ({
           ...prev,
           residentialHistory: {
@@ -428,7 +302,7 @@ export default function ApplicationPage() {
         return !residentialHistoryError && (!landlordInfoError || residentialHistory.housingStatus !== 'rent');
       }
       case 2: {
-        const incomeError = validateIncome();
+        const incomeError = validateIncome(incomes);
         setErrors(prev => ({
           ...prev,
           income: { income: incomeError },
@@ -436,7 +310,7 @@ export default function ApplicationPage() {
         return !incomeError;
       }
       case 3: {
-        const questionnaireError = validateQuestionnaire();
+        const questionnaireError = validateQuestionnaire(answers);
         setErrors(prev => ({
           ...prev,
           questionnaire: { questionnaire: questionnaireError },
@@ -496,8 +370,6 @@ export default function ApplicationPage() {
                     Basic Information
                   </h2>
                   <PersonalInfo
-                    personalInfo={personalInfo}
-                    setPersonalInfo={setPersonalInfo}
                     error={errors.basicInfo.personalInfo}
                   />
                   <div className="mt-8">
@@ -558,9 +430,9 @@ export default function ApplicationPage() {
                   <Button
                     onClick={handleSubmit}
                     className="w-full mt-4"
-                    disabled={!isEditing()}
+                    disabled={!isEdited()}
                   >
-                    {isEditing() ? 'Save Changes' : 'No Changes'}
+                    {isEdited() ? 'Save Changes' : 'No Changes'}
                   </Button>
                 </div>
               </CarouselItem>
