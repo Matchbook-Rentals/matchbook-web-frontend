@@ -132,14 +132,31 @@ export const validateIncome = (incomes: { source: string; monthlyAmount: string 
 };
 
 export const validateQuestionnaire = (answers: {
-  evicted: boolean;
-  brokenLease: boolean;
-  landlordDispute: boolean;
-  explanation: string;
+  felony: boolean | null;
+  felonyExplanation: string;
+  evicted: boolean | null;
+  evictedExplanation: string;
 }) => {
-  let errorMsg = '';
-  if ((answers.evicted || answers.brokenLease || answers.landlordDispute) && !answers.explanation.trim()) {
-    errorMsg += 'Explanation is required for questionnaire responses. ';
+  const errors: {
+    felonyExplanation?: string;
+    evictedExplanation?: string;
+    felony?: string;
+    evicted?: string;
+  } = {};
+
+  // Validate felony question
+  if (answers.felony === null || answers.felony === undefined) {
+    errors.felony = 'Please select either Yes or No';
+  } else if (answers.felony && !answers.felonyExplanation?.trim()) {
+    errors.felonyExplanation = 'Explanation is required when answering Yes';
   }
-  return errorMsg;
+
+  // Validate eviction question
+  if (answers.evicted === null || answers.evicted === undefined) {
+    errors.evicted = 'Please select either Yes or No';
+  } else if (answers.evicted && !answers.evictedExplanation?.trim()) {
+    errors.evictedExplanation = 'Explanation is required when answering Yes';
+  }
+
+  return errors;
 };

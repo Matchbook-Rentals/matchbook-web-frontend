@@ -288,9 +288,9 @@ export default function ApplicationPage() {
         return Object.keys(incomeErrors).length === 0;
       }
       case 3: {
-        const questionnaireError = validateQuestionnaire(answers);
-        setErrors('questionnaire', { questionnaire: questionnaireError });
-        return !questionnaireError;
+        const questionnaireErrors = validateQuestionnaire(answers);
+        setErrors('questionnaire', questionnaireErrors);
+        return Object.keys(questionnaireErrors).length === 0;
       }
       default:
         return true;

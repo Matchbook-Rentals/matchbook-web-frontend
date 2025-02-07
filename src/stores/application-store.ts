@@ -66,7 +66,10 @@ interface ApplicationErrors {
     monthlyAmount?: string[];
   };
   questionnaire: {
-    questionnaire: string;
+    felony?: string;
+    felonyExplanation?: string;
+    evicted?: string;
+    evictedExplanation?: string;
   };
 }
 
@@ -158,7 +161,10 @@ const initialErrors: ApplicationErrors = {
     monthlyAmount: [],
   },
   questionnaire: {
-    questionnaire: '',
+    felony: '',
+    felonyExplanation: '',
+    evicted: '',
+    evictedExplanation: '',
   },
 };
 
