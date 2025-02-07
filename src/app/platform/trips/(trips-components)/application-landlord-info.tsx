@@ -6,7 +6,7 @@ import { useApplicationStore } from '@/stores/application-store';
 
 export const LandlordInfo: React.FC = () => {
   const { landlordInfo, setLandlordInfo, errors } = useApplicationStore();
-  const error = errors.residentialHistory.landlordInfo;
+  const error = errors.landlordInfo;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,8 +27,9 @@ export const LandlordInfo: React.FC = () => {
             value={landlordInfo.landlordFirstName}
             onChange={handleInputChange}
             placeholder="Landlord's First Name"
-            className={error ? "border-red-500" : ""}
+            className={error?.landlordFirstName ? "border-red-500" : ""}
           />
+          {error?.landlordFirstName && <p className="mt-1 text-red-500 text-sm">{error.landlordFirstName}</p>}
         </div>
         <div>
           <Label className={ApplicationItemLabelStyles}>Last Name</Label>
@@ -37,8 +38,9 @@ export const LandlordInfo: React.FC = () => {
             value={landlordInfo.landlordLastName}
             onChange={handleInputChange}
             placeholder="Landlord's Last Name"
-            className={error ? "border-red-500" : ""}
+            className={error?.landlordLastName ? "border-red-500" : ""}
           />
+          {error?.landlordLastName && <p className="mt-1 text-red-500 text-sm">{error.landlordLastName}</p>}
         </div>
         <div>
           <Label className={ApplicationItemLabelStyles}>Email</Label>
@@ -47,8 +49,9 @@ export const LandlordInfo: React.FC = () => {
             value={landlordInfo.landlordEmail}
             onChange={handleInputChange}
             placeholder="Landlord's Email"
-            className={error ? "border-red-500" : ""}
+            className={error?.landlordEmail ? "border-red-500" : ""}
           />
+          {error?.landlordEmail && <p className="mt-1 text-red-500 text-sm">{error.landlordEmail}</p>}
         </div>
         <div>
           <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
@@ -57,11 +60,11 @@ export const LandlordInfo: React.FC = () => {
             value={landlordInfo.landlordPhoneNumber}
             onChange={handleInputChange}
             placeholder="Landlord's Phone Number"
-            className={error ? "border-red-500" : ""}
+            className={error?.landlordPhoneNumber ? "border-red-500" : ""}
           />
+          {error?.landlordPhoneNumber && <p className="mt-1 text-red-500 text-sm">{error.landlordPhoneNumber}</p>}
         </div>
       </div>
-      {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
     </div>
   );
 };

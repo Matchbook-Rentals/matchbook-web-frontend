@@ -271,13 +271,16 @@ export default function ApplicationPage() {
                Object.keys(identificationError).length === 0;
       }
       case 1: {
-        const residentialHistoryError = validateResidentialHistory(residentialHistory);
-        const landlordInfoError = residentialHistory.housingStatus === 'rent' ? validateLandlordInfo(landlordInfo) : '';
-        setErrors('residentialHistory', {
-          residentialHistory: residentialHistoryError,
-          landlordInfo: landlordInfoError
-        });
-        return !residentialHistoryError && (!landlordInfoError || residentialHistory.housingStatus !== 'rent');
+        const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
+        const landlordInfoErrors = residentialHistory.housingStatus === 'rent'
+          ? validateLandlordInfo(landlordInfo)
+          : {};
+
+        setErrors('residentialHistory', residentialHistoryErrors);
+        setErrors('landlordInfo', landlordInfoErrors);
+
+        return Object.keys(residentialHistoryErrors).length === 0 &&
+               (residentialHistory.housingStatus !== 'rent' || Object.keys(landlordInfoErrors).length === 0);
       }
       case 2: {
         const incomeError = validateIncome(incomes);

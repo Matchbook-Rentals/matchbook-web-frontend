@@ -25,7 +25,7 @@ export const ResidentialHistory: React.FC = () => {
     errors
   } = useApplicationStore();
 
-  const error = errors.residentialHistory.residentialHistory;
+  const error = errors.residentialHistory;
 
   const normalizedResidentialHistory = {
     ...emptyResidentialHistory,
@@ -77,9 +77,9 @@ export const ResidentialHistory: React.FC = () => {
             value={residentialHistory.currentStreet}
             onChange={handleInputChange}
             placeholder="Street Address Ex: 123 Main St"
-            className={error ? "border-red-500" : ""}
+            className={error?.currentStreet ? "border-red-500" : ""}
           />
-          {error && <p className="mt-1 text-red-500 text-sm">{error}</p>}
+          {error?.currentStreet && <p className="mt-1 text-red-500 text-sm">{error.currentStreet}</p>}
         </div>
 
         {/* Apt and City */}
@@ -99,8 +99,9 @@ export const ResidentialHistory: React.FC = () => {
             value={residentialHistory.currentCity}
             onChange={handleInputChange}
             placeholder="City"
-            className={error ? "border-red-500" : ""}
+            className={error?.currentCity ? "border-red-500" : ""}
           />
+          {error?.currentCity && <p className="mt-1 text-red-500 text-sm">{error.currentCity}</p>}
         </div>
 
         {/* State and ZIP */}
@@ -111,8 +112,9 @@ export const ResidentialHistory: React.FC = () => {
             value={residentialHistory.currentState}
             onChange={handleInputChange}
             placeholder="State"
-            className={error ? "border-red-500" : ""}
+            className={error?.currentState ? "border-red-500" : ""}
           />
+          {error?.currentState && <p className="mt-1 text-red-500 text-sm">{error.currentState}</p>}
         </div>
         <div>
           <Label className={ApplicationItemLabelStyles}>ZIP Code</Label>
@@ -121,27 +123,30 @@ export const ResidentialHistory: React.FC = () => {
             value={residentialHistory.currentZipCode}
             onChange={handleInputChange}
             placeholder="ZIP Code"
-            className={error ? "border-red-500" : ""}
+            className={error?.currentZipCode ? "border-red-500" : ""}
           />
+          {error?.currentZipCode && <p className="mt-1 text-red-500 text-sm">{error.currentZipCode}</p>}
         </div>
 
         {/* Payment and Duration */}
         <div className="space-y-2 space-x-4 py-0 flex flex-col items-end  xl:flex-row">
           <CurrencyInput
             id="monthlyPayment"
-            className={`py-2 ${error ? "border-red-500" : ""}`}
+            className={`py-2 ${error?.monthlyPayment ? "border-red-500" : ""}`}
             label="Monthly Payment"
             labelClassName={ApplicationItemLabelStyles + 'text-[#404040]'}
             value={residentialHistory.monthlyPayment}
             onChange={handleMonthlyPaymentChange}
           />
-          <div className="flex flex-col ">
+          {error?.monthlyPayment && <p className="mt-1 text-red-500 text-sm">{error.monthlyPayment}</p>}
+          <div className="flex flex-col">
             <Label className={ApplicationItemLabelStyles}>Length of Stay</Label>
             <MonthSelect
               value={residentialHistory.durationOfTenancy}
               onChange={handleDurationChange}
-              className={error ? "border-red-500" : ""}
+              className={error?.durationOfTenancy ? "border-red-500" : ""}
             />
+            {error?.durationOfTenancy && <p className="mt-1 text-red-500 text-sm">{error.durationOfTenancy}</p>}
           </div>
         </div>
 

@@ -48,8 +48,18 @@ interface ApplicationErrors {
     identification: { idType?: string; idNumber?: string };
   };
   residentialHistory: {
-    residentialHistory: string;
-    landlordInfo: string;
+    currentStreet?: string;
+    currentCity?: string;
+    currentState?: string;
+    currentZipCode?: string;
+    monthlyPayment?: string;
+    durationOfTenancy?: string;
+  };
+  landlordInfo: {
+    landlordFirstName?: string;
+    landlordLastName?: string;
+    landlordEmail?: string;
+    landlordPhoneNumber?: string;
   };
   income: {
     income: string;
@@ -129,8 +139,18 @@ const initialErrors: ApplicationErrors = {
     identification: {},
   },
   residentialHistory: {
-    residentialHistory: '',
-    landlordInfo: '',
+    currentStreet: '',
+    currentCity: '',
+    currentState: '',
+    currentZipCode: '',
+    monthlyPayment: '',
+    durationOfTenancy: '',
+  },
+  landlordInfo: {
+    landlordFirstName: '',
+    landlordLastName: '',
+    landlordEmail: '',
+    landlordPhoneNumber: '',
   },
   income: {
     income: '',

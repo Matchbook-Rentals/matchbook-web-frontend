@@ -38,56 +38,62 @@ export const validateIdentification = (ids: { idType: string; idNumber: string }
   return errorObj;
 };
 
-export const validateResidentialHistory = (residentialHistory: {
-  currentStreet: string;
-  currentCity: string;
-  currentState: string;
-  currentZipCode: string;
-  monthlyPayment: string;
-  durationOfTenancy: string;
-}) => {
-  let errorMsg = '';
-  if (!residentialHistory.currentStreet.trim()) {
-    errorMsg += 'Street address is required. ';
+export const validateResidentialHistory = (residentialHistory: any) => {
+  const errors: { [key: string]: string } = {};
+
+  if (!residentialHistory.currentStreet) {
+    errors.currentStreet = 'Street address is required';
   }
-  if (!residentialHistory.currentCity.trim()) {
-    errorMsg += 'City is required. ';
+
+  if (!residentialHistory.currentCity) {
+    errors.currentCity = 'City is required';
   }
-  if (!residentialHistory.currentState.trim()) {
-    errorMsg += 'State is required. ';
+
+  if (!residentialHistory.currentState) {
+    errors.currentState = 'State is required';
   }
-  if (!residentialHistory.currentZipCode.trim()) {
-    errorMsg += 'ZIP Code is required. ';
+
+  if (!residentialHistory.currentZipCode) {
+    errors.currentZipCode = 'ZIP code is required';
+  } else if (!/^\d{5}(-\d{4})?$/.test(residentialHistory.currentZipCode)) {
+    errors.currentZipCode = 'Invalid ZIP code format';
   }
-  if (!residentialHistory.monthlyPayment.trim()) {
-    errorMsg += 'Monthly payment is required. ';
+
+  if (!residentialHistory.monthlyPayment) {
+    errors.monthlyPayment = 'Monthly payment is required';
   }
-  if (!residentialHistory.durationOfTenancy.trim()) {
-    errorMsg += 'Duration of tenancy is required. ';
+
+  if (!residentialHistory.durationOfTenancy) {
+    errors.durationOfTenancy = 'Length of stay is required';
   }
-  return errorMsg;
+
+  return errors;
 };
 
-export const validateLandlordInfo = (landlordInfo: {
-  landlordFirstName: string;
-  landlordLastName: string;
-  landlordEmail: string;
-  landlordPhoneNumber: string;
-}) => {
-  let errorMsg = '';
-  if (!landlordInfo.landlordFirstName.trim()) {
-    errorMsg += 'Landlord first name is required. ';
+export const validateLandlordInfo = (landlordInfo: any) => {
+  const errors: { [key: string]: string } = {};
+
+  if (!landlordInfo.landlordFirstName) {
+    errors.landlordFirstName = 'First name is required';
   }
-  if (!landlordInfo.landlordLastName.trim()) {
-    errorMsg += 'Landlord last name is required. ';
+
+  if (!landlordInfo.landlordLastName) {
+    errors.landlordLastName = 'Last name is required';
   }
-  if (!landlordInfo.landlordEmail.trim()) {
-    errorMsg += 'Landlord email is required. ';
+
+  if (!landlordInfo.landlordEmail) {
+    errors.landlordEmail = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(landlordInfo.landlordEmail)) {
+    errors.landlordEmail = 'Invalid email format';
   }
-  if (!landlordInfo.landlordPhoneNumber.trim()) {
-    errorMsg += 'Landlord phone number is required. ';
+
+  if (!landlordInfo.landlordPhoneNumber) {
+    errors.landlordPhoneNumber = 'Phone number is required';
+  } else if (!/^\d{10}$/.test(landlordInfo.landlordPhoneNumber.replace(/\D/g, ''))) {
+    errors.landlordPhoneNumber = 'Invalid phone number format';
   }
-  return errorMsg;
+
+  return errors;
 };
 
 export const validateIncome = (incomes: { source: string; monthlyAmount: string }[]) => {
