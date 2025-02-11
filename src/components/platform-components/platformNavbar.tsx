@@ -14,7 +14,7 @@ export default function PlatformNavbar() {
   let marginClass;
 
   const pathSegments = pathName.split('/');
-  const isNarrowPath = pathSegments.includes('trips') || pathSegments.includes('searches');
+  const isNarrowPath = pathSegments.includes('trips') || pathSegments.includes('searches') || pathSegments.includes('listing');
 
   isNarrowPath ? marginClass = PAGE_MARGIN : marginClass = APP_PAGE_MARGIN;
 

@@ -14,7 +14,6 @@ interface ListingPageProps {
 }
 
 export default async function ListingPage({ params }: ListingPageProps) {
-  const { userId } = auth()
 
   const listing = await prisma.listing.findUnique({
     where: { id: params.listingId },
@@ -26,9 +25,11 @@ export default async function ListingPage({ params }: ListingPageProps) {
   }
 
   return (
-    <div className={`${PAGE_MARGIN} font-montserrat max-w-[1440px] mx-auto px-4 md:px-6`}>
-      <MatchbookHeader customMargin={false} />
-      <ListingDetailsView listing={listing} />
-    </div>
+    <>
+      <PlatformNavbar />
+      <div className={`${PAGE_MARGIN} font-montserrat `}>
+       <ListingDetailsView listing={listing} />
+      </div>
+    </>
   )
 }

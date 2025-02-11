@@ -3,7 +3,7 @@
 ##10FEB24
 - [ ] finish application sent to DB
 - [ ] finish application mobile view
-- [ ] listing view outside of trips
+- [x] listing view outside of trips
 - [ ] sign up sign in pages
 
 Credit Card APIS for paywall

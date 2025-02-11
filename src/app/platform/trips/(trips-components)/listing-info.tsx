@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
-import { ShareIcon, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
+import ShareButton from '@/components/ui/share-button';
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
@@ -25,7 +26,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const calculateDisplayAmenities = () => {
     const displayAmenities = [];
     for (let amenity of iconAmenities) {
-      if (listing[amenity.code]) {
+      if ((listing as any)[amenity.code]) {
         displayAmenities.push(amenity);
       }
     }
@@ -34,16 +35,14 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
 
   const displayAmenities = calculateDisplayAmenities();
   const initialDisplayCount = 6;
+
   return (
     <div className='w-full  '>
       <div className='flex justify-between items-center border-b mt-6 mb-3'>
         <h1 className="text-[#404040]  text-[24px] sm:text-[32px] font-normal">
           {listing.title}
         </h1>
-        <button className='flex items-end gap-x-1 h-fit  hover:bg-gray-100 p-1 rounded-[5px] text-[15px] group'>
-          <ShareIcon className='' />
-          <p className='hidden xxs:block'>Share</p>
-        </button>
+        <ShareButton />
       </div>
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
         <div className="lg:hidden w-full flex flex-col space-y-6">
@@ -53,7 +52,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
           </div>
           <div className="w-full flex justify-between">
             <p>{listing.squareFootage.toLocaleString()} sqft</p>
-            <p>${listing.depositSize.toLocaleString()} deposit</p>
+            <p>${listing.depositSize ? listing.depositSize.toLocaleString() : 'N/A'} deposit</p>
           </div>
         </div>
         <div className="hidden lg:flex w-full justify-between">

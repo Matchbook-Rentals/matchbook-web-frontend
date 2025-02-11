@@ -92,11 +92,6 @@ export default function ListingDetailsView({
         {/* Location section */}
         <div className="pb-3 mt-3" ref={locationSectionRef}>
           <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
-          <div className="pb-3 text-[#404040] text-[20px] font-normal">
-            <p>
-              {listing.category} in {listing.locationString}
-            </p>
-          </div>
           <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef}>
             <div className="absolute top-2 right-2 z-10 flex flex-col">
               <button

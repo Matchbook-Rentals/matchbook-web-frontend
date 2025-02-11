@@ -28,7 +28,7 @@ export default function SearchListingPage({ params }: ListingPageProps) {
   }
 
   // Check if the trip belongs to the user
-  if (true ||state.trip?.userId !== user?.id) {
+  if (state.trip?.userId !== user?.id) {
     console.log("Not invited to trip, showing default listing view")
     setTimeout(() => {
       router.push(`/guest/listing/${params.listingId}`)
