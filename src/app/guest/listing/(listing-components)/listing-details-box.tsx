@@ -26,23 +26,27 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing }) => {
   return (
     <div className="p-4 rounded-md font-poppin" style={{ fontFamily: 'Poppins' }}>
       {/* Pricing Information Section - Updated Display */}
-      <div className="flex flex-col mb-4">
-        <p className="text-xl font-medium">
-          {listing.shortestLeasePrice && listing.longestLeasePrice
-            ? `Price between: $${listing.shortestLeasePrice.toLocaleString()} - $${listing.longestLeasePrice.toLocaleString()}/month`
-            : listing.shortestLeasePrice
-              ? `$${listing.shortestLeasePrice.toLocaleString()}/month`
-              : listing.longestLeasePrice
-                ? `$${listing.longestLeasePrice.toLocaleString()}/month`
-                : ''}
-        </p>
-        <p className="text-sm text-gray-500">
+      <div className="mb-4 space-y-2">
+        <div className="flex flex-col items-start ">
+          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">
+            {listing.shortestLeasePrice && listing.longestLeasePrice
+              ? <>Price between: ${listing.shortestLeasePrice.toLocaleString()} - ${listing.longestLeasePrice.toLocaleString()} <span className="underline font-normal">month</span></>
+              : listing.shortestLeasePrice
+                ? <>${listing.shortestLeasePrice.toLocaleString()}<span className="underline font-normal">month</span></>
+                : listing.longestLeasePrice
+                  ? <>${listing.longestLeasePrice.toLocaleString()}<span className="underline font-normal">month</span></>
+                  : ''}
+          </p>
+        <p className="md:text-[16px] text-gray-500 font-normal">
           Prices vary depending on stay length
         </p>
+        </div>
         {listing.depositSize && (
-          <p className="text-xl font-medium">
-            Deposit: ${listing.depositSize.toLocaleString()}
-          </p>
+          <div className="whitespace-nowrap">
+            <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">
+              ${listing.depositSize.toLocaleString()} <span className="underline font-normal">deposit</span>
+            </p>
+          </div>
         )}
       </div>
 

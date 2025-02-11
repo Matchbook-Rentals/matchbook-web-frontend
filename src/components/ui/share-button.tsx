@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { usePathname } from 'next/navigation';
 
 interface ShareButtonProps {
   url?: string;
@@ -24,8 +25,8 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 }) => {
   const { toast } = useToast();
   const [open, setOpen] = React.useState(false);
-
-  const currentUrl = url || window.location.href;
+  const pathname = usePathname();
+  const currentUrl = url || `${window.location.origin}${pathname}`;
 
   const handleShare = async () => {
     const shareData = {
@@ -50,7 +51,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(currentUrl);
-      toast({ title: "Link copied to clipboard!", variant: "success" });
+      toast({ title: "Link copied to clipboard!" });
       setOpen(false);
     } catch (error) {
       console.error("Clipboard error:", error);

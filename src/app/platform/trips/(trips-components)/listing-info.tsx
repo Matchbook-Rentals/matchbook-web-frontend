@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { Star } from 'lucide-react';
 import ShareButton from '@/components/ui/share-button';
+import { usePathname } from 'next/navigation';
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
@@ -23,6 +24,7 @@ interface ListingDescriptionProps {
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
+  const pathname = usePathname();
   const calculateDisplayAmenities = () => {
     const displayAmenities = [];
     for (let amenity of iconAmenities) {
@@ -42,7 +44,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         <h1 className="text-[#404040]  text-[24px] sm:text-[32px] font-normal">
           {listing.title}
         </h1>
-        <ShareButton title={`${listing.title} on Matchbook`} text={`Check out this listing on Matchbook: ${window.location.href}`} />
+        <ShareButton title={`${listing.title} on Matchbook`} text={`Check out this listing on Matchbook: ${pathname}`} />
       </div>
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
         <div className="lg:hidden w-full flex flex-col space-y-6">
@@ -57,7 +59,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         </div>
         <div className="hidden lg:flex w-full justify-between">
           <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
-          <p>{listing.depositSize} sqft</p>
+          <p>{listing.squareFootage.toLocaleString()} sqft</p>
         </div>
       </div>
 
