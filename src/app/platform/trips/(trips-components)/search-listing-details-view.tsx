@@ -17,18 +17,29 @@ export default function SearchListingDetailsView({ listingId }: ListingDetailsVi
   const { state, actions } = useTripContext();
   const listing = state.listings.find(l => l.id === listingId);
 
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
-  const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-  const [mapCenter, setMapCenter] = useState<[number, number]>(() => listing ? [listing.longitude, listing.latitude] : [0, 0]);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
-  const locationSectionRef = useRef<HTMLDivElement>(null);
-
+  // Early exit _before_ rendering the inner component that uses hooks
   if (!listing) {
     return <div>Listing not found</div>;
   }
 
-  // Set up map
+  return <ListingDetailsView listing={listing} actions={actions} />;
+}
+
+function ListingDetailsView({
+  listing,
+  actions,
+}: {
+  listing: ListingAndImages;
+  actions: ReturnType<typeof useTripContext>["actions"];
+}) {
+  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  const [isDetailsVisible, setIsDetailsVisible] = useState(true);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(() => [listing.longitude, listing.latitude]);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const locationSectionRef = useRef<HTMLDivElement>(null);
+
+  // All hooks in this component are always called in the same order.
   React.useEffect(() => {
     if (!mapContainerRef.current || !mapCenter) return;
 
@@ -52,7 +63,7 @@ export default function SearchListingDetailsView({ listingId }: ListingDetailsVi
         mapRef.current = null;
       }
     };
-  }, [mapCenter]);
+  }, [mapCenter, listing]);
 
   const handleLike = async () => {
     await optimisticLike(listing.id);

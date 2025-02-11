@@ -4,7 +4,7 @@
 NONE FOR NO MIDDLE NAME (no middle name toggle)
 
 ##10FEB24
-- [ ] finish application sent to DB
+- [x] finish application sent to DB
 - [ ] finish application mobile view
 - [x] listing view outside of trips
 - [ ] sign up sign in pages
