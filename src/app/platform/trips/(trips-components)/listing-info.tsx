@@ -42,7 +42,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         <h1 className="text-[#404040]  text-[24px] sm:text-[32px] font-normal">
           {listing.title}
         </h1>
-        <ShareButton />
+        <ShareButton title={`${listing.title} on Matchbook`} text={`Check out this listing on Matchbook: ${window.location.href}`} />
       </div>
       <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
         <div className="lg:hidden w-full flex flex-col space-y-6">
