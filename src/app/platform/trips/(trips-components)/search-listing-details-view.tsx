@@ -17,16 +17,16 @@ export default function SearchListingDetailsView({ listingId }: ListingDetailsVi
   const { state, actions } = useTripContext();
   const listing = state.listings.find(l => l.id === listingId);
 
-  if (!listing) {
-    return <div>Listing not found</div>;
-  }
-
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(() => listing ? [listing.longitude, listing.latitude] : [0, 0]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
+
+  if (!listing) {
+    return <div>Listing not found</div>;
+  }
 
   // Set up map
   React.useEffect(() => {

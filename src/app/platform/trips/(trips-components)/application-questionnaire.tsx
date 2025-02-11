@@ -22,8 +22,8 @@ const Questionnaire: React.FC = () => {
         <div className="mb-6">
           <div className="flex mb-2">
             <div className="w-4/5 flex items-center">
-              <span className="font-bold text-[54px] mr-6">1.</span>
-              <span className="font-medium text-[26px]">
+              <span className="font-bold text-[24px] mr-4">1.</span>
+              <span className="font-medium text-[22px]">
                 Have you been convicted of a felony or misdemeanor offense in the past 7 years?
               </span>
             </div>
@@ -31,15 +31,19 @@ const Questionnaire: React.FC = () => {
               <RadioGroup
                 onValueChange={(value) => handleChange('felony', value === 'true')}
                 value={answers.felony?.toString()}
-                className="flex justify-center space-x-8"
+                className="flex justify-center space-x-4"
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="true" id="felony-yes" />
-                  <Label className='text-[26px] cursor-pointer font-normal' htmlFor="felony-yes">Yes</Label>
+                  <Label className="text-[20px] cursor-pointer font-normal" htmlFor="felony-yes">
+                    Yes
+                  </Label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="false" id="felony-no" />
-                  <Label className='text-[26px] cursor-pointer font-normal' htmlFor="felony-no">No</Label>
+                  <Label className="text-[20px] cursor-pointer font-normal" htmlFor="felony-no">
+                    No
+                  </Label>
                 </div>
               </RadioGroup>
               {error?.felony && (
@@ -48,7 +52,7 @@ const Questionnaire: React.FC = () => {
             </div>
           </div>
           <div className="mt-2">
-            <Label htmlFor="felonyExplanation" className="text-[24px] font-medium">
+            <Label htmlFor="felonyExplanation" className="text-[18px] font-medium">
               Please provide the date, and nature of the conviction.
             </Label>
             <Textarea
@@ -66,10 +70,10 @@ const Questionnaire: React.FC = () => {
         </div>
 
         <div className="mb-6">
-          <div className="flex mb-2">
+          <div className="flex mb-6">
             <div className="w-4/5 flex items-center">
-              <span className="font-bold text-[54px] mr-6">2.</span>
-              <span className="font-medium text-[26px]">
+              <span className="font-bold text-[24px] mr-4">2.</span>
+              <span className="font-medium text-[22px]">
                 Have you been evicted from a rental property in the past 7 years?
               </span>
             </div>
@@ -77,15 +81,19 @@ const Questionnaire: React.FC = () => {
               <RadioGroup
                 onValueChange={(value) => handleChange('evicted', value === 'true')}
                 value={answers.evicted?.toString()}
-                className="flex justify-center space-x-8"
+                className="flex justify-center space-x-4"
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="true" id="evicted-yes" />
-                  <Label className='text-[26px] cursor-pointer font-normal' htmlFor="evicted-yes">Yes</Label>
+                  <Label className="text-[20px] cursor-pointer font-normal" htmlFor="evicted-yes">
+                    Yes
+                  </Label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="false" id="evicted-no" />
-                  <Label className='text-[26px] cursor-pointer font-normal' htmlFor="evicted-no">No</Label>
+                  <Label className="text-[20px] cursor-pointer font-normal" htmlFor="evicted-no">
+                    No
+                  </Label>
                 </div>
               </RadioGroup>
               {error?.evicted && (
@@ -94,7 +102,7 @@ const Questionnaire: React.FC = () => {
             </div>
           </div>
           <div className="mt-2">
-            <Label htmlFor="evictedExplanation" className="text-[24px] font-medium">
+            <Label htmlFor="evictedExplanation" className="text-[18px] font-medium">
               Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome.
             </Label>
             <Textarea
