@@ -1,17 +1,23 @@
 # TO DOs
 
+##10FEB24
+- [ ] finish application sent to DB
+- [ ] finish application mobile view
+- [ ] listing view outside of trips
+- [ ] sign up sign in pages
+
 Credit Card APIS for paywall
 EVICTION AND CRIMINAL BACKGROUND CHECKS
 
 ACH PLAID API
 
 ## 4Feb
-- [x] New compnents in trip edit search bar 
-- [x] Map button on mobile 
+- [x] New compnents in trip edit search bar
+- [x] Map button on mobile
 - [ ] Pop up to signify like or dislike
-- [ ] finish application 
+- [ ] finish application
 - [ ] change card hover behcaior (map zoom level) add cards to map
-- [ ] Listing links (one for sub-trip route, one for not part of a trip, although probably just grab teh trip, when authing the user if not part of trip then we redirect to new platform/listing/[listingID] route) 
+- [ ] Listing links (one for sub-trip route, one for not part of a trip, although probably just grab teh trip, when authing the user if not part of trip then we redirect to new platform/listing/[listingID] route)
 - [ ] deal with the stupid god damn overview village at mobile ( AHHHHHH)
 
 
@@ -40,11 +46,11 @@ set one month minimuj on calendar
 help widget to hamburger menu on platform routes
 add gesture suppor to mbile caledar (swipe to next)
 TONIGHT --- remove test from mobiile calender
-expand to full page on 
+expand to full page on
 mirror bottom padding on matchbook header
 trip delete, lanuage change edit button to populate trashcans
 new serach button opens full screen serach modal, differetn from desktop behaviour
-skeleton adjustment, 
+skeleton adjustment,
 
 
 - [ ] MYMOO
@@ -52,52 +58,52 @@ skeleton adjustment,
 - [ ] pretty up the control bar on home page (it allows for edge clicks that do nothing, clicking off doesn't remove the popover)
 - [ ] calendars
 - [X] Search page
-- [x] Filters 
-- [ ] min adults 1 
-- [ ] Double check all icon sizing in detials tiles and filter tiles 
+- [x] Filters
+- [ ] min adults 1
+- [ ] Double check all icon sizing in detials tiles and filter tiles
 - [ ] Maps over to free maps
 - [x] bed bath
 - [ ] tab selector carousel? arrows? two layers?
 
 - [x]  dialog finish, control active state for property type selection
 - [ ] Adults 1 minimum and defualt start
-- [ ] go through FIGMA text sizes and weights 
+- [ ] go through FIGMA text sizes and weights
 - [ ] Reset default text to 404040 instead of black
-- [ ] Number of properties to show on filters 
-- [ ] Actually filter by properties 
-- [x] Matchmaker blocks and separation 
+- [ ] Number of properties to show on filters
+- [ ] Actually filter by properties
+- [x] Matchmaker blocks and separation
 - [ ] Search page
-- [x] Default tab matchmaker 
-- [ ] Reset platform navbar to be narrow on trips page.  
-- [x] Delete green scrollbar  
-- [ ] Seed db to 10000 listings 
-- [ ] REDO prop availability section 
-- [x]  Gap in carousel + beteween columns on match desktop 
+- [x] Default tab matchmaker
+- [ ] Reset platform navbar to be narrow on trips page.
+- [x] Delete green scrollbar
+- [ ] Seed db to 10000 listings
+- [ ] REDO prop availability section
+- [x]  Gap in carousel + beteween columns on match desktop
 - [x]  Move bedroom bathroom count to below listing title
 - [ ]  Popover for mobile view
 - [ ]  Tab selector mboile view
-- [ ] Highlight display for single family 
+- [ ] Highlight display for single family
 
-##02DEC24- [X] Credit Intelligence Filtering 
-- [x] Maybes 
-- [X] Get rid of X 
-- [ ] carousel circle behind chevron and updated chevron 
+##02DEC24- [X] Credit Intelligence Filtering
+- [x] Maybes
+- [X] Get rid of X
+- [ ] carousel circle behind chevron and updated chevron
 - [ ] hide alerts
-- [x] Images for trips page 
-- [ ] Hamburger menu update for platform Navbar (not normal navbar due to brevo dialog) 
+- [x] Images for trips page
+- [ ] Hamburger menu update for platform Navbar (not normal navbar due to brevo dialog)
 - [ ] Button control Box safari attempt
-- [ ] Apply button behavior and details on list view (table) 
-- [ ] Sharepoint 
-- [ ] Unlock search container on beta user, send to new york regardless 
+- [ ] Apply button behavior and details on list view (table)
+- [ ] Sharepoint
+- [ ] Unlock search container on beta user, send to new york regardless
 - [X] redo split point on listingdetails
-- [X] deeper scroll point on button box, probalby as percent of display height 
+- [X] deeper scroll point on button box, probalby as percent of display height
 - [ ] see more button on desktop image carousel
-- [x] fix height on control bar siblings 
-- [ ] Isabelle icon updates from figma 
+- [x] fix height on control bar siblings
+- [ ] Isabelle icon updates from figma
 - [ ] Create flowchart
 
 ##13NOV24
-- [X] Credit Intelligence Filtering 
+- [X] Credit Intelligence Filtering
 - [X] save to creditBucket on user
 - [ ] consume Ticket
 - [ ] Add Dialog to confirm data
@@ -105,8 +111,8 @@ skeleton adjustment,
 
 ##05NOV24
 - [x] paddles
--[ ] pandadoc 
--[ ] changed error messages on comingSoon 
+-[ ] pandadoc
+-[ ] changed error messages on comingSoon
 -[ ] Change stripe behaviour
 -[ ] Stripe 2 payment structure
 -[ ] Integrate branches
@@ -133,7 +139,7 @@ DOCUSIGN SDK
 - [x] send document
 - [x] embed doc sign - landlord
 - [x] create lease and match from client side event
-- [x] watch for webhook saying person signed, add siggy to db lease 
+- [x] watch for webhook saying person signed, add siggy to db lease
 - [x] embed doc sign - tenant
 - [] set housingRequest status to approved, handle this in applications logic
 - [] setup second webhook for live site, please try to keep them separate (env vars for dev testing)
@@ -146,7 +152,7 @@ DOCUSIGN SDK
 - [X] Add unavailablePeriods to bookings tab
 
 ## 24SEP24
-- [X]  Change flow to choose lease at housingRequest approval   
+- [X]  Change flow to choose lease at housingRequest approval
 - [x] Store doc Id in match
 - [x] Embed on Guest Side
 - [x] Use doc Id to pull Sign embed page
@@ -155,7 +161,7 @@ DOCUSIGN SDK
 
 ## 18SEP24
 - [ ]  EMAIL TESTING
-- [X] add outbound to query params, read query params to check for user profile, prompt signup if no user profile, prompt login if found, also maybe clerk to see if already signed in  
+- [X] add outbound to query params, read query params to check for user profile, prompt signup if no user profile, prompt login if found, also maybe clerk to see if already signed in
 - [ ] fix tab selector eating other query params
 - [ ] build trip specific page
 - [ ] add invited trips to current searches
@@ -190,7 +196,7 @@ REPEAT FOR BACKGROUND CHECKS
 
 ##25AUG24
 get auth to webhook
-OPEN API ACCOUNTS        
+OPEN API ACCOUNTS
 
 
 ## 21AUG24
@@ -198,7 +204,7 @@ OPEN UP STRIPE CLI (one to listen and one to trigger)
 add Order to DB (include service type, status, isRedeemed)
 npx prisma db push
 update webhook to save order to db
-Success page needs to check for Order (type: backgroundCheck, isRedeemed: false) 
+Success page needs to check for Order (type: backgroundCheck, isRedeemed: false)
 if no order, redirect to please pay, if found proceed with apis
 
 ## 20AUG24
@@ -223,14 +229,14 @@ reset carousel api to 0.
         Kick up coordinates
 
 [ ] 3. New Dashboard
-        control bar, populate old data, use popovers, create double calendar, save new dates to trip via handlesave, adults counter, 
+        control bar, populate old data, use popovers, create double calendar, save new dates to trip via handlesave, adults counter,
         fix infinite scroll
         Matchbook
         hearts on map view listings
 
 [] 4. Add other users&application to housingRequest
 
-[ ] 5. Errors for client side validation 
+[ ] 5. Errors for client side validation
 
 ## Algorithm
 U score = Sum of All Scores where Score is (Value/MaxValue * Coeffecient)
@@ -286,7 +292,7 @@ If no leave blank
 
 [ ] 2. Color darkening
 
-## Image Upload 
+## Image Upload
 
 1. Better Drag and Drop
 
@@ -316,9 +322,9 @@ If no leave blank
 
 [ ] 1. Add listing preview
 
-[ ] 2. Utilities Included 
+[ ] 2. Utilities Included
 
-[ ] 3. House Rules 
+[ ] 3. House Rules
 
 [ ] 4. Counters in Add property bathroom or bedroom count quare footabe 50
 
@@ -330,7 +336,7 @@ If no leave blank
 [ ] 2. Bold Desk
 
 
-## Auth 
+## Auth
 
 1. Create user in platform layout page load
 

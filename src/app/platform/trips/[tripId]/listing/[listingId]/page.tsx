@@ -26,28 +26,29 @@ export default async function ListingPage({ params }: ListingPageProps) {
 
   // Check if the trip belongs to the user
   if (trip.userId !== userId) {
-    redirect('/platform/trips')
+    console.log("Not invited to trip, showing default listing view")
+    redirect('/platform/trips/not-invited')
   }
 
   // Get the listing
-  const listing = await prisma.listing.findUnique({
-    where: { id: params.listingId },
-    include: {
-      listingImages: true,
-      bedrooms: true,
-      user: true,
-      unavailablePeriods: true,
-      bookings: true
-    }
-  }) as ListingAndImages | null
+  // const listing = await prisma.listing.findUnique({
+  //   where: { id: params.listingId },
+  //   include: {
+  //     listingImages: true,
+  //     bedrooms: true,
+  //     user: true,
+  //     unavailablePeriods: true,
+  //     bookings: true
+  //   }
+  // }) as ListingAndImages | null
 
-  if (!listing) {
-    redirect('/platform/trips')
-  }
+  // if (!listing) {
+  //   redirect('/platform/trips')
+  // }
 
   return (
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
-        <ListingDetailsView listing={listing} />
+        <ListingDetailsView listingId={params.listingId} />
       </div>
   )
 }

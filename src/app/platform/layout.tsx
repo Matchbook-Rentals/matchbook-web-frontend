@@ -7,11 +7,11 @@ import Footer from '@/components/marketing-landing-components/footer';
 
 //const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default function ClerkLayout({ children }: { children: React.ReactNode }) {
+export default function PlatformLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <PlatformNavbar />
       <div style={{ fontFamily: 'Poppins' }}>{children}</div>
     </>
   )
-} 
+}

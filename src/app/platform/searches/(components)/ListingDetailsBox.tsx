@@ -99,7 +99,7 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject
         </div>
         <div className='flex items-center justify-between'>
           <p className={normalText}>{calculateTimeOnMatchbook()}</p>
-          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore?.toFixed(1)}</p>
+          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}</p>
         </div>
       </div>
 

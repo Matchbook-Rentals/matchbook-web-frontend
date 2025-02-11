@@ -101,12 +101,13 @@ export default function SearchListingCard({ listing, status, className, style, d
     }
   }
 
-  const handleLikeAction = () => {
+  const handleLikeAction = (e: React.MouseEvent) => {
     if (favIds.has(listing.id)) {
       optimisticRemoveLike(listing.id);
     } else {
       optimisticLike(listing.id);
     }
+    e.stopPropagation(); // Stop event from bubbling up to card click handler
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -118,7 +119,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
-    router.push(`/platform/trips/${state.trip.id}/listing/${listing.id}`);
+    window.open(`/platform/trips/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
