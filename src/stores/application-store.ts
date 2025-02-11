@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { VerificationImage, ImageCategory } from '@/types/application';
+import { VerificationImage } from '@prisma/client';
 
 interface PersonalInfo {
   firstName: string;
@@ -30,14 +30,14 @@ interface LandlordInfo {
 }
 
 interface Income {
+  id?: string;
   source: string;
   monthlyAmount: string;
 }
 
 interface QuestionnaireAnswers {
   evicted: boolean;
-  brokenLease: boolean;
-  landlordDispute: boolean;
+  felony: boolean;
   felonyExplanation: string;
   evictedExplanation: string;
 }
@@ -79,7 +79,7 @@ export const initialState = {
     lastName: ''
   },
   ids: [{ idType: '', idNumber: '' }],
-  verificationImages: [],
+  verificationImages: [] as VerificationImage[],
   residentialHistory: {
     currentStreet: '',
     currentApt: '',
@@ -99,8 +99,7 @@ export const initialState = {
   incomes: [{ source: '', monthlyAmount: '' }],
   answers: {
     evicted: false,
-    brokenLease: false,
-    landlordDispute: false,
+    felony: false,
     felonyExplanation: '',
     evictedExplanation: ''
   }
@@ -114,6 +113,7 @@ interface ApplicationState {
   landlordInfo: LandlordInfo;
   incomes: Income[];
   answers: QuestionnaireAnswers;
+  originalData: typeof initialState;
 
   // Actions
   setPersonalInfo: (info: PersonalInfo) => void;
@@ -135,6 +135,9 @@ interface ApplicationState {
   // Add error actions
   setErrors: (step: keyof ApplicationErrors, errors: ApplicationErrors[typeof step]) => void;
   clearErrors: () => void;
+
+  // <<< NEW ACTION TO UPDATE ORIGINAL DATA AFTER SYNC >>>
+  markSynced: () => void;
 }
 
 const initialErrors: ApplicationErrors = {
@@ -170,6 +173,7 @@ const initialErrors: ApplicationErrors = {
 
 export const useApplicationStore = create<ApplicationState>((set, get) => ({
   ...initialState,
+  originalData: { ...initialState },
 
   setPersonalInfo: (info) => set({ personalInfo: info }),
   setIds: (ids) => set({ ids }),
@@ -184,13 +188,13 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   initializeFromApplication: (application) => {
     if (!application) return;
 
-    set({
+    const newData = {
       personalInfo: {
         firstName: application.firstName || '',
         lastName: application.lastName || ''
       },
       ids: application.identifications || [{ idType: '', idNumber: '' }],
-      verificationImages: application.verificationImages || [],
+      verificationImages: application.verificationImages || [] as VerificationImage[],
       residentialHistory: {
         currentStreet: application.currentStreet || '',
         currentApt: application.currentApt || '',
@@ -208,17 +212,20 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         landlordPhoneNumber: application.landlordPhoneNumber || '',
       },
       incomes: application.incomes?.map((income: any) => ({
+        id: income.id || null,
         source: income.source || '',
         monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0]
       })) || [{ source: '', monthlyAmount: '' }],
       answers: {
         evicted: application.evicted || false,
-        brokenLease: application.brokenLease || false,
-        landlordDispute: application.landlordDispute || false,
+        felony: application.felony || false,
         felonyExplanation: application.felonyExplanation || '',
         evictedExplanation: application.evictedExplanation || ''
       }
-    });
+    };
+    set(newData);
+    // Update the pristine/original state for proper comparison
+    set({ originalData: newData });
   },
 
   isEdited: () => {
@@ -231,7 +238,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       landlordInfo: state.landlordInfo,
       incomes: state.incomes,
       answers: state.answers
-    }) !== JSON.stringify(initialState);
+    }) !== JSON.stringify(state.originalData);
   },
 
   errors: initialErrors,
@@ -244,4 +251,19 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   })),
 
   clearErrors: () => set({ errors: initialErrors }),
+
+  // <<< NEW ACTION: markSynced >>>
+  markSynced: () => {
+    const { personalInfo, ids, verificationImages, residentialHistory, landlordInfo, incomes, answers } = get();
+    const newData = {
+      personalInfo,
+      ids,
+      verificationImages,
+      residentialHistory,
+      landlordInfo,
+      incomes,
+      answers,
+    };
+    set({ originalData: newData });
+  },
 }));

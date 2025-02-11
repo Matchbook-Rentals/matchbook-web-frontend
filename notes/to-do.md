@@ -5,6 +5,8 @@
 - [ ] finish application mobile view
 - [x] listing view outside of trips
 - [ ] sign up sign in pages
+- [x] fix share button
+  - [ ] test on mobile
 
 Credit Card APIS for paywall
 EVICTION AND CRIMINAL BACKGROUND CHECKS

@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState, useCallback, useEffect } from 'react';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { getTripLocationString } from '@/utils/trip-helpers';
@@ -21,7 +21,7 @@ import { ResidentialHistory } from '../../(trips-components)/application-residen
 import { LandlordInfo } from '../../(trips-components)/application-landlord-info';
 import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
-import { createApplication } from '@/app/actions/applications';
+import { upsertApplication } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -128,7 +128,8 @@ const getChangedFields = (current: any, initial: any) => {
         changes.push(`Monthly Amount ${i + 1} ($${initialAmount || '0'} → $${currentAmount})`);
       }
     }
-    return [...new Set(changes)]; // Remove duplicates
+    // Use Array.from instead of spread operator for better compatibility
+    return Array.from(new Set(changes)); // Remove duplicates and fix TS error
   };
 
   const incomeChanges = hasIncomeChanges();
@@ -159,6 +160,7 @@ const getChangedFields = (current: any, initial: any) => {
 export default function ApplicationPage() {
   const params = useParams();
   const tripId = params.tripId as string;
+  const router = useRouter();
   const { state: { trip, application, hasApplication }, actions: { setHasApplication } } = useTripContext();
   const { toast } = useToast();
 
@@ -183,6 +185,7 @@ export default function ApplicationPage() {
     errors,
     setErrors,
     clearErrors,
+    markSynced,
   } = useApplicationStore();
 
   // Initialize store with application data
@@ -193,6 +196,7 @@ export default function ApplicationPage() {
   // Carousel state
   const [api, setApi] = useState<CarouselApi>();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   const windowSize = useWindowSize();
@@ -207,7 +211,7 @@ export default function ApplicationPage() {
     setCurrentStep(newStep);
   }, [api]);
 
-  const scrollToIndex = (index: number) => {
+  const scrollToIndex = async (index: number) => {
     let isValid = validateStep(currentStep);
     if (!isValid) {
       toast({
@@ -217,7 +221,41 @@ export default function ApplicationPage() {
       });
       return;
     }
-    api?.scrollTo(index);
+
+    // Only execute this try catch if we have changes
+    if (isEdited()) {
+      setIsLoading(true);
+      try {
+        const result = await upsertApplication({
+          ...personalInfo,
+          ...residentialHistory,
+          ...answers,
+          incomes,
+          identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+        });
+        setIsLoading(false);
+        if (result.success) {
+          markSynced();
+          api?.scrollTo(index);
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to save changes",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        setIsLoading(false);
+        toast({
+          title: "Error",
+          description: "Failed to save changes",
+          variant: "destructive",
+        });
+      }
+    } else {
+      // If no changes, just scroll to the index
+      api?.scrollTo(index);
+    }
   };
 
   useEffect(() => {
@@ -236,19 +274,29 @@ export default function ApplicationPage() {
       incomes,
       identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
       verificationImages,
-      ...(residentialHistory.housingStatus === 'rent' ? landlordInfo : {})
+      ...(residentialHistory.housingStatus === 'rent' ? landlordInfo : {}),
     };
 
+    setIsLoading(true);
     try {
-      const result = await createApplication(applicationData);
+      const result = await upsertApplication(applicationData);
+      setIsLoading(false);
       if (result.success) {
         toast({
           title: "Success",
           description: "Application submitted successfully",
         });
         setHasApplication(true);
+        router.push(`/platform/trips/${tripId}`);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to submit application",
+          variant: "destructive",
+        });
       }
     } catch (error) {
+      setIsLoading(false);
       toast({
         title: "Error",
         description: "Failed to submit application",
@@ -288,6 +336,10 @@ export default function ApplicationPage() {
         return Object.keys(incomeErrors).length === 0;
       }
       case 3: {
+        // Ensure 'answers' has all required properties, even if null.
+        // The actual fix needs to be in your application-store.ts,
+        // making sure the initial state of 'answers' includes:
+        // { felony: null, felonyExplanation: '', evicted: null, evictedExplanation: '' }
         const questionnaireErrors = validateQuestionnaire(answers);
         setErrors('questionnaire', questionnaireErrors);
         return Object.keys(questionnaireErrors).length === 0;
@@ -327,8 +379,16 @@ export default function ApplicationPage() {
           </nav>
         </div>
 
-        {/* Carousel Section */}
-        <div className="flex-1 min-w-0 ">
+        {/* Carousel Section with Overlay */}
+        <div className="relative flex-1 min-w-0">
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-10">
+              <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </div>
+          )}
           <Carousel
             className="w-full"
             setApi={setApi}
@@ -418,7 +478,7 @@ export default function ApplicationPage() {
                   });
                   return;
                 }
-                api?.scrollNext();
+                scrollToIndex(currentStep + 1);
               }}
               disabled={currentStep === navigationItems.length - 1}
             >

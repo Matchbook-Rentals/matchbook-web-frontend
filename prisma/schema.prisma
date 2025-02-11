@@ -627,6 +627,7 @@ model Application {
   // Comments to explain Yes answers
   evicted            Boolean?
   brokenLease        Boolean?
+  felony             Boolean?
   landlordDispute    Boolean?
   evictedExplanation String?
   felonyExplanation  String?

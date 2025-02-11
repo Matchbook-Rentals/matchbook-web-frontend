@@ -24,6 +24,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import CurrencyInput from "@/components/ui/currency-input";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
+import { deleteIncome } from '@/app/actions/applications';
 
 interface UploadData {
   name: string;
@@ -77,6 +78,7 @@ export const Income: React.FC = () => {
 
   const handleDelete = (index: number) => {
     if (incomes.length > 1) {
+      deleteIncome(incomes[index].id);
       setIncomes(incomes.filter((_, i) => i !== index));
     }
   };
@@ -84,9 +86,10 @@ export const Income: React.FC = () => {
   const incomeImages = verificationImages.filter(img => img.category === 'Income');
 
   return (
-    <div>
+    <div onClick={() => console.log(incomes)}>
       {incomes.map((item, index) => (
         <div key={index} className="mb-4 p-4 border rounded relative">
+          {item.id || 'new'}
           {index > 0 && (
             <button
               onClick={() => handleDelete(index)}
