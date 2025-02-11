@@ -21,6 +21,7 @@ import { ResidentialHistory } from '../../(trips-components)/application-residen
 import { LandlordInfo } from '../../(trips-components)/application-landlord-info';
 import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
+import MobileApplicationEdit from '../../(trips-components)/mobile-application-edit';
 import { upsertApplication, markComplete } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
@@ -168,23 +169,13 @@ export default function ApplicationPage() {
   const {
     personalInfo,
     ids,
-    verificationImages,
     residentialHistory,
     landlordInfo,
     incomes,
     answers,
-    setPersonalInfo,
-    setIds,
-    setVerificationImages,
-    setResidentialHistory,
-    setLandlordInfo,
-    setIncomes,
-    setAnswers,
     initializeFromApplication,
     isEdited,
-    errors,
     setErrors,
-    clearErrors,
     markSynced,
     checkCompletion
   } = useApplicationStore();
@@ -364,135 +355,140 @@ export default function ApplicationPage() {
         ]}
         className="mb-4"
       />
-      <div className="flex gap-6 max-w-full  overflow-x-hidden ">
-        {/* Sidebar Navigation - Hidden on mobile */}
-        <div onClick={() => console.log(application)} className="hidden md:block pt-1 w-64 shrink-0">
-          <nav className="space-y-1">
-            {navigationItems.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToIndex(index)}
-                className={cn(
-                  "w-full text-left px-4 py-2 rounded-lg transition-colors duration-200",
-                  currentStep === index
-                    ? "bg-gray-100 text-gray-900 font-medium"
-                    : "hover:bg-gray-50 text-gray-600"
-                )}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
 
-        {/* Carousel Section with Overlay */}
-        <div className="relative flex-1 min-w-0">
-          {isLoading && (
-            <div className="absolute inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-10">
-              <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-            </div>
-          )}
-          <Carousel
-            className="w-full"
-            setApi={setApi}
-            opts={{
-              align: 'start',
-              skipSnaps: false,
-              watchDrag: isMobile
-            }}
-          >
-            <CarouselContent className="w-full">
-              <CarouselItem>
-                <div className="px-6 pb-6 pt-0  min-h-[400px]">
-                  <h2 className={ApplicationItemHeaderStyles}>
-                    Basic Information
-                  </h2>
-                  <PersonalInfo />
-                  <div className="mt-8">
-                    <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
-                    <Identification />
+      {isMobile ? (
+        <MobileApplicationEdit />
+      ) : (
+        <div className="flex gap-6 max-w-full overflow-x-hidden">
+          {/* Sidebar Navigation - Hidden on mobile */}
+          <div onClick={() => console.log(application)} className="hidden md:block pt-1 w-64 shrink-0">
+            <nav className="space-y-1">
+              {navigationItems.map((item, index) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToIndex(index)}
+                  className={cn(
+                    "w-full text-left px-4 py-2 rounded-lg transition-colors duration-200",
+                    currentStep === index
+                      ? "bg-gray-100 text-gray-900 font-medium"
+                      : "hover:bg-gray-50 text-gray-600"
+                  )}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Carousel Section with Overlay */}
+          <div className="relative flex-1 min-w-0">
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-10">
+                <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+              </div>
+            )}
+            <Carousel
+              className="w-full"
+              setApi={setApi}
+              opts={{
+                align: 'start',
+                skipSnaps: false,
+                watchDrag: false
+              }}
+            >
+              <CarouselContent className="w-full">
+                <CarouselItem>
+                  <div className="px-6 pb-6 pt-0  min-h-[400px]">
+                    <h2 className={ApplicationItemHeaderStyles}>
+                      Basic Information
+                    </h2>
+                    <PersonalInfo />
+                    <div className="mt-8">
+                      <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
+                      <Identification />
+                    </div>
                   </div>
-                </div>
-              </CarouselItem>
+                </CarouselItem>
 
-              <CarouselItem>
-                <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={ApplicationItemHeaderStyles}>
-                    Residential History
-                  </h2>
-                  <ResidentialHistory />
-                  <LandlordInfo />
-                </div>
-              </CarouselItem>
+                <CarouselItem>
+                  <div className="px-6 pb-6 min-h-[400px]">
+                    <h2 className={ApplicationItemHeaderStyles}>
+                      Residential History
+                    </h2>
+                    <ResidentialHistory />
+                    <LandlordInfo />
+                  </div>
+                </CarouselItem>
 
-              <CarouselItem>
-                <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={itemHeaderStyles}>
-                    Income
-                  </h2>
-                  <Income />
-                </div>
-              </CarouselItem>
+                <CarouselItem>
+                  <div className="px-6 pb-6 min-h-[400px]">
+                    <h2 className={itemHeaderStyles}>
+                      Income
+                    </h2>
+                    <Income />
+                  </div>
+                </CarouselItem>
 
-              <CarouselItem>
-                <div className="px-6 pb-6 min-h-[400px]">
-                  <h2 className={itemHeaderStyles}>
-                    Questionnaire
-                  </h2>
-                  <Questionnaire />
-                  <Button
-                    onClick={handleSubmit}
-                    className="w-full mt-4"
-                    disabled={!isEdited()}
-                  >
-                    {isEdited() ? 'Save Changes' : 'No Changes'}
-                  </Button>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-          </Carousel>
+                <CarouselItem>
+                  <div className="px-6 pb-6 min-h-[400px]">
+                    <h2 className={itemHeaderStyles}>
+                      Questionnaire
+                    </h2>
+                    <Questionnaire />
+                    <Button
+                      onClick={handleSubmit}
+                      className="w-full mt-4"
+                      disabled={!isEdited()}
+                    >
+                      {isEdited() ? 'Save Changes' : 'No Changes'}
+                    </Button>
+                  </div>
+                </CarouselItem>
+              </CarouselContent>
+            </Carousel>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between ">
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (!validateStep(currentStep)) {
-                  toast({
-                    title: "Validation Error",
-                    description: "Please correct errors before navigating.",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-                api?.scrollPrev();
-              }}
-              disabled={currentStep === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              onClick={() => {
-                if (!validateStep(currentStep)) {
-                  toast({
-                    title: "Validation Error",
-                    description: "Please correct errors before navigating.",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-                scrollToIndex(currentStep + 1);
-              }}
-              disabled={currentStep === navigationItems.length - 1}
-            >
-              Next
-            </Button>
+            {/* Navigation Buttons */}
+            <div className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  api?.scrollPrev();
+                }}
+                disabled={currentStep === 0}
+              >
+                Previous
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  scrollToIndex(currentStep + 1);
+                }}
+                disabled={currentStep === navigationItems.length - 1}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
