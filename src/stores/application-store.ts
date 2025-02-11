@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { VerificationImage } from '@prisma/client';
+import { markComplete, absurdApplication } from '@/app/actions/applications';
 
 interface PersonalInfo {
   firstName: string;
@@ -138,6 +139,9 @@ interface ApplicationState {
 
   // <<< NEW ACTION TO UPDATE ORIGINAL DATA AFTER SYNC >>>
   markSynced: () => void;
+
+  // <<< NEW ACTION: checkCompletion for determining if the application is complete >>>
+  checkCompletion: (applicationId: string) => { complete: boolean; missingFields: string[] };
 }
 
 const initialErrors: ApplicationErrors = {
@@ -254,7 +258,15 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
 
   // <<< NEW ACTION: markSynced >>>
   markSynced: () => {
-    const { personalInfo, ids, verificationImages, residentialHistory, landlordInfo, incomes, answers } = get();
+    const {
+      personalInfo,
+      ids,
+      verificationImages,
+      residentialHistory,
+      landlordInfo,
+      incomes,
+      answers,
+    } = get();
     const newData = {
       personalInfo,
       ids,
@@ -264,6 +276,68 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       incomes,
       answers,
     };
+    console.log("markSynced invoked. New data to sync:", newData);
     set({ originalData: newData });
+    console.log("Original data updated to:", newData);
+  },
+
+  // <<< NEW ACTION: checkCompletion >>>
+  checkCompletion: (applicationId: string) => {
+    const state = get();
+    const missingFields: string[] = [];
+
+    // Check Personal Info
+    if (!state.personalInfo.firstName) missingFields.push('personalInfo.firstName');
+    if (!state.personalInfo.lastName) missingFields.push('personalInfo.lastName');
+
+    // Check Identification(s)
+    if (!state.ids || state.ids.length === 0) {
+      missingFields.push('ids (no identification provided)');
+    } else {
+      state.ids.forEach((id, index) => {
+        if (!id.idType) missingFields.push(`ids[${index}].idType`);
+        if (!id.idNumber) missingFields.push(`ids[${index}].idNumber`);
+      });
+    }
+
+    // Check Residential History (required fields)
+    if (!state.residentialHistory.currentStreet) missingFields.push('residentialHistory.currentStreet');
+    if (!state.residentialHistory.currentCity) missingFields.push('residentialHistory.currentCity');
+    if (!state.residentialHistory.currentState) missingFields.push('residentialHistory.currentState');
+    if (!state.residentialHistory.currentZipCode) missingFields.push('residentialHistory.currentZipCode');
+    if (!state.residentialHistory.monthlyPayment) missingFields.push('residentialHistory.monthlyPayment');
+    if (!state.residentialHistory.durationOfTenancy) missingFields.push('residentialHistory.durationOfTenancy');
+
+    // Check Landlord Info
+    if (!state.landlordInfo.landlordFirstName) missingFields.push('landlordInfo.landlordFirstName');
+    if (!state.landlordInfo.landlordLastName) missingFields.push('landlordInfo.landlordLastName');
+    if (!state.landlordInfo.landlordEmail) missingFields.push('landlordInfo.landlordEmail');
+    if (!state.landlordInfo.landlordPhoneNumber) missingFields.push('landlordInfo.landlordPhoneNumber');
+
+    // Check Incomes
+    if (!state.incomes || state.incomes.length === 0) {
+      missingFields.push('incomes (no income provided)');
+    } else {
+      state.incomes.forEach((income, index) => {
+        if (!income.source) missingFields.push(`incomes[${index}].source`);
+        if (!income.monthlyAmount) missingFields.push(`incomes[${index}].monthlyAmount`);
+      });
+    }
+
+    // Check Answers - conditionally require explanations if triggered
+    if (state.answers.felony && !state.answers.felonyExplanation)
+      missingFields.push('answers.felonyExplanation');
+    if (state.answers.evicted && !state.answers.evictedExplanation)
+      missingFields.push('answers.evictedExplanation');
+
+    const complete = missingFields.length === 0;
+    const result = { complete, missingFields };
+
+    if (complete) {
+      console.log("Application is complete; marking complete for applicationId:", applicationId);
+      markComplete(applicationId);
+    }
+    console.log("Application Completion Check:", result);
+    return result;
   },
 }));

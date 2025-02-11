@@ -373,3 +373,46 @@ export async function deleteIncome(incomeId: string) {
   }
 }
 
+export async function markComplete(applicationId: string) {
+  try {
+    const application = await prisma.application.update({
+      where: { id: applicationId },
+      data: { isComplete: true },
+    });
+    return { success: true, application };
+  } catch (error) {
+    console.error("Failed to mark application as complete:", error);
+    return { success: false, error: 'Failed to mark application as complete.' };
+  }
+}
+
+export async function markSynced(applicationId: string) {
+  try {
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+      include: {
+        identifications: true,
+        incomes: true,
+        verificationImages: true,
+      },
+    });
+
+    if (!application) {
+      return { success: false, error: 'Application not found' };
+    }
+
+    if (
+      !application.identifications || application.identifications.length === 0 ||
+      !application.incomes || application.incomes.length === 0 ||
+      !application.verificationImages || application.verificationImages.length === 0
+    ) {
+      return { success: false, error: 'Not all required fields are complete' };
+    }
+
+    return await markComplete(applicationId);
+  } catch (error) {
+    console.error("Failed to mark application as synced:", error);
+    return { success: false, error: 'Failed to mark application as synced.' };
+  }
+}
+

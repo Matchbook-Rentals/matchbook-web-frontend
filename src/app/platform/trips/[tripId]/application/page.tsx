@@ -21,7 +21,7 @@ import { ResidentialHistory } from '../../(trips-components)/application-residen
 import { LandlordInfo } from '../../(trips-components)/application-landlord-info';
 import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
-import { upsertApplication } from '@/app/actions/applications';
+import { upsertApplication, markComplete } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -186,6 +186,7 @@ export default function ApplicationPage() {
     setErrors,
     clearErrors,
     markSynced,
+    checkCompletion
   } = useApplicationStore();
 
   // Initialize store with application data
@@ -236,6 +237,9 @@ export default function ApplicationPage() {
         setIsLoading(false);
         if (result.success) {
           markSynced();
+          if (result.application?.id) {
+            checkCompletion(result.application?.id);
+          }
           api?.scrollTo(index);
         } else {
           toast({
@@ -273,8 +277,6 @@ export default function ApplicationPage() {
       ...answers,
       incomes,
       identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
-      verificationImages,
-      ...(residentialHistory.housingStatus === 'rent' ? landlordInfo : {}),
     };
 
     setIsLoading(true);
@@ -282,12 +284,16 @@ export default function ApplicationPage() {
       const result = await upsertApplication(applicationData);
       setIsLoading(false);
       if (result.success) {
+        markSynced();
         toast({
           title: "Success",
           description: "Application submitted successfully",
         });
         setHasApplication(true);
-        router.push(`/platform/trips/${tripId}`);
+        if (result.application?.id) {
+          let completeResult = await markComplete(result.application?.id);
+          console.log('completeResult', completeResult);
+        }
       } else {
         toast({
           title: "Error",
