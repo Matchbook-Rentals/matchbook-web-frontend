@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
 import {
   Carousel,
   CarouselContent,
@@ -41,6 +43,9 @@ interface SearchListingCardProps {
 export default function SearchListingCard({ listing, status, className, style, detailsClassName, detailsStyle, callToAction, contextLabel }: SearchListingCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
+  const router = useRouter()
+  const { userId } = useAuth()
+  const { state, actions } = useTripContext()
 
   // Create ref for the image container and state for dimensions
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +66,6 @@ export default function SearchListingCard({ listing, status, className, style, d
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  const { state, actions } = useTripContext();
   const { lookup } = state;
   const { favIds, dislikedIds } = lookup;
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
@@ -105,9 +109,21 @@ export default function SearchListingCard({ listing, status, className, style, d
     }
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't navigate if clicking on action buttons or carousel controls
+    if (
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('.carousel-controls')
+    ) {
+      return;
+    }
+
+    router.push(`/platform/trips/${state.trip.id}/listing/${listing.id}`);
+  };
+
   return (
     <Card
-      className={`w-full overflow-hidden border-0 max-w-[600px]  shadow-0 shadow-none ${className || ''}`}
+      className={`w-full overflow-hidden border-0 max-w-[600px] shadow-0 shadow-none cursor-pointer ${className || ''}`}
       style={style}
       onMouseEnter={() => {
         setIsHovered(true)
@@ -117,6 +133,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         setIsHovered(false)
         setHoveredListing(null)
       }}
+      onClick={handleCardClick}
     >
       <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[600px] sm:aspect-[317/321]">
         <Carousel className="w-full h-full" opts={{ loop: true }}>
