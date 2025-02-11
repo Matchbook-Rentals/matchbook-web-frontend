@@ -12,10 +12,16 @@ import { useAuth, useUser } from "@clerk/nextjs";
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 interface MatchbookHeaderProps {
-  handleListProperty: (() => void) | false;
+  handleListProperty?: (() => void) | false;
+  customMargin?: boolean;
+  isSticky?: boolean;
 }
 
-export default function MatchbookHeader({ handleListProperty = false }: MatchbookHeaderProps) {
+export default function MatchbookHeader({
+  handleListProperty = false,
+  customMargin = true,
+  isSticky = true
+}: MatchbookHeaderProps) {
   const [defaultIsOpen, setDefaultIsOpen] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const { isSignedIn } = useAuth();
@@ -43,11 +49,11 @@ export default function MatchbookHeader({ handleListProperty = false }: Matchboo
   //}, 300)
 
   return (
-    <div className="sticky mb-0 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b">
+    <div className={`${isSticky ? 'sticky' : ''} mb-0 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}>
       {!handleListProperty && (
         <CountdownDialog isOpen={defaultIsOpen} setIsOpen={setDefaultIsOpen} />
       )}
-      <header className="relative flex mb-0 w-full md:w-[90vw] lg:w-[80vw] px-2 md:px-0 mx-auto justify-center pt-2 items-center border-b-0 pb-2">
+      <header className={`relative flex mb-0 w-full ${customMargin ? 'md:w-[90vw] lg:w-[80vw]' : 'md:w-full lg:w-full'} px-2 md:px-0 mx-auto justify-center pt-2 items-center border-b-0 pb-2`}>
         {/* Logo container with responsive visibility */}
         <div className="flex items-center absolute left-2 xs:static xs:mr-auto">
           <Link href={"/"}>

@@ -1,10 +1,10 @@
-import { auth } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
+'use client'
+import { useRouter } from 'next/navigation'
 import { getTripById } from '@/app/actions/trips'
-import { TripContextProvider } from '@/contexts/trip-context-provider'
-import { ListingAndImages } from '@/types'
 import prisma from '@/lib/prismadb'
-import ListingDetailsView from '@/app/platform/trips/(trips-components)/listing-details-view'
+import SearchListingDetailsView from '@/app/platform/trips/(trips-components)/search-listing-details-view'
+import { useTripContext } from '@/contexts/trip-context-provider'
+import { useUser } from '@clerk/nextjs'
 
 interface ListingPageProps {
   params: {
@@ -13,42 +13,42 @@ interface ListingPageProps {
   }
 }
 
-export default async function ListingPage({ params }: ListingPageProps) {
-  const { userId } = auth()
-  if (!userId) {
-    redirect('/sign-in')
-  }
+export default function SearchListingPage({ params }: ListingPageProps) {
+  const { user } = useUser()
+  const { state } = useTripContext()
+  const router = useRouter()
 
-  const trip = await getTripById(params.tripId)
-  if (!trip) {
-    redirect('/platform/trips')
+  // Show loading state while trip or user data is being fetched
+  if (!state.trip || !user) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
   }
 
   // Check if the trip belongs to the user
-  if (trip.userId !== userId) {
+  if (true ||state.trip?.userId !== user?.id) {
     console.log("Not invited to trip, showing default listing view")
-    redirect('/platform/trips/not-invited')
+    setTimeout(() => {
+      router.push(`/guest/listing/${params.listingId}`)
+    }, 2000)
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+        <h1 className="font-mona-sans text-4xl md:text-6xl font-bold text-gray-900 mb-4 text-center">
+          Not Invited to Trip
+        </h1>
+        <p className="text-lg md:text-xl text-gray-600 mb-8 text-center">
+          Redirecting to default listing view...
+        </p>
+        <div className="w-12 h-12 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
   }
-
-  // Get the listing
-  // const listing = await prisma.listing.findUnique({
-  //   where: { id: params.listingId },
-  //   include: {
-  //     listingImages: true,
-  //     bedrooms: true,
-  //     user: true,
-  //     unavailablePeriods: true,
-  //     bookings: true
-  //   }
-  // }) as ListingAndImages | null
-
-  // if (!listing) {
-  //   redirect('/platform/trips')
-  // }
 
   return (
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
-        <ListingDetailsView listingId={params.listingId} />
+        <SearchListingDetailsView listingId={params.listingId} />
       </div>
   )
 }

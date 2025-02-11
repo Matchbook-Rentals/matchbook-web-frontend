@@ -11,7 +11,7 @@ interface ListingDetailsBoxProps {
   setIsDetailsVisible: (isVisible: boolean) => void;
 }
 
-const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike, setIsDetailsVisible }) => {
+const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject, onReturn, onLike, setIsDetailsVisible }) => {
   const host = listing.user;
   const detailsBoxRef = useRef<HTMLDivElement>(null);
   // Style variables
@@ -113,4 +113,4 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, onReject
   );
 };
 
-export default ListingDetailsBox;
+export default SearchListingDetailsBox;

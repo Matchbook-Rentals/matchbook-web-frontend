@@ -4,7 +4,7 @@ import ListingImageCarousel from './image-carousel';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import ListingDescription from './listing-info';
-import ListingDetailsBox from '../../searches/(components)/ListingDetailsBox';
+import SearchListingDetailsBox from '../../searches/(components)/search-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BrandHeart, RejectIcon } from '@/components/icons';
@@ -13,7 +13,7 @@ interface ListingDetailsViewProps {
   listingId: string;
 }
 
-export default function ListingDetailsView({ listingId }: ListingDetailsViewProps) {
+export default function SearchListingDetailsView({ listingId }: ListingDetailsViewProps) {
   const { state, actions } = useTripContext();
   const listing = state.listings.find(l => l.id === listingId);
 
@@ -113,7 +113,7 @@ export default function ListingDetailsView({ listingId }: ListingDetailsViewProp
           <div
             className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
           >
-            <ListingDetailsBox
+            <SearchListingDetailsBox
               listing={listing}
               onReject={handleReject}
               onLike={handleLike}

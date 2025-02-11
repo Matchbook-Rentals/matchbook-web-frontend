@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/ui/spinner';
 import ListingDetails from '../(components)/listing-details';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ListingDescription from '../../trips/(trips-components)/listing-info';
-import ListingDetailsBox from '../(components)/ListingDetailsBox';
+import ListingDetailsBox from '../(components)/search-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import ActionPopup from '../(components)/action-popup';
