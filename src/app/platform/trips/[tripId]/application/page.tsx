@@ -348,20 +348,19 @@ export default function ApplicationPage() {
 
   return (
     <div className={PAGE_MARGIN}>
-      <Breadcrumbs
+      <Breadcrumbs className="mb-4"
         links={[
           { label: getTripLocationString(trip), url: `/platform/trips/${tripId}` },
           { label: 'Application' }
-        ]}
-        className="mb-4"
-      />
+        ]} />
+
 
       {isMobile ? (
         <MobileApplicationEdit />
       ) : (
         <div className="flex gap-6 max-w-full overflow-x-hidden">
           {/* Sidebar Navigation - Hidden on mobile */}
-          <div onClick={() => console.log(application)} className="hidden md:block pt-1 w-64 shrink-0">
+          <div onClick={() => console.log(application)} className="hidden lg:block pt-1 w-64 shrink-0">
             <nav className="space-y-1">
               {navigationItems.map((item, index) => (
                 <button
@@ -382,6 +381,43 @@ export default function ApplicationPage() {
 
           {/* Carousel Section with Overlay */}
           <div className="relative flex-1 min-w-0">
+            {/* Navigation Buttons moved to top */}
+            <div className="flex justify-between px-6 mb-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  api?.scrollPrev();
+                }}
+                disabled={currentStep === 0}
+              >
+                Previous
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  scrollToIndex(currentStep + 1);
+                }}
+                disabled={currentStep === navigationItems.length - 1}
+              >
+                Next
+              </Button>
+            </div>
+
             {isLoading && (
               <div className="absolute inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-10">
                 <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -399,9 +435,9 @@ export default function ApplicationPage() {
                 watchDrag: false
               }}
             >
-              <CarouselContent className="w-full">
+              <CarouselContent className="w-full ">
                 <CarouselItem>
-                  <div className="px-6 pb-6 pt-0  min-h-[400px]">
+                  <div className="px-6 pb-6 pt-0 overflow-y-auto  min-h-[400px]">
                     <h2 className={ApplicationItemHeaderStyles}>
                       Basic Information
                     </h2>
@@ -414,7 +450,7 @@ export default function ApplicationPage() {
                 </CarouselItem>
 
                 <CarouselItem>
-                  <div className="px-6 pb-6 min-h-[400px]">
+                  <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
                     <h2 className={ApplicationItemHeaderStyles}>
                       Residential History
                     </h2>
@@ -424,7 +460,7 @@ export default function ApplicationPage() {
                 </CarouselItem>
 
                 <CarouselItem>
-                  <div className="px-6 pb-6 min-h-[400px]">
+                  <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
                     <h2 className={itemHeaderStyles}>
                       Income
                     </h2>
@@ -433,7 +469,7 @@ export default function ApplicationPage() {
                 </CarouselItem>
 
                 <CarouselItem>
-                  <div className="px-6 pb-6 min-h-[400px]">
+                  <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
                     <h2 className={itemHeaderStyles}>
                       Questionnaire
                     </h2>
@@ -449,43 +485,6 @@ export default function ApplicationPage() {
                 </CarouselItem>
               </CarouselContent>
             </Carousel>
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (!validateStep(currentStep)) {
-                    toast({
-                      title: "Validation Error",
-                      description: "Please correct errors before navigating.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  api?.scrollPrev();
-                }}
-                disabled={currentStep === 0}
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={() => {
-                  if (!validateStep(currentStep)) {
-                    toast({
-                      title: "Validation Error",
-                      description: "Please correct errors before navigating.",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  scrollToIndex(currentStep + 1);
-                }}
-                disabled={currentStep === navigationItems.length - 1}
-              >
-                Next
-              </Button>
-            </div>
           </div>
         </div>
       )}

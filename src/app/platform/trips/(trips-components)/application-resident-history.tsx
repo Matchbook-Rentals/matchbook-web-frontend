@@ -129,7 +129,7 @@ export const ResidentialHistory: React.FC = () => {
         </div>
 
         {/* Payment and Duration */}
-        <div className="space-y-2 space-x-4 py-0 flex flex-col items-end  xl:flex-row">
+        <div className="space-y-2 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
           <CurrencyInput
             id="monthlyPayment"
             className={`py-2 ${error?.monthlyPayment ? "border-red-500" : ""}`}
@@ -155,15 +155,15 @@ export const ResidentialHistory: React.FC = () => {
           <RadioGroup
             value={residentialHistory.housingStatus}
             onValueChange={handleRadioChange}
-            className="space-y-2 est"
+            className="space-y-2 "
           >
             <div className="flex items-center  space-x-2">
               <RadioGroupItem value="rent" id="rent" className='mb-2' />
-              <Label className='text-[20px] font-normal' htmlFor="rent">I rent this property</Label>
+              <Label className='text-[16px] sm:text-[20px] font-normal' htmlFor="rent">I rent this property</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="own" id="own" className='mb-2' />
-              <Label className='text-[20px] font-normal' htmlFor="own">I own this property</Label>
+              <Label className='text-[16px] sm:text-[20px] font-normal' htmlFor="own">I own this property</Label>
             </div>
           </RadioGroup>
         </div>

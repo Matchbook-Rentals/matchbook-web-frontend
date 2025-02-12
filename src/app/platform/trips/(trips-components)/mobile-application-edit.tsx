@@ -38,6 +38,7 @@ export default function MobileApplicationEdit() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
+  const [openAccordion, setOpenAccordion] = useState<string>('___closed');
 
   // Replace all individual state with store
   const {
@@ -104,9 +105,13 @@ export default function MobileApplicationEdit() {
   const handleSubmit = async () => {
     // Validate all sections
     const sections = ['basic', 'residential', 'income', 'questionnaire'];
-    const allValid = sections.every(section => validateSection(section));
+    const invalidSections = sections.filter(section => !validateSection(section));
 
-    if (!allValid) {
+    if (invalidSections.length > 0) {
+      setOpenAccordion('___closed'); // close all accordions
+      setTimeout(() => {
+        setOpenAccordion(invalidSections[0]); // open the first invalid section after 600ms delay
+      }, 600);
       toast({
         title: "Validation Error",
         description: "Please correct all errors before submitting.",
@@ -158,7 +163,12 @@ export default function MobileApplicationEdit() {
   return (
     <div className={PAGE_MARGIN}>
       <div className="w-full max-w-3xl mx-auto">
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={(value) => setOpenAccordion(value === '' ? '___closed' : value)}>
+          <AccordionItem value="___closed" className="hidden">
+            <AccordionTrigger className="hidden" />
+            <AccordionContent className="hidden" />
+          </AccordionItem>
+
           <AccordionItem
             value="basic"
             className={cn(

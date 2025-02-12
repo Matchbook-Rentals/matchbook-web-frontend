@@ -10,7 +10,7 @@ export const TallDialogTitle = 'px-4 py-4 border-b border-gray-300 text-[20px] t
 export const TallDialogTrigger = 'flex items-center rounded-full p-2 px-4';
 export const TallDialogTriggerText = 'text-[#404040] text-center font-montserrat text-[16px] font-medium';
 
-export const ApplicationItemHeaderStyles = 'text-[32px] font-medium  mb-4 ';
-export const ApplicationItemSubHeaderStyles = 'text-[24px] font-medium  mb-4 ';
-export const ApplicationItemLabelStyles = 'text-[18px] font-normal mb-2 ';
-export const ApplicationItemInputStyles = 'text-[16px] font-normal  mb-4 ';
+export const ApplicationItemHeaderStyles = 'text-[24px] sm:text-[32px] font-medium  mb-4 ';
+export const ApplicationItemSubHeaderStyles = 'text-[20px] sm:text-[24px] font-medium  mb-4 ';
+export const ApplicationItemLabelStyles = 'text-[16px] sm:text-[18px] font-normal mb-2 ';
+export const ApplicationItemInputStyles = 'text-[14px] sm:text-[16px] font-normal  mb-4 ';

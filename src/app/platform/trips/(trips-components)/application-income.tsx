@@ -89,7 +89,6 @@ export const Income: React.FC = () => {
     <div onClick={() => console.log(incomes)}>
       {incomes.map((item, index) => (
         <div key={index} className="mb-4 p-4 border rounded relative">
-          {item.id || 'new'}
           {index > 0 && (
             <button
               onClick={() => handleDelete(index)}
@@ -134,7 +133,7 @@ export const Income: React.FC = () => {
         </div>
       ))}
 
-      <div className="mt-4">
+      <div className="my-4 space-y-4">
         <Button onClick={(e) => addIncome(e)} className="w-full mb-4">
           <PlusCircle className="mr-2 h-4 w-4" /> Add Another Income
         </Button>
@@ -144,7 +143,7 @@ export const Income: React.FC = () => {
           onUploadError={(error) => alert(error.message)}
           onClientUploadComplete={(res) => handleUploadFinish(res)}
           className="p-0 mt-2"
-          appearance={{ button: 'bg-parent border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
+          appearance={{ button: 'bg-parent border-[#404040] text-[#404040] border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
         />
       </div>
 
