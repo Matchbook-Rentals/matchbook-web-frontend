@@ -32,6 +32,7 @@ function ListingDetailsView({
   listing: ListingAndImages;
   actions: ReturnType<typeof useTripContext>["actions"];
 }) {
+  const { state } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
   const [mapCenter, setMapCenter] = useState<[number, number]>(() => [listing.longitude, listing.latitude]);
