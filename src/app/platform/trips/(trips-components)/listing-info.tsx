@@ -9,10 +9,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
-import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
+import {
+  TallDialogContent,
+  TallDialogTitle,
+  TallDialogTrigger,
+  TallDialogTriggerText,
+} from '@/constants/styles';
 import { Star } from 'lucide-react';
 import ShareButton from '@/components/ui/share-button';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
+
+// Define your base URL; for example, using an environment variable.
+const baseUrl = process.env.NEXT_PUBLIC_URL || "";
 
 const sectionStyles = 'border-b pb-5 mt-5';
 const sectionHeaderStyles = 'text-[#404040] text-[24px] mb-3 font-medium';
@@ -25,6 +33,8 @@ interface ListingDescriptionProps {
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const pathname = usePathname();
+  const { tripId } = useParams();
+
   const calculateDisplayAmenities = () => {
     const displayAmenities = [];
     for (let amenity of iconAmenities) {
@@ -39,14 +49,18 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
   const initialDisplayCount = 6;
 
   return (
-    <div className='w-full  '>
+    <div className='w-full'>
       <div className='flex justify-between items-center border-b mt-6 mb-3'>
-        <h1 className="text-[#404040]  text-[24px] sm:text-[32px] font-normal">
+        <h1 className="text-[#404040] text-[24px] sm:text-[32px] font-normal">
           {listing.title}
         </h1>
-        <ShareButton title={`${listing.title} on Matchbook`} text={`Check out this listing on Matchbook: ${pathname}`} />
+        <ShareButton
+          title={`${listing.title} on Matchbook`}
+          text={`Check out this listing on Matchbook: ${pathname}`}
+          url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+        />
       </div>
-      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px]  sm:text-[24px] font-normal`}>
+      <div className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>
         <div className="lg:hidden w-full flex flex-col space-y-6">
           <div className="w-full flex justify-between">
             <p>{listing.roomCount} beds | {listing.bathroomCount} Baths</p>
@@ -63,28 +77,23 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         </div>
       </div>
 
-
-      {/* Highlights Section   */}
+      {/* Highlights Section */}
       <div className={sectionStyles}>
-
         <h3 className={sectionHeaderStyles}> Highlights </h3>
-
         <AmenityListItem
           icon={MatchbookVerified}
           label="Matchbook Verified Guests Preferred"
           labelClassNames={amenityTextStyle}
           iconClassNames='h-[32px] w-[32px]'
-          className=' '
         />
         <div className="flex flex-col space-y-2">
-          {/* Property Type */}
+          {/* Category-dependent icons */}
           {listing.category === "singleFamily" && (
             <AmenityListItem
               icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
               label="Single Family"
               labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
-              className=' '
             />
           )}
           {listing.category === "townhouse" && (
@@ -93,7 +102,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
               label="Townhouse"
               labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
-              className=' '
             />
           )}
           {listing.category === "privateRoom" && (
@@ -102,7 +110,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
               label="Private Room"
               labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
-              className=' '
             />
           )}
           {(listing.category === "apartment" || listing.category === "condo") && (
@@ -111,7 +118,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
               label="Apartment"
               labelClassNames={amenityTextStyle}
               iconClassNames='h-[32px] w-[32px]'
-              className=' '
             />
           )}
 
@@ -121,7 +127,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             label={listing.furnished ? "Furnished" : "Unfurnished"}
             labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
-            className=' '
           />
 
           {/* Utilities */}
@@ -130,7 +135,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
             labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
-            className=' '
           />
 
           {/* Pets */}
@@ -139,17 +143,16 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
             label={listing.petsAllowed ? "Pets Allowed" : "No Pets"}
             labelClassNames={amenityTextStyle}
             iconClassNames='h-[32px] w-[32px]'
-            className=' '
           />
         </div>
       </div>
 
-
-
       {/* Description section */}
       <div className={sectionStyles}>
         <h3 className={sectionHeaderStyles}> Description </h3>
-        <p className={bodyTextStyle}> {listing.description + listing.description + listing.description + listing.description} </p>
+        <p className={bodyTextStyle}>
+          {listing.description + listing.description + listing.description + listing.description}
+        </p>
       </div>
 
       {/* Amenity section */}
@@ -169,7 +172,10 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
         {displayAmenities.length > initialDisplayCount && (
           <Dialog>
             <DialogTrigger className=" mt-2 w-full sm:w-auto">
-              <Button variant="outline" className='text-[16px] mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0' >
+              <Button
+                variant="outline"
+                className='text-[16px] mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0'
+              >
                 Show all {displayAmenities.length} amenities
               </Button>
             </DialogTrigger>
@@ -207,11 +213,8 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
           </Dialog>
         )}
       </div>
-
-
-
-    </div >
+    </div>
   );
-}
+};
 
 export default ListingDescription;

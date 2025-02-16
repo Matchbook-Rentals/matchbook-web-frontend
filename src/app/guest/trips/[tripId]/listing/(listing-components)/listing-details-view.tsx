@@ -11,10 +11,13 @@ import { BrandHeart, RejectIcon } from '@/components/icons';
 interface ListingDetailsViewProps {
   listing: ListingAndImages;
   locationString: string;
+  calculatedPrice: number;
 }
 
 export default function ListingDetailsView({
   listing,
+  locationString,
+  calculatedPrice,
 }: ListingDetailsViewProps) {
   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
@@ -85,7 +88,7 @@ export default function ListingDetailsView({
         <div className="flex justify-between gap-x-8 relative">
           <ListingDescription listing={listing} />
           <div className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block">
-            <ListingDetailsBox listing={listing} />
+            <ListingDetailsBox listing={listing} calculatedPrice={calculatedPrice} />
           </div>
         </div>
 

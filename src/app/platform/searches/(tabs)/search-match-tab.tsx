@@ -2,21 +2,17 @@
 //IMports
 import React, { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
 import ListingImageCarousel from '../../trips/(trips-components)/image-carousel';
-import ButtonControl from '../../trips/(trips-components)/button-controls';
 import { BrandHeart, RejectIcon, ReturnIcon } from '@/components/svgs/svg-components';
 import { amenities } from '@/lib/amenities-list';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
-import ListingDetails from '../(components)/listing-details';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ListingDescription from '../../trips/(trips-components)/listing-info';
 import ListingDetailsBox from '../(components)/search-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import ActionPopup from '../(components)/action-popup';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
-const PLATFORM_NAVBAR_HEIGHT = 0; // Add this constant for the navbar height
 
 // Add prop interface
 interface MatchViewTabProps {
@@ -28,7 +24,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const { state, actions } = useTripContext();
   const { showListings, listings, viewedListings, lookup } = state;
   const { favIds, dislikedIds } = lookup;
-  const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike, optimisticMaybe, optimisticRemoveMaybe } = actions;
+  const { setViewedListings, setLookup, optimisticLike, optimisticRemoveLike, optimisticDislike, optimisticRemoveDislike } = actions;
   const MAX_HISTORY = 50;
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -145,8 +141,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         await optimisticRemoveLike(lastAction.listing.id);
       } else if (lastAction.action === 'dislike') {
         await optimisticRemoveDislike(lastAction.listing.id);
-      } else if (lastAction.action === 'maybe') {
-        await optimisticRemoveMaybe(lastAction.listing.id);
       }
 
       setViewedListings(prev => prev.slice(0, -1));
@@ -175,8 +169,8 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   };
 
   // Calculate the number of liked/maybed and filtered out listings
-  const numFavorites = state.likedListings.length + state.maybedListings.length;
-  const numFilteredOut = listings.length - state.likedListings.length - state.maybedListings.length;
+  const numFavorites = state.likedListings.length;
+  const numFilteredOut = listings.length - state.likedListings.length;
 
   // Early returns for edge cases
   if (state.isLoading) {

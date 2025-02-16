@@ -1,7 +1,36 @@
 # TO DOs
 
 
-NONE FOR NO MIDDLE NAME (no middle name toggle)
+- [ ] NONE FOR NO MIDDLE NAME (no middle name toggle)
+- [ ] kill prices between move deposit up
+- [ ] guest attach tripId
+---- [ ] change links to /guest/tripID/listingId (on share buttons)
+---- [ ] change route to the above
+-----[ ] change listing details box to calc price
+- [ ] move flip point on action buttons (to bottom instead of top)
+- [ ] less than 10 on distance change toFixed to 1 above 10 toFixed(0)
+- [ ] finish sharebutton url fix
+- [ ] delete maybes from trip context
+- [ ] scrollbar outside the lines
+- [ ] infinite scroll
+- [ ] close button fixed
+- [ ] fuck with maps to create switch for map zoom to search radius
+- [ ] double click to kill it
+- [ ] add like button to map listing card
+- [ ] see more becomes a pop up on mobile
+- [ ] add card on desktop to pin click
+- [ ] card hover change cursor color
+- [ ] map button too big and too bold for map view
+- [ ] manage search cards full in single stack
+- [ ] fix shadow transition
+- [ ] if own property hide landlord information
+- [ ] line up income inputs vertically
+- [ ] each income item gets its own upload button
+- [ ] Guest counter filled in on search edit mobile
+- [ ] loading skeleton
+
+
+
 
 ##10FEB24
 - [x] finish application sent to DB
@@ -10,6 +39,8 @@ NONE FOR NO MIDDLE NAME (no middle name toggle)
 - [ ] sign up sign in pages
 - [x] fix share button
   - [ ] test on mobile
+
+
 
 Credit Card APIS for paywall
 EVICTION AND CRIMINAL BACKGROUND CHECKS
