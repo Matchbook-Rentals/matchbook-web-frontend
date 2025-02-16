@@ -72,7 +72,7 @@ export const Identification: React.FC = () => {
   const identificationImages = verificationImages.filter(img => img.category === 'Identification');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
@@ -84,7 +84,7 @@ export const Identification: React.FC = () => {
             ])}
           >
             <SelectTrigger className={`${error?.idType ? 'border-red-500' : ''}`}>
-              <SelectValue placeholder="Select Id type" />
+              <SelectValue placeholder="Select Identification Type" />
             </SelectTrigger>
             <SelectContent>
               {ID_TYPES.map((type) => (
@@ -96,7 +96,7 @@ export const Identification: React.FC = () => {
           </Select>
           {error?.idType && <p className="mt-1 text-red-500 text-sm">{error.idType}</p>}
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 mb-4 lg:mb-8">
           <Label htmlFor="idNumber" className={ApplicationItemLabelStyles}>Id Number</Label>
           <Input
             id="idNumber"
@@ -110,56 +110,57 @@ export const Identification: React.FC = () => {
           {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
         </div>
       </div>
-      <div className="mt-2">
-        <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
-        <UploadButton<UploadData>
-          endpoint="idUploader"
-          onClientUploadComplete={handleUploadFinish}
-          onUploadError={(error: Error) => alert(error.message)}
-          className="p-0 mt-5"
-          appearance={{ button: 'bg-parent text-[#404040] border-[#404040] border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-[#404040]' }}
-        />
-      </div>
-      {identificationImages.length > 0 && (
-        <>
-          <Label className={ApplicationItemLabelStyles}>Id image uploads</Label>
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            {identificationImages.map((img, idx) => (
-              <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
-                <DialogTrigger asChild>
-                  <img
-                    src={img.url}
-                    alt={`Id image ${idx + 1}`}
-                    className="w-full h-auto cursor-pointer"
-                    onClick={() => handleImageClick(idx)}
-                  />
-                </DialogTrigger>
-                <DialogContent className="max-w-3xl">
-                  <DialogHeader>
-                    <DialogTitle>Id Images</DialogTitle>
-                    <DialogDescription>Use arrows to navigate between images</DialogDescription>
-                  </DialogHeader>
-                  <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
-                    <CarouselContent>
-                      {identificationImages.map((image, index) => (
-                        <CarouselItem key={index}>
-                          <Card>
-                            <CardContent className="flex aspect-square items-center justify-center p-6">
-                              <img src={image.url} alt={`Id image ${index + 1}`} className="w-full h-auto" />
-                            </CardContent>
-                          </Card>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </Carousel>
-                </DialogContent>
-              </Dialog>
-            ))}
+      <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
+      <div className="grid grid-cols-2 gap-4">
+        <div className='border border-gray-200 rounded-md flex justify-center items-center'>
+          <UploadButton<UploadData>
+            endpoint="idUploader"
+            onClientUploadComplete={handleUploadFinish}
+            onUploadError={(error: Error) => alert(error.message)}
+            className="mb-0"
+            appearance={{ button: 'bg-parent text-[#404040] border-[#404040] border-2  sm:4/5 px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-[#404040]' }}
+          />
+        </div>
+        {identificationImages.length > 0 && (
+          <div className='border border-gray-300 rounded-md '>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {identificationImages.map((img, idx) => (
+                <Dialog key={idx} onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
+                  <DialogTrigger asChild>
+                    <img
+                      src={img.url}
+                      alt={`Id image ${idx + 1}`}
+                      className="w-full h-auto cursor-pointer"
+                      onClick={() => handleImageClick(idx)}
+                    />
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                      <DialogTitle>Id Images</DialogTitle>
+                      <DialogDescription>Use arrows to navigate between images</DialogDescription>
+                    </DialogHeader>
+                    <Carousel opts={{ loop: true, startIndex: selectedImageIndex ?? 0 }}>
+                      <CarouselContent>
+                        {identificationImages.map((image, index) => (
+                          <CarouselItem key={index}>
+                            <Card>
+                              <CardContent className="flex aspect-square items-center justify-center p-6">
+                                <img src={image.url} alt={`Id image ${index + 1}`} className="w-full h-auto" />
+                              </CardContent>
+                            </Card>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

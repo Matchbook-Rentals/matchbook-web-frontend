@@ -395,10 +395,10 @@ export default function ApplicationPage() {
               opts={{
                 align: 'start',
                 skipSnaps: false,
-                watchDrag: false
+                watchDrag: false,
               }}
             >
-              <CarouselContent className="w-full ">
+              <CarouselContent className="w-full">
                 <CarouselItem>
                   <div className="px-6 pb-6 pt-0 overflow-y-auto  min-h-[400px]">
                     <h2 className={ApplicationItemHeaderStyles}>
@@ -406,7 +406,6 @@ export default function ApplicationPage() {
                     </h2>
                     <PersonalInfo />
                     <div className="mt-8">
-                      <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
                       <Identification />
                     </div>
                   </div>
@@ -450,7 +449,7 @@ export default function ApplicationPage() {
             </Carousel>
 
             {/* Navigation Buttons moved to bottom */}
-            <div className="flex justify-between px-6 my-4">
+            <div className="flex justify-between px-6 mt-1 mb-4">
               <Button
                 onClick={() => {
                   if (!validateStep(currentStep)) {
