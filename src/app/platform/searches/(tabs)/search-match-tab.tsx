@@ -41,10 +41,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Remove these states since we handle popups in the context now
-  const [showActionPopup, setShowActionPopup] = useState(false);
-  const [currentAction, setCurrentAction] = useState<'like' | 'dislike' | 'back'>('like');
-
   useEffect(() => {
     const handleScroll = () => {
       if (detailsBoxRef.current && locationSectionRef.current) {

@@ -2,11 +2,11 @@
 
 
 - [ ] NONE FOR NO MIDDLE NAME (no middle name toggle)
-- [ ] kill prices between move deposit up
-- [ ] guest attach tripId
----- [ ] change links to /guest/tripID/listingId (on share buttons)
----- [ ] change route to the above
------[ ] change listing details box to calc price
+- [x] kill prices between move deposit up
+- [x] guest attach tripId
+---- [x] change links to /guest/tripID/listingId (on share buttons)
+---- [x] change route to the above
+-----[x] change listing details box to calc price
 - [ ] move flip point on action buttons (to bottom instead of top)
 - [ ] less than 10 on distance change toFixed to 1 above 10 toFixed(0)
 - [ ] finish sharebutton url fix
@@ -28,6 +28,7 @@
 - [ ] each income item gets its own upload button
 - [ ] Guest counter filled in on search edit mobile
 - [ ] loading skeleton
+- [ ] 24 months +, load more address history, own property gets rid of landlord info
 
 
 

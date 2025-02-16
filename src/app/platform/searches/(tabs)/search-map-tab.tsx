@@ -38,7 +38,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { listings, showListings, likedListings, maybedListings, trip } = state;
+  const { listings, showListings, likedListings, trip } = state;
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
@@ -85,7 +85,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     }
   }, [isSlideMapOpen]);
 
-  // Using this instead of showListings as we might want to add back in liked/maybed listings
+  // Using this instead of showListings as we might want to add back in liked listings
   const displayListings = [...showListings];
 
   const getListingStatus = (listing: ListingAndImages) => {
@@ -125,9 +125,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     router.push(url);
   };
 
-  // Calculate the number of liked/maybed and filtered out listings
-  const numFavorites = likedListings.length + maybedListings.length;
-  const numFilteredOut = listings.length - likedListings.length - maybedListings.length;
+  // Calculate the number of liked and filtered out listings
+  const numFavorites = likedListings.length;
+  const numFilteredOut = listings.length - likedListings.length;
 
   return (
     <>

@@ -84,9 +84,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     if (state.lookup.favIds.has(listing.id)) {
       return ListingStatus.Favorite;
     }
-    if (state.lookup.maybeIds.has(listing.id)) {
-      return ListingStatus.Maybe;
-    }
     return ListingStatus.None;
   };
 

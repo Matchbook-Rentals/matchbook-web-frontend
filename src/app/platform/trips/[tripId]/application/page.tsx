@@ -381,43 +381,6 @@ export default function ApplicationPage() {
 
           {/* Carousel Section with Overlay */}
           <div className="relative flex-1 min-w-0">
-            {/* Navigation Buttons moved to top */}
-            <div className="flex justify-between px-6 mb-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (!validateStep(currentStep)) {
-                    toast({
-                      title: "Validation Error",
-                      description: "Please correct errors before navigating.",
-                      variant: "destructive"
-                    });
-                    return;
-                  }
-                  api?.scrollPrev();
-                }}
-                disabled={currentStep === 0}
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={() => {
-                  if (!validateStep(currentStep)) {
-                    toast({
-                      title: "Validation Error",
-                      description: "Please correct errors before navigating.",
-                      variant: "destructive"
-                    });
-                    return;
-                  }
-                  scrollToIndex(currentStep + 1);
-                }}
-                disabled={currentStep === navigationItems.length - 1}
-              >
-                Next
-              </Button>
-            </div>
-
             {isLoading && (
               <div className="absolute inset-0 bg-gray-300 bg-opacity-50 flex items-center justify-center z-10">
                 <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -485,6 +448,42 @@ export default function ApplicationPage() {
                 </CarouselItem>
               </CarouselContent>
             </Carousel>
+
+            {/* Navigation Buttons moved to bottom */}
+            <div className="flex justify-between px-6 my-4">
+              <Button
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  api?.scrollPrev();
+                }}
+                disabled={currentStep === 0}
+              >
+               Back
+              </Button>
+              <Button
+                onClick={() => {
+                  if (!validateStep(currentStep)) {
+                    toast({
+                      title: "Validation Error",
+                      description: "Please correct errors before navigating.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  scrollToIndex(currentStep + 1);
+                }}
+                disabled={currentStep === navigationItems.length - 1}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </div>
       )}

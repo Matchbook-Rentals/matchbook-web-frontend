@@ -15,7 +15,7 @@ export default function SearchFavoritesTab() {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { state, actions } = useTripContext();
-  const { likedListings, requestedListings, maybedListings, lookup } = state;
+  const { likedListings, requestedListings, lookup } = state;
   const { setLookup } = actions;
   const router = useRouter();
   const pathname = usePathname();
@@ -154,7 +154,7 @@ export default function SearchFavoritesTab() {
     };
   }, []);
 
-  if (likedListings.length === 0 && requestedListings.length === 0 && maybedListings.length === 0) {
+  if (likedListings.length === 0 && requestedListings.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
         {(() => {
@@ -179,7 +179,7 @@ export default function SearchFavoritesTab() {
     <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full">
       <div className="w-full ">
         <SearchFavoriteGrid
-          listings={[...likedListings, ...maybedListings].sort((a, b) => {
+          listings={[...likedListings].sort((a, b) => {
             const aRequested = lookup.requestedIds.has(a.id);
             const bRequested = lookup.requestedIds.has(b.id);
             return bRequested ? 1 : aRequested ? -1 : 0;
