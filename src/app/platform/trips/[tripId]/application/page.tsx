@@ -33,6 +33,7 @@ import {
   validateQuestionnaire
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
+import { ResidentialLandlordInfo } from '../../(trips-components)/residential-landlord-info';
 
 const navigationItems = [
   { id: 'basic', label: 'Basic Information' },
@@ -416,8 +417,7 @@ export default function ApplicationPage() {
                     <h2 className={ApplicationItemHeaderStyles}>
                       Residential History
                     </h2>
-                    <ResidentialHistory />
-                    <LandlordInfo />
+                    <ResidentialLandlordInfo />
                   </div>
                 </CarouselItem>
 
