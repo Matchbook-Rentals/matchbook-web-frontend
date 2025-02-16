@@ -414,9 +414,12 @@ export default function ApplicationPage() {
 
                 <CarouselItem>
                   <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
-                    <h2 className={ApplicationItemHeaderStyles}>
+                    <h2 className={cn(ApplicationItemHeaderStyles, "mb-1")}>
                       Residential History
                     </h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Please add 24 months of residential history or three previous addresses.
+        </p>
                     <ResidentialLandlordInfo />
                   </div>
                 </CarouselItem>

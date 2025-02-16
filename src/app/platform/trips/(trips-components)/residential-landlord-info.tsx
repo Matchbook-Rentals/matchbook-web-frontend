@@ -66,29 +66,13 @@ export const ResidentialLandlordInfo: React.FC = () => {
     });
   };
 
-  // Auto-trim or auto-add residences: Only show as many residences as needed to sum to at least 24 months.
+  // Automatically add a new residence if the last one has a duration, total months is less than 24, and we haven't reached 3 residences
   useEffect(() => {
-    let cumulative = 0;
-    let trimIndex = -1;
-    for (let i = 0; i < residences.length; i++) {
-      cumulative += parseInt(residences[i].durationOfTenancy) || 0;
-      if (cumulative >= 24) {
-        trimIndex = i;
-        break;
-      }
+    const lastResidence = residences[residences.length - 1];
+    if (totalMonths < 24 && lastResidence && lastResidence.durationOfTenancy !== "" && residences.length < 3) {
+      addResidence();
     }
-
-    if (trimIndex !== -1 && residences.length > trimIndex + 1) {
-      // We've reached 24 months; trim extra residences
-      setResidences(residences.slice(0, trimIndex + 1));
-    } else if (cumulative < 24) {
-      // If total is less than 24 and the last residence's duration is filled, auto-add a new residence if not already present
-      const lastResidence = residences[residences.length - 1];
-      if (lastResidence && lastResidence.durationOfTenancy !== "" && residences.length < 3) {
-        setResidences([...residences, { ...defaultResidence }]);
-      }
-    }
-  }, [residences]);
+  }, [residences, totalMonths]);
 
   return (
     <div className="space-y-8">
@@ -105,7 +89,6 @@ export const ResidentialLandlordInfo: React.FC = () => {
           <div key={index} className="border p-4 rounded-md space-y-6">
             <h3 className={ApplicationItemSubHeaderStyles}>{headerText}</h3>
             <div className="space-y-4">
-              <h4 className={ApplicationItemSubHeaderStyles}>Address Information</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <Label className={ApplicationItemLabelStyles}>Street Address</Label>
@@ -237,9 +220,6 @@ export const ResidentialLandlordInfo: React.FC = () => {
           </div>
         );
       })}
-      <div className="flex flex-col items-start space-y-2">
-        <p>Total Months: {totalMonths} (need at least 24)</p>
-      </div>
     </div>
   );
 };
