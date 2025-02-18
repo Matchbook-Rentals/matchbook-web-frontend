@@ -7,12 +7,13 @@ import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
 import { ResidentialHistory } from '@prisma/client';
+import { validateResidentialHistory } from '@/utils/application-validation';
 
 export const ResidentialLandlordInfo: React.FC = () => {
   // Directly use residentialHistory from the store
   const residentialHistory = useApplicationStore((state) => state.residentialHistory);
   const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
-
+  const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -104,6 +105,9 @@ export const ResidentialLandlordInfo: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {residentialHistoryErrors.overall && (
+         <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
+      )}
       {residentialHistory.map((residence, index) => {
         let headerText;
         if (index === 0) {
@@ -125,7 +129,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     value={residence.street || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="Street Address Ex: 123 Main St"
+                    className={residentialHistoryErrors.street?.[index] ? "border-red-500" : ""}
                   />
+                  {residentialHistoryErrors.street?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.street[index]}</p>
+                  )}
                 </div>
                 <div>
                   <Label className={ApplicationItemLabelStyles}>Apt, Suite, Bldg</Label>
@@ -143,7 +151,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     value={residence.city || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="City"
+                    className={residentialHistoryErrors.city?.[index] ? "border-red-500" : ""}
                   />
+                  {residentialHistoryErrors.city?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.city[index]}</p>
+                  )}
                 </div>
                 <div>
                   <Label className={ApplicationItemLabelStyles}>State</Label>
@@ -152,7 +164,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     value={residence.state || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="State"
+                    className={residentialHistoryErrors.state?.[index] ? "border-red-500" : ""}
                   />
+                  {residentialHistoryErrors.state?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.state[index]}</p>
+                  )}
                 </div>
                 <div>
                   <Label className={ApplicationItemLabelStyles}>ZIP Code</Label>
@@ -161,24 +177,35 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     value={residence.zipCode || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="ZIP Code"
+                    className={residentialHistoryErrors.zipCode?.[index] ? "border-red-500" : ""}
                   />
+                  {residentialHistoryErrors.zipCode?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.zipCode[index]}</p>
+                  )}
                 </div>
                 <div className="space-y-2 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
                   <CurrencyInput
                     id={`monthlyPayment-${index}`}
-                    className="py-2"
+                    className={`py-2 ${residentialHistoryErrors.monthlyPayment?.[index] ? "border-red-500" : ""}`}
                     label="Monthly Payment"
                     labelClassName={ApplicationItemLabelStyles + ' text-[#404040]'}
                     value={residence.monthlyPayment || ""}
                     onChange={(value) => handleMonthlyPaymentChange(index, value)}
                   />
+                  {residentialHistoryErrors.monthlyPayment?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.monthlyPayment[index]}</p>
+                  )}
                   <div className="flex flex-col test">
                     <Label className={ApplicationItemLabelStyles}>Length of Stay (months)</Label>
                     <MonthSelect
                       value={residence.durationOfTenancy || ""}
                       onChange={(value) => handleDurationChange(index, value)}
+                      className={residentialHistoryErrors.durationOfTenancy?.[index] ? "border-red-500" : ""}
                     />
                   </div>
+                  {residentialHistoryErrors.durationOfTenancy?.[index] && (
+                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.durationOfTenancy[index]}</p>
+                  )}
                 </div>
                 <div className="flex items-center">
                   <RadioGroup
@@ -213,7 +240,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       value={residence.landlordFirstName || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's First Name"
+                      className={residentialHistoryErrors.landlordFirstName?.[index] ? "border-red-500" : ""}
                     />
+                    {residentialHistoryErrors.landlordFirstName?.[index] && (
+                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordFirstName[index]}</p>
+                    )}
                   </div>
                   <div>
                     <Label className={ApplicationItemLabelStyles}>Last Name</Label>
@@ -222,7 +253,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       value={residence.landlordLastName || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Last Name"
+                      className={residentialHistoryErrors.landlordLastName?.[index] ? "border-red-500" : ""}
                     />
+                    {residentialHistoryErrors.landlordLastName?.[index] && (
+                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordLastName[index]}</p>
+                    )}
                   </div>
                   <div>
                     <Label className={ApplicationItemLabelStyles}>Email</Label>
@@ -231,7 +266,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       value={residence.landlordEmail || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Email"
+                      className={residentialHistoryErrors.landlordEmail?.[index] ? "border-red-500" : ""}
                     />
+                    {residentialHistoryErrors.landlordEmail?.[index] && (
+                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordEmail[index]}</p>
+                    )}
                   </div>
                   <div>
                     <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
@@ -240,7 +279,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       value={residence.landlordPhoneNumber || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Phone Number"
+                      className={residentialHistoryErrors.landlordPhoneNumber?.[index] ? "border-red-500" : ""}
                     />
+                    {residentialHistoryErrors.landlordPhoneNumber?.[index] && (
+                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.landlordPhoneNumber[index]}</p>
+                    )}
                   </div>
                 </div>
               </div>

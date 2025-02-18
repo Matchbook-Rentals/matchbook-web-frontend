@@ -64,7 +64,7 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
   let cumulativeMonths = 0;
   let requiredCount = 0;
   for (let i = 0; i < residentialHistory.length; i++) {
-    const duration = parseInt(residentialHistory[i].durationOfTenancy) || 0;
+    const duration = parseInt(residentialHistory[i].durationOfTenancy || '0') || 0;
     if (cumulativeMonths < 24) {
       cumulativeMonths += duration;
       requiredCount++;
@@ -84,27 +84,27 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
     const durationOfTenancy = entry.durationOfTenancy ? entry.durationOfTenancy : '';
     if (!street.trim()) {
       errors.street = errors.street || [];
-      errors.street[i] = 'Street address is required';
+      errors.street[i] = `Residence ${i + 1}: Street address is required`;
     }
     if (!city.trim()) {
       errors.city = errors.city || [];
-      errors.city[i] = 'City is required';
+      errors.city[i] = `Residence ${i + 1}: City is required`;
     }
     if (!state.trim()) {
       errors.state = errors.state || [];
-      errors.state[i] = 'State is required';
+      errors.state[i] = `Residence ${i + 1}: State is required`;
     }
     if (!zipCode.trim()) {
       errors.zipCode = errors.zipCode || [];
-      errors.zipCode[i] = 'ZIP code is required';
+      errors.zipCode[i] = `Residence ${i + 1}: ZIP code is required`;
     }
     if (!monthlyPayment.trim()) {
       errors.monthlyPayment = errors.monthlyPayment || [];
-      errors.monthlyPayment[i] = 'Monthly payment is required';
+      errors.monthlyPayment[i] = `Residence ${i + 1}: Monthly payment is required`;
     }
     if (!durationOfTenancy.trim()) {
       errors.durationOfTenancy = errors.durationOfTenancy || [];
-      errors.durationOfTenancy[i] = 'Length of stay is required';
+      errors.durationOfTenancy[i] = `Residence ${i + 1}: Length of stay is required`;
     }
     if (entry.housingStatus === 'rent') {
       const landlordFirstName = entry.landlordFirstName ? entry.landlordFirstName : '';
@@ -113,19 +113,19 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
       const landlordPhoneNumber = entry.landlordPhoneNumber ? entry.landlordPhoneNumber : '';
       if (!landlordFirstName.trim()) {
         errors.landlordFirstName = errors.landlordFirstName || [];
-        errors.landlordFirstName[i] = 'Landlord first name is required';
+        errors.landlordFirstName[i] = `Residence ${i + 1}: Landlord first name is required`;
       }
       if (!landlordLastName.trim()) {
         errors.landlordLastName = errors.landlordLastName || [];
-        errors.landlordLastName[i] = 'Landlord last name is required';
+        errors.landlordLastName[i] = `Residence ${i + 1}: Landlord last name is required`;
       }
       if (!landlordEmail.trim()) {
         errors.landlordEmail = errors.landlordEmail || [];
-        errors.landlordEmail[i] = 'Landlord email is required';
+        errors.landlordEmail[i] = `Residence ${i + 1}: Landlord email is required`;
       }
       if (!landlordPhoneNumber.trim()) {
         errors.landlordPhoneNumber = errors.landlordPhoneNumber || [];
-        errors.landlordPhoneNumber[i] = 'Landlord phone number is required';
+        errors.landlordPhoneNumber[i] = `Residence ${i + 1}: Landlord phone number is required`;
       }
     }
   }

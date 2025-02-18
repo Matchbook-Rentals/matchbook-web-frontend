@@ -149,6 +149,10 @@ const initialErrors: ApplicationErrors = {
     zipCode: '',
     monthlyPayment: '',
     durationOfTenancy: '',
+    landlordFirstName: '',
+    landlordLastName: '',
+    landlordEmail: '',
+    landlordPhoneNumber: '',
   }],
   income: {
     source: [],

@@ -323,6 +323,8 @@ export default function ApplicationPage() {
         const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
 
         setErrors('residentialHistory', residentialHistoryErrors);
+        console.log('residentialHistoryErrors', residentialHistoryErrors);
+        return Object.keys(residentialHistoryErrors).length === 0;
       }
       case 2: {
         const incomeErrors = validateIncome(incomes);
@@ -451,9 +453,6 @@ export default function ApplicationPage() {
             <div className="flex justify-between px-6 mt-1 mb-4">
               <Button
                 onClick={() => {
-                  if (application?.id) {
-                    checkCompletion(application.id);
-                  }
                   if (!validateStep(currentStep)) {
                     toast({
                       title: "Validation Error",

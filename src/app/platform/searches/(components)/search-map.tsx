@@ -1,9 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { ListingAndImages } from '@/types';
 import { format } from 'date-fns';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import Image from 'next/image';
 
 interface MapMarker {
   lat: number;
@@ -36,20 +38,23 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
-  const [selectedMarker, setSelectedMarker] = React.useState<MapMarker | null>(null);
-  const [isFullscreen , setIsFullscreen] = React.useState<Boolean>(false);
+  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
-  // Update selected marker when hoveredListing changes
-  useEffect(() => {
-    if (hoveredListing) {
-      const marker = markers.find(m => m.listing.id === hoveredListing.id);
-      setSelectedMarker(marker || null);
-    } else {
-      setSelectedMarker(null);
-    }
-  }, [hoveredListing, markers]);
+  // Function to calculate distance between two lat/lng points
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 3958.8; // Earth radius in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
 
-  // Initial map setup with marker and popup creation
+  // Initialize map and set up markers with click handlers
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
 
@@ -63,24 +68,31 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
     mapRef.current = map;
 
-    markers.forEach(marker => {
-      // Create a popup with the listing title
-      const popup = new maplibregl.Popup({ closeOnClick: false })
-        .setText(marker.listing.title);
+    // Close card when clicking on the map background
+    const handleMapClick = () => {
+      setSelectedMarker(null);
+    };
+    map.on('click', handleMapClick);
 
-      // Create the marker and associate the popup
+    markers.forEach(marker => {
       const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
         .setLngLat([marker.lng, marker.lat])
-        .setPopup(popup) // Attach the popup to the marker
         .addTo(map);
+
+      // Add click handler to marker
+      mapMarker.getElement().addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent map click event from firing
+        setSelectedMarker(marker);
+      });
 
       markersRef.current.set(marker.listing.id, mapMarker);
     });
 
-    // Cleanup function
+    // Cleanup
     return () => {
       if (mapRef.current) {
-        mapRef.current.remove();
+        map.off('click', handleMapClick);
+        map.remove();
         mapRef.current = null;
       }
       markersRef.current.clear();
@@ -132,7 +144,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {/* Map controls */}
+      {/* Zoom controls */}
       <div className="absolute top-2 right-2 z-10 flex flex-col">
         <button
           onClick={() => mapRef.current?.zoomIn()}
@@ -146,11 +158,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6v12m6-6H6"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
           </svg>
         </button>
         <button
@@ -165,11 +173,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M18 12H6"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
           </svg>
         </button>
       </div>
@@ -181,10 +185,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
             if (mapRef.current) {
               if (!document.fullscreenElement) {
                 mapContainerRef.current?.requestFullscreen();
-                setIsFullscreen(true)
+                setIsFullscreen(true);
               } else {
                 document.exitFullscreen();
-                setIsFullscreen(false)
+                setIsFullscreen(false);
               }
             }
           }}
@@ -206,6 +210,70 @@ const SearchMap: React.FC<SearchMapProps> = ({
           </svg>
         </button>
       </div>
+
+      {/* Detailed Card on Marker Click */}
+      {selectedMarker && (
+        <div className="absolute bottom-4 left-4 z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden w-80">
+          {/* Close Button */}
+          <div className="absolute top-2 right-2 z-20">
+            <button
+              onClick={() => setSelectedMarker(null)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          {/* Image Carousel */}
+          <div className="relative h-40 w-full">
+            <Carousel>
+              <CarouselContent>
+                {selectedMarker.listing.listingImages.map((image, index) => (
+                  <CarouselItem key={index} className="relative h-40 w-full">
+                    <Image
+                      src={image.url}
+                      alt={selectedMarker.listing.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="z-20" />
+              <CarouselNext className="z-20" />
+            </Carousel>
+          </div>
+          {/* Listing Details */}
+          <div className="p-4 space-y-2">
+            <h3 className="font-semibold text-xl leading-tight tracking-tight text-gray-900">
+              {selectedMarker.listing.title}
+            </h3>
+            <p className="text-sm font-medium text-gray-500">
+              {center && calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng).toFixed(1)} miles away
+            </p>
+            <div className="flex items-center justify-between pt-1">
+              <p className="text-lg font-bold text-gray-900">
+                ${selectedMarker.listing.price.toLocaleString()}
+                <span className="text-sm font-normal text-gray-600">/month</span>
+              </p>
+              <button
+                onClick={() => setSelectedMarker(null)}
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
