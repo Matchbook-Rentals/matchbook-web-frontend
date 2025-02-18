@@ -53,9 +53,6 @@ export const ResidentialLandlordInfo: React.FC = () => {
     updateResidence(index, 'durationOfTenancy', value);
   };
 
-  // Calculate total months from all residences
-  const totalMonths = residences.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy) || 0), 0);
-
   // Function to add a new residence with a cap of 3
   const addResidence = () => {
     setResidences(prev => {
@@ -66,13 +63,38 @@ export const ResidentialLandlordInfo: React.FC = () => {
     });
   };
 
-  // Automatically add a new residence if the last one has a duration, total months is less than 24, and we haven't reached 3 residences
+  // New useEffect to adjust the number of residences based on the total months entered.
+  // It ensures that if the cumulative months across residences reaches or exceeds 24,
+  // any extra (unneeded) residences are removed.
   useEffect(() => {
-    const lastResidence = residences[residences.length - 1];
-    if (totalMonths < 24 && lastResidence && lastResidence.durationOfTenancy !== "" && residences.length < 3) {
-      addResidence();
+    let cumulativeMonths = 0;
+    let neededProperties = residences.length;
+    // Loop over residences in order, accumulating duration until we reach 24.
+    for (let i = 0; i < residences.length; i++) {
+      const duration = parseInt(residences[i].durationOfTenancy) || 0;
+      cumulativeMonths += duration;
+      if (cumulativeMonths >= 24) {
+        // Only the first (i + 1) residences are needed.
+        neededProperties = i + 1;
+        break;
+      }
     }
-  }, [residences, totalMonths]);
+    // If we've reached (or exceeded) 24 and have extra residences, trim them.
+    if (cumulativeMonths >= 24 && residences.length > neededProperties) {
+      setResidences(prev => prev.slice(0, neededProperties));
+    }
+    // Otherwise, if we're below 24 and the last residence's duration is filled,
+    // auto-add a new residence (if we haven't reached the maximum of 3).
+    else if (cumulativeMonths < 24) {
+      const lastResidence = residences[residences.length - 1];
+      if (lastResidence && lastResidence.durationOfTenancy !== "" && residences.length < 3) {
+        addResidence();
+      }
+    }
+  }, [residences]);
+
+  // Calculate total months from all residences (if needed elsewhere)
+  const totalMonths = residences.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy) || 0), 0);
 
   return (
     <div className="space-y-8">

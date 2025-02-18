@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { UploadButton } from '@uploadthing/react';
 import { PlusCircle, X, Trash } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
-import CurrencyInput from "@/components/ui/currency-input";
 import { ApplicationItemLabelStyles } from '@/constants/styles';
 import { useApplicationStore } from '@/stores/application-store';
 import { deleteIncome } from '@/app/actions/applications';
 import { UploadIcon } from '@radix-ui/react-icons';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 interface UploadData {
   name: string;
@@ -35,7 +35,6 @@ export const Income: React.FC = () => {
   } = useApplicationStore();
 
   const error = errors.income;
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const handleInputChange = (index: number, field: 'source' | 'monthlyAmount', value: string) => {
     const updatedIncomes = incomes.map((item, i) => {
@@ -56,10 +55,6 @@ export const Income: React.FC = () => {
       );
       setIncomes(updatedIncomes);
     }
-  };
-
-  const handleImageClick = (imageIndex: number) => {
-    setSelectedImageIndex(imageIndex);
   };
 
   const addIncome = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -96,7 +91,7 @@ export const Income: React.FC = () => {
               <X className="h-5 w-5" />
             </button>
           )}
-          <div className="flex flex-wrap  justify-around">
+          <div className="grid grid-cols-3 gap-6 px-2">
               <div className="space-y-2">
                 <Label className={ApplicationItemLabelStyles} htmlFor={`incomeSource-${index}`}>
                   Income Source {index + 1}
@@ -115,23 +110,29 @@ export const Income: React.FC = () => {
                 <Label className={ApplicationItemLabelStyles} htmlFor={`monthlyAmount-${index}`}>
                   Monthly Amount {index + 1}
                 </Label>
-                <CurrencyInput
+                <Input
                   id={`monthlyAmount-${index}`}
-                  label=""
                   value={item.monthlyAmount}
-                  onChange={(value) => handleInputChange(index, 'monthlyAmount', value)}
+                  onChange={(e) => handleInputChange(index, 'monthlyAmount', e.target.value)}
                   className={`w-full ${error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                 />
                 {error?.monthlyAmount?.[index] && (
                   <p className="mt-1 text-red-500 text-sm">{error.monthlyAmount[index]}</p>
                 )}
               </div>
-            <div className="space-y-2  flex-col justify-start ">
-              <Label htmlFor={`incomeUpload-${index}`}>Income Proof</Label>
+            <div className="space-y-2 pr-2 ">
+              <Label className={ApplicationItemLabelStyles} htmlFor={`incomeUpload-${index}`}>Income Proof</Label>
               {item.imageUrl ? (
-                <div className="flex items-center space-x-2 justify-center">
-                  <img src={item.imageUrl} alt="Income Proof" className="w-16 h-16 object-cover rounded" />
-                  <button type="button" onClick={() => clearIncomeImage(index)} className="p-1">
+                <div className="flex items-center space-x-2 justify-start w-full">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <img src={item.imageUrl} alt="Income Proof" className="h-12 w-36 rounded cursor-pointer" />
+                    </DialogTrigger>
+                    <DialogContent className="p-4 bg-white rounded pt-16 max-h-[90vh] overflow-auto">
+                      <img src={item.imageUrl} alt="Income Proof" className="max-h-[80vh] object-contain" />
+                    </DialogContent>
+                  </Dialog>
+                  <button type="button" onClick={() => clearIncomeImage(index)} className="p-1 ">
                     <Trash className="h-5 w-5 text-[#404040]" />
                   </button>
                 </div>
@@ -150,8 +151,9 @@ export const Income: React.FC = () => {
                   className="p-0 "
                   text="Upload"
                   appearance={{
-                    button: 'bg-parent border-[#404040] text-[#404040] border w-fit px-2  focus-within:ring-[#404040  ] data-[state="uploading"]:after:bg-gray-200',
+                    button: 'bg-parent border-[#404040] text-[#404040] border w-fit px-2   focus-within:ring-[#404040  ] data-[state="uploading"]:after:bg-gray-200',
                     allowedContent: 'hidden',
+                    container: 'w-fit '
                    }}
                 />
               )}

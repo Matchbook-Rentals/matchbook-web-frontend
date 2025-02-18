@@ -20,22 +20,22 @@ const LoadingTabs: React.FC = () => {
   const tabTriggerStyles = 'p-0';
   const tabs: Tab[] = [
     {
-      label: 'Overview',
+      label: 'Manage Search',
       value: 'overview',
       content: <LoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },
     {
-      label: 'Matchmaker',
-      value: 'matchmaker',
+      label: 'Recommended',
+      value: 'recommended',
       content: <LoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
     },
     {
-      label: 'Map',
-      value: 'map',
+      label: 'All Listings',
+      value: 'allListings',
       content: <LoadingSkeleton />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
@@ -57,7 +57,7 @@ const LoadingTabs: React.FC = () => {
   ];
 
   return (
-    <div className={`flex flex-col items-center ${APP_PAGE_MARGIN}`}>
+    <div className={`flex flex-col items-center ${PAGE_MARGIN}`}>
 
       {/* Breadcrumb Navigation */}
       <h1 className=" text-[#404040] font-montserrat-regular text-[14px] mr-auto leading-normal">
@@ -73,9 +73,9 @@ const LoadingTabs: React.FC = () => {
       <div className="flex w-full">
         <TabSelector
           tabs={tabs}
-          defaultTab='matchmaker'
+          defaultTab='recommended'
           className='mx-auto w-full'
-          tabsClassName='w-full md:w-[90vw] lg:w-[95vw] px-2 md:px-0 mx-auto'
+          tabsClassName='w-full '
           tabsListClassName='flex justify-start w-full space-x-0 md:space-x-2 md:gap-x-4'
         />
       </div>

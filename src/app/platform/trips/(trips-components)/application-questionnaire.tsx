@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -12,6 +12,10 @@ const Questionnaire: React.FC = () => {
   const felonyTextareaRef = useRef<HTMLTextAreaElement>(null);
   const evictedTextareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // State flags to trigger autofocus only when the user clicks "Yes"
+  const [shouldFocusFelony, setShouldFocusFelony] = useState(false);
+  const [shouldFocusEvicted, setShouldFocusEvicted] = useState(false);
+
   const handleChange = (question: string, value: string | boolean) => {
     setAnswers({
       ...answers,
@@ -20,20 +24,24 @@ const Questionnaire: React.FC = () => {
   };
 
   useEffect(() => {
-    if (answers.felony && felonyTextareaRef.current) {
+    // Only focus if the user explicitly selected "Yes"
+    if (shouldFocusFelony && answers.felony && felonyTextareaRef.current) {
       felonyTextareaRef.current.focus();
       const length = answers.felonyExplanation?.length || 0;
       felonyTextareaRef.current.setSelectionRange(length, length);
+      setShouldFocusFelony(false); // reset the flag
     }
-  }, [answers.felony, answers.felonyExplanation]);
+  }, [shouldFocusFelony, answers.felony, answers.felonyExplanation]);
 
   useEffect(() => {
-    if (answers.evicted && evictedTextareaRef.current) {
+    // Only focus if the user explicitly selected "Yes"
+    if (shouldFocusEvicted && answers.evicted && evictedTextareaRef.current) {
       evictedTextareaRef.current.focus();
       const length = answers.evictedExplanation?.length || 0;
       evictedTextareaRef.current.setSelectionRange(length, length);
+      setShouldFocusEvicted(false); // reset the flag
     }
-  }, [answers.evicted, answers.evictedExplanation]);
+  }, [shouldFocusEvicted, answers.evicted, answers.evictedExplanation]);
 
   return (
     <div className="w-full">
@@ -47,19 +55,30 @@ const Questionnaire: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <RadioGroup
-                onValueChange={(value) => handleChange('felony', value === 'true')}
+                onValueChange={(value) => {
+                  handleChange('felony', value === 'true');
+                  if (value === 'true') {
+                    setShouldFocusFelony(true);
+                  }
+                }}
                 value={answers.felony?.toString()}
                 className="flex justify-center space-x-2"
               >
                 <div className="flex items-center space-x-1 ">
                   <RadioGroupItem value="true" id="felony-yes" />
-                  <Label className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal" htmlFor="felony-yes">
+                  <Label
+                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
+                    htmlFor="felony-yes"
+                  >
                     Yes
                   </Label>
                 </div>
                 <div className="flex items-center space-x-1">
                   <RadioGroupItem value="false" id="felony-no" />
-                  <Label className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal" htmlFor="felony-no">
+                  <Label
+                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
+                    htmlFor="felony-no"
+                  >
                     No
                   </Label>
                 </div>
@@ -77,7 +96,9 @@ const Questionnaire: React.FC = () => {
               <Textarea
                 ref={felonyTextareaRef}
                 id="felonyExplanation"
-                className={`mt-1 text-md ${ApplicationItemInputStyles} ${error?.felonyExplanation ? "border-red-500" : ""}`}
+                className={`mt-1 text-md ${ApplicationItemInputStyles} ${
+                  error?.felonyExplanation ? "border-red-500" : ""
+                }`}
                 value={answers.felonyExplanation || ''}
                 onChange={(e) => handleChange('felonyExplanation', e.target.value)}
                 placeholder=""
@@ -98,19 +119,30 @@ const Questionnaire: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <RadioGroup
-                onValueChange={(value) => handleChange('evicted', value === 'true')}
+                onValueChange={(value) => {
+                  handleChange('evicted', value === 'true');
+                  if (value === 'true') {
+                    setShouldFocusEvicted(true);
+                  }
+                }}
                 value={answers.evicted?.toString()}
                 className="flex justify-center space-x-2"
               >
                 <div className="flex items-center space-x-1">
                   <RadioGroupItem value="true" id="evicted-yes" />
-                  <Label className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal" htmlFor="evicted-yes">
+                  <Label
+                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
+                    htmlFor="evicted-yes"
+                  >
                     Yes
                   </Label>
                 </div>
                 <div className="flex items-center space-x-1">
                   <RadioGroupItem value="false" id="evicted-no" />
-                  <Label className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal" htmlFor="evicted-no">
+                  <Label
+                    className="text-[16px] md:text-[18px] lg:text-[20px] mt-2 cursor-pointer font-normal"
+                    htmlFor="evicted-no"
+                  >
                     No
                   </Label>
                 </div>
@@ -122,13 +154,18 @@ const Questionnaire: React.FC = () => {
           </div>
           {answers.evicted && (
             <div className="mt-2">
-              <Label htmlFor="evictedExplanation" className="text-[14px] sm:text-[16px] font-normal mb-2 block">
+              <Label
+                htmlFor="evictedExplanation"
+                className="text-[14px] sm:text-[16px] font-normal mb-2 block"
+              >
                 Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome.
               </Label>
               <Textarea
                 ref={evictedTextareaRef}
                 id="evictedExplanation"
-                className={`mt-1 text-md ${ApplicationItemInputStyles} ${error?.evictedExplanation ? "border-red-500" : ""}`}
+                className={`mt-1 text-md ${ApplicationItemInputStyles} ${
+                  error?.evictedExplanation ? "border-red-500" : ""
+                }`}
                 value={answers.evictedExplanation || ''}
                 onChange={(e) => handleChange('evictedExplanation', e.target.value)}
                 placeholder=""

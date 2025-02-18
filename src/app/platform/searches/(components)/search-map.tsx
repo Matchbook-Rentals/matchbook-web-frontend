@@ -3,14 +3,12 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { ListingAndImages } from '@/types';
-import Image from 'next/image';
 import { format } from 'date-fns';
 
 interface MapMarker {
   lat: number;
   lng: number;
   title?: string;
-  color?: string;
   listing: ListingAndImages & {
     user: {
       imageUrl: string;
@@ -31,10 +29,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
   center,
   markers = [],
   zoom = 12,
-  height = '526px'
+  height = '526px',
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
+  const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const [selectedMarker, setSelectedMarker] = React.useState<MapMarker | null>(null);
 
@@ -63,16 +63,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
     mapRef.current = map;
 
     markers.forEach(marker => {
-      new maplibregl.Marker({
-        color: marker.color || '#FF0000'
-      })
+      const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
         .setLngLat([marker.lng, marker.lat])
-        .addTo(map)
-        .getElement().addEventListener('click', () => {
-          if (marker.title) {
-            alert(marker.title);
-          }
-        });
+        .addTo(map);
+      markersRef.current.set(marker.listing.id, mapMarker);
     });
 
     return () => {
@@ -80,8 +74,34 @@ const SearchMap: React.FC<SearchMapProps> = ({
         mapRef.current.remove();
         mapRef.current = null;
       }
+      markersRef.current.clear();
+      highlightedMarkerRef.current = null;
     };
   }, [center, markers, zoom]);
+
+  // Update marker colors based on hoveredListing
+  useEffect(() => {
+    const setMarkerColor = (marker: maplibregl.Marker, color: string) => {
+      const markerElement = marker.getElement();
+      const paths = markerElement.querySelectorAll('path');
+      paths.forEach(path => {
+        path.setAttribute('fill', color);
+      });
+    };
+
+    if (highlightedMarkerRef.current) {
+      setMarkerColor(highlightedMarkerRef.current, '#FF0000'); // Default color
+    }
+    if (hoveredListing) {
+      const marker = markersRef.current.get(hoveredListing.id);
+      if (marker) {
+        setMarkerColor(marker, '#404040'); // Highlighted color
+        highlightedMarkerRef.current = marker;
+      }
+    } else {
+      highlightedMarkerRef.current = null;
+    }
+  }, [hoveredListing]);
 
   // Handle panning to hovered location with debounce
   useEffect(() => {
@@ -92,7 +112,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         mapRef.current.easeTo({
           center: [shouldPanTo.lng, shouldPanTo.lat],
           duration: 1500,
-          zoom: zoom
+          zoom: zoom,
         });
         clearPanTo();
       }
@@ -103,45 +123,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {/* Host Card */}
-      {selectedMarker && (
-        <div
-          className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden p-2 "
-          key={selectedMarker.listing.id}
-        >
-          <div className="flex items-center gap-4">
-            {/* Host Image */}
-            <div className="relative h-16 w-16 rounded-full overflow-hidden">
-              <img
-                src={selectedMarker.listing.user.imageUrl}
-                alt={selectedMarker.listing.user.firstName}
-                className="object-cover"
-              />
-            </div>
 
-            {/* Host Info */}
-            <div className="flex-1">
-              <p className="text-sm text-gray-600">Hosted by {selectedMarker.listing.user.fullName || selectedMarker.listing.user.firstName}</p>
-              <h3 className="font-semibold text-lg text-gray-900">
-                {selectedMarker.listing.user.fullName}
-              </h3>
-              <p className="text-sm text-gray-500">
-                Been on Matchbook since{' '}
-                {format(new Date(selectedMarker.listing.user.createdAt), 'MMMM yyyy')}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Map container */}
+      {/* Map controls */}
       <div className="absolute top-2 right-2 z-10 flex flex-col">
         <button
-          onClick={() => {
-            if (mapRef.current) {
-              mapRef.current.zoomIn();
-            }
-          }}
+          onClick={() => mapRef.current?.zoomIn()}
           className="bg-white p-2 rounded-md shadow mb-1"
         >
           <svg
@@ -160,11 +146,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
           </svg>
         </button>
         <button
-          onClick={() => {
-            if (mapRef.current) {
-              mapRef.current.zoomOut();
-            }
-          }}
+          onClick={() => mapRef.current?.zoomOut()}
           className="bg-white p-2 rounded-md shadow"
         >
           <svg
@@ -182,9 +164,36 @@ const SearchMap: React.FC<SearchMapProps> = ({
             />
           </svg>
         </button>
+        <button
+          onClick={() => {
+            if (mapRef.current) {
+              if (!document.fullscreenElement) {
+                mapContainerRef.current?.requestFullscreen();
+              } else {
+                document.exitFullscreen();
+              }
+            }
+          }}
+          className="bg-white p-2 rounded-md shadow mt-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default SearchMap;

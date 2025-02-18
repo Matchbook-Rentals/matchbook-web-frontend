@@ -73,7 +73,7 @@ const TripsPage: React.FC = () => {
     },
     {
       label: 'Recommended',
-      value: 'matchmaker',
+      value: 'recommended',
       content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
@@ -132,7 +132,7 @@ const TripsPage: React.FC = () => {
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
 
-            {['matchmaker', 'map'].includes(currentTab) && (
+            {['recommended', 'map'].includes(currentTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -149,12 +149,12 @@ const TripsPage: React.FC = () => {
         <TabSelector
           useUrlParams
           tabs={tabs}
-          defaultTab={currentTab || 'matchmaker'}
+          defaultTab={currentTab || 'recommended'}
           className='mx-auto w-full pb-0 mb-0 border-none'
           tabsClassName='w-full mx-auto  '
           tabsListClassName='flex py-0 justify-start w-full space-x-4  md:gap-x-4 '
           secondaryButton={
-            ['matchmaker', 'map'].includes(currentTab) ? (
+            ['recommended', 'map'].includes(currentTab) ? (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -169,7 +169,7 @@ const TripsPage: React.FC = () => {
         <MobileTabSelector
           useUrlParams
           tabs={tabs}
-          defaultTab={currentTab || 'matchmaker'}
+          defaultTab={currentTab || 'recommended'}
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-28'
         />

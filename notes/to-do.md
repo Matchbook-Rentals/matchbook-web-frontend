@@ -28,8 +28,14 @@
 - [ ] each income item gets its own upload button
 - [ ] Guest counter filled in on search edit mobile
 - [ ] loading skeleton
+---- [X] desktop
+---- [ ] mobile
 - [ ] 24 months +, load more address history, own property gets rid of landlord info
 - [ ] match error codes to field names (First name to First Name)
+- [ ] Currency display update
+
+
+load javascript array of markers, give listingId property, change color direclty in array
 
 
 

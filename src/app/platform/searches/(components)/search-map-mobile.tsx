@@ -157,7 +157,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         </div>
       )}
 
-      <div className="absolute fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-10">
+      <div className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-10">
         <Button
           onClick={onClose}
           className="gap-x-2 px-5 max-w-[300px] z-10 text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
