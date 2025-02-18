@@ -608,21 +608,7 @@ model Application {
   firstName String?
   lastName  String?
 
-  // Residential History
-  currentStreet     String?
-  currentApt        String?
-  currentCity       String?
-  currentState      String?
-  currentZipCode    String?
-  housingStatus     String?
-  monthlyPayment    String?
-  durationOfTenancy String?
-
-  // Landlord Info
-  landlordFirstName   String?
-  landlordLastName    String?
-  landlordEmail       String?
-  landlordPhoneNumber String?
+  residentialHistories ResidentialHistory[]
 
   // Comments to explain Yes answers
   evicted            Boolean?
@@ -659,6 +645,7 @@ model Income {
   applicationId String
   source        String
   monthlyAmount String
+  imageUrl      String?
 
   @@index([applicationId])
 }
@@ -826,4 +813,23 @@ model Tag {
   updatedAt DateTime      @updatedAt
 
   @@index([slug])
+}
+
+model ResidentialHistory {
+  id                  String      @id @default(uuid())
+  street              String?
+  apt                 String?
+  city                String?
+  state               String?
+  zipCode             String?
+  monthlyPayment      String?
+  durationOfTenancy   String?
+  housingStatus       String?
+  landlordFirstName   String?
+  landlordLastName    String?
+  landlordEmail       String?
+  landlordPhoneNumber String?
+
+  application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId       String
 }

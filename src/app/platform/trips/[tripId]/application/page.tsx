@@ -254,6 +254,10 @@ export default function ApplicationPage() {
     }
   };
 
+  const scrollToIndexSkipValidation = (index: number) => {
+    api?.scrollTo(index);
+  };
+
   useEffect(() => {
     if (!api) return;
     api.on('select', onSelect);
@@ -426,7 +430,7 @@ export default function ApplicationPage() {
 
                 <CarouselItem>
                   <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
-                    <h2 className={itemHeaderStyles}>
+                    <h2 className={ApplicationItemHeaderStyles}>
                       Income
                     </h2>
                     <Income />
@@ -435,7 +439,7 @@ export default function ApplicationPage() {
 
                 <CarouselItem>
                   <div className="px-6 pb-6 overflow-y-auto min-h-[400px]">
-                    <h2 className={itemHeaderStyles}>
+                    <h2 className={ApplicationItemHeaderStyles}>
                       Questionnaire
                     </h2>
                     <Questionnaire />
@@ -484,6 +488,26 @@ export default function ApplicationPage() {
                 disabled={currentStep === navigationItems.length - 1}
               >
                 Next
+              </Button>
+            </div>
+
+            {/* Skip Validation Navigation Buttons */}
+            <div className="flex justify-between px-6 mb-4">
+              <Button
+                onClick={() => api?.scrollPrev()}
+                disabled={currentStep === 0}
+                variant="outline"
+                className="text-gray-500 border-gray-300"
+              >
+                Skip Back
+              </Button>
+              <Button
+                onClick={() => scrollToIndexSkipValidation(currentStep + 1)}
+                disabled={currentStep === navigationItems.length - 1}
+                variant="outline"
+                className="text-gray-500 border-gray-300"
+              >
+                Skip Next
               </Button>
             </div>
           </div>

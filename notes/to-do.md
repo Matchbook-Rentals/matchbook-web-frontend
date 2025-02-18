@@ -9,8 +9,8 @@
 -----[x] change listing details box to calc price
 - [ ] move flip point on action buttons (to bottom instead of top)
 - [ ] less than 10 on distance change toFixed to 1 above 10 toFixed(0)
-- [ ] finish sharebutton url fix
-- [ ] delete maybes from trip context
+- [x] finish sharebutton url fix
+- [X] delete maybes from trip context
 - [ ] scrollbar outside the lines
 - [ ] infinite scroll
 - [ ] close button fixed

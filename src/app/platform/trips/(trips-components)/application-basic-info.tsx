@@ -194,7 +194,7 @@ export const ApplicationBasicInfo: React.FC<ApplicationBasicInfoProps> = ({
             />
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 min-h-16">
           <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
           <UploadButton
             endpoint="idUploader"
@@ -204,7 +204,7 @@ export const ApplicationBasicInfo: React.FC<ApplicationBasicInfoProps> = ({
             appearance={{ button: 'bg-parent text-black border-black border-2 lg:w-2/5 md:3/5 sm:4/5 px-2 focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand' }}
           />
         </div>
-        {verificationImages.length > 0 && (
+        {verificationImages.length > 0 ? (
           <>
             <Label className={ApplicationItemLabelStyles}>Id image uploads</Label>
             <div className="grid grid-cols-2 gap-4 mt-2">
@@ -243,6 +243,12 @@ export const ApplicationBasicInfo: React.FC<ApplicationBasicInfoProps> = ({
               ))}
             </div>
           </>
+        ) : (
+          <Card>
+            <CardContent className="flex items-center justify-center p-6">
+              Uploaded photo, we'll show here
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

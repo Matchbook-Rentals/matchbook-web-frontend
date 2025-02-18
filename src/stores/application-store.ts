@@ -34,6 +34,7 @@ interface Income {
   id?: string;
   source: string;
   monthlyAmount: string;
+  imageUrl: string;
 }
 
 interface QuestionnaireAnswers {
@@ -78,6 +79,7 @@ interface ApplicationErrors {
   income: {
     source?: string[];
     monthlyAmount?: string[];
+    imageUrl?: string[];
   };
   questionnaire: {
     felony?: string;
@@ -124,7 +126,7 @@ export const initialState = {
     landlordEmail: '',
     landlordPhoneNumber: ''
   },
-  incomes: [{ source: '', monthlyAmount: '' }],
+  incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
     evicted: false,
     felony: false,
@@ -221,6 +223,7 @@ const initialErrors: ApplicationErrors = {
   income: {
     source: [],
     monthlyAmount: [],
+    imageUrl: [],
   },
   questionnaire: {
     felony: '',
@@ -288,8 +291,9 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       incomes: application.incomes?.map((income: any) => ({
         id: income.id || null,
         source: income.source || '',
-        monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0]
-      })) || [{ source: '', monthlyAmount: '' }],
+        monthlyAmount: (income.monthlyAmount || '').toString().replace(/[$,]/g, '').split('.')[0],
+        imageUrl: income.imageUrl || ''
+      })) || [{ source: '', monthlyAmount: '', imageUrl: '' }],
       answers: {
         evicted: application.evicted || false,
         felony: application.felony || false,
@@ -392,6 +396,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       state.incomes.forEach((income, index) => {
         if (!income.source) missingFields.push(`incomes[${index}].source`);
         if (!income.monthlyAmount) missingFields.push(`incomes[${index}].monthlyAmount`);
+        if (!income.imageUrl) missingFields.push(`incomes[${index}].imageUrl`);
       });
     }
 
