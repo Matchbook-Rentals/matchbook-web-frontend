@@ -1,6 +1,27 @@
 import { create } from 'zustand';
 import { VerificationImage } from '@prisma/client';
 import { markComplete } from '@/app/actions/applications';
+import { ResidentialHistory } from '@prisma/client';
+
+
+// interface ResidentialHistory {
+//   id                  String      @id @default(uuid())
+//   street              String?
+//   apt                 String?
+//   city                String?
+//   state               String?
+//   zipCode             String?
+//   monthlyPayment      String?
+//   durationOfTenancy   String?
+//   housingStatus       String?
+//   landlordFirstName   String?
+//   landlordLastName    String?
+//   landlordEmail       String?
+//   landlordPhoneNumber String?
+
+//   application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+//   applicationId       String
+// }
 
 interface PersonalInfo {
   firstName: string;
@@ -12,23 +33,6 @@ interface Identification {
   idNumber: string;
 }
 
-interface ResidentialHistory {
-  currentStreet: string;
-  currentApt: string;
-  currentCity: string;
-  currentState: string;
-  currentZipCode: string;
-  housingStatus: 'rent' | 'own';
-  monthlyPayment: string;
-  durationOfTenancy: string;
-}
-
-interface LandlordInfo {
-  landlordFirstName: string;
-  landlordLastName: string;
-  landlordEmail: string;
-  landlordPhoneNumber: string;
-}
 
 interface Income {
   id?: string;
@@ -49,33 +53,20 @@ interface ApplicationErrors {
     personalInfo: { firstName?: string; lastName?: string };
     identification: { idType?: string; idNumber?: string };
   };
-  residentialHistory: {
-    currentStreet?: string;
-    currentCity?: string;
-    currentState?: string;
-    currentZipCode?: string;
+  residentialHistory: Array<{
+    street?: string;
+    apt?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
     monthlyPayment?: string;
     durationOfTenancy?: string;
-  };
-  landlordInfo: {
+    housingStatus?: 'rent' | 'own';
     landlordFirstName?: string;
     landlordLastName?: string;
     landlordEmail?: string;
     landlordPhoneNumber?: string;
-  };
-  residentialAndLandlordInfo: {
-    currentStreet?: string;
-    currentApt?: string;
-    currentCity?: string;
-    currentState?: string;
-    currentZipCode?: string;
-    monthlyPayment?: string;
-    durationOfTenancy?: string;
-    landlordFirstName?: string;
-    landlordLastName?: string;
-    landlordEmail?: string;
-    landlordPhoneNumber?: string;
-  };
+  }>;
   income: {
     source?: string[];
     monthlyAmount?: string[];
@@ -96,36 +87,7 @@ export const initialState = {
   },
   ids: [{ idType: '', idNumber: '' }],
   verificationImages: [] as VerificationImage[],
-  residentialHistory: {
-    currentStreet: '',
-    currentApt: '',
-    currentCity: '',
-    currentState: '',
-    currentZipCode: '',
-    housingStatus: 'rent' as 'rent' | 'own',
-    monthlyPayment: '',
-    durationOfTenancy: '',
-  },
-  landlordInfo: {
-    landlordFirstName: '',
-    landlordLastName: '',
-    landlordEmail: '',
-    landlordPhoneNumber: '',
-  },
-  residentialAndLandlordInfo: {
-    currentStreet: '',
-    currentApt: '',
-    currentCity: '',
-    currentState: '',
-    currentZipCode: '',
-    housingStatus: 'rent' as 'rent' | 'own',
-    monthlyPayment: '',
-    durationOfTenancy: '',
-    landlordFirstName: '',
-    landlordLastName: '',
-    landlordEmail: '',
-    landlordPhoneNumber: ''
-  },
+  residentialHistory: [] as ResidentialHistory[],
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
     evicted: false,
@@ -139,22 +101,7 @@ interface ApplicationState {
   personalInfo: PersonalInfo;
   ids: Identification[];
   verificationImages: VerificationImage[];
-  residentialHistory: ResidentialHistory;
-  landlordInfo: LandlordInfo;
-  residentialAndLandlordInfo: {
-    currentStreet: string;
-    currentApt: string;
-    currentCity: string;
-    currentState: string;
-    currentZipCode: string;
-    housingStatus: 'rent' | 'own';
-    monthlyPayment: string;
-    durationOfTenancy: string;
-    landlordFirstName: string;
-    landlordLastName: string;
-    landlordEmail: string;
-    landlordPhoneNumber: string;
-  };
+  residentialHistory: ResidentialHistory[];
   incomes: Income[];
   answers: QuestionnaireAnswers;
   originalData: typeof initialState;
@@ -163,9 +110,7 @@ interface ApplicationState {
   setPersonalInfo: (info: PersonalInfo) => void;
   setIds: (ids: Identification[]) => void;
   setVerificationImages: (images: VerificationImage[]) => void;
-  setResidentialHistory: (history: ResidentialHistory) => void;
-  setLandlordInfo: (info: LandlordInfo) => void;
-  setResidentialAndLandlordInfo: (info: ApplicationState["residentialAndLandlordInfo"]) => void;
+  setResidentialHistory: (history: ResidentialHistory[]) => void;
   setIncomes: (incomes: Income[]) => void;
   setAnswers: (answers: QuestionnaireAnswers) => void;
   resetStore: () => void;
@@ -186,6 +131,9 @@ interface ApplicationState {
 
   // <<< NEW ACTION: checkCompletion for determining if the application is complete >>>
   checkCompletion: (applicationId: string) => { complete: boolean; missingFields: string[] };
+
+  // New action to add a residential history entry if total duration is less than 24
+  addResidentialHistoryEntry: (newEntry: ResidentialHistory) => void;
 }
 
 const initialErrors: ApplicationErrors = {
@@ -193,33 +141,15 @@ const initialErrors: ApplicationErrors = {
     personalInfo: {},
     identification: {},
   },
-  residentialHistory: {
-    currentStreet: '',
-    currentCity: '',
-    currentState: '',
-    currentZipCode: '',
+  residentialHistory: [{
+    street: '',
+    apt: '',
+    city: '',
+    state: '',
+    zipCode: '',
     monthlyPayment: '',
     durationOfTenancy: '',
-  },
-  landlordInfo: {
-    landlordFirstName: '',
-    landlordLastName: '',
-    landlordEmail: '',
-    landlordPhoneNumber: '',
-  },
-  residentialAndLandlordInfo: {
-    currentStreet: '',
-    currentApt: '',
-    currentCity: '',
-    currentState: '',
-    currentZipCode: '',
-    monthlyPayment: '',
-    durationOfTenancy: '',
-    landlordFirstName: '',
-    landlordLastName: '',
-    landlordEmail: '',
-    landlordPhoneNumber: ''
-  },
+  }],
   income: {
     source: [],
     monthlyAmount: [],
@@ -240,9 +170,17 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   setPersonalInfo: (info) => set({ personalInfo: info }),
   setIds: (ids) => set({ ids }),
   setVerificationImages: (images) => set({ verificationImages: images }),
-  setResidentialHistory: (history) => set({ residentialHistory: history }),
-  setLandlordInfo: (info) => set({ landlordInfo: info }),
-  setResidentialAndLandlordInfo: (info) => set({ residentialAndLandlordInfo: info }),
+  setResidentialHistory: (history: ResidentialHistory[]) => set({ residentialHistory: history }),
+  // New action to add a residential history entry if total duration is less than 24
+  addResidentialHistoryEntry: (newEntry: ResidentialHistory) => {
+    const currentHistory = get().residentialHistory;
+    const currentSum = currentHistory.reduce((sum, entry) => sum + ((parseInt(entry.durationOfTenancy || '0')) || 0), 0);
+    if (currentSum >= 24) {
+      console.log('Residential history complete. Total duration:', currentSum);
+      return;
+    }
+    set({ residentialHistory: [...currentHistory, newEntry] });
+  },
   setIncomes: (incomes) => set({ incomes }),
   setAnswers: (answers) => set({ answers }),
 
@@ -251,6 +189,14 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   initializeFromApplication: (application) => {
     if (!application) return;
 
+    let residences;
+    console.log('application.residentialHistories', application.residentialHistories);
+    if (application.residentialHistories.length === 0) {
+      residences = [defaultResidentialHistory];
+    } else {
+      residences = application.residentialHistories;
+    }
+
     const newData = {
       personalInfo: {
         firstName: application.firstName || '',
@@ -258,36 +204,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       },
       ids: application.identifications || [{ idType: '', idNumber: '' }],
       verificationImages: application.verificationImages || [] as VerificationImage[],
-      residentialHistory: {
-        currentStreet: application.currentStreet || '',
-        currentApt: application.currentApt || '',
-        currentCity: application.currentCity || '',
-        currentState: application.currentState || '',
-        currentZipCode: application.currentZipCode || '',
-        housingStatus: application.housingStatus || 'rent',
-        monthlyPayment: application.monthlyPayment || '',
-        durationOfTenancy: application.durationOfTenancy || '',
-      },
-      landlordInfo: {
-        landlordFirstName: application.landlordFirstName || '',
-        landlordLastName: application.landlordLastName || '',
-        landlordEmail: application.landlordEmail || '',
-        landlordPhoneNumber: application.landlordPhoneNumber || '',
-      },
-      residentialAndLandlordInfo: {
-        currentStreet: application.currentStreet || '',
-        currentApt: application.currentApt || '',
-        currentCity: application.currentCity || '',
-        currentState: application.currentState || '',
-        currentZipCode: application.currentZipCode || '',
-        housingStatus: application.housingStatus || 'rent',
-        monthlyPayment: application.monthlyPayment || '',
-        durationOfTenancy: application.durationOfTenancy || '',
-        landlordFirstName: application.landlordFirstName || '',
-        landlordLastName: application.landlordLastName || '',
-        landlordEmail: application.landlordEmail || '',
-        landlordPhoneNumber: application.landlordPhoneNumber || ''
-      },
+      residentialHistory: residences,
       incomes: application.incomes?.map((income: any) => ({
         id: income.id || null,
         source: income.source || '',
@@ -313,8 +230,6 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       ids: state.ids,
       verificationImages: state.verificationImages,
       residentialHistory: state.residentialHistory,
-      landlordInfo: state.landlordInfo,
-      residentialAndLandlordInfo: state.residentialAndLandlordInfo,
       incomes: state.incomes,
       answers: state.answers
     }) !== JSON.stringify(state.originalData);
@@ -338,8 +253,6 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       ids,
       verificationImages,
       residentialHistory,
-      landlordInfo,
-      residentialAndLandlordInfo,
       incomes,
       answers,
     } = get();
@@ -348,14 +261,12 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       ids,
       verificationImages,
       residentialHistory,
-      landlordInfo,
-      residentialAndLandlordInfo,
       incomes,
       answers,
     };
-    console.log("markSynced invoked. New data to sync:", newData);
+    console.log('markSynced invoked. New data to sync:', newData);
     set({ originalData: newData });
-    console.log("Original data updated to:", newData);
+    console.log('Original data updated to:', newData);
   },
 
   // <<< NEW ACTION: checkCompletion >>>
@@ -377,17 +288,28 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       });
     }
 
-    // Check Combined Residential and Landlord Info
-    if (!state.residentialAndLandlordInfo.currentStreet) missingFields.push('residentialAndLandlordInfo.currentStreet');
-    if (!state.residentialAndLandlordInfo.currentCity) missingFields.push('residentialAndLandlordInfo.currentCity');
-    if (!state.residentialAndLandlordInfo.currentState) missingFields.push('residentialAndLandlordInfo.currentState');
-    if (!state.residentialAndLandlordInfo.currentZipCode) missingFields.push('residentialAndLandlordInfo.currentZipCode');
-    if (!state.residentialAndLandlordInfo.monthlyPayment) missingFields.push('residentialAndLandlordInfo.monthlyPayment');
-    if (!state.residentialAndLandlordInfo.durationOfTenancy) missingFields.push('residentialAndLandlordInfo.durationOfTenancy');
-    if (!state.residentialAndLandlordInfo.landlordFirstName) missingFields.push('residentialAndLandlordInfo.landlordFirstName');
-    if (!state.residentialAndLandlordInfo.landlordLastName) missingFields.push('residentialAndLandlordInfo.landlordLastName');
-    if (!state.residentialAndLandlordInfo.landlordEmail) missingFields.push('residentialAndLandlordInfo.landlordEmail');
-    if (!state.residentialAndLandlordInfo.landlordPhoneNumber) missingFields.push('residentialAndLandlordInfo.landlordPhoneNumber');
+    // Check Residential History total duration
+    const totalDuration = state.residentialHistory.reduce((sum, entry) => sum + ((parseInt(entry.durationOfTenancy || '0')) || 0), 0);
+    if (totalDuration < 24) {
+      missingFields.push('residentialHistory total duration less than 24');
+    }
+    // New check: ensure each residential history entry has all required fields (except apt) and landlord info if needed
+    state.residentialHistory.forEach((entry, index) => {
+      if (!entry.street) missingFields.push(`residentialHistory[${index}].street`);
+      if (!entry.city) missingFields.push(`residentialHistory[${index}].city`);
+      if (!entry.state) missingFields.push(`residentialHistory[${index}].state`);
+      if (!entry.zipCode) missingFields.push(`residentialHistory[${index}].zipCode`);
+      if (!entry.monthlyPayment) missingFields.push(`residentialHistory[${index}].monthlyPayment`);
+      if (!entry.durationOfTenancy) missingFields.push(`residentialHistory[${index}].durationOfTenancy`);
+      if (!entry.housingStatus) {
+        missingFields.push(`residentialHistory[${index}].housingStatus`);
+      } else if (entry.housingStatus !== 'own') {
+        if (!entry.landlordFirstName) missingFields.push(`residentialHistory[${index}].landlordFirstName`);
+        if (!entry.landlordLastName) missingFields.push(`residentialHistory[${index}].landlordLastName`);
+        if (!entry.landlordEmail) missingFields.push(`residentialHistory[${index}].landlordEmail`);
+        if (!entry.landlordPhoneNumber) missingFields.push(`residentialHistory[${index}].landlordPhoneNumber`);
+      }
+    });
 
     // Check Incomes
     if (!state.incomes || state.incomes.length === 0) {
@@ -410,10 +332,27 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     const result = { complete, missingFields };
 
     if (complete) {
-      console.log("Application is complete; marking complete for applicationId:", applicationId);
+      console.log('Application is complete; marking complete for applicationId:', applicationId);
       markComplete(applicationId);
     }
-    console.log("Application Completion Check:", result);
+    console.log('Application Completion Check:', result);
     return result;
   },
 }));
+
+export const defaultResidentialHistory:ResidentialHistory = {
+  id: crypto.randomUUID(), // Use crypto.randomUUID() for ID generation
+  applicationId: "", // Will be filled in when the application is created
+  street: "",
+  apt: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  monthlyPayment: "",
+  durationOfTenancy: "",
+  housingStatus: "rent",
+  landlordFirstName: "",
+  landlordLastName: "",
+  landlordEmail: "",
+  landlordPhoneNumber: ""
+};

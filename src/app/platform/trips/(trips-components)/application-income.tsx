@@ -59,7 +59,7 @@ export const Income: React.FC = () => {
 
   const addIncome = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIncomes([...incomes, { source: '', monthlyAmount: '', imageUrl: '' }]);
+    setIncomes([...incomes, { id: null, source: '', monthlyAmount: '', imageUrl: '' }]);
   };
 
   const handleDelete = (index: number) => {
@@ -140,10 +140,8 @@ export const Income: React.FC = () => {
                 <UploadButton<UploadData, unknown>
                   endpoint="incomeUploader"
                   content={{
-                    button({ready}) {
-                      return (
-                        <UploadIcon className="h-5 w-5 text-gray-500" />
-                      )
+                    button({ ready }) {
+                      return <UploadIcon className="h-5 w-5 text-gray-500" />;
                     }
                   }}
                   onUploadError={(error) => alert(error.message)}
@@ -151,10 +149,11 @@ export const Income: React.FC = () => {
                   className="p-0 "
                   text="Upload"
                   appearance={{
-                    button: 'bg-parent border-[#404040] text-[#404040] border w-fit px-2   focus-within:ring-[#404040  ] data-[state="uploading"]:after:bg-gray-200',
+                    button:
+                      'bg-parent border-[#404040] text-[#404040] border w-fit px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-gray-200',
                     allowedContent: 'hidden',
-                    container: 'w-fit '
-                   }}
+                    container: 'w-fit'
+                  }}
                 />
               )}
             </div>

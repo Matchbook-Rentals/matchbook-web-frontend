@@ -1,77 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import CurrencyInput from "@/components/ui/currency-input";
 import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
-
-// Define a default residence record
-const defaultResidence = {
-  street: "",
-  apt: "",
-  city: "",
-  state: "",
-  zipCode: "",
-  monthlyPayment: "",
-  durationOfTenancy: "",
-  housingStatus: "rent",
-  landlordFirstName: "",
-  landlordLastName: "",
-  landlordEmail: "",
-  landlordPhoneNumber: ""
-};
+import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
+import { ResidentialHistory } from '@prisma/client';
 
 export const ResidentialLandlordInfo: React.FC = () => {
-  // Using local state for multiple residences
-  const [residences, setResidences] = useState([defaultResidence]);
+  // Directly use residentialHistory from the store
+  const residentialHistory = useApplicationStore((state) => state.residentialHistory);
+  const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
 
-  // Helper function to update a residence field
-  const updateResidence = (index: number, field: string, value: string) => {
-    setResidences(prev => {
-      const newRes = [...prev];
-      newRes[index] = { ...newRes[index], [field]: value };
-      return newRes;
-    });
-  };
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    updateResidence(index, name, value);
+    // Directly update the store's residentialHistory
+    setResidentialHistory(
+      residentialHistory.map((residence, i) =>
+        i === index ? { ...residence, [name]: value } : residence
+      )
+    );
   };
 
   const handleRadioChange = (index: number, value: 'rent' | 'own') => {
-    updateResidence(index, 'housingStatus', value);
+    // Directly update the store
+    setResidentialHistory(
+      residentialHistory.map((residence, i) =>
+        i === index ? { ...residence, housingStatus: value } : residence
+      )
+    );
   };
 
   const handleMonthlyPaymentChange = (index: number, value: string) => {
     const strippedValue = value.replace(/[$,]/g, '').split('.')[0];
-    updateResidence(index, 'monthlyPayment', strippedValue);
+    // Directly update the store
+    setResidentialHistory(
+      residentialHistory.map((residence, i) =>
+        i === index ? { ...residence, monthlyPayment: strippedValue } : residence
+      )
+    );
   };
 
   const handleDurationChange = (index: number, value: string) => {
-    updateResidence(index, 'durationOfTenancy', value);
+    // Directly update the store
+    setResidentialHistory(
+      residentialHistory.map((residence, i) =>
+        i === index ? { ...residence, durationOfTenancy: value } : residence
+      )
+    );
   };
 
   // Function to add a new residence with a cap of 3
   const addResidence = () => {
-    setResidences(prev => {
-      if (prev.length < 3) {
-        return [...prev, { ...defaultResidence }];
-      }
-      return prev;
-    });
+    if (residentialHistory.length < 3) {
+      // Directly update the store
+      setResidentialHistory([...residentialHistory, { ...defaultResidentialHistory, id: crypto.randomUUID() }]);
+    }
   };
 
-  // New useEffect to adjust the number of residences based on the total months entered.
+    // New useEffect to adjust the number of residences based on the total months entered.
   // It ensures that if the cumulative months across residences reaches or exceeds 24,
   // any extra (unneeded) residences are removed.
   useEffect(() => {
     let cumulativeMonths = 0;
-    let neededProperties = residences.length;
+    let neededProperties = residentialHistory.length;
     // Loop over residences in order, accumulating duration until we reach 24.
-    for (let i = 0; i < residences.length; i++) {
-      const duration = parseInt(residences[i].durationOfTenancy) || 0;
+    for (let i = 0; i < residentialHistory.length; i++) {
+      const duration = parseInt(residentialHistory[i].durationOfTenancy || "") || 0; // Corrected parseInt usage
       cumulativeMonths += duration;
       if (cumulativeMonths >= 24) {
         // Only the first (i + 1) residences are needed.
@@ -80,25 +77,34 @@ export const ResidentialLandlordInfo: React.FC = () => {
       }
     }
     // If we've reached (or exceeded) 24 and have extra residences, trim them.
-    if (cumulativeMonths >= 24 && residences.length > neededProperties) {
-      setResidences(prev => prev.slice(0, neededProperties));
+    if (cumulativeMonths >= 24 && residentialHistory.length > neededProperties) {
+      setResidentialHistory(residentialHistory.slice(0, neededProperties));
     }
     // Otherwise, if we're below 24 and the last residence's duration is filled,
     // auto-add a new residence (if we haven't reached the maximum of 3).
     else if (cumulativeMonths < 24) {
-      const lastResidence = residences[residences.length - 1];
-      if (lastResidence && lastResidence.durationOfTenancy !== "" && residences.length < 3) {
+      const lastResidence = residentialHistory[residentialHistory.length - 1];
+      if (lastResidence && lastResidence.durationOfTenancy !== "" && residentialHistory.length < 3) {
         addResidence();
       }
     }
-  }, [residences]);
+  }, [residentialHistory, setResidentialHistory]); // Include setResidentialHistory in dependency array
+
 
   // Calculate total months from all residences (if needed elsewhere)
-  const totalMonths = residences.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy) || 0), 0);
+  const totalMonths = residentialHistory.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy || "") || 0), 0);
+
+  if (residentialHistory.length === 0) {
+    return (
+      <div className="space-y-8">
+        <h3 className={ApplicationItemSubHeaderStyles}>Current Residence</h3>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">
-      {residences.map((residence, index) => {
+      {residentialHistory.map((residence, index) => {
         let headerText;
         if (index === 0) {
           headerText = "Current Residence";
@@ -116,7 +122,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <Label className={ApplicationItemLabelStyles}>Street Address</Label>
                   <Input
                     name="street"
-                    value={residence.street}
+                    value={residence.street || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="Street Address Ex: 123 Main St"
                   />
@@ -125,7 +131,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <Label className={ApplicationItemLabelStyles}>Apt, Suite, Bldg</Label>
                   <Input
                     name="apt"
-                    value={residence.apt}
+                    value={residence.apt || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="Apt, Suite, Bldg (optional)"
                   />
@@ -134,7 +140,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <Label className={ApplicationItemLabelStyles}>City</Label>
                   <Input
                     name="city"
-                    value={residence.city}
+                    value={residence.city || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="City"
                   />
@@ -143,7 +149,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <Label className={ApplicationItemLabelStyles}>State</Label>
                   <Input
                     name="state"
-                    value={residence.state}
+                    value={residence.state || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="State"
                   />
@@ -152,7 +158,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                   <Label className={ApplicationItemLabelStyles}>ZIP Code</Label>
                   <Input
                     name="zipCode"
-                    value={residence.zipCode}
+                    value={residence.zipCode || ""}
                     onChange={(e) => handleInputChange(index, e)}
                     placeholder="ZIP Code"
                   />
@@ -163,20 +169,20 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     className="py-2"
                     label="Monthly Payment"
                     labelClassName={ApplicationItemLabelStyles + ' text-[#404040]'}
-                    value={residence.monthlyPayment}
+                    value={residence.monthlyPayment || ""}
                     onChange={(value) => handleMonthlyPaymentChange(index, value)}
                   />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col test">
                     <Label className={ApplicationItemLabelStyles}>Length of Stay (months)</Label>
                     <MonthSelect
-                      value={residence.durationOfTenancy}
+                      value={residence.durationOfTenancy || ""}
                       onChange={(value) => handleDurationChange(index, value)}
                     />
                   </div>
                 </div>
                 <div className="flex items-center">
                   <RadioGroup
-                    value={residence.housingStatus}
+                    value={residence.housingStatus || ""}
                     onValueChange={(value) => handleRadioChange(index, value as 'rent' | 'own')}
                     className="space-y-2"
                   >
@@ -204,7 +210,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <Label className={ApplicationItemLabelStyles}>First Name</Label>
                     <Input
                       name="landlordFirstName"
-                      value={residence.landlordFirstName}
+                      value={residence.landlordFirstName || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's First Name"
                     />
@@ -213,7 +219,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <Label className={ApplicationItemLabelStyles}>Last Name</Label>
                     <Input
                       name="landlordLastName"
-                      value={residence.landlordLastName}
+                      value={residence.landlordLastName || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Last Name"
                     />
@@ -222,7 +228,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <Label className={ApplicationItemLabelStyles}>Email</Label>
                     <Input
                       name="landlordEmail"
-                      value={residence.landlordEmail}
+                      value={residence.landlordEmail || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Email"
                     />
@@ -231,7 +237,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <Label className={ApplicationItemLabelStyles}>Phone Number</Label>
                     <Input
                       name="landlordPhoneNumber"
-                      value={residence.landlordPhoneNumber}
+                      value={residence.landlordPhoneNumber || ""}
                       onChange={(e) => handleInputChange(index, e)}
                       placeholder="Landlord's Phone Number"
                     />

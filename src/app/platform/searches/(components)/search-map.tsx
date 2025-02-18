@@ -37,6 +37,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const [selectedMarker, setSelectedMarker] = React.useState<MapMarker | null>(null);
+  const [isFullscreen , setIsFullscreen] = React.useState<Boolean>(false);
 
   // Update selected marker when hoveredListing changes
   useEffect(() => {
@@ -48,7 +49,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     }
   }, [hoveredListing, markers]);
 
-  // Initial map setup
+  // Initial map setup with marker and popup creation
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
 
@@ -63,12 +64,20 @@ const SearchMap: React.FC<SearchMapProps> = ({
     mapRef.current = map;
 
     markers.forEach(marker => {
+      // Create a popup with the listing title
+      const popup = new maplibregl.Popup({ closeOnClick: false })
+        .setText(marker.listing.title);
+
+      // Create the marker and associate the popup
       const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
         .setLngLat([marker.lng, marker.lat])
+        .setPopup(popup) // Attach the popup to the marker
         .addTo(map);
+
       markersRef.current.set(marker.listing.id, mapMarker);
     });
 
+    // Cleanup function
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -123,7 +132,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
-
       {/* Map controls */}
       <div className="absolute top-2 right-2 z-10 flex flex-col">
         <button
@@ -164,17 +172,23 @@ const SearchMap: React.FC<SearchMapProps> = ({
             />
           </svg>
         </button>
+      </div>
+
+      {/* Fullscreen control */}
+      <div className="absolute top-2 left-2 z-10">
         <button
           onClick={() => {
             if (mapRef.current) {
               if (!document.fullscreenElement) {
                 mapContainerRef.current?.requestFullscreen();
+                setIsFullscreen(true)
               } else {
                 document.exitFullscreen();
+                setIsFullscreen(false)
               }
             }
           }}
-          className="bg-white p-2 rounded-md shadow mt-1"
+          className="bg-white p-2 rounded-md shadow"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

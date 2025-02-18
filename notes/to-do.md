@@ -39,7 +39,6 @@ load javascript array of markers, give listingId property, change color direclty
 
 
 
-
 ##10FEB24
 - [x] finish application sent to DB
 - [ ] finish application mobile view

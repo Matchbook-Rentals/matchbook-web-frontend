@@ -17,8 +17,6 @@ import { cn } from '@/lib/utils';
 import { PAGE_MARGIN, APP_PAGE_MARGIN, ApplicationItemHeaderStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { PersonalInfo } from '../../(trips-components)/application-personal-info';
 import { Identification } from '../../(trips-components)/application-identity';
-import { ResidentialHistory } from '../../(trips-components)/application-resident-history';
-import { LandlordInfo } from '../../(trips-components)/application-landlord-info';
 import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import MobileApplicationEdit from '../../(trips-components)/mobile-application-edit';
@@ -28,7 +26,6 @@ import {
   validatePersonalInfo,
   validateIdentification,
   validateResidentialHistory,
-  validateLandlordInfo,
   validateIncome,
   validateQuestionnaire
 } from '@/utils/application-validation';
@@ -42,7 +39,6 @@ const navigationItems = [
   { id: 'questionnaire', label: 'Questionnaire' },
 ];
 
-const itemHeaderStyles = "text-[30px] font-medium mb-4";
 
 // Update the helper function to be more specific about field changes
 const getChangedFields = (current: any, initial: any) => {
@@ -171,7 +167,6 @@ export default function ApplicationPage() {
     personalInfo,
     ids,
     residentialHistory,
-    landlordInfo,
     incomes,
     answers,
     initializeFromApplication,
@@ -218,14 +213,16 @@ export default function ApplicationPage() {
     // Only execute this try catch if we have changes
     if (isEdited()) {
       setIsLoading(true);
+      const applicationData = {
+        ...personalInfo,
+        ...answers,
+        incomes,
+        identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+        residentialHistories: residentialHistory,
+      };
+      console.log('applicationData', applicationData);
       try {
-        const result = await upsertApplication({
-          ...personalInfo,
-          ...residentialHistory,
-          ...answers,
-          incomes,
-          identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
-        });
+        const result = await upsertApplication(applicationData);
         setIsLoading(false);
         if (result.success) {
           markSynced();
@@ -269,11 +266,13 @@ export default function ApplicationPage() {
   const handleSubmit = async () => {
     const applicationData = {
       ...personalInfo,
-      ...residentialHistory,
       ...answers,
       incomes,
       identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      residentialHistories: residentialHistory,
     };
+
+    console.log('applicationData', applicationData);
 
     setIsLoading(true);
     try {
@@ -322,15 +321,8 @@ export default function ApplicationPage() {
       }
       case 1: {
         const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
-        const landlordInfoErrors = residentialHistory.housingStatus === 'rent'
-          ? validateLandlordInfo(landlordInfo)
-          : {};
 
         setErrors('residentialHistory', residentialHistoryErrors);
-        setErrors('landlordInfo', landlordInfoErrors);
-
-        return Object.keys(residentialHistoryErrors).length === 0 &&
-               (residentialHistory.housingStatus !== 'rent' || Object.keys(landlordInfoErrors).length === 0);
       }
       case 2: {
         const incomeErrors = validateIncome(incomes);
@@ -459,6 +451,9 @@ export default function ApplicationPage() {
             <div className="flex justify-between px-6 mt-1 mb-4">
               <Button
                 onClick={() => {
+                  if (application?.id) {
+                    checkCompletion(application.id);
+                  }
                   if (!validateStep(currentStep)) {
                     toast({
                       title: "Validation Error",

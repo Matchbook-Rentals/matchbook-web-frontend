@@ -33,6 +33,17 @@ const slideUpVariants = {
   }
 };
 
+// Add this function to determine zoom level based on radius
+const getZoomLevel = (radius: number | undefined): number => {
+  if (!radius) return 9; // Default zoom if radius is undefined
+  
+  if (radius >= 100) return 6;
+  if (radius >= 75) return 7;
+  if (radius >= 40) return 8;
+  if (radius >= 20) return 9;
+  return 9; // Default for anything less than 20
+};
+
 const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -48,6 +59,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
   const [shouldRenderMap, setShouldRenderMap] = useState(false);
+
+  // Calculate zoom level based on searchRadius
+  const zoomLevel = getZoomLevel(trip?.searchRadius);
 
   useEffect(() => {
     const setHeight = () => {
@@ -139,14 +153,14 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           ) : listings.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <p className="text-gray-600 text-center">
-                Sorry, we couldn&apos;t find any listings in this area right now.
+                Sorry, we couldn't find any listings in this area right now.
                 <br />
                 Please check again later or try different dates.
               </p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-[50vh]">
-              <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
+              <p className="font-montserrat-regular text-2xl mb-5">You're out of listings!</p>
               <p>
                 You can {numFavorites > 0 ? 'look at your favorites' : ''}
                 {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
@@ -197,7 +211,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
-            zoom={9}
+            zoom={zoomLevel}
             height={`${calculatedHeight}px`}
             markers={markers.map((marker) => ({
               ...marker,
@@ -220,7 +234,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           >
             <SearchMapMobile
               center={[mapCenter.lng, mapCenter.lat]}
-              zoom={10}
+              zoom={zoomLevel}
               height="100vh"
               markers={markers.map((marker) => ({
                 ...marker,

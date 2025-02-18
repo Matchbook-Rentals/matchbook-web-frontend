@@ -43,7 +43,7 @@ export async function createApplication(data: any) {
         ...data,
         userId,
         identifications: { create: data.identifications },
-        incomes: { create: data.incomes },
+        incomes: { create: data.incomes.map(({ id, ...rest }: any) => rest) },
         verificationImages: { create: data.verificationImages },
         isDefault: true,
       },
@@ -74,7 +74,7 @@ export async function createDefaultApplication(data: any) {
         ...data,
         userId,
         identifications: { create: data.identifications },
-        incomes: { create: data.incomes },
+        incomes: { create: data.incomes.map(({ id, ...rest }: any) => rest) },
         verificationImages: { create: data.verificationImages },
         isDefault: true,
       },
@@ -105,7 +105,7 @@ export async function upsertNonDefaultApplication(data: any) {
       update: {
         ...data,
         identifications: { upsert: data.identifications.map((id: any) => ({ where: { id: id.id }, update: id, create: id })) },
-        incomes: { upsert: data.incomes.map((income: any) => ({ where: { id: income.id }, update: income, create: income })) },
+        incomes: { upsert: data.incomes.map((income: any) => ({ where: { id: income.id || 'new' }, update: income, create: income })) },
         verificationImages: { upsert: data.verificationImages.map((img: any) => ({ where: { id: img.id }, update: img, create: img })) },
         isDefault: false,
       },
@@ -113,7 +113,7 @@ export async function upsertNonDefaultApplication(data: any) {
         ...data,
         userId,
         identifications: { create: data.identifications },
-        incomes: { create: data.incomes },
+        incomes: { create: data.incomes.map(({ id, ...rest }: any) => rest) },
         verificationImages: { create: data.verificationImages },
         isDefault: false,
       },
@@ -144,9 +144,11 @@ export async function getTripApplication(tripId?: string) {
           incomes: true,
           verificationImages: true,
           identifications: true,
+          residentialHistories: true,
         },
       });
     }
+    console.log('residentialHistories', application?.residentialHistories);
 
     if (!application) {
       application = await prisma.application.findUnique({
@@ -160,6 +162,7 @@ export async function getTripApplication(tripId?: string) {
           incomes: true,
           verificationImages: true,
           identifications: true,
+          residentialHistories: true,
         },
       });
     }
@@ -189,8 +192,11 @@ export async function getUserApplication() {
         incomes: true,
         verificationImages: true,
         identifications: true,
+        residentialHistories: true,
       },
     });
+    console.log('residentialHistories', application?.residentialHistories);
+    console.log('application', application);
 
     return application; // This will be null if no application is found
   } catch (error) {
@@ -227,7 +233,7 @@ export async function updateApplication(data: any) {
       upsert: incomes.map((income: any) => ({
         where: { id: income.id || 'new' },
         update: income,
-        create: income,
+        create: (({ id, ...rest }: any) => rest)(income)
       })),
     };
   }
@@ -268,7 +274,7 @@ export async function upsertApplication(data: any) {
 
   // Destructure the incoming data.  We separate out the nested arrays
   // and the tripId, and gather the rest of the fields into 'rest'.
-  const { identifications, incomes, verificationImages, tripId, ...rest } = data;
+  const { identifications, incomes, verificationImages, tripId, residentialHistories, ...rest } = data;
 
   // Create a new object 'filteredData' to store only the defined (non-undefined) values from 'rest'.
   // This prevents accidentally overwriting existing data with undefined values.
@@ -305,7 +311,7 @@ export async function upsertApplication(data: any) {
       upsert: incomes.map((income: any) => ({
         where: { id: income.id || 'new' },
         update: income,
-        create: income,
+        create: (({ id, ...rest }: any) => rest)(income)
       })),
     };
   }
@@ -320,6 +326,22 @@ export async function upsertApplication(data: any) {
     };
   }
 
+  if (residentialHistories) {
+    filteredData.residentialHistories = {
+      upsert: residentialHistories.map((rh: any) => {
+        const payload = { ...rh };
+        if (payload.applicationId === null) {
+          delete payload.applicationId;
+        }
+        return {
+          where: { id: rh.id || 'new' },
+          update: payload,
+          create: payload,
+        };
+      }),
+    };
+  }
+
   // Prepare the data for creating a new application.  This is used in the 'create' part of the main upsert.
   const createData: any = {
     ...data, // Includes all fields from the input data
@@ -328,8 +350,17 @@ export async function upsertApplication(data: any) {
     // Conditionally include the creation of related records.  If, for example, 'identifications' is null,
     // we don't want to create an empty 'identifications' relation.
     identifications: identifications ? { create: identifications } : undefined,
-    incomes: incomes ? { create: incomes } : undefined,
+    incomes: incomes ? { create: incomes.map(({ id, ...rest }: any) => rest) } : undefined,
     verificationImages: verificationImages ? { create: verificationImages } : undefined,
+    residentialHistories: residentialHistories
+      ? { create: residentialHistories.map((rh: any) => {
+          const payload = { ...rh };
+          if (payload.applicationId === null) {
+            delete payload.applicationId;
+          }
+          return payload;
+        }) }
+      : undefined,
   };
 
   // Determine the 'where' clause for the main upsert.  This selects *which* application to update/create.
