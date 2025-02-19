@@ -3,7 +3,6 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { ListingAndImages } from '@/types';
-import { format } from 'date-fns';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Image from 'next/image';
 
@@ -54,7 +53,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     return R * c;
   };
 
-  // Initialize map and set up markers with click handlers
+  // Initialize map and set up markers
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
 
@@ -79,10 +78,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
         .setLngLat([marker.lng, marker.lat])
         .addTo(map);
 
-      // Add click handler to marker
+      // Only set selectedMarker in full-screen mode
       mapMarker.getElement().addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent map click event from firing
-        setSelectedMarker(marker);
+        e.stopPropagation();
+        if (isFullscreen) {
+          setSelectedMarker(marker);
+        }
       });
 
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -98,7 +99,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       highlightedMarkerRef.current = null;
     };
-  }, [center, markers, zoom]);
+  }, [center, markers, zoom, isFullscreen]);
 
   // Update marker colors based on hoveredListing
   useEffect(() => {
@@ -141,6 +142,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
     return () => clearTimeout(timeoutId);
   }, [shouldPanTo, clearPanTo, zoom]);
+
+  // Sync isFullscreen state with browser full-screen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
@@ -211,9 +223,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
         </button>
       </div>
 
-      {/* Detailed Card on Marker Click */}
-      {selectedMarker && (
-        <div className="absolute bottom-4 left-4 z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden w-80">
+      {/* Detailed Card (only in full-screen) */}
+      {selectedMarker && isFullscreen && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden w-96">
           {/* Close Button */}
           <div className="absolute top-2 right-2 z-20">
             <button
@@ -234,7 +246,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
           </div>
           {/* Image Carousel */}
           <div className="relative h-40 w-full">
-            <Carousel>
+            <Carousel keyboardControls={false}>
               <CarouselContent>
                 {selectedMarker.listing.listingImages.map((image, index) => (
                   <CarouselItem key={index} className="relative h-40 w-full">
@@ -247,8 +259,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="z-20" />
-              <CarouselNext className="z-20" />
+              <div className="hidden sm:block">
+                <CarouselPrevious className="z-20" />
+                <CarouselNext className="z-20" />
+              </div>
             </Carousel>
           </div>
           {/* Listing Details */}

@@ -61,7 +61,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const [shouldRenderMap, setShouldRenderMap] = useState(false);
 
   // Calculate zoom level based on searchRadius
-  const zoomLevel = getZoomLevel(trip?.searchRadius);
 
   useEffect(() => {
     const setHeight = () => {
@@ -211,7 +210,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
-            zoom={zoomLevel}
+            zoom={getZoomLevel(trip?.searchRadius || 50)}
             height={`${calculatedHeight}px`}
             markers={markers.map((marker) => ({
               ...marker,
