@@ -9,7 +9,7 @@ import { PAGE_MARGIN, ApplicationItemHeaderStyles, ApplicationItemSubHeaderStyle
 import { PersonalInfo } from './application-personal-info';
 import { Identification } from './application-identity';
 import { ResidentialHistory } from './application-resident-history';
-import { LandlordInfo } from './application-landlord-info';
+import { ResidentialLandlordInfo } from './residential-landlord-info';
 import { Income } from './application-income';
 import Questionnaire from './application-questionnaire';
 import { upsertApplication, markComplete } from '@/app/actions/applications';
@@ -25,7 +25,6 @@ import {
   validatePersonalInfo,
   validateIdentification,
   validateResidentialHistory,
-  validateLandlordInfo,
   validateIncome,
   validateQuestionnaire
 } from '@/utils/application-validation';
@@ -76,13 +75,8 @@ export default function MobileApplicationEdit() {
       }
       case 'residential': {
         const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
-        const landlordInfoErrors = residentialHistory.housingStatus === 'rent'
-          ? validateLandlordInfo(landlordInfo)
-          : {};
         setErrors('residentialHistory', residentialHistoryErrors);
-        setErrors('landlordInfo', landlordInfoErrors);
-        isValid = Object.keys(residentialHistoryErrors).length === 0 &&
-                 (residentialHistory.housingStatus !== 'rent' || Object.keys(landlordInfoErrors).length === 0);
+        isValid = Object.keys(residentialHistoryErrors).length === 0;
         break;
       }
       case 'income': {
@@ -122,10 +116,10 @@ export default function MobileApplicationEdit() {
 
     const applicationData = {
       ...personalInfo,
-      ...residentialHistory,
       ...answers,
       incomes,
-      identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      residentialHistories: residentialHistory,
     };
 
     setIsLoading(true);
@@ -195,8 +189,7 @@ export default function MobileApplicationEdit() {
           >
             <AccordionTrigger className="px-4">Residential History</AccordionTrigger>
             <AccordionContent className="px-4 pb-4">
-              <ResidentialHistory />
-              <LandlordInfo />
+              <ResidentialLandlordInfo />
             </AccordionContent>
           </AccordionItem>
 

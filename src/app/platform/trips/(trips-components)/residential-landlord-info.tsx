@@ -218,7 +218,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.zipCode[index]}</p>
                   )}
                 </div>
-                <div className="space-y-0 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
+                <div className="space-y-4 xl:space-y-0 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
                   <div className="flex flex-col ">
                     <Label className={ApplicationItemLabelStyles}>Monthly Payment</Label>
                     <MonthlyPaymentInput
@@ -231,7 +231,7 @@ export const ResidentialLandlordInfo: React.FC = () => {
                       <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.monthlyPayment[index]}</p>
                     )}
                   </div>
-                  <div className="flex flex-col items-start py-0 ">
+                  <div className="flex flex-col  items-start py-0 ">
                     <Label className={ApplicationItemLabelStyles}>Length of Stay</Label>
                     <MonthSelect
                       value={residence.durationOfTenancy || ""}
