@@ -2,18 +2,60 @@ import React, { useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import CurrencyInput from "@/components/ui/currency-input";
 import MonthSelect from "@/components/ui/month-select";
 import { ApplicationItemLabelStyles, ApplicationItemSubHeaderStyles } from '@/constants/styles';
 import { useApplicationStore, defaultResidentialHistory } from '@/stores/application-store';
 import { ResidentialHistory } from '@prisma/client';
 import { validateResidentialHistory } from '@/utils/application-validation';
 
+// New MonthlyPaymentInput component
+interface MonthlyPaymentInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  id?: string;
+  className?: string;
+}
+
+const MonthlyPaymentInput: React.FC<MonthlyPaymentInputProps> = ({ value, onChange, id, className }) => {
+  const [isFocused, setIsFocused] = React.useState(false);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(false);
+  };
+
+  let displayValue = value;
+  if (!isFocused && value && /^\d+$/.test(value)) {
+    // Format as currency when not focused
+    const numericValue = parseInt(value, 10);
+    displayValue = "$" + numericValue.toLocaleString();
+  }
+
+  return (
+    <Input
+      id={id}
+      type="text"
+      className={className}
+      value={displayValue}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onChange={(e) => {
+        // Remove any $ or commas so only a raw numeric string is passed upward
+        const cleaned = e.target.value.replace(/[$,]/g, '');
+        onChange(cleaned);
+      }}
+    />
+  );
+};
+
 export const ResidentialLandlordInfo: React.FC = () => {
   // Directly use residentialHistory from the store
   const residentialHistory = useApplicationStore((state) => state.residentialHistory);
   const setResidentialHistory = useApplicationStore((state) => state.setResidentialHistory);
-  const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
+  const residentialHistoryErrors = useApplicationStore((state) => state.errors.residentialHistory);
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -95,18 +137,11 @@ export const ResidentialLandlordInfo: React.FC = () => {
   // Calculate total months from all residences (if needed elsewhere)
   const totalMonths = residentialHistory.reduce((acc, curr) => acc + (parseInt(curr.durationOfTenancy || "") || 0), 0);
 
-  if (residentialHistory.length === 0) {
-    return (
-      <div className="space-y-8">
-        <h3 className={ApplicationItemSubHeaderStyles}>Current Residence</h3>
-      </div>
-    )
-  }
 
   return (
     <div className="space-y-8">
       {residentialHistoryErrors.overall && (
-         <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
+        <p onClick={() => console.log(residentialHistory)} className="text-red-500 text-sm mt-1">{residentialHistoryErrors.overall}</p>
       )}
       {residentialHistory.map((residence, index) => {
         let headerText;
@@ -183,29 +218,30 @@ export const ResidentialLandlordInfo: React.FC = () => {
                     <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.zipCode[index]}</p>
                   )}
                 </div>
-                <div className="space-y-2 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
-                  <CurrencyInput
-                    id={`monthlyPayment-${index}`}
-                    className={`py-2 ${residentialHistoryErrors.monthlyPayment?.[index] ? "border-red-500" : ""}`}
-                    label="Monthly Payment"
-                    labelClassName={ApplicationItemLabelStyles + ' text-[#404040]'}
-                    value={residence.monthlyPayment || ""}
-                    onChange={(value) => handleMonthlyPaymentChange(index, value)}
-                  />
-                  {residentialHistoryErrors.monthlyPayment?.[index] && (
-                    <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.monthlyPayment[index]}</p>
-                  )}
-                  <div className="flex flex-col test">
-                    <Label className={ApplicationItemLabelStyles}>Length of Stay (months)</Label>
+                <div className="space-y-0 xl:space-x-4 py-0 flex flex-col items-start xl:flex-row">
+                  <div className="flex flex-col ">
+                    <Label className={ApplicationItemLabelStyles}>Monthly Payment</Label>
+                    <MonthlyPaymentInput
+                      id={`monthlyPayment-${index}`}
+                      className={`${residentialHistoryErrors.monthlyPayment?.[index] ? "border-red-500" : ""}`}
+                      value={residence.monthlyPayment || ""}
+                      onChange={(value) => handleMonthlyPaymentChange(index, value)}
+                    />
+                    {residentialHistoryErrors.monthlyPayment?.[index] && (
+                      <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.monthlyPayment[index]}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-start py-0 ">
+                    <Label className={ApplicationItemLabelStyles}>Length of Stay</Label>
                     <MonthSelect
                       value={residence.durationOfTenancy || ""}
                       onChange={(value) => handleDurationChange(index, value)}
                       className={residentialHistoryErrors.durationOfTenancy?.[index] ? "border-red-500" : ""}
                     />
-                  </div>
                   {residentialHistoryErrors.durationOfTenancy?.[index] && (
                     <p className="text-red-500 text-sm mt-1">{residentialHistoryErrors.durationOfTenancy[index]}</p>
                   )}
+                  </div>
                 </div>
                 <div className="flex items-center">
                   <RadioGroup

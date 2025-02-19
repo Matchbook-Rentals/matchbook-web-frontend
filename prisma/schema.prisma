@@ -829,6 +829,7 @@ model ResidentialHistory {
   landlordLastName    String?
   landlordEmail       String?
   landlordPhoneNumber String?
+  index               Int?
 
   application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId       String

@@ -43,6 +43,7 @@ interface PersonalInfo {
 }
 
 interface Identification {
+  id: string;
   idType: string;
   idNumber: string;
 }
@@ -211,7 +212,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     if (application.residentialHistories.length === 0) {
       residences = [defaultResidentialHistory];
     } else {
-      residences = application.residentialHistories;
+      residences = application.residentialHistories.sort((a: any, b: any) => a.index - b.index);
     }
 
     const newData = {
@@ -335,7 +336,9 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       state.incomes.forEach((income, index) => {
         if (!income.source) missingFields.push(`incomes[${index}].source`);
         if (!income.monthlyAmount) missingFields.push(`incomes[${index}].monthlyAmount`);
-        if (!income.imageUrl) missingFields.push(`incomes[${index}].imageUrl`);
+        if (!income.imageUrl.trim()) {
+          missingFields.push(`incomes[${index}].imageUrl`);
+        }
       });
     }
 

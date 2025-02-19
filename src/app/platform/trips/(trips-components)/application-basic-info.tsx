@@ -190,6 +190,7 @@ export const ApplicationBasicInfo: React.FC<ApplicationBasicInfoProps> = ({
             <Input
               id="idNumber"
               value={ids.idNumber}
+              placeholder='Identification Number'
               onChange={handleIdChange}
             />
           </div>

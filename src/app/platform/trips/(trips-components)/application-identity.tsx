@@ -44,6 +44,7 @@ interface VerificationImage {
 interface IdentificationItem {
   idType: string;
   idNumber: string;
+  id: string;
 }
 
 interface IdentificationProps {
@@ -75,7 +76,7 @@ export const Identification: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
+          <Label onClick={() => console.log(ids)} htmlFor="idType" className={ApplicationItemLabelStyles}>Id Type</Label>
           <Select
             value={ids[0]?.idType}
             onValueChange={(value) => setIds([
@@ -101,6 +102,7 @@ export const Identification: React.FC = () => {
           <Input
             id="idNumber"
             value={ids[0]?.idNumber}
+            placeholder='Identification Number'
             onChange={(e) => setIds([
               { ...ids[0], idNumber: e.target.value },
               ...ids.slice(1)
@@ -112,7 +114,7 @@ export const Identification: React.FC = () => {
       </div>
       <Label className={ApplicationItemLabelStyles}>Please upload a photo of your Id</Label>
       <div className="grid grid-cols-2 gap-4">
-        <div className='border border-gray-200 rounded-md flex justify-center items-center'>
+        <div className='border border-gray-200 min-h-32 rounded-md flex justify-center items-center'>
           <UploadButton<UploadData>
             endpoint="idUploader"
             onClientUploadComplete={handleUploadFinish}
@@ -121,7 +123,7 @@ export const Identification: React.FC = () => {
             appearance={{ button: 'bg-parent text-[#404040] border-[#404040] border-2  sm:4/5 px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-[#404040]' }}
           />
         </div>
-        {identificationImages.length > 0 && (
+        {identificationImages.length > 0 ? (
           <div className='border border-gray-300 rounded-md '>
             <div className="flex flex-wrap gap-2 justify-center">
               {identificationImages.map((img, idx) => (
@@ -158,6 +160,10 @@ export const Identification: React.FC = () => {
                 </Dialog>
               ))}
             </div>
+          </div>
+        ) : (
+          <div className='border border-gray-200 rounded-md flex justify-center items-center'>
+            <span className="text-gray-500">ID image will display here</span>
           </div>
         )}
       </div>

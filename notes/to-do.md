@@ -33,6 +33,7 @@
 - [ ] 24 months +, load more address history, own property gets rid of landlord info
 - [ ] match error codes to field names (First name to First Name)
 - [ ] Currency display update
+scroll areas
 
 
 load javascript array of markers, give listingId property, change color direclty in array

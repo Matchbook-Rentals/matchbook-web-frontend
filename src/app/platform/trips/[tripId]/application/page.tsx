@@ -31,6 +31,7 @@ import {
 } from '@/utils/application-validation';
 import { useApplicationStore } from '@/stores/application-store';
 import { ResidentialLandlordInfo } from '../../(trips-components)/residential-landlord-info';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const navigationItems = [
   { id: 'basic', label: 'Basic Information' },
@@ -199,6 +200,44 @@ export default function ApplicationPage() {
     setCurrentStep(newStep);
   }, [api]);
 
+  // Update validateStep function
+  const validateStep = (step: number) => {
+    switch (step) {
+      case 0: {
+        const personalInfoError = validatePersonalInfo(personalInfo);
+        const identificationError = validateIdentification(ids);
+        setErrors('basicInfo', {
+          personalInfo: personalInfoError,
+          identification: identificationError,
+        });
+        return Object.keys(personalInfoError).length === 0 &&
+          Object.keys(identificationError).length === 0;
+      }
+      case 1: {
+        const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
+        setErrors('residentialHistory', residentialHistoryErrors as any);
+        console.log('residentialHistoryErrors', residentialHistoryErrors);
+        return Object.keys(residentialHistoryErrors).length === 0;
+      }
+      case 2: {
+        const incomeErrors = validateIncome(incomes);
+        setErrors('income', incomeErrors);
+        return Object.keys(incomeErrors).length === 0;
+      }
+      case 3: {
+        // Ensure 'answers' has all required properties, even if null.
+        // The actual fix needs to be in your application-store.ts,
+        // making sure the initial state of 'answers' includes:
+        // { felony: null, felonyExplanation: '', evicted: null, evictedExplanation: '' }
+        const questionnaireErrors = validateQuestionnaire(answers);
+        setErrors('questionnaire', questionnaireErrors);
+        return Object.keys(questionnaireErrors).length === 0;
+      }
+      default:
+        return true;
+    }
+  };
+
   const scrollToIndex = async (index: number) => {
     let isValid = validateStep(currentStep);
     if (!isValid) {
@@ -217,10 +256,9 @@ export default function ApplicationPage() {
         ...personalInfo,
         ...answers,
         incomes,
-        identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+        identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
         residentialHistories: residentialHistory,
       };
-      console.log('applicationData', applicationData);
       try {
         const result = await upsertApplication(applicationData);
         setIsLoading(false);
@@ -268,10 +306,18 @@ export default function ApplicationPage() {
       ...personalInfo,
       ...answers,
       incomes,
-      identifications: [{ idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
       residentialHistories: residentialHistory,
     };
-
+    let isValid = validateStep(currentStep);
+    if (!isValid) {
+      toast({
+        title: "Validation Error",
+        description: "Please correct errors before navigating.",
+        variant: "destructive",
+      });
+      return;
+    }
     console.log('applicationData', applicationData);
 
     setIsLoading(true);
@@ -303,45 +349,6 @@ export default function ApplicationPage() {
         description: "Failed to submit application",
         variant: "destructive",
       });
-    }
-  };
-
-  // Update validateStep function
-  const validateStep = (step: number) => {
-    switch (step) {
-      case 0: {
-        const personalInfoError = validatePersonalInfo(personalInfo);
-        const identificationError = validateIdentification(ids);
-        setErrors('basicInfo', {
-          personalInfo: personalInfoError,
-          identification: identificationError,
-        });
-        return Object.keys(personalInfoError).length === 0 &&
-               Object.keys(identificationError).length === 0;
-      }
-      case 1: {
-        const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
-
-        setErrors('residentialHistory', residentialHistoryErrors);
-        console.log('residentialHistoryErrors', residentialHistoryErrors);
-        return Object.keys(residentialHistoryErrors).length === 0;
-      }
-      case 2: {
-        const incomeErrors = validateIncome(incomes);
-        setErrors('income', incomeErrors);
-        return Object.keys(incomeErrors).length === 0;
-      }
-      case 3: {
-        // Ensure 'answers' has all required properties, even if null.
-        // The actual fix needs to be in your application-store.ts,
-        // making sure the initial state of 'answers' includes:
-        // { felony: null, felonyExplanation: '', evicted: null, evictedExplanation: '' }
-        const questionnaireErrors = validateQuestionnaire(answers);
-        setErrors('questionnaire', questionnaireErrors);
-        return Object.keys(questionnaireErrors).length === 0;
-      }
-      default:
-        return true;
     }
   };
 
@@ -415,10 +422,12 @@ export default function ApplicationPage() {
                     <h2 className={cn(ApplicationItemHeaderStyles, "mb-1")}>
                       Residential History
                     </h2>
+                      <ScrollArea className='h-[500px]' >
         <p className="text-sm text-gray-500 mb-4">
           Please add 24 months of residential history or three previous addresses.
         </p>
                     <ResidentialLandlordInfo />
+                    </ScrollArea>
                   </div>
                 </CarouselItem>
 

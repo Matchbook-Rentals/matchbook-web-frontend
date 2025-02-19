@@ -59,7 +59,7 @@ export const Income: React.FC = () => {
 
   const addIncome = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIncomes([...incomes, { id: null, source: '', monthlyAmount: '', imageUrl: '' }]);
+    setIncomes([...incomes, {  source: '', monthlyAmount: '', imageUrl: '' }]);
   };
 
   const handleDelete = (index: number) => {
@@ -77,6 +77,26 @@ export const Income: React.FC = () => {
   };
 
   const incomeImages = verificationImages.filter(img => img.category === 'Income');
+
+  // Modified function to format currency without cents
+  const formatCurrency = (value: string) => {
+    const numberValue = Number(value.replace(/[^0-9.-]+/g, ""));
+    if (isNaN(numberValue)) {
+      return value;
+    }
+    return numberValue.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0, // Remove cents
+      maximumFractionDigits: 0, // Remove cents
+    });
+  };
+
+  // Function to handle changes in the monthly amount, removing non-numeric characters
+  const handleMonthlyAmountChange = (index: number, value: string) => {
+    const numericValue = value.replace(/[^0-9]/g, '');
+    handleInputChange(index, 'monthlyAmount', numericValue);
+  };
 
   return (
     <div onClick={() => console.log(incomes)}>
@@ -112,8 +132,8 @@ export const Income: React.FC = () => {
                 </Label>
                 <Input
                   id={`monthlyAmount-${index}`}
-                  value={item.monthlyAmount}
-                  onChange={(e) => handleInputChange(index, 'monthlyAmount', e.target.value)}
+                  value={formatCurrency(item.monthlyAmount)}
+                  onChange={(e) => handleMonthlyAmountChange(index, e.target.value)}
                   className={`w-full ${error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                 />
                 {error?.monthlyAmount?.[index] && (
@@ -150,11 +170,15 @@ export const Income: React.FC = () => {
                   text="Upload"
                   appearance={{
                     button:
-                      'bg-parent border-[#404040] text-[#404040] border w-fit px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-gray-200',
+                      'bg-parent border-[#404040] text-[#404040] border w-fit px-2 focus-within:ring-[#404040] data-[state="uploading"]:after:bg-gray-200' +
+                      (error?.imageUrl?.[index] ? " border-red-500" : ""),
                     allowedContent: 'hidden',
                     container: 'w-fit'
                   }}
                 />
+              )}
+              {error?.imageUrl?.[index] && (
+                <p className="mt-1 text-red-500 text-sm">{error.imageUrl[index]}</p>
               )}
             </div>
           </div>

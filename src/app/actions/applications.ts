@@ -192,7 +192,11 @@ export async function getUserApplication() {
         incomes: true,
         verificationImages: true,
         identifications: true,
-        residentialHistories: true,
+        residentialHistories: {
+          orderBy: {
+            index: 'asc',
+          },
+        },
       },
     });
     console.log('residentialHistories', application?.residentialHistories);
@@ -275,6 +279,7 @@ export async function upsertApplication(data: any) {
   // Destructure the incoming data.  We separate out the nested arrays
   // and the tripId, and gather the rest of the fields into 'rest'.
   const { identifications, incomes, verificationImages, tripId, residentialHistories, ...rest } = data;
+  console.log('IDENTIFICATIONS', identifications);
 
   // Create a new object 'filteredData' to store only the defined (non-undefined) values from 'rest'.
   // This prevents accidentally overwriting existing data with undefined values.
@@ -291,17 +296,18 @@ export async function upsertApplication(data: any) {
   if (identifications) {
     filteredData.identifications = {
       // The 'upsert' array operation allows us to update existing records or create new ones.
-      upsert: identifications.map((id: any) => ({
+      upsert: identifications.map((identificaiton: any) => ({
         // 'where':  Try to find an existing identification by its ID.  If 'id.id' is undefined (e.g., for a new identification),
         // it will use 'new'. Prisma will treat 'new' string as not matching any existing ID, forcing a create.
-        where: { id: id.id || 'new' },
+        where: { id: identificaiton.id || 'new' },
         // 'update': If a record with the given ID *is* found, update it with the provided data ('id').
-        update: id,
+        update: identificaiton,
         // 'create': If a record with the given ID is *not* found, create a new one with the provided data ('id').
-        create: id,
+        create: identificaiton,
       })),
     };
   }
+  console.log('INCOMES', incomes);
 
   // The same 'upsert' logic is applied to incomes and verificationImages.
   if (incomes) {
@@ -328,15 +334,12 @@ export async function upsertApplication(data: any) {
 
   if (residentialHistories) {
     filteredData.residentialHistories = {
-      upsert: residentialHistories.map((rh: any) => {
-        const payload = { ...rh };
-        if (payload.applicationId === null) {
-          delete payload.applicationId;
-        }
+      upsert: residentialHistories.map((rh: any, idx: number) => {
+        const { applicationId, ...payload } = rh;
         return {
           where: { id: rh.id || 'new' },
           update: payload,
-          create: payload,
+          create: { ...payload, index: idx },
         };
       }),
     };
@@ -353,13 +356,7 @@ export async function upsertApplication(data: any) {
     incomes: incomes ? { create: incomes.map(({ id, ...rest }: any) => rest) } : undefined,
     verificationImages: verificationImages ? { create: verificationImages } : undefined,
     residentialHistories: residentialHistories
-      ? { create: residentialHistories.map((rh: any) => {
-          const payload = { ...rh };
-          if (payload.applicationId === null) {
-            delete payload.applicationId;
-          }
-          return payload;
-        }) }
+      ? { create: residentialHistories.map(({ applicationId, ...rest }: any) => rest) }
       : undefined,
   };
 
