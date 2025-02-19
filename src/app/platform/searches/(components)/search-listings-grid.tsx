@@ -23,34 +23,13 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
   const [currentPage, setCurrentPage] = useState(1);
   const [gridColumns, setGridColumns] = useState(1);
   const listingsPerPage = gridColumns * 3;
   const infiniteScrollMode = gridColumns === 1;
-  const [seenCards, setSeenCards] = useState<Set<number | string>>(new Set());
-
-  // NEW: A callback ref to attach to every listing card wrapper
-  const createCardRef = (id: number | string) => {
-    return (node: HTMLElement | null) => {
-      if (node) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              setSeenCards(prev => {
-                const newSet = new Set(prev);
-                newSet.add(id);
-                return newSet;
-              });
-              observer.unobserve(node);
-            }
-          });
-        }, { root: scrollAreaRef.current, threshold: 0.5 });
-        observer.observe(node);
-      }
-    };
-  };
 
   useEffect(() => {
     if (infiniteScrollMode) {
@@ -190,16 +169,25 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     return () => window.removeEventListener('resize', updateGridColumns);
   }, []);
 
-  // NEW: When the last displayed card becomes visible, load more listings
+  // Observer for the sentinel to trigger loading more listings
   useEffect(() => {
     if (!infiniteScrollMode) return;
-    if (displayedListings.length === 0) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
 
-    const lastListing = displayedListings[displayedListings.length - 1];
-    if (seenCards.has(lastListing.id) && displayedListings.length < listings.length) {
-      setCurrentPage(prev => prev + 1);
-    }
-  }, [seenCards, displayedListings, infiniteScrollMode, listings]);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && displayedListings.length < listings.length) {
+          setCurrentPage(prev => prev + 1);
+        }
+      });
+    }, { root: scrollAreaRef.current, threshold: 0.1 });
+
+    observer.observe(sentinel);
+    return () => {
+      observer.disconnect();
+    };
+  }, [infiniteScrollMode, displayedListings, listings]);
 
   return (
     <div className={`relative min-h-[640px] h-[${height ? height : '640px'}] `}>
@@ -219,19 +207,21 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (
-                  <div key={listing.id} ref={createCardRef(listing.id)}>
-                    <SearchListingCard
-                      listing={listing}
-                      status={status}
-                      callToAction={getCallToAction(listing, status)}
-                      className="listing-card"
-                      detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
-                      detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
-                    />
-                  </div>
+                  <SearchListingCard
+                    key={listing.id}
+                    listing={listing}
+                    status={status}
+                    callToAction={getCallToAction(listing, status)}
+                    className="listing-card"
+                    detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
+                    detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
+                  />
                 );
               })}
             </div>
+            {infiniteScrollMode && displayedListings.length < listings.length && (
+              <div ref={sentinelRef} style={{ height: '20px' }} />
+            )}
           </ScrollArea>
           {!infiniteScrollMode && (
             <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
