@@ -25,7 +25,7 @@
 - [ ] fix shadow transition
 - [ ] if own property hide landlord information
 - [ ] line up income inputs vertically
-- [ ] each income item gets its own upload button
+- [x] each income item gets its own upload button
 - [ ] Guest counter filled in on search edit mobile
 - [ ] loading skeleton
 ---- [X] desktop
@@ -42,7 +42,7 @@ load javascript array of markers, give listingId property, change color direclty
 
 ##10FEB24
 - [x] finish application sent to DB
-- [ ] finish application mobile view
+- [x] finish application mobile view
 - [x] listing view outside of trips
 - [ ] sign up sign in pages
 - [x] fix share button

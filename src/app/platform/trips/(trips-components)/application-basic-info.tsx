@@ -247,7 +247,7 @@ export const ApplicationBasicInfo: React.FC<ApplicationBasicInfoProps> = ({
         ) : (
           <Card>
             <CardContent className="flex items-center justify-center p-6">
-              Uploaded photo, we'll show here
+              Uploaded photo, will show here
             </CardContent>
           </Card>
         )}

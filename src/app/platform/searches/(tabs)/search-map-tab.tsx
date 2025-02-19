@@ -152,14 +152,14 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           ) : listings.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[50vh]">
               <p className="text-gray-600 text-center">
-                Sorry, we couldn't find any listings in this area right now.
+                Sorry, we couldn&apos;t find any listings in this area right now.
                 <br />
                 Please check again later or try different dates.
               </p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-[50vh]">
-              <p className="font-montserrat-regular text-2xl mb-5">You're out of listings!</p>
+              <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
               <p>
                 You can {numFavorites > 0 ? 'look at your favorites' : ''}
                 {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}

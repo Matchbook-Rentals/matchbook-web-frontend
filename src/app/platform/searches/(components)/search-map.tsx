@@ -82,7 +82,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
         if (isFullscreen) {
-          setSelectedMarker(marker);
+          setSelectedMarker((prev) => {
+            if (prev?.listing.id === marker.listing.id) {
+              setSelectedMarker(null)
+            } else {
+              setSelectedMarker(marker)
+            }
+
+          });
         }
       });
 
