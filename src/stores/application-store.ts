@@ -3,6 +3,20 @@ import { VerificationImage } from '@prisma/client';
 import { markComplete } from '@/app/actions/applications';
 import { ResidentialHistory } from '@prisma/client';
 
+export const defaultResidentialHistory: ResidentialHistory = {
+  street: "",
+  apt: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  monthlyPayment: "",
+  durationOfTenancy: "",
+  housingStatus: "rent",
+  landlordFirstName: "",
+  landlordLastName: "",
+  landlordEmail: "",
+  landlordPhoneNumber: ""
+};
 
 // interface ResidentialHistory {
 //   id                  String      @id @default(uuid())
@@ -53,20 +67,19 @@ interface ApplicationErrors {
     personalInfo: { firstName?: string; lastName?: string };
     identification: { idType?: string; idNumber?: string };
   };
-  residentialHistory: Array<{
-    street?: string;
-    apt?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    monthlyPayment?: string;
-    durationOfTenancy?: string;
-    housingStatus?: 'rent' | 'own';
-    landlordFirstName?: string;
-    landlordLastName?: string;
-    landlordEmail?: string;
-    landlordPhoneNumber?: string;
-  }>;
+  residentialHistory: {
+    overall?: string;
+    street?: string[];
+    city?: string[];
+    state?: string[];
+    zipCode?: string[];
+    monthlyPayment?: string[];
+    durationOfTenancy?: string[];
+    landlordFirstName?: string[];
+    landlordLastName?: string[];
+    landlordEmail?: string[];
+    landlordPhoneNumber?: string[];
+  };
   income: {
     source?: string[];
     monthlyAmount?: string[];
@@ -87,7 +100,7 @@ export const initialState = {
   },
   ids: [{ idType: '', idNumber: '' }],
   verificationImages: [] as VerificationImage[],
-  residentialHistory: [] as ResidentialHistory[],
+  residentialHistory: [defaultResidentialHistory],
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
     evicted: false,
@@ -141,19 +154,19 @@ const initialErrors: ApplicationErrors = {
     personalInfo: {},
     identification: {},
   },
-  residentialHistory: [{
-    street: '',
-    apt: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    monthlyPayment: '',
-    durationOfTenancy: '',
-    landlordFirstName: '',
-    landlordLastName: '',
-    landlordEmail: '',
-    landlordPhoneNumber: '',
-  }],
+  residentialHistory: {
+    overall: '',
+    street: [],
+    city: [],
+    state: [],
+    zipCode: [],
+    monthlyPayment: [],
+    durationOfTenancy: [],
+    landlordFirstName: [],
+    landlordLastName: [],
+    landlordEmail: [],
+    landlordPhoneNumber: [],
+  },
   income: {
     source: [],
     monthlyAmount: [],
@@ -343,20 +356,3 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     return result;
   },
 }));
-
-export const defaultResidentialHistory:ResidentialHistory = {
-  id: crypto.randomUUID(), // Use crypto.randomUUID() for ID generation
-  applicationId: "", // Will be filled in when the application is created
-  street: "",
-  apt: "",
-  city: "",
-  state: "",
-  zipCode: "",
-  monthlyPayment: "",
-  durationOfTenancy: "",
-  housingStatus: "rent",
-  landlordFirstName: "",
-  landlordLastName: "",
-  landlordEmail: "",
-  landlordPhoneNumber: ""
-};
