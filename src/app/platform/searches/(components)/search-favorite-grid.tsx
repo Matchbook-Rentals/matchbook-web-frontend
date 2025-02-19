@@ -29,12 +29,33 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [gridColumns, setGridColumns] = useState(1);
   const listingsPerPage = gridColumns * 3;
+  const infiniteScrollMode = gridColumns === 1;
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const startIndex = (currentPage - 1) * listingsPerPage;
-    const endIndex = startIndex + listingsPerPage;
-    setDisplayedListings(listings.slice(startIndex, endIndex));
-  }, [listings, currentPage, listingsPerPage]);
+    if (infiniteScrollMode) {
+      setDisplayedListings(listings.slice(0, listingsPerPage));
+      setCurrentPage(1);
+    } else {
+      const startIndex = (currentPage - 1) * listingsPerPage;
+      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
+    }
+  }, [listings, infiniteScrollMode, listingsPerPage]);
+
+  useEffect(() => {
+    if (infiniteScrollMode && currentPage > 1) {
+      const newItems = listings.slice((currentPage - 1) * listingsPerPage, currentPage * listingsPerPage);
+      setDisplayedListings(prev => [...prev, ...newItems]);
+    }
+  }, [currentPage, infiniteScrollMode, listings, listingsPerPage]);
+
+  useEffect(() => {
+    if (!infiniteScrollMode) {
+      const startIndex = (currentPage - 1) * listingsPerPage;
+      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
+    }
+  }, [currentPage, listings, listingsPerPage, infiniteScrollMode]);
 
   const updateMaxDetailsHeight = useCallback(() => {
     if (gridRef.current) {
@@ -156,6 +177,25 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
     return () => window.removeEventListener('resize', updateGridColumns);
   }, []);
 
+  useEffect(() => {
+    if (!infiniteScrollMode) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && displayedListings.length < listings.length) {
+          setCurrentPage(prev => prev + 1);
+        }
+      });
+    }, { root: scrollAreaRef.current, threshold: 0.1 });
+
+    observer.observe(sentinel);
+    return () => {
+      observer.disconnect();
+    };
+  }, [infiniteScrollMode, displayedListings, listings]);
+
   return (
     <div className={`relative min-h-[640px] h-[${height || '640px'}]`}>
       {listings.length === 0 ? (
@@ -165,6 +205,7 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
       ) : (
         <>
           <ScrollArea
+            ref={scrollAreaRef}
             className={`w-full mx-auto sm:w-full rounded-md pb-12 px-0 sm:pr-4  `}
             style={{ height: height ? `${height}px` : '640px' }}
           >
@@ -187,46 +228,51 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
                 );
               })}
             </div>
+            {infiniteScrollMode && displayedListings.length < listings.length && (
+              <div ref={sentinelRef} style={{ height: '20px' }} />
+            )}
           </ScrollArea>
-          <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-            >
-              <ChevronsLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            {renderPageNumbers()}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronsRight className="h-4 w-4" />
-            </Button>
-          </div>
+          {!infiniteScrollMode && (
+            <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              {renderPageNumbers()}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </>
       )}
     </div>
