@@ -36,7 +36,7 @@ const slideUpVariants = {
 // Add this function to determine zoom level based on radius
 const getZoomLevel = (radius: number | undefined): number => {
   if (!radius) return 9; // Default zoom if radius is undefined
-  
+
   if (radius >= 100) return 6;
   if (radius >= 75) return 7;
   if (radius >= 40) return 8;
@@ -233,7 +233,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           >
             <SearchMapMobile
               center={[mapCenter.lng, mapCenter.lat]}
-              zoom={zoomLevel}
+              zoom={getZoomLevel(trip?.searchRadius || 50)}
               height="100vh"
               markers={markers.map((marker) => ({
                 ...marker,

@@ -5,6 +5,7 @@ import { useListingHoverStore } from '@/store/listing-hover-store';
 import { ListingAndImages } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Image from 'next/image';
+import ListingCard from './map-click-listing-card';
 
 interface MapMarker {
   lat: number;
@@ -78,18 +79,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
         .setLngLat([marker.lng, marker.lat])
         .addTo(map);
 
-      // Only set selectedMarker in full-screen mode
+      // Only set selectedMarker in full-screen mode with a fixed callback that returns a value
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
         if (isFullscreen) {
-          setSelectedMarker((prev) => {
-            if (prev?.listing.id === marker.listing.id) {
-              setSelectedMarker(null)
-            } else {
-              setSelectedMarker(marker)
-            }
-
-          });
+          setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         }
       });
 
@@ -230,70 +224,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
         </button>
       </div>
 
-      {/* Detailed Card (only in full-screen) */}
-      {selectedMarker && isFullscreen && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden w-96">
-          {/* Close Button */}
-          <div className="absolute top-2 right-2 z-20">
-            <button
-              onClick={() => setSelectedMarker(null)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          {/* Image Carousel */}
-          <div className="relative h-40 w-full">
-            <Carousel keyboardControls={false}>
-              <CarouselContent>
-                {selectedMarker.listing.listingImages.map((image, index) => (
-                  <CarouselItem key={index} className="relative h-40 w-full">
-                    <Image
-                      src={image.url}
-                      alt={selectedMarker.listing.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="hidden sm:block">
-                <CarouselPrevious className="z-20" />
-                <CarouselNext className="z-20" />
-              </div>
-            </Carousel>
-          </div>
-          {/* Listing Details */}
-          <div className="p-4 space-y-2">
-            <h3 className="font-semibold text-xl leading-tight tracking-tight text-gray-900">
-              {selectedMarker.listing.title}
-            </h3>
-            <p className="text-sm font-medium text-gray-500">
-              {center && calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng).toFixed(1)} miles away
-            </p>
-            <div className="flex items-center justify-between pt-1">
-              <p className="text-lg font-bold text-gray-900">
-                ${selectedMarker.listing.price.toLocaleString()}
-                <span className="text-sm font-normal text-gray-600">/month</span>
-              </p>
-              <button
-                onClick={() => setSelectedMarker(null)}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Updated Detailed Card (only in full-screen) */}
+      {selectedMarker && isFullscreen && center && (
+        <ListingCard
+          listing={selectedMarker.listing}
+          distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+          onClose={() => setSelectedMarker(null)}
+          className="top-4 left-1/2 transform -translate-x-1/2 w-96"
+        />
       )}
     </div>
   );

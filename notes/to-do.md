@@ -18,8 +18,8 @@
 - [ ] double click to kill it
 - [ ] add like button to map listing card
 - [ ] see more becomes a pop up on mobile
-- [ ] add card on desktop to pin click
-- [ ] card hover change cursor color
+- [x] add card on desktop to pin click
+- [x] card hover change cursor color
 - [ ] map button too big and too bold for map view
 - [ ] manage search cards full in single stack
 - [ ] fix shadow transition

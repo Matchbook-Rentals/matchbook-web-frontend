@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { RejectIcon } from '@/components/icons';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import ListingCard from './map-click-listing-card';
 
 interface MapMarker {
   lat: number;
@@ -40,6 +41,18 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
   const [selectedListing, setSelectedListing] = React.useState<MapMarker | null>(null);
 
+  // Local calculateDistance function
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 3958.8; // radius in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
   // Initial map setup
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
@@ -60,7 +73,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     };
     map.on('click', handleMapClick);
 
-    // Add marker with click handlers that stop propagation
+    // Add markers with click handlers that stop propagation
     markers.forEach(marker => {
       new maplibregl.Marker({
         color: marker.color || '#FF0000'
@@ -69,7 +82,6 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         .addTo(map)
         .getElement()
         .addEventListener('click', (e) => {
-          // Prevent the map click event from firing
           e.stopPropagation();
           console.log('Marker clicked:', marker);
           setSelectedListing(marker);
@@ -101,60 +113,14 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
-      {/* Listing Card */}
-      {selectedListing && selectedListing.listing && (
-        <div className="absolute top-2 left-2 right-[50px] z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden">
-          {/* Carousel Image Container */}
-          <div className="relative h-40 w-full">
-            <Carousel keyboardControls={false}>
-              <CarouselContent>
-                {selectedListing.listing.listingImages.map((image, index) => (
-                  <CarouselItem key={index} className="relative h-40 w-full">
-                    <Image
-                      src={image.url}
-                      alt={selectedListing.listing.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {/* The arrows below will only be visible from "sm" and up */}
-              <div className="hidden sm:block">
-                <CarouselPrevious className="z-20" />
-                <CarouselNext className="z-20" />
-              </div>
-            </Carousel>
-          </div>
-
-          {/* Content Container */}
-          <div className="p-4 space-y-2">
-            {/* Title */}
-            <h3 className="font-semibold text-xl leading-tight tracking-tight text-gray-900">
-              {selectedListing.listing.title}
-            </h3>
-
-            {/* Distance */}
-            <p className="text-sm font-medium text-gray-500">
-              {selectedListing.listing.distance.toFixed(1)} miles away
-            </p>
-
-            {/* Price and CTA Row */}
-            <div className="flex items-center justify-between pt-1">
-              <p className="text-lg font-bold text-gray-900">
-                ${selectedListing.listing.price.toLocaleString()}
-                <span className="text-sm font-normal text-gray-600">/month</span>
-              </p>
-
-              <button
-                onClick={() => setSelectedListing(null)}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-              >
-                See More
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Updated Listing Card using the common component */}
+      {selectedListing && selectedListing.listing && center && (
+        <ListingCard
+          listing={selectedListing.listing}
+          distance={calculateDistance(center[1], center[0], selectedListing.lat, selectedListing.lng)}
+          onClose={() => setSelectedListing(null)}
+          className="top-2 left-2 right-[50px]"
+        />
       )}
 
       <div className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-10">
