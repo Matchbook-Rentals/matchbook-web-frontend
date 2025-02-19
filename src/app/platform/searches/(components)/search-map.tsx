@@ -6,19 +6,7 @@ import { ListingAndImages } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
-
-interface MapMarker {
-  lat: number;
-  lng: number;
-  title?: string;
-  listing: ListingAndImages & {
-    user: {
-      imageUrl: string;
-      fullName: string;
-      createdAt: Date;
-    };
-  };
-}
+import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -38,7 +26,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
-  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
+  const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   // Function to calculate distance between two lat/lng points
@@ -79,12 +67,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         .setLngLat([marker.lng, marker.lat])
         .addTo(map);
 
-      // Only set selectedMarker in full-screen mode with a fixed callback that returns a value
+      // Updated: use Zustand store to set the marker on click
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
-        if (isFullscreen) {
-          setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
-        }
+          setSelectedMarker((prev) => (prev?.listing.id === marker.listing.id ? null : marker));
       });
 
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -100,7 +86,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       highlightedMarkerRef.current = null;
     };
-  }, [center, markers, zoom, isFullscreen]);
+  }, [center, markers, zoom, isFullscreen, setSelectedMarker]);
 
   // Update marker colors based on hoveredListing
   useEffect(() => {

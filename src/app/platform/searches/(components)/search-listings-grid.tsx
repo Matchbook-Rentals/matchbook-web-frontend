@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
+import { useMapSelectionStore } from '@/store/map-selection-store';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -30,6 +31,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const [gridColumns, setGridColumns] = useState(1);
   const listingsPerPage = gridColumns * 3;
   const infiniteScrollMode = gridColumns === 1;
+
+  // Subscribe to the selected marker from the map selection store
+  const selectedMarker = useMapSelectionStore((state) => state.selectedMarker);
 
   useEffect(() => {
     if (infiniteScrollMode) {
@@ -188,6 +192,20 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       observer.disconnect();
     };
   }, [infiniteScrollMode, displayedListings, listings]);
+
+  // New effect: update pagination when the selected marker changes
+  useEffect(() => {
+    // Only update if a marker is selected and if we are in multi-column (pagination) mode.
+    if (!selectedMarker || infiniteScrollMode) return;
+    const markerListingId = selectedMarker.listing.id;
+    const listingIndex = listings.findIndex(listing => listing.id === markerListingId);
+    if (listingIndex !== -1) {
+      const newPage = Math.floor(listingIndex / listingsPerPage) + 1;
+      if (newPage !== currentPage) {
+        setCurrentPage(newPage);
+      }
+    }
+  }, [selectedMarker, infiniteScrollMode, listings, listingsPerPage, currentPage]);
 
   return (
     <div className={`relative min-h-[640px] h-[${height ? height : '640px'}] `}>

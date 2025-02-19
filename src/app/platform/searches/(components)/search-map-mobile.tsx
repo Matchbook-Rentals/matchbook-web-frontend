@@ -7,19 +7,7 @@ import { RejectIcon } from '@/components/icons';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import ListingCard from './map-click-listing-card';
-
-interface MapMarker {
-  lat: number;
-  lng: number;
-  title?: string;
-  color?: string;
-  listing?: {
-    listingImages: { url: string }[];
-    price: number;
-    title: string;
-    distance: number;
-  };
-}
+import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -39,7 +27,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
-  const [selectedListing, setSelectedListing] = React.useState<MapMarker | null>(null);
+  const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
 
   // Local calculateDistance function
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -69,7 +57,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
     // Handler for clicking on the map background
     const handleMapClick = () => {
-      setSelectedListing(null);
+      setSelectedMarker(null);
     };
     map.on('click', handleMapClick);
 
@@ -84,7 +72,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         .addEventListener('click', (e) => {
           e.stopPropagation();
           console.log('Marker clicked:', marker);
-          setSelectedListing(marker);
+          setSelectedMarker(marker);
         });
     });
 
@@ -95,7 +83,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [center, markers, zoom]);
+  }, [center, markers, zoom, setSelectedMarker]);
 
   // Handle panning to hovered location
   useEffect(() => {
@@ -109,16 +97,16 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     }
   }, [shouldPanTo, clearPanTo, zoom]);
 
-  console.log('Selected listing:', selectedListing);
+  console.log('Selected marker:', selectedMarker);
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
       {/* Updated Listing Card using the common component */}
-      {selectedListing && selectedListing.listing && center && (
+      {selectedMarker && selectedMarker.listing && center && (
         <ListingCard
-          listing={selectedListing.listing}
-          distance={calculateDistance(center[1], center[0], selectedListing.lat, selectedListing.lng)}
-          onClose={() => setSelectedListing(null)}
+          listing={selectedMarker.listing}
+          distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+          onClose={() => setSelectedMarker(null)}
           className="top-2 left-2 right-[50px]"
         />
       )}
