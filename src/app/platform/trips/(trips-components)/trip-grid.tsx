@@ -65,7 +65,7 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
       <div className="grid mx-auto  grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 justify-between gap-y-6 max-w-[2000px]">
         {trips.map((trip) => (
           <Link
-            href={`/platform/trips/${trip.id}?tab=matchmaker`}
+            href={`/platform/trips/${trip.id}?tab=recommended`}
             key={trip.id}
             className="block hover:no-underline"
           >

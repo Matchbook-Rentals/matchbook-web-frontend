@@ -12,7 +12,7 @@
 - [x] finish sharebutton url fix
 - [X] delete maybes from trip context
 - [ ] scrollbar outside the lines
-- [ ] infinite scroll
+- [X] infinite scroll
 - [ ] close button fixed
 - [ ] fuck with maps to create switch for map zoom to search radius
 - [ ] double click to kill it

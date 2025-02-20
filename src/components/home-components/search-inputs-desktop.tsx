@@ -190,7 +190,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     });
 
     if (response.success && response.trip) {
-      router.push(`/platform/trips/${response.trip.id}?tab=matchmaker`);
+      router.push(`/platform/trips/${response.trip.id}?tab=recommended`);
     } else {
       toast({
         variant: "destructive",
