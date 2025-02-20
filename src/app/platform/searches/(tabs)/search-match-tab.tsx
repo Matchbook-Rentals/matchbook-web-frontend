@@ -299,7 +299,9 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
           <div className=" pb-3 text-[#404040] text-[20px] font-normal">
-            <p> {showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>
+            {showListings[0].distance >= 10
+              ? <p>{showListings[0].distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+              : <p>{showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
           </div>
 
           <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
