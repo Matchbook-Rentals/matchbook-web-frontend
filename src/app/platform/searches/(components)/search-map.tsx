@@ -8,6 +8,8 @@ import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { useTripContext } from '@/contexts/trip-context-provider';
+import { useSearchParams } from 'next/navigation';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -26,11 +28,26 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
+  const updateVisibleMarkersRef = useRef<() => void>();
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
+
+  const {state} = useTripContext();
+  const {filters, trip} = state;
+  const {searchRadius} = trip;
+  const queryParams = useSearchParams();
+
+  useEffect(() => {
+    setSelectedMarker(null);
+    setClickedMarkerId(null);
+    setTimeout(() => {
+      updateVisibleMarkersRef.current?.();
+    }, 300);
+  }, [filters, searchRadius, queryParams]);
+
 
   // Function to calculate distance between two lat/lng points
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -67,6 +84,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
         .map(marker => marker.listing.id);
       useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
     };
+
+    // Store the updateVisibleMarkers function in the ref for later use
+    updateVisibleMarkersRef.current = updateVisibleMarkers;
 
     // Close card when clicking on the map background
     const handleMapClick = () => {
@@ -118,6 +138,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
       highlightedMarkerRef.current = null;
     };
   }, [center, markers, zoom, isFullscreen, setSelectedMarker]);
+
+  // New useEffect to listen for changes in trip.filters and trip.searchRadius
+  useEffect(() => {
+    if (updateVisibleMarkersRef.current && mapRef.current) {
+      updateVisibleMarkersRef.current();
+    }
+  }, [filters, searchRadius]);
 
   // Update marker colors based on hovered listing, clicked marker, and selected marker in fullscreen
   useEffect(() => {
