@@ -203,12 +203,12 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
         <>
           <ScrollArea
             ref={scrollAreaRef}
-            className={`w-full mx-auto sm:w-full rounded-md pb-12 px-0 sm:pr-4  `}
+            className={`w-[103%] sm:w-full mx-auto sm:w-full rounded-md pb-12  pr-4  `}
             style={{ height: height ? `${height}px` : '640px' }}
           >
             <div
               ref={gridRef}
-              className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-8 pb-12"
+              className="grid grid-cols-1  justify-items-center sm:justify-items-start sm:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-8 pb-12"
             >
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
