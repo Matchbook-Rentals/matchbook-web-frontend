@@ -81,8 +81,8 @@ const TripsPage: React.FC = () => {
       iconClassName: ""
     },
     {
-      label: 'Map',
-      value: 'map',
+      label: 'All Listings',
+      value: 'allListings',
       content: <MapView setIsFilterOpen={setIsFilterOpen} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
@@ -132,7 +132,7 @@ const TripsPage: React.FC = () => {
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
 
-            {['recommended', 'map'].includes(currentTab) && (
+            {['recommended', 'allListings'].includes(currentTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -154,7 +154,7 @@ const TripsPage: React.FC = () => {
           tabsClassName='w-full mx-auto  '
           tabsListClassName='flex py-0 justify-start w-full space-x-4  md:gap-x-4 '
           secondaryButton={
-            ['recommended', 'map'].includes(currentTab) ? (
+            ['recommended', 'allListings'].includes(currentTab) ? (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
