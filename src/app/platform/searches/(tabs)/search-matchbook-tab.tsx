@@ -6,7 +6,6 @@ enum Status {
   Favorite = 'favorite',
   Dislike = 'dislike',
   Applied = 'applied',
-  Maybe = 'maybe',
   None = 'none'
 }
 
@@ -33,12 +32,6 @@ export function SearchMatchbookTab() {
           action: () => alert('Review'),
           className: 'bg-[#E3CE5B] text-gray-900 hover:bg-[#d4c154]'
         };
-      case Status.Maybe:
-        return {
-          label: 'Retract',
-          action: () => alert('Retract'),
-          className: 'bg-gray-200 text-gray-900 border border-gray-200 hover:bg-gray-50'
-        };
       case Status.Dislike:
         return {
           label: 'Remove',
@@ -63,12 +56,6 @@ export function SearchMatchbookTab() {
           label: 'Review',
           action: () => alert('Review'),
           className: 'bg-[#E3CE5B]/80 text-gray-900 hover:bg-[#d4c154]/80'
-        };
-      case Status.Maybe:
-        return {
-          label: 'Retract',
-          action: () => alert('Retract'),
-          className: 'bg-gray-200/80 text-gray-900 border border-gray-200 hover:bg-gray-50/80'
         };
       case Status.Dislike:
         return {

@@ -1,6 +1,9 @@
 # TO DOs
 
 
+
+- [ ] ON application last page, change button to COmplete APplication and have it validate tehn route user to search page
+
 - [ ] NONE FOR NO MIDDLE NAME (no middle name toggle)
 - [x] kill prices between move deposit up
 - [x] guest attach tripId
@@ -18,9 +21,10 @@
 - [ ] double click to kill it
 - [ ] add like button to map listing card
 - [ ] see more becomes a pop up on mobile
+------ currently set to current tab push
 - [x] add card on desktop to pin click
 - [x] card hover change cursor color
-- [ ] map button too big and too bold for map view
+- [x] map button too big and too bold for map view
 - [ ] manage search cards full in single stack
 - [ ] fix shadow transition
 - [ ] if own property hide landlord information
@@ -30,10 +34,10 @@
 - [ ] loading skeleton
 ---- [X] desktop
 ---- [ ] mobile
-- [ ] 24 months +, load more address history, own property gets rid of landlord info
-- [ ] match error codes to field names (First name to First Name)
-- [ ] Currency display update
-scroll areas
+- [x] 24 months +, load more address history, own property gets rid of landlord info
+- [x] match error codes to field names (First name to First Name)
+- [x] Currency display update
+- [x] scroll areas
 
 
 load javascript array of markers, give listingId property, change color direclty in array
@@ -75,7 +79,7 @@ ACH PLAID API
 - [ ] Radio buttons
 - [ ] Remove trips from breadcrumbs
 - [ ] Navigation sizes as subheader for source of truth
-- [ ] Four different forms approach
+- [X] Four different forms approach
 - [ ] only 5 applications out
 - [ ] text size on cards
 - [x] Open free maps

@@ -14,7 +14,6 @@ interface SortableFavoritesProps {
       requestedIds: Set<string>;
       dislikedIds: Set<string>;
       favIds: Set<string>;
-      maybeIds: Set<string>;
     };
   };
   onApply: (listing: ListingAndImages) => void;
@@ -64,9 +63,6 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
   ]);
 
   const getListingStatus = (listing: ListingAndImages) => {
-    if (state.lookup.maybeIds.has(listing.id)) {
-      return 'maybe'
-    }
     if (state.lookup.dislikedIds.has(listing.id)) {
       return 'dislike'
     }
@@ -78,7 +74,6 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'maybe': return <QuestionMarkIcon className="h-8 w-8 p-2 bg-yellowBrand rounded-full text-white" />;
       case 'dislike': return <ThumbsDown className="h-8 w-8 p-2 bg-redBrand rounded-full text-white" />;
       case 'favorite': return <BrandHeart className="h-8 w-8 p-2 bg-primaryBrand rounded-full text-white" />;
       default: return null;
