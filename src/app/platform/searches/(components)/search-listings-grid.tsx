@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { ListingAndImages } from '@/types';
 import SearchListingCard from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
 import { useMapSelectionStore } from '@/store/map-selection-store';
+import { useVisibleListingsStore } from '@/store/visible-listings-store';
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -35,29 +36,34 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   // Subscribe to the selected marker from the map selection store
   const selectedMarker = useMapSelectionStore((state) => state.selectedMarker);
 
+  // *** New: subscribe to visible listings from the map ***
+  const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
+  const filteredListings = useMemo(() => listings.filter(listing => visibleListingIds.includes(listing.id)), [listings, visibleListingIds]);
+
+  // Update displayed listings based on filtered listings
   useEffect(() => {
     if (infiniteScrollMode) {
-      setDisplayedListings(listings.slice(0, listingsPerPage));
+      setDisplayedListings(filteredListings.slice(0, listingsPerPage));
       setCurrentPage(1);
     } else {
       const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
+      setDisplayedListings(filteredListings.slice(startIndex, startIndex + listingsPerPage));
     }
-  }, [listings, infiniteScrollMode, listingsPerPage]);
+  }, [filteredListings, infiniteScrollMode, listingsPerPage]);
 
   useEffect(() => {
     if (infiniteScrollMode && currentPage > 1) {
-      const newItems = listings.slice((currentPage - 1) * listingsPerPage, currentPage * listingsPerPage);
+      const newItems = filteredListings.slice((currentPage - 1) * listingsPerPage, currentPage * listingsPerPage);
       setDisplayedListings(prev => [...prev, ...newItems]);
     }
-  }, [currentPage, infiniteScrollMode, listings, listingsPerPage]);
+  }, [currentPage, infiniteScrollMode, filteredListings, listingsPerPage]);
 
   useEffect(() => {
     if (!infiniteScrollMode) {
       const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
+      setDisplayedListings(filteredListings.slice(startIndex, startIndex + listingsPerPage));
     }
-  }, [currentPage, listings, listingsPerPage, infiniteScrollMode]);
+  }, [currentPage, filteredListings, listingsPerPage, infiniteScrollMode]);
 
   const updateMaxDetailsHeight = useCallback(() => {
     if (gridRef.current) {
@@ -128,7 +134,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       };
   };
 
-  const totalPages = Math.ceil(listings.length / listingsPerPage);
+  const totalPages = Math.ceil(filteredListings.length / listingsPerPage);
 
   const renderPageNumbers = () => {
     const pages = [];
@@ -136,7 +142,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     let startPage = Math.max(1, currentPage - 3);
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-    // Adjust startPage if we're near the end
     if (endPage - startPage < maxVisiblePages - 1) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -181,7 +186,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && displayedListings.length < listings.length) {
+        if (entry.isIntersecting && displayedListings.length < filteredListings.length) {
           setCurrentPage(prev => prev + 1);
         }
       });
@@ -191,21 +196,21 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, [infiniteScrollMode, displayedListings, listings]);
+  }, [infiniteScrollMode, displayedListings, filteredListings]);
 
   // New effect: update pagination when the selected marker changes
   useEffect(() => {
     // Only update if a marker is selected and if we are in multi-column (pagination) mode.
     if (!selectedMarker || infiniteScrollMode) return;
     const markerListingId = selectedMarker.listing.id;
-    const listingIndex = listings.findIndex(listing => listing.id === markerListingId);
+    const listingIndex = filteredListings.findIndex(listing => listing.id === markerListingId);
     if (listingIndex !== -1) {
       const newPage = Math.floor(listingIndex / listingsPerPage) + 1;
       if (newPage !== currentPage) {
         setCurrentPage(newPage);
       }
     }
-  }, [selectedMarker, infiniteScrollMode, listings, listingsPerPage, currentPage]);
+  }, [selectedMarker, infiniteScrollMode, filteredListings, listingsPerPage, currentPage]);
 
   return (
     <div className={`relative min-h-[640px] h-[${height ? height : '640px'}] `}>
@@ -237,7 +242,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                 );
               })}
             </div>
-            {infiniteScrollMode && displayedListings.length < listings.length && (
+            {infiniteScrollMode && displayedListings.length < filteredListings.length && (
               <div ref={sentinelRef} style={{ height: '20px' }} />
             )}
           </ScrollArea>

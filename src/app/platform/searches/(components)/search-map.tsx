@@ -7,6 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
+import { useVisibleListingsStore } from '@/store/visible-listings-store';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -76,10 +77,21 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.set(marker.listing.id, mapMarker);
     });
 
+    const updateVisibleMarkers = () => {
+      const bounds = map.getBounds();
+      const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+        .map(marker => marker.listing.id);
+      useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+    };
+
+    map.on('moveend', updateVisibleMarkers);
+    updateVisibleMarkers();
+
     // Cleanup
     return () => {
       if (mapRef.current) {
         map.off('click', handleMapClick);
+        map.off('moveend', updateVisibleMarkers);
         map.remove();
         mapRef.current = null;
       }
@@ -212,7 +224,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       {/* Updated Detailed Card (only in full-screen) */}
       {selectedMarker && isFullscreen && center && (
         <ListingCard
-          listing={selectedMarker.listing}
+          listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
           onClose={() => setSelectedMarker(null)}
           className="top-4 left-1/2 transform -translate-x-1/2 w-96"
