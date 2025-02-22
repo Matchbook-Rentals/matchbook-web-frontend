@@ -590,6 +590,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
 
   const updateFilters = useCallback(async (newFilters: FilterOptions) => {
     setFilters(newFilters);
+    setTrip(prevTrip => ({ ...prevTrip, searchRadius: newFilters.searchRadius }));
     const dbFilters = {
       maxPrice: newFilters.maxPrice,
       minPrice: newFilters.minPrice,

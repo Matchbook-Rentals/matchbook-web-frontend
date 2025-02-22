@@ -344,7 +344,6 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
         matches: true,
         dislikes: true,
         favorites: true,
-        maybes: true,
         housingRequests: true,
         allParticipants: true,
       },

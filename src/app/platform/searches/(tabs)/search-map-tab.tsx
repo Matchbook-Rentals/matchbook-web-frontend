@@ -60,7 +60,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
   const [shouldRenderMap, setShouldRenderMap] = useState(false);
 
-  // Calculate zoom level based on searchRadius
+  // New state for zoom level based on trip.searchRadius
+  const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
 
   useEffect(() => {
     const setHeight = () => {
@@ -97,6 +98,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       return () => clearTimeout(timer);
     }
   }, [isSlideMapOpen]);
+
+  useEffect(() => {
+    setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
+  }, [trip?.searchRadius]);
 
   // Using this instead of showListings as we might want to add back in liked listings
   const displayListings = [...showListings];
@@ -210,7 +215,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
-            zoom={getZoomLevel(trip?.searchRadius || 50)}
+            zoom={zoomLevel}
             height={`${calculatedHeight}px`}
             markers={markers.map((marker) => ({
               ...marker,
@@ -233,7 +238,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           >
             <SearchMapMobile
               center={[mapCenter.lng, mapCenter.lat]}
-              zoom={getZoomLevel(trip?.searchRadius || 50)}
+              zoom={zoomLevel}
               height="100vh"
               markers={markers.map((marker) => ({
                 ...marker,
