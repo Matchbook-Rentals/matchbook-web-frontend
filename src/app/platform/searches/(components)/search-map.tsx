@@ -127,23 +127,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
     }
   }, [hoveredListing]);
 
-  // Handle panning to hovered location with debounce
-  useEffect(() => {
-    if (!mapRef.current || !shouldPanTo) return;
-
-    const timeoutId = setTimeout(() => {
-      if (mapRef.current) {
-        mapRef.current.easeTo({
-          center: [shouldPanTo.lng, shouldPanTo.lat],
-          duration: 1500,
-        });
-        clearPanTo();
-      }
-    }, 1000); // 1000ms debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [shouldPanTo, clearPanTo, zoom]);
-
   // Sync isFullscreen state with browser full-screen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
