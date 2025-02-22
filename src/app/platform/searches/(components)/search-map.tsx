@@ -160,7 +160,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
   // Sync isFullscreen state with browser full-screen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const fs = !!document.fullscreenElement;
+      setIsFullscreen(fs);
+      if (!fs) {
+        setSelectedMarker(null);
+      }
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => {
