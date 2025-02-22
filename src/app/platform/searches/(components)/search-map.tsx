@@ -119,10 +119,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
     };
   }, [center, markers, zoom, isFullscreen, setSelectedMarker]);
 
-  // Update marker colors based on hovered listing and clicked marker in non-fullscreen mode
+  // Update marker colors based on hovered listing, clicked marker, and selected marker in fullscreen
   useEffect(() => {
-    if (isFullscreen) return; // skip in fullscreen mode
-
     const setMarkerColor = (marker: maplibregl.Marker, color: string, zIndex: string = '') => {
       const markerElement = marker.getElement();
       const paths = markerElement.querySelectorAll('path');
@@ -132,45 +130,72 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markerElement.style.zIndex = zIndex;
     };
 
-    // If a marker is clicked, it takes precedence over hover
-    if (clickedMarkerId) {
-      markersRef.current.forEach((marker, id) => {
-        if (id === clickedMarkerId) {
-          setMarkerColor(marker, '#404040', '1');
-        } else {
+    if (isFullscreen) {
+      if (selectedMarker) {
+        markersRef.current.forEach((marker, id) => {
+          if (id === selectedMarker.listing.id) {
+            setMarkerColor(marker, '#404040', '1');
+          } else {
+            setMarkerColor(marker, '#FF0000', '');
+          }
+        });
+      } else if (hoveredListing) {
+        markersRef.current.forEach((marker, id) => {
+          if (id === hoveredListing.id) {
+            setMarkerColor(marker, '#404040', '1');
+          } else {
+            setMarkerColor(marker, '#FF0000', '');
+          }
+        });
+      } else {
+        markersRef.current.forEach(marker => {
           setMarkerColor(marker, '#FF0000', '');
-        }
-      });
-    } else if (hoveredListing) {
-      markersRef.current.forEach((marker, id) => {
-        if (id === hoveredListing.id) {
-          setMarkerColor(marker, '#404040', '1');
-        } else {
-          setMarkerColor(marker, '#FF0000', '');
-        }
-      });
+        });
+      }
     } else {
-      // no clicked or hovered marker, reset all markers to default color
-      markersRef.current.forEach(marker => {
-        setMarkerColor(marker, '#FF0000', '');
-      });
+      if (clickedMarkerId) {
+        markersRef.current.forEach((marker, id) => {
+          if (id === clickedMarkerId) {
+            setMarkerColor(marker, '#404040', '1');
+          } else {
+            setMarkerColor(marker, '#FF0000', '');
+          }
+        });
+      } else if (hoveredListing) {
+        markersRef.current.forEach((marker, id) => {
+          if (id === hoveredListing.id) {
+            setMarkerColor(marker, '#404040', '1');
+          } else {
+            setMarkerColor(marker, '#FF0000', '');
+          }
+        });
+      } else {
+        markersRef.current.forEach(marker => {
+          setMarkerColor(marker, '#FF0000', '');
+        });
+      }
     }
-  }, [hoveredListing, clickedMarkerId, isFullscreen]);
+  }, [hoveredListing, clickedMarkerId, selectedMarker, isFullscreen]);
 
   // Sync isFullscreen state with browser full-screen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
       const fs = !!document.fullscreenElement;
       setIsFullscreen(fs);
-      if (!fs) {
-        setSelectedMarker(null);
+      setSelectedMarker(null);
+      setClickedMarkerId(null);
+      if (!fs && mapRef.current) {
+        const bounds = mapRef.current.getBounds();
+        const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+          .map(marker => marker.listing.id);
+        useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
       }
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
-  }, []);
+  }, [markers]);
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
