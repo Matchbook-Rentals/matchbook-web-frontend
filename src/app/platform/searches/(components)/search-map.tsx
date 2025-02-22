@@ -29,6 +29,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
   // Function to calculate distance between two lat/lng points
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -56,6 +57,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     });
 
     mapRef.current = map;
+    setMapLoaded(true);
 
     // Close card when clicking on the map background
     const handleMapClick = () => {
@@ -71,7 +73,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       // Updated: use Zustand store to set the marker on click
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
-          setSelectedMarker((prev) => (prev?.listing.id === marker.listing.id ? null : marker));
+        setSelectedMarker((prev) => (prev?.listing.id === marker.listing.id ? null : marker));
       });
 
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -85,7 +87,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
     };
 
     map.on('moveend', updateVisibleMarkers);
-    updateVisibleMarkers();
 
     // Cleanup
     return () => {
@@ -154,72 +155,77 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {/* Zoom controls */}
-      <div className="absolute top-2 right-2 z-10 flex flex-col">
-        <button
-          onClick={() => mapRef.current?.zoomIn()}
-          className="bg-white p-2 rounded-md shadow mb-1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
-          </svg>
-        </button>
-        <button
-          onClick={() => mapRef.current?.zoomOut()}
-          className="bg-white p-2 rounded-md shadow"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
-          </svg>
-        </button>
-      </div>
+      {/* Conditionally render controls only after the map is loaded */}
+      {mapLoaded && (
+        <>
+          {/* Zoom controls */}
+          <div className="absolute top-2 right-2 z-10 flex flex-col">
+            <button
+              onClick={() => mapRef.current?.zoomIn()}
+              className="bg-white p-2 rounded-md shadow mb-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
+              </svg>
+            </button>
+            <button
+              onClick={() => mapRef.current?.zoomOut()}
+              className="bg-white p-2 rounded-md shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
+              </svg>
+            </button>
+          </div>
 
-      {/* Fullscreen control */}
-      <div className="absolute top-2 left-2 z-10">
-        <button
-          onClick={() => {
-            if (mapRef.current) {
-              if (!document.fullscreenElement) {
-                mapContainerRef.current?.requestFullscreen();
-                setIsFullscreen(true);
-              } else {
-                document.exitFullscreen();
-                setIsFullscreen(false);
-              }
-            }
-          }}
-          className="bg-white p-2 rounded-md shadow"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
-            />
-          </svg>
-        </button>
-      </div>
+          {/* Fullscreen control */}
+          <div className="absolute top-2 left-2 z-10">
+            <button
+              onClick={() => {
+                if (mapRef.current) {
+                  if (!document.fullscreenElement) {
+                    mapContainerRef.current?.requestFullscreen();
+                    setIsFullscreen(true);
+                  } else {
+                    document.exitFullscreen();
+                    setIsFullscreen(false);
+                  }
+                }
+              }}
+              className="bg-white p-2 rounded-md shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                />
+              </svg>
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Updated Detailed Card (only in full-screen) */}
       {selectedMarker && isFullscreen && center && (

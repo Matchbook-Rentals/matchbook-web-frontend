@@ -38,7 +38,10 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   // *** New: subscribe to visible listings from the map ***
   const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
-  const filteredListings = useMemo(() => listings.filter(listing => visibleListingIds.includes(listing.id)), [listings, visibleListingIds]);
+  const filteredListings = useMemo(() => {
+    if (visibleListingIds === null) return listings;
+    return listings.filter(listing => visibleListingIds.includes(listing.id));
+  }, [listings, visibleListingIds]);
 
   // Update displayed listings based on filtered listings
   useEffect(() => {
@@ -218,13 +221,16 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
         <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings to display
         </div>
+      ) : filteredListings.length === 0 ? (
+        <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
+          No listings in that area, Try changing your filters or zooming out to see more listings
+        </div>
       ) : (
         <>
           <ScrollArea
             ref={scrollAreaRef}
             className={`w-full mx-auto sm:w-full rounded-md pb-12 px-0 sm:pr-4`}
             style={{ height: height ? `${height}px` : '640px' }}
-            hiddenScrollbar={true}
           >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
               {displayedListings.map((listing) => {
