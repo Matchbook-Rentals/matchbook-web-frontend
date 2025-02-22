@@ -111,10 +111,10 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         />
       )}
 
-      <div className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-10">
+      <div className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-50">
         <Button
           onClick={onClose}
-          className="gap-x-2 px-5 max-w-[300px] z-10 text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
+          className="gap-x-2 px-5 max-w-[300px] text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
         >
           <RejectIcon className="h-5 w-5 mb-[2px]" />
           Close
