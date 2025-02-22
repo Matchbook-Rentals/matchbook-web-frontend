@@ -113,11 +113,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
     if (highlightedMarkerRef.current) {
       setMarkerColor(highlightedMarkerRef.current, '#FF0000'); // Default color
+      highlightedMarkerRef.current.getElement().style.zIndex = ''; // reset z-index to default
     }
     if (hoveredListing) {
       const marker = markersRef.current.get(hoveredListing.id);
       if (marker) {
         setMarkerColor(marker, '#404040'); // Highlighted color
+        marker.getElement().style.zIndex = '1'; // set hovered marker on top
         highlightedMarkerRef.current = marker;
       }
     } else {
