@@ -28,7 +28,7 @@ const BigButton: React.FC<BigButtonProps> = ({
 }) => {
   const buttonStyles = `
     w-full h-full px-[10%] lg:px-[8%] xl:px-[10%] py-2 bg-background border font-montserrat drop-shadow-custom
-    hover:drop-shadow-big transition-all rounded-lg cursor-pointer flex flex-col items-start
+    transition-all rounded-lg cursor-pointer flex flex-col items-start
     gap-2 max-w-[300px] mx-auto sm:mx-0 sm:even:ml-auto sm:odd:mr-auto lg:mx-auto
   `;
 
@@ -74,7 +74,7 @@ const OverviewTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full mx-auto mt-8 pb-8 test grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="w-full mx-auto mt-8 pb-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         <BigButton
           Icon={ApplicationIcon}
           title="Application"

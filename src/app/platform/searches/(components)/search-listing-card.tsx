@@ -223,7 +223,7 @@ export default function SearchListingCard({ listing, status, className, style, d
       </div>
 
       {callToAction && (
-        <div className=" pt-0">
+        <div className=" pt-2 ">
           <button
             onClick={() => callToAction.action()}
             className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand/90 text-white hover:bg-blueBrand'}`}
