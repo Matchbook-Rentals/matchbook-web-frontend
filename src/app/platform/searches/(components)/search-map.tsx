@@ -102,6 +102,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
         .setLngLat([marker.lng, marker.lat])
         .addTo(map);
+      
+      mapMarker.getElement().style.cursor = 'pointer';
+      
 
       // Updated: use Zustand store to set the marker on click based on fullscreen state
       mapMarker.getElement().addEventListener('click', (e) => {
