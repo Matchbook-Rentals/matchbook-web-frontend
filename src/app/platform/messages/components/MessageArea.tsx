@@ -136,7 +136,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               allowedContent: 'Image upload'
             }}
             appearance={{
-              button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
+              button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-[#404040]',
               allowedContent: ''
             }}
           />

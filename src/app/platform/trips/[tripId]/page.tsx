@@ -167,7 +167,6 @@ const TripsPage: React.FC = () => {
         />
       ) : (
         <MobileTabSelector
-          useUrlParams
           tabs={tabs}
           defaultTab={currentTab || 'recommended'}
           className='mx-auto w-full'

@@ -69,11 +69,11 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   return (
-    <Card className="w-1/3 bg-gray-300 h-[75vh] flex flex-col">
+    <Card className="w-1/3 bg-gray-200 h-[75vh] flex flex-col">
       <CardHeader>
         <CardTitle className='text-center'>Conversations</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col">
+      <CardContent className="flex-1 flex flex-col relative">
         <ScrollArea className="flex-1 max-h-[50vh]">
           {conversations && conversations.length > 0 ? (
             conversations.map((conv, index) => {
@@ -85,7 +85,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               return (
                 <Card
                   key={conv.id}
-                  className="w-full mb-2 cursor-pointer border bg-white"
+                  className="w-full mb-2 cursor-pointer border bg-background hover:bg-gray-100 transition-colors duration-200"
                   onClick={() => onSelectConversation(index)}
                 >
                   <CardContent className="p-4 flex items-start">
@@ -118,7 +118,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
         </ScrollArea>
         <Popover>
           <PopoverTrigger asChild>
-            <Button className="w-full mt-2">New Conversation</Button>
+            <div className="absolute bottom-1 left-0 w-full flex justify-center">
+              <Button className="w-4/5">New Conversation</Button>
+            </div>
           </PopoverTrigger>
           <PopoverContent className="w-80">
             <div className="grid gap-4">
