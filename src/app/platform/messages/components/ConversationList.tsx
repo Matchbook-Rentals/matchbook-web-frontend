@@ -4,13 +4,37 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Conversation, User } from '@prisma/client';
+import { Conversation } from '@prisma/client';
+import { UserResource } from '@clerk/types';
+
+// Define the conversation participant structure
+interface ConversationParticipant {
+  id: string;
+  userId: string;
+  conversationId: string;
+  joinedAt: Date;
+  leftAt: Date | null;
+  role: string;
+  User: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    imageUrl: string | null;
+  };
+}
+
+// Define the extended conversation type
+interface ExtendedConversation extends Conversation {
+  messages: any[];
+  participants: ConversationParticipant[];
+}
 
 interface ConversationListProps {
-  conversations: Conversation[];
+  conversations: ExtendedConversation[];
   onSelectConversation: (index: number) => void;
   onCreateConversation: (email: string) => void;
-  user: User | null; // Change to allow null
+  user: UserResource;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
@@ -21,21 +45,32 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [newConversationEmail, setNewConversationEmail] = useState('');
 
-// Clean up and improve the code
-if (!conversations || conversations.length === 0) {
-  return <p>No conversations available</p>;
-}
-  const getParticipantInfo = (conv: Conversation, user: User | null) => {
-    if (!user) return { displayName: "Loading...", imageUrl: "" };
+  // Clean up and improve the code
+  if (!conversations || conversations.length === 0) {
+    return <p>No conversations available</p>;
+  }
 
-    const nonUserParticipant = conv.participant1Id === user.id ? conv.participant2 : conv.participant1;
-    let displayName = nonUserParticipant.firstName + " " + nonUserParticipant.lastName;
+  const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
+    if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
-    if (!nonUserParticipant.firstName && !nonUserParticipant.lastName) {
-      displayName = nonUserParticipant.email;
+    // Find the other participant in the conversation
+    const otherParticipant = conv.participants.find(
+      p => p.User.id !== currentUser.id
+    );
+
+    if (!otherParticipant) {
+      return { displayName: "Unknown", imageUrl: "" };
     }
 
-    return { displayName, imageUrl: nonUserParticipant.imageUrl };
+    const { User } = otherParticipant;
+    let displayName = User.firstName && User.lastName
+      ? `${User.firstName} ${User.lastName}`
+      : User.email || "Unknown";
+
+    return {
+      displayName,
+      imageUrl: User.imageUrl || ""
+    };
   };
 
   return (
@@ -47,6 +82,10 @@ if (!conversations || conversations.length === 0) {
         <ScrollArea className="flex-1 max-h-[50vh]">
           {conversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
+            const lastMessage = conv.messages && conv.messages.length > 0
+              ? conv.messages[conv.messages.length - 1]
+              : null;
+
             return (
               <Card
                 key={conv.id}
@@ -54,15 +93,22 @@ if (!conversations || conversations.length === 0) {
                 onClick={() => onSelectConversation(index)}
               >
                 <CardContent className="p-4 flex items-start">
-                  <img onMouseOver={() => console.log(conv)} src={imageUrl} className="w-10 h-10 rounded-full mr-2 flex-shrink-0" alt={displayName} />
+                  <img
+                    onMouseOver={() => console.log(conv)}
+                    src={imageUrl || "/placeholder-avatar.png"}
+                    className="w-10 h-10 rounded-full mr-2 flex-shrink-0"
+                    alt={displayName}
+                  />
                   <div className="flex flex-col flex-grow min-w-0">
                     <div className="flex justify-between items-start w-full">
                       <span className="text-xs text-black">{displayName}</span>
                       <span className="text-xs text-black ml-2 flex-shrink-0">
-                        {new Date(conv.messages[conv.messages.length - 1]?.updatedAt).toLocaleString() || 'undefined'}
+                        {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString() : 'No messages'}
                       </span>
                     </div>
-                    <span className="text-md text-black truncate">{conv.messages[conv.messages.length - 1]?.content}</span>
+                    <span className="text-md text-black truncate">
+                      {lastMessage ? lastMessage.content : 'Start a conversation'}
+                    </span>
                   </div>
                 </CardContent>
               </Card>

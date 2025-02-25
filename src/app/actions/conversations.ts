@@ -18,28 +18,65 @@ async function checkAuth() {
 export async function createConversation(recipientEmail: string) {
   console.log('Creating conversation with recipient email:', recipientEmail);
   const authUserId = await checkAuth();
-  const participant2Id = await prisma.user.findUnique({
+  const recipient = await prisma.user.findUnique({
     where: {
       email: recipientEmail,
     },
   });
-  if (!participant2Id) {
+  if (!recipient) {
     throw new Error('Recipient not found');
   }
-  console.log('Participant 2 ID:', participant2Id);
-  const conversation = await prisma.conversation.upsert({
+  console.log('Participant 2 ID:', recipient);
+
+  // Check if a conversation already exists between these users
+  const existingConversation = await prisma.conversation.findFirst({
     where: {
-      participant1Id_participant2Id: {
-        participant1Id: authUserId,
-        participant2Id: participant2Id?.id,
-      },
+      AND: [
+        {
+          participants: {
+            some: {
+              userId: authUserId
+            }
+          }
+        },
+        {
+          participants: {
+            some: {
+              userId: recipient.id
+            }
+          }
+        }
+      ],
+      isGroup: false,
     },
-    update: {},
-    create: {
-      participant1Id: authUserId,
-      participant2Id: participant2Id?.id,
-    },
+    include: {
+      participants: true
+    }
   });
+
+  if (existingConversation) {
+    return existingConversation;
+  }
+
+  // Create a new conversation with participants
+  const conversation = await prisma.conversation.create({
+    data: {
+      participants: {
+        create: [
+          { userId: authUserId },
+          { userId: recipient.id }
+        ]
+      }
+    },
+    include: {
+      participants: {
+        include: {
+          User: true
+        }
+      }
+    }
+  });
+
   console.log('Conversation created:', conversation);
   revalidatePath('/conversations');
   return conversation;
@@ -49,7 +86,14 @@ export async function getConversation(id: string) {
   await checkAuth();
   return await prisma.conversation.findUnique({
     where: { id },
-    include: { messages: true },
+    include: {
+      messages: true,
+      participants: {
+        include: {
+          User: true
+        }
+      }
+    },
   });
 }
 
@@ -81,20 +125,33 @@ export async function createMessage(data: {
   imgUrl?: string;
 }) {
   const userId = await checkAuth();
+
+  // Extract the fields that exist in the Prisma schema
+  const { content, conversationId, imgUrl } = data;
+
+  // Create the message with only valid fields
   const message = await prisma.message.create({
     data: {
-      ...data,
+      content,
+      conversationId,
       senderId: userId,
+      imgUrl,
     },
   });
-  //  sendMessageToConnection(message);
+
+  // Send message to Go server for real-time updates
   fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(message),
+    body: JSON.stringify({
+      ...message,
+      senderRole: data.senderRole, // Include the field in the WebSocket message, not the DB
+      receiverId: data.receiverId, // Add the receiverId for the Go server
+    }),
   });
+
   revalidatePath('/conversations');
   return message;
 }
@@ -129,10 +186,11 @@ export async function getAllConversations() {
   const authUserId = await checkAuth();
   const conversations = await prisma.conversation.findMany({
     where: {
-      OR: [
-        { participant1Id: authUserId },
-        { participant2Id: authUserId },
-      ],
+      participants: {
+        some: {
+          userId: authUserId
+        }
+      }
     },
     include: {
       messages: {
@@ -141,22 +199,19 @@ export async function getAllConversations() {
         },
         take: 1,
       },
-      participant1: {
-        select: {
-          firstName: true,
-          lastName: true,
-          imageUrl: true,
-          email: true,
-        },
-      },
-      participant2: {
-        select: {
-          firstName: true,
-          lastName: true,
-          imageUrl: true,
-          email: true,
-        },
-      },
+      participants: {
+        include: {
+          User: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true,
+              email: true,
+            }
+          }
+        }
+      }
     },
     orderBy: {
       updatedAt: 'desc',

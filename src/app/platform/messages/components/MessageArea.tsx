@@ -8,7 +8,7 @@ import Image from "next/image";
 interface MessageAreaProps {
   selectedConversation: string | null;
   messages: any[];
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, imgUrl?: string) => void;
   currentUserId: string | undefined;
 }
 
@@ -75,16 +75,26 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 : 'bg-green-500 text-white'
                 }`}>
                 {message.imgUrl && (
-                  <Image src={message.imgUrl} alt="Message Attachment" width={100} height={100} />
+                  <div className="mb-2">
+                    <Image
+                      src={message.imgUrl}
+                      alt="Message Attachment"
+                      width={200}
+                      height={200}
+                      className="rounded"
+                    />
+                  </div>
                 )}
-                {message.content}
+                <div>{message.content}</div>
               </div>
             </div>
           ))}
           <div ref={bottomRef} />
         </ScrollArea>
       ) : (
-        <div className="flex-1">Select a conversation</div>
+        <div className="flex-1 flex items-center justify-center text-gray-500">
+          <p>Select a conversation or start a new one</p>
+        </div>
       )}
       <div className="flex mt-4 items-center">
         {messageAttachments.map((attachment, index) => (
@@ -99,6 +109,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           value={newMessageInput}
           onChange={(e) => setNewMessageInput(e.target.value)}
           onKeyPress={handleKeyPress}
+          disabled={!selectedConversation}
         />
         <UploadButton
           endpoint="messageUploader"
@@ -110,12 +121,18 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             allowedContent: 'Image upload'
           }}
           appearance={{
-            button: 'bg-parent text-black  focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
+            button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
             allowedContent: ''
           }}
-
+          disabled={!selectedConversation}
         />
-        <Button className="rounded-l-none" onClick={handleSend}>Send</Button>
+        <Button
+          className="rounded-l-none"
+          onClick={handleSend}
+          disabled={!selectedConversation || !newMessageInput.trim()}
+        >
+          Send
+        </Button>
       </div>
     </div>
   );
