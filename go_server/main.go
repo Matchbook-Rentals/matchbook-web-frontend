@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -36,6 +37,9 @@ func main() {
 	http.HandleFunc("/events", handleSSE)
 	http.HandleFunc("/send-message", handleSendMessage)
 
+	// Start the client monitor
+	startClientMonitor()
+
 	port := 3000
 	fmt.Printf("SSE server running on port %d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
@@ -54,6 +58,10 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Normalize the client ID to avoid inconsistencies
+	// This ensures we store clients with consistent ID format
+	clientID = strings.TrimSpace(clientID)
+
 	flusher, ok := w.(http.Flusher)
 	if !ok {
 		logWithConnCount("Error: Streaming unsupported")
@@ -68,6 +76,10 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mutex.Lock()
+	// Log if we're replacing an existing connection
+	if _, exists := clients[clientID]; exists {
+		logWithConnCount(fmt.Sprintf("Replacing existing connection for client: %s", clientID))
+	}
 	clients[clientID] = client
 	mutex.Unlock()
 
@@ -128,8 +140,41 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 	logWithConnCount(fmt.Sprintf("Received message for client %s: %s", msg.ReceiverID, msg.Content))
 
 	mutex.Lock()
+	// Log all connected client IDs to help diagnose the issue
+	var connectedIds []string
+	for id := range clients {
+		connectedIds = append(connectedIds, id)
+	}
 	client, exists := clients[msg.ReceiverID]
+
+	// If exact match doesn't exist, try to find a case-insensitive match
+	// This can help with clients that might have ID format inconsistencies
+	if !exists {
+		targetId := msg.ReceiverID
+		for id, c := range clients {
+			// Case insensitive comparison
+			if strings.EqualFold(id, targetId) {
+				client = c
+				exists = true
+				logWithConnCount(fmt.Sprintf("Found case-insensitive match for %s: %s", targetId, id))
+				break
+			}
+
+			// Check if one is a prefix/suffix of the other (for truncated IDs)
+			if strings.HasPrefix(id, targetId) || strings.HasPrefix(targetId, id) ||
+			   strings.HasSuffix(id, targetId) || strings.HasSuffix(targetId, id) {
+				client = c
+				exists = true
+				logWithConnCount(fmt.Sprintf("Found prefix/suffix match for %s: %s", targetId, id))
+				break
+			}
+		}
+	}
+
 	mutex.Unlock()
+
+	logWithConnCount(fmt.Sprintf("Connected client IDs: %v", connectedIds))
+	logWithConnCount(fmt.Sprintf("Looking for receiver ID: %s, exists: %v", msg.ReceiverID, exists))
 
 	if !exists {
 		logWithConnCount(fmt.Sprintf("Warning: Receiver not connected: %s", msg.ReceiverID))
@@ -161,4 +206,23 @@ func logWithConnCount(message string) {
 	count := len(clients)
 	mutex.Unlock()
 	log.Printf("[Active Connections: %d] %s", count, message)
+}
+
+// Function to periodically log the state of all connected clients
+func startClientMonitor() {
+	ticker := time.NewTicker(2 * time.Minute)
+	go func() {
+		for {
+			<-ticker.C
+			mutex.Lock()
+			if len(clients) > 0 {
+				var clientIds []string
+				for id := range clients {
+					clientIds = append(clientIds, id)
+				}
+				log.Printf("[CLIENT MONITOR] Currently connected clients (%d): %v", len(clients), clientIds)
+			}
+			mutex.Unlock()
+		}
+	}()
 }

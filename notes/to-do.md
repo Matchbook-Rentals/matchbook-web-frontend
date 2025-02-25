@@ -12,7 +12,7 @@
 - [ ] carousel and like button for map card, and modal on see more
 - [ ] on map drag restu clicked at small non fullscreen
 - [ ] get rid of page scroll on grids
-- [ ] get rid of tab navigation
+- [x] get rid of tab navigation
 
 - [ ] NONE FOR NO MIDDLE NAME (no middle name toggle)
 - [x] kill prices between move deposit up

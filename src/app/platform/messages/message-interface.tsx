@@ -48,6 +48,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [sseMessages, setSseMessages] = useState<any[]>([]);
   const [testEmail, setTestEmail] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [unreadHostMessages, setUnreadHostMessages] = useState(0);
+  const [unreadTenantMessages, setUnreadTenantMessages] = useState(0);
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
@@ -111,6 +113,32 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         try {
           const message = JSON.parse(event.data);
           setSseMessages((prevMessages) => [...prevMessages, message]);
+
+          // Update unread message counters based on the message's conversation type
+          const messageConversation = allConversations.find(conv => conv.id === message.conversationId);
+          if (messageConversation) {
+            // Find the user's role in this conversation
+            const userParticipant = messageConversation.participants.find(
+              participant => participant.userId === user?.id
+            );
+
+            if (userParticipant) {
+              const messageRole = userParticipant.role;
+
+              // Check if this message's conversation is currently selected/open
+              const isConversationOpen = selectedConversationIndex !== null &&
+                allConversations[selectedConversationIndex]?.id === message.conversationId;
+
+              // Increment unread counter if the conversation is not open
+              if (!isConversationOpen) {
+                if (messageRole === 'Host') {
+                  setUnreadHostMessages(prev => prev + 1);
+                } else if (messageRole === 'Tenant') {
+                  setUnreadTenantMessages(prev => prev + 1);
+                }
+              }
+            }
+          }
 
           // Check if this message is from a conversation we already know about
           const conversationExists = allConversations.some(conv => conv.id === message.conversationId);
@@ -189,6 +217,18 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   const handleSelectConversation = (index: number) => {
     setSelectedConversationIndex(index);
+
+    // Clear relevant unread message counter when selecting a conversation
+    const conversation = allConversations[index];
+    const userParticipant = conversation.participants.find(
+      participant => participant.userId === user?.id
+    );
+
+    if (userParticipant && userParticipant.role === 'Host') {
+      setUnreadHostMessages(0);
+    } else if (userParticipant && userParticipant.role === 'Tenant') {
+      setUnreadTenantMessages(0);
+    }
   };
 
   const handleDeleteAllConversations = async () => {
@@ -277,6 +317,13 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const handleTabChange = (value: string) => {
     if (value === 'Host' || value === 'Tenant') {
       setUserType(value as 'Host' | 'Tenant');
+
+      // Clear unread messages count for the tab we're switching to
+      if (value === 'Host') {
+        setUnreadHostMessages(0);
+      } else {
+        setUnreadTenantMessages(0);
+      }
     }
   };
 
@@ -311,15 +358,25 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           <TabsList className="grid w-[200px] grid-cols-2">
             <TabsTrigger
               value="Tenant"
-              className="data-[state=active]:bg-gray-200"
+              className="data-[state=active]:bg-gray-200 relative"
             >
               Tenant
+              {unreadTenantMessages > 0 && userType !== 'Tenant' && (
+                <span className="absolute -top-1 right-0 bg-red-500 z-10 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {unreadTenantMessages}
+                </span>
+              )}
             </TabsTrigger>
             <TabsTrigger
               value="Host"
-              className="data-[state=active]:bg-gray-200"
+              className="data-[state=active]:bg-gray-200 relative"
             >
               Host
+              {unreadHostMessages > 0 && userType !== 'Host' && (
+                <span className="absolute -top-1 right-0 bg-red-500  z-10 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {unreadHostMessages}
+                </span>
+              )}
             </TabsTrigger>
           </TabsList>
         </Tabs>

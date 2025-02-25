@@ -194,16 +194,16 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
   }, [infiniteScrollMode, displayedListings, listings]);
 
   return (
-    <div className={`relative min-h-[640px] h-[${height || '640px'}]`}>
+    <div className={`relative max-h-[80vh] md:max-h-[200vh]  md:min-h-[640px] test h-[${height || '640px'}]`}>
       {listings.length === 0 ? (
-        <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="md:h-[640px] test-green w-full flex items-center justify-center text-gray-500">
           No listings to display
         </div>
       ) : (
         <>
           <ScrollArea
             ref={scrollAreaRef}
-            className={`w-[104%] sm:w-full mx-auto sm:w-full rounded-md pb-12  pr-4  `}
+            className={`w-[104%] sm:w-full mx-auto sm:w-full rounded-md md:pb-12  pr-4  `}
             style={{ height: height ? `${height}px` : '640px' }}
           >
             <div

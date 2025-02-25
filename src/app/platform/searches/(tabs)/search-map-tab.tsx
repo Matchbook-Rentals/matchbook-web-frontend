@@ -205,9 +205,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {/* Mobile-only Map button */}
         <Button
           onClick={() => setIsSlideMapOpen(true)}
-          className="fixed md:hidden gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[10vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+          className="fixed md:hidden text-sm  gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
         >
-          <MapViewIcon stroke="white" strokeWidth={1.0} />
+          <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
           Map
         </Button>
 
