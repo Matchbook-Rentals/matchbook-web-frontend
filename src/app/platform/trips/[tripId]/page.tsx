@@ -14,7 +14,7 @@ import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat } from 'next/font/google';
-import { BrandHeartOutline, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
+import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon, SettingsIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
@@ -68,7 +68,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <OverviewTab /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <ManageSearchIcon className="h-[35px] scale-110 -translate-y-[5px] " />,
+      Icon: <SettingsIcon className='mt-1' />,
       iconClassName: ""
     },
     {
@@ -77,7 +77,7 @@ const TripsPage: React.FC = () => {
       content: state.trip ? <MatchViewTab setIsFilterOpen={setIsFilterOpen} /> : null,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <RecommendedIcon className="h-[35px]" />,
+      Icon: <RecommendedIcon className="mt-1" />,
       iconClassName: ""
     },
     {
@@ -86,7 +86,7 @@ const TripsPage: React.FC = () => {
       content: <MapView setIsFilterOpen={setIsFilterOpen} />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <MapViewIcon className="h-[35px] -translate-y-[6px]" />,
+      Icon: <ALlListingsIcon className='mt-1' />,
       iconClassName: ""
     },
     {
@@ -95,7 +95,7 @@ const TripsPage: React.FC = () => {
       content: <SearchFavoritesTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <BrandHeartOutline className="h-[35px]" stroke='black' />,
+      Icon: <FavoritesIcon className='mt-1' />,
       iconClassName: ""
     },
     {
@@ -104,7 +104,7 @@ const TripsPage: React.FC = () => {
       content: <SearchMatchbookTab />,
       textSize: tabTriggerTextStyles,
       className: tabTriggerStyles,
-      Icon: <MatchesIcon className="h-[35px] -translate-y-[4px]" />,
+      Icon: <MatchesIcon className="mt-1" />,
       iconClassName: ""
     },
   ];

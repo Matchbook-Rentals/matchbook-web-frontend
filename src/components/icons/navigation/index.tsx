@@ -76,7 +76,7 @@ export const ArrowLeft = (props: any) => (
   </svg>
 );
 
-export const RecommendedIcon = (props: any) => (
+export const ActionsIcon = (props: any) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={58}
@@ -296,7 +296,7 @@ export const ManageSearchIcon = (props: any) => (
   </svg>
 );
 
-export const MatchesIcon = (props: any) => (
+export const HandshakeIcon = (props: any) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={31}
@@ -421,3 +421,6 @@ export const DeniedIcon = (props: any) => (
     />
   </svg>
 );
+
+
+

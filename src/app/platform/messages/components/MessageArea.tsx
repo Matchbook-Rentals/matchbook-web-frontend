@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { UploadButton } from "@/app/utils/uploadthing";
 import { PaperclipIcon } from 'lucide-react';
 import Image from "next/image";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface MessageAreaProps {
   selectedConversation: string | null;
@@ -33,6 +34,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -64,6 +66,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     setMessageAttachments(prev => [...prev, ...res.map(r => r.url)]);
   };
 
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
   return (
     <div className="flex-1 p-4 flex flex-col">
       {selectedConversation ? (
@@ -81,7 +87,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       alt="Message Attachment"
                       width={200}
                       height={200}
-                      className="rounded"
+                      className="rounded cursor-pointer"
+                      onClick={() => handleImageClick(message.imgUrl)}
                     />
                   </div>
                 )}
@@ -99,7 +106,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       <div className="flex mt-4 items-center">
         {messageAttachments.map((attachment, index) => (
           <div key={index} className="inline-block p-2 rounded bg-gray-200">
-            <Image src={attachment} alt="Message Attachment" width={100} height={100} />
+            <Image
+              src={attachment}
+              alt="Message Attachment"
+              width={100}
+              height={100}
+              className="cursor-pointer"
+              onClick={() => handleImageClick(attachment)}
+            />
           </div>
         ))}
         <input
@@ -111,21 +125,22 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           onKeyPress={handleKeyPress}
           disabled={!selectedConversation}
         />
-        <UploadButton
-          endpoint="messageUploader"
-          onClientUploadComplete={handleUploadFinish}
-          onUploadError={(error) => alert(error.message)}
-          className="p-0 mt-5"
-          content={{
-            button: <PaperclipIcon className="w-6 h-6" />,
-            allowedContent: 'Image upload'
-          }}
-          appearance={{
-            button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
-            allowedContent: ''
-          }}
-          disabled={!selectedConversation}
-        />
+        <div className={!selectedConversation ? "opacity-50 pointer-events-none" : ""}>
+          <UploadButton
+            endpoint="messageUploader"
+            onClientUploadComplete={handleUploadFinish}
+            onUploadError={(error) => alert(error.message)}
+            className="p-0 mt-5"
+            content={{
+              button: <PaperclipIcon className="w-6 h-6" />,
+              allowedContent: 'Image upload'
+            }}
+            appearance={{
+              button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-primaryBrand',
+              allowedContent: ''
+            }}
+          />
+        </div>
         <Button
           className="rounded-l-none"
           onClick={handleSend}
@@ -134,6 +149,24 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           Send
         </Button>
       </div>
+
+      {/* Image Viewer Dialog */}
+      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
+        <DialogContent className="max-w-3xl" hideCloseButton={false}>
+          {selectedImage && (
+            <div className="flex justify-center items-center">
+              <Image
+                src={selectedImage}
+                alt="Enlarged Image"
+                width={800}
+                height={800}
+                className="max-h-[80vh] w-auto object-contain mt-6"
+                priority
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

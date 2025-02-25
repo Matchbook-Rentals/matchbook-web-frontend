@@ -109,9 +109,22 @@ export async function updateConversation(id: string, data: { participant1Id?: st
 
 export async function deleteConversation(id: string) {
   await checkAuth();
+
+  // First delete all messages associated with the conversation
+  await prisma.message.deleteMany({
+    where: { conversationId: id },
+  });
+
+  // Then delete all participants associated with the conversation
+  await prisma.conversationParticipant.deleteMany({
+    where: { conversationId: id },
+  });
+
+  // Finally delete the conversation
   await prisma.conversation.delete({
     where: { id },
   });
+
   revalidatePath('/conversations');
 }
 

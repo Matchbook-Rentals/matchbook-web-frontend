@@ -6,7 +6,7 @@ import { Conversation } from '@prisma/client';
 import UserTypeSelector from './components/UserTypeSelector';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
-import { getConversation, createMessage, createConversation } from '@/app/actions/conversations';
+import { getConversation, createMessage, createConversation, deleteConversation } from '@/app/actions/conversations';
 
 // Define the expanded Conversation type that includes the messages and participants
 interface ConversationParticipant {
@@ -47,6 +47,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [messages, setMessages] = useState<any[]>([]);
   const [sseMessages, setSseMessages] = useState<any[]>([]);
   const [testEmail, setTestEmail] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
@@ -104,6 +105,27 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   const handleSelectConversation = (index: number) => {
     setSelectedConversationIndex(index);
+  };
+
+  const handleDeleteAllConversations = async () => {
+    if (window.confirm('Are you sure you want to delete all your conversations? This action cannot be undone.')) {
+      setIsDeleting(true);
+      try {
+        // Delete each conversation one by one
+        for (const conversation of allConversations) {
+          await deleteConversation(conversation.id);
+        }
+        // Clear the local state
+        setAllConversations([]);
+        setSelectedConversationIndex(null);
+        setMessages([]);
+      } catch (error) {
+        console.error('Failed to delete conversations:', error);
+        alert('An error occurred while deleting conversations');
+      } finally {
+        setIsDeleting(false);
+      }
+    }
   };
 
   const handleSendMessage = async (newMessageInput: string, imgUrl?: string) => {
@@ -170,9 +192,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   if (!user) return null;
   return (
     <div className="flex flex-col">
-      {url}
       <UserTypeSelector userType={userType} setUserType={setUserType} />
-      <div onClick={() => console.log(conversations)} >{sseMessages.length}</div>
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
           conversations={allConversations}
@@ -191,7 +211,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       {/* Testing Tools */}
       <div className="mt-4 p-4 border-t border-gray-200">
         <h3 className="text-lg font-semibold mb-2">Testing Tools</h3>
-        <div className="flex items-center">
+        <div className="flex items-center mb-3">
           <input
             type="email"
             className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -209,6 +229,15 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             }}
           >
             Start Test Conversation
+          </button>
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-red-300"
+            onClick={handleDeleteAllConversations}
+            disabled={isDeleting || allConversations.length === 0}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
           </button>
         </div>
       </div>
