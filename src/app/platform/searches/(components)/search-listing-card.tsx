@@ -88,27 +88,55 @@ export default function SearchListingCard({ listing, status, className, style, d
 
   const getStatusIcon = (status: ListingStatus) => {
     if (favIds.has(listing.id)) {
-      return <BrandHeart className="w-5 h-5" />
+      return (
+        <div
+          className="bg-black/50 rounded-full p-1"
+          onClick={(e: React.MouseEvent) => {
+            optimisticRemoveLike(listing.id);
+            e.stopPropagation();
+          }}
+        >
+          <BrandHeartOutline
+            className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
+            stroke="white"
+            strokeWidth={1}
+            fill="white"
+          />
+        </div>
+      );
     } else if (dislikedIds.has(listing.id)) {
-      return <RejectIcon className="w-5 h-5 text-white" />
+      return (
+        <div
+          className="bg-black/50 rounded-full "
+          onClick={(e: React.MouseEvent) => {
+            optimisticRemoveDislike(listing.id);
+            e.stopPropagation();
+          }}
+        >
+          <RejectIcon
+            className="w-9 h-9 text-white cursor-pointer p-2 "
+          />
+        </div>
+      );
     }
 
-    switch (status) {
-      case ListingStatus.Applied:
-        return <BrandHeart className="w-4 h-4" />
-      default:
-        return <MoreHorizontal className="w-7 h-7" />
-    }
+    return (
+      <div
+        className="flex items-center"
+        onClick={(e: React.MouseEvent) => {
+          optimisticLike(listing.id);
+          e.stopPropagation();
+        }}
+      >
+        <BrandHeartOutline
+          className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
+          stroke="white"
+          strokeWidth={1.5}
+          fill="black"
+        />
+      </div>
+    );
   }
-
-  const handleLikeAction = (e: React.MouseEvent) => {
-    if (favIds.has(listing.id)) {
-      optimisticRemoveLike(listing.id);
-    } else {
-      optimisticLike(listing.id);
-    }
-    e.stopPropagation(); // Stop event from bubbling up to card click handler
-  };
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't navigate if clicking on action buttons or carousel controls
@@ -162,15 +190,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
         {/* Action Buttons */}
         <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`}>
-          <div className={`${favIds.has(listing.id) ? 'bg-black/50 rounded-full p-1' : 'flex items-center '}`}>
-            <BrandHeartOutline
-              className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
-              stroke={favIds.has(listing.id) ? 'white' : 'white'}
-              strokeWidth={favIds.has(listing.id) ? 1 : 1.5}
-              fill={favIds.has(listing.id) ? 'white' : 'black'}
-              onClick={handleLikeAction}
-            />
-          </div>
+          {getStatusIcon(status)}
         </div>
 
         {/* Conditional render context banner only */}
@@ -202,11 +222,11 @@ export default function SearchListingCard({ listing, status, className, style, d
         {/* Listing Category and Rating */}
         <div className='flex justify-between mt-2'>
           {`${listing.category === 'singleFamily' ? 'Home' :
-             listing.category?.charAt(0).toUpperCase() + listing.category?.slice(1).toLowerCase()} in
-            ${listing.locationString.split(',').at(-2)?.trim() || listing.locationString}`}
+             listing.category ? (listing.category.charAt(0).toUpperCase() + listing.category.slice(1).toLowerCase()) : 'Property'} in
+            ${listing.locationString ? (listing.locationString.split(',').at(-2)?.trim() || listing.locationString) : 'Location'}`}
           <div className="flex items-center">
             <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
-            <span className="">{listing.rating || 4.9}</span>
+            <span className="">{(listing as any).rating ?? 4.9}</span>
           </div>
         </div>
 

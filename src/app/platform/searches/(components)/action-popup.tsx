@@ -33,7 +33,7 @@ const ActionPopup: React.FC<ActionPopupProps> = ({ action, isVisible }) => {
           }}
           exit={{ opacity: 0 }}
         >
-          <div className="bg-charcoalBrand rounded-full w-36 h-36 flex p-8 opacity-50 items-center justify-center">
+          <div className="bg-charcoalBrand rounded-full w-48 h-48 flex p-8 opacity-50 items-center justify-center">
             {action === 'like' ? (
               <BrandHeart className="w-32 h-32 text-[#A3B899]" />
             ) : action === 'dislike' ? (
