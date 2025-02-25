@@ -2,7 +2,7 @@
 
 
 - [ ] find bug on maps may be due to pagination
-- [ ] new icons
+- [x] new icons
 - [ ] full screen big button on manage search
 
 

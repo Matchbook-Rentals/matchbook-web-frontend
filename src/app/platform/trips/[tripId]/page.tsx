@@ -126,7 +126,7 @@ const TripsPage: React.FC = () => {
   const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
 
   return (
-    <div className={`flex flex-col ${marginClass}  mx-auto `}>
+    <div className={`flex flex-col scrollbar-none ${marginClass}  mx-auto `}>
       <div className='flex justify-between items-center sm:justify-start'>
         <Breadcrumbs links={breadcrumbLinks} />
         {isMobile && (
@@ -170,7 +170,7 @@ const TripsPage: React.FC = () => {
           tabs={tabs}
           defaultTab={currentTab || 'recommended'}
           className='mx-auto w-full'
-          tabsClassName='w-full mx-auto pb-28'
+          tabsClassName='w-full mx-auto pb-0'
         />
       )}
     </div>
