@@ -4,7 +4,7 @@
 - [ ] find bug on maps may be due to pagination
 - [x] new icons
 - [ ] full screen big button on manage search
-
+- [ ] mobile skelly
 
 
 - [ ] ON application last page, change button to COmplete APplication and have it validate tehn route user to search page
@@ -21,14 +21,14 @@
 ---- [x] change route to the above
 -----[x] change listing details box to calc price
 - [ ] move flip point on action buttons (to bottom instead of top)
-- [ ] less than 10 on distance change toFixed to 1 above 10 toFixed(0)
+- [x] less than 10 on distance change toFixed to 1 above 10 toFixed(0)
 - [x] finish sharebutton url fix
 - [X] delete maybes from trip context
 - [ ] scrollbar outside the lines
 - [X] infinite scroll
-- [ ] close button fixed
-- [ ] fuck with maps to create switch for map zoom to search radius
-- [ ] double click to kill it
+- [x] close button fixed
+- [x] fuck with maps to create switch for map zoom to search radius
+- [x] double click to kill it
 - [ ] add like button to map listing card
 - [ ] see more becomes a pop up on mobile
 ------ currently set to current tab push

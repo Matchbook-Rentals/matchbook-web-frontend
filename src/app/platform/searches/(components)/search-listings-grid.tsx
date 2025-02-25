@@ -38,6 +38,16 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   // *** New: subscribe to visible listings from the map ***
   const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
+  const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
+
+  // Reset visible listings filter when in mobile view (infiniteScrollMode)
+  useEffect(() => {
+    if (infiniteScrollMode && visibleListingIds !== null) {
+      // On small screens, we should show all listings instead of filtering by map visibility
+      setVisibleListingIds(null);
+    }
+  }, [infiniteScrollMode, visibleListingIds, setVisibleListingIds]);
+
   const filteredListings = useMemo(() => {
     if (visibleListingIds === null) return listings;
     return listings.filter(listing => visibleListingIds.includes(listing.id));
@@ -173,13 +183,17 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
         setGridColumns(2);
       } else {
         setGridColumns(1);
+        // Reset visible listings filter when in mobile view
+        if (visibleListingIds !== null) {
+          setVisibleListingIds(null);
+        }
       }
     };
 
     updateGridColumns();
     window.addEventListener('resize', updateGridColumns);
     return () => window.removeEventListener('resize', updateGridColumns);
-  }, []);
+  }, [visibleListingIds, setVisibleListingIds]);
 
   // Observer for the sentinel to trigger loading more listings
   useEffect(() => {
