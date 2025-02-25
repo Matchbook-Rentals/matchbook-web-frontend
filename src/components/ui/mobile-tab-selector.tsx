@@ -83,7 +83,7 @@ export default function MobileTabSelector({
 
       <TabsList
         className={cn(
-          "fixed bottom-0 left-0 right-0 flex justify-between pt-1  items-center h-[70px] bg-background border-gray-200 px-2 z-50",
+          "fixed bottom-0 left-0 right-0 flex justify-between pt-0  items-center h-[68px] bg-background border-gray-200 px-2 z-50",
           tabsListClassName
         )}
       >

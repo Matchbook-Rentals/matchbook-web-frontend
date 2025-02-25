@@ -230,21 +230,21 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [selectedMarker, infiniteScrollMode, filteredListings, listingsPerPage, currentPage]);
 
   return (
-    <div className={`relative min-h-[640px] h-[${height ? height : '640px'}] `}>
+    <div className="relative h-[80vh] md:max-h-[200vh] md:min-h-[640px] md:h-[${height || '640px'}]">
       {listings.length === 0 ? (
-        <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings to display
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings in that area, Try changing your filters or zooming out to see more listings
         </div>
       ) : (
         <>
           <ScrollArea
             ref={scrollAreaRef}
-            className={`w-[103%] sm:w-full mx-auto sm:w-full rounded-md pb-12 pr-3`}
-            style={{ height: height ? `${height}px` : '640px' }}
+            className={`w-[103%] sm:w-full mx-auto rounded-md md:pb-12 pr-3`}
+            style={{ height: 'calc(100% - 80px)' }}
           >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
               {displayedListings.map((listing) => {
