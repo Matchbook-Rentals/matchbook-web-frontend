@@ -45,11 +45,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [newConversationEmail, setNewConversationEmail] = useState('');
 
-  // Clean up and improve the code
-  if (!conversations || conversations.length === 0) {
-    return <p>No conversations available</p>;
-  }
-
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -80,40 +75,46 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
         <ScrollArea className="flex-1 max-h-[50vh]">
-          {conversations.map((conv, index) => {
-            const { displayName, imageUrl } = getParticipantInfo(conv, user);
-            const lastMessage = conv.messages && conv.messages.length > 0
-              ? conv.messages[conv.messages.length - 1]
-              : null;
+          {conversations && conversations.length > 0 ? (
+            conversations.map((conv, index) => {
+              const { displayName, imageUrl } = getParticipantInfo(conv, user);
+              const lastMessage = conv.messages && conv.messages.length > 0
+                ? conv.messages[conv.messages.length - 1]
+                : null;
 
-            return (
-              <Card
-                key={conv.id}
-                className="w-full mb-2 cursor-pointer border bg-white"
-                onClick={() => onSelectConversation(index)}
-              >
-                <CardContent className="p-4 flex items-start">
-                  <img
-                    onMouseOver={() => console.log(conv)}
-                    src={imageUrl || "/placeholder-avatar.png"}
-                    className="w-10 h-10 rounded-full mr-2 flex-shrink-0"
-                    alt={displayName}
-                  />
-                  <div className="flex flex-col flex-grow min-w-0">
-                    <div className="flex justify-between items-start w-full">
-                      <span className="text-xs text-black">{displayName}</span>
-                      <span className="text-xs text-black ml-2 flex-shrink-0">
-                        {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString() : 'No messages'}
+              return (
+                <Card
+                  key={conv.id}
+                  className="w-full mb-2 cursor-pointer border bg-white"
+                  onClick={() => onSelectConversation(index)}
+                >
+                  <CardContent className="p-4 flex items-start">
+                    <img
+                      onMouseOver={() => console.log(conv)}
+                      src={imageUrl || "/placeholder-avatar.png"}
+                      className="w-10 h-10 rounded-full mr-2 flex-shrink-0"
+                      alt={displayName}
+                    />
+                    <div className="flex flex-col flex-grow min-w-0">
+                      <div className="flex justify-between items-start w-full">
+                        <span className="text-xs text-black">{displayName}</span>
+                        <span className="text-xs text-black ml-2 flex-shrink-0">
+                          {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString() : 'No messages'}
+                        </span>
+                      </div>
+                      <span className="text-md text-black truncate">
+                        {lastMessage ? lastMessage.content : 'Start a conversation'}
                       </span>
                     </div>
-                    <span className="text-md text-black truncate">
-                      {lastMessage ? lastMessage.content : 'Start a conversation'}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                  </CardContent>
+                </Card>
+              );
+            })
+          ) : (
+            <div className="flex items-center justify-center h-32 text-gray-500">
+              <p>No conversations yet. Start a new one below!</p>
+            </div>
+          )}
         </ScrollArea>
         <Popover>
           <PopoverTrigger asChild>

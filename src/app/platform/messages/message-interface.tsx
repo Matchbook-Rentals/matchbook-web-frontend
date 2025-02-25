@@ -6,7 +6,7 @@ import { Conversation } from '@prisma/client';
 import UserTypeSelector from './components/UserTypeSelector';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
-import { getConversation, createMessage, createConversation, deleteConversation } from '@/app/actions/conversations';
+import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations } from '@/app/actions/conversations';
 
 // Define the expanded Conversation type that includes the messages and participants
 interface ConversationParticipant {
@@ -42,7 +42,7 @@ interface MessageData {
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
   const [userType, setUserType] = useState<'Landlord' | 'Tenant'>('Landlord');
-  const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
+  const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations || []);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [sseMessages, setSseMessages] = useState<any[]>([]);
@@ -79,6 +79,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     const connectSSE = () => {
       if (retryCount >= maxRetries) {
         console.error('Max SSE connection retries reached');
+        // Wait for a longer period before trying again
+        setTimeout(() => {
+          retryCount = 0;
+          connectSSE();
+        }, 30000); // 30 seconds
         return;
       }
 
@@ -106,19 +111,50 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         try {
           const message = JSON.parse(event.data);
           setSseMessages((prevMessages) => [...prevMessages, message]);
-          setAllConversations((prevConversations) => {
-            const updatedConversations = [...prevConversations];
-            const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
-            if (index !== -1) {
-              // Create a new array if messages property doesn't exist yet
-              const currentMessages = updatedConversations[index].messages || [];
-              updatedConversations[index] = {
-                ...updatedConversations[index],
-                messages: [...currentMessages, message]
-              };
-            }
-            return updatedConversations;
-          });
+
+          // Check if this message is from a conversation we already know about
+          const conversationExists = allConversations.some(conv => conv.id === message.conversationId);
+
+          if (!conversationExists) {
+            console.log('New conversation detected. Fetching updated conversations...');
+            // Fetch all conversations to get the new one
+            const fetchNewConversations = async () => {
+              try {
+                const updatedConversations = await getAllConversations();
+                if (updatedConversations) {
+                  setAllConversations(updatedConversations);
+
+                  // Find the index of the new conversation to select it
+                  const newConvIndex = updatedConversations.findIndex(
+                    conv => conv.id === message.conversationId
+                  );
+
+                  if (newConvIndex !== -1) {
+                    setSelectedConversationIndex(newConvIndex);
+                  }
+                }
+              } catch (error) {
+                console.error('Failed to fetch new conversations:', error);
+              }
+            };
+
+            fetchNewConversations();
+          } else {
+            // Update existing conversation with the new message
+            setAllConversations((prevConversations) => {
+              const updatedConversations = [...prevConversations];
+              const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+              if (index !== -1) {
+                // Create a new array if messages property doesn't exist yet
+                const currentMessages = updatedConversations[index].messages || [];
+                updatedConversations[index] = {
+                  ...updatedConversations[index],
+                  messages: [...currentMessages, message]
+                };
+              }
+              return updatedConversations;
+            });
+          }
         } catch (error) {
           console.error('Error parsing SSE message:', error, event.data);
         }
