@@ -46,7 +46,7 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
     const handleScroll = () => {
       if (detailsBoxRef.current) {
         const detailsBoxRect = detailsBoxRef.current.getBoundingClientRect();
-        const isVisible = detailsBoxRect.top >= 0;
+        const isVisible = detailsBoxRect.top >= -90;
         setIsDetailsVisible(isVisible);
       }
     };
