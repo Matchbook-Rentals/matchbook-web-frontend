@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Conversation } from '@prisma/client';
 import { UserResource } from '@clerk/types';
@@ -35,16 +33,22 @@ interface ConversationListProps {
   onSelectConversation: (index: number) => void;
   onCreateConversation: (email: string) => void;
   user: UserResource;
+  hasOtherRoleConversations?: boolean;
+  otherRole?: string;
+  currentRole?: string;
+  onRoleSwitch?: () => void;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
   onSelectConversation,
   onCreateConversation,
-  user
+  user,
+  hasOtherRoleConversations = false,
+  otherRole = '',
+  currentRole = '',
+  onRoleSwitch
 }) => {
-  const [newConversationEmail, setNewConversationEmail] = useState('');
-
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -73,7 +77,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       <CardHeader>
         <CardTitle className='text-center'>Conversations</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col relative">
+      <CardContent className="flex-1 flex flex-col">
         <ScrollArea className="flex-1 max-h-[50vh]">
           {conversations && conversations.length > 0 ? (
             conversations.map((conv, index) => {
@@ -111,33 +115,25 @@ const ConversationList: React.FC<ConversationListProps> = ({
               );
             })
           ) : (
-            <div className="flex items-center justify-center h-32 text-gray-500">
-              <p>No conversations yet. Start a new one below!</p>
+            <div className="flex flex-col items-center justify-center h-32 text-gray-500">
+              {hasOtherRoleConversations ? (
+                <>
+                  <p className="text-center mb-4">
+                    You don't have any {currentRole} messages.
+                  </p>
+                  <Button
+                    variant="default"
+                    onClick={onRoleSwitch}
+                  >
+                    Switch to {otherRole} messages
+                  </Button>
+                </>
+              ) : (
+                <p>No conversations yet.</p>
+              )}
             </div>
           )}
         </ScrollArea>
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="absolute bottom-1 left-0 w-full flex justify-center">
-              <Button className="w-4/5">New Conversation</Button>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="grid gap-4">
-              <h4 className="font-medium leading-none">Start a new conversation</h4>
-              <Input
-                type="email"
-                placeholder="Enter recipient's email"
-                value={newConversationEmail}
-                onChange={(e) => setNewConversationEmail(e.target.value)}
-              />
-              <Button onClick={() => {
-                onCreateConversation(newConversationEmail);
-                setNewConversationEmail('');
-              }}>Create</Button>
-            </div>
-          </PopoverContent>
-        </Popover>
       </CardContent>
     </Card>
   );

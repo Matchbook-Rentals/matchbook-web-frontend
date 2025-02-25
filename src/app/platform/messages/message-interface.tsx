@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from "@clerk/nextjs";
 import { Conversation } from '@prisma/client';
-import UserTypeSelector from './components/UserTypeSelector';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations } from '@/app/actions/conversations';
@@ -33,7 +33,7 @@ interface ExtendedConversation extends Conversation {
 // Define the message data interface to include imgUrl
 interface MessageData {
   content: string;
-  senderRole: 'Landlord' | 'Tenant'; // Used for UI context, not stored in database
+  senderRole: 'Host' | 'Tenant'; // Update from 'Landlord' to 'Host'
   conversationId: string;
   receiverId: string;
   imgUrl?: string;
@@ -41,7 +41,7 @@ interface MessageData {
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
-  const [userType, setUserType] = useState<'Landlord' | 'Tenant'>('Landlord');
+  const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant'); // Changed default from 'Host' to 'Tenant'
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations || []);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -246,8 +246,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const handleCreateConversation = async (email: string) => {
     if (!email.trim()) return;
     try {
-      // Call createConversation and process the response to match our expected interface
-      const response = await createConversation(email);
+      // Call createConversation with specified roles
+      const response = await createConversation(email, 'Host', 'Tenant');
 
       // Add the new conversation to our state, ensuring it has the expected properties
       const newConversation: ExtendedConversation = {
@@ -269,20 +269,76 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setAllConversations([...allConversations, newConversation]);
     } catch (error) {
       console.error('Failed to create conversation:', error);
-      // TODO: Handle error (e.g., show an error message to the user)
     }
   };
 
   if (!user) return null;
+
+  const handleTabChange = (value: string) => {
+    if (value === 'Host' || value === 'Tenant') {
+      setUserType(value as 'Host' | 'Tenant');
+    }
+  };
+
+  // Filter conversations based on the selected role
+  const filteredConversations = allConversations.filter(conversation => {
+    // Find the current user's participant record in this conversation
+    const userParticipant = conversation.participants.find(
+      participant => participant.userId === user.id
+    );
+
+    // Only include this conversation if the user's role matches the selected userType
+    return userParticipant && userParticipant.role === userType;
+  });
+
+  // Check if we have conversations in the other role
+  const otherRole = userType === 'Tenant' ? 'Host' : 'Tenant';
+  const hasOtherRoleConversations = allConversations.some(conversation => {
+    const userParticipant = conversation.participants.find(
+      participant => participant.userId === user.id
+    );
+    return userParticipant && userParticipant.role === otherRole;
+  });
+
   return (
     <div className="flex flex-col">
-      <UserTypeSelector userType={userType} setUserType={setUserType} />
+      <div className="flex justify-start p-2">
+        <Tabs
+          value={userType}
+          onValueChange={handleTabChange}
+          className="w-full"
+        >
+          <TabsList className="grid w-[200px] grid-cols-2">
+            <TabsTrigger
+              value="Tenant"
+              className="data-[state=active]:bg-gray-200"
+            >
+              Tenant
+            </TabsTrigger>
+            <TabsTrigger
+              value="Host"
+              className="data-[state=active]:bg-gray-200"
+            >
+              Host
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
-          conversations={allConversations}
-          onSelectConversation={handleSelectConversation}
+          conversations={filteredConversations}
+          onSelectConversation={index => {
+            // Find the actual index in allConversations for the selected filtered conversation
+            const selectedConversationId = filteredConversations[index].id;
+            const actualIndex = allConversations.findIndex(conv => conv.id === selectedConversationId);
+            handleSelectConversation(actualIndex);
+          }}
           onCreateConversation={handleCreateConversation}
           user={user as any} // Cast to any to bypass the Clerk UserResource type issue
+          hasOtherRoleConversations={hasOtherRoleConversations}
+          otherRole={otherRole}
+          currentRole={userType}
+          onRoleSwitch={() => setUserType(otherRole as 'Host' | 'Tenant')}
         />
         <MessageArea
           selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex].id : null}

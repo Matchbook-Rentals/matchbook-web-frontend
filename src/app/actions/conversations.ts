@@ -15,7 +15,11 @@ async function checkAuth() {
 
 // Conversation CRUD operations
 
-export async function createConversation(recipientEmail: string) {
+export async function createConversation(
+  recipientEmail: string,
+  creatorRole: string = 'Host',
+  recipientRole: string = 'Tenant'
+) {
   console.log('Creating conversation with recipient email:', recipientEmail);
   const authUserId = await checkAuth();
   const recipient = await prisma.user.findUnique({
@@ -58,13 +62,19 @@ export async function createConversation(recipientEmail: string) {
     return existingConversation;
   }
 
-  // Create a new conversation with participants
+  // Create a new conversation with participants and assign roles
   const conversation = await prisma.conversation.create({
     data: {
       participants: {
         create: [
-          { userId: authUserId },
-          { userId: recipient.id }
+          {
+            userId: authUserId,
+            role: creatorRole
+          },
+          {
+            userId: recipient.id,
+            role: recipientRole
+          }
         ]
       }
     },
