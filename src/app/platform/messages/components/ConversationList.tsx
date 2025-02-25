@@ -73,12 +73,12 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   return (
-    <Card className="w-1/3 bg-gray-200 h-[75vh] flex flex-col">
+    <Card className="w-1/3 bg-gray-200 h-[75vh] flex flex-col pb-4">
       <CardHeader>
         <CardTitle className='text-center'>Conversations</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
-        <ScrollArea className="flex-1 max-h-[50vh]">
+        <ScrollArea className="flex-1 mb-4">
           {conversations && conversations.length > 0 ? (
             conversations.map((conv, index) => {
               const { displayName, imageUrl } = getParticipantInfo(conv, user);

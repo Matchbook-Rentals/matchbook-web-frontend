@@ -5,6 +5,7 @@
 - [x] new icons
 - [ ] full screen big button on manage search
 - [ ] mobile skelly
+- [ ] combined menu with clerk menu being settings
 
 
 - [ ] ON application last page, change button to COmplete APplication and have it validate tehn route user to search page

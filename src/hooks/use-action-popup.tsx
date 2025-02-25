@@ -18,7 +18,7 @@ export const useActionPopup = () => {
     animationTimeoutRef.current = window.setTimeout(() => {
       setShowActionPopup(false)
       animationTimeoutRef.current = null
-    }, 600)
+    }, 1200)
   }, [])
 
   return {

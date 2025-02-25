@@ -23,12 +23,13 @@ const ActionPopup: React.FC<ActionPopupProps> = ({ action, isVisible }) => {
             zIndex: 100
           }}
           animate={{
-            scale: [0.5, 1.2, 1],
+            scale: [0.5, 1.1, 1],
             opacity: [0, 1, 0]
           }}
           transition={{
-            duration: 0.6,
-            times: [0, 0.3, 1]
+            duration: 1.2,
+            times: [0, 0.4, 1],
+            ease: "easeInOut"
           }}
           exit={{ opacity: 0 }}
         >

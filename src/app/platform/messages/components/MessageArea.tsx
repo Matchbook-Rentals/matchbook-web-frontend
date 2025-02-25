@@ -71,7 +71,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-[75vh] pb-4">
+    <div className="flex-1 flex flex-col h-[75vh] ">
       {selectedConversation ? (
         <ScrollArea className="flex-1 px-8 mb-4">
           {messages.map((message) => (
@@ -103,51 +103,60 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           <p>Select a conversation or start a new one</p>
         </div>
       )}
-      <div className="mt-auto px-4 flex items-center">
-        {messageAttachments.map((attachment, index) => (
-          <div key={index} className="inline-block p-2 rounded bg-gray-200">
-            <Image
-              src={attachment}
-              alt="Message Attachment"
-              width={100}
-              height={100}
-              className="cursor-pointer"
-              onClick={() => handleImageClick(attachment)}
+
+      {/* Message input area */}
+      <div className="mt-auto px-4">
+        {/* Display message attachments */}
+        <div className="flex flex-wrap gap-2 mb-2">
+          {messageAttachments.map((attachment, index) => (
+            <div key={index} className="inline-block p-2 rounded bg-gray-200">
+              <Image
+                src={attachment}
+                alt="Message Attachment"
+                width={100}
+                height={100}
+                className="cursor-pointer"
+                onClick={() => handleImageClick(attachment)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Input and buttons flex container */}
+        <div className="flex items-center">
+          <input
+            type="text"
+            className="flex-1 min-w-0 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Type a message..."
+            value={newMessageInput}
+            onChange={(e) => setNewMessageInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={!selectedConversation}
+          />
+          <div className={`flex-shrink-0 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}>
+            <UploadButton
+              endpoint="messageUploader"
+              onClientUploadComplete={handleUploadFinish}
+              onUploadError={(error) => alert(error.message)}
+              className="p-0"
+              content={{
+                button: <PaperclipIcon className="w-6 h-6" />,
+                allowedContent: 'Image upload'
+              }}
+              appearance={{
+                button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-[#404040]',
+                allowedContent: 'hidden'
+              }}
             />
           </div>
-        ))}
-        <input
-          type="text"
-          className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Type a message..."
-          value={newMessageInput}
-          onChange={(e) => setNewMessageInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          disabled={!selectedConversation}
-        />
-        <div className={!selectedConversation ? "opacity-50 pointer-events-none" : ""}>
-          <UploadButton
-            endpoint="messageUploader"
-            onClientUploadComplete={handleUploadFinish}
-            onUploadError={(error) => alert(error.message)}
-            className="p-0 mt-5"
-            content={{
-              button: <PaperclipIcon className="w-6 h-6" />,
-              allowedContent: 'Image upload'
-            }}
-            appearance={{
-              button: 'bg-parent text-black focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-[#404040]',
-              allowedContent: ''
-            }}
-          />
+          <Button
+            className="rounded-l-none flex-shrink-0"
+            onClick={handleSend}
+            disabled={!selectedConversation || !newMessageInput.trim()}
+          >
+            Send
+          </Button>
         </div>
-        <Button
-          className="rounded-l-none"
-          onClick={handleSend}
-          disabled={!selectedConversation || !newMessageInput.trim()}
-        >
-          Send
-        </Button>
       </div>
 
       {/* Image Viewer Dialog */}
