@@ -153,17 +153,32 @@ export async function createMessage(data: {
   });
 
   // Send message to Go server for real-time updates
-  fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      ...message,
-      senderRole: data.senderRole, // Include the field in the WebSocket message, not the DB
-      receiverId: data.receiverId, // Add the receiverId for the Go server
-    }),
-  });
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: message.id,
+        conversationId: message.conversationId,
+        senderId: message.senderId,
+        receiverId: data.receiverId,
+        content: message.content,
+        senderRole: data.senderRole,
+        imgUrl: message.imgUrl,
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to send message to real-time server:', await response.text());
+    }
+  } catch (error) {
+    console.error('Error sending message to real-time server:', error);
+    // Continue even if the real-time sending fails
+  }
 
   revalidatePath('/conversations');
   return message;

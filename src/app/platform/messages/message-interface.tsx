@@ -71,37 +71,85 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   useEffect(() => {
     if (!user?.id) return;
 
-    //const eventSource = new EventSource(`/api/sse?id=${user.id}`);
-    const eventSource = new EventSource(url);
+    let eventSource: EventSource | null = null;
+    let retryCount = 0;
+    const maxRetries = 5;
+    const retryDelay = 3000; // 3 seconds
 
-    eventSource.onmessage = (event) => {
-      console.log(event)
-      if (event.data.trim() === ': keepalive') {
-        // Ignore heartbeat messages
+    const connectSSE = () => {
+      if (retryCount >= maxRetries) {
+        console.error('Max SSE connection retries reached');
         return;
       }
 
-      const message = JSON.parse(event.data);
-      setSseMessages((prevMessages) => [...prevMessages, message]);
-      setAllConversations((prevConversations) => {
-        const updatedConversations = [...prevConversations];
-        const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
-        if (index !== -1) {
-          // Create a new array if messages property doesn't exist yet
-          const currentMessages = updatedConversations[index].messages || [];
-          updatedConversations[index] = {
-            ...updatedConversations[index],
-            messages: [...currentMessages, message]
-          };
+      // Close existing connection if any
+      if (eventSource) {
+        eventSource.close();
+      }
+
+      console.log(`Connecting to SSE: ${url}`);
+      eventSource = new EventSource(url);
+
+      eventSource.onopen = () => {
+        console.log('SSE connection opened');
+        retryCount = 0; // Reset retry count on successful connection
+      };
+
+      eventSource.onmessage = (event) => {
+        console.log('SSE message received:', event);
+        if (event.data.trim() === ': keepalive') {
+          // Ignore heartbeat messages
+          console.log('Keepalive received');
+          return;
         }
-        return updatedConversations;
-      });
+
+        try {
+          const message = JSON.parse(event.data);
+          setSseMessages((prevMessages) => [...prevMessages, message]);
+          setAllConversations((prevConversations) => {
+            const updatedConversations = [...prevConversations];
+            const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+            if (index !== -1) {
+              // Create a new array if messages property doesn't exist yet
+              const currentMessages = updatedConversations[index].messages || [];
+              updatedConversations[index] = {
+                ...updatedConversations[index],
+                messages: [...currentMessages, message]
+              };
+            }
+            return updatedConversations;
+          });
+        } catch (error) {
+          console.error('Error parsing SSE message:', error, event.data);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('SSE connection error:', error);
+
+        // Close the current connection
+        if (eventSource) {
+          eventSource.close();
+          eventSource = null;
+        }
+
+        // Attempt to reconnect after delay
+        retryCount++;
+        console.log(`Retrying SSE connection (${retryCount}/${maxRetries}) in ${retryDelay}ms`);
+        setTimeout(connectSSE, retryDelay);
+      };
     };
 
+    connectSSE();
+
     return () => {
-      eventSource.close();
+      console.log('Closing SSE connection');
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
     };
-  }, [user]);
+  }, [user, url]);
 
   const handleSelectConversation = (index: number) => {
     setSelectedConversationIndex(index);
