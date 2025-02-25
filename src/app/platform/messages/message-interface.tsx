@@ -381,7 +381,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden h-[75vh]">
         <ConversationList
           conversations={filteredConversations}
           onSelectConversation={index => {

@@ -71,9 +71,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   return (
-    <div className="flex-1 p-4 flex flex-col">
+    <div className="flex-1 flex flex-col h-[75vh] pb-4">
       {selectedConversation ? (
-        <ScrollArea className="flex-1 max-h-[40vh] px-8">
+        <ScrollArea className="flex-1 px-8 mb-4">
           {messages.map((message) => (
             <div key={message.id} className={`mb-2 ${message.senderId === currentUserId ? 'text-right' : 'text-left'}`}>
               <div className={`inline-block p-2 rounded ${message.senderId === currentUserId
@@ -103,7 +103,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           <p>Select a conversation or start a new one</p>
         </div>
       )}
-      <div className="flex mt-4 items-center">
+      <div className="mt-auto px-4 flex items-center">
         {messageAttachments.map((attachment, index) => (
           <div key={index} className="inline-block p-2 rounded bg-gray-200">
             <Image

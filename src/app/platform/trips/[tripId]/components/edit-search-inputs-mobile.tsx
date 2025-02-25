@@ -421,11 +421,9 @@ const EditSearchInputsMobile: React.FC = () => {
         type="text"
         placeholder="Who?"
         value={
-          hasBeenSelected
-            ? totalGuests
+           totalGuests
               ? `${totalGuests} Guest${totalGuests !== 1 ? "s" : ""}`
               : ""
-            : ""
         }
         className="w-full px-4 py-3 font-medium text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r-0 bg-transparent"
         readOnly
