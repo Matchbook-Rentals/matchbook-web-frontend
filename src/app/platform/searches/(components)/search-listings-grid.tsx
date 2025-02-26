@@ -229,6 +229,25 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     }
   }, [selectedMarker, infiniteScrollMode, filteredListings, listingsPerPage, currentPage]);
 
+  // Check if current page is still valid when listings change
+  useEffect(() => {
+    if (infiniteScrollMode) return; // Only needed for pagination mode
+
+    // If there are no listings at all, set to page 1
+    if (filteredListings.length === 0) {
+      setCurrentPage(1);
+      return;
+    }
+
+    // Calculate the new total pages
+    const newTotalPages = Math.ceil(filteredListings.length / listingsPerPage);
+
+    // If current page is greater than the new total pages, adjust to the last valid page
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages);
+    }
+  }, [filteredListings, currentPage, listingsPerPage, infiniteScrollMode]);
+
   return (
     <div className="relative h-[80vh] md:max-h-[200vh] md:min-h-[640px] md:h-[${height || '640px'}]">
       {listings.length === 0 ? (
