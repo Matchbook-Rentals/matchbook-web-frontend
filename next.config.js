@@ -28,6 +28,12 @@ remotePatterns: [
     hostname: 'upload.wikimedia.org',
     pathname: '/wikipedia/commons/**',
   },
+  {
+    protocol: 'https',
+    hostname: 'img.clerk.com',
+    pathname: '**',
+  },
+
 ],
   },
   typescript: {

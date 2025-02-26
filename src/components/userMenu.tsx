@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
@@ -16,6 +16,7 @@ const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
+  const { user } = useUser();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
@@ -24,7 +25,6 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
   useEffect(() => {
     updateUserLogin(new Date());
-
   }, []);
 
   const fetchNotifications = useCallback(async () => {
@@ -82,44 +82,46 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }
 
-  //setTimeout(() => {
-  //  if (window?.FreshworksWidget) {
-  //    window?.FreshworksWidget('hide', 'launcher');
-  //  }
-  //  const openWidget = () => {
-  //    if (window?.FreshworksWidget) {
-  //      window?.FreshworksWidget('open');
-  //    }
-  //  }
-  //}, 0)
-
-  //const handleSupportClick = () => {
-  //  setIsMenuOpen(false);
-  //  if (window?.FreshworksWidget) {
-  //    window?.FreshworksWidget('open');
-  //  }
-  //}
-
   return (
     <div className="flex items-center space-x-1 md:space-x-4">
       {isSignedIn ? (
         <>
           <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <PopoverTrigger className="flex justify-between relative">
-              <MenuIcon className="text-charcoal h-[32px] w-[31px]" />
-              {hasUnread && (
-                <div className="absolute -top0 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+            <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+              <div className="relative">
+                <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+                {hasUnread && (
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </div>
+              {user?.imageUrl ? (
+                <div className="relative">
+                  <Image
+                    src={user.imageUrl}
+                    alt="User Profile"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <UserIcon className="text-charcoal h-[32px] w-[31px]" />
+                </div>
               )}
             </PopoverTrigger>
             <PopoverContent>
               <div className='flex flex-col'>
-                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/dashboard'>Dashboard</Link> */}
                 <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
                 <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
                 <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
-                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/bookings'>Bookings</Link> */}
-                {/* <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/host-dashboard'>Host Dashboard</Link>
-                <Link className='hover:bg-primaryBrand border-b-1 p-1 transition-all duration-300' href='/platform/messages'>Messages</Link> */}
+                <p onClick={() => {
+                  // This would typically open the Clerk user settings
+                  const userButtonElement = document.querySelector('[data-clerk-ui-component="user-button"]');
+                  if (userButtonElement) {
+                    (userButtonElement as HTMLElement).click();
+                  }
+                }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="notifications">
                     <AccordionTrigger className="flex justify-between">
@@ -145,25 +147,23 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               </div>
             </PopoverContent>
           </Popover>
-          <UserButton />
+          {/* Hidden UserButton for Clerk functionality */}
+          <div className="hidden">
+            <UserButton />
+          </div>
         </>
       ) : (
         <>
           <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <PopoverTrigger className="flex justify-between">
-              <MenuIcon className="text-charcoal h-[32px] w-[31px]" />
+            <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+              <div className="relative">
+                <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+              </div>
+              <UserIcon className="text-charcoal h-[32px] w-[31px]" />
             </PopoverTrigger>
             <PopoverContent className='w-full p1'>
               <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
               <p onClick={() => { }} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger className="flex justify-between">
-              <UserIcon className="text-charcoal h-[32px] w-[31px]" />
-            </PopoverTrigger>
-            <PopoverContent>
-              <Link href="/sign-in">Sign In</Link>
             </PopoverContent>
           </Popover>
         </>

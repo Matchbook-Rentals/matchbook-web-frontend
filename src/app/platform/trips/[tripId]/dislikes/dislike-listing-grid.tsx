@@ -174,7 +174,7 @@ const DislikeListingGrid: React.FC<DislikeListingGridProps> = ({
   }, [infiniteScrollMode, displayedListings, listings]);
 
   return (
-    <div className="relative h-[80vh] md:h-[90vh]" style={{ height: height }}>
+    <div className="relative h-[80vh] md:h-[98vh]" style={{ height: height }}>
       {listings.length === 0 ? (
         <div className="w-full flex items-center justify-center text-gray-500 h-full">
           No disliked properties to display
