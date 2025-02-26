@@ -1,9 +1,9 @@
 // Handle setInterval crash
 'use client'
 import Image from 'next/image';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { UserButton, useUser } from '@clerk/nextjs';
+import { UserButton, useUser, useClerk } from '@clerk/nextjs';
 import Link from 'next/link';
 import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
@@ -17,11 +17,13 @@ const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const { user } = useUser();
+  const { openUserProfile } = useClerk();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
   const [canUpdate, setCanUpdate] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userButtonContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     updateUserLogin(new Date());
@@ -116,11 +118,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
                 <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
                 <p onClick={() => {
-                  // This would typically open the Clerk user settings
-                  const userButtonElement = document.querySelector('[data-clerk-ui-component="user-button"]');
-                  if (userButtonElement) {
-                    (userButtonElement as HTMLElement).click();
-                  }
+                  openUserProfile();
                 }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="notifications">
@@ -148,8 +146,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             </PopoverContent>
           </Popover>
           {/* Hidden UserButton for Clerk functionality */}
-          <div className="hidden">
-            <UserButton />
+          <div className="hidden" ref={userButtonContainerRef}>
+            <UserButton  />
           </div>
         </>
       ) : (

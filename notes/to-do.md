@@ -1,7 +1,7 @@
 # TO DOs
 
 
-- [ ] find bug on maps may be due to pagination
+- [x] find bug on maps may be due to pagination
 - [x] new icons
 - [ ] full screen big button on manage search
 - [ ] mobile skelly
@@ -12,7 +12,7 @@
 - [ ] app name goes two column col1 first and last, col 2 middle and middle checkmark 
 - [ ] carousel and like button for map card, and modal on see more
 - [ ] on map drag restu clicked at small non fullscreen
-- [ ] get rid of page scroll on grids
+- [x] get rid of page scroll on grids
 - [x] get rid of tab navigation
 
 - [ ] NONE FOR NO MIDDLE NAME (no middle name toggle)
