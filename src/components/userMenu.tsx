@@ -11,6 +11,7 @@ import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
+import { Circle } from 'lucide-react';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
@@ -118,7 +119,81 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
                 <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
                 <p onClick={() => {
-                  openUserProfile();
+                  openUserProfile({
+                    customPages: [
+                      {
+                        label: 'Terms',
+                        mount: (el) => {
+                          const content = document.createElement('div');
+                          content.className = 'p-4';
+                          content.innerHTML = `
+                            <h2 class="text-xl font-bold mb-4">Terms of Service</h2>
+                            <p>Please review our terms of service.</p>
+                          `;
+                          el.appendChild(content);
+                        },
+                        mountIcon: (el) => {
+                          const icon = document.createElement('div');
+                          icon.innerHTML = '📋';
+                          icon.className = 'text-lg';
+                          el.appendChild(icon);
+                        },
+                        unmountIcon: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                      },
+                      {
+                        label: 'Support',
+                        mountIcon: (el) => {
+                          const icon = document.createElement('div');
+                          icon.innerHTML = '❓';
+                          icon.className = 'text-lg';
+                          el.appendChild(icon);
+                        },
+                        unmountIcon: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                      },
+                      {
+                        label: 'Feedback',
+                        mountIcon: (el) => {
+                          const icon = document.createElement('div');
+                          icon.innerHTML = '💬';
+                          icon.className = 'text-lg';
+                          el.appendChild(icon);
+                        },
+                        unmountIcon: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                        mount: (el) => {
+                          const content = document.createElement('div');
+                          content.className = 'p-4';
+                          content.innerHTML = `
+                            <h2 class="text-xl font-bold mb-4">We'd Love Your Feedback</h2>
+                            <p class="mb-4">Help us improve our service by sharing your thoughts.</p>
+                            <textarea class="w-full p-2 border rounded mb-4" rows="4" placeholder="Enter your feedback..."></textarea>
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                          `;
+                          el.appendChild(content);
+                        },
+                        unmount: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                      },
+                      {
+                        label: 'Privacy Policy',
+                        mountIcon: (el) => {
+                          const icon = document.createElement('div');
+                          icon.innerHTML = '🔒';
+                          icon.className = 'text-lg';
+                          el.appendChild(icon);
+                        },
+                        unmountIcon: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                      }
+                    ]
+                  });
                 }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="notifications">
@@ -145,10 +220,6 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               </div>
             </PopoverContent>
           </Popover>
-          {/* Hidden UserButton for Clerk functionality */}
-          <div className="hidden" ref={userButtonContainerRef}>
-            <UserButton  />
-          </div>
         </>
       ) : (
         <>

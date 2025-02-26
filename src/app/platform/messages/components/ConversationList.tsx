@@ -119,7 +119,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               {hasOtherRoleConversations ? (
                 <>
                   <p className="text-center mb-4">
-                    You don't have any {currentRole} messages.
+                    You don&apos;t have any {currentRole} messages.
                   </p>
                   <Button
                     variant="default"
