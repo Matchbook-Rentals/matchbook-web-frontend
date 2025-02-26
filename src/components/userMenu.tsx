@@ -123,6 +123,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     customPages: [
                       {
                         label: 'Terms',
+                        url: '/terms',
                         mount: (el) => {
                           const content = document.createElement('div');
                           content.className = 'p-4';
@@ -131,6 +132,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                             <p>Please review our terms of service.</p>
                           `;
                           el.appendChild(content);
+                        },
+                        unmount: (el) => {
+                          if (el) el.innerHTML = '';
                         },
                         mountIcon: (el) => {
                           const icon = document.createElement('div');
@@ -144,6 +148,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                       },
                       {
                         label: 'Support',
+                        url: '/support',
                         mountIcon: (el) => {
                           const icon = document.createElement('div');
                           icon.innerHTML = '❓';
@@ -153,9 +158,22 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                         unmountIcon: (el) => {
                           if (el) el.innerHTML = '';
                         },
+                        mount: (el) => {
+                          const content = document.createElement('div');
+                          content.className = 'p-4';
+                          content.innerHTML = `
+                            <h2 class="text-xl font-bold mb-4">Support</h2>
+                            <p>Please review our support page.</p>
+                          `;
+                          el.appendChild(content);
+                        },
+                        unmount: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
                       },
                       {
                         label: 'Feedback',
+                        url: '/feedback',
                         mountIcon: (el) => {
                           const icon = document.createElement('div');
                           icon.innerHTML = '💬';
@@ -182,6 +200,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                       },
                       {
                         label: 'Privacy Policy',
+                        url: '/privacy',
                         mountIcon: (el) => {
                           const icon = document.createElement('div');
                           icon.innerHTML = '🔒';
@@ -189,6 +208,18 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                           el.appendChild(icon);
                         },
                         unmountIcon: (el) => {
+                          if (el) el.innerHTML = '';
+                        },
+                        mount: (el) => {
+                          const content = document.createElement('div');
+                          content.className = 'p-4';
+                          content.innerHTML = `
+                            <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
+                            <p>Please review our privacy policy.</p>
+                          `;
+                          el.appendChild(content);
+                        },
+                        unmount: (el) => {
                           if (el) el.innerHTML = '';
                         },
                       }
