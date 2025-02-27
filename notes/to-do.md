@@ -1,16 +1,47 @@
 # TO DOs
 
 
+- [ ] AUTO BLOG POSTS / ADMIN DASH
+---- [ ] Be sure to implement on 'Staging' branch 'comingSoon'
+
+- [ ] Clerk Profile and Security
+- [ ] Clerk crop photos
+- [ ] Host mode 
+- [ ] Default guest side, change after listing approval 
+- [ ] Upload more than just images 
+- [ ] messages navbar correciton
+- [ ] Remove mileage, accordion to roughly matchmaker/recommended
+- [ ] Not fullscreen new tab, mobile dialog view
+- [ ] mobile dialog too big
+- [ ] less fade time
+- [ ] green hearts in favorites, current favoirrtes to all listings
+- [ ] remove dislike, no button, get rid of the x button to heart, no button
+- [ ] back arrow under breadcrumbs
+- [ ] change the spas point lower 
+- [ ] new search trips box instead of rounded
+- [ ] make grids shorter
+- [ ] make manage search longer (cańt see all)
+- [ ] Massive gap in search cards
+- [ ] blue search button on trips
+- [ ] Investigate sticky nav forcing down buttons
+- [ ] shrink icons in sticky nav recommended
+
+- [ ] Verification
+- [ ] Sign IN Page
+- [ ] notification bell
+
+
+
 - [x] find bug on maps may be due to pagination
 - [x] new icons
-- [ ] full screen big button on manage search
-- [ ] mobile skelly
-- [ ] combined menu with clerk menu being settings
+- [x] full screen big button on manage search
+- [x] mobile skelly
+- [x] combined menu with clerk menu being settings
 
 
 - [ ] ON application last page, change button to COmplete APplication and have it validate tehn route user to search page
 - [ ] app name goes two column col1 first and last, col 2 middle and middle checkmark 
-- [ ] carousel and like button for map card, and modal on see more
+- [x] carousel and like button for map card, and modal on see more
 - [ ] on map drag restu clicked at small non fullscreen
 - [x] get rid of page scroll on grids
 - [x] get rid of tab navigation
