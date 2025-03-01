@@ -53,7 +53,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
   const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
-    } bg-white ${inputClassName || ''}`;
+    } bg-background ${inputClassName || ''}`;
 
   // Add this effect to update totalGuests whenever guests state changes
   React.useEffect(() => {
@@ -275,9 +275,9 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       </div>
 
       {isOpen && (
-        <div ref={popoverRef} className="absolute top-[calc(100%+8px)] left-0 w-full bg-white rounded-xl shadow-lg z-50
+        <div ref={popoverRef} className="absolute top-[calc(100%+8px)] left-0 w-full bg-background rounded-xl shadow-lg z-50
           before:content-[''] before:absolute before:-top-2 before:left-[var(--arrow-position)] before:w-4 before:h-4
-          before:bg-white before:rotate-45 before:border-l before:border-t before:border-gray-200
+          before:bg-background before:rotate-45 before:border-l before:border-t before:border-gray-200
           transform origin-top transition-all duration-200 ease-out
           animate-in fade-in slide-in-from-top-2"
           style={{ '--arrow-position': `${arrowPosition}%` } as React.CSSProperties}>

@@ -40,8 +40,8 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             <div className="flex w-full justify-center">
               <SearchContainer
                 className="z-100"
-                containerStyles='bg-white border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
-                inputStyles='bg-white'
+                containerStyles='bg-background border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                inputStyles='bg-background'
               />
             </div>
           </motion.div>

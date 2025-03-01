@@ -3,6 +3,12 @@
 
 - [ ] AUTO BLOG POSTS / ADMIN DASH
 ---- [ ] Be sure to implement on 'Staging' branch 'comingSoon'
+- [ ] Better Share links
+- [ ] Calendar resize text at larger sizes to accomadate gaps
+- [ ] Article breadcrumbs, new signature block
+- [ ] Render markdown on articles
+
+
 
 - [ ] Clerk Profile and Security
 - [ ] Clerk crop photos

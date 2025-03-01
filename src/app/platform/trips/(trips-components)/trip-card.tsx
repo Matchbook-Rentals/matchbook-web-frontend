@@ -3,15 +3,8 @@ import { Trip } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
 import { Trash2, MoreHorizontal } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -85,19 +78,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
   const stateName = getState(locationElements[locationElements.length - 1]);
   const statePhotoPath = `/State Photos/${stateName}.jpg`;
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent the Link navigation
-    e.stopPropagation();
-    setIsDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    onDelete(trip.id);
-    setIsDeleteDialogOpen(false);
-  };
-
   // Format date range for display
   const dateRangeText = trip.startDate && trip.endDate ?
     `${trip.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} -
@@ -130,41 +110,33 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             >
               Continue Search
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-md h-9 w-9 border border-gray-200"
-              onClick={handleDeleteClick}
-            >
-              <Trash2 className="h-5 w-5 text-gray-500" />
-              <span className="sr-only">Delete search</span>
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-md h-9 w-9 border border-gray-200"
+                >
+                  <MoreHorizontal className="h-5 w-5 text-gray-500" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-40 p-2">
+                <Button
+                  variant="ghost"
+                  className="w-full text-left"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(trip.id);
+                  }}
+                >
+                  Delete search
+                </Button>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
-
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className='bg-background' onClick={(e) => e.stopPropagation()}>
-          <DialogTitle className='w-full text-center'><p className='font-montserrat-medium text-[#404040] text-xl font-normal'>Delete Search</p></DialogTitle>
-          <p className='font-montserrat-normal text-lg text-[#404040]'>
-            Are you sure you want to delete this search and any matches you&apos;ve made? This action cannot be undone.
-          </p>
-          <div className="flex justify-end space-x-2">
-            <Button className='bg-background hover:bg-gray-100 text-[#404040] font-montserrat font-medium border rounded-md' onClick={(e) => {
-              e.stopPropagation();
-              setIsDeleteDialogOpen(false);
-            }}>
-              Cancel
-            </Button>
-            <Button className='bg-red-700 hover:bg-red-600 font-montserrat font-semibold' onClick={(e) => {
-              e.stopPropagation();
-              confirmDelete();
-            }}>
-              Delete
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }
