@@ -31,26 +31,26 @@ const GuestVerificationArticle = () => {
           <h1 className="text-[36px] font-semibold mb-1 text-left">MatchBook Guest Verification: Stand Out Without Breaking the Bank</h1>
         </div>
         <div className="w-full mx-auto bg-background pb-8 font-medium rounded-lg space-y-4">
-          <h2 className="text-2xl font-semibold mt-8">Let's Talk About Rental Application Fees (a.k.a. The Worst)</h2>
+          <h2 className="text-2xl font-semibold mt-8">Let&apos;s Talk About Rental Application Fees (a.k.a. The Worst)</h2>
           <p className="mb-6">
-            Applying for rentals shouldn't feel like a financial black hole. Yet, most renters drop <strong>$50+ per application</strong>—per person—just to <em>maybe</em> get a response. It's a system designed to drain your wallet, not get you housed.
+            Applying for rentals shouldn&apos;t feel like a financial black hole. Yet, most renters drop <strong>$50+ per application</strong>—per person—just to <em>maybe</em> get a response. It&apos;s a system designed to drain your wallet, not get you housed.
           </p>
           <p className="mb-6">
-            That's where we flip the script.
+            That&apos;s where we flip the script.
           </p>
           <p className="mb-6">
-            On our platform, you can <strong>apply to properties for free</strong> (yes, FREE). No upfront costs, no wasted application fees. But if you want to <strong>stand out to landlords</strong>, we've got an optional tool that can help: <strong>MatchBook Guest Verification.</strong>
+            On our platform, you can <strong>apply to properties for free</strong> (yes, FREE). No upfront costs, no wasted application fees. But if you want to <strong>stand out to landlords</strong>, we&apos;ve got an optional tool that can help: <strong>MatchBook Guest Verification.</strong>
           </p>
 
           <h2 className="text-2xl font-semibold mt-8">What Is MatchBook Guest Verification?</h2>
           <p className="mb-6">
-            Think of it as a <strong>supercharged rental application</strong>—but without the constant cash drain. For just <strong>$25</strong>, you get a <strong>criminal history, credit check, and eviction history report</strong>—and here's the kicker: <strong>you keep the report</strong>. It's yours to review, dispute if needed, and use for as many applications as you'd like over <strong>three months</strong>—on MatchBook <em>or</em> anywhere else.
+            Think of it as a <strong>supercharged rental application</strong>—but without the constant cash drain. For just <strong>$25</strong>, you get a <strong>criminal history, credit check, and eviction history report</strong>—and here&apos;s the kicker: <strong>you keep the report</strong>. It&apos;s yours to review, dispute if needed, and use for as many applications as you&apos;d like over <strong>three months</strong>—on MatchBook <em>or</em> anywhere else.
           </p>
           <p className="mb-6">
-            It's not required, but some landlords may <strong>prefer renters who provide it</strong> because it gives them instant insight into your rental background.
+            It&apos;s not required, but some landlords may <strong>prefer renters who provide it</strong> because it gives them instant insight into your rental background.
           </p>
 
-          <h3 className="text-xl font-semibold mt-6">Here's How It Works:</h3>
+          <h3 className="text-xl font-semibold mt-6">Here&apos;s How It Works:</h3>
           <ul className="list-disc pl-6 mb-6">
             <li><strong>Apply for free</strong> to properties on our platform—no MatchBook Guest Verification required.</li>
             <li>Want to <strong>boost your application?</strong> Get MatchBook Guest Verified for a <strong>one-time</strong> $25 fee.</li>
@@ -63,12 +63,12 @@ const GuestVerificationArticle = () => {
           <ul className="list-disc pl-6 mb-6">
             <li><strong>Control Your Own Data</strong> – The report belongs to YOU. Review it first, dispute errors, and decide who sees it.</li>
             <li><strong>Save Money</strong> – Stop paying <strong>$50+ per application</strong>. One report, unlimited uses, <strong>three months</strong>.</li>
-            <li><strong>Look More Reliable to Hosts</strong> – Some hosts prefer renters with verified reports because it speeds up the decision-making process and ensures you're a quality guest.</li>
+            <li><strong>Look More Reliable to Hosts</strong> – Some hosts prefer renters with verified reports because it speeds up the decision-making process and ensures you&apos;re a quality guest.</li>
           </ul>
 
           <h2 className="text-2xl font-semibold mt-8">The Bottom Line</h2>
           <p className="mb-6">
-            You don't have to use MatchBook Guest Verification to apply, but if you want an edge in a competitive rental market, it's a small investment that can make a big difference.
+            You don&apos;t have to use MatchBook Guest Verification to apply, but if you want an edge in a competitive rental market, it&apos;s a small investment that can make a big difference.
           </p>
           <p className="mb-6">
             Why waste money on application fees when you could <strong>apply for free, take control of your own rental history, and stand out to landlords</strong>—all for less than the cost of nice (or not so nice, thanks inflation) dinner?
