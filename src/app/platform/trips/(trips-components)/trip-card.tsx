@@ -2,7 +2,7 @@
 import { Trip } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, MoreHorizontal } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -98,71 +98,75 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
     setIsDeleteDialogOpen(false);
   };
 
+  // Format date range for display
+  const dateRangeText = trip.startDate && trip.endDate ?
+    `${trip.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} -
+     ${trip.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })},
+     ${Math.ceil((trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24))} days` :
+    'No dates selected';
+
+  // Format price range for display
+  const getPriceDisplay = () => {
+    if (!trip.minPrice && !trip.maxPrice) return 'No price range';
+    if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice.toLocaleString()}-$${trip.maxPrice.toLocaleString()}/ Month`;
+    if (trip.minPrice) return `$${trip.minPrice.toLocaleString()} or more/ Month`;
+    if (trip.maxPrice) return `$${trip.maxPrice.toLocaleString()} or less/ Month`;
+  };
+
   return (
     <>
-      <div className='group flex w-[100%] sm:max-w-[320px] active:bg-gray-300 pr-2 border-background hover:bg-gray-100 border rounded-[15px] transition-colors duration-100'>
-
-        <div className="relative group">
-          <Image src={statePhotoPath} height={400} width={400} className='h-[134px] min-w-[193px]  sm:min-w-[143px] w-1/2 sm:w-[143px] rounded-[15px]' />
-          <div
-            onClick={handleDeleteClick}
-            className="absolute xs:opacity-0 group-hover:opacity-100 flex top-2 left-2 p-1.5 bg-background/60 rounded-full cursor-pointer hover:bg-background transition-opacity duration-200 ease-in-out"
-          >
-            <Trash2 className="w-5 h-5 text-[#404040]" />
+      <div className="border border-blue-500 rounded-md p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="space-y-1">
+          <h2 className="font-medium text-gray-900">{trip.locationString}</h2>
+          <p className="text-sm text-gray-600">{dateRangeText}</p>
+          <p className="text-sm text-gray-600">Within {trip.searchRadius} miles</p>
+        </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3 w-full md:w-auto">
+          <div className="text-right font-medium">{getPriceDisplay()}</div>
+          <div className="flex gap-2 w-full md:w-auto">
+            <Button
+              className="bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md px-4 py-2 text-sm font-medium w-full md:w-auto"
+              variant="ghost"
+            >
+              Continue Search
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-md h-9 w-9 border border-gray-200"
+              onClick={handleDeleteClick}
+            >
+              <Trash2 className="h-5 w-5 text-gray-500" />
+              <span className="sr-only">Delete search</span>
+            </Button>
           </div>
         </div>
-        <div onClick={(e) => e.stopPropagation()} className='absolute z-50'>
-          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-            <DialogContent className='bg-background' onClick={(e) => e.stopPropagation()}>
-              <DialogTitle className='w-full text-center'><p className='font-montserrat-medium text-[#404040] text-xl font-normal'>Delete Search</p></DialogTitle>
-              <p className='font-montserrat-normal text-lg text-[#404040]'>
-                Are you sure you want to delete this search and any matches you&apos;ve made? This action cannot be undone.
-              </p>
-              <div className="flex justify-end space-x-2">
-                <Button className='bg-background hover:bg-gray-100 text-[#404040] font-montserrat font-medium border rounded-md' onClick={(e) => {
-                  e.stopPropagation();
-                  setIsDeleteDialogOpen(false);
-                }}>
-                  Cancel
-                </Button>
-                <Button className='bg-red-700 hover:bg-red-600 font-montserrat font-semibold' onClick={(e) => {
-                  e.stopPropagation();
-                  confirmDelete();
-                }}>
-                  Delete
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className='flex flex-col justify-between w-1/2 overflow-hidden  sm:max-w-[150px] ml-4 pt-1'>
-          <h2 className='text-nowrap overflow-hidden overflow-ellipsis font-medium text-[16px] text-[#404040]'>{trip.locationString}</h2>
-          <h2 className='truncate'>{'Within ' + trip.searchRadius + ' miles' || '50 miles (m)'}</h2>
-          <h2 className='truncate'>
-            {trip.startDate?.toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric'
-            })} - {trip.endDate?.toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric'
-            })}
-          </h2>
-          <h2 className='truncate'>
-            {/* Price display logic: shows range or 'any' if no prices set */}
-            {(() => {
-              if (!trip.minPrice && !trip.maxPrice) return 'No price range';
-              if (trip.minPrice && trip.maxPrice) return `$${trip.minPrice.toLocaleString()} - $${trip.maxPrice.toLocaleString()}`;
-              if (trip.minPrice) return `$${trip.minPrice.toLocaleString()} or more`;
-              if (trip.maxPrice) return `$${trip.maxPrice.toLocaleString()} or less`;
-            })()}
-          </h2>
+      </div>
 
-        </div>
-      </div >
-
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className='bg-background' onClick={(e) => e.stopPropagation()}>
+          <DialogTitle className='w-full text-center'><p className='font-montserrat-medium text-[#404040] text-xl font-normal'>Delete Search</p></DialogTitle>
+          <p className='font-montserrat-normal text-lg text-[#404040]'>
+            Are you sure you want to delete this search and any matches you&apos;ve made? This action cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-2">
+            <Button className='bg-background hover:bg-gray-100 text-[#404040] font-montserrat font-medium border rounded-md' onClick={(e) => {
+              e.stopPropagation();
+              setIsDeleteDialogOpen(false);
+            }}>
+              Cancel
+            </Button>
+            <Button className='bg-red-700 hover:bg-red-600 font-montserrat font-semibold' onClick={(e) => {
+              e.stopPropagation();
+              confirmDelete();
+            }}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
-
 
 export default TripCard;
