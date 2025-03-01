@@ -779,12 +779,13 @@ model BlogArticle {
   slug       String     @unique
   title      String     @db.VarChar(255)
   content    String     @db.LongText
-  excerpt    String     @db.Text
+  excerpt    String?     @db.Text
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   imageUrl   String?
   published  Boolean    @default(false)
   authorName String     @default("The Matchbook Team")
+  authorTitle String?
   categories Category[]
   tags       Tag[]
 
