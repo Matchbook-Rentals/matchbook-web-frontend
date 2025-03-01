@@ -31,7 +31,7 @@ export default async function ArticlePage({ params }: Params) {
         <Link href="/articles" className="hover:underline">Articles</Link> &gt; {article.title}
       </h1>
       <div className="flex justify-between items-center px-1 mb-1 text-foreground">
-        <h3 className={`${poppins.className}`}>{new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(article.createdAt))}</h3>
+        <h3 className={`${poppins.className}`}>{new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}</h3>
         <SocialLinks className='mb-1' />
       </div>
       {article.imageUrl && (

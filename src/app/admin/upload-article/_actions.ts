@@ -22,6 +22,7 @@ function slugify(title: string): string {
  */
 export async function uploadArticle(formData: FormData) {
   // Check if user has admin privileges
+  console.log('uploadArticle', formData);
   const isAdmin = await checkRole('admin');
   if (!isAdmin) {
     return {
@@ -36,7 +37,12 @@ export async function uploadArticle(formData: FormData) {
   const content = formData.get('content') as string;
   const imageUrl = formData.get('imageUrl') as string;
   const published = formData.get('published') === 'on';
-  const authorName = (formData.get('authorName') as string) || 'The Matchbook Team'; // Default to 'Matchbook Team' if not provided
+  const authorName = (formData.get('authorName') as string) || 'The Matchbook Team';
+  const authorTitle = formData.get('authorTitle') as string;
+
+  // Extract publishedOn from formData
+  const publishDateStr = formData.get('publishDate') as string;
+  const createdAtValue = publishDateStr ? new Date(publishDateStr) : new Date();
 
   // Validate required fields
   if (!title || !content) {
@@ -60,7 +66,7 @@ export async function uploadArticle(formData: FormData) {
         imageUrl,
         published,
         authorName,
-        createdAt: new Date(),
+        createdAt: createdAtValue,
         updatedAt: new Date(),
       },
     });

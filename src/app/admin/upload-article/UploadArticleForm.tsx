@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { uploadArticle } from "./_actions";
 import { UploadButton } from "@/app/utils/uploadthing";
+import React from "react";
 
 export default function UploadArticleForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,8 +20,12 @@ export default function UploadArticleForm() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [slug, setSlug] = useState("");
-  const [contentInput, setContentInput] = useState("");
   const [excerptInput, setExcerptInput] = useState("");
+
+  // New state for content entry method and markdown content
+  const [contentMethod, setContentMethod] = useState("markdown");
+  const [contentInput, setContentInput] = useState("");
+  const [convertedMarkdown, setConvertedMarkdown] = useState("");
 
   async function handleSubmit(formData: FormData) {
     setIsSubmitting(true);
@@ -30,7 +35,8 @@ export default function UploadArticleForm() {
     try {
       // Basic validation
       const title = formData.get("title") as string;
-      const content = formData.get("content") as string;
+      // If using markdown entry, contentInput is already set; if using docx, contentInput is set after conversion
+      const content = formData.get("content") as string || contentInput;
 
       if (!title || !content) {
         throw new Error("Title and content are required");
@@ -80,6 +86,35 @@ export default function UploadArticleForm() {
     }
   }
 
+  async function handleDocxUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    // Create a FormData object to send the docx file
+    const formData = new FormData();
+    formData.append("docxFile", file);
+
+    try {
+      // Call the API endpoint to convert the docx to markdown using pandoc
+      const res = await fetch("/api/convert-docx", {
+        method: "POST",
+        body: formData
+      });
+
+      if (!res.ok) throw new Error("Conversion failed");
+
+      const markdown = await res.text();
+      setConvertedMarkdown(markdown);
+      setContentInput(markdown);
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message || "Docx conversion failed",
+        variant: "destructive",
+      });
+    }
+  }
+
   function handleUploadFinish(res: any) {
     if (res && res.length > 0) {
       setUploadedImageUrl(res[0].url);
@@ -114,7 +149,7 @@ export default function UploadArticleForm() {
           onChange={(e) => {
             const value = e.target.value;
             setTitleInput(value);
-            setSlug(value.trim().toLowerCase().replace(/\s+/g, "-") );
+            setSlug(value.trim().toLowerCase().replace(/\s+/g, "-"));
           }}
         />
       </div>
@@ -133,6 +168,78 @@ export default function UploadArticleForm() {
       </div>
 
       <div className="space-y-2">
+        <Label>Content Entry Method</Label>
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="contentMethod"
+              value="markdown"
+              checked={contentMethod === "markdown"}
+              onChange={() => setContentMethod("markdown")}
+            /> Markdown Entry
+          </label>
+          <label className="ml-4">
+            <input
+              type="radio"
+              name="contentMethod"
+              value="docx"
+              checked={contentMethod === "docx"}
+              onChange={() => setContentMethod("docx")}
+            /> DOCX Upload
+          </label>
+        </div>
+      </div>
+
+      {contentMethod === "markdown" && (
+        <div className="space-y-2">
+          <Label htmlFor="content">Content *</Label>
+          <Textarea
+            id="content"
+            name="content"
+            placeholder="Full article content (supports Markdown)"
+            rows={10}
+            required
+            value={contentInput}
+            onChange={(e) => {
+              const newContent = e.target.value;
+              setContentInput(newContent);
+              if (!excerptInput.trim()) {
+                const computedExcerpt = newContent.split(/\s+/).slice(0, 100).join(" ");
+                setExcerptInput(computedExcerpt);
+              }
+            }}
+          />
+        </div>
+      )}
+
+      {contentMethod === "docx" && (
+        <div className="space-y-2">
+          <Label htmlFor="docxUpload">DOCX Upload</Label>
+          <Input
+            id="docxUpload"
+            name="docxUpload"
+            type="file"
+            accept=".docx"
+            onChange={handleDocxUpload}
+          />
+          {convertedMarkdown && (
+            <>
+              <Label htmlFor="content">Converted Markdown</Label>
+              <Textarea
+                id="content"
+                name="content"
+                placeholder="Converted markdown content will appear here..."
+                rows={10}
+                value={convertedMarkdown}
+                onChange={(e) => setConvertedMarkdown(e.target.value)}
+              />
+            </>
+          )}
+        </div>
+      )}
+
+      <div className="space-y-2">
         <Label htmlFor="excerpt">Excerpt</Label>
         <Textarea
           id="excerpt"
@@ -143,27 +250,6 @@ export default function UploadArticleForm() {
           onChange={(e) => setExcerptInput(e.target.value)}
         />
         <p className="text-sm text-gray-500">This excerpt is the portion of text that is displayed on the overview screen.</p>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="content">Content *</Label>
-        <Textarea
-          id="content"
-          name="content"
-          placeholder="Full article content (supports Markdown)"
-          rows={10}
-          required
-          value={contentInput}
-          onChange={(e) => {
-            const newContent = e.target.value;
-            setContentInput(newContent);
-            // Auto-populate excerpt if it is still empty
-            if (!excerptInput.trim()) {
-              const computedExcerpt = newContent.split(/\s+/).slice(0, 100).join(" ");
-              setExcerptInput(computedExcerpt);
-            }
-          }}
-        />
       </div>
 
       <div className="space-y-2">
@@ -225,6 +311,7 @@ export default function UploadArticleForm() {
           id="publishDate"
           name="publishDate"
           placeholder="Leave blank to use today's date"
+          defaultValue={new Date().toISOString().split('T')[0]}
         />
         <p className="text-sm text-gray-500">If left blank, today's date will be used.</p>
       </div>
