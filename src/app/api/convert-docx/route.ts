@@ -1,51 +1,42 @@
 import { NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { randomBytes } from 'crypto';
 import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
 
-const execPromise = promisify(exec);
+export async function POST(request: Request) {
+  const formData = await request.formData();
+  const file = formData.get('docxFile') as File;
+  if (!file) {
+    return new NextResponse('No file uploaded', { status: 400 });
+  }
 
-/* Declare tempFilePath before try block */
-let tempFilePath: string = '';
-
-export async function POST(req: Request) {
   try {
-    const formData = await req.formData();
-    const file = formData.get('docxFile');
-    if (!file || !(file instanceof File)) {
-      return new NextResponse('No file provided', { status: 400 });
-    }
+    // Save file to a temporary directory
+    const tempDir = tmpdir();
+    const randomName = randomBytes(16).toString('hex');
+    const tempFilePath = join(tempDir, `${randomName}.docx`);
 
-    // Write the uploaded file to a temporary location
-    const tempDir = os.tmpdir();
-    tempFilePath = path.join(tempDir, `upload-${Date.now()}.docx`);
-    const fileArrayBuffer = await file.arrayBuffer();
-    const buffer = new Uint8Array(fileArrayBuffer);
-    fs.writeFileSync(tempFilePath, buffer);
+    const buffer = new Uint8Array(await file.arrayBuffer());
+    await fs.writeFile(tempFilePath, buffer);
 
-    // Run pandoc to convert DOCX to Markdown
-    const { stdout, stderr } = await execPromise(`pandoc "${tempFilePath}" -f docx -t markdown`);
-    if (stderr) {
-      console.error(stderr);
-    }
-
-    return new NextResponse(stdout, {
-      status: 200,
-      headers: { 'Content-Type': 'text/plain' }
+    // Use pandoc to convert DOCX to Markdown
+    const markdown = await new Promise<string>((resolve, reject) => {
+      exec(`pandoc "${tempFilePath}" -f docx -t markdown`, (error, stdout, stderr) => {
+        // Clean up temporary file
+        fs.unlink(tempFilePath);
+        if (error) {
+          console.error('Pandoc conversion error:', stderr);
+          return reject(new Error('Conversion failed'));
+        }
+        resolve(stdout);
+      });
     });
+
+    return new NextResponse(markdown, { status: 200 });
   } catch (error: any) {
-    console.error(error);
-    return new NextResponse('Conversion failed', { status: 500 });
-  } finally {
-    // Cleanup temporary file if it exists
-    try {
-      if (tempFilePath) {
-        fs.unlinkSync(tempFilePath);
-      }
-    } catch (e) {
-      // Ignore cleanup errors
-    }
+    console.error('Error converting DOCX:', error);
+    return new NextResponse('Conversion error', { status: 500 });
   }
 }

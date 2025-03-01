@@ -313,7 +313,7 @@ export default function UploadArticleForm() {
           placeholder="Leave blank to use today's date"
           defaultValue={new Date().toISOString().split('T')[0]}
         />
-        <p className="text-sm text-gray-500">If left blank, today's date will be used.</p>
+        <p className="text-sm text-gray-500">If left blank, today&apos;s date will be used.</p>
       </div>
 
       <div className="space-y-2">
