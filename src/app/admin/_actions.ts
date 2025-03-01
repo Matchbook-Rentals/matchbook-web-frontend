@@ -22,7 +22,7 @@ export async function setRole(formData: FormData) {
 }
 
 export async function removeRole(formData: FormData) {
-  const client = await clerkClient()
+  const client = clerkClient
 
   try {
     const res = await client.users.updateUser(formData.get('id') as string, {

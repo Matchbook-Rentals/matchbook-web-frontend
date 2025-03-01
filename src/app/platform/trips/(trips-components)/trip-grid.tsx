@@ -64,16 +64,11 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
     <>
       <div className="grid mx-auto  grid-cols-1 justify-between gap-y-6 max-w-[2000px]">
         {trips.map((trip) => (
-          <Link
-            href={`/platform/trips/${trip.id}?tab=recommended`}
-            key={trip.id}
-            className="block hover:no-underline"
-          >
             <TripCard
+            key={trip.id}
               trip={trip}
               onDelete={handleDelete}
             />
-          </Link>
         ))}
       </div>
     </>
