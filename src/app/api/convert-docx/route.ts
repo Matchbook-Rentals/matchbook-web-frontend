@@ -4,6 +4,8 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { randomBytes } from 'crypto';
 import { exec } from 'child_process';
+import mammoth from 'mammoth';
+import TurndownService from 'turndown';
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -13,26 +15,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Save file to a temporary directory
-    const tempDir = tmpdir();
-    const randomName = randomBytes(16).toString('hex');
-    const tempFilePath = join(tempDir, `${randomName}.docx`);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    // Convert DOCX to HTML using mammoth
+    const result = await mammoth.convertToHtml({ buffer });
+    const html = result.value;
 
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    await fs.writeFile(tempFilePath, buffer);
-
-    // Use pandoc to convert DOCX to Markdown
-    const markdown = await new Promise<string>((resolve, reject) => {
-      exec(`pandoc "${tempFilePath}" -f docx -t markdown`, (error, stdout, stderr) => {
-        // Clean up temporary file
-        fs.unlink(tempFilePath);
-        if (error) {
-          console.error('Pandoc conversion error:', stderr);
-          return reject(new Error('Conversion failed'));
-        }
-        resolve(stdout);
-      });
-    });
+    // Convert HTML to Markdown using turndown
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(html);
 
     return new NextResponse(markdown, { status: 200 });
   } catch (error: any) {
