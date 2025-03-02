@@ -66,6 +66,7 @@ export async function uploadArticle(formData: FormData) {
         imageUrl,
         published,
         authorName,
+        authorTitle,
         createdAt: createdAtValue,
         updatedAt: new Date(),
       },

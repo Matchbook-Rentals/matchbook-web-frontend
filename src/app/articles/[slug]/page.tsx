@@ -48,11 +48,12 @@ export default async function ArticlePage({ params }: Params) {
       <article className="prose prose-sm md:prose-base lg:prose-lg mb-8">
         <ReactMarkdown
           components={{
-            h1: ({node, ...props}) => <h1 className="text-[36px] font-semibold mb-1" {...props} />,
-            h2: ({node, ...props}) => <h2 className="text-[32px] font-semibold mb-1" {...props} />,
-            p: ({node, ...props}) => <p className="mb-6" {...props} />,
+            h1: ({node, ...props}) => <h1 className="text-[36px] font-semibold my-3" {...props} />,
+            h2: ({node, ...props}) => <h2 className="text-[32px] font-semibold my-3" {...props} />,
+            p: ({node, ...props}) => <p className="mb-2" {...props} />,
             img: ({node, ...props}) => <img className="w-full h-auto my-4" {...props} />,
-            a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />
+            a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
+            ul: ({node, ...props}) => <ul className="list-disc ml-4" {...props} />
           }}
         >{article.content}</ReactMarkdown>
       </article>
