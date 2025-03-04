@@ -7,12 +7,16 @@ interface SearchContainerProps {
   className?: string;
   containerStyles?: string;
   inputStyles?: string;
+  searchButtonClassNames?: string;
+  searchIconColor?: string;
 }
 
 const SearchContainer: React.FC<SearchContainerProps> = ({
   className,
   containerStyles,
-  inputStyles
+  inputStyles,
+  searchButtonClassNames,
+  searchIconColor
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -35,12 +39,24 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
     <>
       <div className={`mx-auto hidden sm:block p-2 ${className || ""}`}>
         <div className={`relative`}>
-          <SearchInputsDesktop hasAccess={hasAccess} inputClassName={inputStyles} className={containerStyles} />
+          <SearchInputsDesktop 
+            hasAccess={hasAccess} 
+            inputClassName={inputStyles} 
+            className={containerStyles} 
+            searchButtonClassNames={searchButtonClassNames}
+            searchIconColor={searchIconColor}
+          />
         </div>
       </div>
       <div className={`mx-auto block sm:hidden p-2 ${className || ""}`}>
         <div className={`relative ${containerStyles || ""}`}>
-          <SearchInputsMobile hasAccess={hasAccess} inputClassName={inputStyles} className={containerStyles} />
+          <SearchInputsMobile 
+            hasAccess={hasAccess} 
+            inputClassName={inputStyles} 
+            className={containerStyles} 
+            searchButtonClassNames={searchButtonClassNames}
+            searchIconColor={searchIconColor}
+          />
         </div>
       </div>
     </>

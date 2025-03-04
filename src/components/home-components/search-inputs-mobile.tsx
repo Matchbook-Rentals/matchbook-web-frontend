@@ -22,6 +22,8 @@ interface SearchInputsMobileProps {
   hasAccess: boolean;
   className?: string;
   inputClassName?: string;
+  searchButtonClassNames?: string;
+  searchIconColor?: string;
 }
 
 const PRESET_CITIES = [
@@ -35,7 +37,9 @@ const PRESET_CITIES = [
 const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   hasAccess,
   className,
-  inputClassName
+  inputClassName,
+  searchButtonClassNames,
+  searchIconColor = 'text-white'
 }) => {
   const [activeInput, setActiveInput] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -363,9 +367,9 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         className={`w-full mt-3 p-3 ${hasAccess && selectedLocation.lat && selectedLocation.lng
           ? 'cursor-pointer'
           : 'cursor-not-allowed opacity-50'
-          } bg-primaryBrand rounded-full`}
+          } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
       >
-        <FaSearch className="text-white mx-auto" size={20} />
+        <FaSearch className={`${searchIconColor} mx-auto`} size={20} />
       </button>
     </motion.div>
   );

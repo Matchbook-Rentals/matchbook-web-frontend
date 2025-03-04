@@ -17,6 +17,8 @@ interface SearchInputsDesktopProps {
   hasAccess: boolean;
   className?: string;
   inputClassName?: string;
+  searchButtonClassNames?: string;
+  searchIconColor?: string;
 }
 
 // Add this type definition
@@ -25,7 +27,9 @@ type ActiveContentType = 'location' | 'date' | 'guests' | null;
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   hasAccess,
   className,
-  inputClassName
+  inputClassName,
+  searchButtonClassNames,
+  searchIconColor = 'text-white'
 }) => {
   const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -263,12 +267,12 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
               }
             }}
             className={`w-auto p-3 ${hasAccess ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-              } bg-primaryBrand rounded-full`}
+              } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
           >
             {locationDisplayValue && (!selectedLocation?.lat || !selectedLocation?.lng) ? (
-              <ImSpinner8 className="text-white mx-auto animate-spin" size={20} />
+              <ImSpinner8 className={`${searchIconColor} mx-auto animate-spin`} size={20} />
             ) : (
-              <FaSearch className="text-white mx-auto" size={20} />
+              <FaSearch className={`${searchIconColor} mx-auto`} size={20} />
             )}
           </button>
         </div>

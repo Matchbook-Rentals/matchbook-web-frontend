@@ -21,7 +21,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
     <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
 
 
-      <div className='flex items-end pb-6'>
+      <div className='flex items-end pb-2'>
         <div className='flex flex-col w-1/2'>
           <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
           <Button onClick={() => setShowSearch(prev => !prev)} className='w-fit rounded-full text-[16px]'> New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} /> </Button>
@@ -45,13 +45,15 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             animate={{ height: "auto", opacity: 1, scale: 1 }}
             exit={{ height: 0, opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex justify-center my-4 "
+            className="flex justify-center mt-4 mb-8 "
           >
             <div className="flex w-full justify-center">
               <SearchContainer
                 className="z-100"
-                containerStyles='bg-background border-[1px] border-gray-200 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                containerStyles='bg-background rounded-sm sm:rounded-full drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                 inputStyles='bg-background'
+                searchButtonClassNames='bg-background hover:bg-gray-200'
+                searchIconColor='text-[#404040]'
               />
             </div>
           </motion.div>

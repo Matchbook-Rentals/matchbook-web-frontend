@@ -149,6 +149,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               {userRole === 'admin' && (
                 <Link className='hover:bg-gray-200 border-b-1 p-1' href='/admin'>Admin Dashboard</Link>
               )}
+              {userRole === 'admin' && (
+                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/platform/messages'>Messages</Link>
+              )}
               
               {/* Show Searches link based on role */}
               {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
