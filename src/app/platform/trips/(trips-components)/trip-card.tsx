@@ -2,7 +2,7 @@
 import { Trip } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
-import { Trash2, MoreHorizontal } from 'lucide-react';
+import { Trash, MoreHorizontal } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
@@ -97,22 +97,14 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
 
   return (
     <>
-      <div className="border border-blue-500 rounded-md p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="space-y-1">
-          <h2 className="font-medium text-gray-900">{trip.locationString}</h2>
-          <p className="text-sm text-gray-600">{dateRangeText}</p>
-          <p className="text-sm text-gray-600">{trip.numAdults} adults, {trip.numChildren} children, {trip.numPets} pets</p>
-        </div>
-        <div className="flex flex-col  items-start md:items-center gap-3 w-full md:w-auto">
-          <div className="text-right font-medium">{getPriceDisplay()}</div>
-          <div className="flex gap-2 w-full md:w-auto">
-            <Button
-              className="bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md px-4 py-2 text-sm font-medium w-full md:w-auto"
-              variant="ghost"
-              onClick={() => router.push(`trips/${trip.id}`)}
-            >
-              Continue Search
-            </Button>
+      <div className="border border-blueBrand rounded-md p-2 md:p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4">
+        <div className="flex justify-between items-start w-full md:w-auto">
+          <div className="space-y-1">
+            <h2 className="font-medium text-gray-900">{trip.locationString}</h2>
+            <p className="text-base text-gray-600">{dateRangeText}</p>
+            <p className="text-base text-gray-600">{trip.numAdults} adults, {trip.numChildren} children, {trip.numPets} pets</p>
+          </div>
+          <div className="md:hidden">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -124,19 +116,57 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-40 p-2">
+              <PopoverContent className="w-fit p-1">
                 <Button
                   variant="ghost"
-                  className="w-full text-left"
+                  className="w-full text-left flex items-center gap-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(trip.id);
                   }}
                 >
-                  Delete search
+                 <Trash className="h-4 w-4" /> Delete search
                 </Button>
               </PopoverContent>
             </Popover>
+          </div>
+        </div>
+        <div className="flex flex-col items-start md:items-center gap-3 w-full md:w-auto">
+          <div className="text-right font-medium">{getPriceDisplay()}</div>
+          <div className="flex justify-center gap-2 w-full md:w-auto">
+            <Button
+              className="bg-blueBrand/50 hover:bg-blueBrand/80 text-[#404040] rounded-md px-4 py-2 text-sm font-medium flex-1 md:w-auto"
+              variant="ghost"
+              onClick={() => router.push(`trips/${trip.id}`)}
+            >
+              Continue Search
+            </Button>
+            <div className="hidden md:block">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-md h-9 w-9 border border-gray-200"
+                  >
+                    <MoreHorizontal className="h-5 w-5 text-gray-500" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit p-1">
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left flex items-center gap-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(trip.id);
+                    }}
+                  >
+                   <Trash className="h-4 w-4" /> Delete search
+                  </Button>
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
         </div>
       </div>

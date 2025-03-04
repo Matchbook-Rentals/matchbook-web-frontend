@@ -7,24 +7,34 @@ import { PAGE_MARGIN } from '@/constants/styles';
 import { Trip } from '@prisma/client';
 import SearchContainer from '@/components/home-components/searchContainer';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ChevronDown } from 'lucide-react';
 
 interface TripsContentProps {
   trips: Trip[];
 }
 
 const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(trips.length === 0);
 
   return (
     <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
-      <div className='flex justify-between'>
-        <h1 className="font-montserrat-regular text-[14px]">Searches</h1>
-        <p
-          className='underline hover:font-medium text-[14px] cursor-pointer'
-          onClick={() => setShowSearch(!showSearch)}
-        >
-          New Search
-        </p>
+
+
+      <div className='flex items-end pb-6'>
+        <div className='flex flex-col w-1/2'>
+          <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
+          <Button onClick={() => setShowSearch(prev => !prev)} className='w-fit rounded-full text-[16px]'> New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} /> </Button>
+        </div>
+        <div className="hidden sm:block w-full md:w-1/2 mx-auto ">
+          <Image
+            src="/milwaukee-downtown.png"
+            alt="Village footer"
+            width={1200}
+            height={516}
+            className="w-full max-w-[1000px] h-auto object-cover mx-auto p-0 my-0"
+          />
+        </div>
       </div>
 
       {/* Search container with Framer Motion animation */}
@@ -48,18 +58,13 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         )}
       </AnimatePresence>
 
-      <div className="w-full mx-auto my-4 sm:mb-4">
-        <Image
-          src="/milwaukee-downtown.png"
-          alt="Village footer"
-          width={1200}
-          height={516}
-          className="w-full max-w-[1000px] h-auto object-cover mx-auto p-0 my-0"
-        />
-        <div className='bg-[#5C9AC5] rounded-md w-full h-[14px] sm:h-[21px] -translate-y-[2px]' />
-      </div>
-
-      <TripGrid initialTrips={trips} />
+      {trips.length > 0 ? (
+        <TripGrid initialTrips={trips} />
+      ) : (
+        <div className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+          <p className="text-lg text-gray-600">You currently don't have any searches. Fill out your search details and get started!</p>
+        </div>
+      )}
     </div>
   );
 };
