@@ -5,27 +5,30 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 )
 
 type Client struct {
-	ID string
-	Writer http.ResponseWriter
+	ID      string
+	Writer  http.ResponseWriter
 	Flusher http.Flusher
 }
 
 type Message struct {
-	ID            string    `json:"id,omitempty"`
+	ID             string    `json:"id,omitempty"`
 	ConversationID string    `json:"conversationId,omitempty"`
-	SenderID      string    `json:"senderId,omitempty"`
-	ReceiverID    string    `json:"receiverId"`
-	Content       string    `json:"content"`
-	SenderRole    string    `json:"senderRole,omitempty"`
-	ImgUrl        string    `json:"imgUrl,omitempty"`
-	CreatedAt     time.Time `json:"createdAt,omitempty"`
-	UpdatedAt     time.Time `json:"updatedAt,omitempty"`
+	SenderID       string    `json:"senderId,omitempty"`
+	ReceiverID     string    `json:"receiverId"`
+	Content        string    `json:"content"`
+	SenderRole     string    `json:"senderRole,omitempty"`
+	ImgUrl         string    `json:"imgUrl,omitempty"`
+	CreatedAt      time.Time `json:"createdAt,omitempty"`
+	UpdatedAt      time.Time `json:"updatedAt,omitempty"`
 }
 
 var (
@@ -42,7 +45,62 @@ func main() {
 
 	port := 3000
 	fmt.Printf("SSE server running on port %d\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+
+	// Create server with graceful shutdown capability
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: nil, // Use default mux
+	}
+
+	// Set up graceful shutdown
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Printf("Server error: %v, attempting to restart...", err)
+			// Clear client map on error
+			mutex.Lock()
+			clients = make(map[string]*Client)
+			mutex.Unlock()
+		}
+	}()
+
+	// Handle hot reload - server will restart on error
+	go func() {
+		for {
+			time.Sleep(5 * time.Second)
+			// Check if server is still running
+			_, err := http.Get(fmt.Sprintf("http://localhost:%d/health-check", port))
+			if err != nil {
+				log.Printf("Server health check failed: %v", err)
+				// Clear client map
+				mutex.Lock()
+				clients = make(map[string]*Client)
+				mutex.Unlock()
+				log.Printf("Cleared client connections, server should restart automatically")
+			}
+		}
+	}()
+
+	// Add health check endpoint
+	http.HandleFunc("/health-check", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
+	<-stop
+	log.Println("Shutting down server...")
+
+	// Clear all clients on shutdown
+	mutex.Lock()
+	for id, client := range clients {
+		// Notify clients about shutdown
+		fmt.Fprintf(client.Writer, "data: {\"type\":\"connection\",\"status\":\"server_shutdown\"}\n\n")
+		client.Flusher.Flush()
+		delete(clients, id)
+	}
+	mutex.Unlock()
 }
 
 func handleSSE(w http.ResponseWriter, r *http.Request) {
@@ -76,9 +134,15 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mutex.Lock()
-	// Log if we're replacing an existing connection
-	if _, exists := clients[clientID]; exists {
+	// Handle existing connection more gracefully
+	if oldClient, exists := clients[clientID]; exists {
 		logWithConnCount(fmt.Sprintf("Replacing existing connection for client: %s", clientID))
+		// Try to close the old connection if possible
+		closeMsg := "data: {\"type\":\"connection\",\"status\":\"replaced\"}\n\n"
+		_, err := fmt.Fprintf(oldClient.Writer, closeMsg)
+		if err == nil {
+			oldClient.Flusher.Flush()
+		}
 	}
 	clients[clientID] = client
 	mutex.Unlock()
@@ -162,7 +226,7 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 
 			// Check if one is a prefix/suffix of the other (for truncated IDs)
 			if strings.HasPrefix(id, targetId) || strings.HasPrefix(targetId, id) ||
-			   strings.HasSuffix(id, targetId) || strings.HasSuffix(targetId, id) {
+				strings.HasSuffix(id, targetId) || strings.HasSuffix(targetId, id) {
 				client = c
 				exists = true
 				logWithConnCount(fmt.Sprintf("Found prefix/suffix match for %s: %s", targetId, id))

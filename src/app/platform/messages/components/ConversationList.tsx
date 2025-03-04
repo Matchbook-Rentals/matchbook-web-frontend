@@ -33,21 +33,13 @@ interface ConversationListProps {
   onSelectConversation: (index: number) => void;
   onCreateConversation: (email: string) => void;
   user: UserResource;
-  hasOtherRoleConversations?: boolean;
-  otherRole?: string;
-  currentRole?: string;
-  onRoleSwitch?: () => void;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
   onSelectConversation,
   onCreateConversation,
-  user,
-  hasOtherRoleConversations = false,
-  otherRole = '',
-  currentRole = '',
-  onRoleSwitch
+  user
 }) => {
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
@@ -116,19 +108,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             })
           ) : (
             <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-              {hasOtherRoleConversations ? (
-                <>
-                  <p className="text-center mb-4">
-                    You don&apos;t have any {currentRole} messages.
-                  </p>
-                  <Button
-                    variant="default"
-                    onClick={onRoleSwitch}
-                  >
-                    Switch to {otherRole} messages
-                  </Button>
-                </>
-              ) : (
+              {(
                 <p>No conversations yet.</p>
               )}
             </div>

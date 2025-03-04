@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from "@clerk/nextjs";
 import { Conversation } from '@prisma/client';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations } from '@/app/actions/conversations';
@@ -327,75 +326,19 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
   };
 
-  // Filter conversations based on the selected role
-  const filteredConversations = allConversations.filter(conversation => {
-    // Find the current user's participant record in this conversation
-    const userParticipant = conversation.participants.find(
-      participant => participant.userId === user.id
-    );
+  // Use all conversations instead of filtering by role
+  const filteredConversations = allConversations;
 
-    // Only include this conversation if the user's role matches the selected userType
-    return userParticipant && userParticipant.role === userType;
-  });
-
-  // Check if we have conversations in the other role
-  const otherRole = userType === 'Tenant' ? 'Host' : 'Tenant';
-  const hasOtherRoleConversations = allConversations.some(conversation => {
-    const userParticipant = conversation.participants.find(
-      participant => participant.userId === user.id
-    );
-    return userParticipant && userParticipant.role === otherRole;
-  });
+  // No longer checking for other role conversations since we're showing all
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-start p-2">
-        <Tabs
-          value={userType}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
-          <TabsList className="grid w-[200px] grid-cols-2">
-            <TabsTrigger
-              value="Tenant"
-              className="data-[state=active]:bg-gray-200 relative"
-            >
-              Tenant
-              {unreadTenantMessages > 0 && userType !== 'Tenant' && (
-                <span className="absolute -top-1 right-0 bg-red-500 z-10 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {unreadTenantMessages}
-                </span>
-              )}
-            </TabsTrigger>
-            <TabsTrigger
-              value="Host"
-              className="data-[state=active]:bg-gray-200 relative"
-            >
-              Host
-              {unreadHostMessages > 0 && userType !== 'Host' && (
-                <span className="absolute -top-1 right-0 bg-red-500  z-10 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {unreadHostMessages}
-                </span>
-              )}
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
       <div className="flex flex-1 overflow-hidden">
         <ConversationList
           conversations={filteredConversations}
-          onSelectConversation={index => {
-            // Find the actual index in allConversations for the selected filtered conversation
-            const selectedConversationId = filteredConversations[index].id;
-            const actualIndex = allConversations.findIndex(conv => conv.id === selectedConversationId);
-            handleSelectConversation(actualIndex);
-          }}
+          onSelectConversation={handleSelectConversation}
           onCreateConversation={handleCreateConversation}
           user={user as any} // Cast to any to bypass the Clerk UserResource type issue
-          hasOtherRoleConversations={hasOtherRoleConversations}
-          otherRole={otherRole}
-          currentRole={userType}
-          onRoleSwitch={() => setUserType(otherRole as 'Host' | 'Tenant')}
         />
         <MessageArea
           selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex].id : null}
@@ -436,6 +379,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           >
             {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
           </button>
+          <div className="mt-4">
+            <h4 className="text-md font-semibold mb-2">SSE Log</h4>
+            <pre className="bg-gray-100 p-2 overflow-auto max-h-80 text-sm">{JSON.stringify(sseMessages, null, 2)}</pre>
+          </div>
         </div>
       </div>
     </div>
