@@ -1,5 +1,4 @@
 'use client'
-//IMports
 import React, { useState, useEffect } from 'react';
 import { useUser } from "@clerk/nextjs";
 import { Conversation } from '@prisma/client';
@@ -32,7 +31,7 @@ interface ExtendedConversation extends Conversation {
 // Define the message data interface to include imgUrl
 interface MessageData {
   content: string;
-  senderRole: 'Host' | 'Tenant'; // Update from 'Landlord' to 'Host'
+  senderRole: 'Host' | 'Tenant';
   conversationId: string;
   receiverId: string;
   imgUrl?: string;
@@ -40,7 +39,7 @@ interface MessageData {
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
-  const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant'); // Changed default from 'Host' to 'Tenant'
+  const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations || []);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -49,6 +48,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [isDeleting, setIsDeleting] = useState(false);
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
   const [unreadTenantMessages, setUnreadTenantMessages] = useState(0);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
@@ -80,7 +80,6 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     const connectSSE = () => {
       if (retryCount >= maxRetries) {
         console.error('Max SSE connection retries reached');
-        // Wait for a longer period before trying again
         setTimeout(() => {
           retryCount = 0;
           connectSSE();
@@ -94,10 +93,13 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       }
 
       console.log(`Connecting to SSE: ${url}`);
+      console.log('Initiating new SSE connection...');
+      setSseMessages(prev => [...prev, { type: 'info', message: `Initiating new SSE connection to: ${url}`, timestamp: new Date().toISOString() }]);
       eventSource = new EventSource(url);
 
       eventSource.onopen = () => {
         console.log('SSE connection opened');
+        setSseMessages(prev => [...prev, { type: 'success', message: 'SSE connection opened successfully', timestamp: new Date().toISOString() }]);
         retryCount = 0; // Reset retry count on successful connection
       };
 
@@ -189,6 +191,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
       eventSource.onerror = (error) => {
         console.error('SSE connection error:', error);
+        setSseMessages(prev => [...prev, { 
+          type: 'error', 
+          message: `SSE connection error encountered`,
+          timestamp: new Date().toISOString() 
+        }]);
 
         // Close the current connection
         if (eventSource) {
@@ -199,6 +206,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         // Attempt to reconnect after delay
         retryCount++;
         console.log(`Retrying SSE connection (${retryCount}/${maxRetries}) in ${retryDelay}ms`);
+        setSseMessages(prev => [...prev, { 
+          type: 'info', 
+          message: `Retrying SSE connection (attempt ${retryCount}/${maxRetries}) in ${retryDelay}ms`,
+          timestamp: new Date().toISOString() 
+        }]);
         setTimeout(connectSSE, retryDelay);
       };
     };
@@ -227,6 +239,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setUnreadHostMessages(0);
     } else if (userParticipant && userParticipant.role === 'Tenant') {
       setUnreadTenantMessages(0);
+    }
+    
+    // On mobile, hide the sidebar when a conversation is selected
+    if (window.innerWidth < 768) {
+      setSidebarVisible(false);
     }
   };
 
@@ -326,26 +343,47 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
   };
 
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
   // Use all conversations instead of filtering by role
   const filteredConversations = allConversations;
 
-  // No longer checking for other role conversations since we're showing all
-
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-[85vh] bg-background ">
+      {/* Header */}
+      <div className="w-full bg-background md:hidden text-black p-3 flex justify-between items-center shadow-md">
+        <button className="md:hidden" onClick={toggleSidebar}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+
       <div className="flex flex-1 overflow-hidden">
-        <ConversationList
-          conversations={filteredConversations}
-          onSelectConversation={handleSelectConversation}
-          onCreateConversation={handleCreateConversation}
-          user={user as any} // Cast to any to bypass the Clerk UserResource type issue
-        />
-        <MessageArea
-          selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex].id : null}
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          currentUserId={user?.id}
-        />
+        {/* Conversation List / Sidebar */}
+        <div 
+          className={`${sidebarVisible ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/3 h-full transition-all duration-300`}
+        >
+          <ConversationList
+            conversations={filteredConversations}
+            onSelectConversation={handleSelectConversation}
+            onCreateConversation={handleCreateConversation}
+            user={user as any}
+          />
+        </div>
+
+        {/* Chat Window */}
+        <div className={`flex-1 ${sidebarVisible ? 'hidden md:block' : 'block'}`}>
+          <MessageArea
+            selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex] : null}
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            currentUserId={user?.id}
+            onBack={toggleSidebar}
+          />
+        </div>
       </div>
 
       {/* Testing Tools */}
@@ -360,7 +398,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             onChange={(e) => setTestEmail(e.target.value)}
           />
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 rounded-r-md hover:bg-blue-600"
             onClick={() => {
               if (testEmail.trim()) {
                 handleCreateConversation(testEmail);
@@ -371,17 +409,56 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             Start Test Conversation
           </button>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-between mb-3">
           <button
-            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-red-300"
+            className="px-4 py-2 bg-red-500  rounded-md hover:bg-red-600 disabled:bg-red-300"
             onClick={handleDeleteAllConversations}
             disabled={isDeleting || allConversations.length === 0}
           >
             {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
           </button>
-          <div className="mt-4">
-            <h4 className="text-md font-semibold mb-2">SSE Log</h4>
-            <pre className="bg-gray-100 p-2 overflow-auto max-h-80 text-sm">{JSON.stringify(sseMessages, null, 2)}</pre>
+          <button
+            className="px-4 py-2 bg-gray-500  rounded-md hover:bg-gray-600"
+            onClick={() => setSseMessages([])}
+          >
+            Clear SSE Log
+          </button>
+        </div>
+        
+        {/* SSE Log Section */}
+        <div className="mt-6 bg-gray-900 rounded-lg p-4">
+          <h4 className="text-md font-semibold mb-2 ">SSE Connection Log</h4>
+          <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm">
+            {sseMessages.length > 0 ? (
+              <div className="space-y-2">
+                {sseMessages.map((msg, index) => (
+                  <div key={index} className={`p-2 rounded ${
+                    msg.type === 'error' ? 'bg-red-900 text-red-100' :
+                    msg.type === 'success' ? 'bg-green-900 text-green-100' :
+                    msg.type === 'info' ? 'bg-blue-900 text-blue-100' :
+                    'bg-gray-700 '
+                  }`}>
+                    <div className="flex justify-between">
+                      <span className="font-medium">
+                        {msg.type === 'error' ? '❌ Error' : 
+                         msg.type === 'success' ? '✅ Success' :
+                         msg.type === 'info' ? 'ℹ️ Info' : 'Message'}
+                      </span>
+                      {msg.timestamp && (
+                        <span className="text-xs opacity-80">
+                          {new Date(msg.timestamp).toLocaleTimeString()}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-1 text-xs font-mono">
+                      {msg.message || JSON.stringify(msg, null, 2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
+            )}
           </div>
         </div>
       </div>

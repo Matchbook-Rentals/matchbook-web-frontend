@@ -42,7 +42,7 @@ export function EmptyState({ isFiltered }: EmptyStateProps) {
           </div>
           <div className="text-xs text-muted-foreground mt-4">
             {searchParams.has('search') && (
-              <div>Search: "{searchParams.get('search')}"</div>
+              <div>Search: &quot;{searchParams.get('search')}&quot;</div>
             )}
             {searchParams.has('role') && (
               <div>Role filter: {searchParams.get('role')}</div>
@@ -56,7 +56,7 @@ export function EmptyState({ isFiltered }: EmptyStateProps) {
           </div>
           <h3 className="text-lg font-medium mb-2">No users found</h3>
           <p className="text-muted-foreground mb-4">
-            There are no users in the system yet. When users sign up, they'll appear here.
+            There are no users in the system yet. When users sign up, they&apos;ll appear here.
           </p>
           <Button 
             onClick={() => router.refresh()}

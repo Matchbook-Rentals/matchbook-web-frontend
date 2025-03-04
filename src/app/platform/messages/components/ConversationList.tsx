@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Conversation } from '@prisma/client';
 import { UserResource } from '@clerk/types';
 
@@ -41,6 +38,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
   onCreateConversation,
   user
 }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -64,58 +64,97 @@ const ConversationList: React.FC<ConversationListProps> = ({
     };
   };
 
-  return (
-    <Card className="w-1/3 bg-gray-200 h-[75vh] flex flex-col pb-4">
-      <CardHeader>
-        <CardTitle className='text-center'>Conversations</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-1 flex flex-col">
-        <ScrollArea className="flex-1 mb-4">
-          {conversations && conversations.length > 0 ? (
-            conversations.map((conv, index) => {
-              const { displayName, imageUrl } = getParticipantInfo(conv, user);
-              const lastMessage = conv.messages && conv.messages.length > 0
-                ? conv.messages[conv.messages.length - 1]
-                : null;
+  // Filter conversations based on search term
+  const filteredConversations = conversations.filter(conv => {
+    const { displayName } = getParticipantInfo(conv, user);
+    return displayName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
-              return (
-                <Card
-                  key={conv.id}
-                  className="w-full mb-2 cursor-pointer border bg-background hover:bg-gray-100 transition-colors duration-200"
-                  onClick={() => onSelectConversation(index)}
-                >
-                  <CardContent className="p-4 flex items-start">
-                    <img
-                      onMouseOver={() => console.log(conv)}
-                      src={imageUrl || "/placeholder-avatar.png"}
-                      className="w-10 h-10 rounded-full mr-2 flex-shrink-0"
-                      alt={displayName}
-                    />
-                    <div className="flex flex-col flex-grow min-w-0">
-                      <div className="flex justify-between items-start w-full">
-                        <span className="text-xs text-black">{displayName}</span>
-                        <span className="text-xs text-black ml-2 flex-shrink-0">
-                          {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString() : 'No messages'}
-                        </span>
-                      </div>
-                      <span className="text-md text-black truncate">
-                        {lastMessage ? lastMessage.content : 'Start a conversation'}
+  return (
+    <div className="h-full bg-background flex flex-col overflow-hidden">
+      {/* Search Bar */}
+      <div className="p-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full p-3 rounded-lg bg-gray-100 shadow-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      {/* Filter Dropdown */}
+      <div className="px-4 pb-2">
+        <div className="flex items-center text-white">
+          <span className="mr-2">All</span>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input 
+              type="checkbox" 
+              value="" 
+              className="sr-only peer"
+              checked={showUnreadOnly}
+              onChange={() => setShowUnreadOnly(!showUnreadOnly)}
+            />
+            <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <span className="ml-2">Unread Only</span>
+          </label>
+        </div>
+      </div>
+      
+      {/* Conversation List */}
+      <div className="flex-1 overflow-y-auto px-4 py-2">
+        {filteredConversations && filteredConversations.length > 0 ? (
+          filteredConversations.map((conv, index) => {
+            const { displayName, imageUrl } = getParticipantInfo(conv, user);
+            const lastMessage = conv.messages && conv.messages.length > 0
+              ? conv.messages[conv.messages.length - 1]
+              : null;
+            
+            return (
+              <div
+                key={conv.id}
+                className="w-full mb-3 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                onClick={() => onSelectConversation(index)}
+              >
+                <div className="p-3 flex items-start">
+                  <img
+                    src={imageUrl || "/placeholder-avatar.png"}
+                    className="w-10 h-10 rounded-full mr-3 flex-shrink-0"
+                    alt={displayName}
+                  />
+                  <div className="flex flex-col flex-grow min-w-0">
+                    <div className="flex justify-between items-start w-full">
+                      <span className="font-semibold text-sm text-gray-800">{displayName}</span>
+                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                        {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          hour12: true
+                        }) : ''}
                       </span>
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })
-          ) : (
-            <div className="flex flex-col items-center justify-center h-32 text-gray-500">
-              {(
-                <p>No conversations yet.</p>
-              )}
-            </div>
-          )}
-        </ScrollArea>
-      </CardContent>
-    </Card>
+                    <span className="text-sm text-gray-600 truncate">
+                      {lastMessage ? lastMessage.content : 'Start a conversation'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center h-32 text-gray-500">
+            <p>No conversations found</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

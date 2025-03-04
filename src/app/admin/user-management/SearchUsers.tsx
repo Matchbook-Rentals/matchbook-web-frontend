@@ -197,7 +197,7 @@ export const SearchUsers = () => {
         </div>
         
         {searchParams.has('search') && (
-          <div>Showing results for: "{searchParams.get('search')}"</div>
+          <div>Showing results for: &quot;{searchParams.get('search')}&quot;</div>
         )}
       </div>
     </div>
