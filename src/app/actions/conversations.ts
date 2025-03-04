@@ -146,11 +146,14 @@ export async function createMessage(data: {
   conversationId: string;
   receiverId: string;
   imgUrl?: string;
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
 }) {
   const userId = await checkAuth();
 
   // Extract the fields that exist in the Prisma schema
-  const { content, conversationId, imgUrl } = data;
+  const { content, conversationId, imgUrl, fileName, fileKey, fileType } = data;
 
   // Create the message with only valid fields
   const message = await prisma.message.create({
@@ -159,6 +162,9 @@ export async function createMessage(data: {
       conversationId,
       senderId: userId,
       imgUrl,
+      fileName,
+      fileKey,
+      fileType,
     },
   });
 
@@ -177,6 +183,9 @@ export async function createMessage(data: {
         content: message.content,
         senderRole: data.senderRole,
         imgUrl: message.imgUrl,
+        fileName: message.fileName,
+        fileKey: message.fileKey,
+        fileType: message.fileType,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt
       }),

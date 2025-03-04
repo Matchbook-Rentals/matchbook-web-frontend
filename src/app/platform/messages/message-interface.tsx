@@ -28,13 +28,16 @@ interface ExtendedConversation extends Conversation {
   participants: ConversationParticipant[];
 }
 
-// Define the message data interface to include imgUrl
+// Define the message data interface to include file properties
 interface MessageData {
   content: string;
   senderRole: 'Host' | 'Tenant';
   conversationId: string;
   receiverId: string;
   imgUrl?: string;
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
 }
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
@@ -268,7 +271,13 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
   };
 
-  const handleSendMessage = async (newMessageInput: string, imgUrl?: string) => {
+  const handleSendMessage = async (
+    newMessageInput: string, 
+    fileUrl?: string, 
+    fileName?: string, 
+    fileKey?: string,
+    fileType?: string
+  ) => {
     if (selectedConversationIndex === null || !newMessageInput.trim()) return;
 
     const selectedConversation = allConversations[selectedConversationIndex];
@@ -290,8 +299,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       receiverId: otherParticipant.User.id
     };
 
-    if (imgUrl) {
-      messageData.imgUrl = imgUrl;
+    // Add file information if available
+    if (fileUrl) {
+      messageData.imgUrl = fileUrl; // Keep for backward compatibility
+      messageData.fileName = fileName;
+      messageData.fileKey = fileKey;
+      messageData.fileType = fileType;
     }
 
     const newMessage = await createMessage(messageData);

@@ -3,13 +3,22 @@ import { UploadButton } from "@/app/utils/uploadthing";
 import { PaperclipIcon, MicIcon, ArrowLeftIcon } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { FileObject, FilePreview } from '@/components/ui/file-preview';
+import { isImageFile, getFileUrl } from '@/lib/utils';
 
 interface MessageAreaProps {
   selectedConversation: any;
   messages: any[];
-  onSendMessage: (message: string, imgUrl?: string) => void;
+  onSendMessage: (message: string, fileUrl?: string, fileName?: string, fileKey?: string, fileType?: string) => void;
   currentUserId: string | undefined;
   onBack?: () => void;
+}
+
+interface MessageFile {
+  fileUrl: string;
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
 }
 
 interface UploadData {
@@ -33,8 +42,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   onBack
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
-  const [messageAttachments, setMessageAttachments] = useState<string[]>([]);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
+  const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -49,8 +58,19 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleSend = () => {
     if (newMessageInput.trim()) {
       // Only pass the attachment if it exists
-      const attachment = messageAttachments.length > 0 ? messageAttachments[0] : undefined;
-      onSendMessage(newMessageInput, attachment);
+      if (messageAttachments.length > 0) {
+        const attachment = messageAttachments[0];
+        onSendMessage(
+          newMessageInput, 
+          attachment.fileUrl, 
+          attachment.fileName, 
+          attachment.fileKey, 
+          attachment.fileType
+        );
+      } else {
+        onSendMessage(newMessageInput);
+      }
+      
       setNewMessageInput('');
       setMessageAttachments([]);
       scrollToBottom();
@@ -64,11 +84,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   const handleUploadFinish = (res: UploadData[]) => {
-    setMessageAttachments(prev => [...prev, ...res.map(r => r.url)]);
+    const attachments = res.map(r => ({
+      fileUrl: r.url,
+      fileName: r.name,
+      fileKey: r.key,
+      fileType: r.type
+    }));
+    setMessageAttachments(prev => [...prev, ...attachments]);
   };
 
-  const handleImageClick = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+  const handleFileClick = (file: MessageFile) => {
+    setSelectedFile(file);
   };
 
   // Get participant info for the header
@@ -110,10 +136,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               <ArrowLeftIcon size={20} />
             </button>
           )}
-          <img 
-            src={participantInfo.imageUrl} 
-            alt={participantInfo.displayName} 
-            className="w-10 h-10 rounded-full mr-3" 
+          <img
+            src={participantInfo.imageUrl}
+            alt={participantInfo.displayName}
+            className="w-10 h-10 rounded-full mr-3"
           />
           <span className="font-medium">{participantInfo.displayName}</span>
         </div>
@@ -129,9 +155,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       )}
 
       {/* Message Area */}
-      <div 
+      <div
         ref={messageContainerRef}
-        className="flex-1 overflow-y-auto p-4"
+        className="h-[90vh] md:h-[80vh] overflow-y-auto p-4"
       >
         {selectedConversation ? (
           messages.length > 0 ? (
@@ -144,23 +170,47 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                     className="w-8 h-8 rounded-full mr-2 self-end"
                   />
                 )}
-                <div 
+                <div
                   className={`max-w-[70%] p-3 rounded-lg shadow-md ${
-                    message.senderId === currentUserId 
-                      ? 'bg-white text-black' 
+                    message.senderId === currentUserId
+                      ? 'bg-white text-black'
                       : 'bg-gray-200 text-black'
                   }`}
                 >
                   {message.imgUrl && (
                     <div className="mb-2">
-                      <Image
-                        src={message.imgUrl}
-                        alt="Message Attachment"
-                        width={200}
-                        height={200}
-                        className="rounded cursor-pointer"
-                        onClick={() => handleImageClick(message.imgUrl)}
-                      />
+                      {isImageFile(message.fileName || '') ? (
+                        <Image
+                          src={message.imgUrl}
+                          alt="Message Attachment"
+                          width={200}
+                          height={200}
+                          className="rounded cursor-pointer"
+                          onClick={() => handleFileClick({
+                            fileUrl: message.imgUrl,
+                            fileName: message.fileName || 'attachment',
+                            fileKey: message.fileKey,
+                            fileType: message.fileType
+                          })}
+                        />
+                      ) : (
+                        <FilePreview
+                          file={{
+                            fileUrl: message.imgUrl,
+                            fileKey: message.fileKey || message.imgUrl,
+                            fileName: message.fileName || 'attachment',
+                            fileType: message.fileType
+                          }}
+                          previewSize="small"
+                          className="cursor-pointer"
+                          onClick={() => handleFileClick({
+                            fileUrl: message.imgUrl,
+                            fileName: message.fileName || 'attachment',
+                            fileKey: message.fileKey,
+                            fileType: message.fileType
+                          })}
+                        />
+                      )}
                     </div>
                   )}
                   <div>{message.content}</div>
@@ -192,15 +242,30 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         {/* Display message attachments */}
         <div className="flex flex-wrap gap-2 mb-2">
           {messageAttachments.map((attachment, index) => (
-            <div key={index} className="inline-block p-2 rounded bg-white">
-              <Image
-                src={attachment}
-                alt="Message Attachment"
-                width={100}
-                height={100}
-                className="cursor-pointer"
-                onClick={() => handleImageClick(attachment)}
-              />
+            <div key={index} className="inline-block rounded">
+              {isImageFile(attachment.fileName || '') ? (
+                <div className="p-2 bg-white">
+                  <Image
+                    src={attachment.fileUrl}
+                    alt="Message Attachment"
+                    width={100}
+                    height={100}
+                    className="cursor-pointer"
+                    onClick={() => handleFileClick(attachment)}
+                  />
+                </div>
+              ) : (
+                <FilePreview
+                  file={{
+                    fileUrl: attachment.fileUrl,
+                    fileKey: attachment.fileKey || attachment.fileUrl,
+                    fileName: attachment.fileName || 'attachment',
+                    fileType: attachment.fileType
+                  }}
+                  previewSize="small"
+                  onClick={() => handleFileClick(attachment)}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -216,7 +281,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             onKeyPress={handleKeyPress}
             disabled={!selectedConversation}
           />
-          
+
           <div className="flex items-center px-2">
             <div className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}>
               <UploadButton
@@ -234,14 +299,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 }}
               />
             </div>
-            
+
             <button
               className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
               disabled={!selectedConversation}
             >
               <MicIcon className="w-5 h-5" />
             </button>
-            
+
             <button
               className="p-2 mx-1 text-gray-600 hover:text-gray-800 disabled:opacity-50"
               onClick={handleSend}
@@ -255,19 +320,44 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       </div>
 
-      {/* Image Viewer Dialog */}
-      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
+      {/* File Viewer Dialog */}
+      <Dialog open={!!selectedFile} onOpenChange={(open) => !open && setSelectedFile(null)}>
         <DialogContent className="max-w-3xl" hideCloseButton={false}>
-          {selectedImage && (
-            <div className="flex justify-center items-center">
-              <Image
-                src={selectedImage}
-                alt="Enlarged Image"
-                width={800}
-                height={800}
-                className="max-h-[80vh] w-auto object-contain mt-6"
-                priority
-              />
+          {selectedFile && (
+            <div className="flex flex-col justify-center items-center">
+              <h3 className="text-lg font-medium mb-4">{selectedFile.fileName}</h3>
+              {isImageFile(selectedFile.fileName || '') ? (
+                <Image
+                  src={selectedFile.fileUrl}
+                  alt="Enlarged Image"
+                  width={800}
+                  height={800}
+                  className="max-h-[70vh] w-auto object-contain"
+                  priority
+                />
+              ) : (
+                <div className="flex flex-col items-center">
+                  <FilePreview
+                    file={{
+                      fileUrl: selectedFile.fileUrl,
+                      fileKey: selectedFile.fileKey || selectedFile.fileUrl,
+                      fileName: selectedFile.fileName || 'attachment',
+                      fileType: selectedFile.fileType,
+                    }}
+                    previewSize="large"
+                    allowDownload={true}
+                    allowPreview={true}
+                  />
+                  <a 
+                    href={selectedFile.fileUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Open File
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>

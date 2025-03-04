@@ -490,6 +490,9 @@ model Message {
   conversationId String
   isRead         Boolean  @default(false)
   imgUrl         String?
+  fileName       String?
+  fileKey        String?
+  fileType       String?
 
   sender       User          @relation("MessageSender", fields: [senderId], references: [id])
   conversation Conversation  @relation(fields: [conversationId], references: [id])
