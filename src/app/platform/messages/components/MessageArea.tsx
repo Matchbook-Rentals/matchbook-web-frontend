@@ -104,7 +104,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className="flex flex-col h-full bg-background">
       {/* Chat Header */}
       {selectedConversation ? (
-        <div className="bg-[#4A90E2] text-white p-4 flex items-center shadow-md">
+        <div className="bg-[#4A90E2]  p-4 flex items-center shadow-md">
           {onBack && (
             <button onClick={onBack} className="mr-3 md:hidden">
               <ArrowLeftIcon size={20} />
@@ -118,7 +118,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           <span className="font-medium">{participantInfo.displayName}</span>
         </div>
       ) : (
-        <div className="bg-[#4A90E2] text-white p-4 flex items-center shadow-md">
+        <div className="bg-[#4A90E2]  p-4 flex items-center shadow-md">
           {onBack && (
             <button onClick={onBack} className="mr-3 md:hidden">
               <ArrowLeftIcon size={20} />

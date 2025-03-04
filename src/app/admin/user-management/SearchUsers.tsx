@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select'
 import { Search, X, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { 
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -23,7 +23,7 @@ export const SearchUsers = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  
+
   const [isSearching, setIsSearching] = useState(false)
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
   const [roleFilter, setRoleFilter] = useState(searchParams.get('role') || 'all')
@@ -32,21 +32,21 @@ export const SearchUsers = () => {
 
   // Update URL when filters change
   const updateSearch = (
-    search: string, 
-    role: string = roleFilter, 
-    sortBy: string = sort, 
+    search: string,
+    role: string = roleFilter,
+    sortBy: string = sort,
     pageNum: number = page
   ) => {
     setIsSearching(true)
-    
+
     const params = new URLSearchParams()
     if (search) params.set('search', search)
     if (role && role !== 'all') params.set('role', role)
     if (sortBy && sortBy !== 'name') params.set('sort', sortBy)
     if (pageNum > 1) params.set('page', pageNum.toString())
-    
+
     router.push(`${pathname}?${params.toString()}`)
-    
+
     // Simulate loading state
     setTimeout(() => {
       setIsSearching(false)
@@ -92,11 +92,11 @@ export const SearchUsers = () => {
           </label>
           <div className="relative w-full">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              id="search" 
-              name="search" 
-              type="text" 
-              placeholder="Search by email, name, or ID..." 
+            <Input
+              id="search"
+              name="search"
+              type="text"
+              placeholder="Search by email, name, or ID..."
               className="pl-9 pr-9"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -174,9 +174,9 @@ export const SearchUsers = () => {
             </Button>
 
             {(searchTerm || roleFilter || sort !== 'name' || page > 1) && (
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 onClick={clearSearch}
                 aria-label="Clear all filters"
               >
@@ -191,13 +191,13 @@ export const SearchUsers = () => {
         <div className="flex items-center gap-1">
           <SlidersHorizontal className="h-4 w-4" />
           <span>
-            {roleFilter && roleFilter !== 'all' ? `Filtering by: ${roleFilter}` : "All roles"} • 
+            {roleFilter && roleFilter !== 'all' ? `Filtering by: ${roleFilter}` : "All roles"} •
             {` Sorting by: ${sort}`}
           </span>
         </div>
-        
+
         {searchParams.has('search') && (
-          <div>Showing results for: &quot;{searchParams.get('search')}&quot;</div>
+          <div>Showing results for: &#34;{searchParams.get('search')}&#34;</div>
         )}
       </div>
     </div>

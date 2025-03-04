@@ -64,7 +64,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         <TripGrid initialTrips={trips} />
       ) : (
         <div className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-          <p className="text-lg text-gray-600">You currently don't have any searches. Fill out your search details and get started!</p>
+          <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
         </div>
       )}
     </div>

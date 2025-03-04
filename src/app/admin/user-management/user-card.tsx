@@ -277,7 +277,7 @@ export function UserCard({ user }: UserCardProps) {
               <AlertDialogHeader>
                 <AlertDialogTitle>Remove User Role</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to remove {user.firstName}'s {userRole} role? This will revoke all permissions associated with this role.
+                  Are you sure you want to remove {user.firstName}&apos;s {userRole} role? This will revoke all permissions associated with this role.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

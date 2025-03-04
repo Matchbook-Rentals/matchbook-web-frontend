@@ -11,11 +11,11 @@ interface EmptyStateProps {
 export function EmptyState({ isFiltered }: EmptyStateProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  
+
   const clearFilters = () => {
     router.push('/admin/user-management')
   }
-  
+
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       {isFiltered ? (
@@ -32,7 +32,7 @@ export function EmptyState({ isFiltered }: EmptyStateProps) {
               <XCircle className="mr-2 h-4 w-4" />
               Clear Filters
             </Button>
-            <Button 
+            <Button
               onClick={() => router.refresh()}
               variant="outline"
             >
@@ -42,7 +42,7 @@ export function EmptyState({ isFiltered }: EmptyStateProps) {
           </div>
           <div className="text-xs text-muted-foreground mt-4">
             {searchParams.has('search') && (
-              <div>Search: &quot;{searchParams.get('search')}&quot;</div>
+              <div>Search: &#34;{searchParams.get('search')}&#34;</div>
             )}
             {searchParams.has('role') && (
               <div>Role filter: {searchParams.get('role')}</div>
@@ -56,9 +56,9 @@ export function EmptyState({ isFiltered }: EmptyStateProps) {
           </div>
           <h3 className="text-lg font-medium mb-2">No users found</h3>
           <p className="text-muted-foreground mb-4">
-            There are no users in the system yet. When users sign up, they&apos;ll appear here.
+            There are no users in the system yet. When users sign up, they&#39;ll appear here.
           </p>
-          <Button 
+          <Button
             onClick={() => router.refresh()}
             variant="outline"
           >
