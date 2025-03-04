@@ -3,7 +3,6 @@ import { checkRole } from '@/utils/roles'
 import { clerkClient } from '@clerk/nextjs/server'
 import { SearchUsers } from './SearchUsers'
 import { UsersTable } from './users-table'
-import { Toaster } from '@/components/ui/toaster'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
@@ -97,7 +96,6 @@ export default async function UserManagementPage(params: {
 
   return (
     <div className="container mx-auto py-10">
-      <Toaster />
       
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
@@ -112,7 +110,7 @@ export default async function UserManagementPage(params: {
               </Button>
             </Link>
             <Link href="/admin">
-              <Button variant="outline">Back to Dashboard</Button>
+              <Button variant="outline">Back to Admin Dashboard</Button>
             </Link>
           </div>
         </CardHeader>
