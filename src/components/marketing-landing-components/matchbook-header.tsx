@@ -3,13 +3,12 @@ import React, { useState, useEffect } from "react";
 import { UserIcon, MenuIcon } from "@/components/svgs/svg-components";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { Montserrat } from "next/font/google";
 import { CountdownDialog } from "@/app/page";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { UserButton } from "@clerk/nextjs";
 import { useAuth, useUser } from "@clerk/nextjs";
+import UserMenu from "../userMenu";
 
-const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 interface MatchbookHeaderProps {
   handleListProperty?: (() => void) | false;
@@ -81,74 +80,23 @@ export default function MatchbookHeader({
         <div className="flex space-x-2 md:space-x-4 items-center absolute right-2 xs:static xs:ml-auto">
           <Link className="hidden xs:flex" href={"?tab=list#list-your-property"} shallow>
             <Button
-              className={`w-[191px] h-[36px] text-[18px] rounded-[15px]
-                         border-[1px] font-normal border-charcoal ${montserrat.className}`}
+              className="w-[191px] h-[36px] text-[18px] rounded-[15px]
+                         border-[1px] font-normal border-charcoal"
               onClick={handleListProperty || handleDefault}
               variant={"outline"}
             >
               List your property
             </Button>
           </Link>
-          <Popover>
-            <PopoverTrigger className="flex justify-between">
-              <MenuIcon className="text-charcoal h-[31px] w-[31px]" />
-            </PopoverTrigger>
-            <PopoverContent className="flex flex-col w-48 p-0">
-              {isSignedIn ? (
-                <>
-                  {hasAccess && (
-                    <Link href="/platform/trips">
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start p-2"
-                      >
-                        Searches
-                      </Button>
-                    </Link>
-                  )}
-                  <div className="p-2">
-                    Role: {user?.publicMetadata.role as string || 'No role'}
-                  </div>
-                </>
-              ) : (
-                <Link href="/sign-in">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start p-2"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
-              )}
-            </PopoverContent>
-          </Popover>
-          {isSignedIn ? (
-            <UserButton afterSignOutUrl="/" />
-          ) : (
-            <Popover>
-              <PopoverTrigger className="flex justify-between">
-                <UserIcon className="text-charcoal h-[31px] w-[31px]" />
-              </PopoverTrigger>
-              <PopoverContent className="flex flex-col w-48 p-0">
-                <Link href="/sign-in">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start p-2"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
-              </PopoverContent>
-            </Popover>
-          )}
+          <UserMenu isSignedIn={isSignedIn} color="black" />
         </div>
 
         {/* Centered button container for mobile */}
         <div className="xs:hidden flex justify-center items-center flex-1">
           <Link href={"?tab=list#list-your-property"} shallow>
             <Button
-              className={`w-[191px] h-[36px] text-[18px] rounded-[15px]
-                         border-[1px] font-normal border-charcoal ${montserrat.className}`}
+              className="w-[191px] h-[36px] text-[18px] rounded-[15px]
+                         border-[1px] font-normal border-charcoal"
               onClick={handleListProperty || handleDefault}
               variant={"outline"}
             >

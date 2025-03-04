@@ -11,7 +11,7 @@ import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
-import { Circle } from 'lucide-react';
+import { Bell, Circle } from 'lucide-react';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
@@ -24,6 +24,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
   const [canUpdate, setCanUpdate] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const userButtonContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,187 +87,188 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   }
 
   return (
-    <div className="flex items-center space-x-1 md:space-x-4">
-      {isSignedIn ? (
-        <>
-          <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
-              <div className="relative">
-                <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
-                {hasUnread && (
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
-                )}
-              </div>
-              {user?.imageUrl ? (
-                <div className="relative">
-                  <Image
-                    src={user.imageUrl}
-                    alt="User Profile"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
+    <div className="flex items-center space-x-2 md:space-x-4">
+      {isSignedIn && (
+        <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
+          <PopoverTrigger className="relative flex items-center justify-center">
+            <Bell className="h-5 w-5 text-charcoal" />
+            {hasUnread && (
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+            )}
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="flex items-center justify-between mb-2 border-b pb-2">
+              <h3 className="font-medium">Notifications</h3>
+            </div>
+            <div className="max-h-80 overflow-y-auto">
+              {notifications.length > 0 ? (
+                notifications.map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    onClick={handleNotificationClick}
+                    onDelete={handleNotificationDelete}
                   />
-                </div>
+                ))
               ) : (
-                <div className="relative">
-                  <UserIcon className="text-charcoal h-[32px] w-[31px]" />
-                </div>
+                <div className="text-center text-gray-500 py-4">No notifications</div>
               )}
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className='flex flex-col'>
-                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
-                <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
-                <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
-                <p onClick={() => {
-                  openUserProfile({
-                    customPages: [
-                      {
-                        label: 'Terms',
-                        url: '/terms',
-                        mount: (el) => {
-                          const content = document.createElement('div');
-                          content.className = 'p-4';
-                          content.innerHTML = `
-                            <h2 class="text-xl font-bold mb-4">Terms of Service</h2>
-                            <p>Please review our terms of service.</p>
-                          `;
-                          el.appendChild(content);
-                        },
-                        unmount: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                        mountIcon: (el) => {
-                          const icon = document.createElement('div');
-                          icon.innerHTML = '📋';
-                          icon.className = 'text-lg';
-                          el.appendChild(icon);
-                        },
-                        unmountIcon: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                      },
-                      {
-                        label: 'Support',
-                        url: '/support',
-                        mountIcon: (el) => {
-                          const icon = document.createElement('div');
-                          icon.innerHTML = '❓';
-                          icon.className = 'text-lg';
-                          el.appendChild(icon);
-                        },
-                        unmountIcon: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                        mount: (el) => {
-                          const content = document.createElement('div');
-                          content.className = 'p-4';
-                          content.innerHTML = `
-                            <h2 class="text-xl font-bold mb-4">Support</h2>
-                            <p>Please review our support page.</p>
-                          `;
-                          el.appendChild(content);
-                        },
-                        unmount: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                      },
-                      {
-                        label: 'Feedback',
-                        url: '/feedback',
-                        mountIcon: (el) => {
-                          const icon = document.createElement('div');
-                          icon.innerHTML = '💬';
-                          icon.className = 'text-lg';
-                          el.appendChild(icon);
-                        },
-                        unmountIcon: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                        mount: (el) => {
-                          const content = document.createElement('div');
-                          content.className = 'p-4';
-                          content.innerHTML = `
-                            <h2 class="text-xl font-bold mb-4">We'd Love Your Feedback</h2>
-                            <p class="mb-4">Help us improve our service by sharing your thoughts.</p>
-                            <textarea class="w-full p-2 border rounded mb-4" rows="4" placeholder="Enter your feedback..."></textarea>
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-                          `;
-                          el.appendChild(content);
-                        },
-                        unmount: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                      },
-                      {
-                        label: 'Privacy Policy',
-                        url: '/privacy',
-                        mountIcon: (el) => {
-                          const icon = document.createElement('div');
-                          icon.innerHTML = '🔒';
-                          icon.className = 'text-lg';
-                          el.appendChild(icon);
-                        },
-                        unmountIcon: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                        mount: (el) => {
-                          const content = document.createElement('div');
-                          content.className = 'p-4';
-                          content.innerHTML = `
-                            <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
-                            <p>Please review our privacy policy.</p>
-                          `;
-                          el.appendChild(content);
-                        },
-                        unmount: (el) => {
-                          if (el) el.innerHTML = '';
-                        },
-                      }
-                    ]
-                  });
-                }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
-                <Accordion type="single" collapsible>
-                  <AccordionItem value="notifications">
-                    <AccordionTrigger className="flex justify-between">
-                      <div>
-                        Notifications
-                        {hasUnread && <span className="text-red-499 ml-2">•</span>}
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="max-h-59 overflow-y-auto">
-                        {notifications.map((notification) => (
-                          <NotificationItem
-                            key={notification.id}
-                            notification={notification}
-                            onClick={handleNotificationClick}
-                            onDelete={handleNotificationDelete}
-                          />
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </>
-      ) : (
-        <>
-          <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
+      
+      {isSignedIn ? (
+        <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+            <div className="relative">
+              <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+            </div>
+            {user?.imageUrl ? (
               <div className="relative">
-                <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+                <Image
+                  src={user.imageUrl}
+                  alt="User Profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
               </div>
-              <UserIcon className="text-charcoal h-[32px] w-[31px]" />
-            </PopoverTrigger>
-            <PopoverContent className='w-full p1'>
-              <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
-              <p onClick={() => { }} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
-            </PopoverContent>
-          </Popover>
-        </>
+            ) : (
+              <div className="relative">
+                <UserIcon className="text-charcoal h-[32px] w-[31px]" />
+              </div>
+            )}
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className='flex flex-col'>
+              <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
+              <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
+              <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
+              <p onClick={() => {
+                openUserProfile({
+                  customPages: [
+                    {
+                      label: 'Terms',
+                      url: '/terms',
+                      mount: (el) => {
+                        const content = document.createElement('div');
+                        content.className = 'p-4';
+                        content.innerHTML = `
+                          <h2 class="text-xl font-bold mb-4">Terms of Service</h2>
+                          <p>Please review our terms of service.</p>
+                        `;
+                        el.appendChild(content);
+                      },
+                      unmount: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                      mountIcon: (el) => {
+                        const icon = document.createElement('div');
+                        icon.innerHTML = '📋';
+                        icon.className = 'text-lg';
+                        el.appendChild(icon);
+                      },
+                      unmountIcon: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                    },
+                    {
+                      label: 'Support',
+                      url: '/support',
+                      mountIcon: (el) => {
+                        const icon = document.createElement('div');
+                        icon.innerHTML = '❓';
+                        icon.className = 'text-lg';
+                        el.appendChild(icon);
+                      },
+                      unmountIcon: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                      mount: (el) => {
+                        const content = document.createElement('div');
+                        content.className = 'p-4';
+                        content.innerHTML = `
+                          <h2 class="text-xl font-bold mb-4">Support</h2>
+                          <p>Please review our support page.</p>
+                        `;
+                        el.appendChild(content);
+                      },
+                      unmount: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                    },
+                    {
+                      label: 'Feedback',
+                      url: '/feedback',
+                      mountIcon: (el) => {
+                        const icon = document.createElement('div');
+                        icon.innerHTML = '💬';
+                        icon.className = 'text-lg';
+                        el.appendChild(icon);
+                      },
+                      unmountIcon: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                      mount: (el) => {
+                        const content = document.createElement('div');
+                        content.className = 'p-4';
+                        content.innerHTML = `
+                          <h2 class="text-xl font-bold mb-4">We'd Love Your Feedback</h2>
+                          <p class="mb-4">Help us improve our service by sharing your thoughts.</p>
+                          <textarea class="w-full p-2 border rounded mb-4" rows="4" placeholder="Enter your feedback..."></textarea>
+                          <button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                        `;
+                        el.appendChild(content);
+                      },
+                      unmount: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                    },
+                    {
+                      label: 'Privacy Policy',
+                      url: '/privacy',
+                      mountIcon: (el) => {
+                        const icon = document.createElement('div');
+                        icon.innerHTML = '🔒';
+                        icon.className = 'text-lg';
+                        el.appendChild(icon);
+                      },
+                      unmountIcon: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                      mount: (el) => {
+                        const content = document.createElement('div');
+                        content.className = 'p-4';
+                        content.innerHTML = `
+                          <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
+                          <p>Please review our privacy policy.</p>
+                        `;
+                        el.appendChild(content);
+                      },
+                      unmount: (el) => {
+                        if (el) el.innerHTML = '';
+                      },
+                    }
+                  ]
+                });
+              }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
+            </div>
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+            <div className="relative">
+              <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
+            </div>
+            <UserIcon className="text-charcoal h-[32px] w-[31px]" />
+          </PopoverTrigger>
+          <PopoverContent className='w-full p1'>
+            <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
+            <p onClick={() => { }} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
+          </PopoverContent>
+        </Popover>
       )}
     </div>
   )
