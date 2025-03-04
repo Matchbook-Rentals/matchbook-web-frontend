@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button"
 import { Building, Menu, User } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { PAGE_MARGIN } from "@/constants/styles"
 
 export default function VerificationPage() {
   return (
-    <div className="min-h-screen bg-background ">
+    <div className={`min-h-screen bg-background ${PAGE_MARGIN} `}>
       {/* Breadcrumb */}
-      <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center text-sm ">
           <Link href="/platform/trips" className="hover:text-blue-400 transition-colors">
             Trips
@@ -15,7 +15,6 @@ export default function VerificationPage() {
           <span className="mx-2">{">"}</span>
           <span className="">MatchBook Verification</span>
         </nav>
-      </div>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
@@ -45,7 +44,8 @@ export default function VerificationPage() {
               </p>
               <p className="text-gray-400">Valid for up to 3 Months</p>
             </div>
-            <Button className="inline-block px-8 py-6 text-lg border-2 border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 rounded-md transition-colors">
+            <Button variant={'outline'}
+              className="inline-block px-8 py-6 flex items-center justify-center text-lg border-2 border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 rounded-md transition-colors">
               Start Screening
             </Button>
           </div>

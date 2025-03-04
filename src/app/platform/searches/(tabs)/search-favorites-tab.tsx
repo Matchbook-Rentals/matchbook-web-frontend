@@ -48,7 +48,7 @@ export default function SearchFavoritesTab() {
 
   const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
     const params = new URLSearchParams(searchParams);
-    params.set('tab', 'matchmaker');
+    params.set('tab', 'recommended');
     const url = `${pathname}?${params.toString()}`;
     router[action](url);
   };
@@ -164,12 +164,11 @@ export default function SearchFavoritesTab() {
         <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t liked any listings!</p>
         <p className='mt-3'> Let&apos;s get you a match! </p>
         <div className='flex justify-center gap-x-2 mt-2'>
-          <button
+          <Button
             onClick={() => handleTabChange()}
-            className="px-4 py-2 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
           >
-            Try Matchmaker
-          </button>
+            Show Recommended
+            </Button>
         </div>
       </div>
     )
