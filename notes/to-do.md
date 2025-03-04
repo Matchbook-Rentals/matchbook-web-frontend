@@ -7,8 +7,13 @@
 - [ ] Calendar resize text at larger sizes to accomadate gaps
 - [ ] Article breadcrumbs, new signature block
 - [ ] Render markdown on articles
-
-
+- [ ] limit height to 350px
+- [ ] on upload success move to preview page with edit, or publish buttons
+- [ ] choose aspect ratio for article uploads
+- [ ] SWITCH TO MAIN
+- [ ] Add Isabelles name or CHIEF MARKETER
+- [ ] Wrong picture on summary
+- [ ] Investigate boldness issue
 
 - [ ] Clerk Profile and Security
 - [ ] Clerk crop photos

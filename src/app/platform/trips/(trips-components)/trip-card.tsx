@@ -5,6 +5,7 @@ import React from 'react';
 import { Trash2, MoreHorizontal } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { useRouter } from 'next/navigation';
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -77,6 +78,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
   const locationElements = trip.locationString.split(',');
   const stateName = getState(locationElements[locationElements.length - 1]);
   const statePhotoPath = `/State Photos/${stateName}.jpg`;
+  const router = useRouter();
 
   // Format date range for display
   const dateRangeText = trip.startDate && trip.endDate ?
@@ -107,6 +109,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             <Button
               className="bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md px-4 py-2 text-sm font-medium w-full md:w-auto"
               variant="ghost"
+              onClick={() => router.push(`trips/${trip.id}`)}
             >
               Continue Search
             </Button>
