@@ -101,9 +101,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
         <div className="space-y-1">
           <h2 className="font-medium text-gray-900">{trip.locationString}</h2>
           <p className="text-sm text-gray-600">{dateRangeText}</p>
-          <p className="text-sm text-gray-600">Within {trip.searchRadius} miles</p>
+          <p className="text-sm text-gray-600">{trip.numAdults} adults, {trip.numChildren} children, {trip.numPets} pets</p>
         </div>
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-3 w-full md:w-auto">
+        <div className="flex flex-col  items-start md:items-center gap-3 w-full md:w-auto">
           <div className="text-right font-medium">{getPriceDisplay()}</div>
           <div className="flex gap-2 w-full md:w-auto">
             <Button

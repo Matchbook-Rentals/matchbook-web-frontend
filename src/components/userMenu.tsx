@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { UserButton, useUser, useClerk } from '@clerk/nextjs';
+import { UserButton, useUser, useClerk, SignOutButton } from '@clerk/nextjs';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
 import { updateUserImage, updateUserLogin } from '@/app/actions/user';
@@ -19,6 +20,7 @@ const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const { user } = useUser();
   const { openUserProfile } = useClerk();
+  const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
@@ -26,14 +28,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const userButtonContainerRef = useRef<HTMLDivElement>(null);
+  const userRole = user?.publicMetadata?.role as string | undefined;
 
   useEffect(() => {
     updateUserLogin(new Date());
   }, []);
 
   const fetchNotifications = useCallback(async () => {
-    if (isSignedIn) {
-
+    if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user')) {
       const result = await getNotifications();
       if (result.success && result.notifications) {
         setNotifications(result.notifications);
@@ -41,9 +43,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       } else if (!result.success) {
         console.error('Failed to fetch notifications:', result.error);
       }
-
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, userRole]);
 
   useEffect(() => {
     fetchNotifications();
@@ -88,7 +89,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
   return (
     <div className="flex items-center space-x-2 md:space-x-4">
-      {isSignedIn && (
+      {isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
         <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
           <PopoverTrigger className="relative flex items-center justify-center">
             <Bell className="h-5 w-5 text-charcoal" />
@@ -143,8 +144,29 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
           <PopoverContent>
             <div className='flex flex-col'>
               <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
-              <Link className='hover:bg-gray-200 border-b-1 p-1 ' href='/platform/trips'>Searches</Link>
-              <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Support</p>
+
+              {/* Show admin dashboard link only for admins */}
+              {userRole === 'admin' && (
+                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/admin'>Admin Dashboard</Link>
+              )}
+              
+              {/* Show Searches link based on role */}
+              {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
+                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/platform/trips'>Searches</Link>
+              )}
+              
+
+              {/* Show coming soon message for users with no role */}
+              {!userRole && (
+                <div className='p-2 text-sm text-gray-500 border-b'>
+                  Beta access coming soon!
+                </div>
+              )}
+              
+              {/* Support link available to all */}
+              <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>Support</p>
+              
+              {/* Settings available to all */}
               <p onClick={() => {
                 openUserProfile({
                   customPages: [
@@ -252,7 +274,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     }
                   ]
                 });
-              }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1 '>Settings</p>
+              }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>Settings</p>
+              
+              {/* Logout button available to all signed-in users */}
+              <div className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>
+                <SignOutButton signOutCallback={() => router.push("/")}>
+                  <span className="w-full text-left block">Log out</span>
+                </SignOutButton>
+              </div>
             </div>
           </PopoverContent>
         </Popover>
