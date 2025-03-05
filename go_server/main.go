@@ -211,7 +211,7 @@ func main() {
 	mutex.Lock()
 	for id, client := range clients {
 		// Notify clients about shutdown
-		sendErr := fmt.Fprintf(client.Writer, "data: {\"type\":\"connection\",\"status\":\"server_shutdown\"}\n\n")
+		_, sendErr := fmt.Fprintf(client.Writer, "data: {\"type\":\"connection\",\"status\":\"server_shutdown\"}\n\n")
 		if sendErr != nil {
 			log.Printf("Error notifying client %s of shutdown: %v", id, sendErr)
 		}
@@ -652,7 +652,9 @@ func startClientMonitor() {
 			iteration++
 			
 			// Switch to normal interval after first 5 minutes
-			if time.Since(startTime) > 5*time.Minute && ticker.C.Reset(normalInterval) {
+			if time.Since(startTime) > 5*time.Minute {
+				ticker.Stop()
+				ticker = time.NewTicker(normalInterval)
 				log.Printf("Switching client monitor to normal interval of %v", normalInterval)
 			}
 			

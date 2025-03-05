@@ -57,6 +57,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   useEffect(() => {
     const checkIfMobile = () => {
+      // MD breakpoint in Tailwind is 768px
       setIsMobile(window.innerWidth < 768);
     };
 
@@ -185,14 +186,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const containerClassName = `flex flex-col h-[90vh] lg:h-[calc(100vh-110px)] bg-background ${
+  const messageContainerClassName = `flex flex-col h-[98vh] md:h-[calc(100vh-110px)] bg-background ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
-    <div className={containerClassName}>
+    <div className={messageContainerClassName}>
       {selectedConversation ? (
-        <div className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 lg:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
+        <div className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
           {onBack && (
             <button onClick={handleBackClick} className="absolute left-2 md:hidden">
               <ArrowLeftIcon size={20} />
@@ -206,13 +207,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               className="aspect-square w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-2 sm:mr-4 md:mr-6 lg:mr-8"
             />
             <div className="flex flex-col">
-              <span className="overflow-hidden text-[#212121] text-ellipsis text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
+              <span className="overflow-hidden text-[#212121] max-w-[90%] truncate text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
               <span className="text-xs sm:text-sm text-gray-500 hidden sm:block">I forgot to put listings in the conversation table</span>
             </div>
           </div>
         </div>
       ) : (
-        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 lg:p-4 relative flex items-center shadow-md">
+        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 md:p-4 relative flex items-center shadow-md">
           {onBack && (
             <button onClick={handleBackClick} className="absolute left-2 md:hidden">
               <ArrowLeftIcon size={20} />
@@ -231,7 +232,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           ref={scrollAreaRef}
           className="h-full overflow-hidden pt-6"
         >
-          <div ref={messageContainerRef} className="p-2 lg:p-4 min-h-full">
+          <div ref={messageContainerRef} className="p-2 md:p-4 min-h-full">
             {selectedConversation ? (
               messages.length > 0 ? (
                 messages.map((message) => (

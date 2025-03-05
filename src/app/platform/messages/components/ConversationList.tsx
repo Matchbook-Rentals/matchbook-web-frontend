@@ -43,6 +43,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
+  const toggleUnreadOnly = () => {
+    setShowUnreadOnly(!showUnreadOnly);
+  };
+
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -66,14 +70,42 @@ const ConversationList: React.FC<ConversationListProps> = ({
     };
   };
 
-  // Filter conversations based on search term
+  // Filter conversations based on search term and unread status
   const filteredConversations = conversations.filter(conv => {
     const { displayName } = getParticipantInfo(conv, user);
-    return displayName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = displayName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // If showUnreadOnly is true, filter for conversations with unread messages
+    if (showUnreadOnly) {
+      // For demonstration purposes - since we don't have a direct hasUnread property,
+      // we can check if there are any messages we haven't seen
+      // This is a placeholder and should be replaced with actual unread logic
+      const lastMessage = conv.messages && conv.messages.length > 0
+        ? conv.messages[conv.messages.length - 1]
+        : null;
+
+      // Assume a message is unread if it's from the other participant
+      // This is a simplified check - in a real app, you'd track read status
+      const hasUnread = lastMessage && lastMessage.senderId !== user.id;
+      return matchesSearch && hasUnread;
+    }
+
+    return matchesSearch;
   });
 
   return (
     <div className="h-full bg-background flex flex-col overflow-hidden">
+      {/* Checkbox styling to ensure black fill when checked */}
+      <style jsx>{`
+        input[type="checkbox"]:checked {
+          background-color: #000 !important;
+          border-color: #000 !important;
+        }
+        input[type="checkbox"]:focus {
+          --tw-ring-color: transparent !important;
+        }
+      `}</style>
+
       {/* Search Bar */}
       <div className="pt-3 md:pt-0 pb-4">
         <div className="relative">
@@ -94,9 +126,20 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
       {/* Filter Switch */}
       <div className="px-4 pb-2 text-black">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           <Button className='rounded-full'> All <ChevronDown /> </Button>
-          <input type='checkbox' />
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="unreadOnlyCheckbox"
+              checked={showUnreadOnly}
+              onChange={toggleUnreadOnly}
+              className="w-4 h-4 rounded border-gray-300 text-black focus:ring-0 focus:ring-offset-0 mr-2 cursor-pointer accent-black"
+            />
+            <label htmlFor="unreadOnlyCheckbox" className="text-sm font-medium cursor-pointer select-none">
+              Unread Only
+            </label>
+          </div>
         </div>
       </div>
 
