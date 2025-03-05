@@ -508,6 +508,7 @@ model Conversation {
   isGroup      Boolean                   @default(false)
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
+  listingId String
   messages     Message[]
   participants ConversationParticipant[]
 }

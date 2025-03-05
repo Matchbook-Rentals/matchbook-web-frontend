@@ -74,7 +74,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   return (
     <div className="h-full bg-background flex flex-col overflow-hidden">
       {/* Search Bar */}
-      <div className="p-4">
+      <div className="pb-4">
         <div className="relative">
           <input
             type="text"
@@ -125,7 +125,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   />
                   <div className="flex flex-col flex-grow min-w-0">
                     <div className="flex justify-between items-start w-full">
-                      <span className="font-semibold text-sm text-gray-800">{displayName}</span>
+                      <span className="font-semibold text-sm text-gray-800 truncate">{displayName}</span>
                       <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
                         {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
                           hour: 'numeric',

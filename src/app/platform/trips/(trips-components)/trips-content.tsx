@@ -41,11 +41,15 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
       <AnimatePresence mode="wait">
         {showSearch && (
           <motion.div
-            initial={{ height: 0, opacity: 0, scale: 0.9 }}
-            animate={{ height: "auto", opacity: 1, scale: 1 }}
-            exit={{ height: 0, opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex justify-center mt-4 mb-8 "
+            initial={{ height: 0, opacity: 0, y: -20 }}
+            animate={{ height: "auto", opacity: 1, y: 0 }}
+            exit={{ height: 0, opacity: 0, y: -20 }}
+            transition={{ 
+              duration: 0.4, 
+              ease: [0.25, 0.1, 0.25, 1],
+              opacity: { duration: 0.5 }
+            }}
+            className="flex justify-center mt-4 mb-8 overflow-hidden"
           >
             <div className="flex w-full justify-center">
               <SearchContainer
@@ -61,11 +65,20 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
       </AnimatePresence>
 
       {trips.length > 0 ? (
-        <TripGrid initialTrips={trips} />
+        <motion.div
+          layout
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <TripGrid initialTrips={trips} />
+        </motion.div>
       ) : (
-        <div className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+        <motion.div
+          layout
+          transition={{ duration: 0.3 }}
+          className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-gray-50"
+        >
           <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
-        </div>
+        </motion.div>
       )}
     </div>
   );

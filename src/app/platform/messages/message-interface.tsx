@@ -52,9 +52,21 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
   const [unreadTenantMessages, setUnreadTenantMessages] = useState(0);
   const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showTestingTools, setShowTestingTools] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
+
+  // Check if user is admin
+  useEffect(() => {
+    if (user?.publicMetadata?.role === 'admin') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+      setShowTestingTools(false); // Hide testing tools if not admin
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchConversation = async () => {
@@ -194,10 +206,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
       eventSource.onerror = (error) => {
         console.error('SSE connection error:', error);
-        setSseMessages(prev => [...prev, { 
-          type: 'error', 
+        setSseMessages(prev => [...prev, {
+          type: 'error',
           message: `SSE connection error encountered`,
-          timestamp: new Date().toISOString() 
+          timestamp: new Date().toISOString()
         }]);
 
         // Close the current connection
@@ -209,10 +221,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         // Attempt to reconnect after delay
         retryCount++;
         console.log(`Retrying SSE connection (${retryCount}/${maxRetries}) in ${retryDelay}ms`);
-        setSseMessages(prev => [...prev, { 
-          type: 'info', 
+        setSseMessages(prev => [...prev, {
+          type: 'info',
           message: `Retrying SSE connection (attempt ${retryCount}/${maxRetries}) in ${retryDelay}ms`,
-          timestamp: new Date().toISOString() 
+          timestamp: new Date().toISOString()
         }]);
         setTimeout(connectSSE, retryDelay);
       };
@@ -243,7 +255,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     } else if (userParticipant && userParticipant.role === 'Tenant') {
       setUnreadTenantMessages(0);
     }
-    
+
     // On mobile, hide the sidebar when a conversation is selected
     if (window.innerWidth < 768) {
       setSidebarVisible(false);
@@ -272,9 +284,9 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   };
 
   const handleSendMessage = async (
-    newMessageInput: string, 
-    fileUrl?: string, 
-    fileName?: string, 
+    newMessageInput: string,
+    fileUrl?: string,
+    fileName?: string,
     fileKey?: string,
     fileType?: string
   ) => {
@@ -366,7 +378,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   return (
     <div className="flex flex-col min-h-[85vh] bg-background ">
       {/* Header */}
-      <div className="w-full bg-background md:hidden text-black p-3 flex justify-between items-center shadow-md">
+      <div className="w-full bg-background md:hidden text-black p-0 flex justify-between items-center shadow-md">
         <button className="md:hidden" onClick={toggleSidebar}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
@@ -376,7 +388,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
       <div className="flex flex-1 overflow-hidden">
         {/* Conversation List / Sidebar */}
-        <div 
+        <div
           className={`${sidebarVisible ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/3 h-full transition-all duration-300`}
         >
           <ConversationList
@@ -394,87 +406,102 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             messages={messages}
             onSendMessage={handleSendMessage}
             currentUserId={user?.id}
+            currentUserImage={user?.imageUrl}
             onBack={toggleSidebar}
           />
         </div>
       </div>
 
+      {/* Admin Testing Tools Toggle */}
+      {isAdmin && (
+        <div className="mt-4 px-4 border-t border-gray-200 py-2">
+          <button
+            className={`px-4 py-2 rounded-md ${showTestingTools ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            onClick={() => setShowTestingTools(!showTestingTools)}
+          >
+            {showTestingTools ? 'Hide Testing Tools' : 'Show Testing Tools'}
+          </button>
+        </div>
+      )}
+
       {/* Testing Tools */}
-      <div className="mt-4 p-4 border-t border-gray-200">
-        <h3 className="text-lg font-semibold mb-2">Testing Tools</h3>
-        <div className="flex items-center mb-3">
-          <input
-            type="email"
-            className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter email to start conversation"
-            value={testEmail}
-            onChange={(e) => setTestEmail(e.target.value)}
-          />
-          <button
-            className="px-4 py-2 bg-blue-500 rounded-r-md hover:bg-blue-600"
-            onClick={() => {
-              if (testEmail.trim()) {
-                handleCreateConversation(testEmail);
-                setTestEmail('');
-              }
-            }}
-          >
-            Start Test Conversation
-          </button>
-        </div>
-        <div className="flex justify-between mb-3">
-          <button
-            className="px-4 py-2 bg-red-500  rounded-md hover:bg-red-600 disabled:bg-red-300"
-            onClick={handleDeleteAllConversations}
-            disabled={isDeleting || allConversations.length === 0}
-          >
-            {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
-          </button>
-          <button
-            className="px-4 py-2 bg-gray-500  rounded-md hover:bg-gray-600"
-            onClick={() => setSseMessages([])}
-          >
-            Clear SSE Log
-          </button>
-        </div>
-        
-        {/* SSE Log Section */}
-        <div className="mt-6 bg-gray-900 rounded-lg p-4">
-          <h4 className="text-md font-semibold mb-2 ">SSE Connection Log</h4>
-          <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm">
-            {sseMessages.length > 0 ? (
-              <div className="space-y-2">
-                {sseMessages.map((msg, index) => (
-                  <div key={index} className={`p-2 rounded ${
-                    msg.type === 'error' ? 'bg-red-900 text-red-100' :
-                    msg.type === 'success' ? 'bg-green-900 text-green-100' :
-                    msg.type === 'info' ? 'bg-blue-900 text-blue-100' :
-                    'bg-gray-700 '
-                  }`}>
-                    <div className="flex justify-between">
-                      <span className="font-medium">
-                        {msg.type === 'error' ? '❌ Error' : 
-                         msg.type === 'success' ? '✅ Success' :
-                         msg.type === 'info' ? 'ℹ️ Info' : 'Message'}
-                      </span>
-                      {msg.timestamp && (
-                        <span className="text-xs opacity-80">
-                          {new Date(msg.timestamp).toLocaleTimeString()}
+      {isAdmin && showTestingTools && (
+        <div className="mt-2 p-4 border-t border-gray-200">
+          <h3 className="text-lg font-semibold mb-2">Testing Tools</h3>
+          <div className="flex items-center mb-3">
+            <input
+              type="email"
+              className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter email to start conversation"
+              value={testEmail}
+              onChange={(e) => setTestEmail(e.target.value)}
+            />
+            <button
+              className="px-4 py-2 bg-blue-500 rounded-r-md hover:bg-blue-600 text-white"
+              onClick={() => {
+                if (testEmail.trim()) {
+                  handleCreateConversation(testEmail);
+                  setTestEmail('');
+                }
+              }}
+            >
+              Start Test Conversation
+            </button>
+          </div>
+          <div className="flex justify-between mb-3">
+            <button
+              className="px-4 py-2 bg-red-500 rounded-md hover:bg-red-600 disabled:bg-red-300 text-white"
+              onClick={handleDeleteAllConversations}
+              disabled={isDeleting || allConversations.length === 0}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-500 rounded-md hover:bg-gray-600 text-white"
+              onClick={() => setSseMessages([])}
+            >
+              Clear SSE Log
+            </button>
+          </div>
+
+          {/* SSE Log Section */}
+          <div className="mt-6 bg-gray-900 rounded-lg p-4">
+            <h4 className="text-md font-semibold mb-2 text-white">SSE Connection Log</h4>
+            <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm text-white">
+              {sseMessages.length > 0 ? (
+                <div className="space-y-2">
+                  {sseMessages.map((msg, index) => (
+                    <div key={index} className={`p-2 rounded ${
+                      msg.type === 'error' ? 'bg-red-900 text-red-100' :
+                      msg.type === 'success' ? 'bg-green-900 text-green-100' :
+                      msg.type === 'info' ? 'bg-blue-900 text-blue-100' :
+                      'bg-gray-700 '
+                    }`}>
+                      <div className="flex justify-between">
+                        <span className="font-medium">
+                          {msg.type === 'error' ? '❌ Error' :
+                           msg.type === 'success' ? '✅ Success' :
+                           msg.type === 'info' ? 'ℹ️ Info' : 'Message'}
                         </span>
-                      )}
+                        {msg.timestamp && (
+                          <span className="text-xs opacity-80">
+                            {new Date(msg.timestamp).toLocaleTimeString()}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 text-xs font-mono">
+                        {msg.message || JSON.stringify(msg, null, 2)}
+                      </div>
                     </div>
-                    <div className="mt-1 text-xs font-mono">
-                      {msg.message || JSON.stringify(msg, null, 2)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

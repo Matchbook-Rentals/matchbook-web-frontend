@@ -209,38 +209,46 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 	for id := range clients {
 		connectedIds = append(connectedIds, id)
 	}
-	client, exists := clients[msg.ReceiverID]
+	
+	// Find all clients that match this user ID
+	targetId := msg.ReceiverID
+	var matchingClients []*Client
+	
+	// First, try exact matches
+	if client, exactExists := clients[targetId]; exactExists {
+		matchingClients = append(matchingClients, client)
+		logWithConnCount(fmt.Sprintf("Found exact match for %s", targetId))
+	}
+	
+	// Then look for all other instances of this user (multiple devices)
+	for id, c := range clients {
+		// Skip if this is already the exact match we found
+		if id == targetId {
+			continue
+		}
+		
+		// Case insensitive comparison
+		if strings.EqualFold(id, targetId) {
+			matchingClients = append(matchingClients, c)
+			logWithConnCount(fmt.Sprintf("Found case-insensitive match for %s: %s", targetId, id))
+			continue
+		}
 
-	// If exact match doesn't exist, try to find a case-insensitive match
-	// This can help with clients that might have ID format inconsistencies
-	if !exists {
-		targetId := msg.ReceiverID
-		for id, c := range clients {
-			// Case insensitive comparison
-			if strings.EqualFold(id, targetId) {
-				client = c
-				exists = true
-				logWithConnCount(fmt.Sprintf("Found case-insensitive match for %s: %s", targetId, id))
-				break
-			}
-
-			// Check if one is a prefix/suffix of the other (for truncated IDs)
-			if strings.HasPrefix(id, targetId) || strings.HasPrefix(targetId, id) ||
-				strings.HasSuffix(id, targetId) || strings.HasSuffix(targetId, id) {
-				client = c
-				exists = true
-				logWithConnCount(fmt.Sprintf("Found prefix/suffix match for %s: %s", targetId, id))
-				break
-			}
+		// Check if one is a prefix/suffix of the other (for truncated IDs)
+		if strings.HasPrefix(id, targetId) || strings.HasPrefix(targetId, id) ||
+			strings.HasSuffix(id, targetId) || strings.HasSuffix(targetId, id) {
+			matchingClients = append(matchingClients, c)
+			logWithConnCount(fmt.Sprintf("Found prefix/suffix match for %s: %s", targetId, id))
+			continue
 		}
 	}
-
+	
 	mutex.Unlock()
 
 	logWithConnCount(fmt.Sprintf("Connected client IDs: %v", connectedIds))
-	logWithConnCount(fmt.Sprintf("Looking for receiver ID: %s, exists: %v", msg.ReceiverID, exists))
+	logWithConnCount(fmt.Sprintf("Looking for receiver ID: %s, found %d instances", msg.ReceiverID, len(matchingClients)))
 
-	if !exists {
+	if len(matchingClients) == 0 {
 		logWithConnCount(fmt.Sprintf("Warning: Receiver not connected: %s", msg.ReceiverID))
 		// Don't return an error, just acknowledge that we received the message
 		w.WriteHeader(http.StatusOK)
@@ -248,7 +256,7 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Send the message to the client
+	// Prepare the message to send
 	messageJSON, err := json.Marshal(msg)
 	if err != nil {
 		logWithConnCount(fmt.Sprintf("Error marshaling message: %v", err))
@@ -256,10 +264,13 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(client.Writer, "data: %s\n\n", messageJSON)
-	client.Flusher.Flush()
+	// Send the message to all instances of this user
+	for _, client := range matchingClients {
+		fmt.Fprintf(client.Writer, "data: %s\n\n", messageJSON)
+		client.Flusher.Flush()
+	}
 
-	logWithConnCount(fmt.Sprintf("Message sent to client %s", msg.ReceiverID))
+	logWithConnCount(fmt.Sprintf("Message broadcast to %d instances of client %s", len(matchingClients), msg.ReceiverID))
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"status": "Message sent"})

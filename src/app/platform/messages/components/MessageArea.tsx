@@ -5,12 +5,14 @@ import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
 import { isImageFile, getFileUrl } from '@/lib/utils';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface MessageAreaProps {
   selectedConversation: any;
   messages: any[];
   onSendMessage: (message: string, fileUrl?: string, fileName?: string, fileKey?: string, fileType?: string) => void;
   currentUserId: string | undefined;
+  currentUserImage?: string | null;
   onBack?: () => void;
 }
 
@@ -39,6 +41,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   messages,
   onSendMessage,
   currentUserId,
+  currentUserImage = "/placeholder-avatar.png",
   onBack
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
@@ -46,34 +49,42 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAreaRef.current && bottomRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [messages]);
 
   const handleSend = () => {
     if (newMessageInput.trim()) {
-      // Only pass the attachment if it exists
       if (messageAttachments.length > 0) {
         const attachment = messageAttachments[0];
         onSendMessage(
-          newMessageInput, 
-          attachment.fileUrl, 
-          attachment.fileName, 
-          attachment.fileKey, 
+          newMessageInput,
+          attachment.fileUrl,
+          attachment.fileName,
+          attachment.fileKey,
           attachment.fileType
         );
       } else {
         onSendMessage(newMessageInput);
       }
-      
+
       setNewMessageInput('');
       setMessageAttachments([]);
-      scrollToBottom();
     }
   };
 
@@ -97,13 +108,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     setSelectedFile(file);
   };
 
-  // Get participant info for the header
   const getParticipantInfo = () => {
     if (!selectedConversation || !selectedConversation.participants) {
       return { displayName: "Unknown", imageUrl: "" };
     }
 
-    // Find the other participant who isn't the current user
     const otherParticipant = selectedConversation.participants.find(
       (p: any) => p.User.id !== currentUserId
     );
@@ -113,9 +122,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     }
 
     const { User } = otherParticipant;
-    const displayName = User.firstName && User.lastName
-      ? `${User.firstName} ${User.lastName}`
-      : User.email || "Unknown";
+    const displayName = User.fullName
+      ? User.fullName
+      : User.firstName && User.lastName
+        ? `${User.firstName} ${User.lastName}`
+        : User.firstName || User.lastName || User.email || "Unknown";
 
     return {
       displayName,
@@ -123,123 +134,127 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
   };
 
-  // Get participant info if we have a selected conversation
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      {/* Chat Header */}
+    <div className="flex flex-col h-[90vh] lg:h-[calc(100vh-110px)] bg-background">
       {selectedConversation ? (
-        <div className="bg-[#4A90E2]  p-4 flex items-center shadow-md">
+        <div onClick={() => console.log(selectedConversation)} className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 lg:p-4 flex items-center shadow-md">
           {onBack && (
-            <button onClick={onBack} className="mr-3 md:hidden">
+            <button onClick={onBack} className="mr-2 md:hidden">
               <ArrowLeftIcon size={20} />
             </button>
           )}
           <img
             src={participantInfo.imageUrl}
             alt={participantInfo.displayName}
-            className="w-10 h-10 rounded-full mr-3"
+            className="aspect-square w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-2 sm:mr-4 md:mr-6 lg:mr-8"
           />
-          <span className="font-medium">{participantInfo.displayName}</span>
+          <div className="flex flex-col">
+            <span className="overflow-hidden text-[#212121] text-ellipsis text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
+            <span className="text-xs sm:text-sm text-gray-500 hidden sm:block">I forgot to put listings in the conversation table</span>
+          </div>
         </div>
       ) : (
-        <div className="bg-[#4A90E2]  p-4 flex items-center shadow-md">
+        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 lg:p-4 flex items-center shadow-md">
           {onBack && (
-            <button onClick={onBack} className="mr-3 md:hidden">
+            <button onClick={onBack} className="mr-2 md:hidden">
               <ArrowLeftIcon size={20} />
             </button>
           )}
-          <span className="font-medium">Select a conversation</span>
+          <span className="font-medium text-sm sm:text-base">Select a conversation</span>
         </div>
       )}
 
-      {/* Message Area */}
-      <div
-        ref={messageContainerRef}
-        className="h-[90vh] md:h-[80vh] overflow-y-auto p-4"
-      >
-        {selectedConversation ? (
-          messages.length > 0 ? (
-            messages.map((message) => (
-              <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
-                {message.senderId !== currentUserId && (
-                  <img
-                    src={participantInfo.imageUrl}
-                    alt="Profile"
-                    className="w-8 h-8 rounded-full mr-2 self-end"
-                  />
-                )}
-                <div
-                  className={`max-w-[70%] p-3 rounded-lg shadow-md ${
-                    message.senderId === currentUserId
-                      ? 'bg-white text-black'
-                      : 'bg-gray-200 text-black'
-                  }`}
-                >
-                  {message.imgUrl && (
-                    <div className="mb-2">
-                      {isImageFile(message.fileName || '') ? (
-                        <Image
-                          src={message.imgUrl}
-                          alt="Message Attachment"
-                          width={200}
-                          height={200}
-                          className="rounded cursor-pointer"
-                          onClick={() => handleFileClick({
-                            fileUrl: message.imgUrl,
-                            fileName: message.fileName || 'attachment',
-                            fileKey: message.fileKey,
-                            fileType: message.fileType
-                          })}
-                        />
-                      ) : (
-                        <FilePreview
-                          file={{
-                            fileUrl: message.imgUrl,
-                            fileKey: message.fileKey || message.imgUrl,
-                            fileName: message.fileName || 'attachment',
-                            fileType: message.fileType
-                          }}
-                          previewSize="small"
-                          className="cursor-pointer"
-                          onClick={() => handleFileClick({
-                            fileUrl: message.imgUrl,
-                            fileName: message.fileName || 'attachment',
-                            fileKey: message.fileKey,
-                            fileType: message.fileType
-                          })}
-                        />
+      <div className="flex-1 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
+
+        <ScrollArea
+          ref={scrollAreaRef}
+          className="h-full overflow-hidden"
+        >
+          <div ref={messageContainerRef} className="p-2 lg:p-4 min-h-full">
+            {selectedConversation ? (
+              messages.length > 0 ? (
+                messages.map((message) => (
+                  <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
+                    {message.senderId !== currentUserId && (
+                      <img
+                        src={participantInfo.imageUrl}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full mr-2 self-center"
+                      />
+                    )}
+                    <div
+                      className={`max-w-[70%] p-3 rounded-lg shadow-md ${
+                        message.senderId === currentUserId
+                          ? 'bg-white text-black'
+                          : 'bg-gray-200 text-black'
+                      }`}
+                    >
+                      {message.imgUrl && (
+                        <div className="mb-2">
+                          {isImageFile(message.fileName || '') ? (
+                            <Image
+                              src={message.imgUrl}
+                              alt="Message Attachment"
+                              width={200}
+                              height={200}
+                              className="rounded cursor-pointer"
+                              onClick={() => handleFileClick({
+                                fileUrl: message.imgUrl,
+                                fileName: message.fileName || 'attachment',
+                                fileKey: message.fileKey,
+                                fileType: message.fileType
+                              })}
+                            />
+                          ) : (
+                            <FilePreview
+                              file={{
+                                fileUrl: message.imgUrl,
+                                fileKey: message.fileKey || message.imgUrl,
+                                fileName: message.fileName || 'attachment',
+                                fileType: message.fileType
+                              }}
+                              previewSize="small"
+                              allowPreview={false}
+                              onClick={() => handleFileClick({
+                                fileUrl: message.imgUrl,
+                                fileName: message.fileName || 'attachment',
+                                fileKey: message.fileKey,
+                                fileType: message.fileType
+                              })}
+                            />
+                          )}
+                        </div>
                       )}
+                      <div>{message.content}</div>
                     </div>
-                  )}
-                  <div>{message.content}</div>
+                    {message.senderId === currentUserId && (
+                      <img
+                        src={currentUserImage || "/placeholder-avatar.png"}
+                        alt="Your profile"
+                        className="w-8 h-8 rounded-full ml-2 self-end"
+                      />
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  <p>No messages yet. Start the conversation!</p>
                 </div>
-                {message.senderId === currentUserId && (
-                  <img
-                    src={"/placeholder-avatar.png"} // Use current user avatar
-                    alt="Your profile"
-                    className="w-8 h-8 rounded-full ml-2 self-end"
-                  />
-                )}
+              )
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                <p>Select a conversation to start messaging</p>
               </div>
-            ))
-          ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              <p>No messages yet. Start the conversation!</p>
-            </div>
-          )
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            <p>Select a conversation to start messaging</p>
+            )}
+            <div ref={bottomRef} className="h-1" />
           </div>
-        )}
-        <div ref={bottomRef} />
+        </ScrollArea>
       </div>
 
-      {/* Message Input Area */}
       <div className="p-4 bg-background">
-        {/* Display message attachments */}
         <div className="flex flex-wrap gap-2 mb-2">
           {messageAttachments.map((attachment, index) => (
             <div key={index} className="inline-block rounded">
@@ -263,6 +278,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                     fileType: attachment.fileType
                   }}
                   previewSize="small"
+                  allowPreview={false}
                   onClick={() => handleFileClick(attachment)}
                 />
               )}
@@ -270,7 +286,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           ))}
         </div>
 
-        {/* Input and buttons flex container */}
         <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
           <input
             type="text"
@@ -320,7 +335,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       </div>
 
-      {/* File Viewer Dialog */}
       <Dialog open={!!selectedFile} onOpenChange={(open) => !open && setSelectedFile(null)}>
         <DialogContent className="max-w-3xl" hideCloseButton={false}>
           {selectedFile && (
@@ -346,16 +360,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                     }}
                     previewSize="large"
                     allowDownload={true}
-                    allowPreview={true}
+                    allowPreview={false}
                   />
-                  <a 
-                    href={selectedFile.fileUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                  >
-                    Open File
-                  </a>
                 </div>
               )}
             </div>

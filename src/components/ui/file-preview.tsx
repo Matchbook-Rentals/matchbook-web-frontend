@@ -4,21 +4,21 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { 
-  downloadFile, 
-  formatFileSize, 
-  getFileExtension, 
-  getFileIcon, 
-  getFileUrl, 
-  isImageFile 
+import {
+  downloadFile,
+  formatFileSize,
+  getFileExtension,
+  getFileIcon,
+  getFileUrl,
+  isImageFile
 } from '@/lib/utils';
 
 // Import your preferred icon library components
-import { 
-  Download, 
-  Eye, 
-  File, 
-  FileText, 
+import {
+  Download,
+  Eye,
+  File,
+  FileText,
   FileImage,
   FileAudio,
   FileVideo,
@@ -60,7 +60,7 @@ export function FilePreview({
 }: FilePreviewProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Define sizes based on previewSize
   const sizes = {
     small: {
@@ -84,15 +84,15 @@ export function FilePreview({
   const fileUrl = file.fileUrl || getFileUrl(file.fileKey);
   const isImage = isImageFile(file.fileName);
   const extension = getFileExtension(file.fileName).toLowerCase();
-  
+
   // Function to get the appropriate icon component based on file type
   const FileIconComponent = () => {
     const iconType = getFileIcon(file.fileName);
-    
+
     const iconProps = {
       className: `text-gray-400 ${sizes[previewSize].icon}`,
     };
-    
+
     switch (iconType) {
       case 'FileText':
         return <FileText {...iconProps} />;
@@ -108,15 +108,15 @@ export function FilePreview({
         return <File {...iconProps} />;
     }
   };
-  
+
   // Handle file download
   const handleDownload = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       let downloadUrl = fileUrl;
-      
+
       // If the file is private, we need to get a signed URL
       if (file.isPrivate) {
         const response = await fetch('/api/get-signed-url', {
@@ -129,15 +129,15 @@ export function FilePreview({
             customId: file.customId,
           }),
         });
-        
+
         if (!response.ok) {
           throw new Error('Failed to get download URL');
         }
-        
+
         const data = await response.json();
         downloadUrl = data.signedUrl;
       }
-      
+
       // Download the file
       downloadFile(downloadUrl, file.fileName);
     } catch (err) {
@@ -147,15 +147,15 @@ export function FilePreview({
       setIsLoading(false);
     }
   };
-  
+
   // Handle file preview
   const handlePreview = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       let previewUrl = fileUrl;
-      
+
       // If the file is private, we need to get a signed URL
       if (file.isPrivate) {
         const response = await fetch('/api/get-signed-url', {
@@ -168,15 +168,15 @@ export function FilePreview({
             customId: file.customId,
           }),
         });
-        
+
         if (!response.ok) {
           throw new Error('Failed to get preview URL');
         }
-        
+
         const data = await response.json();
         previewUrl = data.signedUrl;
       }
-      
+
       // Open the file in a new tab for preview
       window.open(previewUrl, '_blank');
     } catch (err) {
@@ -188,7 +188,7 @@ export function FilePreview({
   };
 
   return (
-    <Card 
+    <Card
       className={`relative overflow-hidden ${sizes[previewSize].card} ${className} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
@@ -206,7 +206,7 @@ export function FilePreview({
           <X size={14} />
         </Button>
       )}
-      
+
       {/* File preview/icon */}
       <div className="flex flex-col items-center justify-center h-full p-2">
         {isImage ? (
@@ -224,7 +224,7 @@ export function FilePreview({
             <FileIconComponent />
           </div>
         )}
-        
+
         {/* File name */}
         <div className="text-center mt-1 px-1">
           <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
@@ -234,7 +234,7 @@ export function FilePreview({
             <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
           )}
         </div>
-        
+
         {/* Action buttons */}
         <div className="flex items-center justify-center mt-1 space-x-1">
           {allowDownload && (
@@ -248,20 +248,8 @@ export function FilePreview({
               <Download size={14} />
             </Button>
           )}
-          
-          {allowPreview && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={handlePreview}
-              disabled={isLoading}
-            >
-              <Eye size={14} />
-            </Button>
-          )}
         </div>
-        
+
         {/* Error message */}
         {error && (
           <p className="text-xs text-red-500 text-center mt-1">{error}</p>
