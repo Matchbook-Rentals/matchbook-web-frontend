@@ -431,20 +431,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   return (
     <div className="flex flex-col min-h-[85vh] bg-background">
-      {/* Header */}
-      <div className="w-full bg-background md:hidden text-black p-0 flex justify-between items-center shadow-md">
-        <button className="md:hidden p-3" onClick={toggleSidebar}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
-      </div>
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Conversation List / Sidebar */}
         <div
-          className={`md:block md:w-1/4 lg:w-1/3 h-full z-10 bg-background
-            ${isMobile ? 'fixed inset-0 pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
+          className={`md:block w-full md:w-1/4 lg:w-1/3 h-full z-10 bg-background
+            ${isMobile ? ' pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
