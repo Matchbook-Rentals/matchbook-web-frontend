@@ -50,6 +50,54 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const bottomRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+
+    window.addEventListener('resize', checkIfMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedConversation) {
+      setIsExiting(false);
+    }
+  }, [selectedConversation]);
+
+  useEffect(() => {
+    return () => {
+      setIsExiting(false);
+    };
+  }, []);
+
+  const handleBackClick = () => {
+    if (isMobile) {
+      setIsExiting(true);
+
+      setTimeout(() => {
+        if (onBack) {
+          onBack();
+        }
+
+        setTimeout(() => {
+          setIsExiting(false);
+        }, 50);
+      }, 300);
+    } else if (onBack) {
+      onBack();
+    }
+  };
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current && bottomRef.current) {
@@ -136,33 +184,43 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
+  // Create the className string explicitly
+  const containerClassName = `flex flex-col h-[90vh] lg:h-[calc(100vh-110px)] bg-background ${
+    isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+  } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+
   return (
-    <div className="flex flex-col h-[90vh] lg:h-[calc(100vh-110px)] bg-background">
+    <div className={containerClassName}>
       {selectedConversation ? (
-        <div onClick={() => console.log(selectedConversation)} className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 lg:p-4 flex items-center shadow-md">
+        <div className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 lg:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
           {onBack && (
-            <button onClick={onBack} className="mr-2 md:hidden">
+            <button onClick={handleBackClick} className="absolute left-2 md:hidden">
               <ArrowLeftIcon size={20} />
             </button>
           )}
-          <img
-            src={participantInfo.imageUrl}
-            alt={participantInfo.displayName}
-            className="aspect-square w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-2 sm:mr-4 md:mr-6 lg:mr-8"
-          />
-          <div className="flex flex-col">
-            <span className="overflow-hidden text-[#212121] text-ellipsis text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
-            <span className="text-xs sm:text-sm text-gray-500 hidden sm:block">I forgot to put listings in the conversation table</span>
+
+          <div className="flex items-center justify-center w-full md:justify-center">
+            <img
+              src={participantInfo.imageUrl}
+              alt={participantInfo.displayName}
+              className="aspect-square w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-2 sm:mr-4 md:mr-6 lg:mr-8"
+            />
+            <div className="flex flex-col">
+              <span className="overflow-hidden text-[#212121] text-ellipsis text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
+              <span className="text-xs sm:text-sm text-gray-500 hidden sm:block">I forgot to put listings in the conversation table</span>
+            </div>
           </div>
         </div>
       ) : (
-        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 lg:p-4 flex items-center shadow-md">
+        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 lg:p-4 relative flex items-center shadow-md">
           {onBack && (
-            <button onClick={onBack} className="mr-2 md:hidden">
+            <button onClick={handleBackClick} className="absolute left-2 md:hidden">
               <ArrowLeftIcon size={20} />
             </button>
           )}
-          <span className="font-medium text-sm sm:text-base">Select a conversation</span>
+          <div className="flex items-center justify-center w-full">
+            <span className="font-medium text-sm sm:text-base">Select a conversation</span>
+          </div>
         </div>
       )}
 
@@ -171,7 +229,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
         <ScrollArea
           ref={scrollAreaRef}
-          className="h-full overflow-hidden"
+          className="h-full overflow-hidden pt-6"
         >
           <div ref={messageContainerRef} className="p-2 lg:p-4 min-h-full">
             {selectedConversation ? (

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Conversation } from '@prisma/client';
 import { UserResource } from '@clerk/types';
-import { Switch } from "@/components/ui/switch";
+import { Button } from '@/components/ui/button';
+import { ChevronDown } from 'lucide-react';
 
 // Define the conversation participant structure
 interface ConversationParticipant {
@@ -41,7 +42,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-  
+
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -74,7 +75,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   return (
     <div className="h-full bg-background flex flex-col overflow-hidden">
       {/* Search Bar */}
-      <div className="pb-4">
+      <div className="pt-3 md:pt-0 pb-4">
         <div className="relative">
           <input
             type="text"
@@ -90,18 +91,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
           </div>
         </div>
       </div>
-      
+
       {/* Filter Switch */}
       <div className="px-4 pb-2 text-black">
         <div className="flex items-center space-x-2">
-          <Switch
-            checked={showUnreadOnly}
-            onCheckedChange={setShowUnreadOnly}
-          />
-          <span className="text-sm font-medium">Show unread only</span>
+          <Button className='rounded-full'> All <ChevronDown /> </Button>
+          <input type='checkbox' />
         </div>
       </div>
-      
+
       {/* Conversation List */}
       <div className="flex-1 overflow-y-auto px-4 py-2">
         {filteredConversations && filteredConversations.length > 0 ? (
@@ -110,7 +108,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             const lastMessage = conv.messages && conv.messages.length > 0
               ? conv.messages[conv.messages.length - 1]
               : null;
-            
+
             return (
               <div
                 key={conv.id}

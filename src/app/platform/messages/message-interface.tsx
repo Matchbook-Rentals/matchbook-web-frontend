@@ -43,7 +43,7 @@ interface MessageData {
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
   const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
-  const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations || []);
+  const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [sseMessages, setSseMessages] = useState<any[]>([]);
@@ -54,6 +54,9 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showTestingTools, setShowTestingTools] = useState(false);
+  const [tabs, setTabs] = useState('all');
+  const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
@@ -241,6 +244,31 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     };
   }, [user, url]);
 
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add resize listener
+    window.addEventListener('resize', checkIfMobile);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    // If initial load on mobile, hide sidebar
+    if (isMobile) {
+      setSidebarVisible(false);
+    }
+  }, []);
+
   const handleSelectConversation = (index: number) => {
     setSelectedConversationIndex(index);
 
@@ -257,7 +285,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
 
     // On mobile, hide the sidebar when a conversation is selected
-    if (window.innerWidth < 768) {
+    if (isMobile) {
       setSidebarVisible(false);
     }
   };
@@ -369,27 +397,36 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   };
 
   const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
+    // Toggle sidebar state
+    setSidebarVisible(prev => !prev);
   };
+
+  // Add an effect to reset MessageArea when sidebar is toggled
+  useEffect(() => {
+    if (isMobile && selectedConversationIndex !== null && sidebarVisible) {
+      // If the sidebar is shown and we have a selected conversation,
+      // let's wait for the animation to complete before resetting
+      setTimeout(() => {
+        // Don't reset if the user has hidden sidebar again
+        if (sidebarVisible) {
+          setSelectedConversationIndex(null);
+        }
+      }, 300); // Match the animation duration
+    }
+  }, [sidebarVisible, isMobile, selectedConversationIndex]);
 
   // Use all conversations instead of filtering by role
   const filteredConversations = allConversations;
 
   return (
-    <div className="flex flex-col min-h-[85vh] bg-background ">
-      {/* Header */}
-      <div className="w-full bg-background md:hidden text-black p-0 flex justify-between items-center shadow-md">
-        <button className="md:hidden" onClick={toggleSidebar}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
-      </div>
+    <div className="flex flex-col min-h-[85vh] bg-background">
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Conversation List / Sidebar */}
         <div
-          className={`${sidebarVisible ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/3 h-full transition-all duration-300`}
+          className={`md:block w-full md:w-1/4 lg:w-1/3  h-full z-10 bg-background
+            ${isMobile ? '  pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
+            ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
             conversations={filteredConversations}
@@ -400,7 +437,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         </div>
 
         {/* Chat Window */}
-        <div className={`flex-1 ${sidebarVisible ? 'hidden md:block' : 'block'}`}>
+        <div
+          className={`flex-1 bg-background
+            ${isMobile ? 'fixed inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
+            ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
+        >
           <MessageArea
             selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex] : null}
             messages={messages}
