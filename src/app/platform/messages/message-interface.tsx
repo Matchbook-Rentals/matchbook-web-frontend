@@ -42,6 +42,7 @@ interface MessageData {
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
+
   const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
@@ -63,6 +64,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   // Check if user is admin
   useEffect(() => {
+    if (!user) return;
+
     if (user?.publicMetadata?.role === 'admin') {
       setIsAdmin(true);
     } else {
@@ -72,6 +75,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   }, [user]);
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchConversation = async () => {
       if (selectedConversationIndex !== null) {
         const conversation = allConversations[selectedConversationIndex];
@@ -85,7 +90,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     };
 
     fetchConversation();
-  }, [selectedConversationIndex, allConversations]);
+  }, [selectedConversationIndex, allConversations, user]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -246,6 +251,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   // Detect mobile screen size
   useEffect(() => {
+    if (!user) return;
+
     const checkIfMobile = () => {
       // MD breakpoint in Tailwind is 768px
       setIsMobile(window.innerWidth < 768);
@@ -261,14 +268,14 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     return () => {
       window.removeEventListener('resize', checkIfMobile);
     };
-  }, []);
+  }, [user, allConversations, selectedConversationIndex]);
 
   useEffect(() => {
+    if (!user || !isMobile) return;
+
     // If initial load on mobile, hide sidebar
-    if (isMobile) {
-      setSidebarVisible(false);
-    }
-  }, []);
+    setSidebarVisible(false);
+  }, [isMobile, user]);
 
   const handleSelectConversation = (index: number) => {
     setSelectedConversationIndex(index);
@@ -382,8 +389,6 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
   };
 
-  if (!user) return null;
-
   const handleTabChange = (value: string) => {
     if (value === 'Host' || value === 'Tenant') {
       setUserType(value as 'Host' | 'Tenant');
@@ -404,6 +409,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   // Add an effect to reset MessageArea when sidebar is toggled
   useEffect(() => {
+    if (!user) return;
+
     if (isMobile && selectedConversationIndex !== null && sidebarVisible) {
       // If the sidebar is shown and we have a selected conversation,
       // let's wait for the animation to complete before resetting
@@ -414,7 +421,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         }
       }, 300); // Match the animation duration
     }
-  }, [sidebarVisible, isMobile, selectedConversationIndex]);
+  }, [sidebarVisible, isMobile, selectedConversationIndex, user]);
+
+  // Add conditional return after all hooks are defined
+  if (!user) return null;
 
   // Use all conversations instead of filtering by role
   const filteredConversations = allConversations;
