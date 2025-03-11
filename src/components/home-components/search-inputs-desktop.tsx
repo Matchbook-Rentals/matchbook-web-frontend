@@ -19,6 +19,7 @@ interface SearchInputsDesktopProps {
   inputClassName?: string;
   searchButtonClassNames?: string;
   searchIconColor?: string;
+  popoverMaxWidth?: string;
 }
 
 // Add this type definition
@@ -29,7 +30,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   className,
   inputClassName,
   searchButtonClassNames,
-  searchIconColor = 'text-white'
+  searchIconColor = 'text-white',
+  popoverMaxWidth
 }) => {
   const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -279,12 +281,28 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       </div>
 
       {isOpen && (
-        <div ref={popoverRef} className="absolute top-[calc(100%+8px)] left-0 w-full bg-background rounded-xl shadow-lg z-50
-          before:content-[''] before:absolute before:-top-2 before:left-[var(--arrow-position)] before:w-4 before:h-4
+        <div ref={popoverRef} 
+          className={`absolute top-[calc(100%+8px)] ${popoverMaxWidth ? 'left-1/2 transform -translate-x-1/2' : 'left-0'} w-full bg-background rounded-xl shadow-lg z-50
+          before:content-[''] before:absolute before:-top-2 ${popoverMaxWidth ? 'before:left-1/2 before:-translate-x-1/2' : 'before:left-[var(--arrow-position)]'} before:w-4 before:h-4
           before:bg-background before:rotate-45 before:border-l before:border-t before:border-gray-200
-          transform origin-top transition-all duration-200 ease-out
-          animate-in fade-in slide-in-from-top-2"
-          style={{ '--arrow-position': `${arrowPosition}%` } as React.CSSProperties}>
+          origin-top`}
+          style={{ 
+            ...(!popoverMaxWidth ? { '--arrow-position': `${arrowPosition}%` } : {}),
+            ...(popoverMaxWidth ? { maxWidth: popoverMaxWidth } : {}),
+            animation: 'popoverFadeIn 0.2s ease-out'
+          } as React.CSSProperties}>
+          <style jsx>{`
+            @keyframes popoverFadeIn {
+              from {
+                opacity: 0;
+                transform: ${popoverMaxWidth ? 'translate(-50%, -8px)' : 'translateY(-8px)'};
+              }
+              to {
+                opacity: 1;
+                transform: ${popoverMaxWidth ? 'translate(-50%, 0)' : 'translateY(0)'};
+              }
+            }
+          `}</style>
           {renderActiveContent()}
         </div>
       )}

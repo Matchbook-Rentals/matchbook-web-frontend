@@ -2,6 +2,7 @@ import React from "react";
 import SearchInputsDesktop from "./search-inputs-desktop";
 import SearchInputsMobile from "./search-inputs-mobile";
 import { useAuth, useUser } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
 
 interface SearchContainerProps {
   className?: string;
@@ -9,6 +10,7 @@ interface SearchContainerProps {
   inputStyles?: string;
   searchButtonClassNames?: string;
   searchIconColor?: string;
+  popoverMaxWidth?: string;
 }
 
 const SearchContainer: React.FC<SearchContainerProps> = ({
@@ -16,7 +18,8 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
   containerStyles,
   inputStyles,
   searchButtonClassNames,
-  searchIconColor
+  searchIconColor,
+  popoverMaxWidth
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -37,19 +40,20 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
 
   return (
     <>
-      <div className={`mx-auto hidden sm:block p-2 ${className || ""}`}>
-        <div className={`relative`}>
+      <div className={cn("mx-auto hidden sm:block p-2", className)}>
+        <div className="relative">
           <SearchInputsDesktop 
             hasAccess={hasAccess} 
             inputClassName={inputStyles} 
             className={containerStyles} 
             searchButtonClassNames={searchButtonClassNames}
             searchIconColor={searchIconColor}
+            popoverMaxWidth={popoverMaxWidth}
           />
         </div>
       </div>
-      <div className={`mx-auto block sm:hidden p-2 ${className || ""}`}>
-        <div className={`relative ${containerStyles || ""}`}>
+      <div className={cn("mx-auto block sm:hidden p-2", className)}>
+        <div className={cn("relative", containerStyles)}>
           <SearchInputsMobile 
             hasAccess={hasAccess} 
             inputClassName={inputStyles} 

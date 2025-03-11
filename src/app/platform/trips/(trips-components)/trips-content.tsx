@@ -49,15 +49,16 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               ease: [0.25, 0.1, 0.25, 1],
               opacity: { duration: 0.5 }
             }}
-            className="flex justify-center mt-4 mb-8 "
+            className="flex justify-center  mt-4 mb-8 "
           >
-            <div className="flex w-full justify-center">
+            <div className="flex w-full justify-center ">
               <SearchContainer
-                className="z-100"
-                containerStyles='bg-background rounded-sm sm:rounded-full drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                className="z-100 w-full px-0 "
+                containerStyles='bg-background rounded-none  m-0 p-0 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                 inputStyles='bg-background'
                 searchButtonClassNames='bg-background hover:bg-gray-200'
                 searchIconColor='text-[#404040]'
+                popoverMaxWidth='900px'
               />
             </div>
           </motion.div>
@@ -75,7 +76,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         <motion.div
           layout
           transition={{ duration: 0.3 }}
-          className="text-center py-10 border border-dashed border-gray-300 rounded-lg bg-gray-50"
+          className="text-center py-10 border mt-4 md:mt-32 border-dashed border-gray-300 rounded-lg bg-gray-50"
         >
           <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
         </motion.div>
