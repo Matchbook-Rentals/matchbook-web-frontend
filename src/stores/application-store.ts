@@ -77,8 +77,21 @@ interface QuestionnaireAnswers {
 
 interface ApplicationErrors {
   basicInfo: {
-    personalInfo: { firstName?: string; lastName?: string };
+    personalInfo: { 
+      firstName?: string; 
+      lastName?: string;
+      middleName?: string;
+      dateOfBirth?: string;
+      ssn?: string;
+    };
     identification: { idType?: string; idNumber?: string };
+  };
+  identification: { 
+    idType?: string; 
+    idNumber?: string;
+    isPrimary?: string;
+    photos?: string;
+    primaryPhoto?: string;
   };
   residentialHistory: {
     overall?: string;
@@ -170,6 +183,13 @@ const initialErrors: ApplicationErrors = {
   basicInfo: {
     personalInfo: {},
     identification: {},
+  },
+  identification: {
+    idType: '',
+    idNumber: '',
+    isPrimary: '',
+    photos: '',
+    primaryPhoto: '',
   },
   residentialHistory: {
     overall: '',

@@ -1,7 +1,7 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from '@/lib/utils';
@@ -12,9 +12,8 @@ import { ResidentialHistory } from './application-resident-history';
 import { ResidentialLandlordInfo } from './residential-landlord-info';
 import { Income } from './application-income';
 import Questionnaire from './application-questionnaire';
-import { upsertApplication, markComplete } from '@/app/actions/applications';
+import { upsertApplication, markComplete, getFullApplication } from '@/app/actions/applications';
 import { useApplicationStore } from '@/stores/application-store';
-import { useTripContext } from '@/contexts/trip-context-provider';
 import {
   Accordion,
   AccordionItem,
@@ -31,11 +30,12 @@ import {
 
 export default function MobileApplicationEdit() {
   const params = useParams();
-  const tripId = params.tripId as string;
   const router = useRouter();
-  const { state: { trip, application }, actions: { setHasApplication } } = useTripContext();
+  const searchParams = useSearchParams();
+  const applicationId = searchParams.get('id') || (params.tripId ? `${params.tripId}_application` : undefined);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
   const [openAccordion, setOpenAccordion] = useState<string>('___closed');
 
@@ -54,23 +54,77 @@ export default function MobileApplicationEdit() {
     checkCompletion
   } = useApplicationStore();
 
-  // Initialize store with application data
+  // Initialize store with application data - in standalone mode we'll use the parent page's data
   useEffect(() => {
-    initializeFromApplication(application);
-  }, [application, initializeFromApplication]);
+    // Only fetch application data if not in the standalone route (which already fetches it)
+    const fetchApplicationData = async () => {
+      setIsDataLoading(true);
+      
+      // Check if we have a trip-specific application or need the default application
+      try {
+        // For trip-specific applications
+        if (params.tripId) {
+          console.log('MobileApplicationEdit - Fetching application for trip:', params.tripId);
+          const appId = `${params.tripId}_application`;
+          const result = await getFullApplication(appId);
+          
+          if (result.success && result.application) {
+            console.log('MobileApplicationEdit - Fetched trip application:', result.application);
+            initializeFromApplication(result.application);
+            setIsDataLoading(false);
+            return;
+          }
+        }
+        
+        // If we're in the standalone route or if fetching by trip ID failed
+        if (!window.location.pathname.includes('/platform/application')) {
+          console.log('MobileApplicationEdit - Fetching default application');
+          const { getUserApplication } = await import('@/app/actions/applications');
+          const defaultApplication = await getUserApplication();
+          
+          if (defaultApplication) {
+            console.log('MobileApplicationEdit - Fetched default application:', defaultApplication);
+            initializeFromApplication(defaultApplication);
+          } else {
+            console.warn('MobileApplicationEdit - No application found for user');
+            toast({
+              title: "No Application Found",
+              description: "You don't have an application yet. Please create one.",
+              variant: "destructive",
+            });
+          }
+        }
+      } catch (error) {
+        console.error('MobileApplicationEdit - Error fetching application:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load application data",
+          variant: "destructive",
+        });
+      } finally {
+        setIsDataLoading(false);
+      }
+    };
+    
+    fetchApplicationData();
+  }, [params.tripId, initializeFromApplication, toast]);
 
   const validateSection = (section: string): boolean => {
     let isValid = true;
     switch (section) {
       case 'basic': {
         const personalInfoError = validatePersonalInfo(personalInfo);
-        const identificationError = validateIdentification(ids);
         setErrors('basicInfo', {
           personalInfo: personalInfoError,
-          identification: identificationError,
+          identification: {}, // Clear any previous identification errors
         });
-        isValid = Object.keys(personalInfoError).length === 0 &&
-                 Object.keys(identificationError).length === 0;
+        isValid = Object.keys(personalInfoError).length === 0;
+        break;
+      }
+      case 'identification': {
+        const identificationError = validateIdentification(ids);
+        setErrors('identification', identificationError);
+        isValid = Object.keys(identificationError).length === 0;
         break;
       }
       case 'residential': {
@@ -98,7 +152,7 @@ export default function MobileApplicationEdit() {
 
   const handleSubmit = async () => {
     // Validate all sections
-    const sections = ['basic', 'residential', 'income', 'questionnaire'];
+    const sections = ['basic', 'identification', 'residential', 'income', 'questionnaire'];
     const invalidSections = sections.filter(section => !validateSection(section));
 
     if (invalidSections.length > 0) {
@@ -114,11 +168,29 @@ export default function MobileApplicationEdit() {
       return;
     }
 
+    // Format the date if it exists
+    const formattedDateOfBirth = personalInfo.dateOfBirth ? 
+      new Date(personalInfo.dateOfBirth).toISOString() : 
+      undefined;
+        
     const applicationData = {
       ...personalInfo,
+      // Override with the formatted date
+      dateOfBirth: formattedDateOfBirth,
       ...answers,
       incomes,
-      identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      identifications: ids.map(id => ({
+        id: id.id,
+        idType: id.idType,
+        idNumber: id.idNumber,
+        isPrimary: id.isPrimary,
+        idPhotos: id.photos?.length ? {
+          create: id.photos.map(photo => ({
+            url: photo.url,
+            isPrimary: photo.isPrimary
+          }))
+        } : undefined
+      })),
       residentialHistories: residentialHistory,
     };
 
@@ -132,7 +204,8 @@ export default function MobileApplicationEdit() {
           title: "Success",
           description: "Application submitted successfully",
         });
-        setHasApplication(true);
+        // Redirect to dashboard after successful submission
+        router.push('/platform/dashboard');
         if (result.application?.id) {
           let completeResult = await markComplete(result.application?.id);
           console.log('completeResult', completeResult);
@@ -154,6 +227,14 @@ export default function MobileApplicationEdit() {
     }
   };
 
+  // Import the Mobile skeleton
+  const MobileApplicationSkeleton = React.lazy(() => import('./mobile-application-skeleton'));
+  
+  // Show loading UI while data is loading
+  if (isDataLoading) {
+    return <MobileApplicationSkeleton />;
+  }
+
   return (
     <div className={PAGE_MARGIN}>
       <div className="w-full max-w-3xl mx-auto">
@@ -173,10 +254,19 @@ export default function MobileApplicationEdit() {
             <AccordionTrigger className="px-4">Basic Information</AccordionTrigger>
             <AccordionContent className="px-4 pb-4">
               <PersonalInfo />
-              <div className="mt-8">
-                <h3 className={ApplicationItemSubHeaderStyles}>Identification</h3>
-                <Identification />
-              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem
+            value="identification"
+            className={cn(
+              "border rounded-lg mb-4",
+              validationErrors.identification && "border-red-500"
+            )}
+          >
+            <AccordionTrigger className="px-4">Identification</AccordionTrigger>
+            <AccordionContent className="px-4 pb-4">
+              <Identification />
             </AccordionContent>
           </AccordionItem>
 

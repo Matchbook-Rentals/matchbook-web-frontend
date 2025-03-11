@@ -191,7 +191,11 @@ export async function getUserApplication() {
       include: {
         incomes: true,
         verificationImages: true,
-        identifications: true,
+        identifications: {
+          include: {
+            idPhotos: true
+          }
+        },
         residentialHistories: {
           orderBy: {
             index: 'asc',
@@ -200,6 +204,7 @@ export async function getUserApplication() {
       },
     });
     console.log('residentialHistories', application?.residentialHistories);
+    console.log('identifications with photos', application?.identifications);
     console.log('application', application);
 
     return application; // This will be null if no application is found
