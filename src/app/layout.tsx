@@ -16,13 +16,26 @@ export const metadata: Metadata = {
   description: "Your place, all in one place",
 };
 
+const localization={
+  signIn: {
+    start: {
+      title: 'Welcome to Matchbook',
+      subtitle: 'Find a place you love'
+    }
+  }
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider 
+      localization={localization}
+      appearance={{
+        layout: {logoImageUrl: '/House_Logo.png', socialButtonsPlacement: 'bottom', socialButtonsVariant: 'blockButton'}}
+    }>
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
         </head>

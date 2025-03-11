@@ -1,5 +1,22 @@
 # TO DOs
 
+# MVP
+- [ ] Sign in / SIgn up
+- [ ] Verification
+- [ ] fix search bar new search
+- [ ] map
+- [ ] messages
+- [ ] Listing Approval
+- [ ] Listing UPload
+- [ ] Host Dashboard
+- [ ] Recommended
+- [ ] Stripe
+- [ ] Flexible Date Range
+- [ ] Email Prev landlords
+
+
+- [ ] fix search bar new search
+- [ ] square search bar in trips
 
 - [ ] AUTO BLOG POSTS / ADMIN DASH
 ---- [ ] Be sure to implement on 'Staging' branch 'comingSoon'
@@ -7,7 +24,7 @@
 - [ ] Calendar resize text at larger sizes to accomadate gaps
 - [ ] Article breadcrumbs, new signature block
 - [ ] Render markdown on articles
-- [ ] limit height to 350px
+- [ ] limit height to 350px 0
 - [ ] on upload success move to preview page with edit, or publish buttons
 - [ ] choose aspect ratio for article uploads
 - [ ] SWITCH TO MAIN
@@ -37,9 +54,9 @@
 - [ ] Investigate sticky nav forcing down buttons
 - [ ] shrink icons in sticky nav recommended
 
-- [ ] Verification
+- [] Verification
 - [ ] Sign IN Page
-- [ ] notification bell
+- [x] notification bell
 
 
 
@@ -78,9 +95,9 @@
 - [x] add card on desktop to pin click
 - [x] card hover change cursor color
 - [x] map button too big and too bold for map view
-- [ ] manage search cards full in single stack
-- [ ] fix shadow transition
-- [ ] if own property hide landlord information
+- [x] manage search cards full in single stack
+- [x] fix shadow transition
+- [x] if own property hide landlord information
 - [ ] line up income inputs vertically
 - [x] each income item gets its own upload button
 - [ ] Guest counter filled in on search edit mobile
