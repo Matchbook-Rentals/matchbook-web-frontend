@@ -6,6 +6,7 @@ import TripCard from './trip-card';
 import { Trip } from '@prisma/client';
 import { deleteTrip } from '@/app/actions/trips';
 import { useToast } from '@/components/ui/use-toast';
+import { motion, LayoutGroup } from 'framer-motion';
 
 interface TripGridProps {
   initialTrips: Trip[];
@@ -61,17 +62,21 @@ const TripGrid: React.FC<TripGridProps> = ({ initialTrips }) => {
   };
 
   return (
-    <>
-      <div className="grid mx-auto  grid-cols-1 justify-between gap-y-6 max-w-[2000px]">
+    <div>
+      <div className="grid mx-auto grid-cols-1 justify-between gap-y-6 max-w-[2000px]">
         {trips.map((trip) => (
-            <TripCard
+          <motion.div 
+            layout 
             key={trip.id}
+          >
+            <TripCard
               trip={trip}
               onDelete={handleDelete}
             />
+          </motion.div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
