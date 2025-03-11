@@ -87,6 +87,115 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }
 
+  const handleSettings = () => {
+    openUserProfile({
+      customPages: [
+        {
+          label: 'Terms',
+          url: '/terms',
+          mount: (el) => {
+            const content = document.createElement('div');
+            content.className = 'p-4';
+            content.innerHTML = `
+              <h2 class="text-xl font-bold mb-4">Terms of Service</h2>
+              <p>Please review our terms of service.</p>
+            `;
+            el.appendChild(content);
+          },
+          unmount: (el) => {
+            if (el) el.innerHTML = '';
+          },
+          mountIcon: (el) => {
+            const icon = document.createElement('div');
+            icon.innerHTML = '📋';
+            icon.className = 'text-lg';
+            el.appendChild(icon);
+          },
+          unmountIcon: (el) => {
+            if (el) el.innerHTML = '';
+          },
+        },
+        {
+          label: 'Support',
+          url: '/support',
+          mountIcon: (el) => {
+            const icon = document.createElement('div');
+            icon.innerHTML = '❓';
+            icon.className = 'text-lg';
+            el.appendChild(icon);
+          },
+          unmountIcon: (el) => {
+            if (el) el.innerHTML = '';
+          },
+          mount: (el) => {
+            const content = document.createElement('div');
+            content.className = 'p-4';
+            content.innerHTML = `
+              <h2 class="text-xl font-bold mb-4">Support</h2>
+              <p>Please review our support page.</p>
+            `;
+            el.appendChild(content);
+          },
+          unmount: (el) => {
+            if (el) el.innerHTML = '';
+          },
+        },
+        {
+          label: 'Feedback',
+          url: '/feedback',
+          mountIcon: (el) => {
+            const icon = document.createElement('div');
+            icon.innerHTML = '💬';
+            icon.className = 'text-lg';
+            el.appendChild(icon);
+          },
+          unmountIcon: (el) => {
+            if (el) el.innerHTML = '';
+          },
+          mount: (el) => {
+            const content = document.createElement('div');
+            content.className = 'p-4';
+            content.innerHTML = `
+              <h2 class="text-xl font-bold mb-4">We'd Love Your Feedback</h2>
+              <p class="mb-4">Help us improve our service by sharing your thoughts.</p>
+              <textarea class="w-full p-2 border rounded mb-4" rows="4" placeholder="Enter your feedback..."></textarea>
+              <button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+            `;
+            el.appendChild(content);
+          },
+          unmount: (el) => {
+            if (el) el.innerHTML = '';
+          },
+        },
+        {
+          label: 'Privacy Policy',
+          url: '/privacy',
+          mountIcon: (el) => {
+            const icon = document.createElement('div');
+            icon.innerHTML = '🔒';
+            icon.className = 'text-lg';
+            el.appendChild(icon);
+          },
+          unmountIcon: (el) => {
+            if (el) el.innerHTML = '';
+          },
+          mount: (el) => {
+            const content = document.createElement('div');
+            content.className = 'p-4';
+            content.innerHTML = `
+              <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
+              <p>Please review our privacy policy.</p>
+            `;
+            el.appendChild(content);
+          },
+          unmount: (el) => {
+            if (el) el.innerHTML = '';
+          },
+        }
+      ]
+    });
+  };
+
   return (
     <div className="flex items-center space-x-2 md:space-x-4">
       {isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
@@ -97,28 +206,35 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             )}
           </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="flex items-center justify-between mb-2 border-b pb-2">
-              <h3 className="font-medium">Notifications</h3>
-            </div>
-            <div className="max-h-80 overflow-y-auto">
-              {notifications.length > 0 ? (
-                notifications.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    onClick={handleNotificationClick}
-                    onDelete={handleNotificationDelete}
-                  />
-                ))
-              ) : (
-                <div className="text-center text-gray-500 py-4">No notifications</div>
-              )}
+          <PopoverContent  className="p-0">
+            <div className="w-80 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <div className="border-b border-gray-200">
+                <div className="px-4 py-3">
+                  <h3 className="text-md font-medium">Notifications</h3>
+                </div>
+              </div>
+              <div className="max-h-80 overflow-y-auto">
+                {notifications.length > 0 ? (
+                  <div className="flex flex-col">
+                    {notifications.map((notification) => (
+                      <div key={notification.id} className="border-b border-gray-100 last:border-b-0">
+                        <NotificationItem
+                          notification={notification}
+                          onClick={handleNotificationClick}
+                          onDelete={handleNotificationDelete}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-4 py-6 text-center text-sm text-gray-500">No notifications</div>
+                )}
+              </div>
             </div>
           </PopoverContent>
         </Popover>
       )}
-      
+
       {isSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
@@ -141,148 +257,84 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               </div>
             )}
           </PopoverTrigger>
-          <PopoverContent>
-            <div className='flex flex-col'>
-              <Link className='hover:bg-gray-200 border-b-1 p-1' href='/'>Home</Link>
+          <PopoverContent  className="p-0">
+            <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+              {/* Core navigation options */}
+              <div className="flex flex-col">
+                <Link href="/">
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Home</button>
+                </Link>
 
-              {/* Show admin dashboard link only for admins */}
-              {userRole === 'admin' && (
-                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/admin'>Admin Dashboard</Link>
-              )}
-              {userRole === 'admin' && (
-                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/platform/messages'>Messages</Link>
-              )}
-              
-              {/* Show Searches link based on role */}
-              {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
-                <Link className='hover:bg-gray-200 border-b-1 p-1' href='/platform/trips'>Searches</Link>
-              )}
-              
+                {/* Role-specific links */}
+                {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
+                  <Link href="/platform/trips">
+                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Searches</button>
+                  </Link>
+                )}
 
-              {/* Show coming soon message for users with no role */}
+                <Link href="/">
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Application</button>
+                </Link>
+
+                <Link href="/">
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Bookings</button>
+                </Link>
+              </div>
+
+              {/* Messages section */}
+              <div className="border-t border-gray-200">
+                {userRole === 'admin' && (
+                  <Link href="/platform/messages">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Inbox</button>
+                  </Link>
+                )}
+              </div>
+
+              {/* Host switch */}
+              <div className="border-t border-gray-200">
+                <Link href="/">
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">
+                    Switch to Hosting
+                  </button>
+                </Link>
+              </div>
+
+              {/* Beta access notice */}
               {!userRole && (
-                <div className='p-2 text-sm text-gray-500 border-b'>
-                  Beta access coming soon!
+                <div className="border-t border-gray-200">
+                  <div className="w-full px-4 py-3 text-left text-sm font-medium text-gray-500">Beta access coming soon!</div>
                 </div>
               )}
-              
-              {/* Support link available to all */}
-              <p onClick={() => { }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>Support</p>
-              
-              {/* Settings available to all */}
-              <p onClick={() => {
-                openUserProfile({
-                  customPages: [
-                    {
-                      label: 'Terms',
-                      url: '/terms',
-                      mount: (el) => {
-                        const content = document.createElement('div');
-                        content.className = 'p-4';
-                        content.innerHTML = `
-                          <h2 class="text-xl font-bold mb-4">Terms of Service</h2>
-                          <p>Please review our terms of service.</p>
-                        `;
-                        el.appendChild(content);
-                      },
-                      unmount: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                      mountIcon: (el) => {
-                        const icon = document.createElement('div');
-                        icon.innerHTML = '📋';
-                        icon.className = 'text-lg';
-                        el.appendChild(icon);
-                      },
-                      unmountIcon: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                    },
-                    {
-                      label: 'Support',
-                      url: '/support',
-                      mountIcon: (el) => {
-                        const icon = document.createElement('div');
-                        icon.innerHTML = '❓';
-                        icon.className = 'text-lg';
-                        el.appendChild(icon);
-                      },
-                      unmountIcon: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                      mount: (el) => {
-                        const content = document.createElement('div');
-                        content.className = 'p-4';
-                        content.innerHTML = `
-                          <h2 class="text-xl font-bold mb-4">Support</h2>
-                          <p>Please review our support page.</p>
-                        `;
-                        el.appendChild(content);
-                      },
-                      unmount: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                    },
-                    {
-                      label: 'Feedback',
-                      url: '/feedback',
-                      mountIcon: (el) => {
-                        const icon = document.createElement('div');
-                        icon.innerHTML = '💬';
-                        icon.className = 'text-lg';
-                        el.appendChild(icon);
-                      },
-                      unmountIcon: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                      mount: (el) => {
-                        const content = document.createElement('div');
-                        content.className = 'p-4';
-                        content.innerHTML = `
-                          <h2 class="text-xl font-bold mb-4">We'd Love Your Feedback</h2>
-                          <p class="mb-4">Help us improve our service by sharing your thoughts.</p>
-                          <textarea class="w-full p-2 border rounded mb-4" rows="4" placeholder="Enter your feedback..."></textarea>
-                          <button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-                        `;
-                        el.appendChild(content);
-                      },
-                      unmount: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                    },
-                    {
-                      label: 'Privacy Policy',
-                      url: '/privacy',
-                      mountIcon: (el) => {
-                        const icon = document.createElement('div');
-                        icon.innerHTML = '🔒';
-                        icon.className = 'text-lg';
-                        el.appendChild(icon);
-                      },
-                      unmountIcon: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                      mount: (el) => {
-                        const content = document.createElement('div');
-                        content.className = 'p-4';
-                        content.innerHTML = `
-                          <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
-                          <p>Please review our privacy policy.</p>
-                        `;
-                        el.appendChild(content);
-                      },
-                      unmount: (el) => {
-                        if (el) el.innerHTML = '';
-                      },
-                    }
-                  ]
-                });
-              }} className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>Settings</p>
-              
-              {/* Logout button available to all signed-in users */}
-              <div className='hover:bg-gray-200 cursor-pointer border-b-1 p-1'>
-                <SignOutButton signOutCallback={() => router.push("/")}>
-                  <span className="w-full text-left block">Log out</span>
+
+              {/* Settings, support, and admin section */}
+              <div className="border-t border-gray-200">
+                <button
+                  onClick={() => handleSettings()}
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
+                >
+                  Settings
+                </button>
+                <button
+                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
+                >
+                  Support
+                </button>
+                {userRole === 'admin' && (
+                  <Link href="/admin">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Admin Dashboard</button>
+                  </Link>
+                )}
+              </div>
+
+              {/* Logout */}
+              <div className="border-t border-gray-200">
+                <SignOutButton>
+                  <button
+                    onClick={() => {}}
+                    className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
+                  >
+                    Log out
+                  </button>
                 </SignOutButton>
               </div>
             </div>
@@ -296,9 +348,15 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             </div>
             <UserIcon className="text-charcoal h-[32px] w-[31px]" />
           </PopoverTrigger>
-          <PopoverContent className='w-full p1'>
-            <Link href="/sign-in" className='hover:bg-primaryBrand/51 cursor-pointer w-full text-left pl-3 pr-14 border-b border-black'>Sign In</Link>
-            <p onClick={() => { }} className='hover:bg-primaryBrand/51 cursor-pointer pl-3'>Get help</p>
+          <PopoverContent align="end" className="p-0">
+            <div className="w-48 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <div className="flex flex-col">
+                <Link href="/sign-in">
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
+                </Link>
+                <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
+              </div>
+            </div>
           </PopoverContent>
         </Popover>
       )}
