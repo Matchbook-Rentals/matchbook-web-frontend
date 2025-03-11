@@ -272,7 +272,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   </Link>
                 )}
 
-                <Link href="/">
+                <Link href="/platform/application">
                   <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Application</button>
                 </Link>
 

@@ -7,6 +7,22 @@ export async function createApplication(data: any) {
   try {
     const { userId } = auth();
     if (!userId) return { success: false, error: 'Unauthorized' };
+    
+    // Handle SSN encryption
+    let applicationData = { ...data };
+    if (data.ssn) {
+      try {
+        const { encryptData } = await import('@/utils/encryption');
+        const encryptedSsn = await encryptData(data.ssn);
+        if (encryptedSsn) {
+          applicationData.ssn = encryptedSsn;
+        } else {
+          console.error('Failed to encrypt SSN');
+        }
+      } catch (error) {
+        console.error('SSN encryption error:', error);
+      }
+    }
 
     const application = await prisma.application.upsert({
       where: {
@@ -16,7 +32,7 @@ export async function createApplication(data: any) {
         },
       },
       update: {
-        ...data,
+        ...applicationData,
         identifications: {
           upsert: data.identifications.map((id: any) => ({
             where: { id: id.id || 'new' },
@@ -68,10 +84,26 @@ export async function createDefaultApplication(data: any) {
     if (existingApplication) {
       return { success: false, error: 'Application already exists' };
     }
+    
+    // Handle SSN encryption
+    let applicationData = { ...data };
+    if (data.ssn) {
+      try {
+        const { encryptData } = await import('@/utils/encryption');
+        const encryptedSsn = await encryptData(data.ssn);
+        if (encryptedSsn) {
+          applicationData.ssn = encryptedSsn;
+        } else {
+          console.error('Failed to encrypt SSN');
+        }
+      } catch (error) {
+        console.error('SSN encryption error:', error);
+      }
+    }
 
     const application = await prisma.application.create({
       data: {
-        ...data,
+        ...applicationData,
         userId,
         identifications: { create: data.identifications },
         incomes: { create: data.incomes.map(({ id, ...rest }: any) => rest) },
@@ -93,6 +125,22 @@ export async function upsertNonDefaultApplication(data: any) {
   if (!data.tripId) {
     return { success: false, error: 'tripId is required for non-default applications' };
   }
+  
+  // Handle SSN encryption
+  let applicationData = { ...data };
+  if (data.ssn) {
+    try {
+      const { encryptData } = await import('@/utils/encryption');
+      const encryptedSsn = await encryptData(data.ssn);
+      if (encryptedSsn) {
+        applicationData.ssn = encryptedSsn;
+      } else {
+        console.error('Failed to encrypt SSN');
+      }
+    } catch (error) {
+      console.error('SSN encryption error:', error);
+    }
+  }
 
   try {
     const application = await prisma.application.upsert({
@@ -103,7 +151,7 @@ export async function upsertNonDefaultApplication(data: any) {
         },
       },
       update: {
-        ...data,
+        ...applicationData,
         identifications: { upsert: data.identifications.map((id: any) => ({ where: { id: id.id }, update: id, create: id })) },
         incomes: { upsert: data.incomes.map((income: any) => ({ where: { id: income.id || 'new' }, update: income, create: income })) },
         verificationImages: { upsert: data.verificationImages.map((img: any) => ({ where: { id: img.id }, update: img, create: img })) },
@@ -170,8 +218,26 @@ export async function getTripApplication(tripId?: string) {
     if (!application) {
       return { success: false, application: null };
     }
+    
+    // Decrypt SSN if it exists
+    let applicationWithDecryptedSSN = application;
+    if (application.ssn) {
+      try {
+        const { decryptData } = await import('@/utils/encryption');
+        const decryptedSsn = await decryptData(application.ssn);
+        if (decryptedSsn) {
+          // Create a new object instead of reassigning
+          applicationWithDecryptedSSN = {
+            ...application,
+            ssn: decryptedSsn
+          };
+        }
+      } catch (error) {
+        console.error('Failed to decrypt SSN:', error);
+      }
+    }
 
-    return { success: true, application };
+    return { success: true, application: applicationWithDecryptedSSN };
   } catch (error) {
     console.error('Failed to get trip application:', error);
     return { success: false, error: 'Failed to get trip application' };
@@ -206,8 +272,26 @@ export async function getUserApplication() {
     console.log('residentialHistories', application?.residentialHistories);
     console.log('identifications with photos', application?.identifications);
     console.log('application', application);
+    
+    // Decrypt SSN if it exists
+    let applicationWithDecryptedSSN = application;
+    if (application?.ssn) {
+      try {
+        const { decryptData } = await import('@/utils/encryption');
+        const decryptedSsn = await decryptData(application.ssn);
+        if (decryptedSsn) {
+          // Create a new object instead of reassigning
+          applicationWithDecryptedSSN = {
+            ...application,
+            ssn: decryptedSsn
+          };
+        }
+      } catch (error) {
+        console.error('Failed to decrypt SSN:', error);
+      }
+    }
 
-    return application; // This will be null if no application is found
+    return applicationWithDecryptedSSN; // This will be null if no application is found
   } catch (error) {
     console.error('Failed to get user application:', error);
     return null;
@@ -224,6 +308,21 @@ export async function updateApplication(data: any) {
   for (const [key, value] of Object.entries(rest)) {
     if (value !== undefined) {
       filteredData[key] = value;
+    }
+  }
+  
+  // Handle SSN encryption if present
+  if (rest.ssn) {
+    try {
+      const { encryptData } = await import('@/utils/encryption');
+      const encryptedSsn = await encryptData(rest.ssn);
+      if (encryptedSsn) {
+        filteredData.ssn = encryptedSsn;
+      } else {
+        console.error('Failed to encrypt SSN');
+      }
+    } catch (error) {
+      console.error('SSN encryption error:', error);
     }
   }
 
@@ -292,6 +391,21 @@ export async function upsertApplication(data: any) {
   for (const [key, value] of Object.entries(rest)) {
     if (value !== undefined) {
       filteredData[key] = value;
+    }
+  }
+  
+  // Handle SSN encryption if it's in the data
+  if (rest.ssn) {
+    try {
+      const { encryptData } = await import('@/utils/encryption');
+      const encryptedSsn = await encryptData(rest.ssn);
+      if (encryptedSsn) {
+        filteredData.ssn = encryptedSsn;
+      } else {
+        console.error('Failed to encrypt SSN');
+      }
+    } catch (error) {
+      console.error('SSN encryption error:', error);
     }
   }
 
@@ -435,7 +549,25 @@ export async function getFullApplication(applicationId: string) {
       }
     });
     
-    return { success: true, application };
+    // Decrypt SSN if it exists
+    let applicationWithDecryptedSSN = application;
+    if (application?.ssn) {
+      try {
+        const { decryptData } = await import('@/utils/encryption');
+        const decryptedSsn = await decryptData(application.ssn);
+        if (decryptedSsn) {
+          // Create a new object instead of reassigning
+          applicationWithDecryptedSSN = {
+            ...application,
+            ssn: decryptedSsn
+          };
+        }
+      } catch (error) {
+        console.error('Failed to decrypt SSN:', error);
+      }
+    }
+    
+    return { success: true, application: applicationWithDecryptedSSN };
   } catch (error) {
     console.error("Failed to fetch full application:", error);
     return { success: false, error: 'Failed to fetch application details.' };

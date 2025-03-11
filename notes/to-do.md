@@ -15,6 +15,9 @@
 - [ ] Email Prev landlords
 
 
+SSN encryption
+
+
 - [ ] fix search bar new search
 - [ ] square search bar in trips
 
