@@ -3,30 +3,78 @@ import { ResidentialHistory } from "@prisma/client";
 type PersonalInfoErrors = {
   firstName?: string;
   lastName?: string;
+  middleName?: string;
+  dateOfBirth?: string;
+  ssn?: string;
 };
 
 type IdentificationErrors = {
   idType?: string;
   idNumber?: string;
+  isPrimary?: string;
+  photos?: string;
+  primaryPhoto?: string;
 };
 
-export const validatePersonalInfo = (personalInfo: { firstName: string; lastName: string }) => {
+export const validatePersonalInfo = (personalInfo: { 
+  firstName: string; 
+  lastName: string;
+  middleName?: string;
+  noMiddleName?: boolean;
+  dateOfBirth?: Date | string;
+  ssn?: string;
+}) => {
   let errorObj: PersonalInfoErrors = {};
+  
   if (!personalInfo.firstName.trim()) {
     errorObj.firstName = 'First Name is required.';
   }
+  
   if (!personalInfo.lastName.trim()) {
     errorObj.lastName = 'Last Name is required.';
   }
+  
+  // New validations
+  if (!personalInfo.noMiddleName && (!personalInfo.middleName || !personalInfo.middleName.trim())) {
+    errorObj.middleName = 'Middle name is required unless "No Middle Name" is checked';
+  }
+  
+  if (!personalInfo.dateOfBirth) {
+    errorObj.dateOfBirth = 'Date of birth is required';
+  }
+  
+  // SSN validation - required field
+  if (!personalInfo.ssn || personalInfo.ssn.trim() === '') {
+    errorObj.ssn = 'Social Security Number is required';
+  } else {
+    // Remove all non-digits first
+    const digitsOnly = personalInfo.ssn.replace(/\D/g, '');
+    // Check if we have exactly 9 digits
+    if (digitsOnly.length !== 9) {
+      errorObj.ssn = 'SSN must contain 9 digits';
+    }
+  }
+  
   return errorObj;
 };
 
-export const validateIdentification = (ids: { idType: string; idNumber: string }[]) => {
+export const validateIdentification = (ids: { 
+  id: string;
+  idType: string; 
+  idNumber: string;
+  isPrimary: boolean;
+  photos?: {id?: string; url: string; isPrimary: boolean}[];
+}[]) => {
   let errorObj: IdentificationErrors = {};
 
   if (!ids || ids.length === 0) {
     errorObj.idType = 'Identification information is required';
     return errorObj;
+  }
+
+  // Check if at least one ID is marked as primary
+  if (!ids.some(id => id.isPrimary)) {
+    errorObj.isPrimary = 'At least one identification must be marked as primary';
   }
 
   const id = ids[0];
@@ -35,6 +83,13 @@ export const validateIdentification = (ids: { idType: string; idNumber: string }
   }
   if (!id.idNumber.trim()) {
     errorObj.idNumber = 'Identification Number is required';
+  }
+
+  // New validations for photos
+  if (!id.photos || id.photos.length === 0) {
+    errorObj.photos = 'At least one photo is required for identification';
+  } else if (!id.photos.some(photo => photo.isPrimary)) {
+    errorObj.primaryPhoto = 'One photo must be marked as primary';
   }
 
   return errorObj;

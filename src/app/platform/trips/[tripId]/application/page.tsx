@@ -20,7 +20,7 @@ import { Identification } from '../../(trips-components)/application-identity';
 import { Income } from '../../(trips-components)/application-income';
 import Questionnaire from '../../(trips-components)/application-questionnaire';
 import MobileApplicationEdit from '../../(trips-components)/mobile-application-edit';
-import { upsertApplication, markComplete } from '@/app/actions/applications';
+import { upsertApplication, markComplete, getFullApplication } from '@/app/actions/applications';
 import { useWindowSize } from '@/hooks/useWindowSize'
 import {
   validatePersonalInfo,
@@ -179,7 +179,26 @@ export default function ApplicationPage() {
 
   // Initialize store with application data
   useEffect(() => {
-    initializeFromApplication(application);
+    // First initialize with whatever we have from the context
+    if (application) {
+      initializeFromApplication(application);
+    }
+    
+    // Then fetch the complete application with all relations
+    const fetchFullApplication = async () => {
+      if (application?.id) {
+        const result = await getFullApplication(application.id);
+        if (result.success && result.application) {
+          // Initialize with the full application data including all relations
+          console.log('Fetched full application:', result.application);
+          initializeFromApplication(result.application);
+        } else {
+          console.error('Failed to fetch full application:', result.error);
+        }
+      }
+    };
+    
+    fetchFullApplication();
   }, [application, initializeFromApplication]);
 
   // Carousel state
@@ -252,11 +271,29 @@ export default function ApplicationPage() {
     // Only execute this try catch if we have changes
     if (isEdited()) {
       setIsLoading(true);
+      // Format the date if it exists
+      const formattedDateOfBirth = personalInfo.dateOfBirth ? 
+        new Date(personalInfo.dateOfBirth).toISOString() : 
+        undefined;
+        
       const applicationData = {
         ...personalInfo,
+        // Override with the formatted date
+        dateOfBirth: formattedDateOfBirth,
         ...answers,
         incomes,
-        identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
+        identifications: ids.map(id => ({
+          id: id.id,
+          idType: id.idType,
+          idNumber: id.idNumber,
+          isPrimary: id.isPrimary,
+          idPhotos: id.photos?.length ? {
+            create: id.photos.map(photo => ({
+              url: photo.url,
+              isPrimary: photo.isPrimary
+            }))
+          } : undefined
+        })),
         residentialHistories: residentialHistory,
       };
       try {
@@ -302,11 +339,29 @@ export default function ApplicationPage() {
   }, [api, onSelect]);
 
   const handleSubmit = async () => {
+    // Format the date if it exists
+    const formattedDateOfBirth = personalInfo.dateOfBirth ? 
+      new Date(personalInfo.dateOfBirth).toISOString() : 
+      undefined;
+      
     const applicationData = {
       ...personalInfo,
+      // Override with the formatted date
+      dateOfBirth: formattedDateOfBirth,
       ...answers,
       incomes,
-      identifications: [{ id: ids[0].id, idType: ids[0].idType, idNumber: ids[0].idNumber }],
+      identifications: ids.map(id => ({
+        id: id.id,
+        idType: id.idType,
+        idNumber: id.idNumber,
+        isPrimary: id.isPrimary,
+        idPhotos: id.photos?.length ? {
+          create: id.photos.map(photo => ({
+            url: photo.url,
+            isPrimary: photo.isPrimary
+          }))
+        } : undefined
+      })),
       residentialHistories: residentialHistory,
     };
     let isValid = validateStep(currentStep);

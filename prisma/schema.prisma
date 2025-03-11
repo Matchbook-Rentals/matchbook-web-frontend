@@ -508,7 +508,7 @@ model Conversation {
   isGroup      Boolean                   @default(false)
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
-  listingId String
+  listingId    String?                   
   messages     Message[]
   participants ConversationParticipant[]
 }
@@ -609,9 +609,13 @@ model Application {
   isComplete Boolean @default(false)
 
   // Personal Info
-  firstName String?
-  lastName  String?
-
+  firstName        String?
+  middleName       String?
+  lastName         String?
+  noMiddleName     Boolean? @default(false)
+  dateOfBirth      DateTime?
+  ssn              String?  // Encrypted value to be stored
+  
   residentialHistories ResidentialHistory[]
 
   // Comments to explain Yes answers
@@ -625,7 +629,7 @@ model Application {
   // Relationships
   user               User                @relation(fields: [userId], references: [id])
   trip               Trip?               @relation(fields: [tripId], references: [id])
-  identifications    Identification[]
+  identifications    Identification[]    // Keep as one-to-many temporarily
   incomes            Income[]
   verificationImages VerificationImage[]
 
@@ -639,8 +643,21 @@ model Identification {
   applicationId String
   idType        String
   idNumber      String
+  idPhotos      IDPhoto[]   // One-to-many relationship with ID photos
+  isPrimary     Boolean     @default(false)  // Flag for the primary ID
 
   @@index([applicationId])
+}
+
+model IDPhoto {
+  id               String         @id @default(cuid())
+  url              String
+  identification   Identification @relation(fields: [identificationId], references: [id], onDelete: Cascade)
+  identificationId String
+  isPrimary        Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+
+  @@index([identificationId])
 }
 
 model Income {

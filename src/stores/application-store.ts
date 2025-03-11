@@ -40,12 +40,24 @@ export const defaultResidentialHistory: ResidentialHistory = {
 interface PersonalInfo {
   firstName: string;
   lastName: string;
+  middleName?: string;
+  noMiddleName?: boolean;
+  dateOfBirth?: Date | string;
+  ssn?: string;
 }
 
 interface Identification {
   id: string;
   idType: string;
   idNumber: string;
+  isPrimary: boolean;
+  photos?: IDPhoto[];
+}
+
+interface IDPhoto {
+  id?: string;
+  url: string;
+  isPrimary: boolean;
 }
 
 
@@ -97,9 +109,13 @@ interface ApplicationErrors {
 export const initialState = {
   personalInfo: {
     firstName: '',
-    lastName: ''
+    lastName: '',
+    middleName: '',
+    noMiddleName: false,
+    dateOfBirth: '',
+    ssn: ''
   },
-  ids: [{ idType: '', idNumber: '' }],
+  ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, photos: [] }],
   verificationImages: [] as VerificationImage[],
   residentialHistory: [defaultResidentialHistory],
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
@@ -218,9 +234,19 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     const newData = {
       personalInfo: {
         firstName: application.firstName || '',
-        lastName: application.lastName || ''
+        lastName: application.lastName || '',
+        middleName: application.middleName || '',
+        noMiddleName: application.noMiddleName || false,
+        dateOfBirth: application.dateOfBirth || '',
+        ssn: application.ssn || ''
       },
-      ids: application.identifications || [{ idType: '', idNumber: '' }],
+      ids: application.identifications?.map((id: any) => ({
+        id: id.id || '',
+        idType: id.idType || '',
+        idNumber: id.idNumber || '',
+        isPrimary: id.isPrimary || false,
+        photos: id.idPhotos || [] // Map idPhotos from the backend to photos in our store
+      })) || [{ id: '', idType: '', idNumber: '', isPrimary: true, photos: [] }],
       verificationImages: application.verificationImages || [] as VerificationImage[],
       residentialHistory: residences,
       incomes: application.incomes?.map((income: any) => ({
@@ -295,14 +321,42 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
     // Check Personal Info
     if (!state.personalInfo.firstName) missingFields.push('personalInfo.firstName');
     if (!state.personalInfo.lastName) missingFields.push('personalInfo.lastName');
+    // New field validations
+    if (!state.personalInfo.noMiddleName && !state.personalInfo.middleName) {
+      missingFields.push('personalInfo.middleName');
+    }
+    if (!state.personalInfo.dateOfBirth) missingFields.push('personalInfo.dateOfBirth');
+    // Check SSN
+    if (!state.personalInfo.ssn || state.personalInfo.ssn.trim() === '') {
+      missingFields.push('personalInfo.ssn (required)');
+    } else {
+      // Remove all non-digits first
+      const digitsOnly = state.personalInfo.ssn.replace(/\D/g, '');
+      // Check if we have exactly 9 digits
+      if (digitsOnly.length !== 9) {
+        missingFields.push('personalInfo.ssn (must contain 9 digits)');
+      }
+    }
 
     // Check Identification(s)
     if (!state.ids || state.ids.length === 0) {
       missingFields.push('ids (no identification provided)');
     } else {
+      // Check if at least one ID is marked as primary
+      if (!state.ids.some(id => id.isPrimary)) {
+        missingFields.push('ids (no primary identification marked)');
+      }
+
       state.ids.forEach((id, index) => {
         if (!id.idType) missingFields.push(`ids[${index}].idType`);
         if (!id.idNumber) missingFields.push(`ids[${index}].idNumber`);
+        
+        // Check for ID photos
+        if (!id.photos || id.photos.length === 0) {
+          missingFields.push(`ids[${index}].photos (no photos provided)`);
+        } else if (!id.photos.some(photo => photo.isPrimary)) {
+          missingFields.push(`ids[${index}].photos (no primary photo marked)`);
+        }
       });
     }
 

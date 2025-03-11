@@ -414,6 +414,29 @@ export async function markComplete(applicationId: string) {
   }
 }
 
+export async function getFullApplication(applicationId: string) {
+  try {
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+      include: {
+        identifications: {
+          include: {
+            idPhotos: true
+          }
+        },
+        incomes: true,
+        residentialHistories: true,
+        verificationImages: true
+      }
+    });
+    
+    return { success: true, application };
+  } catch (error) {
+    console.error("Failed to fetch full application:", error);
+    return { success: false, error: 'Failed to fetch application details.' };
+  }
+}
+
 export async function markSynced(applicationId: string) {
   try {
     const application = await prisma.application.findUnique({
