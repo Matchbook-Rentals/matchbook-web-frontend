@@ -1,0 +1,119 @@
+
+.cl-socialButtonsBlockButton {
+  width: 95%;
+  display: grid;
+  grid-template-columns: 22px 1fr 22px; /* Icon | Text | Spacer */
+}
+
+.cl-socialButtonsBlockButton > span {
+  display: contents;
+}
+
+.cl-socialButtonsBlockButton > span > span:has(img) {
+  justify-self: start;
+}
+
+.cl-socialButtonsBlockButton > span > span:has(img) img {
+  width: 22px;
+}
+
+.cl-socialButtonsBlockButtonText {
+  justify-self: center;
+  text-align: center;
+  color: #281d1b;
+}
+
+.cl-socialButtonsBlockButton::after {
+  content: "";
+}
+
+.cl-socialButtons {
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+  align-items: center;
+}
+
+.cl-card {
+  padding: 5px;
+  background: var(--background);
+}
+
+
+.cl-cardBox {
+  border: none;
+  box-shadow: none;
+}
+
+.cl-header {
+  padding: 0 0px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.cl-logoImage {
+  height: 31px;
+}
+
+.cl-headerTitle {
+  color: #281d1b;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px; /* 114.286% */
+  letter-spacing: -0.56px;
+}
+
+
+.cl-headerSubtitle {
+  color: #281d1b;
+  text-align: right;
+  font-family: Poppins;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 133.333% */
+  letter-spacing: -0.075px;
+}
+
+.cl-formButtonPrimary {
+  border: none !important;
+  border-radius: 8px;
+  outline: none ;
+  background: rgba(92, 154, 197, 0.49);
+  margin: 0 auto;
+  padding: 8px 16px;
+  color:#050100;
+  box-shadow: none !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: rgba(92, 154, 197, 0.69);
+}
+
+.cl-formFieldInput {
+  border-radius: 8px;
+}
+
+
+.cl-footer {
+  background: var(--background);
+}
+
+.cl-footerAction {
+  background: var(--background);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.cl-footerActionText {
+  background: var(--background);
+}
+
+.cl-footerActionLink {
+  background: var(--background);
+}
+

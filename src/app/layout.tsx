@@ -22,7 +22,13 @@ const localization={
       title: 'Welcome to Matchbook',
       subtitle: 'Find a place you love'
     }
-  }
+  },
+  signUp: {
+    start: {
+      title: 'Welcome to Matchbook',
+      subtitle: 'Find a place you love'
+    }
+  },
 }
 
 export default function RootLayout({
