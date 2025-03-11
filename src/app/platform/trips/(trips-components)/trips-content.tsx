@@ -49,7 +49,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               ease: [0.25, 0.1, 0.25, 1],
               opacity: { duration: 0.5 }
             }}
-            className="flex justify-center mt-4 mb-8 overflow-hidden"
+            className="flex justify-center mt-4 mb-8 "
           >
             <div className="flex w-full justify-center">
               <SearchContainer
