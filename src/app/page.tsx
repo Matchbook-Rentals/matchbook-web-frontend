@@ -99,7 +99,7 @@ const WebHomePage = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="text-sm text-gray-700 text-center">Fill out one application, and you'll be able to apply for any listing available on our platform.</span>
+              <span className="text-sm text-gray-700 text-center">Fill out one application, and you&apos;ll be able to apply for any listing available on our platform.</span>
             </div>
             <div className="p-4 flex flex-col items-center justify-center border-b border-l border-t">
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="mb-2">
@@ -131,7 +131,7 @@ const WebHomePage = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="text-sm text-gray-700 text-center">Our rating system ensures you know who you're dealing with.</span>
+              <span className="text-sm text-gray-700 text-center">Our rating system ensures you know who you&apos;re dealing with.</span>
             </div>
             <div className="p-4 flex flex-col items-center justify-center border-l border-t">
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="mb-2">
