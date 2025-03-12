@@ -5,9 +5,9 @@ import Countdown from "../marketing-landing-components/countdown";
 const Hero: React.FC = () => {
   return (
     <div
-      className="relative md:mt-20 min-h-[60vh] rounded-lg shadow-md w-full md:w-[90vw] lg:w-[80vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative  min-h-[60vh] rounded-lg shadow-md w-[100vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
-        backgroundImage: "url('/hero-image.png')",
+        backgroundImage: "url('/img/home-page/new-hero.png')",
         backgroundSize: "cover", // Ensures the image covers the container
         backgroundPosition: "center", // Centers the image so it crops equally from all sides
       }}
@@ -16,7 +16,14 @@ const Hero: React.FC = () => {
       {/* <div className="absolute inset-0 bg-gray-400 opacity-50"></div> */}
 
       {/* Content */}
-      <SearchContainer className="md:pt-[5%] pt-[5%] sm:w-[90%] lg:w-[80%] relative" />
+                  <SearchContainer
+                    className="z-100 w-full px-0 sm:w-[90%] lg:w-[80%] pt-[6%]"
+                    containerStyles='bg-background rounded-none m-0 p-0 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                    inputStyles='bg-background'
+                    searchButtonClassNames='bg-background hover:bg-gray-200'
+                    searchIconColor='text-[#404040]'
+                    popoverMaxWidth='900px'
+                  />
     </div>
   );
 };

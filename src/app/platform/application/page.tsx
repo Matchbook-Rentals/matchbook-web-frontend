@@ -185,9 +185,16 @@ export default function ApplicationPage() {
           idNumber: id.idNumber,
           isPrimary: id.isPrimary,
           idPhotos: id.photos?.length ? {
-            create: id.photos.map(photo => ({
-              url: photo.url,
-              isPrimary: photo.isPrimary
+            upsert: id.photos.map(photo => ({
+              where: { id: photo.id || 'new' }, // Use existing ID if available
+              update: {
+                url: photo.url,
+                isPrimary: photo.isPrimary
+              },
+              create: {
+                url: photo.url,
+                isPrimary: photo.isPrimary
+              }
             }))
           } : undefined
         })),
@@ -253,9 +260,16 @@ export default function ApplicationPage() {
         idNumber: id.idNumber,
         isPrimary: id.isPrimary,
         idPhotos: id.photos?.length ? {
-          create: id.photos.map(photo => ({
-            url: photo.url,
-            isPrimary: photo.isPrimary
+          upsert: id.photos.map(photo => ({
+            where: { id: photo.id || 'new' }, // Use existing ID if available
+            update: {
+              url: photo.url,
+              isPrimary: photo.isPrimary
+            },
+            create: {
+              url: photo.url,
+              isPrimary: photo.isPrimary
+            }
           }))
         } : undefined
       })),

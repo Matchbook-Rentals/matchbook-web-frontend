@@ -41,7 +41,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   // Replace activeContent state with new type
   const [activeContent, setActiveContent] = React.useState<ActiveContentType>(null);
-  const [totalGuests, setTotalGuests] = React.useState<number>(null);
+  const [totalGuests, setTotalGuests] = React.useState<number>(0); // Initialize with 0 instead of null
   const [dateRange, setDateRange] = React.useState<{ start: Date | null; end: Date | null }>({
     start: null,
     end: null,
@@ -58,7 +58,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
-  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400  cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-background ${inputClassName || ''}`;
 
   // Add this effect to update totalGuests whenever guests state changes
@@ -87,8 +87,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   }, [isOpen]);
 
   // Format the dates for display
-  const formatDate = (date: Date) => {
-    if (!date) return null
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
@@ -200,7 +200,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     } else {
       toast({
         variant: "destructive",
-        description: response?.message || "Failed to create trip",
+        description: response.success === false ? response.error : "Failed to create trip",
       });
     }
   };
@@ -217,48 +217,63 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       <div
         className={cn('flex flex-row no-wrap px-3 py-1 xl:px-3 xl:py-3 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
-        <input
-          ref={locationInputRef}
-          type="text"
-          placeholder="Where to?"
-          value={locationDisplayValue}
-          className={inputClasses}
-          readOnly
-          onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
-        />
-        <input
-          ref={moveInInputRef}
-          type="text"
-          placeholder="Move in"
-          value={formatDate(dateRange.start)}
-          className={inputClasses}
-          readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
-        />
-        <input
-          ref={moveOutInputRef}
-          type="text"
-          placeholder="Move out"
-          value={formatDate(dateRange.end)}
-          className={inputClasses}
-          readOnly={!hasAccess}
-          onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
-        />
-        <input
-          ref={guestsInputRef}
-          type="text"
-          placeholder="Who?"
-          value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Where</label>
+          <input
+            ref={locationInputRef}
+            type="text"
+            placeholder="Chooose Location"
+            value={locationDisplayValue}
+            className={inputClasses}
+            readOnly
+            onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
+          />
+        </div>
 
-          className={`${inputClasses} sm:border-r-0`}
-          readOnly={!hasAccess}
-          onClick={(e) => {
-            setHasBeenSelected(true);
-            handleInputClick(e, 'guests', guestsInputRef)
-          }
-          }
-        />
-        <div className="flex-shrink-0">
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Move In</label>
+          <input
+            ref={moveInInputRef}
+            type="text"
+            placeholder="Select dates"
+            value={formatDate(dateRange.start)}
+            className={inputClasses}
+            readOnly={!hasAccess}
+            onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
+          />
+        </div>
+
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Move Out</label>
+          <input
+            ref={moveOutInputRef}
+            type="text"
+            placeholder="Select dates"
+            value={formatDate(dateRange.end)}
+            className={inputClasses}
+            readOnly={!hasAccess}
+            onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
+          />
+        </div>
+
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Who</label>
+          <input
+            ref={guestsInputRef}
+            type="text"
+            placeholder="Add guests"
+            value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+            className={`${inputClasses} sm:border-r-0`}
+            readOnly={!hasAccess}
+            onClick={(e) => {
+              setHasBeenSelected(true);
+              handleInputClick(e, 'guests', guestsInputRef)
+            }
+            }
+          />
+        </div>
+
+        <div className="flex-shrink-0 self-end">
           <button
             disabled={!hasAccess}
             onClick={(e) => {
@@ -281,12 +296,12 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       </div>
 
       {isOpen && (
-        <div ref={popoverRef} 
+        <div ref={popoverRef}
           className={`absolute top-[calc(100%+8px)] ${popoverMaxWidth ? 'left-1/2 transform -translate-x-1/2' : 'left-0'} w-full bg-background rounded-xl shadow-lg z-50
           before:content-[''] before:absolute before:-top-2 ${popoverMaxWidth ? 'before:left-1/2 before:-translate-x-1/2' : 'before:left-[var(--arrow-position)]'} before:w-4 before:h-4
           before:bg-background before:rotate-45 before:border-l before:border-t before:border-gray-200
           origin-top`}
-          style={{ 
+          style={{
             ...(!popoverMaxWidth ? { '--arrow-position': `${arrowPosition}%` } : {}),
             ...(popoverMaxWidth ? { maxWidth: popoverMaxWidth } : {}),
             animation: 'popoverFadeIn 0.2s ease-out'

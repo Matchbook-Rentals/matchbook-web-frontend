@@ -79,7 +79,7 @@ const OverviewTab: React.FC = () => {
           Icon={ApplicationIcon}
           title="Application"
           subTitle="Start your general application"
-          href={`/platform/trips/${tripId}/application`}
+          href={`/platform/application`}
         />
         <BigButton
           Icon={MatchbookVerified}

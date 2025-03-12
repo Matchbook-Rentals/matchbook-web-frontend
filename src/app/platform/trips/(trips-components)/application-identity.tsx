@@ -84,19 +84,24 @@ export const Identification: React.FC = () => {
   }
 
   const handleUploadFinish = (res: UploadData[]) => {
-    // Convert uploaded images to IDPhotos - make first uploaded photo primary
+    // Check if we have existing photos
+    const hasExistingPhotos = currentId.photos && currentId.photos.length > 0;
+    
+    // Convert uploaded images to IDPhotos
     const newPhotos = res.map((upload, index) => ({
       url: upload.url,
-      isPrimary: currentId.photos?.length === 0 && index === 0, // First photo is primary by default
+      // Only set as primary if there are no existing photos and this is the first uploaded photo
+      isPrimary: !hasExistingPhotos && index === 0,
     }));
     
-    // Add photos to current ID
+    // Add photos to current ID without creating a new ID
     const updatedId = {
       ...currentId,
       isPrimary: true, // Ensure ID is marked as primary
       photos: [...(currentId.photos || []), ...newPhotos]
     };
     
+    // Only update the current ID, keeping all other IDs unchanged
     setIds([updatedId, ...ids.slice(1)]);
     
     // Also keep old functionality for backward compatibility
@@ -177,15 +182,15 @@ export const Identification: React.FC = () => {
         
         {idPhotos.length > 0 ? (
           <div className='border border-gray-300 rounded-md p-2'>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 items-center">
               {idPhotos.map((photo, idx) => (
-                <div key={idx} className="relative">
+                <div key={idx} className="relative group">
                   <Dialog onOpenChange={(open) => !open && setSelectedImageIndex(null)}>
                     <DialogTrigger asChild>
                       <img
                         src={photo.url}
                         alt={`ID image ${idx + 1}`}
-                        className="w-full h-auto cursor-pointer"
+                        className={`w-full h-auto max-h-[300px] cursor-pointer `}
                         onClick={() => handleImageClick(idx)}
                       />
                     </DialogTrigger>
@@ -195,20 +200,64 @@ export const Identification: React.FC = () => {
                         <DialogDescription>Your identification document</DialogDescription>
                       </DialogHeader>
                       <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-6">
+                        <CardContent className="flex aspect-square  items-center justify-center p-4">
                           <img src={photo.url} alt={`ID image ${idx + 1}`} className="w-full h-auto" />
                         </CardContent>
                       </Card>
                     </DialogContent>
                   </Dialog>
                   
+                  <div className="absolute top-0 right-0 p-1 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    
+                    {/* Delete button */}
+                    <button
+                      type="button"
+                      className="bg-red-500 text-white p-1 rounded-full text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        
+                        // Remove this photo from the current ID
+                        const updatedPhotos = currentId.photos?.filter((_, i) => i !== idx) || [];
+                        
+                        // If we're removing the primary photo, set a new primary if any photos left
+                        if (photo.isPrimary && updatedPhotos.length > 0) {
+                          updatedPhotos[0].isPrimary = true;
+                        }
+                        
+                        // Update the ID with the new photos array
+                        const updatedId = {
+                          ...currentId,
+                          photos: updatedPhotos
+                        };
+                        
+                        setIds([updatedId, ...ids.slice(1)]);
+                      }}
+                      title="Delete photo"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  
+                  {photo.isPrimary && (
+                    <div className="absolute bottom-0 left-0 bg-blue-500 text-white px-2 py-1 text-xs">
+                      Primary
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         ) : (
-          <div className='border border-gray-200 rounded-md flex justify-center items-center'>
-            <span className="text-gray-500">ID photos will display here</span>
+          <div className={`border ${error?.photos ? 'border-red-500 bg-red-50' : 'border-gray-200'} rounded-md flex flex-col justify-center items-center p-4`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className={`${error?.photos ? 'text-red-600 font-medium' : 'text-gray-500'}`}>
+              {error?.photos ? 'Required: Please upload ID photos' : 'ID photos will display here'}
+            </span>
+            <span className="text-xs text-gray-400 mt-1">
+              At least one photo is required
+            </span>
           </div>
         )}
       </div>
