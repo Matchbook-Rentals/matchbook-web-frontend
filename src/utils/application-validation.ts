@@ -12,7 +12,7 @@ type IdentificationErrors = {
   idType?: string;
   idNumber?: string;
   isPrimary?: string;
-  photos?: string;
+  idPhotos?: string;
   primaryPhoto?: string;
 };
 
@@ -63,7 +63,7 @@ export const validateIdentification = (ids: {
   idType: string; 
   idNumber: string;
   isPrimary: boolean;
-  photos?: {id?: string; url: string; isPrimary: boolean}[];
+  idPhotos?: {id?: string; url: string; isPrimary: boolean}[];
 }[]) => {
   let errorObj: IdentificationErrors = {};
 
@@ -86,9 +86,9 @@ export const validateIdentification = (ids: {
   }
 
   // New validations for photos
-  if (!id.photos || id.photos.length === 0) {
-    errorObj.photos = 'At least one photo is required for identification';
-  } else if (!id.photos.some(photo => photo.isPrimary)) {
+  if (!id.idPhotos || id.idPhotos.length === 0) {
+    errorObj.idPhotos = 'At least one photo is required for identification';
+  } else if (!id.idPhotos.some(photo => photo.isPrimary)) {
     errorObj.primaryPhoto = 'One photo must be marked as primary';
   }
 

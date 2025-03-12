@@ -7,7 +7,7 @@ export async function createApplication(data: any) {
   try {
     const { userId } = auth();
     if (!userId) return { success: false, error: 'Unauthorized' };
-    
+
     // Handle SSN encryption
     let applicationData = { ...data };
     if (data.ssn) {
@@ -84,7 +84,7 @@ export async function createDefaultApplication(data: any) {
     if (existingApplication) {
       return { success: false, error: 'Application already exists' };
     }
-    
+
     // Handle SSN encryption
     let applicationData = { ...data };
     if (data.ssn) {
@@ -125,7 +125,7 @@ export async function upsertNonDefaultApplication(data: any) {
   if (!data.tripId) {
     return { success: false, error: 'tripId is required for non-default applications' };
   }
-  
+
   // Handle SSN encryption
   let applicationData = { ...data };
   if (data.ssn) {
@@ -196,7 +196,7 @@ export async function getTripApplication(tripId?: string) {
         },
       });
     }
-    console.log('residentialHistories', application?.residentialHistories);
+    // Debug residential histories if needed
 
     if (!application) {
       application = await prisma.application.findUnique({
@@ -218,7 +218,7 @@ export async function getTripApplication(tripId?: string) {
     if (!application) {
       return { success: false, application: null };
     }
-    
+
     // Decrypt SSN if it exists
     let applicationWithDecryptedSSN = application;
     if (application.ssn) {
@@ -269,10 +269,8 @@ export async function getUserApplication() {
         },
       },
     });
-    console.log('residentialHistories', application?.residentialHistories);
-    console.log('identifications with photos', application?.identifications);
-    console.log('application', application);
-    
+    // Debug data if needed
+
     // Decrypt SSN if it exists
     let applicationWithDecryptedSSN = application;
     if (application?.ssn) {
@@ -310,7 +308,7 @@ export async function updateApplication(data: any) {
       filteredData[key] = value;
     }
   }
-  
+
   // Handle SSN encryption if present
   if (rest.ssn) {
     try {
@@ -380,20 +378,17 @@ export async function upsertApplication(data: any) {
   const { userId } = auth();
   if (!userId) return { success: false, error: 'Unauthorized' };
 
-  // Destructure the incoming data.  We separate out the nested arrays
-  // and the tripId, and gather the rest of the fields into 'rest'.
+  // Destructure the incoming data
   const { identifications, incomes, verificationImages, tripId, residentialHistories, ...rest } = data;
-  console.log('IDENTIFICATIONS', identifications);
 
-  // Create a new object 'filteredData' to store only the defined (non-undefined) values from 'rest'.
-  // This prevents accidentally overwriting existing data with undefined values.
+  // Create a new object 'filteredData' to store only the defined values
   const filteredData: any = {};
   for (const [key, value] of Object.entries(rest)) {
     if (value !== undefined) {
       filteredData[key] = value;
     }
   }
-  
+
   // Handle SSN encryption if it's in the data
   if (rest.ssn) {
     try {
@@ -409,97 +404,247 @@ export async function upsertApplication(data: any) {
     }
   }
 
-  // Prepare the nested objects for identifications, incomes, and verificationImages.
-  // Each of these uses an 'upsert' operation, which is crucial for preventing duplicates.
-
-  if (identifications) {
-    filteredData.identifications = {
-      // The 'upsert' array operation allows us to update existing records or create new ones.
-      upsert: identifications.map((identificaiton: any) => ({
-        // 'where':  Try to find an existing identification by its ID.  If 'id.id' is undefined (e.g., for a new identification),
-        // it will use 'new'. Prisma will treat 'new' string as not matching any existing ID, forcing a create.
-        where: { id: identificaiton.id || 'new' },
-        // 'update': If a record with the given ID *is* found, update it with the provided data ('id').
-        update: identificaiton,
-        // 'create': If a record with the given ID is *not* found, create a new one with the provided data ('id').
-        create: identificaiton,
-      })),
-    };
-  }
-  console.log('INCOMES', incomes);
-
-  // The same 'upsert' logic is applied to incomes and verificationImages.
-  if (incomes) {
-    console.log('incomes', incomes);
-    console.log('filteredData', filteredData);
-    filteredData.incomes = {
-      upsert: incomes.map((income: any) => ({
-        where: { id: income.id || 'new' },
-        update: income,
-        create: (({ id, ...rest }: any) => rest)(income)
-      })),
-    };
-  }
-
-  if (verificationImages) {
-    filteredData.verificationImages = {
-      upsert: verificationImages.map((img: any) => ({
-        where: { id: img.id || 'new' },
-        update: img,
-        create: img,
-      })),
-    };
-  }
-
-  if (residentialHistories) {
-    filteredData.residentialHistories = {
-      upsert: residentialHistories.map((rh: any, idx: number) => {
-        const { applicationId, ...payload } = rh;
-        return {
-          where: { id: rh.id || 'new' },
-          update: payload,
-          create: { ...payload, index: idx },
-        };
-      }),
-    };
-  }
-
-  // Prepare the data for creating a new application.  This is used in the 'create' part of the main upsert.
-  const createData: any = {
-    ...data, // Includes all fields from the input data
-    userId,
-    isDefault: tripId ? false : true, // Set 'isDefault' based on whether a 'tripId' is provided.
-    // Conditionally include the creation of related records.  If, for example, 'identifications' is null,
-    // we don't want to create an empty 'identifications' relation.
-    identifications: identifications ? { create: identifications } : undefined,
-    incomes: incomes ? { create: incomes.map(({ id, ...rest }: any) => rest) } : undefined,
-    verificationImages: verificationImages ? { create: verificationImages } : undefined,
-    residentialHistories: residentialHistories
-      ? { create: residentialHistories.map(({ applicationId, ...rest }: any) => rest) }
-      : undefined,
-  };
-
-  // Determine the 'where' clause for the main upsert.  This selects *which* application to update/create.
-  let whereClause;
-  if (tripId) {
-    // If a 'tripId' is provided, we're dealing with a trip-specific application.
-    whereClause = { userId_tripId: { userId, tripId } };
-  } else {
-    // Otherwise, we're dealing with the user's default application.
-    whereClause = { userId_isDefault: { userId, isDefault: true } };
-  }
-
-  // Perform the main upsert operation on the 'application' table.
   try {
-    const application = await prisma.application.upsert({
-      where: whereClause, // Select the application to update or create.
-      update: filteredData, // If the application exists, update it with the filtered data.
-      create: createData, // If the application doesn't exist, create it with the 'createData'.
+    // Log incoming identifications for debugging
+    console.log('===== DETAILED IDENTIFICATION STRUCTURE DEBUG =====');
+    if (identifications) {
+      console.log(JSON.stringify({
+        identifications_count: identifications.length,
+        full_structure: identifications.map((id: any) => ({
+          id: id.id,
+          idType: id.idType,
+          idNumber: id.idNumber,
+          isPrimary: id.isPrimary,
+          idPhotos: id.idPhotos ? {
+            count: id.idPhotos.length,
+            details: id.idPhotos.map((photo: any) => ({
+              url: photo.url,
+              isPrimary: photo.isPrimary,
+              id: photo.id
+            }))
+          } : 'No idPhotos found'
+        }))
+      }, null, 2));
+    } else {
+      console.log('No identifications provided');
+    }
+    console.log('===== END OF DETAILED DEBUG =====');
+
+    // Determine the where clause for upsert
+    let whereClause;
+    if (tripId) {
+      whereClause = { userId_tripId: { userId, tripId } };
+      filteredData.isDefault = false;
+    } else {
+      whereClause = { userId_isDefault: { userId, isDefault: true } };
+      filteredData.isDefault = true;
+    }
+
+    console.log('DEBUG - Upsert where clause:', JSON.stringify(whereClause));
+
+    // Check if record exists first - this lets us handle relationships differently for create vs update
+    const existingApp = await prisma.application.findUnique({
+      where: whereClause
     });
-    return { success: true, application };
+
+    // Process relationships based on whether it's a create or update operation
+    if (existingApp) {
+      console.log('DEBUG - Updating existing application');
+
+      // Update the base record first
+      await prisma.application.update({
+        where: { id: existingApp.id },
+        data: filteredData
+      });
+
+      // Handle relationships separately using connect/disconnect pattern
+      if (identifications && identifications.length > 0) {
+        // Delete all existing identifications for this application
+        await prisma.identification.deleteMany({
+          where: { applicationId: existingApp.id }
+        });
+
+        // Create new identifications
+        for (const id of identifications) {
+          // Create the identification
+          const newId = await prisma.identification.create({
+            data: {
+              idType: id.idType,
+              idNumber: id.idNumber,
+              isPrimary: !!id.isPrimary,
+              application: { connect: { id: existingApp.id } }
+            }
+          });
+
+          // Create photos if they exist
+          if (id.idPhotos && Array.isArray(id.idPhotos) && id.idPhotos.length > 0) {
+            await Promise.all(id.idPhotos.map((photo: any) =>
+              prisma.iDPhoto.create({
+                data: {
+                  url: photo.url || '',
+                  isPrimary: !!photo.isPrimary,
+                  identification: { connect: { id: newId.id } }
+                }
+              })
+            ));
+          }
+        }
+      }
+
+      // Handle other relationships similarly
+      if (incomes && incomes.length > 0) {
+        await prisma.income.deleteMany({
+          where: { applicationId: existingApp.id }
+        });
+
+        await Promise.all(incomes.map((income: any) => {
+          const { id, ...incomeData } = income;
+          return prisma.income.create({
+            data: {
+              ...incomeData,
+              application: { connect: { id: existingApp.id } }
+            }
+          });
+        }));
+      }
+
+      if (verificationImages && verificationImages.length > 0) {
+        await prisma.verificationImage.deleteMany({
+          where: { applicationId: existingApp.id }
+        });
+
+        await Promise.all(verificationImages.map((img: any) => {
+          const { id, ...imgData } = img;
+          return prisma.verificationImage.create({
+            data: {
+              ...imgData,
+              application: { connect: { id: existingApp.id } }
+            }
+          });
+        }));
+      }
+
+      if (residentialHistories && residentialHistories.length > 0) {
+        await prisma.residentialHistory.deleteMany({
+          where: { applicationId: existingApp.id }
+        });
+
+        await Promise.all(residentialHistories.map((rh: any, idx: number) => {
+          const { id, applicationId, ...rhData } = rh;
+          return prisma.residentialHistory.create({
+            data: {
+              ...rhData,
+              index: idx,
+              application: { connect: { id: existingApp.id } }
+            }
+          });
+        }));
+      }
+
+      // Fetch and return the updated application with all relationships
+      const application = await prisma.application.findUnique({
+        where: { id: existingApp.id },
+        include: {
+          identifications: {
+            include: {
+              idPhotos: true
+            }
+          },
+          incomes: true,
+          verificationImages: true,
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          }
+        }
+      });
+
+      return { success: true, application };
+    } else {
+      // Create new application with all relationships in one go
+      console.log('DEBUG - Creating new application');
+
+      // Process identifications for creation
+      if (identifications) {
+        filteredData.identifications = {
+          create: identifications.map((id: any) => {
+            const { id: idId, ...idData } = id;
+
+            // Handle nested idPhotos
+            let idPhotoData = undefined;
+            if (id.idPhotos && Array.isArray(id.idPhotos) && id.idPhotos.length > 0) {
+              idPhotoData = {
+                create: id.idPhotos.map((photo: any) => {
+                  const { id: photoId, ...photoData } = photo;
+                  return {
+                    url: photoData.url || '',
+                    isPrimary: !!photoData.isPrimary
+                  };
+                })
+              };
+            }
+
+            return {
+              ...idData,
+              ...(idPhotoData ? { idPhotos: idPhotoData } : {})
+            };
+          })
+        };
+      }
+
+      // Process incomes for creation
+      if (incomes) {
+        filteredData.incomes = {
+          create: incomes.map(({ id, ...incomeData }: any) => incomeData)
+        };
+      }
+
+      // Process verificationImages for creation
+      if (verificationImages) {
+        filteredData.verificationImages = {
+          create: verificationImages.map(({ id, ...imgData }: any) => imgData)
+        };
+      }
+
+      // Process residentialHistories for creation
+      if (residentialHistories) {
+        filteredData.residentialHistories = {
+          create: residentialHistories.map(({ id, applicationId, ...rhData }: any, idx: number) => ({
+            ...rhData,
+            index: idx
+          }))
+        };
+      }
+
+      // Create the application with all relationships
+      const application = await prisma.application.create({
+        data: {
+          ...filteredData,
+          userId,
+          tripId: tripId || undefined
+        },
+        include: {
+          identifications: {
+            include: {
+              idPhotos: true
+            }
+          },
+          incomes: true,
+          verificationImages: true,
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          }
+        }
+      });
+
+      return { success: true, application };
+    }
   } catch (error) {
     console.error('Failed to upsert application:', error);
-    return { success: false, error: 'Failed to upsert application' };
+    return { success: false, error: `Failed to upsert application: ${error}` };
   }
 }
 
@@ -548,7 +693,7 @@ export async function getFullApplication(applicationId: string) {
         verificationImages: true
       }
     });
-    
+
     // Decrypt SSN if it exists
     let applicationWithDecryptedSSN = application;
     if (application?.ssn) {
@@ -566,7 +711,7 @@ export async function getFullApplication(applicationId: string) {
         console.error('Failed to decrypt SSN:', error);
       }
     }
-    
+
     return { success: true, application: applicationWithDecryptedSSN };
   } catch (error) {
     console.error("Failed to fetch full application:", error);

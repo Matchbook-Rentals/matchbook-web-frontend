@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
       {/* Content */}
                   <SearchContainer
                     className="z-100 w-full px-0 sm:w-[90%] lg:w-[80%] pt-[6%]"
-                    containerStyles='bg-background rounded-none m-0 p-0 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                    containerStyles='bg-background rounded-[15px] m-0 p-0 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                     inputStyles='bg-background'
                     searchButtonClassNames='bg-background hover:bg-gray-200'
                     searchIconColor='text-[#404040]'

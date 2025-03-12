@@ -248,7 +248,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   alt="User Profile"
                   width={32}
                   height={32}
-                  className="rounded-full"
+                  className="rounded-full aspect-square object-cover object-center"
                 />
               </div>
             ) : (

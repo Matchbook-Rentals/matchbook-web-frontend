@@ -51,7 +51,7 @@ interface Identification {
   idType: string;
   idNumber: string;
   isPrimary: boolean;
-  photos?: IDPhoto[];
+  idPhotos?: IDPhoto[];
 }
 
 interface IDPhoto {
@@ -90,7 +90,7 @@ interface ApplicationErrors {
     idType?: string; 
     idNumber?: string;
     isPrimary?: string;
-    photos?: string;
+    idPhotos?: string;
     primaryPhoto?: string;
   };
   residentialHistory: {
@@ -128,7 +128,7 @@ export const initialState = {
     dateOfBirth: '',
     ssn: ''
   },
-  ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, photos: [] }],
+  ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
   verificationImages: [] as VerificationImage[],
   residentialHistory: [defaultResidentialHistory],
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
@@ -188,7 +188,7 @@ const initialErrors: ApplicationErrors = {
     idType: '',
     idNumber: '',
     isPrimary: '',
-    photos: '',
+    idPhotos: '',
     primaryPhoto: '',
   },
   residentialHistory: {
@@ -265,8 +265,8 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         idType: id.idType || '',
         idNumber: id.idNumber || '',
         isPrimary: id.isPrimary || false,
-        photos: id.idPhotos || [] // Map idPhotos from the backend to photos in our store
-      })) || [{ id: '', idType: '', idNumber: '', isPrimary: true, photos: [] }],
+        idPhotos: id.idPhotos || [] // Map idPhotos from the backend to photos in our store
+      })) || [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
       verificationImages: application.verificationImages || [] as VerificationImage[],
       residentialHistory: residences,
       incomes: application.incomes?.map((income: any) => ({
@@ -372,10 +372,10 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
         if (!id.idNumber) missingFields.push(`ids[${index}].idNumber`);
         
         // Check for ID photos
-        if (!id.photos || id.photos.length === 0) {
-          missingFields.push(`ids[${index}].photos (no photos provided)`);
-        } else if (!id.photos.some(photo => photo.isPrimary)) {
-          missingFields.push(`ids[${index}].photos (no primary photo marked)`);
+        if (!id.idPhotos || id.idPhotos.length === 0) {
+          missingFields.push(`ids[${index}].idPhotos (no photos provided)`);
+        } else if (!id.idPhotos.some(photo => photo.isPrimary)) {
+          missingFields.push(`ids[${index}].idPhotos (no primary photo marked)`);
         }
       });
     }

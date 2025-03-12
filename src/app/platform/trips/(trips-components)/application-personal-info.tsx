@@ -80,28 +80,30 @@ export const PersonalInfo: React.FC = () => {
       
       {/* Middle Name Section */}
       <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <Label htmlFor="middleName" className={ApplicationItemLabelStyles}>Middle Name</Label>
-          <div className="flex items-center space-x-2">
+        <Label htmlFor="middleName" className={ApplicationItemLabelStyles}>Middle Name</Label>
+        <div className="flex gap-4">
+          <div className="w-1/2  flex ">
+            <Input
+              id="middleName"
+              name="middleName"
+              value={personalInfo.middleName || ''}
+              onChange={handleInputChange}
+              placeholder="Middle Name"
+              disabled={personalInfo.noMiddleName}
+              className={error?.middleName ? "border-red-500" : ApplicationItemInputStyles}
+            />
+            {error?.middleName && <p className="mt-1 text-red-500 text-sm">{error.middleName}</p>}
+          </div>
+          <div className="w-1/2 flex pt-1 items-start space-x-2">
             <Checkbox 
               id="noMiddleName" 
               checked={personalInfo.noMiddleName} 
               onCheckedChange={handleCheckboxChange}
             />
-            <Label htmlFor="noMiddleName" className="text-sm font-normal">No Middle Name</Label>
+            <Label htmlFor="noMiddleName" className="text-md pt-1 font-normal">No Middle Name</Label>
           </div>
         </div>
         
-        <Input
-          id="middleName"
-          name="middleName"
-          value={personalInfo.middleName || ''}
-          onChange={handleInputChange}
-          placeholder="Middle Name"
-          disabled={personalInfo.noMiddleName}
-          className={error?.middleName ? "border-red-500" : ApplicationItemInputStyles}
-        />
-        {error?.middleName && <p className="mt-1 text-red-500 text-sm">{error.middleName}</p>}
       </div>
       
       {/* Date of Birth */}
