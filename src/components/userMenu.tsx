@@ -348,13 +348,13 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             </div>
             <UserIcon className="text-charcoal h-[32px] w-[31px]" />
           </PopoverTrigger>
-          <PopoverContent align="end" className="p-0">
-            <div className="w-48 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+          <PopoverContent  className="p-0">
+            <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
                 <Link href="/sign-in">
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
+                  <button className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
                 </Link>
-                <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
+                <button className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
               </div>
             </div>
           </PopoverContent>
