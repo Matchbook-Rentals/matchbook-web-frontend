@@ -308,6 +308,7 @@ model Booking {
   id           String        @id @default(uuid())
   userId       String
   listingId    String
+  tripId       String?        
   matchId      String        @unique
   startDate    DateTime
   endDate      DateTime
@@ -322,6 +323,9 @@ model Booking {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   match   Match   @relation(fields: [matchId], references: [id])
+  trip    Trip?    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  @@index([tripId])
 }
 
 model Trip {
@@ -464,6 +468,7 @@ model Trip {
   dislikes        Dislike[]
   maybes          Maybe[]
   applications    Application[]
+  bookings        Booking[]
 }
 
 model Notification {
