@@ -6,7 +6,6 @@ import { PAGE_MARGIN } from '@/constants/styles';
 import { Booking } from '@prisma/client';
 import BookingGrid from './booking-grid';
 import BookingCard from './booking-card';
-import CurrentBookingCard from './current-booking-card';
 
 // Add test bookings
 const testBookings = [
@@ -181,7 +180,7 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
         <div>
           {/* Current booking - full width */}
           <div className="w-full mb-8">
-            <CurrentBookingCard booking={currentBooking} />
+            <BookingCard booking={currentBooking} onDelete={() => {}} headerText="Current Booking" />
           </div>
           
           {/* Other bookings - 3/4 width with filter */}
@@ -243,16 +242,6 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                       </>
                     );
                   })()}
-                </div>
-                
-                {/* Reset filters button */}
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <button 
-                    onClick={() => setFilters({ upcoming: true, past: true, cancelled: true })}
-                    className="text-xs text-blueBrand hover:underline w-full text-center"
-                  >
-                    Reset Filters
-                  </button>
                 </div>
               </div>
             </div>
