@@ -5,81 +5,102 @@ import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
 import { Booking } from '@prisma/client';
 import BookingGrid from './booking-grid';
+import BookingCard from './booking-card';
 import CurrentBookingCard from './current-booking-card';
 
 // Add test bookings
-const testBookings: Booking[] = [
+const testBookings = [
   // Current booking
   {
     id: 'current-booking-123',
     createdAt: new Date(),
-    updatedAt: new Date(),
     userId: 'user123',
+    listingId: 'listing123',
+    tripId: 'trip123',
     matchId: 'match123',
     status: 'active',
-    amount: 120000, // $1,200.00
-    currency: 'usd',
+    totalPrice: 120000, // $1,200.00
+    monthlyRent: 4000, // $4,000.00
     startDate: new Date(),
     endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-    paymentIntentId: 'pi_123',
-    checkoutSessionId: 'cs_123',
-    refundId: null,
-    stripeAccountId: 'acct_123',
-    metadata: {}
+    listing: {
+      title: 'Luxury Downtown Apartment',
+      imageSrc: '/placeholderImages/image_1.jpg'
+    },
+    trip: {
+      numAdults: 2,
+      numPets: 1,
+      numChildren: 0
+    }
   },
   // Future booking
   {
     id: 'future-booking-456',
     createdAt: new Date(),
-    updatedAt: new Date(),
     userId: 'user123',
+    listingId: 'listing456',
+    tripId: 'trip456',
     matchId: 'match456',
     status: 'upcoming',
-    amount: 150000, // $1,500.00
-    currency: 'usd',
+    totalPrice: 150000, // $1,500.00
+    monthlyRent: 5000, // $5,000.00
     startDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
     endDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
-    paymentIntentId: 'pi_456',
-    checkoutSessionId: 'cs_456',
-    refundId: null,
-    stripeAccountId: 'acct_456',
-    metadata: {}
+    listing: {
+      title: 'Spacious House with Garden',
+      imageSrc: '/placeholderImages/image_2.jpg'
+    },
+    trip: {
+      numAdults: 3,
+      numPets: 0,
+      numChildren: 2
+    }
   },
   // Past booking
   {
     id: 'past-booking-789',
     createdAt: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000), // 120 days ago
-    updatedAt: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000),
     userId: 'user123',
+    listingId: 'listing789',
+    tripId: 'trip789',
     matchId: 'match789',
     status: 'completed',
-    amount: 110000, // $1,100.00
-    currency: 'usd',
+    totalPrice: 110000, // $1,100.00
+    monthlyRent: 3500, // $3,500.00
     startDate: new Date(Date.now() - 120 * 24 * 60 * 60 * 1000), // 120 days ago
     endDate: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // 90 days ago
-    paymentIntentId: 'pi_789',
-    checkoutSessionId: 'cs_789',
-    refundId: null,
-    stripeAccountId: 'acct_789',
-    metadata: {}
+    listing: {
+      title: 'Cozy Studio in the City Center',
+      imageSrc: '/placeholderImages/image_3.jpg'
+    },
+    trip: {
+      numAdults: 1,
+      numPets: 0,
+      numChildren: 0
+    }
   },
   // Cancelled booking
   {
     id: 'cancelled-booking-101',
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-    updatedAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000), // 25 days ago
     userId: 'user123',
+    listingId: 'listing101',
+    tripId: 'trip101',
     matchId: 'match101',
     status: 'cancelled',
-    amount: 130000, // $1,300.00
-    currency: 'usd',
+    totalPrice: 130000, // $1,300.00
+    monthlyRent: 4300, // $4,300.00
     startDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // would have been 10 days from now
     endDate: new Date(Date.now() + 40 * 24 * 60 * 60 * 1000), // would have been 40 days from now
-    paymentIntentId: 'pi_101',
-    checkoutSessionId: 'cs_101',
-    refundId: 're_101',
-    stripeAccountId: 'acct_101',
-    metadata: {}
+    listing: {
+      title: 'Beachfront Condo with Ocean View',
+      imageSrc: '/placeholderImages/image_4.jpg'
+    },
+    trip: {
+      numAdults: 2,
+      numPets: 1,
+      numChildren: 1
+    }
   }
 ];
 
@@ -141,13 +162,13 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
 
   return (
     <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
-      <div className='flex items-end pb-2'>
+      <div className='flex items-center mb-4 '>
         <div className='flex flex-col w-1/2'>
-          <h1 className='text-[32px] font-medium mb-4'>Your Bookings</h1>
+          <h1 className='text-[32px] font-medium '>Your Bookings</h1>
         </div>
         <div className="hidden sm:block w-full md:w-1/2 mx-auto">
           <Image
-            src="/milwaukee-downtown.png"
+            src="/city-skyline.png"
             alt="Village footer"
             width={1200}
             height={516}
@@ -160,7 +181,6 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
         <div>
           {/* Current booking - full width */}
           <div className="w-full mb-8">
-            <h2 className="text-xl font-medium mb-4">Current Booking</h2>
             <CurrentBookingCard booking={currentBooking} />
           </div>
           

@@ -5,8 +5,21 @@ import { CalendarDays, Bookmark, MapPin, Clock, CreditCard } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 
+// Extended booking type with included relations
+type BookingWithRelations = Booking & {
+  listing?: {
+    title: string;
+    imageSrc?: string;
+  };
+  trip?: {
+    numAdults: number;
+    numPets: number;
+    numChildren: number;
+  };
+};
+
 interface CurrentBookingCardProps {
-  booking: Booking;
+  booking: BookingWithRelations;
 }
 
 const CurrentBookingCard: React.FC<CurrentBookingCardProps> = ({ booking }) => {
@@ -20,79 +33,75 @@ const CurrentBookingCard: React.FC<CurrentBookingCardProps> = ({ booking }) => {
     `${startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - 
      ${endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}` :
     'No dates selected';
+  
+  const daysCount = booking.startDate && booking.endDate
+    ? Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
+    
+  const dateDisplayText = booking.startDate && booking.endDate
+    ? `${dateRangeText} (${daysCount} days)`
+    : dateRangeText;
     
   const daysLeft = Math.ceil((endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Get listing title
+  const listingTitle = booking.listing?.title || 'Unnamed Property';
+  
+  // Format guest count
+  const getTotalGuests = () => {
+    if (!booking.trip) return '';
+    const { numAdults, numChildren, numPets } = booking.trip;
+    
+    let guestText = '';
+    if (numAdults > 0) {
+      guestText += `${numAdults} adult${numAdults !== 1 ? 's' : ''}`;
+    }
+    
+    if (numChildren > 0) {
+      if (guestText) guestText += ', ';
+      guestText += `${numChildren} child${numChildren !== 1 ? 'ren' : ''}`;
+    }
+    
+    if (numPets > 0) {
+      if (guestText) guestText += ', ';
+      guestText += `${numPets} pet${numPets !== 1 ? 's' : ''}`;
+    }
+    
+    return guestText;
+  };
+  
+  // Calculate price display
+  const priceDisplay = booking.totalPrice 
+    ? `$${(booking.totalPrice / 100).toFixed(2)}` 
+    : booking.monthlyRent 
+      ? `$${(booking.monthlyRent / 100).toFixed(2)}/mo` 
+      : '$0.00';
 
   return (
-    <div className="border border-blueBrand bg-background rounded-lg shadow-md overflow-hidden">
-      <div className="p-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Left content */}
-          <div className="flex-1">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-2xl font-medium text-gray-900 mb-1">Current Stay</h3>
-                <p className="text-lg text-gray-700 mb-4">Booking #{booking.id.substring(0, 8)}</p>
-              </div>
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                Active
-              </span>
+    <div className="border border-blueBrand rounded-md overflow-hidden shadow-md">
+      <div className=" px-4 py-2 ">
+        <p className="text-gray-500 font-medium">Current Booking</p>
+      </div>
+      <div className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-background">
+        <div className="flex justify-between items-start w-full md:w-auto">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <h2 className="font-medium text-gray-900">{listingTitle}</h2>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="flex items-center gap-3">
-                <CalendarDays className="h-5 w-5 text-blueBrand" />
-                <div>
-                  <p className="text-sm text-gray-500">Dates</p>
-                  <p className="text-sm font-medium">{dateRangeText}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-blueBrand" />
-                <div>
-                  <p className="text-sm text-gray-500">Time Remaining</p>
-                  <p className="text-sm font-medium">{daysLeft} days left</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-blueBrand" />
-                <div>
-                  <p className="text-sm text-gray-500">Location</p>
-                  <p className="text-sm font-medium">123 Main Street, Apartment 4B</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <CreditCard className="h-5 w-5 text-blueBrand" />
-                <div>
-                  <p className="text-sm text-gray-500">Payment</p>
-                  <p className="text-sm font-medium">${(booking.amount / 100).toFixed(2)}/month</p>
-                </div>
-              </div>
-            </div>
+            <p className="text-sm text-gray-600">{dateDisplayText}</p>
+            {booking.trip && (
+              <p className="text-sm text-gray-500">{getTotalGuests()}</p>
+            )}
           </div>
-          
-          {/* Right content (call to action) */}
-          <div className="flex flex-col justify-center space-y-4 min-w-[200px]">
-            <Button 
-              className="bg-blueBrand hover:bg-blueBrand/90 text-white w-full"
-              onClick={() => router.push(`/platform/bookings/${booking.id}`)}
+        </div>
+        <div className="flex flex-col items-start md:items-center gap-3 w-full md:w-auto">
+          <div className="text-right font-medium">{priceDisplay}</div>
+          <div className="flex justify-center gap-2 w-full md:w-auto">
+            <Button
+              className="bg-blueBrand hover:bg-blueBrand/90 text-white rounded-md px-4 py-2 text-sm font-medium flex-1 md:w-auto"
+              onClick={() => router.push(`bookings/${booking.id}`)}
             >
               View Details
-            </Button>
-            <Button 
-              variant="outline" 
-              className="border-blueBrand text-blueBrand hover:bg-blueBrand/10 w-full"
-            >
-              Contact Host
-            </Button>
-            <Button 
-              variant="outline" 
-              className="border-blueBrand text-blueBrand hover:bg-blueBrand/10 w-full"
-            >
-              Report Issue
             </Button>
           </div>
         </div>

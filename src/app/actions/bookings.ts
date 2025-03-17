@@ -14,22 +14,28 @@ export async function createBooking(data: Prisma.BookingCreateInput): Promise<Bo
     throw new Error('Unauthorized');
   }
 
+  // First get the match to get the tripId
+  const match = await prisma.match.findUnique({
+    where: {
+      id: data.matchId as string
+    },
+    include: {
+      listing: true,
+      trip: true
+    }
+  });
+
+  if (!match) {
+    throw new Error('Match not found');
+  }
+
   const booking = await prisma.booking.create({
     data: {
       ...data,
       userId,
+      tripId: match.tripId, // Add the tripId from the match
     },
   });
-
-  const match = await prisma.match.findUnique({
-    where: {
-      id: booking.matchId
-    },
-     include: {
-      listing: true,
-      trip: true
-    }
-  })
 
   const notificationData: Notification = {
     actionType: 'booking',
@@ -59,7 +65,7 @@ export async function getBooking(id: string): Promise<Booking | null> {
 }
 
 // Get all bookings for the current user
-export async function getUserBookings(): Promise<Booking[]> {
+export async function getUserBookings() {
   const { userId } = auth();
   if (!userId) {
     throw new Error('Unauthorized');
@@ -68,6 +74,21 @@ export async function getUserBookings(): Promise<Booking[]> {
   return prisma.booking.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
+    include: {
+      listing: {
+        select: {
+          title: true,
+          imageSrc: true
+        }
+      },
+      trip: {
+        select: {
+          numAdults: true,
+          numPets: true,
+          numChildren: true
+        }
+      }
+    }
   });
 }
 
