@@ -103,7 +103,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
       center: center,
       zoom: zoom,
       scrollZoom: false,
+      attributionControl: false
     });
+    
+    // Add a custom attribution control that starts collapsed
+    map.addControl(new maplibreModule.AttributionControl({
+      compact: true
+    }));
 
     // Set map to loaded when it's ready
     map.on('load', () => {

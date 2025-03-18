@@ -35,7 +35,13 @@ export default function ListingDetailsView({
       center: mapCenter,
       zoom: 14,
       scrollZoom: false,
+      attributionControl: false
     });
+    
+    // Add a custom attribution control that starts collapsed
+    map.addControl(new maplibregl.AttributionControl({
+      compact: true
+    }));
 
     mapRef.current = map;
 
