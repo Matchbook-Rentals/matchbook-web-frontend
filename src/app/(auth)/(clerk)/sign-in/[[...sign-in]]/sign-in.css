@@ -98,6 +98,11 @@
 }
 
 
+.cl-buttonArrowIcon {
+  display: none;
+}
+
+
 .cl-footer {
   background: var(--background);
 }

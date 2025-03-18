@@ -1,4 +1,3 @@
-
 .cl-socialButtonsBlockButton {
   width: 95%;
   display: grid;
@@ -37,6 +36,8 @@
 .cl-card {
   padding: 5px;
   background: var(--background);
+  border-bottom: none;
+  box-shadow: none;
 }
 
 
@@ -66,7 +67,6 @@
   letter-spacing: -0.56px;
 }
 
-
 .cl-headerSubtitle {
   color: #281d1b;
   text-align: right;
@@ -95,6 +95,11 @@
 
 .cl-formFieldInput {
   border-radius: 8px;
+}
+
+
+.cl-buttonArrowIcon {
+  display: none;
 }
 
 

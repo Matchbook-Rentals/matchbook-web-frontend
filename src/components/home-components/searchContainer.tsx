@@ -40,7 +40,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
 
   return (
     <>
-      <div className={cn("mx-auto hidden sm:block p-2", className)}>
+      <div className={cn("mx-auto hidden sm:block", className)}>
         <div className="relative">
           <SearchInputsDesktop 
             hasAccess={hasAccess} 
@@ -52,7 +52,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
           />
         </div>
       </div>
-      <div className={cn("mx-auto block sm:hidden p-2", className)}>
+      <div className={cn("mx-auto block sm:hidden", className)}>
         <div className={cn("relative", containerStyles)}>
           <SearchInputsMobile 
             hasAccess={hasAccess} 

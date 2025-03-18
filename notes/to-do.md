@@ -1,7 +1,7 @@
 # TO DOs
 
 
-- [ ] Sign in Picture
+- [x] Sign in Picture
 - [ ] Mobile search container fix
 - [ ] higher quality front photo
 - [ ] filter menu bookings needs update

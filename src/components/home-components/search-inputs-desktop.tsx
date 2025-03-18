@@ -58,7 +58,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
 
-  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+  const inputClasses = `w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-background ${inputClassName || ''}`;
 
   // Add this effect to update totalGuests whenever guests state changes
@@ -215,10 +215,10 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   return (
     <div ref={containerRef} className="relative">
       <div
-        className={cn('flex flex-row no-wrap px-3 py-1 xl:px-3 xl:py-3 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
+        className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
-        <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Where</label>
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Where</label>
           <input
             ref={locationInputRef}
             type="text"
@@ -230,8 +230,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           />
         </div>
 
-        <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Move In</label>
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move In</label>
           <input
             ref={moveInInputRef}
             type="text"
@@ -243,8 +243,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           />
         </div>
 
-        <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Move Out</label>
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move Out</label>
           <input
             ref={moveOutInputRef}
             type="text"
@@ -257,13 +257,13 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
         </div>
 
         <div className="flex-1 flex flex-col">
-          <label className="text-xs font-medium pl-4 pt-1 text-gray-600">Who</label>
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
           <input
             ref={guestsInputRef}
             type="text"
             placeholder="Add guests"
             value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
-            className={`${inputClasses} sm:border-r-0`}
+            className={`${inputClasses}`}
             readOnly={!hasAccess}
             onClick={(e) => {
               setHasBeenSelected(true);
