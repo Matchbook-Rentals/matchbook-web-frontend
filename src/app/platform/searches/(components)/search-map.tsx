@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { ListingAndImages } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
@@ -12,6 +10,9 @@ import { useMapFullscreenStore } from '@/store/map-fullscreen-store';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/ui/spinner';
+
+// For client-side only
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -27,9 +28,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
   height = '526px',
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maplibregl.Map | null>(null);
-  const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
-  const highlightedMarkerRef = useRef<maplibregl.Marker | null>(null);
+  const mapRef = useRef<any | null>(null);
+  const markersRef = useRef<Map<string, any>>(new Map());
+  const highlightedMarkerRef = useRef<any | null>(null);
   const updateVisibleMarkersRef = useRef<() => void>();
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -37,6 +38,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [maplibreModule, setMaplibreModule] = useState<any>(null);
+  // Add a ref to track if the map has been interacted with
+  const hasMapInteractionRef = useRef<boolean>(false);
 
   const {state} = useTripContext();
   const {filters, trip} = state;
@@ -65,11 +69,35 @@ const SearchMap: React.FC<SearchMapProps> = ({
     return R * c;
   };
 
+  // Dynamically import maplibre-gl library
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadMapLibrary = async () => {
+      try {
+        // Dynamically import the library
+        const maplibregl = await import('maplibre-gl');
+        if (isMounted) {
+          setMaplibreModule(maplibregl);
+        }
+      } catch (error) {
+        console.error("Failed to load maplibre-gl:", error);
+      }
+    };
+    
+    loadMapLibrary();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Initialize map and set up markers
   useEffect(() => {
-    if (!mapContainerRef.current || !center) return;
+    if (!mapContainerRef.current || !center || !maplibreModule) return;
 
-    const map = new maplibregl.Map({
+    // Initialize the map with the loaded library
+    const map = new maplibreModule.Map({
       container: mapContainerRef.current,
       style: 'https://tiles.openfreemap.org/styles/bright',
       center: center,
@@ -77,13 +105,35 @@ const SearchMap: React.FC<SearchMapProps> = ({
       scrollZoom: false,
     });
 
+    // Set map to loaded when it's ready
+    map.on('load', () => {
+      // Force a resize to ensure map fills container properly
+      setTimeout(() => {
+        map.resize();
+        
+        // Add all markers to the map now that it's properly sized
+        markersToAdd.forEach(mapMarker => {
+          mapMarker.addTo(map);
+        });
+        
+        setMapLoaded(true);
+      }, 100);
+    });
+
     mapRef.current = map;
-    setMapLoaded(true);
 
     // Define updateVisibleMarkers before using it in event listeners
     const updateVisibleMarkers = () => {
+      // If there has been no interaction, either return all IDs or don't filter
+      if (!hasMapInteractionRef.current) {
+        // On initial load, show all listings by setting to null
+        useVisibleListingsStore.getState().setVisibleListingIds(null);
+        return;
+      }
+      
+      // After interaction, filter by visible bounds
       const bounds = map.getBounds();
-      const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+      const visibleIds = markers.filter(marker => bounds.contains(new maplibreModule.LngLat(marker.lng, marker.lat)))
         .map(marker => marker.listing.id);
       useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
     };
@@ -93,25 +143,34 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
     // Close card when clicking on the map background
     const handleMapClick = () => {
+      // Set interaction flag on map click
+      hasMapInteractionRef.current = true;
+      
       setSelectedMarker(null);
-      if (!isFullscreen) {
+      if (!isMapFullscreen) {
         updateVisibleMarkers();
         setClickedMarkerId(null);
       }
     };
     map.on('click', handleMapClick);
 
+    // Store markers in a temporary array for later adding to ensure the container is fully ready
+    const markersToAdd = [];
+    
     markers.forEach(marker => {
-      const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
-        .setLngLat([marker.lng, marker.lat])
-        .addTo(map);
+      const mapMarker = new maplibreModule.Marker({ color: '#FF0000' })
+        .setLngLat([marker.lng, marker.lat]);
+      
+      markersToAdd.push(mapMarker);
       
       mapMarker.getElement().style.cursor = 'pointer';
       
-
       // Updated: use Zustand store to set the marker on click based on fullscreen state
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
+        // Set interaction flag on marker click
+        hasMapInteractionRef.current = true;
+        
         if (!isMapFullscreen) {
           setClickedMarkerId(curr => {
             if (curr === marker.listing.id) {
@@ -127,23 +186,40 @@ const SearchMap: React.FC<SearchMapProps> = ({
         }
       });
 
+      // Store marker in ref for later use
       markersRef.current.set(marker.listing.id, mapMarker);
     });
 
-    map.on('moveend', updateVisibleMarkers);
+    // Set up map interaction event handlers
+    const handleMapInteraction = () => {
+      hasMapInteractionRef.current = true;
+    };
+    
+    // Track user interactions that should trigger filtering
+    map.on('dragend', handleMapInteraction);
+    map.on('zoomend', handleMapInteraction);
+    
+    // Update visible markers after map movement ends, but only if there's been interaction
+    map.on('moveend', () => {
+      updateVisibleMarkers();
+    });
 
     // Cleanup
     return () => {
       if (mapRef.current) {
         map.off('click', handleMapClick);
-        map.off('moveend', updateVisibleMarkers);
+        map.off('dragend', handleMapInteraction);
+        map.off('zoomend', handleMapInteraction);
+        map.off('moveend');
         map.remove();
         mapRef.current = null;
       }
       markersRef.current.clear();
       highlightedMarkerRef.current = null;
+      // Reset the interaction flag when unmounting
+      hasMapInteractionRef.current = false;
     };
-  }, [center, markers, zoom, isMapFullscreen, setSelectedMarker]);
+  }, [center, markers, zoom, isMapFullscreen, setSelectedMarker, maplibreModule]);
 
   // New useEffect to listen for changes in trip.filters and trip.searchRadius
   useEffect(() => {
@@ -237,10 +313,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
         setTimeout(() => {
           if (mapRef.current) {
             mapRef.current.resize();
-            const bounds = mapRef.current.getBounds();
-            const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
-              .map(marker => marker.listing.id);
-            useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+            // Only filter by visible markers if there's been a map interaction
+            if (hasMapInteractionRef.current && maplibreModule) {
+              const bounds = mapRef.current.getBounds();
+              const visibleIds = markers.filter(marker => {
+                return bounds.contains(new maplibreModule.LngLat(marker.lng, marker.lat));
+              }).map(marker => marker.listing.id);
+              useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+            } else {
+              // Otherwise show all listings
+              useVisibleListingsStore.getState().setVisibleListingIds(null);
+            }
             // End transition state after the map has been resized
             setTimeout(() => {
               setIsTransitioning(false);
@@ -249,7 +332,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         }, 200);
       }
     }
-  }, [isMapFullscreen, markers]);
+  }, [isMapFullscreen, markers, maplibreModule]);
   
   // Also keep sync with browser fullscreen for backward compatibility
   useEffect(() => {
@@ -268,21 +351,55 @@ const SearchMap: React.FC<SearchMapProps> = ({
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, [isMapFullscreen, setMapFullscreen]);
+  
+  // Handle window resize events to keep markers properly positioned
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return;
+    
+    const handleResize = () => {
+      if (mapRef.current) {
+        mapRef.current.resize();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Initial resize to ensure map fits container
+    setTimeout(handleResize, 200);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mapLoaded]);
 
   return (
     <div 
-      className={`transition-all duration-300 ease-in-out ${isMapFullscreen ? 'fixed inset-0 z-50 w-full h-full' : ''}`}
-      style={{ height: isMapFullscreen ? '100vh' : height }}
-      ref={mapContainerRef}
+      className={`transition-all duration-300 ease-in-out relative w-full h-full ${isMapFullscreen ? 'fixed inset-0 z-50' : ''}`}
+      style={{ height: height || '100%', minHeight: '600px' }}
     >
+      {/* Map container or loading placeholder */}
+      <div 
+        ref={mapContainerRef}
+        className={`w-full h-full absolute inset-0 overflow-hidden ${!mapLoaded || !maplibreModule ? 'hidden' : ''}`}
+      ></div>
+      
+      {/* Loading placeholder with the same dimensions as the map */}
+      {(!mapLoaded || !maplibreModule) && (
+        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+          <LoadingSpinner />
+          <span className="ml-3 text-gray-500">Loading map...</span>
+        </div>
+      )}
+      
       {/* Loading overlay that appears during transitions */}
       {isTransitioning && (
         <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-[60]">
           <LoadingSpinner />
         </div>
       )}
+      
       {/* Conditionally render controls only after the map is loaded */}
-      {mapLoaded && (
+      {mapLoaded && maplibreModule && (
         <>
           {/* Zoom controls */}
           <div className="absolute top-2 right-2 z-10 flex flex-col">
@@ -351,13 +468,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M9 9L3.75 3.75M9 15L3.75 20.25M15 9l5.25-5.25M15 15l5.25 5.25"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 ) : (
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
                   />
                 )}
               </svg>
@@ -384,7 +501,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       )}
 
       {/* Updated Detailed Card (only in full-screen) */}
-      {selectedMarker && isMapFullscreen && center && (
+      {selectedMarker && isMapFullscreen && center && mapLoaded && maplibreModule && (
         <ListingCard
           listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}

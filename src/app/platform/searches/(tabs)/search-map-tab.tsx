@@ -1,7 +1,7 @@
 import React, { useState, Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
-import SearchMap from '../(components)/search-map';
+import dynamic from 'next/dynamic';
 import SearchMapMobile from '../(components)/search-map-mobile';
 import { ListingAndImages } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -9,6 +9,17 @@ import { Button } from '@/components/ui/button';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMapFullscreenStore } from '@/store/map-fullscreen-store';
+
+// Dynamically import the SearchMap component with no SSR to ensure proper loading
+const SearchMap = dynamic(() => import('../(components)/search-map'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+      <span className="ml-3 text-gray-500">Loading map...</span>
+    </div>
+  ),
+});
 
 interface MapMarker {
   lat: number;
@@ -38,10 +49,10 @@ const slideUpVariants = {
 const getZoomLevel = (radius: number | undefined): number => {
   if (!radius) return 7; // Default zoom if radius is undefined
 
-  if (radius >= 100) return 6;
+  if (radius >= 100) return 6.3;
   if (radius >= 65) return 7;
-  if (radius >= 40) return 8;
-  if (radius >= 20) return 9;
+  if (radius >= 40) return 7.3;
+  if (radius >= 20) return 7.5;
   return 9; // Default for anything less than 20
 };
 
@@ -54,7 +65,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  // Default to a reasonable height (80vh) until we can calculate actual height
+  const [calculatedHeight, setCalculatedHeight] = useState(600);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
   const { isMapFullscreen } = useMapFullscreenStore();
 
@@ -65,22 +77,25 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
 
-  useEffect(() => {
-    const setHeight = () => {
-      if (containerRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const newStartY = containerRect.top;
-        const newViewportHeight = window.innerHeight;
-        const newCalculatedHeight = newViewportHeight - newStartY;
-        setStartY(newStartY);
-        setViewportHeight(newViewportHeight);
-        setCalculatedHeight(newCalculatedHeight);
-        setCurrentComponentHeight(containerRef.current.offsetHeight);
-        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
-      }
-    };
+  // Function to calculate and set the height
+  const setHeight = () => {
+    if (containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const newStartY = containerRect.top;
+      const newViewportHeight = window.innerHeight;
+      const newCalculatedHeight = Math.max(600, newViewportHeight - newStartY - 20); // Min 600px, -20 for margin
+      setStartY(newStartY);
+      setViewportHeight(newViewportHeight);
+      setCalculatedHeight(newCalculatedHeight);
+      setCurrentComponentHeight(containerRef.current.offsetHeight);
+      containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+    }
+  };
 
-    setHeight();
+  // Run immediately on mount and on window resize
+  useEffect(() => {
+    // Need a slight delay to ensure container is rendered first
+    setTimeout(setHeight, 0);
     window.addEventListener('resize', setHeight);
 
     return () => {
@@ -151,7 +166,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   return (
     <>
-      <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full sm:px-2 relative">
+      <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full sm:px-2 relative" style={{ minHeight: '600px' }}>
         {/* Grid container - hide when map is fullscreen */}
         {!isMapFullscreen && (
           <div className="w-full md:w-3/5 md:pr-4 transition-all duration-300 ease-in-out">
@@ -216,11 +231,12 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         </Button>
 
         {/* Map container for Desktop */}
-        <div className={`w-full hidden md:block ${isMapFullscreen ? 'w-full' : 'md:w-2/5'} mt-4 md:mt-0 transition-all duration-300 ease-in-out`}>
+        <div className={`w-full hidden md:block ${isMapFullscreen ? 'w-full' : 'md:w-2/5'} mt-4 md:mt-0 transition-all duration-300 ease-in-out relative overflow-hidden`} 
+             style={{ height: `${calculatedHeight}px`, minHeight: '600px' }}>
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
-            height={`${calculatedHeight}px`}
+            height="100%"
             markers={markers.map((marker) => ({
               ...marker,
               lat: marker.lat,
