@@ -147,7 +147,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-md h-9 w-9 border border-gray-200"
+                    className="rounded-md h-10 w-10 border border-gray-200"
                   >
                     <MoreHorizontal className="h-5 w-5 text-gray-500" />
                     <span className="sr-only">Open menu</span>
@@ -189,7 +189,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="rounded-md h-9 w-9 border border-gray-200"
+                      className="rounded-md h-10 w-10 border border-gray-200"
                     >
                       <MoreHorizontal className="h-5 w-5 text-gray-500" />
                       <span className="sr-only">Open menu</span>
