@@ -21,7 +21,7 @@ export default function PlatformNavbar() {
 
   return (
     <motion.nav
-      className="bg-background  z-50 border-b mb-6 pb-2"
+      className="bg-background border-b mb-6 pb-2"
       layout="position"
       transition={{ duration: 0.3 }}
     >
@@ -35,12 +35,12 @@ export default function PlatformNavbar() {
             <img
               src="/navbar-logo-full.png"
               alt="MatchBook Logo"
-              className="hidden sm:block h-14 md:h-14"
+              className="hidden sm:block h-14 md:h-14 w-auto object-contain"
             />
             <img
               src="/House_Logo.png"
               alt="MatchBook Heart"
-              className="sm:hidden h-10 w-10 pt-1"
+              className="sm:hidden h-10 w-auto object-contain pt-1"
             />
           </Link>
         </motion.div>
@@ -48,7 +48,7 @@ export default function PlatformNavbar() {
         <motion.div className="w-1/3 flex justify-center" layout="position" transition={{ duration: 0.3 }}>
           <img
             src="/svg/heart-header.svg"
-            className="h-8 w-8 hidden md:flex"
+            className="h-8 w-auto object-contain hidden md:flex"
             alt="MatchBook Heart"
           />
         </motion.div>

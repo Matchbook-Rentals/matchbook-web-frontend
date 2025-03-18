@@ -237,23 +237,23 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
       {isSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1 min-w-[80px]">
             <div className="relative">
               <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
             </div>
             {user?.imageUrl ? (
-              <div className="relative">
+              <div className="relative min-w-[32px] min-h-[32px]">
                 <Image
                   src={user.imageUrl}
                   alt="User Profile"
                   width={32}
                   height={32}
-                  className="rounded-full aspect-square object-cover object-center"
+                  className="rounded-full aspect-square object-cover object-center min-w-[32px] min-h-[32px]"
                 />
               </div>
             ) : (
-              <div className="relative">
-                <UserIcon className="text-charcoal h-[32px] w-[31px]" />
+              <div className="relative min-w-[32px] min-h-[32px]">
+                <UserIcon className="text-charcoal h-[32px] w-[32px]" />
               </div>
             )}
           </PopoverTrigger>
@@ -342,11 +342,13 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
         </Popover>
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1">
+          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1 min-w-[80px]">
             <div className="relative">
               <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
             </div>
-            <UserIcon className="text-charcoal h-[32px] w-[31px]" />
+            <div className="relative min-w-[32px] min-h-[32px]">
+              <UserIcon className="text-charcoal h-[32px] w-[32px]" />
+            </div>
           </PopoverTrigger>
           <PopoverContent  className="p-0">
             <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">

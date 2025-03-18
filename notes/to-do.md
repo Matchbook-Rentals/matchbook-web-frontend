@@ -23,6 +23,7 @@
 - [ ] PUT HCATS MESSAGES HERE
 - [ ] new search padding
 - [ ] edti trip in pip upj
+- [ ] navbar no sticky
 
 # MVP
 - [ ] Sign in / SIgn up

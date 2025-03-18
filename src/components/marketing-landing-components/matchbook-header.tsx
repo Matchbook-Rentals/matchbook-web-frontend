@@ -19,7 +19,7 @@ interface MatchbookHeaderProps {
 export default function MatchbookHeader({
   handleListProperty = false,
   customMargin = true,
-  isSticky = true
+  isSticky = false
 }: MatchbookHeaderProps) {
   const [defaultIsOpen, setDefaultIsOpen] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
@@ -48,36 +48,38 @@ export default function MatchbookHeader({
   //}, 300)
 
   return (
-    <div className={`${isSticky ? 'sticky' : ''} mb-0 top-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b`}>
+    <div className="mb-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b">
       {!handleListProperty && (
         <CountdownDialog isOpen={defaultIsOpen} setIsOpen={setDefaultIsOpen} />
       )}
-      <header className={`relative flex mb-0 w-full ${customMargin ? 'md:w-[90vw] lg:w-[80vw]' : 'md:w-full lg:w-full'} px-2 md:px-0 mx-auto justify-center pt-2 items-center border-b-0 pb-2`}>
-        {/* Logo container with responsive visibility */}
-        <div className="flex items-center absolute left-2 xs:static xs:mr-auto">
+      <header className={`flex mb-0 w-full ${customMargin ? 'md:w-[90vw] lg:w-[80vw]' : 'md:w-full lg:w-full'} px-2 md:px-0 mx-auto justify-between items-center py-1 border-b-0`}>
+        {/* Logo container with responsive visibility - 1/3 width like platform navbar */}
+        <div className="w-1/3 flex items-center">
           <Link href={"/"}>
             <img
               src="/navbar-logo-full.png"
               alt="MatchBook Logo"
-              className="hidden sm:block w-[full] h-14 md:h-14"
+              className="hidden sm:block h-14 md:h-14 w-auto object-contain"
             />
             <img
               src="/House_Logo.png"
               alt="MatchBook Heart"
-              className="sm:hidden h-10 w-10"
+              className="sm:hidden h-10 w-auto object-contain pt-1"
             />
           </Link>
         </div>
 
-        {/* Center heart logo */}
-        <img
-          src="/svg/heart-header.svg"
-          className="h-8 w-8 hidden md:flex"
-          alt="MatchBook Heart"
-        />
+        {/* Center heart logo - 1/3 width with centered content */}
+        <div className="w-1/3 flex justify-center">
+          <img
+            src="/svg/heart-header.svg"
+            className="h-8 w-auto object-contain hidden md:flex"
+            alt="MatchBook Heart"
+          />
+        </div>
 
-        {/* Right-side elements container */}
-        <div className="flex space-x-2 md:space-x-4 items-center absolute right-2 xs:static xs:ml-auto">
+        {/* Right-side elements container - 1/3 width with right aligned content */}
+        <div className="w-1/3 flex space-x-2 md:space-x-4 items-center justify-end">
           <Link className="hidden xs:flex" href={"?tab=list#list-your-property"} shallow>
             <Button
               className="w-[191px] h-[36px] text-[18px] rounded-[15px]
@@ -91,8 +93,8 @@ export default function MatchbookHeader({
           <UserMenu isSignedIn={isSignedIn} color="black" />
         </div>
 
-        {/* Centered button container for mobile */}
-        <div className="xs:hidden flex justify-center items-center flex-1">
+        {/* Centered button shown only in mobile view, hidden in desktop */}
+        <div className="w-full xs:hidden flex justify-center items-center mt-2">
           <Link href={"?tab=list#list-your-property"} shallow>
             <Button
               className="w-[191px] h-[36px] text-[18px] rounded-[15px]
