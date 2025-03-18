@@ -333,7 +333,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     onClick={() => {}}
                     className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
                   >
-                    Log out
+                    Sign Out
                   </button>
                 </SignOutButton>
               </div>

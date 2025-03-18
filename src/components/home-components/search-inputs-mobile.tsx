@@ -82,7 +82,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     setTotalGuests(total);
   }, [guests]);
 
-  const inputClasses = `w-full px-4 py-3 font-medium text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+  const inputClasses = `w-full px-4 py-3 font-normal text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
     } bg-transparent ${inputClassName || ''}`;
 
   const prefetchGeocode = async (description: string) => {
@@ -320,7 +320,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(0)}
       >
-        {selectedLocation.description || "Where to?"}
+        {selectedLocation.description || "Where to"}
       </div>
       {renderLocationSuggestions()}
 
@@ -343,7 +343,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
           handleInputClick(4);
         }}
       >
-        {hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : 'Who?'}
+        {hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : 'Who'}
       </div>
       {renderSlidingComponent(4)}
 

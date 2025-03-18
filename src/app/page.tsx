@@ -15,15 +15,15 @@ interface CountdownDialogProps {
 }
 
 const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialogProps) => {
-  useEffect(() => {
-    if (autoOpen) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [setIsOpen, autoOpen]);
+  //useEffect(() => {
+  //  if (autoOpen) {
+  //    const timer = setTimeout(() => {
+  //      setIsOpen(true);
+  //    }, 1000);
+  //
+  //    return () => clearTimeout(timer);
+  //  }
+  //}, [setIsOpen, autoOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

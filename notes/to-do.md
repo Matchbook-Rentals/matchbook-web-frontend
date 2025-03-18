@@ -1,6 +1,14 @@
 # TO DOs
 
 
+- [ ] MAP
+-------- [ ] expand to take up all of tab selctor width 
+-------- [ ] change full screen icon to arrow left
+-------- [ ] try and hide i menu (at the bottom) by defualt
+-------- [ ] map clusters when pins are too close
+-------- [ ] full screen card goes to left side of map and becomes mini matchmaker when clicking see more
+- [ ] recommended view fix temp header or go all the way down past location
+- [ ] listingId page margins are fucked in a weird way
 - [x] Sign in Picture
 - [ ] Mobile search container fix
 - [ ] higher quality front photo
@@ -8,6 +16,9 @@
 - [ ] mobile tab selector not updating tab param which is perma hiding/showing filters button
 - [ ] get rid of overview tab, move those functions to ... menu in searches page 
 - [ ] add confirmation step to delete search
+- [ ] add confirmation step to delete search
+- [ ] support page
+- [ ] email plain text, match email to matchbookrentals.com
 
 # MVP
 - [ ] Sign in / SIgn up

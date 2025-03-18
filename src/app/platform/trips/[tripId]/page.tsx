@@ -9,12 +9,12 @@ import { SearchMatchbookTab } from '../../searches/(tabs)/search-matchbook-tab';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { APP_PAGE_MARGIN, PAGE_MARGIN } from '@/constants/styles';
 import { useSearchParams } from 'next/navigation';
-import OverviewTab from './(tabs)/overview-tab';
+// Overview tab removed
 import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat } from 'next/font/google';
-import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon, SettingsIcon } from '@/components/icons';
+import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
@@ -35,7 +35,7 @@ interface Tab {
 const TripsPage: React.FC = () => {
   const { state, actions } = useTripContext();
   const searchParams = useSearchParams();
-  const currentTab = searchParams.get('tab') || 'overview';
+  const currentTab = searchParams.get('tab') || 'recommended';
 
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
   const [filters, setFilters] = React.useState<FilterOptions>({
@@ -62,15 +62,15 @@ const TripsPage: React.FC = () => {
   const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px]  sm:font-normal'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
-    {
-      label: 'Manage Search',
-      value: 'overview',
-      content: state.trip ? <OverviewTab /> : null,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <SettingsIcon className='mt-1' />,
-      iconClassName: ""
-    },
+    //{
+    //  label: 'Manage Search',
+    //  value: 'overview',
+    //  content: state.trip ? <OverviewTab /> : null,
+    //  textSize: tabTriggerTextStyles,
+    //  className: tabTriggerStyles,
+    //  Icon: <SettingsIcon className='mt-1' />,
+    //  iconClassName: ""
+    //},
     {
       label: 'Recommended',
       value: 'recommended',
