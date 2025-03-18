@@ -65,14 +65,14 @@ const LoadingTabs: React.FC = () => {
 
   // Desktop tabs with correct typing for TabSelector
   const desktopTabs: DesktopTab[] = [
-    {
-      label: 'Manage Search',
-      value: 'overview',
-      content: <LoadingSkeleton />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: SettingsIcon
-    },
+    //{
+    //  label: 'Manage Search',
+    //  value: 'overview',
+    //  content: <LoadingSkeleton />,
+    //  textSize: tabTriggerTextStyles,
+    //  className: tabTriggerStyles,
+    //  Icon: SettingsIcon
+    //},
     {
       label: 'Recommended',
       value: 'recommended',
@@ -109,15 +109,15 @@ const LoadingTabs: React.FC = () => {
 
   // Mobile tabs with correct typing for MobileTabSelector
   const mobileTabs: MobileTab[] = [
-    {
-      label: 'Manage Search',
-      value: 'overview',
-      content: <LoadingSkeleton />,
-      textSize: tabTriggerTextStyles,
-      className: tabTriggerStyles,
-      Icon: <SettingsIcon className='mt-1' />,
-      iconClassName: ""
-    },
+    //{
+    //  label: 'Manage Search',
+    //  value: 'overview',
+    //  content: <LoadingSkeleton />,
+    //  textSize: tabTriggerTextStyles,
+    //  className: tabTriggerStyles,
+    //  Icon: <SettingsIcon className='mt-1' />,
+    //  iconClassName: ""
+    //},
     {
       label: 'Recommended',
       value: 'recommended',
