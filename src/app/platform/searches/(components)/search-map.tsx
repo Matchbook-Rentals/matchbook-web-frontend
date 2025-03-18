@@ -8,8 +8,10 @@ import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { useMapFullscreenStore } from '@/store/map-fullscreen-store';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { useSearchParams } from 'next/navigation';
+import LoadingSpinner from '@/components/ui/spinner';
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -31,9 +33,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const updateVisibleMarkersRef = useRef<() => void>();
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const { isMapFullscreen, setMapFullscreen } = useMapFullscreenStore();
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
   const {state} = useTripContext();
   const {filters, trip} = state;
@@ -109,7 +112,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       // Updated: use Zustand store to set the marker on click based on fullscreen state
       mapMarker.getElement().addEventListener('click', (e) => {
         e.stopPropagation();
-        if (!isFullscreen) {
+        if (!isMapFullscreen) {
           setClickedMarkerId(curr => {
             if (curr === marker.listing.id) {
               updateVisibleMarkers();
@@ -140,7 +143,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       highlightedMarkerRef.current = null;
     };
-  }, [center, markers, zoom, isFullscreen, setSelectedMarker]);
+  }, [center, markers, zoom, isMapFullscreen, setSelectedMarker]);
 
   // New useEffect to listen for changes in trip.filters and trip.searchRadius
   useEffect(() => {
@@ -160,7 +163,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markerElement.style.zIndex = zIndex;
     };
 
-    if (isFullscreen) {
+    if (isMapFullscreen) {
       if (selectedMarker) {
         markersRef.current.forEach((marker, id) => {
           if (id === selectedMarker.listing.id) {
@@ -205,30 +208,79 @@ const SearchMap: React.FC<SearchMapProps> = ({
         });
       }
     }
-  }, [hoveredListing, clickedMarkerId, selectedMarker, isFullscreen]);
+  }, [hoveredListing, clickedMarkerId, selectedMarker, isMapFullscreen]);
 
-  // Sync isFullscreen state with browser full-screen changes
+  // Handle effects when fullscreen state changes
+  useEffect(() => {
+    if (isMapFullscreen) {
+      // Actions when entering fullscreen
+      setSelectedMarker(null);
+      setClickedMarkerId(null);
+      
+      // Reset the map after a short delay to ensure proper rendering
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.resize();
+          // End transition state after the map has been resized
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 300);
+        }
+      }, 200);
+    } else {
+      // Actions when exiting fullscreen
+      setSelectedMarker(null);
+      setClickedMarkerId(null);
+      
+      // Update visible listings after exiting fullscreen
+      if (mapRef.current) {
+        setTimeout(() => {
+          if (mapRef.current) {
+            mapRef.current.resize();
+            const bounds = mapRef.current.getBounds();
+            const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+              .map(marker => marker.listing.id);
+            useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+            // End transition state after the map has been resized
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 300);
+          }
+        }, 200);
+      }
+    }
+  }, [isMapFullscreen, markers]);
+  
+  // Also keep sync with browser fullscreen for backward compatibility
   useEffect(() => {
     const handleFullscreenChange = () => {
       const fs = !!document.fullscreenElement;
-      setIsFullscreen(fs);
-      setSelectedMarker(null);
-      setClickedMarkerId(null);
-      if (!fs && mapRef.current) {
-        const bounds = mapRef.current.getBounds();
-        const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
-          .map(marker => marker.listing.id);
-        useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+      if (!fs && isMapFullscreen) {
+        // If browser fullscreen was exited, also exit our custom fullscreen
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setMapFullscreen(false);
+        }, 50);
       }
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
-  }, [markers]);
+  }, [isMapFullscreen, setMapFullscreen]);
 
   return (
-    <div style={{ height }} ref={mapContainerRef}>
+    <div 
+      className={`transition-all duration-300 ease-in-out ${isMapFullscreen ? 'fixed inset-0 z-50 w-full h-full' : ''}`}
+      style={{ height: isMapFullscreen ? '100vh' : height }}
+      ref={mapContainerRef}
+    >
+      {/* Loading overlay that appears during transitions */}
+      {isTransitioning && (
+        <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-[60]">
+          <LoadingSpinner />
+        </div>
+      )}
       {/* Conditionally render controls only after the map is loaded */}
       {mapLoaded && (
         <>
@@ -271,13 +323,18 @@ const SearchMap: React.FC<SearchMapProps> = ({
             <button
               onClick={() => {
                 if (mapRef.current) {
-                  if (!document.fullscreenElement) {
-                    mapContainerRef.current?.requestFullscreen();
-                    setIsFullscreen(true);
-                  } else {
-                    document.exitFullscreen();
-                    setIsFullscreen(false);
-                  }
+                  // Set transitioning state to true
+                  setIsTransitioning(true);
+                  // Delay the actual fullscreen toggle slightly to allow transition overlay to appear
+                  setTimeout(() => {
+                    setMapFullscreen(!isMapFullscreen);
+                    if (isMapFullscreen) {
+                      // If we're exiting fullscreen, check if we need to exit browser fullscreen too
+                      if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                      }
+                    }
+                  }, 50);
                 }
               }}
               className="bg-white p-2 rounded-md shadow"
@@ -290,19 +347,44 @@ const SearchMap: React.FC<SearchMapProps> = ({
                 stroke="currentColor"
                 className="w-5 h-5"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
-                />
+                {isMapFullscreen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 9L3.75 3.75M9 15L3.75 20.25M15 9l5.25-5.25M15 15l5.25 5.25"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                  />
+                )}
               </svg>
             </button>
           </div>
+          
+          {/* Exit fullscreen button (only shows when in fullscreen) */}
+          {isMapFullscreen && (
+            <div className="absolute top-2 right-14 z-10">
+              <button
+                onClick={() => {
+                  setIsTransitioning(true);
+                  setTimeout(() => {
+                    setMapFullscreen(false);
+                  }, 50);
+                }}
+                className="bg-white p-2 rounded-md shadow text-sm"
+              >
+                Exit Full Screen
+              </button>
+            </div>
+          )}
         </>
       )}
 
       {/* Updated Detailed Card (only in full-screen) */}
-      {selectedMarker && isFullscreen && center && (
+      {selectedMarker && isMapFullscreen && center && (
         <ListingCard
           listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
