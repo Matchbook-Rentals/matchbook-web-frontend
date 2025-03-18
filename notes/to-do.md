@@ -5,9 +5,9 @@
 - [ ] Mobile search container fix
 - [ ] higher quality front photo
 - [ ] filter menu bookings needs update
-
-  usermenu
-
+- [ ] mobile tab selector not updating tab param which is perma hiding/showing filters button
+- [ ] get rid of overview tab, move those functions to ... menu in searches page 
+- [ ] add confirmation step to delete search
 
 # MVP
 - [ ] Sign in / SIgn up

@@ -352,7 +352,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
                 <Link href="/sign-in">
-                  <button className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
                 </Link>
                 <button className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
               </div>
