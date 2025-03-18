@@ -150,11 +150,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   };
 
   const handleInputClick = (index: number) => {
-    if (index === 2) {
-      setActiveInput(3);
-    } else {
-      setActiveInput(activeInput === index ? null : index);
-    }
+    setActiveInput(activeInput === index ? null : index);
   };
 
   const renderSlidingComponent = (index: number) => {
@@ -162,7 +158,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
 
     return (
       <AnimatePresence>
-        {(activeInput === index || (index === 2 && activeInput === 3)) && (
+        {activeInput === index && (
           <motion.div
             initial={{ maxHeight: 0, opacity: 0 }}
             animate={{ maxHeight: "1500px", opacity: 1 }}
@@ -171,7 +167,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
             className="w-full bg-background border-t border-b border-gray-200 overflow-hidden"
           >
             <div className="p-0">
-              {(index === 3) && (
+              {index === 3 && (
                 <MobileDateRange
                   dateRange={dateRange}
                   onDateRangeChange={setDateRange}
@@ -270,7 +266,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
       setActiveInput(3);
       toast({
         variant: "destructive",
-        description: `Please select move-in and move-out dates`,
+        description: `Please select both move-in and move-out dates`,
       });
       return;
     }
@@ -320,45 +316,35 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         ease: "easeInOut"
       }}
     >
-      <input
-        type="text"
-        placeholder="Where to?"
-        value={selectedLocation.description}
-        className={inputClasses}
-        readOnly
+      <div
+        className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(0)}
-      />
+      >
+        {selectedLocation.description || "Where to?"}
+      </div>
       {renderLocationSuggestions()}
 
-      <input
-        type="text"
-        placeholder="Move in"
-        value={dateRange.start ? format(dateRange.start, 'MMM d, yyyy') : ''}
+      <div
         className={inputClasses}
-        readOnly={!hasAccess}
-        onClick={() => handleInputClick(2)}
-      />
-      <input
-        type="text"
-        placeholder="Move out"
-        value={dateRange.end ? format(dateRange.end, 'MMM d, yyyy') : ''}
-        className={inputClasses}
-        readOnly={!hasAccess}
         onClick={() => handleInputClick(3)}
-      />
+      >
+        {dateRange.start && dateRange.end 
+          ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
+          : dateRange.start
+          ? `${format(dateRange.start, 'MMM d')} - Select`
+          : 'Move in - Move out'}
+      </div>
       {renderSlidingComponent(3)}
 
-      <input
-        type="text"
-        placeholder="Who?"
-        value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+      <div
         className={`${inputClasses} sm:border-r-0`}
-        readOnly={!hasAccess}
         onClick={() => {
           setHasBeenSelected(true);
           handleInputClick(4);
         }}
-      />
+      >
+        {hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : 'Who?'}
+      </div>
       {renderSlidingComponent(4)}
 
       <button

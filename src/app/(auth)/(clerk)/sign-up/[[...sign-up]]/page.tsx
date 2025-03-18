@@ -8,7 +8,7 @@ export default function Page() {
         <SignUp />
       </div>
       <div className="hidden md:block w-0 lg:w-1/2">
-        <img className="object-cover w-full h-screen" src="/sign-in.png" alt="Matchbook sign up" />
+        <img className="object-cover w-full h-screen" src="/vertical-shot-golden-gate-bridge-against-misty-blue-sky-san-francisco-california-usa.jpg" alt="Matchbook sign up" />
       </div>
     </div>
   )

@@ -5,9 +5,9 @@ import Countdown from "../marketing-landing-components/countdown";
 const Hero: React.FC = () => {
   return (
     <div
-      className="relative  min-h-[60vh] rounded-lg shadow-md w-[100vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative min-h-[60vh]  rounded-lg shadow-md w-[100vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
-        backgroundImage: "url('/img/home-page/new-hero.png')",
+        backgroundImage: "url('/treelined-street-with-beautifully-restored-victorian-home.jpg')",
         backgroundSize: "cover", // Ensures the image covers the container
         backgroundPosition: "center", // Centers the image so it crops equally from all sides
       }}
