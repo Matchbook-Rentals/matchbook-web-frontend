@@ -6,7 +6,7 @@ import { ListingAndImages } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
-import DesktopListingCard from './desktop-listing-card';
+import DesktopListingCard from './desktop-map-click-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { useTripContext } from '@/contexts/trip-context-provider';
