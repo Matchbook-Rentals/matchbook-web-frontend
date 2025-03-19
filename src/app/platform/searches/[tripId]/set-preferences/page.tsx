@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import Paddle from '@/components/ui/paddle';
 import CurrencyInput from '@/components/ui/currency-input';
 import * as AmenitiesIcons from '@/components/icons/amenities';
@@ -19,7 +20,10 @@ interface FilterOptions {
   minBathrooms: number;
 }
 
-export default function SearchPreferenceDisplay() {
+export default function SetPreferencesPage() {
+  const params = useParams();
+  const tripId = params.tripId as string;
+  
   const [filters, setFilters] = useState<FilterOptions>({
     propertyTypes: [],
     minPrice: null,
@@ -83,12 +87,21 @@ export default function SearchPreferenceDisplay() {
     },
   ];
 
+  const handleSubmit = async () => {
+    // Here you would save the preferences to the database for the current trip
+    console.log(`Saving preferences for trip ${tripId}:`, filters);
+    
+    // You could add an API call to save the preferences
+    // await savePreferences(tripId, filters);
+    
+    // Redirect or show success message
+  };
 
   return (
     <div className="container mx-auto py-8 max-w-[700px]">
       <h1 className="text-2xl font-bold mb-6">Tell us more about what you're looking for in a place</h1>
 
-      <ScrollArea className=" w-full rounded-md border p-4">
+      <ScrollArea className="w-full rounded-md border p-4">
         {/* Property Types Section */}
         <div className="space-y-4 border-b-2 pb-3">
           <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
@@ -230,6 +243,7 @@ export default function SearchPreferenceDisplay() {
         <div className="mt-6 flex justify-end">
           <Button 
             className="py-2 rounded-full text-[14px] px-4"
+            onClick={handleSubmit}
           >
             Save Preferences
           </Button>

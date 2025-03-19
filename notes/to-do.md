@@ -4,9 +4,9 @@
 try to force invalidate cache bring up to speed
 
 - [ ] MAP
--------- [ ] expand to take up all of tab selctor width 
--------- [ ] change full screen icon to arrow left
--------- [ ] try and hide i menu (at the bottom) by defualt
+-------- [x] expand to take up all of tab selctor width 
+-------- [x] change full screen icon to arrow left
+-------- [x] try and hide i menu (at the bottom) by defualt
 -------- [ ] map clusters when pins are too close
 -------- [ ] full screen card goes to left side of map and becomes mini matchmaker when clicking see more
 -------- [ ] get rid of listing card popup on like

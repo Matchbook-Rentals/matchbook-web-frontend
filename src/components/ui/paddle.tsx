@@ -7,10 +7,11 @@ interface PaddleProps {
   icon: React.ReactNode;
   className?: string;
   labelClassNames?: string;
+  iconClassNames?: string;
   onClick?: () => void;
 }
 
-const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames, onClick }) => {
+const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames, iconClassNames, onClick }) => {
   return (
     <Card
       className={cn(
@@ -20,7 +21,7 @@ const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames
       onClick={onClick}
     >
       <CardContent className="flex flex-col items-center h-full w-full px-0 pt-12">
-        <div className="flex-1 flex h-1/2 items-end">{icon}</div>
+        <div className={cn("flex-1 flex h-1/2 items-end", iconClassNames)}>{icon}</div>
         <div className={cn(
           "text-center w-[80%] h-1/2 pt-4 leading-none flex-1 flex justify-center items-start",
           labelClassNames

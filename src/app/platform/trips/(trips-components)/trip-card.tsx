@@ -2,7 +2,7 @@
 import { Trip } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
-import { Trash, MoreHorizontal, Pencil } from 'lucide-react';
+import { Trash, MoreHorizontal, Pencil, Settings } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useRouter } from 'next/navigation';
@@ -181,6 +181,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   >
                     <ApplicationIcon className="h-4 w-4" /> Application
                   </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left flex items-center justify-start gap-2"
+                    onClick={() => router.push(`/platform/searches/${trip.id}/set-preferences`)}
+                  >
+                    <Settings className="h-4 w-4" /> Preferences
+                  </Button>
                   <hr className="my-1" />
                   <Button
                     variant="ghost"
@@ -255,6 +262,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       onClick={() => router.push(`/platform/application`)}
                     >
                       <ApplicationIcon className="h-4 w-4" /> Application
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full text-left flex items-center justify-start gap-2"
+                      onClick={() => router.push(`/platform/searches/${trip.id}/set-preferences`)}
+                    >
+                      <Settings className="h-4 w-4" /> Preferences
                     </Button>
                     <hr className="my-1" />
                     <Button
