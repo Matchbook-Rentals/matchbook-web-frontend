@@ -19,6 +19,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { 
+  Dialog,
+  DialogContent,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import SearchEditBar from '@/components/home-components/search-edit-bar';
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -188,6 +194,22 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   >
                     <Settings className="h-4 w-4" /> Preferences
                   </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-left flex items-center justify-start gap-2"
+                      >
+                        <Pencil className="h-4 w-4" /> Edit Search
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl bg-gray-300 p-8" xOnRight={true}>
+                      <div className="mb-6 bg-gray-300 test">
+                        <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
+                      </div>
+                      <SearchEditBar tripId={trip.id} />
+                    </DialogContent>
+                  </Dialog>
                   <hr className="my-1" />
                   <Button
                     variant="ghost"
@@ -214,13 +236,22 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             >
               Continue Search
             </Button>
-            <Button
-              className="bg-background border border-gray-200 hover:bg-gray-100 text-[#404040] rounded-md px-4 py-2 text-sm font-medium h-9"
-              variant="ghost"
-              onClick={() => router.push(`trips/${trip.id}/edit`)}
-            >
-              <Pencil className="h-4 w-4 mr-1" /> Edit
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  className="bg-background border border-gray-200 hover:bg-gray-100 text-[#404040] rounded-md px-4 py-2 text-sm font-medium h-9"
+                  variant="ghost"
+                >
+                  <Pencil className="h-4 w-4 mr-1" /> Edit
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl p-8" xOnRight={true}>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
+                </div>
+                <SearchEditBar tripId={trip.id} />
+              </DialogContent>
+            </Dialog>
             <div className="hidden md:block">
               <Popover>
                 <PopoverTrigger asChild>
@@ -270,6 +301,22 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                     >
                       <Settings className="h-4 w-4" /> Preferences
                     </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-full text-left flex items-center justify-start gap-2"
+                        >
+                          <Pencil className="h-4 w-4" /> Edit Search
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl p-8" xOnRight={true}>
+                        <div className="mb-6">
+                          <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
+                        </div>
+                        <SearchEditBar tripId={trip.id} />
+                      </DialogContent>
+                    </Dialog>
                     <hr className="my-1" />
                     <Button
                       variant="ghost"
