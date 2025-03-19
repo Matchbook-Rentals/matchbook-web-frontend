@@ -155,7 +155,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
 
   return (
     <div className="container mx-auto py-8 max-w-[700px]">
-      <h1 className="text-2xl font-bold mb-6">Tell us more about what you're looking for in a place</h1>
+      <h1 className="text-2xl font-bold mb-6">Tell us more about what you&apos;re looking for in a place</h1>
 
       <ScrollArea className="w-full rounded-md border p-4">
         {/* Property Types Section */}
