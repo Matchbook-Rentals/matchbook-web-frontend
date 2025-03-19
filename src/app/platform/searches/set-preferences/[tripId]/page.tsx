@@ -7,6 +7,7 @@ import CurrencyInput from '@/components/ui/currency-input';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
 interface FilterOptions {
   propertyTypes: string[];
@@ -23,6 +24,7 @@ interface FilterOptions {
 export default function SetPreferencesPage() {
   const params = useParams();
   const tripId = params.tripId as string;
+  const { toast } = useToast();
   
   const [filters, setFilters] = useState<FilterOptions>({
     propertyTypes: [],
@@ -40,6 +42,8 @@ export default function SetPreferencesPage() {
     min: '',
     max: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
     setFilters(prev => ({
@@ -88,13 +92,45 @@ export default function SetPreferencesPage() {
   ];
 
   const handleSubmit = async () => {
-    // Here you would save the preferences to the database for the current trip
-    console.log(`Saving preferences for trip ${tripId}:`, filters);
-    
-    // You could add an API call to save the preferences
-    // await savePreferences(tripId, filters);
-    
-    // Redirect or show success message
+    setIsSubmitting(true);
+    try {
+      // Transform filters into an object compatible with the updateTripFilters action
+      const preferencesData = {
+        preferredPropertyTypes: filters.propertyTypes,
+        minRent: filters.minPrice,
+        maxRent: filters.maxPrice,
+        preferFurnished: filters.furnished,
+        preferUnfurnished: filters.unfurnished,
+        preferUtilitiesIncluded: filters.utilities.includes('utilitiesIncluded'),
+        minBedrooms: filters.minBedrooms,
+        minBathrooms: filters.minBathrooms,
+      };
+      
+      // Import the action to update trip filters
+      const { updateTripFilters } = await import('@/app/actions/trips');
+      
+      // Save the preferences to the database
+      const updatedTrip = await updateTripFilters(tripId, preferencesData);
+      
+      // Show success toast
+      toast({
+        title: "Preferences saved!",
+        description: "Redirecting you to properties that match your preferences..."
+      });
+      
+      // Slight delay before redirect to allow toast to be seen
+      setTimeout(() => {
+        window.location.href = `/platform/trips/${tripId}?tab=recommended`;
+      }, 1500);
+    } catch (error) {
+      console.error('Error saving preferences:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to save preferences",
+        description: error instanceof Error ? error.message : "An unknown error occurred"
+      });
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -244,8 +280,9 @@ export default function SetPreferencesPage() {
           <Button 
             className="py-2 rounded-full text-[14px] px-4"
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
-            Save Preferences
+            {isSubmitting ? 'Saving...' : 'Save Preferences'}
           </Button>
         </div>
       </ScrollArea>

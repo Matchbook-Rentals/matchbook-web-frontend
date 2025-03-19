@@ -196,7 +196,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     });
 
     if (response.success && response.trip) {
-      router.push(`/platform/trips/${response.trip.id}?tab=recommended`);
+      router.push(`/platform/searches/set-preferences/${response.trip.id}`);
     } else {
       toast({
         variant: "destructive",
