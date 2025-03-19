@@ -20,7 +20,7 @@ const AmenityListItem: React.FC<AmenityListItemProps> = ({
   return (
     <div className={cn("flex items-center gap-4 py-2", className)}>
       {Icon && <Icon className={cn("h-[64px] w-[64px]", iconClassNames)} />}
-      <span className={cn("text-[16px] md:text-[20px]", labelClassNames)}>{label}</span>
+      <span className={cn(labelClassNames || "text-[16px] md:text-[20px]")}>{label}</span>
     </div>
   );
 };

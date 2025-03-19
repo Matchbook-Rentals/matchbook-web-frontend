@@ -48,7 +48,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
   const sectionHeaderStyles = 'text-[#404040] text-[18px] font-medium mb-2';
-  const amenityTextStyle = 'text-[11px] font-medium';
+  const amenityTextStyle = 'text-[16px] font-medium';
 
   // Calculate amenities to display
   const calculateDisplayAmenities = () => {
