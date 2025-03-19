@@ -332,7 +332,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
           ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
           : dateRange.start
           ? `${format(dateRange.start, 'MMM d')} - Select`
-          : 'Move in - Move out'}
+          : 'Dates'}
       </div>
       {renderSlidingComponent(3)}
 

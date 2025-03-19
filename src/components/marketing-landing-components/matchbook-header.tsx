@@ -80,7 +80,7 @@ export default function MatchbookHeader({
 
         {/* Right-side elements container - 1/3 width with right aligned content */}
         <div className="w-1/3 flex space-x-2 md:space-x-4 items-center justify-end">
-          <Link className="hidden xs:flex" href={"?tab=list#list-your-property"} shallow>
+          <Link className="hidden md:flex" href={"?tab=list#list-your-property"} shallow>
             <Button
               className="w-[191px] h-[36px] text-[18px] rounded-[15px]
                          border-[1px] font-normal border-charcoal"
@@ -93,19 +93,6 @@ export default function MatchbookHeader({
           <UserMenu isSignedIn={isSignedIn} color="black" />
         </div>
 
-        {/* Centered button shown only in mobile view, hidden in desktop */}
-        <div className="w-full xs:hidden flex justify-center items-center mt-2">
-          <Link href={"?tab=list#list-your-property"} shallow>
-            <Button
-              className="w-[191px] h-[36px] text-[18px] rounded-[15px]
-                         border-[1px] font-normal border-charcoal"
-              onClick={handleListProperty || handleDefault}
-              variant={"outline"}
-            >
-              List your property
-            </Button>
-          </Link>
-        </div>
       </header>
     </div>
   );

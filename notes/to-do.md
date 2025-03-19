@@ -7,6 +7,8 @@
 -------- [ ] try and hide i menu (at the bottom) by defualt
 -------- [ ] map clusters when pins are too close
 -------- [ ] full screen card goes to left side of map and becomes mini matchmaker when clicking see more
+-------- [ ] get rid of listing card popup on like
+
 - [ ] recommended view fix temp header or go all the way down past location
 - [ ] listingId page margins are fucked in a weird way
 - [x] Sign in Picture
