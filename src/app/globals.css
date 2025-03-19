@@ -202,7 +202,3 @@
   border-width: 2px;
   border-color: black;
 }
-
-.maplibregl-ctrl-attrib a {
-  font-size: 11px !important;
-}

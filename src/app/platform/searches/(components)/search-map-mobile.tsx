@@ -51,13 +51,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       center: center,
       zoom: zoom,
       scrollZoom: false,
-      attributionControl: false
     });
-    
-    // Add a custom attribution control that starts collapsed
-    map.addControl(new maplibregl.AttributionControl({
-      compact: true
-    }));
 
     mapRef.current = map;
 
