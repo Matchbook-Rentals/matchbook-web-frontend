@@ -6,6 +6,7 @@ import { ListingAndImages } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import Image from 'next/image';
 import ListingCard from './map-click-listing-card';
+import DesktopListingCard from './desktop-listing-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { useTripContext } from '@/contexts/trip-context-provider';
@@ -307,14 +308,27 @@ const SearchMap: React.FC<SearchMapProps> = ({
         </>
       )}
 
-      {/* Updated Detailed Card (only in full-screen) */}
+      {/* Desktop Listing Card (only in full-screen) */}
       {selectedMarker && isFullscreen && center && (
-        <ListingCard
-          listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
-          distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
-          onClose={() => setSelectedMarker(null)}
-          className="top-4 left-1/2 transform -translate-x-1/2 w-96"
-        />
+        <div className="hidden md:block">
+          <DesktopListingCard
+            listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
+            distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+            onClose={() => setSelectedMarker(null)}
+          />
+        </div>
+      )}
+      
+      {/* Mobile Listing Card (only in full-screen) */}
+      {selectedMarker && isFullscreen && center && (
+        <div className="block md:hidden">
+          <ListingCard
+            listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
+            distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+            onClose={() => setSelectedMarker(null)}
+            className="top-4 left-1/2 transform -translate-x-1/2 w-96"
+          />
+        </div>
       )}
     </div>
   );
