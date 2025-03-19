@@ -9,10 +9,11 @@ import { BrandHeartOutline } from '@/components/icons/marketing';
 import { ListingStatus } from '@/constants/enums';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ShareIcon } from 'lucide-react';
+import { Star } from 'lucide-react';
 import AmenityListItem from './amenity-list-item';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { MatchbookVerified } from '@/components/icons';
+import { iconAmenities } from '@/lib/amenities-list';
 
 interface DesktopListingCardProps {
   listing: {
@@ -29,6 +30,7 @@ interface DesktopListingCardProps {
     utilitiesIncluded?: boolean;
     petsAllowed?: boolean;
     description?: string;
+    [key: string]: any; // For amenities
   };
   distance?: number;
   onClose: () => void;
@@ -47,7 +49,20 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
   const sectionHeaderStyles = 'text-[#404040] text-[18px] font-medium mb-2';
-  const amenityTextStyle = 'text-[14px] font-medium';
+  const amenityTextStyle = 'text-[11px] font-medium';
+  
+  // Calculate amenities to display
+  const calculateDisplayAmenities = () => {
+    const displayAmenities = [];
+    for (let amenity of iconAmenities) {
+      if (listing[amenity.code]) {
+        displayAmenities.push(amenity);
+      }
+    }
+    return displayAmenities;
+  };
+  
+  const displayAmenities = calculateDisplayAmenities();
 
   const getStatusIcon = () => {
     if (favIds?.has(listing.id)) {
@@ -101,13 +116,16 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     );
   };
 
+  // Define height for collapsed and expanded states
+  const collapsedHeight = '290px'; // Original starting size (adjust as needed)
+  const expandedHeight = 'calc(100vh - 60px)'; // Expanded size
+
   return (
     <div
-      className={`absolute z-20 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 ${
-        expanded 
-          ? 'top-14 left-2 bottom-4 w-96' 
-          : 'top-14 left-2 w-96'
-      }`}
+      className="absolute z-20 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 ease-in-out top-14 left-2 w-96"
+      style={{
+        height: expanded ? expandedHeight : collapsedHeight
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -149,184 +167,182 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
       </div>
 
       {/* Non-expanded Content */}
-      {!expanded && (
-        <>
-          <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b">
-            <h3 className="font-normal text-[20px] text-[#404040] leading-tight">
-              {listing.title}
-            </h3>
-            <div className="text-[#404040]">
-              <ShareIcon className="w-5 h-5" />
-            </div>
+      <div className={`transition-all duration-300 ease-in-out ${expanded ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100'}`}>
+        <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b">
+          <h3 className="font-normal text-[20px] text-[#404040] leading-tight truncate max-w-[calc(100%-80px)]">
+            {listing.title}
+          </h3>
+          <button
+            onClick={() => setExpanded(true)}
+            className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors ml-2 shrink-0"
+          >
+            See more
+          </button>
+        </div>
+        
+        <div className={`px-4 py-3 flex flex-col space-y-4 text-[#404040] ${sectionStyles}`}>
+          <div className="w-full flex justify-between">
+            <p className="text-[16px]">
+              {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
+            </p>
+            <p className="text-[16px] font-medium">
+              ${listing.price.toLocaleString()}/month
+            </p>
           </div>
-          
-          <div className={`px-4 py-3 flex flex-col space-y-4 text-[#404040] ${sectionStyles}`}>
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">
-                {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
-              </p>
-              <p className="text-[16px] font-medium">
-                ${listing.price.toLocaleString()}/month
-              </p>
-            </div>
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">
-                {listing.squareFootage?.toLocaleString() || 0} sqft
-              </p>
-              <p className="text-[16px]">
-                ${listing.depositSize?.toLocaleString() || 0} deposit
-              </p>
-            </div>
+          <div className="w-full flex justify-between">
+            <p className="text-[16px]">
+              {listing.squareFootage?.toLocaleString() || 0} sqft
+            </p>
+            <p className="text-[16px]">
+              ${listing.depositSize?.toLocaleString() || 0} deposit
+            </p>
           </div>
-          
-          <div className="px-4 pt-1 pb-4 flex items-center justify-between">
-            {typeof distance === 'number' && (
-              <p className="text-sm font-medium text-gray-500">
-                {distance.toFixed(1)} miles away
-              </p>
-            )}
-            
-            <button
-              onClick={() => setExpanded(true)}
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-            >
-              See more
-            </button>
-          </div>
-        </>
-      )}
+        </div>
+      </div>
 
       {/* Expanded Content */}
-      {expanded && (
-        <>
-          <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b">
-            <h3 className="font-normal text-[20px] text-[#404040] leading-tight">
-              {listing.title}
-            </h3>
-            <div className="text-[#404040]">
-              <ShareIcon className="w-5 h-5" />
+      <div className={`transition-all duration-300 ease-in-out ${expanded ? 'opacity-100' : 'opacity-0 max-h-0 overflow-hidden'}`}>
+        <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b">
+          <h3 className="font-normal text-[20px] text-[#404040] leading-tight truncate max-w-[calc(100%-80px)]">
+            {listing.title}
+          </h3>
+          <button
+            onClick={() => setExpanded(false)}
+            className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors ml-2 shrink-0"
+          >
+            See less
+          </button>
+        </div>
+        
+        <div className={`px-4 py-3 flex flex-col space-y-4 text-[#404040] ${sectionStyles}`}>
+          <div className="w-full flex justify-between">
+            <p className="text-[16px]">
+              {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
+            </p>
+            <p className="text-[16px] font-medium">
+              ${listing.price.toLocaleString()}/month
+            </p>
+          </div>
+          <div className="w-full flex justify-between">
+            <p className="text-[16px]">
+              {listing.squareFootage?.toLocaleString() || 0} sqft
+            </p>
+            <p className="text-[16px]">
+              ${listing.depositSize?.toLocaleString() || 0} deposit
+            </p>
+          </div>
+        </div>
+        
+        <ScrollArea className="h-[calc(100%-200px)] w-full px-4">
+          {/* Highlights Section */}
+          <div className={sectionStyles}>
+            <h3 className={sectionHeaderStyles}>Highlights</h3>
+            <div className="space-y-1 py-1">
+              <AmenityListItem
+                icon={MatchbookVerified}
+                label="Matchbook Verified Guests Preferred"
+                labelClassNames={amenityTextStyle}
+                iconClassNames="h-[22px] w-[22px]"
+              />
+              
+              {/* Category-dependent icons */}
+              {listing.category === "singleFamily" && (
+                <AmenityListItem
+                  icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
+                  label="Single Family"
+                  labelClassNames={amenityTextStyle}
+                  iconClassNames="h-[22px] w-[22px]"
+                />
+              )}
+              {listing.category === "townhouse" && (
+                <AmenityListItem
+                  icon={AmenitiesIcons.UpdatedTownhouseIcon}
+                  label="Townhouse"
+                  labelClassNames={amenityTextStyle}
+                  iconClassNames="h-[22px] w-[22px]"
+                />
+              )}
+              {listing.category === "privateRoom" && (
+                <AmenityListItem
+                  icon={AmenitiesIcons.UpdatedSingleRoomIcon}
+                  label="Private Room"
+                  labelClassNames={amenityTextStyle}
+                  iconClassNames="h-[22px] w-[22px]"
+                />
+              )}
+              {(listing.category === "apartment" || listing.category === "condo") && (
+                <AmenityListItem
+                  icon={AmenitiesIcons.UpdatedApartmentIcon}
+                  label="Apartment"
+                  labelClassNames={amenityTextStyle}
+                  iconClassNames="h-[22px] w-[22px]"
+                />
+              )}
+
+              {/* Furnished Status */}
+              <AmenityListItem
+                icon={listing.furnished ? AmenitiesIcons.UpdatedFurnishedIcon : AmenitiesIcons.UpdatedUnfurnishedIcon}
+                label={listing.furnished ? "Furnished" : "Unfurnished"}
+                labelClassNames={amenityTextStyle}
+                iconClassNames="h-[22px] w-[22px]"
+              />
+
+              {/* Utilities */}
+              <AmenityListItem
+                icon={listing.utilitiesIncluded ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon}
+                label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
+                labelClassNames={amenityTextStyle}
+                iconClassNames="h-[22px] w-[22px]"
+              />
+
+              {/* Pets */}
+              <AmenityListItem
+                icon={listing.petsAllowed ? AmenitiesIcons.UpdatedPetFriendlyIcon : AmenitiesIcons.UpdatedPetUnfriendlyIcon}
+                label={listing.petsAllowed ? "Pets Allowed" : "No Pets"}
+                labelClassNames={amenityTextStyle}
+                iconClassNames="h-[22px] w-[22px]"
+              />
             </div>
           </div>
-          
-          <div className={`px-4 py-3 flex flex-col space-y-4 text-[#404040] ${sectionStyles}`}>
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">
-                {listing.roomCount || 0} beds | {listing.bathroomCount || 0} Baths
-              </p>
-              <p className="text-[16px] font-medium">
-                ${listing.price.toLocaleString()}/month
-              </p>
-            </div>
-            <div className="w-full flex justify-between">
-              <p className="text-[16px]">
-                {listing.squareFootage?.toLocaleString() || 0} sqft
-              </p>
-              <p className="text-[16px]">
-                ${listing.depositSize?.toLocaleString() || 0} deposit
-              </p>
-            </div>
+
+          {/* Description section */}
+          <div className={sectionStyles}>
+            <h3 className={sectionHeaderStyles}>Description</h3>
+            <p className="text-[14px] text-gray-600">
+              {listing.description || 'No description available for this property.'}
+            </p>
           </div>
           
-          <ScrollArea className="h-[calc(100%-200px)] w-full px-4">
-            {/* Highlights Section */}
+          {/* Amenities section */}
+          {displayAmenities.length > 0 && (
             <div className={sectionStyles}>
-              <h3 className={sectionHeaderStyles}>Highlights</h3>
-              <div className="space-y-1">
-                <AmenityListItem
-                  icon={MatchbookVerified}
-                  label="Matchbook Verified Guests Preferred"
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[24px] w-[24px]"
-                />
-                
-                {/* Category-dependent icons */}
-                {listing.category === "singleFamily" && (
+              <h3 className={sectionHeaderStyles}>Amenities</h3>
+              <div className="flex flex-col space-y-1 py-1">
+                {displayAmenities.map((amenity) => (
                   <AmenityListItem
-                    icon={AmenitiesIcons.UpdatedSingleFamilyIcon}
-                    label="Single Family"
+                    key={amenity.code}
+                    icon={amenity.icon || Star}
+                    label={amenity.label}
                     labelClassNames={amenityTextStyle}
-                    iconClassNames="h-[24px] w-[24px]"
+                    iconClassNames="h-[22px] w-[22px]"
                   />
-                )}
-                {listing.category === "townhouse" && (
-                  <AmenityListItem
-                    icon={AmenitiesIcons.UpdatedTownhouseIcon}
-                    label="Townhouse"
-                    labelClassNames={amenityTextStyle}
-                    iconClassNames="h-[24px] w-[24px]"
-                  />
-                )}
-                {listing.category === "privateRoom" && (
-                  <AmenityListItem
-                    icon={AmenitiesIcons.UpdatedSingleRoomIcon}
-                    label="Private Room"
-                    labelClassNames={amenityTextStyle}
-                    iconClassNames="h-[24px] w-[24px]"
-                  />
-                )}
-                {(listing.category === "apartment" || listing.category === "condo") && (
-                  <AmenityListItem
-                    icon={AmenitiesIcons.UpdatedApartmentIcon}
-                    label="Apartment"
-                    labelClassNames={amenityTextStyle}
-                    iconClassNames="h-[24px] w-[24px]"
-                  />
-                )}
-
-                {/* Furnished Status */}
-                <AmenityListItem
-                  icon={listing.furnished ? AmenitiesIcons.UpdatedFurnishedIcon : AmenitiesIcons.UpdatedUnfurnishedIcon}
-                  label={listing.furnished ? "Furnished" : "Unfurnished"}
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[24px] w-[24px]"
-                />
-
-                {/* Utilities */}
-                <AmenityListItem
-                  icon={listing.utilitiesIncluded ? AmenitiesIcons.UpdatedUtilitiesIncludedIcon : AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon}
-                  label={listing.utilitiesIncluded ? "Utilities Included" : "No Utilities"}
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[24px] w-[24px]"
-                />
-
-                {/* Pets */}
-                <AmenityListItem
-                  icon={listing.petsAllowed ? AmenitiesIcons.UpdatedPetFriendlyIcon : AmenitiesIcons.UpdatedPetUnfriendlyIcon}
-                  label={listing.petsAllowed ? "Pets Allowed" : "No Pets"}
-                  labelClassNames={amenityTextStyle}
-                  iconClassNames="h-[24px] w-[24px]"
-                />
+                ))}
               </div>
             </div>
-
-            {/* Description section */}
-            <div className={sectionStyles}>
-              <h3 className={sectionHeaderStyles}>Description</h3>
-              <p className="text-[14px] text-gray-600">
-                {listing.description || 'No description available for this property.'}
-              </p>
-            </div>
-          </ScrollArea>
-          
-          <div className="border-t border-gray-200 p-4 flex justify-between items-center">
-            <button
-              onClick={() => setExpanded(false)}
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-            >
-              Show less
-            </button>
-            
-            <Link
-              href={`/platform/trips/${state.trip.id}/listing/${listing.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded text-center transition-colors"
-            >
-              View full details
-            </Link>
-          </div>
-        </>
-      )}
+          )}
+        </ScrollArea>
+        
+        <div className="border-t border-gray-200 p-4 flex justify-center items-center">
+          <Link
+            href={`/platform/trips/${state.trip.id}/listing/${listing.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded text-center transition-colors w-full"
+          >
+            View full details
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
