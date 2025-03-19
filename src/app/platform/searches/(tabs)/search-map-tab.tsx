@@ -59,6 +59,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
   const [shouldRenderMap, setShouldRenderMap] = useState(false);
+  
+  // State to control map fullscreen view
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
@@ -150,69 +153,71 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   return (
     <>
       <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full sm:px-2">
-        {/* Grid container */}
-        <div className="w-full md:w-3/5 md:pr-4">
-          {displayListings.length > 0 ? (
-            <SearchListingsGrid listings={[...showListings]} height={calculatedHeight} />
-          ) : listings.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-[50vh]">
-              <p className="text-gray-600 text-center">
-                Sorry, we couldn&apos;t find any listings in this area right now.
-                <br />
-                Please check again later or try different dates.
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-[50vh]">
-              <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
-              <p>
-                You can {numFavorites > 0 ? 'look at your favorites' : ''}
-                {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
-                {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.
-              </p>
-
-              {(numFavorites > 0 || numFilteredOut > 0) && (
-                <p className="mt-3">
-                  {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
-                  {numFavorites > 0 && numFilteredOut > 0 && ' & '}
-                  {numFilteredOut > 0 && `${numFilteredOut} listings filtered out`}
-                  .
+        {/* Grid container - hide when fullscreen */}
+        {!isFullscreen && (
+          <div className="w-full md:w-3/5 md:pr-4">
+            {displayListings.length > 0 ? (
+              <SearchListingsGrid listings={[...showListings]} height={calculatedHeight} />
+            ) : listings.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-[50vh]">
+                <p className="text-gray-600 text-center">
+                  Sorry, we couldn&apos;t find any listings in this area right now.
+                  <br />
+                  Please check again later or try different dates.
                 </p>
-              )}
-
-              <div className="flex justify-center gap-x-2 mt-2">
-                {numFilteredOut > 0 && (
-                  <button
-                    onClick={() => setIsFilterOpen(true)}
-                    className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
-                  >
-                    Adjust Filters
-                  </button>
-                )}
-                {numFavorites > 0 && (
-                  <button
-                    onClick={() => handleTabChange()}
-                    className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
-                  >
-                    View Favorites
-                  </button>
-                )}
               </div>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-[50vh]">
+                <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
+                <p>
+                  You can {numFavorites > 0 ? 'look at your favorites' : ''}
+                  {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
+                  {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.
+                </p>
+
+                {(numFavorites > 0 || numFilteredOut > 0) && (
+                  <p className="mt-3">
+                    {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
+                    {numFavorites > 0 && numFilteredOut > 0 && ' & '}
+                    {numFilteredOut > 0 && `${numFilteredOut} listings filtered out`}
+                    .
+                  </p>
+                )}
+
+                <div className="flex justify-center gap-x-2 mt-2">
+                  {numFilteredOut > 0 && (
+                    <button
+                      onClick={() => setIsFilterOpen(true)}
+                      className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
+                    >
+                      Adjust Filters
+                    </button>
+                  )}
+                  {numFavorites > 0 && (
+                    <button
+                      onClick={() => handleTabChange()}
+                      className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
+                    >
+                      View Favorites
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Mobile-only Map button */}
         <Button
           onClick={() => setIsSlideMapOpen(true)}
-          className="fixed md:hidden text-sm  gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+          className="fixed md:hidden text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
         >
           <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
           Map
         </Button>
 
-        {/* Map container for Desktop */}
-        <div className="w-full hidden md:block md:w-2/5 mt-4 md:mt-0">
+        {/* Map container for Desktop - adjust width based on fullscreen state */}
+        <div className={`w-full hidden md:block ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
@@ -222,6 +227,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               lat: marker.lat,
               lng: marker.lng
             }))}
+            isFullscreen={isFullscreen}
+            setIsFullscreen={setIsFullscreen}
           />
         </div>
       </div>

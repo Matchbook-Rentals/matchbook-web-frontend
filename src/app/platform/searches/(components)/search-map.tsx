@@ -16,6 +16,8 @@ interface SearchMapProps {
   markers?: MapMarker[];
   zoom?: number;
   height?: string;
+  isFullscreen?: boolean;
+  setIsFullscreen?: (value: boolean) => void;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -23,6 +25,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   markers = [],
   zoom = 12,
   height = '526px',
+  isFullscreen = false,
+  setIsFullscreen = () => {},
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -31,7 +35,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const updateVisibleMarkersRef = useRef<() => void>();
   const { shouldPanTo, clearPanTo, hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
 
@@ -207,25 +210,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
     }
   }, [hoveredListing, clickedMarkerId, selectedMarker, isFullscreen]);
 
-  // Sync isFullscreen state with browser full-screen changes
+  // Update visible listings when exiting fullscreen mode
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      const fs = !!document.fullscreenElement;
-      setIsFullscreen(fs);
+    if (!isFullscreen && mapRef.current) {
       setSelectedMarker(null);
       setClickedMarkerId(null);
-      if (!fs && mapRef.current) {
-        const bounds = mapRef.current.getBounds();
-        const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
-          .map(marker => marker.listing.id);
-        useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
-      }
-    };
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, [markers]);
+      const bounds = mapRef.current.getBounds();
+      const visibleIds = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+        .map(marker => marker.listing.id);
+      useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
+    }
+  }, [isFullscreen, markers]);
 
   return (
     <div style={{ height }} ref={mapContainerRef}>
@@ -271,13 +266,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
             <button
               onClick={() => {
                 if (mapRef.current) {
-                  if (!document.fullscreenElement) {
-                    mapContainerRef.current?.requestFullscreen();
-                    setIsFullscreen(true);
-                  } else {
-                    document.exitFullscreen();
-                    setIsFullscreen(false);
-                  }
+                  setIsFullscreen(!isFullscreen);
                 }
               }}
               className="bg-white p-2 rounded-md shadow"
