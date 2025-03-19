@@ -249,13 +249,13 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [filteredListings, currentPage, listingsPerPage, infiniteScrollMode]);
 
   return (
-    <div className="relative h-[80vh] md:max-h-[200vh] md:min-h-[600px]" style={{ height: height ? `${height}px` : '600px' }}>
+    <div className="relative h-[80vh] md:max-h-[200vh] md:min-h-[640px] md:h-[${height || '640px'}]">
       {listings.length === 0 ? (
-        <div className="h-full w-full flex items-center justify-center text-gray-500">
+        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings to display
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="h-full w-full flex items-center justify-center text-gray-500">
+        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
           No listings in that area, Try changing your filters or zooming out to see more listings
         </div>
       ) : (
