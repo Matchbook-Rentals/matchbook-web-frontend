@@ -389,7 +389,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
           listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
           onClose={() => setSelectedMarker(null)}
-          className="top-14 left-2 w-80"
+          className="top-4 left-1/2 transform -translate-x-1/2 w-96"
         />
       )}
     </div>

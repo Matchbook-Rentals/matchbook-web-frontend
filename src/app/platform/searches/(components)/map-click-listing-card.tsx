@@ -45,13 +45,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
   const router = useRouter();
   const { state, actions } = useTripContext();
   const [isHovered, setIsHovered] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   // Using our hook to check if viewport is medium (768px) or larger
   const isMediumOrAbove = useMediaQuery('(min-width: 768px)');
   // Set default positioning based on viewport size:
   const defaultPositionClass = isMediumOrAbove
-    ? "top-14 left-2" // top left just under fullscreen button for desktop
+    ? "bottom-2 left-2" // bottom left for medium and above
     : "top-2 left-1/2 transform -translate-x-1/2"; // top middle for smaller screens
 
   const { lookup } = state;
@@ -112,13 +111,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
 
   return (
     <div
-      className={`absolute z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden ${className || defaultPositionClass} transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[80vh]' : 'max-h-[320px]'} w-80`}
+      className={`absolute z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden ${className || defaultPositionClass}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ 
-        transitionProperty: 'max-height, transform, opacity',
-        transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
     >
       {/* Carousel Image Container */}
       <div className="relative h-40 w-full">
@@ -151,82 +146,30 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
         </div>
       </div>
 
-      {/* Collapsed Content Container */}
+      {/* Content Container */}
       <div className="p-4 space-y-2">
         <h3 className="font-semibold text-xl leading-tight tracking-tight text-gray-900">
           {listing.title}
         </h3>
-        <div className="flex items-center justify-between">
-          <div>
-            {typeof distance === 'number' && (
-              <p className="text-sm font-medium text-gray-500">
-                {distance.toFixed(1)} miles away
-              </p>
-            )}
-            <p className="text-lg font-bold text-gray-900">
-              ${listing.price.toLocaleString()}
-              <span className="text-sm font-normal text-gray-600">/month</span>
-            </p>
-          </div>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-all duration-300 flex items-center gap-1"
+        {typeof distance === 'number' && (
+          <p className="text-sm font-medium text-gray-500">
+            {distance.toFixed(1)} miles away
+          </p>
+        )}
+        <div className="flex items-center justify-between pt-1">
+          <p className="text-lg font-bold text-gray-900">
+            ${listing.price.toLocaleString()}
+            <span className="text-sm font-normal text-gray-600">/month</span>
+          </p>
+          <Link
+            href={`/platform/trips/${state.trip.id}/listing/${listing.id}`}
+            target={isMediumOrAbove ? "_blank" : undefined}  // open in new tab for medium and above
+            rel={isMediumOrAbove ? "noopener noreferrer" : undefined}
           >
-            <span>{isExpanded ? "See less" : "See more"}</span>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              className={`transition-transform duration-500 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
-            >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
-      
-      {/* Expanded Content with animation */}
-      <div 
-        className={`px-4 pb-4 overflow-y-auto max-h-[calc(80vh-220px)] transition-all duration-500 ease-in-out ${
-          isExpanded 
-            ? 'opacity-100 max-h-[800px]' 
-            : 'opacity-0 max-h-0 overflow-hidden'
-        }`}
-      >
-        <div className={`border-t border-gray-200 pt-4 space-y-4 transform transition-transform duration-500 ease-in-out ${
-          isExpanded ? 'translate-y-0' : 'translate-y-8'
-        }`}>
-          <div>
-            <h4 className="font-medium text-gray-900 mb-1">Description</h4>
-            <p className="text-sm text-gray-700">
-              Beautiful apartment in a prime location with modern amenities.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-medium text-gray-900 mb-1">Amenities</h4>
-            <ul className="text-sm text-gray-700 grid grid-cols-2 gap-2">
-              <li>Air Conditioning</li>
-              <li>Washer/Dryer</li>
-              <li>Parking</li>
-              <li>Pet Friendly</li>
-            </ul>
-          </div>
-          <div className="flex justify-center">
-            <Link
-              href={`/platform/trips/${state.trip.id}/listing/${listing.id}`}
-              target={isMediumOrAbove ? "_blank" : undefined}
-              rel={isMediumOrAbove ? "noopener noreferrer" : undefined}
-              className="px-4 py-2 bg-[#4F4F4F] text-white rounded-md hover:bg-[#404040] text-center"
-            >
-              View full details
-            </Link>
-          </div>
+            <span className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+              See more
+            </span>
+          </Link>
         </div>
       </div>
     </div>
