@@ -298,11 +298,11 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
         {/* Submit button */}
         <div className="mt-6 flex justify-end">
           <Button 
-            className="py-2 rounded-full text-[14px] px-4"
+            className="py-2 rounded-none text-[14px] px-4"
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Saving...' : 'Save Preferences'}
+            {isSubmitting ? 'Finding properties for you...' : 'Start Search'}
           </Button>
         </div>
       </ScrollArea>
