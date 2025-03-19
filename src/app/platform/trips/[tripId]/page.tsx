@@ -13,13 +13,14 @@ import { useSearchParams } from 'next/navigation';
 import FilterOptionsDialog from '../../searches/(tabs)/filter-options-dialog';
 import { FilterOptions } from '@/lib/consts/options';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
-import { Montserrat } from 'next/font/google';
+import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
+const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
 
 interface Tab {
   value: string;
@@ -59,7 +60,7 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px]  sm:font-normal'
+  const tabTriggerTextStyles = 'text-[9px] px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
     //{
@@ -126,9 +127,8 @@ const TripsPage: React.FC = () => {
   const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
 
   return (
-    <div className={`flex flex-col scrollbar-none ${marginClass}  mx-auto `}>
+    <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>
       <div className='flex justify-between items-center sm:justify-start'>
-        <Breadcrumbs links={breadcrumbLinks} />
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
 
@@ -152,7 +152,7 @@ const TripsPage: React.FC = () => {
           defaultTab={currentTab || 'recommended'}
           className='mx-auto w-full pb-0 mb-0 border-none'
           tabsClassName='w-full mx-auto  '
-          tabsListClassName='flex py-0 justify-start w-full space-x-4  md:gap-x-4 '
+          tabsListClassName='flex py-0  justify-start w-full space-x-2  md:gap-x-2 '
           secondaryButton={
             ['recommended', 'allListings'].includes(currentTab) ? (
               <FilterOptionsDialog

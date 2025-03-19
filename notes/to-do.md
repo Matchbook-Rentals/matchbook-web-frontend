@@ -1,6 +1,8 @@
 # TO DOs
 
 
+try to force invalidate cache bring up to speed
+
 - [ ] MAP
 -------- [ ] expand to take up all of tab selctor width 
 -------- [ ] change full screen icon to arrow left
@@ -8,6 +10,14 @@
 -------- [ ] map clusters when pins are too close
 -------- [ ] full screen card goes to left side of map and becomes mini matchmaker when clicking see more
 -------- [ ] get rid of listing card popup on like
+-------- [ ] mobile map close button
+-------- [ ] mobile map click card over plus minus
+-------- [ ] listing card 
+-------- [ ] List your property button 
+-------- [ ] Switch to Hosting
+-------- [ ] acgive tab blue and padded
+-------- [ ] new heart on listing cards
+-------- [ ] add to tab selector location string 
 
 - [ ] recommended view fix temp header or go all the way down past location
 - [ ] listingId page margins are fucked in a weird way

@@ -17,6 +17,9 @@ import {
 } from '@/components/icons';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import Link from 'next/link';
+import { Public_Sans } from 'next/font/google';
+
+const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
 
 // Interface for TabSelector component
 interface DesktopTab {
@@ -57,7 +60,7 @@ const LoadingBreadcrumbs: React.FC = () => {
 };
 
 const LoadingTabs: React.FC = () => {
-  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px] sm:font-normal';
+  const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px] sm:font-normal font-public-sans';
   const tabTriggerStyles = 'pt-1 sm:p-0';
 
   const { width } = useWindowSize();
@@ -157,7 +160,7 @@ const LoadingTabs: React.FC = () => {
   ];
 
   return (
-    <div className={`flex flex-col items-center ${PAGE_MARGIN}`}>
+    <div className={`flex flex-col items-center ${PAGE_MARGIN} ${publicSans.variable}`}>
       {/* Breadcrumb Navigation with Loading State */}
       <div className='flex justify-between items-center sm:justify-start w-full'>
         <LoadingBreadcrumbs />
