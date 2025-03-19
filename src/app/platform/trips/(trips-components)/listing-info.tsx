@@ -28,10 +28,11 @@ const amenityTextStyle = 'text-[16px] md:text-[18px] lg:text-[20px] font-medium'
 const bodyTextStyle = 'text-[14px] md:text-[16px] lg:text-[20px] font-normal';
 
 interface ListingDescriptionProps {
-  listing: ListingAndImages
+  listing: ListingAndImages;
+  showFullAmenities?: boolean;
 }
 
-const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
+const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false }) => {
   const pathname = usePathname();
   const { tripId } = useParams();
 
@@ -158,59 +159,94 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing }) => {
       {/* Amenity section */}
       <div className={`${sectionStyles}`}>
         <h3 className={sectionHeaderStyles}>Amenities</h3>
-        <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
-          {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
-            <AmenityListItem
-              key={amenity.code}
-              icon={amenity.icon || Star}
-              label={amenity.label}
-              labelClassNames={amenityTextStyle}
-              iconClassNames='h-[32px] w-[32px]'
-            />
-          ))}
-        </div>
-        {displayAmenities.length > initialDisplayCount && (
-          <Dialog>
-            <DialogTrigger className=" mt-2 w-full sm:w-auto">
-              <Button
-                variant="outline"
-                className='text-[16px] mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0'
-              >
-                Show all {displayAmenities.length} amenities
-              </Button>
-            </DialogTrigger>
-            <DialogContent className={TallDialogContent}>
-              <h2 className={TallDialogTitle}>All Amenities</h2>
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="flex flex-col">
-                  {Object.entries(
-                    displayAmenities.reduce((acc, amenity) => {
-                      const category = amenity.category || 'Other';
-                      if (!acc[category]) acc[category] = [];
-                      acc[category].push(amenity);
-                      return acc;
-                    }, {} as Record<string, typeof displayAmenities>)
-                  ).map(([category, amenities]) => (
-                    <div key={category} className="mb-6">
-                      <h3 className="text-[17px] font-medium text-[#404040] mb-2">
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                      </h3>
-                      {amenities.map((amenity) => (
-                        <AmenityListItem
-                          key={amenity.code}
-                          icon={amenity.icon || Star}
-                          label={amenity.label}
-                          iconClassNames='h-[24px] w-[24px]'
-                          labelClassNames={amenityTextStyle}
-                          className='py-2 border-b border-[#40404080] space-y-2'
-                        />
-                      ))}
-                    </div>
+        
+        {showFullAmenities ? (
+          /* Full amenities list */
+          <div className="flex flex-col">
+            {Object.entries(
+              displayAmenities.reduce((acc, amenity) => {
+                const category = amenity.category || 'Other';
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(amenity);
+                return acc;
+              }, {} as Record<string, typeof displayAmenities>)
+            ).map(([category, amenities]) => (
+              <div key={category} className="mb-4">
+                <h3 className="text-[17px] font-medium text-[#404040] mb-2">
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </h3>
+                <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
+                  {amenities.map((amenity) => (
+                    <AmenityListItem
+                      key={amenity.code}
+                      icon={amenity.icon || Star}
+                      label={amenity.label}
+                      iconClassNames='h-[24px] w-[24px]'
+                      labelClassNames={amenityTextStyle}
+                    />
                   ))}
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
+            ))}
+          </div>
+        ) : (
+          /* Abbreviated list with modal */
+          <>
+            <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
+              {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
+                <AmenityListItem
+                  key={amenity.code}
+                  icon={amenity.icon || Star}
+                  label={amenity.label}
+                  labelClassNames={amenityTextStyle}
+                  iconClassNames='h-[32px] w-[32px]'
+                />
+              ))}
+            </div>
+            {displayAmenities.length > initialDisplayCount && (
+              <Dialog>
+                <DialogTrigger className="mt-2 w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    className='text-[16px] mx-auto border-[#404040] rounded-[5px] w-full sm:w-auto sm:mx-0'
+                  >
+                    Show all {displayAmenities.length} amenities
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className={TallDialogContent}>
+                  <h2 className={TallDialogTitle}>All Amenities</h2>
+                  <div className="flex-1 overflow-y-auto p-6">
+                    <div className="flex flex-col">
+                      {Object.entries(
+                        displayAmenities.reduce((acc, amenity) => {
+                          const category = amenity.category || 'Other';
+                          if (!acc[category]) acc[category] = [];
+                          acc[category].push(amenity);
+                          return acc;
+                        }, {} as Record<string, typeof displayAmenities>)
+                      ).map(([category, amenities]) => (
+                        <div key={category} className="mb-6">
+                          <h3 className="text-[17px] font-medium text-[#404040] mb-2">
+                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                          </h3>
+                          {amenities.map((amenity) => (
+                            <AmenityListItem
+                              key={amenity.code}
+                              icon={amenity.icon || Star}
+                              label={amenity.label}
+                              iconClassNames='h-[24px] w-[24px]'
+                              labelClassNames={amenityTextStyle}
+                              className='py-2 border-b border-[#40404080] space-y-2'
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
+          </>
         )}
       </div>
     </div>

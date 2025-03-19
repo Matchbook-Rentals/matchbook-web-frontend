@@ -219,9 +219,34 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
 
       {/* Full screen dialog for mobile view */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className={`${TallDialogContent} max-w-full w-full h-full sm:h-full p-0 m-0`} xOnRight hideCloseButton={false}>
-          <div className="h-full overflow-y-auto">
-            <SearchListingDetailsView listingId={listing.id} />
+        <DialogContent className={`${TallDialogContent} max-w-full w-[95%] max-h-[90vh] mx-auto my-auto p-0 rounded-lg`} hideCloseButton>
+          <div className="flex flex-col h-full">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="text-lg font-medium">Property Details</h3>
+              <button 
+                onClick={() => setIsDialogOpen(false)}
+                className="p-1 rounded-full hover:bg-gray-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4">
+              <SearchListingDetailsView 
+                listingId={listing.id} 
+                className="pb-6" 
+                hideLocationSection={true}
+                showFullAmenities={true}
+                lowerActionButtons={true}
+              />
+            </div>
           </div>
         </DialogContent>
       </Dialog>

@@ -8,12 +8,23 @@ import SearchListingDetailsBox from '../../searches/(components)/search-listing-
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { BrandHeart, RejectIcon } from '@/components/icons';
+import { cn } from '@/lib/utils';
 
 interface ListingDetailsViewProps {
   listingId: string;
+  className?: string;
+  hideLocationSection?: boolean;
+  showFullAmenities?: boolean;
+  lowerActionButtons?: boolean;
 }
 
-export default function SearchListingDetailsView({ listingId }: ListingDetailsViewProps) {
+export default function SearchListingDetailsView({ 
+  listingId, 
+  className, 
+  hideLocationSection, 
+  showFullAmenities,
+  lowerActionButtons 
+}: ListingDetailsViewProps) {
   const { state, actions } = useTripContext();
   const listing = state.listings.find(l => l.id === listingId);
 
@@ -22,15 +33,32 @@ export default function SearchListingDetailsView({ listingId }: ListingDetailsVi
     return <div>Listing not found</div>;
   }
 
-  return <ListingDetailsView listing={listing} actions={actions} />;
+  return (
+    <ListingDetailsView 
+      listing={listing} 
+      actions={actions} 
+      className={className} 
+      hideLocationSection={hideLocationSection} 
+      showFullAmenities={showFullAmenities}
+      lowerActionButtons={lowerActionButtons}
+    />
+  );
 }
 
 function ListingDetailsView({
   listing,
   actions,
+  className,
+  hideLocationSection = false,
+  showFullAmenities = false,
+  lowerActionButtons = false,
 }: {
   listing: ListingAndImages;
   actions: ReturnType<typeof useTripContext>["actions"];
+  className?: string;
+  hideLocationSection?: boolean;
+  showFullAmenities?: boolean;
+  lowerActionButtons?: boolean;
 }) {
   const { state } = useTripContext();
   const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
@@ -116,12 +144,12 @@ function ListingDetailsView({
         </div>
       )}
 
-      <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6`}>
+      <div className={cn("w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6", className)}>
         <ListingImageCarousel
           listingImages={listing.listingImages || []}
         />
         <div className='flex justify-between gap-x-8 relative'>
-          <ListingDescription listing={listing} />
+          <ListingDescription listing={listing} showFullAmenities={showFullAmenities} />
           <div
             className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
           >
@@ -135,90 +163,90 @@ function ListingDetailsView({
           </div>
         </div>
 
-        {/* Location section */}
-        <div className="pb-3 mt-3" ref={locationSectionRef}>
-          <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
+        {/* Location section - conditionally rendered */}
+        {!hideLocationSection && (
+          <div className="pb-3 mt-3" ref={locationSectionRef}>
+            <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
-          <div className="pb-3 text-[#404040] text-[20px] font-normal">
-            {listing.distance >= 10
-              ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
-              : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+            <div className="pb-3 text-[#404040] text-[20px] font-normal">
+              {listing.distance >= 10
+                ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+                : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
 
-          </div>
+            </div>
 
-          <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
-            {/* Map container */}
-            <div className="absolute top-2 right-2 z-10 flex flex-col">
-              <button
-                onClick={() => {
-                  if (mapRef.current) {
-                    mapRef.current.zoomIn();
-                  }
-                }}
-                className="bg-white p-2 rounded-md shadow mb-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
+            <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
+              {/* Map container */}
+              <div className="absolute top-2 right-2 z-10 flex flex-col">
+                <button
+                  onClick={() => {
+                    if (mapRef.current) {
+                      mapRef.current.zoomIn();
+                    }
+                  }}
+                  className="bg-white p-2 rounded-md shadow mb-1"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v12m6-6H6"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => {
-                  if (mapRef.current) {
-                    mapRef.current.zoomOut();
-                  }
-                }}
-                className="bg-white p-2 rounded-md shadow"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v12m6-6H6"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => {
+                    if (mapRef.current) {
+                      mapRef.current.zoomOut();
+                    }
+                  }}
+                  className="bg-white p-2 rounded-md shadow"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 12H6"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M18 12H6"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile Action Buttons */}
-        <div className="lg:hidden fixed sm:bottom-[20px] bottom-[80px] left-0 right-0 z-50">
+        <div className={cn(
+          "lg:hidden fixed left-0 right-0 z-50",
+          lowerActionButtons ? "sm:bottom-[10px] bottom-[10px]" : "sm:bottom-[20px] bottom-[80px]"
+        )}>
           <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
             <button
               onClick={handleReject}
-              className={`w-[80px] drop-shadow aspect-square
-                flex items-center justify-center rounded-full
-                hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
+              className="w-[80px] drop-shadow aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]"
             >
-              <RejectIcon className={`w-[40%] h-[40%] text-white`} />
+              <RejectIcon className="w-[40%] h-[40%] text-white" />
             </button>
 
             <button
               onClick={handleLike}
-              className={`w-[80px] drop-shadow aspect-square flex
-                items-center justify-center rounded-full
-                hover:opacity-90 transition-opacity
-                bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
+              className="w-[80px] drop-shadow aspect-square flex items-center justify-center rounded-full hover:opacity-90 transition-opacity bg-gradient-to-br from-[#A3B899] to-[#5F6F58]"
             >
-              <BrandHeart className={`w-[40%] h-[40%]`} />
+              <BrandHeart className="w-[40%] h-[40%]" />
             </button>
           </div>
         </div>
