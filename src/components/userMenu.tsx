@@ -237,7 +237,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
       {isSignedIn ? (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1 min-w-[80px]">
+          <PopoverTrigger className="flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]">
             <div className="relative">
               <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
             </div>
@@ -342,7 +342,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
         </Popover>
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <PopoverTrigger className="flex items-center space-x-2 border border-black rounded-full px-2 py-1 min-w-[80px]">
+          <PopoverTrigger className="flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]">
             <div className="relative">
               <MenuIcon className="text-charcoal h-[24px] w-[24px]" />
             </div>
