@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { RejectIcon } from '@/components/icons';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import ListingCard from './map-click-listing-card';
+import ListingCard from './mobile-map-click-listing-card';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 
 interface SearchMapProps {
