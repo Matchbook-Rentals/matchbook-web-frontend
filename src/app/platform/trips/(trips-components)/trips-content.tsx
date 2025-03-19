@@ -41,7 +41,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
           style={{
             height: showSearch ? 'auto' : '0px',
             minHeight: showSearch ? '80px' : '0px',
-            marginBottom: showSearch ? '0px' : '10px',
+            marginBottom: showSearch ? '0px' : '20px',
           }}
           className="transition-all duration-700">
           {/* Search container with Framer Motion animation */}
@@ -65,12 +65,12 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                     ease: 'easeInOut'
                   }
                 }}
-                className="flex justify-center mt-4 mb-8"
+                className="flex justify-center mt-4 mb-4 md:mb-0 "
               >
                 <div className="flex w-full justify-center">
                   <SearchContainer
-                    className="z-100 w-full px-0"
-                    containerStyles='bg-background rounded-none m-0 p-0 drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                    className="z-100 md:w-full px-0"
+                    containerStyles='bg-background rounded-[15px]  drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                     inputStyles='bg-background'
                     searchButtonClassNames='bg-background hover:bg-gray-200'
                     searchIconColor='text-[#404040]'
