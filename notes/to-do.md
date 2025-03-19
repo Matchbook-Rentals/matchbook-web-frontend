@@ -11,16 +11,16 @@
 - [ ] listingId page margins are fucked in a weird way
 - [x] Sign in Picture
 - [ ] Mobile search container fix
-- [X] higher quality front photo
+- [ ] higher quality front photo
 - [ ] filter menu bookings needs update
 - [ ] mobile tab selector not updating tab param which is perma hiding/showing filters button
 - [ ] get rid of overview tab, move those functions to ... menu in searches page 
-- [X] add confirmation step to delete search
+- [ ] add confirmation step to delete search
 - [ ] support page
 - [ ] email plain text, match email to matchbookrentals.com
 - [ ] change move in - move out to Dates
 - [ ] Loading sekelton
-- [ ] PUT CHATS MESSAGES HERE
+- [ ] PUT HCATS MESSAGES HERE
 - [ ] new search padding
 - [ ] edti trip in pip upj
 - [ ] navbar no sticky
