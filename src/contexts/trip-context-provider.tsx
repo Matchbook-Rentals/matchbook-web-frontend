@@ -64,7 +64,7 @@ interface TripContextType {
     setTrip: React.Dispatch<React.SetStateAction<TripAndMatches[]>>;
     setLookup: React.Dispatch<React.SetStateAction<TripContextType['state']['lookup']>>;
     setHasApplication: React.Dispatch<React.SetStateAction<boolean>>;
-    optimisticLike: (listingId: string) => Promise<void>;
+    optimisticLike: (listingId: string, withPopup: Boolean) => Promise<void>;
     optimisticDislike: (listingId: string) => Promise<void>;
     optimisticRemoveLike: (listingId: string) => Promise<void>;
     optimisticRemoveDislike: (listingId: string) => Promise<void>;
@@ -419,8 +419,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
   }, [trip, lookup]);
 
-  const optimisticRemoveLike = useCallback(async (listingId: string) => {
-    triggerPopup('back');
+  const optimisticRemoveLike = useCallback(async (listingId: string, withPopup = false) => {
+    if (withPopup) {
+      triggerPopup('back');
+    }
     try {
       // Skip if not liked
       if (!lookup.favIds.has(listingId)) return;
@@ -452,8 +454,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
   }, [trip, lookup, optimisticRemoveApply, triggerPopup]);
 
-  const optimisticLike = useCallback(async (listingId: string) => {
-    triggerPopup('like');
+  const optimisticLike = useCallback(async (listingId: string, withPopup = false) => {
+    if (withPopup) {
+      triggerPopup('like');
+    }
     try {
       if (lookup.favIds.has(listingId)) {
         return;

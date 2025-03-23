@@ -95,7 +95,7 @@ function ListingDetailsView({
   }, [mapCenter, listing]);
 
   const handleLike = async () => {
-    await optimisticLike(listing.id);
+    await optimisticLike(listing.id, true);
   };
 
   const handleReject = async () => {

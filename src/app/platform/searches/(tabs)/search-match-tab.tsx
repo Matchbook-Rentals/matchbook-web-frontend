@@ -106,7 +106,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const handleLike = async (listing: ListingAndImages) => {
     scrollToTop();
     // Remove popup logic
-    await optimisticLike(listing.id);
+    await optimisticLike(listing.id, true);
     setViewedListings(prev => {
       const newState = [...prev, { listing, action: 'favorite' as 'favorite' | 'dislike', actionId: '' }];
       return newState.slice(-MAX_HISTORY);
