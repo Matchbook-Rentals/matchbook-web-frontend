@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { Card } from "@/components/ui/card"
-import { MoreHorizontal, Star, ChevronLeft, ChevronRight } from "lucide-react"
+import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart } from "lucide-react"
 import { ListingAndImages } from "@/types"
 import { useState, useRef, useEffect } from 'react'
 import { useTripContext } from '@/contexts/trip-context-provider'
-import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components'
+import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/carousel"
 import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
 import { ListingStatus } from '@/constants/enums'
-import { BrandHeartOutline } from '@/components/icons/marketing'
 
 const TITLE_MAX_LENGTH = 40
 
@@ -90,17 +89,15 @@ export default function SearchListingCard({ listing, status, className, style, d
     if (favIds.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full p-1"
+          className="bg-black/50 rounded-full p-2"
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveLike(listing.id);
             e.stopPropagation();
           }}
         >
-          <BrandHeartOutline
-            className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
-            stroke="white"
-            strokeWidth={1}
-            fill="white"
+          <Heart
+            className="w-6 h-6 text-white cursor-pointer fill-red-500"
+            strokeWidth={2}
           />
         </div>
       );
@@ -122,17 +119,15 @@ export default function SearchListingCard({ listing, status, className, style, d
 
     return (
       <div
-        className="flex items-center"
+        className="bg-black/50 rounded-full p-2"
         onClick={(e: React.MouseEvent) => {
           optimisticLike(listing.id);
           e.stopPropagation();
         }}
       >
-        <BrandHeartOutline
-          className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
-          stroke="white"
-          strokeWidth={1.5}
-          fill="black"
+        <Heart
+          className="w-6 h-6 text-white cursor-pointer"
+          strokeWidth={2}
         />
       </div>
     );
