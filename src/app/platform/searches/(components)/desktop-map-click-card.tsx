@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { BrandHeart, RejectIcon } from '@/components/svgs/svg-components';
-import { BrandHeartOutline } from '@/components/icons/marketing';
+import { RejectIcon } from '@/components/svgs/svg-components';
+import { Heart } from 'lucide-react';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Star } from 'lucide-react';
@@ -67,17 +67,15 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     if (favIds?.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full p-1"
+          className="bg-black/50 rounded-full p-2"
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveLike(listing.id);
             e.stopPropagation();
           }}
         >
-          <BrandHeartOutline
-            className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
-            stroke="white"
-            strokeWidth={1}
-            fill="white"
+          <Heart
+            className="w-6 h-6 text-white cursor-pointer fill-red-500"
+            strokeWidth={2}
           />
         </div>
       );
@@ -97,17 +95,15 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
 
     return (
       <div
-        className="flex items-center"
+        className="bg-black/50 rounded-full p-2"
         onClick={(e: React.MouseEvent) => {
           optimisticLike(listing.id);
           e.stopPropagation();
         }}
       >
-        <BrandHeartOutline
-          className="w-9 h-9 stroke-white text-white cursor-pointer pt-2 hover:fill-black"
-          stroke="white"
-          strokeWidth={1.5}
-          fill="black"
+        <Heart
+          className="w-6 h-6 text-white cursor-pointer"
+          strokeWidth={2}
         />
       </div>
     );
