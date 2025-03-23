@@ -128,7 +128,6 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
     <>
       <div
         className={`absolute z-10 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden ${className || defaultPositionClass}`}
-        style={{ width: isMediumOrAbove ? '24rem' : '92%', maxWidth: isMediumOrAbove ? '24rem' : '92%' }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

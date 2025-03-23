@@ -107,7 +107,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
           listing={selectedMarker.listing}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
           onClose={() => setSelectedMarker(null)}
-          className="top-2 left-2 right-[50px]"
+          className="top-2 w-full z-40 "
         />
       )}
 
