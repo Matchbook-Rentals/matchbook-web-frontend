@@ -1,91 +1,108 @@
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { cn } from '@/lib/utils';
 
-const inputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed opacity-50 bg-transparent`
+interface DisabledInputsProps {
+  className?: string;
+  inputClassName?: string;
+  searchButtonClassNames?: string;
+  searchIconColor?: string;
+  popoverMaxWidth?: string;
+}
 
+const baseInputClasses = `w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed opacity-50 bg-transparent`;
 
-export const DisabledDesktopInputs: React.FC = () => {
+export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
+  className,
+  inputClassName,
+  searchButtonClassNames,
+  searchIconColor = 'text-black',
+}) => {
+  const inputClasses = cn('w-full px-4 py-0 text-gray-700 placeholder-gray-400 cursor-not-allowed opacity-50 focus:outline-none bg-background', inputClassName);
+  
   return (
-    <div className="relative ">
+    <div className="relative">
       <div
-        className="flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden"
+        className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-[15px] shadow-md overflow-hidden', className)}
       >
-        <input
-          type="text"
-          placeholder="Where to?"
-          value={""}
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Move in:"
-          value={""}
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Move out:"
-          value={""}
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Who?"
-          value={""}
-          className={`${inputClasses} sm:border-r-0`}
-          readOnly
-        />
-        <div className="flex-shrink-0">
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Where</label>
+          <input
+            type="text"
+            placeholder="Choose Location"
+            value={""}
+            className={inputClasses}
+            readOnly
+          />
+        </div>
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move In</label>
+          <input
+            type="text"
+            placeholder="Select dates"
+            value={""}
+            className={inputClasses}
+            readOnly
+          />
+        </div>
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move Out</label>
+          <input
+            type="text"
+            placeholder="Select dates"
+            value={""}
+            className={inputClasses}
+            readOnly
+          />
+        </div>
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
+          <input
+            type="text"
+            placeholder="Add guests"
+            value={""}
+            className={inputClasses}
+            readOnly
+          />
+        </div>
+        <div className="flex-shrink-0 self-end">
           <button
             disabled
-            className="w-auto p-3 cursor-not-allowed opacity-50 bg-primaryBrand rounded-full"
+            className={cn('w-auto p-3 cursor-not-allowed opacity-50 rounded-[15px]', searchButtonClassNames || 'bg-background')}
           >
-            <FaSearch className="text-white mx-auto" size={20} />
+            <FaSearch className={cn(searchIconColor, "mx-auto")} size={20} />
           </button>
         </div>
       </div>
     </div>
-
   );
 };
 
-export const DisabledMobileInputs: React.FC = () => {
+export const DisabledMobileInputs: React.FC<DisabledInputsProps> = ({
+  className,
+  inputClassName,
+  searchButtonClassNames,
+  searchIconColor = 'text-black',
+}) => {
+  const inputClasses = cn('w-full px-4 py-3 text-gray-700 placeholder-gray-400 cursor-not-allowed opacity-50 focus:outline-none bg-transparent', inputClassName);
+  
   return (
-    <div className="flex flex-col p-3 items-center bg-gray-100 rounded-3xl shadow-md overflow-hidden">
-      <input
-        type="text"
-        placeholder="Where to?"
-        className={inputClasses}
-        readOnly
-      />
-      <input
-        type="text"
-        placeholder="Move in:"
-        className={inputClasses}
-        readOnly
-      />
-      <input
-        type="text"
-        placeholder="Move out:"
-        className={inputClasses}
-        readOnly
-      />
-      <input
-        type="text"
-        placeholder="Who?"
-        className={inputClasses}
-        readOnly
-      />
+    <div className={cn("flex flex-col p-3 items-center bg-background rounded-[15px] shadow-md overflow-hidden w-[60vw]", className)}>
+      <div className={`${inputClasses} flex items-center`}>
+        Where to
+      </div>
+      <div className={inputClasses}>
+        Dates
+      </div>
+      <div className={`${inputClasses} sm:border-r-0`}>
+        Who
+      </div>
       <button
         disabled
-        className={`w-full mt-3 p-3 cursor-pointer cursor-not-allowed opacity-50 bg-primaryBrand rounded-full`}
+        className={cn('w-full mt-3 p-3 cursor-not-allowed opacity-50 rounded-[15px]', searchButtonClassNames || 'bg-background border border-black')}
       >
-        <FaSearch className="text-white mx-auto" size={20} />
+        <FaSearch className={cn(searchIconColor, "mx-auto")} size={20} />
       </button>
     </div>
-
   );
 };
