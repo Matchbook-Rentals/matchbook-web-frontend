@@ -13,6 +13,7 @@ import { Notification } from '@prisma/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell, Circle } from 'lucide-react';
+import { SupportDialog } from '@/components/ui/support-dialog';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
@@ -27,6 +28,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const [canUpdate, setCanUpdate] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
   const userButtonContainerRef = useRef<HTMLDivElement>(null);
   const userRole = user?.publicMetadata?.role as string | undefined;
 
@@ -315,6 +317,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   Settings
                 </button>
                 <button
+                  onClick={() => setIsSupportOpen(true)}
                   className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
                 >
                   Support
@@ -356,12 +359,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 <Link href="/sign-in">
                   <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
                 </Link>
-                <button className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
+                <button onClick={() => setIsSupportOpen(true)} className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
               </div>
             </div>
           </PopoverContent>
         </Popover>
       )}
+
+      <SupportDialog open={isSupportOpen} onOpenChange={setIsSupportOpen} />
     </div>
   )
 }
