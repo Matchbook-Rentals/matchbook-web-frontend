@@ -122,7 +122,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     if (!shouldCluster) {
       const bounds = mapRef.current.getBounds();
       markers
-        .filter(marker => bounds.contains(new maplibre.LngLat(marker.lng, marker.lat)))
+        .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
         .forEach(marker => createSingleMarker(marker));
     } else {
       clusters.forEach(cluster => {
@@ -158,7 +158,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     markersRef.current.set(marker.listing.id, mapMarker);
   };
 
-  /** Create a cluster marker */
+  /** Create a cluster marker with updated click behavior */
   const createClusterMarker = (cluster: ClusterMarker) => {
     if (!mapRef.current) return;
     const el = document.createElement('div');
@@ -173,9 +173,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
       e.stopPropagation();
       useVisibleListingsStore.getState().setVisibleListingIds(cluster.listingIds);
       setClickedCluster(cluster);
+
+      // Always zoom in by 2 levels, capped at max zoom
+      const currentZoom = mapRef.current!.getZoom();
+      const newZoom = Math.min(currentZoom + 2, mapRef.current!.getMaxZoom());
+
       mapRef.current!.flyTo({
         center: [cluster.lng, cluster.lat],
-        zoom: Math.min(currentZoom + 2, 14),
+        zoom: newZoom,
         duration: 500,
       });
     });
