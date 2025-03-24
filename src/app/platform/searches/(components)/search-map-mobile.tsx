@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
@@ -34,8 +34,12 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const clusterMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
+  const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
+  const [clickedCluster, setClickedCluster] = useState<ClusterMarker | null>(null);
+  const [currentZoom, setCurrentZoom] = useState(zoom);
 
   // Local calculateDistance function for listing card distance display
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -87,7 +91,105 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     return newClusters;
   };
 
-  // Initial map setup with clustering
+  // Function to create a single marker
+  const createSingleMarker = (marker: MapMarker) => {
+    if (!mapRef.current) return;
+    const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
+      .setLngLat([marker.lng, marker.lat])
+      .addTo(mapRef.current);
+    mapMarker.getElement().style.cursor = 'pointer';
+    mapMarker.getElement().addEventListener('click', (e) => {
+      e.stopPropagation();
+      setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+    });
+    markersRef.current.set(marker.listing.id, mapMarker);
+  };
+
+  // Function to create a cluster marker
+  const createClusterMarker = (cluster: ClusterMarker) => {
+    if (!mapRef.current) return;
+    const el = document.createElement('div');
+    el.className = 'cluster-marker';
+    el.style.cssText = `
+      width: 36px; height: 36px; border-radius: 50%; background-color: #FF0000; color: white;
+      display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
+    `;
+    el.innerText = `${cluster.count}`;
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setClickedCluster(cluster);
+      
+      // Always zoom in by 2 levels, capped at max zoom
+      const currentZoom = mapRef.current!.getZoom();
+      const newZoom = Math.min(currentZoom + 2, mapRef.current!.getMaxZoom());
+      
+      mapRef.current!.flyTo({
+        center: [cluster.lng, cluster.lat],
+        zoom: newZoom,
+        duration: 500,
+      });
+    });
+    const clusterMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
+      .setLngLat([cluster.lng, cluster.lat])
+      .addTo(mapRef.current);
+    clusterMarkersRef.current.set(`cluster-${cluster.listingIds.join('-')}`, clusterMarker);
+  };
+
+  // Function to render clusters and markers
+  const renderMarkers = (clusters: ClusterMarker[]) => {
+    if (!mapRef.current) return;
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current.clear();
+    clusterMarkersRef.current.forEach(marker => marker.remove());
+    clusterMarkersRef.current.clear();
+
+    const shouldCluster = currentZoom < 15;
+    if (!shouldCluster) {
+      const bounds = mapRef.current.getBounds();
+      markers
+        .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
+        .forEach(marker => createSingleMarker(marker));
+    } else {
+      clusters.forEach(cluster => {
+        cluster.count === 1
+          ? createSingleMarker(markers.find(m => m.listing.id === cluster.listingIds[0])!)
+          : createClusterMarker(cluster);
+      });
+    }
+  };
+
+  // Function to update marker colors based on state
+  const updateMarkerColors = () => {
+    const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
+      const el = marker.getElement();
+      const isCluster = el.classList.contains('cluster-marker');
+      if (isCluster) {
+        el.style.backgroundColor = color;
+      } else {
+        el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
+      }
+      el.style.zIndex = zIndex;
+    };
+
+    markersRef.current.forEach((marker, id) => {
+      if (selectedMarker?.listing.id === id) {
+        setColor(marker, '#404040', '2');
+      } else {
+        setColor(marker, '#FF0000');
+      }
+    });
+
+    clusterMarkersRef.current.forEach((marker, id) => {
+      if (clickedCluster && id === `cluster-${clickedCluster.listingIds.join('-')}`) {
+        setColor(marker, '#404040', '2');
+      } else {
+        setColor(marker, '#FF0000', '1');
+      }
+    });
+  };
+
+  // Initial map setup
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
 
@@ -100,88 +202,32 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     });
 
     mapRef.current = map;
+    setMapLoaded(true);
 
-    // Handler for clicking on the map background
-    const handleMapClick = () => {
-      setSelectedMarker(null);
-    };
-    map.on('click', handleMapClick);
-
-    // Function to update markers and clusters
     const updateMarkers = () => {
-      if (!mapRef.current) return;
-      const currentZoom = mapRef.current.getZoom();
-      const newClusters = createClusters(currentZoom);
-
-      // Clear existing markers
-      markersRef.current.forEach(marker => marker.remove());
-      markersRef.current.clear();
-      clusterMarkersRef.current.forEach(marker => marker.remove());
-      clusterMarkersRef.current.clear();
-
-      // Add new markers or clusters
-      newClusters.forEach(cluster => {
-        if (cluster.count === 1) {
-          // Individual marker
-          const markerData = markers.find(m => m.listing.id === cluster.listingIds[0]);
-          if (markerData) {
-            const mapMarker = new maplibregl.Marker({ color: markerData.color || '#FF0000' })
-              .setLngLat([markerData.lng, markerData.lat])
-              .addTo(mapRef.current);
-            mapMarker.getElement().addEventListener('click', (e) => {
-              e.stopPropagation();
-              setSelectedMarker(markerData);
-            });
-            markersRef.current.set(markerData.listing.id, mapMarker);
-          }
-        } else {
-          // Cluster marker
-          const el = document.createElement('div');
-          el.className = 'cluster-marker';
-          el.style.cssText = `
-            width: 36px; height: 36px; border-radius: 50%; background-color: #FF0000; color: white;
-            display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
-          `;
-          el.innerText = `${cluster.count}`;
-          el.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const currentZoom = mapRef.current!.getZoom();
-            const newZoom = Math.min(currentZoom + 2, mapRef.current!.getMaxZoom());
-            mapRef.current!.flyTo({
-              center: [cluster.lng, cluster.lat],
-              zoom: newZoom,
-              duration: 500,
-            });
-          });
-          const clusterMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
-            .setLngLat([cluster.lng, cluster.lat])
-            .addTo(mapRef.current);
-          const clusterId = `cluster-${cluster.listingIds.join('-')}`;
-          clusterMarkersRef.current.set(clusterId, clusterMarker);
-        }
-      });
+      const newZoom = map.getZoom();
+      setCurrentZoom(newZoom);
+      const newClusters = createClusters(newZoom);
+      renderMarkers(newClusters);
+      updateMarkerColors();
     };
 
     // Set up event listeners
     map.on('load', updateMarkers);
     map.on('zoomend', updateMarkers);
     map.on('moveend', updateMarkers);
+    map.on('click', () => {
+      setSelectedMarker(null);
+      setClickedCluster(null);
+    });
 
     // Cleanup
     return () => {
-      if (mapRef.current) {
-        map.off('click', handleMapClick);
-        map.off('load', updateMarkers);
-        map.off('zoomend', updateMarkers);
-        map.off('moveend', updateMarkers);
-        map.remove();
-        mapRef.current = null;
-        markersRef.current.clear();
-        clusterMarkersRef.current.clear();
-      }
+      map.remove();
+      markersRef.current.clear();
+      clusterMarkersRef.current.clear();
     };
-  }, [center, markers, zoom, setSelectedMarker]);
+  }, [center, markers, zoom]);
 
   // Handle panning to hovered location
   useEffect(() => {
@@ -194,6 +240,13 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       clearPanTo();
     }
   }, [shouldPanTo, clearPanTo, zoom]);
+  
+  // Update marker colors when state changes
+  useEffect(() => {
+    if (mapLoaded) {
+      updateMarkerColors();
+    }
+  }, [mapLoaded, selectedMarker, clickedCluster]);
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
@@ -203,7 +256,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
           listing={selectedMarker.listing}
           distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
           onClose={() => setSelectedMarker(null)}
-          className="top-2 w-full z-40"
+          className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
         />
       )}
 
