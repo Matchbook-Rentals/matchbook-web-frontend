@@ -251,7 +251,7 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
               <h2 className="text-xl font-medium mb-4">All Bookings</h2>
               
               {filteredBookings.length > 0 ? (
-                <BookingGrid initialBookings={filteredBookings} />
+                <BookingGrid key={JSON.stringify(filters)} initialBookings={filteredBookings} />
               ) : (
                 <div className="text-center py-10 border mt-4 border-dashed border-gray-300 rounded-lg bg-gray-50">
                   <p className="text-lg text-gray-600">No bookings match your current filters.</p>
