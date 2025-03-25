@@ -118,22 +118,33 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   }, [messages]);
 
   const handleSend = () => {
-    if (newMessageInput.trim()) {
+    console.log('=== HANDLE SEND ===');
+    console.log('Message input:', newMessageInput);
+    console.log('Message attachments:', messageAttachments);
+    
+    if (newMessageInput.trim() || messageAttachments.length > 0) {
       if (messageAttachments.length > 0) {
         const attachment = messageAttachments[0];
+        console.log('Sending message with attachment:', attachment);
+        // With the database change, we can now send empty content with attachments
+        const messageContent = newMessageInput.trim() || ""; // Empty string is fine now
+        console.log('Message content to send:', messageContent ? `"${messageContent}"` : '<empty string>');
         onSendMessage(
-          newMessageInput,
+          messageContent,
           attachment.fileUrl,
           attachment.fileName,
           attachment.fileKey,
           attachment.fileType
         );
       } else {
+        console.log('Sending text-only message');
         onSendMessage(newMessageInput);
       }
 
       setNewMessageInput('');
       setMessageAttachments([]);
+    } else {
+      console.log('No content to send');
     }
   };
 
@@ -144,12 +155,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   const handleUploadFinish = (res: UploadData[]) => {
+    console.log('=== UPLOAD FINISH ===', res);
     const attachments = res.map(r => ({
       fileUrl: r.url,
       fileName: r.name,
       fileKey: r.key,
       fileType: r.type
     }));
+    console.log('Setting message attachments:', attachments);
     setMessageAttachments(prev => [...prev, ...attachments]);
   };
 
@@ -247,7 +260,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                         }`}
                     >
                       {message.imgUrl && (
-                        <div className="mb-2">
+                        <div className={message.content ? "mb-2" : ""}>
                           {isImageFile(message.fileName || '') ? (
                             <Image
                               src={message.imgUrl}
@@ -282,7 +295,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           )}
                         </div>
                       )}
-                      <div>{message.content}</div>
+                      {message.content && <div>{message.content}</div>}
                     </div>
                     {message.senderId === currentUserId && (
                       <img
@@ -384,7 +397,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             <button
               className="p-2 mx-1 text-gray-600 hover:text-gray-800 disabled:opacity-50"
               onClick={handleSend}
-              disabled={!selectedConversation || !newMessageInput.trim()}
+              disabled={!selectedConversation || (!newMessageInput.trim() && messageAttachments.length === 0)}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />

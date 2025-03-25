@@ -154,51 +154,78 @@ export async function createMessage(data: {
 
   // Extract the fields that exist in the Prisma schema
   const { content, conversationId, imgUrl, fileName, fileKey, fileType } = data;
+  
+  // Add logging to track message creation details
+  console.log('=== CREATE MESSAGE DEBUG ===');
+  console.log('Content:', content ? `"${content}"` : 'empty/null');
+  console.log('Has attachment:', !!imgUrl);
+  console.log('File details:', { fileName, fileType });
+  console.log('------------------------');
 
+  let message;
   // Create the message with only valid fields
-  const message = await prisma.message.create({
-    data: {
-      content,
-      conversationId,
-      senderId: userId,
-      imgUrl,
-      fileName,
-      fileKey,
-      fileType,
-    },
-  });
+  try {
+    message = await prisma.message.create({
+      data: {
+        content,
+        conversationId,
+        senderId: userId,
+        imgUrl,
+        fileName,
+        fileKey,
+        fileType,
+      },
+    });
+    
+    // Log successful message creation
+    console.log('Message created successfully:', { 
+      id: message.id, 
+      hasContent: !!message.content,
+      hasAttachment: !!message.imgUrl
+    });
+  } catch (error) {
+    console.error('Error creating message:', error);
+    throw error;
+  }
 
   // Send message to Go server for real-time updates
   try {
+    // Convert message to a payload object and check which fields are supported by the Go server
+    // Apparently the Go server doesn't accept fileName, fileKey, or fileType fields
+    const goServerPayload = {
+      id: message.id,
+      conversationId: message.conversationId,
+      senderId: message.senderId,
+      receiverId: data.receiverId,
+      content: message.content || "", // Ensure content is at least an empty string
+      senderRole: data.senderRole,
+      imgUrl: message.imgUrl,
+      // Removing fileName, fileKey, fileType which are causing the error
+      createdAt: message.createdAt,
+      updatedAt: message.updatedAt
+    };
+    
+    console.log('Sending to Go server with payload:', goServerPayload);
+    
     const response = await fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        id: message.id,
-        conversationId: message.conversationId,
-        senderId: message.senderId,
-        receiverId: data.receiverId,
-        content: message.content,
-        senderRole: data.senderRole,
-        imgUrl: message.imgUrl,
-        fileName: message.fileName,
-        fileKey: message.fileKey,
-        fileType: message.fileType,
-        createdAt: message.createdAt,
-        updatedAt: message.updatedAt
-      }),
+      body: JSON.stringify(goServerPayload),
     });
 
     if (!response.ok) {
       console.error('Failed to send message to real-time server:', await response.text());
+    } else {
+      console.log('Message sent to real-time server successfully');
     }
   } catch (error) {
     console.error('Error sending message to real-time server:', error);
     // Continue even if the real-time sending fails
   }
 
+  console.log('=== MESSAGE CREATION COMPLETE ===');
   revalidatePath('/conversations');
   return message;
 }

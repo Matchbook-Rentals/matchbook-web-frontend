@@ -30,7 +30,7 @@ interface ExtendedConversation extends Conversation {
 
 // Define the message data interface to include file properties
 interface MessageData {
-  content: string;
+  content: string; // Note: The backend now accepts empty strings or null
   senderRole: 'Host' | 'Tenant';
   conversationId: string;
   receiverId: string;
@@ -363,9 +363,17 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     fileKey?: string,
     fileType?: string
   ) => {
-    if (selectedConversationIndex === null || !newMessageInput.trim()) return;
+    console.log('=== HANDLE SEND MESSAGE ===');
+    console.log('Input params:', { newMessageInput, fileUrl, fileName, fileKey, fileType });
+    
+    // Remove the trim check to allow empty string messages with attachments
+    if (selectedConversationIndex === null) {
+      console.error('No conversation selected');
+      return;
+    }
 
     const selectedConversation = allConversations[selectedConversationIndex];
+    console.log('Selected conversation:', selectedConversation.id);
 
     // Find the other participant who isn't the current user
     const otherParticipant = selectedConversation.participants.find(
@@ -376,9 +384,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       console.error('Cannot find recipient for message');
       return;
     }
+    console.log('Recipient found:', otherParticipant.User.id);
 
     const messageData: MessageData = {
-      content: newMessageInput,
+      content: newMessageInput, // This can be empty string now
       senderRole: userType,
       conversationId: selectedConversation.id,
       receiverId: otherParticipant.User.id
@@ -386,15 +395,21 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
     // Add file information if available
     if (fileUrl) {
+      console.log('Adding file information to message');
       messageData.imgUrl = fileUrl; // Keep for backward compatibility
       messageData.fileName = fileName;
       messageData.fileKey = fileKey;
       messageData.fileType = fileType;
     }
 
-    const newMessage = await createMessage(messageData);
-
-    setMessages([...messages, newMessage]);
+    console.log('Message data to send:', messageData);
+    try {
+      const newMessage = await createMessage(messageData);
+      console.log('Message created successfully:', newMessage);
+      setMessages([...messages, newMessage]);
+    } catch (error) {
+      console.error('Error creating message:', error);
+    }
   };
 
   const handleCreateConversation = async (email: string) => {

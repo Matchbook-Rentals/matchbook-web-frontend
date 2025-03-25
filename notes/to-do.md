@@ -7,13 +7,12 @@
 ----- [ ] Move up higher by default so we don't cutoff the popover
 
 - [ ] Messages 
------ [ ] Search input foucs ring cutoff
------ [ ] Make blue area like a header for messages, meaning same width as
------ [ ] Make blue area like a header for messages, meaning same width as
------ [ ] Swap filters and search bar (just move top to bottom)
------ [ ] add border to convo list
+----- [x] Search input foucs ring cutoff
+----- [x] Make blue area like a header for messages, meaning same width as
+----- [x] Swap filters and search bar (just move top to bottom)
+----- [x] add border to convo list
 ----- [ ] Convo card w-full (match convo list) and make taller to accomadate a larger image
------ [ ] No banner until convo selected
+----- [x] No banner until convo selected
 ----- [ ] Send attachments no caption
 ----- [ ] Yeet microphone
 ----- [ ] handle error on bad upload (especially for image too large)
@@ -21,6 +20,7 @@
 ----- [ ] scrap attachements and message on convo change
 ----- [ ] investiage native upload and wait for upload thing to confirm
 ----- [ ] upload button much smaller, spinner instead of progress, no color change
+----- [ ] Message area expands upwards when message is too long
 
 - [ ] Preferences
 ----- [ ] shorten
