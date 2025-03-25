@@ -366,38 +366,41 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
             </div>
           ) : (
             <>
-              {/* Bulk actions toolbar */}
-              {selectedTickets.length > 0 && (
-                <div className="bg-muted rounded-md p-2 mb-4 flex items-center justify-between">
-                  <div className="font-medium text-sm">
-                    {selectedTickets.length} ticket{selectedTickets.length !== 1 ? 's' : ''} selected
-                  </div>
-                  <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => setStatusDialogOpen(true)}
-                    >
-                      Update Status
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => setCategoryDialogOpen(true)}
-                    >
-                      Update Category
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      variant="destructive"
-                      onClick={() => setDeleteDialogOpen(true)}
-                    >
-                      <Trash className="h-4 w-4 mr-1" /> 
-                      Delete
-                    </Button>
-                  </div>
+              {/* Bulk actions toolbar - always present to prevent layout shift */}
+              <div className={`rounded-md p-2 mb-4 flex items-center justify-between ${selectedTickets.length > 0 ? 'bg-muted' : 'invisible'}`} style={{ minHeight: '42px' }}>
+                <div className="font-medium text-sm">
+                  {selectedTickets.length > 0 ? 
+                    `${selectedTickets.length} ticket${selectedTickets.length !== 1 ? 's' : ''} selected` : 
+                    'No tickets selected'}
                 </div>
-              )}
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setStatusDialogOpen(true)}
+                    disabled={selectedTickets.length === 0}
+                  >
+                    Update Status
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setCategoryDialogOpen(true)}
+                    disabled={selectedTickets.length === 0}
+                  >
+                    Update Category
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="destructive"
+                    onClick={() => setDeleteDialogOpen(true)}
+                    disabled={selectedTickets.length === 0}
+                  >
+                    <Trash className="h-4 w-4 mr-1" /> 
+                    Delete
+                  </Button>
+                </div>
+              </div>
               
               <Table>
                 <TableHeader>
@@ -515,7 +518,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Status Update Dialog */}
               <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
-                <DialogContent>
+                <DialogContent xOnRight>
                   <DialogHeader>
                     <DialogTitle>Update Ticket Status</DialogTitle>
                     <DialogDescription>
@@ -544,7 +547,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Category Update Dialog */}
               <Dialog open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
-                <DialogContent>
+                <DialogContent xOnRight>
                   <DialogHeader>
                     <DialogTitle>Update Ticket Category</DialogTitle>
                     <DialogDescription>
@@ -574,7 +577,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Delete Confirmation Dialog */}
               <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent>
+                <DialogContent xOnRight>
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-destructive">
                       <AlertTriangle className="h-5 w-5" />
