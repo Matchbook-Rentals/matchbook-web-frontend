@@ -186,7 +186,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const messageContainerClassName = `flex flex-col h-[98vh] md:h-[calc(100vh-110px)] bg-background ${
+  const messageContainerClassName = `flex flex-col h-[calc(100vh-theme(spacing.16))] bg-background ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 

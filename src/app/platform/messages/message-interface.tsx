@@ -476,12 +476,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       });
 
   return (
-    <div className="flex flex-col min-h-[85vh] bg-background">
+    <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))] bg-background">
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Conversation List / Sidebar */}
         <div
-          className={`md:block w-full md:w-1/4 lg:w-1/3 h-full z-10 bg-background
+          className={`md:block w-full md:w-1/4 lg:w-1/3 h-[calc(100vh-theme(spacing.16))] z-10 bg-background
             ${isMobile ? ' pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >

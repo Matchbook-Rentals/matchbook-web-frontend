@@ -101,7 +101,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   });
 
   return (
-    <div className="h-full bg-background flex flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-2 p-1 flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
@@ -119,7 +119,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
           <input
             type="text"
             placeholder="Search..."
-            className="w-full p-3 rounded-lg bg-gray-100 shadow-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 rounded-lg bg-gray-100 shadow-md text-black focus:outline-none focus:ring-1 focus:ring-black"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
