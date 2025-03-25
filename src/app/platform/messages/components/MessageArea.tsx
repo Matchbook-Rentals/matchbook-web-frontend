@@ -323,7 +323,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           )}
                         </div>
                       )}
-                      {message.content && <div>{message.content}</div>}
+                      {message.content && <div className="break-words whitespace-pre-wrap max-w-full">{message.content}</div>}
                     </div>
                     {message.senderId === currentUserId && (
                       <img

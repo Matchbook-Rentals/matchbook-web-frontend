@@ -204,7 +204,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       </span>
                     </div>
                     <span className={`text-sm ${hasUnreadMessages(conv) ? 'font-medium text-black' : 'text-gray-600'} truncate`}>
-                      {lastMessage ? lastMessage.content : 'Start a conversation'}
+                      {lastMessage ? (lastMessage.content?.length > 20 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
                     </span>
                   </div>
                 </div>
