@@ -333,7 +333,12 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Support Tickets</CardTitle>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              <Link href="/admin">
+                <Button variant="outline">Back to Admin Dashboard</Button>
+              </Link>
+            </div>
             <select 
               className="px-2 py-1 border rounded-md"
               value={status}
