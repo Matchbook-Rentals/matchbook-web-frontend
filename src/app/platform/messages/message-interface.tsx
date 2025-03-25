@@ -136,6 +136,14 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
         try {
           const message = JSON.parse(event.data);
+          
+          // Mark incoming messages as unread by default if they're not from the current user
+          if (message.senderId !== user?.id) {
+            message.isRead = false;
+          } else {
+            message.isRead = true; // Messages sent by current user are automatically read
+          }
+          
           setSseMessages((prevMessages) => [...prevMessages, message]);
 
           // Update unread message counters based on the message's conversation type
@@ -199,6 +207,16 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
               if (index !== -1) {
                 // Create a new array if messages property doesn't exist yet
                 const currentMessages = updatedConversations[index].messages || [];
+                
+                // Check if this conversation is currently selected/open
+                const isConversationOpen = selectedConversationIndex !== null && 
+                  updatedConversations[selectedConversationIndex]?.id === message.conversationId;
+                
+                // If the conversation is open and the message is from another user, mark it as read
+                if (isConversationOpen && message.senderId !== user?.id) {
+                  message.isRead = true;
+                }
+                
                 updatedConversations[index] = {
                   ...updatedConversations[index],
                   messages: [...currentMessages, message]
@@ -291,6 +309,25 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     } else if (userParticipant && userParticipant.role === 'Tenant') {
       setUnreadTenantMessages(0);
     }
+
+    // Mark all messages in this conversation as read
+    // This is a local state update only - in a real app, you would call an API to update the read status
+    setAllConversations(prevConversations => {
+      const updatedConversations = [...prevConversations];
+      const conversationToUpdate = updatedConversations[index];
+      
+      if (conversationToUpdate && conversationToUpdate.messages) {
+        // Mark all messages from other participants as read
+        conversationToUpdate.messages = conversationToUpdate.messages.map(message => {
+          if (message.senderId !== user?.id) {
+            return { ...message, isRead: true };
+          }
+          return message;
+        });
+      }
+      
+      return updatedConversations;
+    });
 
     // On mobile, hide the sidebar when a conversation is selected
     if (isMobile) {
@@ -390,13 +427,15 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   };
 
   const handleTabChange = (value: string) => {
+    setTabs(value);
+    
     if (value === 'Host' || value === 'Tenant') {
       setUserType(value as 'Host' | 'Tenant');
 
       // Clear unread messages count for the tab we're switching to
       if (value === 'Host') {
         setUnreadHostMessages(0);
-      } else {
+      } else if (value === 'Tenant') {
         setUnreadTenantMessages(0);
       }
     }
@@ -426,8 +465,15 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   // Add conditional return after all hooks are defined
   if (!user) return null;
 
-  // Use all conversations instead of filtering by role
-  const filteredConversations = allConversations;
+  // Filter conversations based on the selected tab/role
+  const filteredConversations = tabs === 'all' 
+    ? allConversations 
+    : allConversations.filter(conv => {
+        const userParticipant = conv.participants.find(
+          participant => participant.userId === user?.id
+        );
+        return userParticipant && userParticipant.role === tabs;
+      });
 
   return (
     <div className="flex flex-col min-h-[85vh] bg-background">
@@ -444,6 +490,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             onSelectConversation={handleSelectConversation}
             onCreateConversation={handleCreateConversation}
             user={user as any}
+            onTabChange={handleTabChange}
+            activeTab={tabs}
           />
         </div>
 

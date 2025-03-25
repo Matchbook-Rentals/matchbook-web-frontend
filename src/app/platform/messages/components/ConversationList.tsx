@@ -32,19 +32,30 @@ interface ConversationListProps {
   onSelectConversation: (index: number) => void;
   onCreateConversation: (email: string) => void;
   user: UserResource;
+  onTabChange?: (tab: string) => void;
+  activeTab?: string;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
   onSelectConversation,
   onCreateConversation,
-  user
+  user,
+  onTabChange,
+  activeTab = 'all'
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
   const toggleUnreadOnly = () => {
     setShowUnreadOnly(!showUnreadOnly);
+  };
+  
+  // Helper function to check if a conversation has unread messages
+  const hasUnreadMessages = (conv: ExtendedConversation) => {
+    return conv.messages?.some(message => 
+      message.senderId !== user.id && !message.isRead
+    ) || false;
   };
 
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
@@ -77,17 +88,13 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
     // If showUnreadOnly is true, filter for conversations with unread messages
     if (showUnreadOnly) {
-      // For demonstration purposes - since we don't have a direct hasUnread property,
-      // we can check if there are any messages we haven't seen
-      // This is a placeholder and should be replaced with actual unread logic
-      const lastMessage = conv.messages && conv.messages.length > 0
-        ? conv.messages[conv.messages.length - 1]
-        : null;
-
-      // Assume a message is unread if it's from the other participant
-      // This is a simplified check - in a real app, you'd track read status
-      const hasUnread = lastMessage && lastMessage.senderId !== user.id;
-      return matchesSearch && hasUnread;
+      // Check for any unread messages in the conversation
+      // A message is considered unread if it's from the other participant (not current user)
+      const hasUnreadMessages = conv.messages?.some(message => 
+        message.senderId !== user.id && !message.isRead
+      );
+      
+      return matchesSearch && hasUnreadMessages;
     }
 
     return matchesSearch;
@@ -124,10 +131,23 @@ const ConversationList: React.FC<ConversationListProps> = ({
         </div>
       </div>
 
-      {/* Filter Switch */}
+      {/* Role Filter and Unread Toggle */}
       <div className="px-4 pb-2 text-black">
         <div className="flex items-center space-x-4">
-          <Button className='rounded-full'> All <ChevronDown /> </Button>
+          <div className="relative">
+            <select
+              value={activeTab}
+              onChange={(e) => onTabChange?.(e.target.value)}
+              className="appearance-none bg-black text-white border border-black rounded-full py-1 px-4 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="all">All</option>
+              <option value="Host">Host</option>
+              <option value="Tenant">Renter</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+              <ChevronDown className="h-4 w-4" />
+            </div>
+          </div>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -155,18 +175,25 @@ const ConversationList: React.FC<ConversationListProps> = ({
             return (
               <div
                 key={conv.id}
-                className="w-full mb-3 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                className={`w-full mb-3 ${hasUnreadMessages(conv) ? 'bg-gray-100' : 'bg-white'} rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-200`}
                 onClick={() => onSelectConversation(index)}
               >
                 <div className="p-3 flex items-start">
-                  <img
-                    src={imageUrl || "/placeholder-avatar.png"}
-                    className="w-10 h-10 rounded-full mr-3 flex-shrink-0"
-                    alt={displayName}
-                  />
+                  <div className="relative">
+                    <img
+                      src={imageUrl || "/placeholder-avatar.png"}
+                      className="w-10 h-10 rounded-full mr-3 flex-shrink-0"
+                      alt={displayName}
+                    />
+                    {hasUnreadMessages(conv) && (
+                      <div className="absolute top-0 right-2 w-3 h-3 bg-blue-500 rounded-full"></div>
+                    )}
+                  </div>
                   <div className="flex flex-col flex-grow min-w-0">
                     <div className="flex justify-between items-start w-full">
-                      <span className="font-semibold text-sm text-gray-800 truncate">{displayName}</span>
+                      <span className={`font-semibold text-sm ${hasUnreadMessages(conv) ? 'text-black' : 'text-gray-800'} truncate`}>
+                        {displayName}
+                      </span>
                       <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
                         {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
                           hour: 'numeric',
@@ -175,7 +202,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         }) : ''}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-600 truncate">
+                    <span className={`text-sm ${hasUnreadMessages(conv) ? 'font-medium text-black' : 'text-gray-600'} truncate`}>
                       {lastMessage ? lastMessage.content : 'Start a conversation'}
                     </span>
                   </div>
