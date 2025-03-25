@@ -63,6 +63,7 @@ model User {
   boldSignTemplates  BoldSignTemplate[]
   BoldSignLease      BoldSignLease[]
   Lease              Lease[]
+  tickets            Ticket[]
 }
 
 model UserPreferences {
@@ -840,6 +841,56 @@ model Tag {
   updatedAt DateTime      @updatedAt
 
   @@index([slug])
+}
+
+model Ticket {
+  id          String    @id @default(cuid())
+  title       String
+  description String    @db.Text
+  status      String    @default("open") // open, in-progress, resolved, closed
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  resolvedAt  DateTime?
+  
+  // User information
+  email       String
+  name        String?
+  userId      String?   // Optional: link to user if they're logged in
+  
+  // Context information
+  pageUrl     String?
+  userAgent   String?
+  
+  // Category/type of issue
+  category    String?   // bug, feature-request, support, complaint, etc.
+  priority    String?   // low, medium, high, urgent
+  
+  // Internal tracking
+  assignedTo  String?   // Admin/support person email
+  notifyEmail String?   // Email to send notifications to (configurable)
+  
+  // Relationships
+  responses   TicketResponse[]
+  user        User?     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([status])
+  @@index([category])
+}
+
+model TicketResponse {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  createdAt   DateTime @default(now())
+  isFromStaff Boolean  @default(false)
+  authorName  String?
+  authorEmail String?
+  
+  // Relationship
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId    String
+  
+  @@index([ticketId])
 }
 
 model ResidentialHistory {
