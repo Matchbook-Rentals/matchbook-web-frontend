@@ -163,3 +163,81 @@ export async function updateTicketStatus(ticketId: string, status: string) {
     return { error: "Failed to update ticket status" };
   }
 }
+
+export async function updateTicketsStatus(ticketIds: string[], status: string) {
+  try {
+    console.log(`Updating ${ticketIds.length} tickets to status "${status}"`);
+    
+    const results = await prismadb.$transaction(
+      ticketIds.map(id => 
+        prismadb.ticket.update({
+          where: { id },
+          data: {
+            status,
+            resolvedAt: status === "resolved" ? new Date() : null,
+          },
+        })
+      )
+    );
+
+    console.log(`Updated ${results.length} tickets to status "${status}"`);
+    revalidatePath("/admin/tickets");
+    return { success: true, count: results.length };
+  } catch (error) {
+    console.error("Error updating ticket statuses:", error);
+    return { error: "Failed to update ticket statuses" };
+  }
+}
+
+export async function updateTicketsCategory(ticketIds: string[], category: string) {
+  try {
+    console.log(`Updating ${ticketIds.length} tickets to category "${category}"`);
+    
+    const results = await prismadb.$transaction(
+      ticketIds.map(id => 
+        prismadb.ticket.update({
+          where: { id },
+          data: { category },
+        })
+      )
+    );
+
+    console.log(`Updated ${results.length} tickets to category "${category}"`);
+    revalidatePath("/admin/tickets");
+    return { success: true, count: results.length };
+  } catch (error) {
+    console.error("Error updating ticket categories:", error);
+    return { error: "Failed to update ticket categories" };
+  }
+}
+
+export async function deleteTickets(ticketIds: string[]) {
+  try {
+    console.log(`Deleting ${ticketIds.length} tickets`);
+    
+    // First delete all responses associated with the tickets
+    await prismadb.ticketResponse.deleteMany({
+      where: {
+        ticketId: {
+          in: ticketIds
+        }
+      }
+    });
+    
+    // Then delete the tickets
+    const result = await prismadb.ticket.deleteMany({
+      where: {
+        id: {
+          in: ticketIds
+        }
+      }
+    });
+
+    console.log(`Deleted ${result.count} tickets`);
+    revalidatePath("/admin/tickets");
+    return { success: true, count: result.count };
+  } catch (error) {
+    console.error("Error deleting tickets:", error);
+    return { error: "Failed to delete tickets" };
+  }
+}

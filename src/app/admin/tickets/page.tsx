@@ -4,7 +4,12 @@ import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { checkRole } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getTickets } from '@/app/actions/tickets'
+import { 
+  getTickets, 
+  updateTicketsStatus, 
+  updateTicketsCategory, 
+  deleteTickets 
+} from '@/app/actions/tickets'
 import {
   Table,
   TableBody,
@@ -15,12 +20,25 @@ import {
 } from "@/components/ui/table"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Checkbox } from "@/components/ui/checkbox"
+import { toast } from "@/components/ui/use-toast"
 import Link from 'next/link'
 import { 
   ChevronLeft, 
   ChevronRight, 
   ChevronsLeft, 
-  ChevronsRight 
+  ChevronsRight,
+  Trash,
+  Tag,
+  AlertTriangle
 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -38,8 +56,21 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
   
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [tickets, setTickets] = useState([])
+  const [tickets, setTickets] = useState<any[]>([])
   const [pagination, setPagination] = useState({ total: 0, pages: 1, page: 1, limit: 10 })
+  
+  // Multi-select state
+  const [selectedTickets, setSelectedTickets] = useState<string[]>([])
+  const [isAllSelected, setIsAllSelected] = useState(false)
+  
+  // Dialogs state
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false)
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  
+  // Action values
+  const [selectedStatus, setSelectedStatus] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
   
   const page = searchParams.page ? parseInt(searchParams.page) : 1
   const status = searchParams.status || ''
@@ -61,6 +92,9 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
         } else {
           setTickets(result.tickets)
           setPagination(result.pagination)
+          // Reset selection when tickets change
+          setSelectedTickets([])
+          setIsAllSelected(false)
         }
       } catch (e) {
         setError('Failed to load tickets')
@@ -125,7 +159,160 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
       minute: '2-digit'
     }).format(date)
   }
-
+  
+  // Multi-select handlers
+  function toggleSelectAll() {
+    if (isAllSelected) {
+      setSelectedTickets([]);
+      setIsAllSelected(false);
+    } else {
+      setSelectedTickets(tickets.map(ticket => ticket.id));
+      setIsAllSelected(true);
+    }
+  }
+  
+  function toggleSelectTicket(id: string) {
+    if (selectedTickets.includes(id)) {
+      setSelectedTickets(selectedTickets.filter(ticketId => ticketId !== id));
+      setIsAllSelected(false);
+    } else {
+      const newSelected = [...selectedTickets, id];
+      setSelectedTickets(newSelected);
+      // Check if all tickets are now selected
+      setIsAllSelected(newSelected.length === tickets.length);
+    }
+  }
+  
+  // Batch actions
+  async function handleUpdateStatus() {
+    if (selectedTickets.length === 0 || !selectedStatus) return;
+    
+    setStatusDialogOpen(false);
+    setLoading(true);
+    
+    try {
+      const result = await updateTicketsStatus(selectedTickets, selectedStatus);
+      
+      if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error,
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: `Updated ${result.count} tickets to status: ${selectedStatus}`,
+        });
+        
+        // Refresh the tickets list
+        const refreshResult = await getTickets({ page, limit: 10, status, category });
+        if (!refreshResult.error) {
+          setTickets(refreshResult.tickets);
+          setPagination(refreshResult.pagination);
+        }
+        
+        // Reset selection
+        setSelectedTickets([]);
+        setIsAllSelected(false);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update tickets",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+  async function handleUpdateCategory() {
+    if (selectedTickets.length === 0 || !selectedCategory) return;
+    
+    setCategoryDialogOpen(false);
+    setLoading(true);
+    
+    try {
+      const result = await updateTicketsCategory(selectedTickets, selectedCategory);
+      
+      if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error,
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: `Updated ${result.count} tickets to category: ${selectedCategory}`,
+        });
+        
+        // Refresh the tickets list
+        const refreshResult = await getTickets({ page, limit: 10, status, category });
+        if (!refreshResult.error) {
+          setTickets(refreshResult.tickets);
+          setPagination(refreshResult.pagination);
+        }
+        
+        // Reset selection
+        setSelectedTickets([]);
+        setIsAllSelected(false);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update tickets",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+  async function handleDeleteTickets() {
+    if (selectedTickets.length === 0) return;
+    
+    setDeleteDialogOpen(false);
+    setLoading(true);
+    
+    try {
+      const result = await deleteTickets(selectedTickets);
+      
+      if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error,
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: `Deleted ${result.count} tickets`,
+        });
+        
+        // Refresh the tickets list
+        const refreshResult = await getTickets({ page, limit: 10, status, category });
+        if (!refreshResult.error) {
+          setTickets(refreshResult.tickets);
+          setPagination(refreshResult.pagination);
+        }
+        
+        // Reset selection
+        setSelectedTickets([]);
+        setIsAllSelected(false);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete tickets",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+  
   if (error) {
     return (
       <div className="container mx-auto py-10">
@@ -179,9 +366,49 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
             </div>
           ) : (
             <>
+              {/* Bulk actions toolbar */}
+              {selectedTickets.length > 0 && (
+                <div className="bg-muted rounded-md p-2 mb-4 flex items-center justify-between">
+                  <div className="font-medium text-sm">
+                    {selectedTickets.length} ticket{selectedTickets.length !== 1 ? 's' : ''} selected
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setStatusDialogOpen(true)}
+                    >
+                      Update Status
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => setCategoryDialogOpen(true)}
+                    >
+                      Update Category
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="destructive"
+                      onClick={() => setDeleteDialogOpen(true)}
+                    >
+                      <Trash className="h-4 w-4 mr-1" /> 
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox 
+                        checked={isAllSelected}
+                        onCheckedChange={toggleSelectAll}
+                        aria-label="Select all tickets"
+                      />
+                    </TableHead>
                     <TableHead>ID</TableHead>
                     <TableHead>Title</TableHead>
                     <TableHead>Submitted By</TableHead>
@@ -194,13 +421,20 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
                 <TableBody>
                   {tickets.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                         No tickets found
                       </TableCell>
                     </TableRow>
                   ) : (
                     tickets.map((ticket: any) => (
-                      <TableRow key={ticket.id}>
+                      <TableRow key={ticket.id} className={selectedTickets.includes(ticket.id) ? "bg-muted/50" : ""}>
+                        <TableCell>
+                          <Checkbox 
+                            checked={selectedTickets.includes(ticket.id)}
+                            onCheckedChange={() => toggleSelectTicket(ticket.id)}
+                            aria-label={`Select ticket ${ticket.id}`}
+                          />
+                        </TableCell>
                         <TableCell className="font-mono text-xs">{ticket.id.slice(0, 8)}</TableCell>
                         <TableCell className="font-medium">{ticket.title}</TableCell>
                         <TableCell>
@@ -278,6 +512,87 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
                   </div>
                 </div>
               )}
+              
+              {/* Status Update Dialog */}
+              <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Update Ticket Status</DialogTitle>
+                    <DialogDescription>
+                      Change the status for {selectedTickets.length} selected ticket{selectedTickets.length !== 1 ? 's' : ''}.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="py-4">
+                    <select 
+                      className="w-full px-3 py-2 border rounded-md"
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    >
+                      <option value="" disabled>Select a status</option>
+                      <option value="open">Open</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="resolved">Resolved</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setStatusDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateStatus} disabled={!selectedStatus}>Update</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              
+              {/* Category Update Dialog */}
+              <Dialog open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Update Ticket Category</DialogTitle>
+                    <DialogDescription>
+                      Change the category for {selectedTickets.length} selected ticket{selectedTickets.length !== 1 ? 's' : ''}.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="py-4">
+                    <select 
+                      className="w-full px-3 py-2 border rounded-md"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                      <option value="" disabled>Select a category</option>
+                      <option value="bug">Bug</option>
+                      <option value="feature-request">Feature Request</option>
+                      <option value="account">Account</option>
+                      <option value="billing">Billing</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setCategoryDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateCategory} disabled={!selectedCategory}>Update</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              
+              {/* Delete Confirmation Dialog */}
+              <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2 text-destructive">
+                      <AlertTriangle className="h-5 w-5" />
+                      Delete Tickets
+                    </DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to delete {selectedTickets.length} ticket{selectedTickets.length !== 1 ? 's' : ''}? 
+                      This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+                    <Button variant="destructive" onClick={handleDeleteTickets}>
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </>
           )}
         </CardContent>
