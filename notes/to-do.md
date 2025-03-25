@@ -45,11 +45,11 @@ try to force invalidate cache bring up to speed
 -------- [ ] full screen card goes to left side of map and becomes mini matchmaker when clicking see more
 -------- [ ] get rid of listing card popup on like
 -------- [ ] mobile map close button
--------- [ ] mobile map click card over plus minus
+-------- [x] mobile map click card over plus minus
 -------- [ ] listing card 
 -------- [ ] List your property button 
 -------- [ ] Switch to Hosting
--------- [ ] acgive tab blue and padded
+-------- [x] acgive tab blue and padded
 -------- [ ] new heart on listing cards
 -------- [ ] add to tab selector location string 
 

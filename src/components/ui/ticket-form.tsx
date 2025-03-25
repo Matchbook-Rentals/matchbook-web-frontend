@@ -3,9 +3,9 @@
 import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { createTicket } from "@/app/actions/tickets"
-import { useToast } from "@/hooks/use-toast"
 import { useAuth, useUser } from "@clerk/nextjs"
 import { usePathname, useSearchParams } from "next/navigation"
+import { useToast } from "./use-toast"
 
 interface TicketFormProps {
   onSubmitSuccess?: () => void
@@ -79,18 +79,16 @@ export function TicketForm({
 
       if (result.error) {
         toast({
-          title: "Error",
+          title: "Ticket not created, please try again later",
           description: result.error,
           variant: "destructive",
         })
       } else {
         toast({
-          title: "Success",
-          description: "Your support ticket has been submitted.",
+          title: "Support ticket created",
+          description: "Support may contact you via email",
         })
 
-        // Reset the form
-        event.currentTarget.reset()
 
         // Call the success callback if provided
         if (onSubmitSuccess) {
