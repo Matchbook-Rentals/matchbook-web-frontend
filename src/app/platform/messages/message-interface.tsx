@@ -82,12 +82,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       if (selectedConversationIndex !== null) {
         const conversation = allConversations[selectedConversationIndex];
         
-        // On desktop, or if we don't already have messages loaded through the selection handler
-        if (!isMobile || !messages.length) {
-          const fullConversation = await getConversation(conversation.id);
-          if (fullConversation) {
-            setMessages(fullConversation.messages || []);
-          }
+        // Always fetch the full conversation to ensure we have the latest messages
+        const fullConversation = await getConversation(conversation.id);
+        if (fullConversation) {
+          setMessages(fullConversation.messages || []);
         }
       } else {
         setMessages([]);
@@ -337,14 +335,10 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     // On mobile, fetch the full conversation data before transitioning
     if (isMobile) {
       try {
-        // Fetch the full conversation data if we don't already have messages
-        if (!allConversations[index].messages?.length) {
-          const fullConversation = await getConversation(conversation.id);
-          if (fullConversation) {
-            setMessages(fullConversation.messages || []);
-          }
-        } else {
-          setMessages(allConversations[index].messages || []);
+        // Always fetch the full conversation data to ensure we have the latest messages
+        const fullConversation = await getConversation(conversation.id);
+        if (fullConversation) {
+          setMessages(fullConversation.messages || []);
         }
         
         // After data is loaded, then hide the sidebar to show the message area
