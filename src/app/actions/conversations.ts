@@ -97,7 +97,12 @@ export async function getConversation(id: string) {
   return await prisma.conversation.findUnique({
     where: { id },
     include: {
-      messages: true,
+      messages: {
+        orderBy: {
+          createdAt: 'asc', // Get messages in chronological order
+        },
+        take: 50, // Limit to the most recent 50 messages
+      },
       participants: {
         include: {
           User: true
@@ -269,9 +274,9 @@ export async function getAllConversations() {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'desc',
+          createdAt: 'asc', // Get messages in chronological order
         },
-        take: 1,
+        take: 50, // Limit to the most recent 50 messages
       },
       participants: {
         include: {
@@ -308,8 +313,9 @@ export async function getRecentConversationsWithMessages(limit: number = 15) {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'asc', // Get all messages in chronological order
+          createdAt: 'asc', // Get messages in chronological order
         },
+        take: 50, // Limit to most recent 50 messages per conversation
       },
       participants: {
         include: {

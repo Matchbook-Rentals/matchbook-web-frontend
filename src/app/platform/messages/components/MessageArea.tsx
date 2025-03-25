@@ -345,7 +345,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
-                  <p className="text-gray-700 mb-2">Welcome to Messages</p>
                   <p className="text-gray-500 text-sm">Select a conversation from the list to get started</p>
                 </div>
               </div>
