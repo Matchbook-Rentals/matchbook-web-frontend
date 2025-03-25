@@ -186,12 +186,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const messageContainerClassName = `flex flex-col h-[calc(100vh-theme(spacing.16))] bg-background ${
-    isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
-  } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col h-[calc(100vh-theme(spacing.16))] bg-background ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+    } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
+    // Main container
     <div className={messageContainerClassName}>
+
+      {/* Header Section - Shows participant info when conversation is selected */}
       {selectedConversation ? (
         <div className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
           {onBack && (
@@ -213,6 +215,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           </div>
         </div>
       ) : (
+
+        // Default header when no conversation is selected
         <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 md:p-4 relative flex items-center shadow-md">
           {onBack && (
             <button onClick={handleBackClick} className="absolute left-2 md:hidden">
@@ -225,13 +229,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       )}
 
+      {/* Messages Container */}
       <div className="flex-1 relative overflow-hidden">
+
+        {/* Gradient overlay at the top of messages */}
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
 
         <ScrollArea
           ref={scrollAreaRef}
-          className="h-full overflow-hidden pt-6"
-        >
+          className="h-full overflow-hidden pt-6" >
+
+          {/* Messages Content */}
           <div ref={messageContainerRef} className="p-2 md:p-4 min-h-full">
             {selectedConversation ? (
               messages.length > 0 ? (
@@ -245,11 +253,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       />
                     )}
                     <div
-                      className={`max-w-[70%] p-3 rounded-lg shadow-md ${
-                        message.senderId === currentUserId
+                      className={`max-w-[70%] p-3 rounded-lg shadow-md ${message.senderId === currentUserId
                           ? 'bg-white text-black'
                           : 'bg-gray-200 text-black'
-                      }`}
+                        }`}
                     >
                       {message.imgUrl && (
                         <div className="mb-2">
@@ -313,7 +320,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
+      {/* Message Input Section */}
       <div className="p-4 bg-background">
+
+        {/* Attachments Preview Area */}
         <div className="flex flex-wrap gap-2 mb-2">
           {messageAttachments.map((attachment, index) => (
             <div key={index} className="inline-block rounded">
@@ -345,6 +355,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           ))}
         </div>
 
+        {/* Message Input Bar */}
         <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
           <input
             type="text"
@@ -356,6 +367,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             disabled={!selectedConversation}
           />
 
+          {/* Action Buttons Container */}
           <div className="flex items-center px-2">
             <div className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}>
               <UploadButton
@@ -394,6 +406,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       </div>
 
+      {/* File Preview Dialog */}
       <Dialog open={!!selectedFile} onOpenChange={(open) => !open && setSelectedFile(null)}>
         <DialogContent className="max-w-3xl" hideCloseButton={false}>
           {selectedFile && (
