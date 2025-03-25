@@ -164,6 +164,24 @@ export async function updateTicketStatus(ticketId: string, status: string) {
   }
 }
 
+export async function updateTicketSupportNotes(ticketId: string, supportNotes: string) {
+  try {
+    console.log(`Updating support notes for ticket ${ticketId}`);
+    
+    const updatedTicket = await prismadb.ticket.update({
+      where: { id: ticketId },
+      data: { supportNotes },
+    });
+
+    console.log(`Ticket ${ticketId} support notes updated successfully`);
+    revalidatePath("/admin/tickets");
+    return { success: true, ticket: updatedTicket };
+  } catch (error) {
+    console.error("Error updating ticket support notes:", error);
+    return { error: "Failed to update ticket support notes" };
+  }
+}
+
 export async function updateTicketsStatus(ticketIds: string[], status: string) {
   try {
     console.log(`Updating ${ticketIds.length} tickets to status "${status}"`);

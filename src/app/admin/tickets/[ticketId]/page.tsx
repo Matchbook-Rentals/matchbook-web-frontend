@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { updateTicketStatus } from '@/app/actions/tickets'
 import { ArrowLeft, Clock } from 'lucide-react'
+import { SupportNotes } from './support-notes'
 
 interface PageProps {
   params: { 
@@ -32,9 +33,6 @@ export default async function TicketDetailPage({ params }: PageProps) {
           email: true,
           imageUrl: true,
         }
-      },
-      responses: {
-        orderBy: { createdAt: 'asc' }
       }
     }
   })
@@ -127,54 +125,10 @@ export default async function TicketDetailPage({ params }: PageProps) {
                   </div>
                 </div>
                 
-                {ticket.responses.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-4">Responses</h3>
-                    <div className="space-y-4">
-                      {ticket.responses.map((response) => (
-                        <div 
-                          key={response.id} 
-                          className={`p-4 rounded-md ${
-                            response.isFromStaff 
-                              ? 'bg-blue-50 border-l-4 border-blue-400' 
-                              : 'bg-gray-50'
-                          }`}
-                        >
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium">
-                              {response.isFromStaff 
-                                ? (response.authorName || 'Staff') 
-                                : (ticket.name || ticket.email.split('@')[0])}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              {formatDate(response.createdAt)}
-                            </span>
-                          </div>
-                          <div className="whitespace-pre-wrap">
-                            {response.content}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Add Response</h3>
-                  <form action="/api/tickets/response" method="post">
-                    <input type="hidden" name="ticketId" value={ticket.id} />
-                    <textarea
-                      name="content"
-                      rows={4}
-                      className="w-full rounded-md border border-gray-300 p-2"
-                      placeholder="Type your response here..."
-                      required
-                    />
-                    <Button type="submit" className="mt-2">
-                      Send Response
-                    </Button>
-                  </form>
+                  <SupportNotes ticketId={ticket.id} defaultNotes={ticket.supportNotes || ''} />
                 </div>
+                
               </div>
             </CardContent>
           </Card>
