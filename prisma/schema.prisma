@@ -868,6 +868,7 @@ model Ticket {
   // Internal tracking
   assignedTo  String?   // Admin/support person email
   notifyEmail String?   // Email to send notifications to (configurable)
+  supportNotes String?  @db.Text  // Internal notes for support staff
   
   // Relationships
   responses   TicketResponse[]
