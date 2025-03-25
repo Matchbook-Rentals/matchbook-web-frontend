@@ -101,7 +101,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   });
 
   return (
-    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[400px] flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
