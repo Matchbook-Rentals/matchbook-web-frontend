@@ -55,6 +55,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showTestingTools, setShowTestingTools] = useState(false);
+  const [hideTestingSection, setHideTestingSection] = useState(false);
   const [tabs, setTabs] = useState('all');
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -491,12 +492,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       });
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))] bg-background">
+    <div className="flex flex-col min-h-[calc(100vh-65px)] sm:min-h-[calc(100vh-65px)] md:min-h-[calc(100vh-80px)] bg-background">
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Conversation List / Sidebar */}
         <div
-          className={`md:block w-full md:w-1/4 lg:w-1/3 h-[calc(100vh-theme(spacing.16))] z-10 bg-background
+          className={`md:block w-full md:w-1/4 lg:w-1/3 h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] z-10 bg-background
             ${isMobile ? ' pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
@@ -527,95 +528,104 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         </div>
       </div>
 
-      {/* Admin Testing Tools Toggle */}
-      {isAdmin && (
-        <div className="mt-4 px-4 border-t border-gray-200 py-2">
-          <button
-            className={`px-4 py-2 rounded-md ${showTestingTools ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-            onClick={() => setShowTestingTools(!showTestingTools)}
-          >
-            {showTestingTools ? 'Hide Testing Tools' : 'Show Testing Tools'}
-          </button>
-        </div>
-      )}
-
-      {/* Testing Tools */}
-      {isAdmin && showTestingTools && (
-        <div className="mt-2 p-4 border-t border-gray-200">
-          <h3 className="text-lg font-semibold mb-2">Testing Tools</h3>
-          <div className="flex items-center mb-3">
-            <input
-              type="email"
-              className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter email to start conversation"
-              value={testEmail}
-              onChange={(e) => setTestEmail(e.target.value)}
-            />
+      {/* Admin Testing Tools Section - Only visible if not completely hidden */}
+      {isAdmin && !hideTestingSection && (
+        <>
+          {/* Admin Testing Tools Toggle */}
+          <div className="mt-4 px-4 border-t border-gray-200 py-2 flex justify-between">
             <button
-              className="px-4 py-2 bg-blue-500 rounded-r-md hover:bg-blue-600 text-white"
-              onClick={() => {
-                if (testEmail.trim()) {
-                  handleCreateConversation(testEmail);
-                  setTestEmail('');
-                }
-              }}
+              className={`px-4 py-2 rounded-md ${showTestingTools ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+              onClick={() => setShowTestingTools(!showTestingTools)}
             >
-              Start Test Conversation
-            </button>
-          </div>
-          <div className="flex justify-between mb-3">
-            <button
-              className="px-4 py-2 bg-red-500 rounded-md hover:bg-red-600 disabled:bg-red-300 text-white"
-              onClick={handleDeleteAllConversations}
-              disabled={isDeleting || allConversations.length === 0}
-            >
-              {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
+              {showTestingTools ? 'Hide Testing Tools' : 'Show Testing Tools'}
             </button>
             <button
-              className="px-4 py-2 bg-gray-500 rounded-md hover:bg-gray-600 text-white"
-              onClick={() => setSseMessages([])}
+              className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white"
+              onClick={() => setHideTestingSection(true)}
             >
-              Clear SSE Log
+              Hide Until Refresh
             </button>
           </div>
 
-          {/* SSE Log Section */}
-          <div className="mt-6 bg-gray-900 rounded-lg p-4">
-            <h4 className="text-md font-semibold mb-2 text-white">SSE Connection Log</h4>
-            <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm text-white">
-              {sseMessages.length > 0 ? (
-                <div className="space-y-2">
-                  {sseMessages.map((msg, index) => (
-                    <div key={index} className={`p-2 rounded ${
-                      msg.type === 'error' ? 'bg-red-900 text-red-100' :
-                      msg.type === 'success' ? 'bg-green-900 text-green-100' :
-                      msg.type === 'info' ? 'bg-blue-900 text-blue-100' :
-                      'bg-gray-700 '
-                    }`}>
-                      <div className="flex justify-between">
-                        <span className="font-medium">
-                          {msg.type === 'error' ? '❌ Error' :
-                           msg.type === 'success' ? '✅ Success' :
-                           msg.type === 'info' ? 'ℹ️ Info' : 'Message'}
-                        </span>
-                        {msg.timestamp && (
-                          <span className="text-xs opacity-80">
-                            {new Date(msg.timestamp).toLocaleTimeString()}
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1 text-xs font-mono">
-                        {msg.message || JSON.stringify(msg, null, 2)}
-                      </div>
+          {/* Testing Tools */}
+          {showTestingTools && (
+            <div className="mt-2 p-4 border-t border-gray-200">
+              <h3 className="text-lg font-semibold mb-2">Testing Tools</h3>
+              <div className="flex items-center mb-3">
+                <input
+                  type="email"
+                  className="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter email to start conversation"
+                  value={testEmail}
+                  onChange={(e) => setTestEmail(e.target.value)}
+                />
+                <button
+                  className="px-4 py-2 bg-blue-500 rounded-r-md hover:bg-blue-600 text-white"
+                  onClick={() => {
+                    if (testEmail.trim()) {
+                      handleCreateConversation(testEmail);
+                      setTestEmail('');
+                    }
+                  }}
+                >
+                  Start Test Conversation
+                </button>
+              </div>
+              <div className="flex justify-between mb-3">
+                <button
+                  className="px-4 py-2 bg-red-500 rounded-md hover:bg-red-600 disabled:bg-red-300 text-white"
+                  onClick={handleDeleteAllConversations}
+                  disabled={isDeleting || allConversations.length === 0}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete All Conversations'}
+                </button>
+                <button
+                  className="px-4 py-2 bg-gray-500 rounded-md hover:bg-gray-600 text-white"
+                  onClick={() => setSseMessages([])}
+                >
+                  Clear SSE Log
+                </button>
+              </div>
+
+              {/* SSE Log Section */}
+              <div className="mt-6 bg-gray-900 rounded-lg p-4">
+                <h4 className="text-md font-semibold mb-2 text-white">SSE Connection Log</h4>
+                <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm text-white">
+                  {sseMessages.length > 0 ? (
+                    <div className="space-y-2">
+                      {sseMessages.map((msg, index) => (
+                        <div key={index} className={`p-2 rounded ${
+                          msg.type === 'error' ? 'bg-red-900 text-red-100' :
+                          msg.type === 'success' ? 'bg-green-900 text-green-100' :
+                          msg.type === 'info' ? 'bg-blue-900 text-blue-100' :
+                          'bg-gray-700 '
+                        }`}>
+                          <div className="flex justify-between">
+                            <span className="font-medium">
+                              {msg.type === 'error' ? '❌ Error' :
+                              msg.type === 'success' ? '✅ Success' :
+                              msg.type === 'info' ? 'ℹ️ Info' : 'Message'}
+                            </span>
+                            {msg.timestamp && (
+                              <span className="text-xs opacity-80">
+                                {new Date(msg.timestamp).toLocaleTimeString()}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1 text-xs font-mono">
+                            {msg.message || JSON.stringify(msg, null, 2)}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  ) : (
+                    <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
+                  )}
                 </div>
-              ) : (
-                <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </div>
   );

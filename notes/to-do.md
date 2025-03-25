@@ -20,7 +20,7 @@
 ----- [ ] scrap attachements and message on convo change
 ----- [ ] investiage native upload and wait for upload thing to confirm
 ----- [x] upload button much smaller, spinner instead of progress, no color change
------ [ ] Message area expands upwards when message is too long
+----- [x] Message area expands upwards when message is too long
 
 - [ ] Preferences
 ----- [ ] shorten
