@@ -3,7 +3,7 @@ import { checkRole } from '@/utils/roles'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { UsersIcon, BookText, Database } from 'lucide-react'
+import { UsersIcon, BookText, Database, TicketIcon } from 'lucide-react'
 
 export default async function AdminDashboard() {
   if (!checkRole('admin')) {
@@ -51,6 +51,22 @@ export default async function AdminDashboard() {
                 </Link>
               </CardContent>
             </Card>
+            
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <TicketIcon className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-semibold">Support Tickets</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Manage customer support tickets
+                </p>
+                <Link href="/admin/tickets">
+                  <Button>View Tickets</Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
           {/*
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
