@@ -71,12 +71,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
   }, []);
   
-  // Focus textarea when conversation is selected
+  // Focus textarea when conversation is selected (only on desktop)
   useEffect(() => {
-    if (selectedConversation && textareaRef.current) {
+    if (selectedConversation && textareaRef.current && !isMobile) {
       textareaRef.current.focus();
     }
-  }, [selectedConversation]);
+  }, [selectedConversation, isMobile]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -94,15 +94,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     if (isMobile) {
       setIsExiting(true);
 
+      // Wait for the animation to complete before toggling the sidebar
       setTimeout(() => {
         if (onBack) {
           onBack();
         }
-
+        
+        // Reset the exiting state after the sidebar toggle is complete
         setTimeout(() => {
           setIsExiting(false);
-        }, 50);
-      }, 300);
+        }, 100);
+      }, 250); // Slightly shorter than the CSS transition duration
     } else if (onBack) {
       onBack();
     }
@@ -208,7 +210,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const messageContainerClassName = `flex flex-col pl-2 h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+  const messageContainerClassName = `flex flex-col pl-2 h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
     } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
@@ -216,10 +218,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className={messageContainerClassName}>
 
       {/* Header Section - Shows participant info when conversation is selected */}
-      {selectedConversation && (
+      {selectedConversation ? (
         <div className="bg-blueBrand/10 w-full mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
           {onBack && (
-            <button onClick={handleBackClick} className="absolute left-2 md:hidden">
+            <button 
+              onClick={handleBackClick} 
+              className="absolute left-2 md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
+            >
               <ArrowLeftIcon size={20} />
             </button>
           )}
@@ -236,7 +241,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             </div>
           </div>
         </div>
-      
+      ) : (
+        /* Empty header with just back button when no conversation is selected */
+        <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
+          {onBack && isMobile && (
+            <button 
+              onClick={handleBackClick} 
+              className="md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+          )}
+          <div className="w-full text-center font-medium">
+            Select a conversation
+          </div>
+        </div>
       )}
 
       {/* Messages Container */}
@@ -252,7 +271,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           {/* Messages Content */}
           <div ref={messageContainerRef} className="p-2 md:p-4 min-h-full">
             {selectedConversation ? (
-              messages.length > 0 ? (
+              messages && messages.length > 0 ? (
                 messages.map((message) => (
                   <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
                     {message.senderId !== currentUserId && (
@@ -316,13 +335,19 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   </div>
                 ))
               ) : (
-                <div className="flex items-center justify-center h-full text-gray-500">
-                  <p>No messages yet. Start the conversation!</p>
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
+                    <p className="text-gray-700 mb-3">No messages yet.</p>
+                    <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
+                  </div>
                 </div>
               )
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                <p>Select a conversation to start messaging</p>
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
+                  <p className="text-gray-700 mb-2">Welcome to Messages</p>
+                  <p className="text-gray-500 text-sm">Select a conversation from the list to get started</p>
+                </div>
               </div>
             )}
             <div ref={bottomRef} className="h-1" />

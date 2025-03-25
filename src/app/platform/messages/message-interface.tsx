@@ -81,9 +81,13 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     const fetchConversation = async () => {
       if (selectedConversationIndex !== null) {
         const conversation = allConversations[selectedConversationIndex];
-        const fullConversation = await getConversation(conversation.id);
-        if (fullConversation) {
-          setMessages(fullConversation.messages || []);
+        
+        // On desktop, or if we don't already have messages loaded through the selection handler
+        if (!isMobile || !messages.length) {
+          const fullConversation = await getConversation(conversation.id);
+          if (fullConversation) {
+            setMessages(fullConversation.messages || []);
+          }
         }
       } else {
         setMessages([]);
@@ -91,7 +95,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     };
 
     fetchConversation();
-  }, [selectedConversationIndex, allConversations, user]);
+  }, [selectedConversationIndex, allConversations, user, isMobile, messages.length]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -292,11 +296,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   useEffect(() => {
     if (!user || !isMobile) return;
 
-    // If initial load on mobile, hide sidebar
-    setSidebarVisible(false);
+    // On mobile, always show conversation list on initial load
+    setSidebarVisible(true);
   }, [isMobile, user]);
 
-  const handleSelectConversation = (index: number) => {
+  const handleSelectConversation = async (index: number) => {
     setSelectedConversationIndex(index);
 
     // Clear relevant unread message counter when selecting a conversation
@@ -330,9 +334,26 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       return updatedConversations;
     });
 
-    // On mobile, hide the sidebar when a conversation is selected
+    // On mobile, fetch the full conversation data before transitioning
     if (isMobile) {
-      setSidebarVisible(false);
+      try {
+        // Fetch the full conversation data if we don't already have messages
+        if (!allConversations[index].messages?.length) {
+          const fullConversation = await getConversation(conversation.id);
+          if (fullConversation) {
+            setMessages(fullConversation.messages || []);
+          }
+        } else {
+          setMessages(allConversations[index].messages || []);
+        }
+        
+        // After data is loaded, then hide the sidebar to show the message area
+        setSidebarVisible(false);
+      } catch (error) {
+        console.error('Error loading conversation:', error);
+        // Still transition even if there's an error
+        setSidebarVisible(false);
+      }
     }
   };
 
@@ -460,23 +481,26 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const toggleSidebar = () => {
     // Toggle sidebar state
     setSidebarVisible(prev => !prev);
+    
+    // For mobile, when showing the conversation list again, we might want to keep the selected conversation
+    // but still allow users to choose a different conversation
   };
 
-  // Add an effect to reset MessageArea when sidebar is toggled
+  // This effect manages the behavior when toggling back to the conversation list
   useEffect(() => {
     if (!user) return;
 
-    if (isMobile && selectedConversationIndex !== null && sidebarVisible) {
-      // If the sidebar is shown and we have a selected conversation,
-      // let's wait for the animation to complete before resetting
-      setTimeout(() => {
-        // Don't reset if the user has hidden sidebar again
-        if (sidebarVisible) {
-          setSelectedConversationIndex(null);
-        }
-      }, 300); // Match the animation duration
+    // When we toggle sidebar visibility, ensure we don't have a half-rendered state
+    if (isMobile) {
+      // Apply transition class to prevent UI getting stuck
+      document.body.style.overflow = sidebarVisible ? 'hidden' : 'auto';
     }
-  }, [sidebarVisible, isMobile, selectedConversationIndex, user]);
+    
+    return () => {
+      // Cleanup to prevent any lingering style issues
+      document.body.style.overflow = 'auto';
+    };
+  }, [sidebarVisible, isMobile, user]);
 
   // Add conditional return after all hooks are defined
   if (!user) return null;
@@ -494,11 +518,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   return (
     <div className="flex flex-col min-h-[calc(100vh-65px)] sm:min-h-[calc(100vh-65px)] md:min-h-[calc(100vh-80px)] bg-background">
 
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 overflow-hidden relative bg-background">
         {/* Conversation List / Sidebar */}
         <div
           className={`md:block w-full md:w-1/4 lg:w-1/3 h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] z-10 bg-background
-            ${isMobile ? ' pt-1 transform transition-transform duration-300 ease-in-out' : 'static'}
+            ${isMobile ? 'absolute inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
@@ -514,7 +538,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         {/* Chat Window */}
         <div
           className={`flex-1 bg-background
-            ${isMobile ? 'fixed inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
+            ${isMobile ? 'absolute inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
         >
           <MessageArea

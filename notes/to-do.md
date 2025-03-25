@@ -21,6 +21,12 @@
 ----- [ ] investiage native upload and wait for upload thing to confirm
 ----- [x] upload button much smaller, spinner instead of progress, no color change
 ----- [x] Message area expands upwards when message is too long
+----- [ ] change dialog title
+----- [ ] handle multiple attachements 
+----- [ ] handle long message in chat render and in convo card render
+----- [ ] unread notifier as circle iwth number
+----- [ ] Taller card with listing (fake data)
+----- [ ] rip airbnb convo card for height
 
 - [ ] Preferences
 ----- [ ] shorten
