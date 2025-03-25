@@ -49,7 +49,7 @@ const SignLeasePage = ({ params }: { params: { listingId: string } }) => {
   }
 
   if (error) {
-    return <div>Error: {error}, currHousingRequest: {currHousingRequest.id || 'FUCK'}</div>;
+    return <div>Error: {error}, currHousingRequest: {currHousingRequest.id || 'not found'}</div>;
   }
 
   return <div>BoldSign Lease Signing</div>;

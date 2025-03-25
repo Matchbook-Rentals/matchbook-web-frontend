@@ -240,7 +240,7 @@ export default function OverviewTab() {
 
       <Card>
         <Button onClick={handleSendPOST}> SEND POST </Button>
-        <p> {file?.name || 'FUCK'} </p>
+        <p> {file?.name || 'not found'} </p>
         <CardHeader>
           <CardTitle>Your Templates</CardTitle>
         </CardHeader>
