@@ -612,7 +612,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       <div className="flex flex-1 overflow-hidden relative bg-background">
         {/* Conversation List / Sidebar */}
         <div
-          className={`md:block w-full md:w-1/4 lg:w-1/3 h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] z-10 bg-background
+          className={`md:block  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] z-10 bg-background
             ${isMobile ? 'absolute inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
@@ -628,7 +628,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
         {/* Chat Window */}
         <div
-          className={`flex-1 bg-background
+          className={`flex-1 bg-background 
             ${isMobile ? 'absolute inset-0 transform transition-transform duration-300 ease-in-out' : 'static'}
             ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
         >
