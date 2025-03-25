@@ -186,7 +186,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const messageContainerClassName = `flex flex-col h-[calc(100vh-theme(spacing.16))] bg-background ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+  const messageContainerClassName = `flex flex-col pl-2 h-[calc(100vh-theme(spacing.16))] bg-background ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
     } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
@@ -194,8 +194,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className={messageContainerClassName}>
 
       {/* Header Section - Shows participant info when conversation is selected */}
-      {selectedConversation ? (
-        <div className="bg-blueBrand/10 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
+      {selectedConversation && (
+        <div className="bg-blueBrand/10 w-full mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
           {onBack && (
             <button onClick={handleBackClick} className="absolute left-2 md:hidden">
               <ArrowLeftIcon size={20} />
@@ -214,30 +214,18 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             </div>
           </div>
         </div>
-      ) : (
-
-        // Default header when no conversation is selected
-        <div className="bg-blueBrand/50 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto p-3 md:p-4 relative flex items-center shadow-md">
-          {onBack && (
-            <button onClick={handleBackClick} className="absolute left-2 md:hidden">
-              <ArrowLeftIcon size={20} />
-            </button>
-          )}
-          <div className="flex items-center justify-center w-full">
-            <span className="font-medium text-sm sm:text-base">Select a conversation</span>
-          </div>
-        </div>
+      
       )}
 
       {/* Messages Container */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-hidden ">
 
         {/* Gradient overlay at the top of messages */}
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
 
         <ScrollArea
           ref={scrollAreaRef}
-          className="h-full overflow-hidden pt-6" >
+          className="h-full overflow-hidden" >
 
           {/* Messages Content */}
           <div ref={messageContainerRef} className="p-2 md:p-4 min-h-full">

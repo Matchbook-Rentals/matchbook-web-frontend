@@ -13,11 +13,9 @@ export default function PlatformNavbar() {
 
   let marginClass;
 
-  const pathSegments = pathName.split('/');
-  //const isNarrowPath = pathSegments.includes('trips') || pathSegments.includes('searches') || pathSegments.includes('listing') || pathSegments.includes('admin');
-  const isNarrowPath = true;
+  const isWidePath = pathName === '/platform/messages';
 
-  isNarrowPath ? marginClass = PAGE_MARGIN : marginClass = APP_PAGE_MARGIN;
+  isWidePath ? marginClass = APP_PAGE_MARGIN : marginClass = PAGE_MARGIN;
 
   return (
     <motion.nav

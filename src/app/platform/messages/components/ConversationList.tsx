@@ -101,7 +101,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   });
 
   return (
-    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-2 p-1 flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
@@ -113,26 +113,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
         }
       `}</style>
 
-      {/* Search Bar */}
-      <div className="pt-3 md:pt-0 pb-4">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full p-3 rounded-lg bg-gray-100 shadow-md text-black focus:outline-none focus:ring-1 focus:ring-black"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
 
       {/* Role Filter and Unread Toggle */}
-      <div className="px-4 pb-2 text-black">
+      <div className=" pb-2 text-black">
         <div className="flex items-center space-x-4">
           <div className="relative">
             <select
@@ -163,8 +146,26 @@ const ConversationList: React.FC<ConversationListProps> = ({
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="pt-3 md:pt-0 pb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full p-3 rounded-lg bg-gray-100 shadow-md text-black focus:outline-none focus:ring-1 focus:ring-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
       {/* Conversation List */}
-      <div className="flex-1 overflow-y-auto px-4 py-2">
+      <div className="flex-1 overflow-y-auto py-2">
         {filteredConversations && filteredConversations.length > 0 ? (
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
