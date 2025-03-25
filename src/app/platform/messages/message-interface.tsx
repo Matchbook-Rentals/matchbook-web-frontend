@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { Conversation } from '@prisma/client';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
-import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations } from '@/app/actions/conversations';
+import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations, getRecentConversationsWithMessages } from '@/app/actions/conversations';
 
 // Define the expanded Conversation type that includes the messages and participants
 interface ConversationParticipant {
@@ -59,6 +59,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [tabs, setTabs] = useState('all');
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [lazyLoadedConversations, setLazyLoadedConversations] = useState<Record<string, boolean>>({});
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
   const url = `${baseUrl}/events?id=${user?.id}`
@@ -74,6 +75,51 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setShowTestingTools(false); // Hide testing tools if not admin
     }
   }, [user]);
+  
+  // Lazy load the top 15 recent conversations with full message history
+  useEffect(() => {
+    if (!user) return;
+    
+    const loadRecentConversations = async () => {
+      try {
+        console.log('Loading recent conversations with full message history...');
+        const recentConversations = await getRecentConversationsWithMessages(15);
+        
+        // Create a record of fully loaded conversations
+        const loadedConvos: Record<string, boolean> = {};
+        
+        // Update allConversations with the fully loaded conversations
+        setAllConversations(prevConversations => {
+          // Create a new conversations array with the same order
+          const updatedConversations = [...prevConversations];
+          
+          // For each of the recent fully loaded conversations
+          recentConversations.forEach(fullConversation => {
+            // Find its index in our current conversations array
+            const index = updatedConversations.findIndex(c => c.id === fullConversation.id);
+            
+            if (index !== -1) {
+              // Replace with the fully loaded version
+              updatedConversations[index] = fullConversation as any;
+            }
+            
+            // Mark this conversation as fully loaded
+            loadedConvos[fullConversation.id] = true;
+          });
+          
+          return updatedConversations;
+        });
+        
+        // Update our record of which conversations are fully loaded
+        setLazyLoadedConversations(loadedConvos);
+        console.log(`Lazy loaded ${recentConversations.length} conversations with full message history`);
+      } catch (error) {
+        console.error('Error lazy loading recent conversations:', error);
+      }
+    };
+    
+    loadRecentConversations();
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -82,10 +128,34 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       if (selectedConversationIndex !== null) {
         const conversation = allConversations[selectedConversationIndex];
         
-        // Always fetch the full conversation to ensure we have the latest messages
-        const fullConversation = await getConversation(conversation.id);
-        if (fullConversation) {
-          setMessages(fullConversation.messages || []);
+        // Check if this conversation has already been lazy loaded
+        if (lazyLoadedConversations[conversation.id]) {
+          console.log(`Using cached messages for conversation ${conversation.id}`);
+          // Use the already loaded messages
+          setMessages(conversation.messages || []);
+        } else {
+          // Fetch the full conversation if it hasn't been lazy loaded
+          console.log(`Fetching messages for conversation ${conversation.id}`);
+          const fullConversation = await getConversation(conversation.id);
+          if (fullConversation) {
+            setMessages(fullConversation.messages || []);
+            
+            // Update the lazyLoadedConversations record
+            setLazyLoadedConversations(prev => ({
+              ...prev,
+              [conversation.id]: true
+            }));
+            
+            // Also update the conversation in allConversations
+            setAllConversations(prevConversations => {
+              const updatedConversations = [...prevConversations];
+              updatedConversations[selectedConversationIndex] = {
+                ...updatedConversations[selectedConversationIndex],
+                messages: fullConversation.messages || []
+              };
+              return updatedConversations;
+            });
+          }
         }
       } else {
         setMessages([]);
@@ -93,7 +163,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     };
 
     fetchConversation();
-  }, [selectedConversationIndex, allConversations, user, isMobile, messages.length]);
+  }, [selectedConversationIndex, allConversations, user, isMobile, lazyLoadedConversations]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -332,13 +402,40 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       return updatedConversations;
     });
 
-    // On mobile, fetch the full conversation data before transitioning
+    // On mobile, use lazy loaded data if available or fetch if needed
     if (isMobile) {
       try {
-        // Always fetch the full conversation data to ensure we have the latest messages
-        const fullConversation = await getConversation(conversation.id);
-        if (fullConversation) {
-          setMessages(fullConversation.messages || []);
+        // Check if this conversation has already been lazy loaded
+        if (lazyLoadedConversations[conversation.id]) {
+          console.log(`Using cached messages for mobile conversation ${conversation.id}`);
+          // Use the already loaded messages
+          setMessages(conversation.messages || []);
+        } else {
+          console.log(`Fetching messages for mobile conversation ${conversation.id}`);
+          // Fetch the full conversation if it hasn't been lazy loaded
+          const fullConversation = await getConversation(conversation.id);
+          if (fullConversation) {
+            setMessages(fullConversation.messages || []);
+            
+            // Update the lazyLoadedConversations record
+            setLazyLoadedConversations(prev => ({
+              ...prev,
+              [conversation.id]: true
+            }));
+            
+            // Also update the conversation in allConversations
+            setAllConversations(prevConversations => {
+              const updatedConversations = [...prevConversations];
+              const convIndex = updatedConversations.findIndex(c => c.id === conversation.id);
+              if (convIndex !== -1) {
+                updatedConversations[convIndex] = {
+                  ...updatedConversations[convIndex],
+                  messages: fullConversation.messages || []
+                };
+              }
+              return updatedConversations;
+            });
+          }
         }
         
         // After data is loaded, then hide the sidebar to show the message area

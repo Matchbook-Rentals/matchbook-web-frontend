@@ -293,3 +293,42 @@ export async function getAllConversations() {
   });
   return conversations;
 }
+
+// Function to get the most recent conversations with full message history
+export async function getRecentConversationsWithMessages(limit: number = 15) {
+  const authUserId = await checkAuth();
+  const conversations = await prisma.conversation.findMany({
+    where: {
+      participants: {
+        some: {
+          userId: authUserId
+        }
+      }
+    },
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: 'asc', // Get all messages in chronological order
+        },
+      },
+      participants: {
+        include: {
+          User: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true,
+              email: true,
+            }
+          }
+        }
+      }
+    },
+    orderBy: {
+      updatedAt: 'desc', // Most recent conversations first
+    },
+    take: limit, // Limit to specified number of conversations
+  });
+  return conversations;
+}
