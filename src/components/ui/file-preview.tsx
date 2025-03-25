@@ -192,7 +192,7 @@ export function FilePreview({
       className={`relative overflow-hidden ${sizes[previewSize].card} ${className} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
-      {/* Remove button if showRemove is true */}
+      {/* X icon to delete attachment */}
       {showRemove && onRemove && (
         <Button
           variant="ghost"

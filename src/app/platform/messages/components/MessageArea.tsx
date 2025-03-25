@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, MicIcon, ArrowLeftIcon } from 'lucide-react';
+import { PaperclipIcon, ArrowLeftIcon, X } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
@@ -329,7 +329,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           {messageAttachments.map((attachment, index) => (
             <div key={index} className="inline-block rounded">
               {isImageFile(attachment.fileName || '') ? (
-                <div className="p-2 bg-white">
+                <div className="p-2 bg-white relative">
+                  <button 
+                    className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
+                    onClick={() => {
+                      setMessageAttachments(prev => prev.filter((_, i) => i !== index));
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
                   <Image
                     src={attachment.fileUrl}
                     alt="Message Attachment"
@@ -349,6 +357,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   }}
                   previewSize="small"
                   allowPreview={false}
+                  showRemove={true}
+                  onRemove={() => {
+                    setMessageAttachments(prev => prev.filter((_, i) => i !== index));
+                  }}
                   onClick={() => handleFileClick(attachment)}
                 />
               )}
@@ -377,22 +389,24 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 onUploadError={(error) => alert(error.message)}
                 className="p-0"
                 content={{
-                  button: <PaperclipIcon className="w-5 h-5 text-gray-600" />,
+                  button({ ready, isUploading }) {
+                    return (
+                      <div className="relative">
+                        {!isUploading && <PaperclipIcon className="w-5 h-5 text-gray-600" />}
+                        {isUploading && (
+                          <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                        )}
+                      </div>
+                    );
+                  },
                   allowedContent: 'Image upload'
                 }}
                 appearance={{
-                  button: 'bg-parent focus-within:ring-primaryBrand data-[state="uploading"]:after:bg-[#404040]',
+                  button: 'bg-parent focus-within:ring-black w-8 data-[state="uploading"]:after:hidden',
                   allowedContent: 'hidden'
                 }}
               />
             </div>
-
-            <button
-              className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
-              disabled={!selectedConversation}
-            >
-              <MicIcon className="w-5 h-5" />
-            </button>
 
             <button
               className="p-2 mx-1 text-gray-600 hover:text-gray-800 disabled:opacity-50"

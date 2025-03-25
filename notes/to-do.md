@@ -13,7 +13,7 @@
 ----- [x] add border to convo list
 ----- [ ] Convo card w-full (match convo list) and make taller to accomadate a larger image
 ----- [x] No banner until convo selected
------ [ ] Send attachments no caption
+----- [x] Send attachments no caption
 ----- [ ] Yeet microphone
 ----- [ ] handle error on bad upload (especially for image too large)
 ----- [ ] use sharper to reduce image size
