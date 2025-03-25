@@ -15,8 +15,8 @@ import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell, Circle } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
 
-const IMAGE_UPDATE_TIME_LIMIT = 300001 // five minutes
-const NOTIFICATION_REFRESH_INTERVAL = 300001 // five minutes
+const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
+const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const { user } = useUser();
@@ -48,25 +48,32 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }, [isSignedIn, userRole]);
 
-  useEffect(() => {
-    fetchNotifications();
-
-    //const intervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
-
-    //return () => clearInterval(intervalId);
-  }, [fetchNotifications]);
-
   const handleImageUpdate = useCallback(() => {
     const currentTime = Date.now();
     if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
-      if (updateUserImage) {
-        updateUserImage();
-      }
+      updateUserImage();
       setLastUpdateTime(currentTime);
       setCanUpdate(false);
-      setTimeout(() => setCanUpdate(true), 60001);
+      setTimeout(() => setCanUpdate(true), 60000); // One minute cooldown
     }
-  }, [canUpdate, lastUpdateTime, updateUserImage]);
+  }, [canUpdate, lastUpdateTime]);
+  
+  // Periodically update notifications and user image
+  useEffect(() => {
+    // Initial fetch
+    fetchNotifications();
+    handleImageUpdate();
+
+    // Set up periodic updates
+    const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
+    const imageUpdateIntervalId = setInterval(handleImageUpdate, IMAGE_UPDATE_TIME_LIMIT);
+
+    // Clean up on unmount
+    return () => {
+      clearInterval(notificationIntervalId);
+      clearInterval(imageUpdateIntervalId);
+    };
+  }, [fetchNotifications, handleImageUpdate]);
 
 
   const handleNotificationClick = async (notificationId: string) => {
