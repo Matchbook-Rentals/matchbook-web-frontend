@@ -54,6 +54,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -69,6 +70,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       window.removeEventListener('resize', checkIfMobile);
     };
   }, []);
+  
+  // Focus textarea when conversation is selected
+  useEffect(() => {
+    if (selectedConversation && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [selectedConversation]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -148,8 +156,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSend();
     }
   };
@@ -369,15 +378,26 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
 
         {/* Message Input Bar */}
-        <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
-          <input
-            type="text"
-            className="flex-1 px-4 py-3 focus:outline-none text-black"
+        <div 
+          className="flex items-center bg-white shadow-lg overflow-hidden transition-[border-radius] duration-200 ease-in-out" 
+          style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
+        >
+          <textarea
+            ref={textareaRef}
+            className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-auto leading-relaxed"
             placeholder="Type a message..."
             value={newMessageInput}
-            onChange={(e) => setNewMessageInput(e.target.value)}
+            onChange={(e) => {
+              setNewMessageInput(e.target.value);
+              // Auto-resize textarea up to 3x original height
+              e.target.style.height = "44px"; // Reset height
+              const scrollHeight = e.target.scrollHeight;
+              const newHeight = Math.min(scrollHeight, 132); // 3x the original 44px
+              e.target.style.height = `${newHeight}px`;
+            }}
             onKeyPress={handleKeyPress}
             disabled={!selectedConversation}
+            rows={1}
           />
 
           {/* Action Buttons Container */}

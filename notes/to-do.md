@@ -14,12 +14,12 @@
 ----- [ ] Convo card w-full (match convo list) and make taller to accomadate a larger image
 ----- [x] No banner until convo selected
 ----- [x] Send attachments no caption
------ [ ] Yeet microphone
+----- [x] Yeet microphone
 ----- [ ] handle error on bad upload (especially for image too large)
 ----- [ ] use sharper to reduce image size
 ----- [ ] scrap attachements and message on convo change
 ----- [ ] investiage native upload and wait for upload thing to confirm
------ [ ] upload button much smaller, spinner instead of progress, no color change
+----- [x] upload button much smaller, spinner instead of progress, no color change
 ----- [ ] Message area expands upwards when message is too long
 
 - [ ] Preferences
