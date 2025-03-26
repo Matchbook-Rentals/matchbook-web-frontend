@@ -56,10 +56,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const toggleUnreadOnly = () => {
     setShowUnreadOnly(!showUnreadOnly);
   };
-  
+
   // Helper function to check if a conversation has unread messages
   const hasUnreadMessages = (conv: ExtendedConversation) => {
-    return conv.messages?.some(message => 
+    return conv.messages?.some(message =>
       message.senderId !== user.id && !message.isRead
     ) || false;
   };
@@ -96,10 +96,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
     if (showUnreadOnly) {
       // Check for any unread messages in the conversation
       // A message is considered unread if it's from the other participant (not current user)
-      const hasUnreadMessages = conv.messages?.some(message => 
+      const hasUnreadMessages = conv.messages?.some(message =>
         message.senderId !== user.id && !message.isRead
       );
-      
+
       return matchesSearch && hasUnreadMessages;
     }
 
@@ -107,7 +107,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   });
 
   return (
-    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[400px] flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[450px] flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
@@ -160,13 +160,13 @@ const ConversationList: React.FC<ConversationListProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
-        <input
-          type="text"
-          placeholder="Search Messages"
-          className="w-full p-2 pl-10 rounded-[15px] bg-gray-100 border-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-black"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+          <input
+            type="text"
+            placeholder="Search Messages"
+            className="w-full p-2 pl-10 rounded-[15px] bg-gray-100 border-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
       </div>
 
@@ -182,7 +182,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             return (
               <div
                 key={conv.id}
-                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationIndex === index ? 'bg-[#E2CBCD20]' : ''} hover:bg-[#E2CBCD20] transition-shadow duration-200`}
+                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationIndex === index ? 'bg-[#AC8D9015]' : ''} hover:bg-[#AC8D9015] transition-shadow duration-200`}
                 onClick={() => onSelectConversation(index)}
               >
                 <div className="p-3 flex items-center h-full w-full">
@@ -199,9 +199,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   <div className="flex flex-col justify-between min-w-0 flex-1 h-full py-1">
                     <div className="flex justify-between items-start w-full">
                       <div className="flex flex-col min-w-0 flex-1 mr-2">
-                        <span className="text-sm text-black truncate">
-                          {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
-                        </span>
                         <span className="font-normal text-sm text-gray-600 truncate">
                           {displayName}
                         </span>
@@ -216,6 +213,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
                     </div>
                     <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
                       {lastMessage ? (lastMessage.content?.length > 50 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
+                    </span>
+                    <span className="text-xs text-gray-600 truncate">
+                      {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
                     </span>
                   </div>
                 </div>

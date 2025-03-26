@@ -1,5 +1,11 @@
 # TO DOs
 
+- [ ] APIS 
+----- [ ] batching for geocodes and autocmplete after half of per second rate limits PositionStack
+----- [ ] City use our own lookup 
+----- [ ] Move up higher by default so we don't cutoff the popover
+----- [ ] Map Box Search box api for autocomplete
+
 
 - [ ] Tickets 
 ----- [ ] rounded edit bar
@@ -42,6 +48,7 @@
 ----- [ ] add dynamic button to chat instead of property name host(no button, show application, show booking) retner (show listing, show listing, show booking)
 ----- [ ] Create review pop-up for host and listing, dospaly on host name click
 ----- [ ]  Move to websockets, digital ocean 
+----- [ ]  standalone images no bubble no avatar
 
 - [ ] Preferences
 ----- [ ] shorten
