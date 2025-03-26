@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -14,12 +15,28 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
+// WebSocket constants
+const (
+	writeWait      = 10 * time.Second    // Time allowed to write a message to the peer.
+	pongWait       = 60 * time.Second    // Time allowed to read the next pong message from the peer.
+	pingPeriod     = (pongWait * 9) / 10 // Send pings to peer with this period. Must be less than pongWait.
+	maxMessageSize = 512                 // Maximum message size allowed from peer.
+	sendChanBuffer = 256                 // Buffered channel size for outgoing messages.
+	"os/signal"
+	"runtime"
+	"runtime/debug"
+	"strings"
+	"sync"
+	"syscall"
+	"time"
 type Client struct {
-	ID      string
-	Writer  http.ResponseWriter
-	Flusher http.Flusher
+	ID   string
+	Conn *websocket.Conn
+	send chan []byte // Buffered channel of outbound messages.
 }
 
 type Message struct {
@@ -35,9 +52,20 @@ type Message struct {
 }
 
 var (
-	clients = make(map[string]*Client)
+	clients = make(map[string]*Client) // Map of client ID -> Client struct
 	mutex   = &sync.Mutex{}
 )
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		// Allow all connections for now.
+		// TODO: Implement proper origin checking for security.
+		// Example: Check r.Header.Get("Origin") against allowed origins
+		return true
+	},
+}
 
 // setupErrorHandling sets up a recovery middleware to catch panics
 func setupErrorHandling(handler http.HandlerFunc) http.HandlerFunc {
@@ -72,9 +100,10 @@ func main() {
 	// Configure log output with timestamps
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 	log.Printf("Server starting...")
-	
+
 	// Set up handlers with error recovery and logging
-	http.HandleFunc("/events", setupLogging(setupErrorHandling(handleSSE)))
+	// http.HandleFunc("/events", setupLogging(setupErrorHandling(handleSSE))) // Removed SSE handler
+	http.HandleFunc("/ws", setupLogging(setupErrorHandling(handleWebSocket))) // Added WebSocket handler
 	http.HandleFunc("/send-message", setupLogging(setupErrorHandling(handleSendMessage)))
 
 	// Start the client monitor
