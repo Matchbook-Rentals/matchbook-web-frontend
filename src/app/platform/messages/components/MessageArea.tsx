@@ -275,16 +275,19 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 messages.map((message) => (
                   <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
                     {message.senderId !== currentUserId && (
-                      <img
-                        src={participantInfo.imageUrl}
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full mr-2 self-center"
-                      />
+                      <div className="relative">
+                        <img
+                          src={participantInfo.imageUrl}
+                          alt="Profile"
+                          className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
+                        />
+                        <div className="w-8 mr-2" />
+                      </div>
                     )}
                     <div
-                      className={`max-w-[70%] p-3 rounded-lg shadow-md overflow-hidden ${message.senderId === currentUserId
-                          ? 'bg-white text-black'
-                          : 'bg-gray-200 text-black'
+                      className={`max-w-[70%] py-1.5 overflow-hidden ${message.senderId === currentUserId
+                          ? 'bg-white text-[#404040] pl-3 pr-2 rounded-t-lg rounded-bl-lg'
+                          : 'bg-[#DCD4D520] text-[#404040] pr-3 pl-2 rounded-t-lg rounded-br-lg'
                         }`}
                     >
                       {message.imgUrl && (
@@ -326,11 +329,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
                     </div>
                     {message.senderId === currentUserId && (
-                      <img
-                        src={currentUserImage || "/placeholder-avatar.png"}
-                        alt="Your profile"
-                        className="w-8 h-8 rounded-full ml-2 self-end"
-                      />
+                      <div className="relative">
+                        <img
+                          src={currentUserImage || "/placeholder-avatar.png"}
+                          alt="Your profile"
+                          className="w-8 h-8 rounded-full ml-2 absolute bottom-[-12px]"
+                        />
+                        <div className="w-8 ml-2" />
+                      </div>
                     )}
                   </div>
                 ))
@@ -403,7 +409,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
         {/* Message Input Bar */}
         <div 
-          className="flex items-center bg-white shadow-lg overflow-hidden transition-[border-radius] duration-200 ease-in-out" 
+          className="flex items-center bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out" 
           style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
         >
           <textarea

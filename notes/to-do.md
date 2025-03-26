@@ -5,6 +5,10 @@
 ----- [ ] rounded edit bar
 ----- [ ] Move up higher by default so we don't cutoff the popover
 
+- [ ] Notifications
+----- [ ] 
+----- [ ] 
+
 - [ ] Trips 
 ----- [ ] rounded edit bar
 ----- [ ] Move up higher by default so we don't cutoff the popover

@@ -532,6 +532,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             user={user as any}
             onTabChange={handleTabChange}
             activeTab={tabs}
+            selectedConversationIndex={selectedConversationIndex !== null ? selectedConversationIndex : undefined}
           />
         </div>
 
