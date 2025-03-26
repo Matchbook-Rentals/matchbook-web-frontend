@@ -70,7 +70,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       window.removeEventListener('resize', checkIfMobile);
     };
   }, []);
-  
+
   // Focus textarea when conversation is selected (only on desktop)
   useEffect(() => {
     if (selectedConversation && textareaRef.current && !isMobile) {
@@ -99,7 +99,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         if (onBack) {
           onBack();
         }
-        
+
         // Reset the exiting state after the sidebar toggle is complete
         setTimeout(() => {
           setIsExiting(false);
@@ -131,7 +131,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     console.log('=== HANDLE SEND ===');
     console.log('Message input:', newMessageInput);
     console.log('Message attachments:', messageAttachments);
-    
+
     if (newMessageInput.trim() || messageAttachments.length > 0) {
       if (messageAttachments.length > 0) {
         const attachment = messageAttachments[0];
@@ -218,58 +218,59 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className={messageContainerClassName}>
 
       {/* Header Section - Shows participant info when conversation is selected */}
-      {selectedConversation ? (
-        <div className="bg-blueBrand/10 w-full mx-auto p-2 md:p-4 relative flex md:flex-row md:justify-center items-center shadow-md">
-          {onBack && (
-            <button 
-              onClick={handleBackClick} 
-              className="absolute left-2 md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
-            >
-              <ArrowLeftIcon size={20} />
-            </button>
-          )}
+      <div className='h-[72px] border-b-2 flex items-center' >
 
-          <div className="flex items-center justify-center w-full md:justify-center">
-            <img
-              src={participantInfo.imageUrl}
-              alt={participantInfo.displayName}
-              className="aspect-square w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-2 sm:mr-4 md:mr-6 lg:mr-8"
-            />
-            <div className="flex flex-col">
-              <span className="overflow-hidden text-[#212121] max-w-[90%] truncate text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</span>
-              <span className="text-xs sm:text-sm text-gray-500 hidden sm:block">I forgot to put listings in the conversation table</span>
+        {selectedConversation ? (
+          <div className="w-full relative flex items-center pr-4">
+            {onBack && (
+              <button
+                onClick={handleBackClick}
+                className="absolute left-4 md:hidden flex items-center justify-center rounded-full bg-transparent"
+              >
+                <ArrowLeftIcon size={20} />
+              </button>
+            )}
+
+            <div className="flex items-center justify-center w-full md:justify-start md:pl-[calc(2.5vw+7px)]">
+              <img
+                src={participantInfo.imageUrl}
+                alt={participantInfo.displayName}
+                className="w-12 h-12 rounded-full mr-4"
+              />
+              <div className="flex justify-between w-full gap-4">
+                <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</p>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        /* Empty header with just back button when no conversation is selected */
-        <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
-          {onBack && isMobile && (
-            <button 
-              onClick={handleBackClick} 
-              className="md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
-            >
-              <ArrowLeftIcon size={20} />
-            </button>
-          )}
-          <div className="w-full text-center font-medium">
-            Select a conversation
+        ) : (
+          /* Empty header with just back button when no conversation is selected */
+          <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
+            {onBack && isMobile && (
+              <button
+                onClick={handleBackClick}
+                className="md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
+              >
+                <ArrowLeftIcon size={20} />
+              </button>
+            )}
+            <div className="w-full text-center font-medium">
+              Select a conversation
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
 
       {/* Messages Container */}
       <div className="flex-1 relative overflow-hidden ">
 
-        {/* Gradient overlay at the top of messages */}
-        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
 
         <ScrollArea
           ref={scrollAreaRef}
           className="h-full overflow-hidden" >
 
           {/* Messages Content */}
-          <div ref={messageContainerRef} className="p-2 md:p-4 min-h-full">
+          <div ref={messageContainerRef} className="p-2 md:pl-[calc(2.5vw+7px)] md:pr-[calc(2.5vw+7px)] min-h-full">
             {selectedConversation ? (
               messages && messages.length > 0 ? (
                 messages.map((message) => (
@@ -285,9 +286,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       </div>
                     )}
                     <div
-                      className={`max-w-[70%] py-1.5 overflow-hidden ${message.senderId === currentUserId
-                          ? 'bg-white text-[#404040] pl-3 pr-2 rounded-t-lg rounded-bl-lg'
-                          : 'bg-[#DCD4D520] text-[#404040] pr-3 pl-2 rounded-t-lg rounded-br-lg'
+                      className={`max-w-[70%] text-black  rounded-[15px] py-[6px] border border-gray-200 overflow-hidden ${message.senderId === currentUserId
+                        ? 'bg-[#3f3f3f] text-white pl-5 pr-5 font-medium rounded-br-none'
+                        : 'bg-[#AC8D9015] pr-5 pl-5 rounded-bl-none font-normal'
                         }`}
                     >
                       {message.imgUrl && (
@@ -326,7 +327,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           )}
                         </div>
                       )}
-                      {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
+                      {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
                     </div>
                     {message.senderId === currentUserId && (
                       <div className="relative">
@@ -369,8 +370,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             <div key={index} className="inline-block rounded">
               {isImageFile(attachment.fileName || '') ? (
                 <div className="p-2 bg-white relative">
-                  <button 
-                    className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
+                  <button
+                    className="absolute top-1 test right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
                     onClick={() => {
                       setMessageAttachments(prev => prev.filter((_, i) => i !== index));
                     }}
@@ -408,13 +409,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
 
         {/* Message Input Bar */}
-        <div 
-          className="flex items-center bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out" 
+        <div
+          className="flex items-center bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out"
           style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
         >
           <textarea
             ref={textareaRef}
-            className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-auto leading-relaxed"
+            className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-auto leading-relaxed font-jakarta"
             placeholder="Type a message..."
             value={newMessageInput}
             onChange={(e) => {

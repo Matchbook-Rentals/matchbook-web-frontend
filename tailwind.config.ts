@@ -148,6 +148,7 @@ const config = {
       fontFamily: {
         montserrat: ['Poppins', 'sans-serif'],
         sans: ['Poppins', 'sans-serif'],
+        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
       },
       fontWeight: {
         light: '300',

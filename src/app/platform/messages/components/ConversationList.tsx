@@ -107,7 +107,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   });
 
   return (
-    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[400px] flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[400px] flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
@@ -185,28 +185,28 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationIndex === index ? 'bg-[#E2CBCD20]' : ''} hover:bg-[#E2CBCD20] transition-shadow duration-200`}
                 onClick={() => onSelectConversation(index)}
               >
-                <div className="p-3 flex items-center h-full">
-                  <div className="relative">
+                <div className="p-3 flex items-center h-full w-full">
+                  <div className="relative flex-shrink-0">
                     <img
                       src={imageUrl || "/placeholder-avatar.png"}
-                      className="w-11 h-11 rounded-full mr-3 flex-shrink-0"
+                      className="w-11 h-11 rounded-full mr-3"
                       alt={displayName}
                     />
                     {hasUnreadMessages(conv) && (
                       <div className="absolute top-0 right-2 w-3 h-3 bg-blue-500 rounded-full"></div>
                     )}
                   </div>
-                  <div className="flex flex-col justify-between flex-grow min-w-0 h-full py-1">
+                  <div className="flex flex-col justify-between min-w-0 flex-1 h-full py-1">
                     <div className="flex justify-between items-start w-full">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col min-w-0 flex-1 mr-2">
                         <span className="text-sm text-black truncate">
                           {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
                         </span>
-                        <span className={`font-normal text-sm text-gray-600 truncate`}>
+                        <span className="font-normal text-sm text-gray-600 truncate">
                           {displayName}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                      <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">
                         {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
                           hour: 'numeric',
                           minute: 'numeric',
@@ -214,7 +214,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         }) : ''}
                       </span>
                     </div>
-                    <span className={`text-sm font-normal text-gray-600 truncate`}>
+                    <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
                       {lastMessage ? (lastMessage.content?.length > 50 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
                     </span>
                   </div>

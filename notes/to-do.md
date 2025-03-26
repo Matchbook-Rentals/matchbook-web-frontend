@@ -13,6 +13,10 @@
 ----- [ ] rounded edit bar
 ----- [ ] Move up higher by default so we don't cutoff the popover
 
+- [ ] Reviews - popup 
+----- [ ] 
+----- [ ] 
+
 - [ ] Messages 
 ----- [x] Search input foucs ring cutoff
 ----- [x] Make blue area like a header for messages, meaning same width as
@@ -33,7 +37,11 @@
 ----- [ ] handle long message in chat render and in convo card render
 ----- [ ] unread notifier as circle iwth number
 ----- [ ] Taller card with listing (fake data)
------ [ ] rip airbnb convo card for height
+----- [ ] One avatar and special corner for multiple messages in a row
+----- [ ] add housingRequest.id and booking.id as optional fields to our converstaion schema 
+----- [ ] add dynamic button to chat instead of property name host(no button, show application, show booking) retner (show listing, show listing, show booking)
+----- [ ] Create review pop-up for host and listing, dospaly on host name click
+----- [ ]  Move to websockets, digital ocean 
 
 - [ ] Preferences
 ----- [ ] shorten
