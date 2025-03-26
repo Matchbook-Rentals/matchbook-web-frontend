@@ -282,7 +282,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       />
                     )}
                     <div
-                      className={`max-w-[70%] p-3 rounded-lg shadow-md ${message.senderId === currentUserId
+                      className={`max-w-[70%] p-3 rounded-lg shadow-md overflow-hidden ${message.senderId === currentUserId
                           ? 'bg-white text-black'
                           : 'bg-gray-200 text-black'
                         }`}
@@ -323,7 +323,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           )}
                         </div>
                       )}
-                      {message.content && <div className="break-words whitespace-pre-wrap max-w-full">{message.content}</div>}
+                      {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
                     </div>
                     {message.senderId === currentUserId && (
                       <img
@@ -414,10 +414,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             onChange={(e) => {
               setNewMessageInput(e.target.value);
               // Auto-resize textarea up to 3x original height
-              e.target.style.height = "44px"; // Reset height
-              const scrollHeight = e.target.scrollHeight;
-              const newHeight = Math.min(scrollHeight, 132); // 3x the original 44px
-              e.target.style.height = `${newHeight}px`;
+              const textarea = e.target;
+              textarea.style.height = "44px"; // Reset to default height
+              const scrollHeight = textarea.scrollHeight;
+              if (scrollHeight > 44) {
+                const newHeight = Math.min(scrollHeight, 132); // Max 3x the original height
+                textarea.style.height = `${newHeight}px`;
+              }
             }}
             onKeyPress={handleKeyPress}
             disabled={!selectedConversation}

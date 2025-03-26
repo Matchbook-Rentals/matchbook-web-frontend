@@ -1,6 +1,9 @@
 # TO DOs
 
 
+- [ ] Tickets 
+----- [ ] rounded edit bar
+----- [ ] Move up higher by default so we don't cutoff the popover
 
 - [ ] Trips 
 ----- [ ] rounded edit bar

@@ -25,6 +25,10 @@ interface ConversationParticipant {
 interface ExtendedConversation extends Conversation {
   messages: any[];
   participants: ConversationParticipant[];
+  listing?: {
+    id: string;
+    title: string;
+  };
 }
 
 interface ConversationListProps {
@@ -178,8 +182,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 key={conv.id}
                 className={`w-full mb-3 ${hasUnreadMessages(conv) ? 'bg-gray-100' : 'bg-white'} rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-200`}
                 onClick={() => onSelectConversation(index)}
+                style={{ height: '105px' }}
               >
-                <div className="p-3 flex items-start">
+                <div className="p-3 flex items-start h-full">
                   <div className="relative">
                     <img
                       src={imageUrl || "/placeholder-avatar.png"}
@@ -192,9 +197,14 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   </div>
                   <div className="flex flex-col flex-grow min-w-0">
                     <div className="flex justify-between items-start w-full">
-                      <span className={`font-semibold text-sm ${hasUnreadMessages(conv) ? 'text-black' : 'text-gray-800'} truncate`}>
-                        {displayName}
-                      </span>
+                      <div className="flex flex-col">
+                        <span className="text-xs text-gray-600 truncate">
+                          {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
+                        </span>
+                        <span className={`font-normal text-sm ${hasUnreadMessages(conv) ? 'text-black' : 'text-gray-800'} truncate`}>
+                          {displayName}
+                        </span>
+                      </div>
                       <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
                         {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
                           hour: 'numeric',
@@ -203,8 +213,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         }) : ''}
                       </span>
                     </div>
-                    <span className={`text-sm ${hasUnreadMessages(conv) ? 'font-medium text-black' : 'text-gray-600'} truncate`}>
-                      {lastMessage ? (lastMessage.content?.length > 20 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
+                    <span className={`text-sm ${hasUnreadMessages(conv) ? 'font-normal text-black' : 'text-gray-600'} truncate mt-0`}>
+                      {lastMessage ? (lastMessage.content?.length > 50 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
                     </span>
                   </div>
                 </div>
