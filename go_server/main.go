@@ -734,12 +734,17 @@ func deliverMessageToClients(reqID string, msg Message) bool {
 
 // Send message to main server for persistence
 func sendMessageToMainServer(reqID string, msg Message) bool {
+	log.Printf("[%s] DEBUG: Starting persistence request to main server", reqID)
+	log.Printf("[%s] DEBUG: Target URL: %s", reqID, mainServerAPIURL)
+
 	// Convert the message to JSON
 	msgJSON, err := json.Marshal(msg)
 	if err != nil {
 		log.Printf("[%s] Error marshaling message for persistence: %v", reqID, err)
 		return false
 	}
+
+	log.Printf("[%s] DEBUG: Message payload: %s", reqID, string(msgJSON))
 
 	// Implement retry logic with exponential backoff
 	maxRetries := 3
@@ -772,6 +777,10 @@ func sendMessageToMainServer(reqID string, msg Message) bool {
 		client := &http.Client{
 			Timeout: 20 * time.Second,
 		}
+		
+		log.Printf("[%s] DEBUG: Sending HTTP request to main server (attempt %d/%d)", 
+			reqID, attempt+1, maxRetries)
+		
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Printf("[%s] Error sending message to main server (attempt %d/%d): %v", 
@@ -787,6 +796,9 @@ func sendMessageToMainServer(reqID string, msg Message) bool {
 			log.Printf("[%s] Error reading response from main server: %v", reqID, err)
 			continue // Try again
 		}
+
+		log.Printf("[%s] DEBUG: Received response from main server - Status: %d, Body: %s", 
+			reqID, resp.StatusCode, string(body))
 
 		// Check status code
 		if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
