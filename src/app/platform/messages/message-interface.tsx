@@ -114,12 +114,16 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     fetchConversation();
   }, [selectedConversationIndex, allConversations, user]);
 
-  // WebSocket connection setup
+  // WebSocket connection setup with more robust reconnection logic
   useEffect(() => {
     if (!user?.id) return;
 
-    const MAX_RECONNECT_ATTEMPTS = 5;
-    const BASE_RECONNECT_DELAY = 3000; // 3 seconds
+    const MAX_RECONNECT_ATTEMPTS = 10; // Increased from 5 to 10
+    const BASE_RECONNECT_DELAY = 2000; // 2 seconds (reduced from 3)
+    const PING_INTERVAL = 20000; // 20 seconds
+    
+    // Create ping interval to keep connection alive
+    const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
     
     const connectWebSocket = () => {
       if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {
@@ -143,38 +147,101 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         return;
       }
 
-      // Close existing connection if any
+      // Clean up any existing connection
       if (wsRef.current) {
-        wsRef.current.close();
+        try {
+          wsRef.current.close();
+        } catch (error) {
+          console.warn('Error closing existing WebSocket:', error);
+        }
+      }
+      
+      // Clean up any existing ping interval
+      if (pingIntervalRef.current) {
+        clearInterval(pingIntervalRef.current);
+        pingIntervalRef.current = null;
       }
 
-      console.log(`Connecting to WebSocket: ${wsUrl}`);
+      // Log connection attempt
+      console.log(`Connecting to WebSocket: ${wsUrl} (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`);
       setWsMessages(prev => [...prev, { 
         type: 'info', 
-        message: `Initiating new WebSocket connection to: ${wsUrl}`, 
+        message: `Initiating new WebSocket connection to: ${wsUrl} (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`, 
         timestamp: new Date().toISOString() 
       }]);
       
       try {
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
+        
+        // Set connection timeout - close and retry if it takes too long to connect
+        const connectionTimeout = setTimeout(() => {
+          if (ws.readyState !== WebSocket.OPEN) {
+            console.warn('WebSocket connection timeout');
+            setWsMessages(prev => [...prev, {
+              type: 'warning',
+              message: 'WebSocket connection attempt timed out',
+              timestamp: new Date().toISOString()
+            }]);
+            
+            try {
+              ws.close();
+            } catch (error) {
+              console.warn('Error closing timed out WebSocket:', error);
+            }
+            
+            // Increase connection attempts and try again
+            setConnectionAttempts(prev => prev + 1);
+            
+            if (reconnectTimeoutRef.current) {
+              clearTimeout(reconnectTimeoutRef.current);
+            }
+            
+            const reconnectDelay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
+            reconnectTimeoutRef.current = setTimeout(() => {
+              connectWebSocket();
+            }, reconnectDelay);
+          }
+        }, 10000); // 10 second connection timeout
 
         ws.onopen = () => {
           console.log('WebSocket connection opened');
+          clearTimeout(connectionTimeout); // Clear the connection timeout
           setWsConnected(true);
           setConnectionAttempts(0);
+          
           setWsMessages(prev => [...prev, { 
             type: 'success', 
             message: 'WebSocket connection opened successfully', 
             timestamp: new Date().toISOString() 
           }]);
+          
+          // Set up a ping interval to keep the connection alive
+          pingIntervalRef.current = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              // Send a small ping message
+              try {
+                ws.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+              } catch (error) {
+                console.warn('Error sending ping:', error);
+              }
+            }
+          }, PING_INTERVAL);
         };
 
         ws.onmessage = (event) => {
-          console.log('WebSocket message received:', event.data);
+          // Only log non-ping messages to avoid console spam
+          if (!event.data.includes('"type":"ping"')) {
+            console.log('WebSocket message received:', event.data);
+          }
           
           try {
             const message = JSON.parse(event.data);
+            
+            // Handle ping responses - don't process further
+            if (message.type === 'ping') {
+              return;
+            }
             
             // Handle connection status messages
             if (message.type === 'connection') {
@@ -186,11 +253,30 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
               return;
             }
             
+            // Handle persistence error messages
+            if (message.type === 'persistence_error') {
+              console.error('Message persistence error:', message);
+              setWsMessages(prev => [...prev, { 
+                type: 'error', 
+                message: `Persistence error for message: ${message.originalMessageId}`, 
+                timestamp: new Date().toISOString() 
+              }]);
+              
+              // Show an error toast or notification to the user
+              alert('Message delivered but could not be saved. Please try again.');
+              return;
+            }
+            
             // Mark incoming messages as unread by default if they're not from the current user
             if (message.senderId !== user?.id) {
               message.isRead = false;
             } else {
               message.isRead = true; // Messages sent by current user are automatically read
+            }
+            
+            // Add a unique client-side ID if not present to help with deduplication
+            if (!message.clientId) {
+              message.clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
             }
             
             setWsMessages((prevMessages) => [...prevMessages, message]);
@@ -249,29 +335,44 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
               fetchNewConversations();
             } else {
-              // Update existing conversation with the new message
+              // Check for duplicate messages to avoid adding the same message twice
+              // This can happen if a message is delivered via WebSocket and then also appears in the conversation fetch
               setAllConversations((prevConversations) => {
                 const updatedConversations = [...prevConversations];
                 const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+                
                 if (index !== -1) {
                   // Create a new array if messages property doesn't exist yet
                   const currentMessages = updatedConversations[index].messages || [];
                   
-                  // Check if this conversation is currently selected/open
-                  const isConversationOpen = selectedConversationIndex !== null && 
-                    updatedConversations[selectedConversationIndex]?.id === message.conversationId;
+                  // Check if this message already exists in the conversation
+                  // Using ID for server-generated messages or clientId for client-generated ones
+                  const messageAlreadyExists = currentMessages.some(existingMsg => 
+                    (message.id && existingMsg.id === message.id) || 
+                    (message.clientId && existingMsg.clientId === message.clientId)
+                  );
                   
-                  // If the conversation is open and the message is from another user, mark it as read
-                  if (isConversationOpen && message.senderId !== user?.id) {
-                    message.isRead = true;
+                  if (!messageAlreadyExists) {
+                    // Check if this conversation is currently selected/open
+                    const isConversationOpen = selectedConversationIndex !== null && 
+                      updatedConversations[selectedConversationIndex]?.id === message.conversationId;
+                    
+                    // If the conversation is open and the message is from another user, mark it as read
+                    if (isConversationOpen && message.senderId !== user?.id) {
+                      message.isRead = true;
+                    }
+                    
+                    updatedConversations[index] = {
+                      ...updatedConversations[index],
+                      messages: [...currentMessages, message]
+                    };
+                    
+                    return updatedConversations;
                   }
-                  
-                  updatedConversations[index] = {
-                    ...updatedConversations[index],
-                    messages: [...currentMessages, message]
-                  };
                 }
-                return updatedConversations;
+                
+                // No changes needed - either conversation not found or message already exists
+                return prevConversations;
               });
             }
           } catch (error) {
@@ -281,22 +382,47 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
         ws.onerror = (error) => {
           console.error('WebSocket error:', error);
+          clearTimeout(connectionTimeout); // Clear the connection timeout
           setWsConnected(false);
+          
           setWsMessages(prev => [...prev, {
             type: 'error',
             message: 'WebSocket connection error encountered',
             timestamp: new Date().toISOString()
           }]);
+          
+          // Clean up ping interval if it exists
+          if (pingIntervalRef.current) {
+            clearInterval(pingIntervalRef.current);
+            pingIntervalRef.current = null;
+          }
         };
 
         ws.onclose = (event) => {
           console.log(`WebSocket closed with code ${event.code}:`, event.reason);
+          clearTimeout(connectionTimeout); // Clear the connection timeout
           setWsConnected(false);
+          
+          // Clean up ping interval if it exists
+          if (pingIntervalRef.current) {
+            clearInterval(pingIntervalRef.current);
+            pingIntervalRef.current = null;
+          }
+          
           setWsMessages(prev => [...prev, {
             type: 'info',
-            message: `WebSocket connection closed: ${event.reason || 'No reason provided'}`,
+            message: `WebSocket connection closed: ${event.reason || 'No reason provided'} (code: ${event.code})`,
             timestamp: new Date().toISOString()
           }]);
+
+          // Determine if this was a clean close or not
+          const wasCleanClose = event.wasClean || event.code === 1000;
+          
+          // For clean closes, don't immediately reconnect unless requested
+          if (wasCleanClose && connectionAttempts === 0) {
+            console.log('Clean WebSocket close, not immediately reconnecting');
+            return;
+          }
 
           // Attempt to reconnect with exponential backoff
           const reconnectDelay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
@@ -324,18 +450,43 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           message: `Failed to create WebSocket: ${error}`,
           timestamp: new Date().toISOString()
         }]);
+        
+        // Retry after delay
+        const reconnectDelay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
+        setConnectionAttempts(prev => prev + 1);
+        
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current);
+        }
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          connectWebSocket();
+        }, reconnectDelay);
       }
     };
 
     connectWebSocket();
 
     return () => {
-      console.log('Closing WebSocket connection');
+      console.log('Cleaning up WebSocket connection');
+      // Clean up all intervals and timeouts
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
       }
+      
+      if (pingIntervalRef.current) {
+        clearInterval(pingIntervalRef.current);
+        pingIntervalRef.current = null;
+      }
+      
+      // Close the WebSocket connection
       if (wsRef.current) {
-        wsRef.current.close();
+        try {
+          wsRef.current.close();
+        } catch (error) {
+          console.warn('Error closing WebSocket in cleanup:', error);
+        }
         wsRef.current = null;
       }
     };
@@ -464,12 +615,16 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
     console.log('Recipient found:', otherParticipant.User.id);
 
-    const messageData: MessageData = {
+    // Generate a client-side ID for this message to help with tracking and deduplication
+    const clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+    
+    const messageData: MessageData & { clientId?: string } = {
       content: newMessageInput, // This can be empty string now
       senderRole: userType,
       conversationId: selectedConversation.id,
       receiverId: otherParticipant.User.id,
-      senderId: user?.id
+      senderId: user?.id,
+      clientId: clientId // Add unique client ID to help with tracking
     };
 
     // Add file information if available
@@ -483,44 +638,131 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
     console.log('Message data to send:', messageData);
     
-    // Check if we have a valid WebSocket connection
-    if (wsRef.current && wsConnected) {
-      try {
-        // Send message directly through WebSocket for instant delivery
-        wsRef.current.send(JSON.stringify(messageData));
-        
-        // Optimistically add message to UI
-        // Note: We'll get this message back from the WebSocket too, but this provides immediate feedback
-        const optimisticMessage = {
-          ...messageData,
-          id: `temp-${Date.now()}`,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          isRead: true // Messages sent by current user are automatically read
+    // Create optimistic message object for immediate UI feedback
+    const optimisticMessage = {
+      ...messageData,
+      id: `temp-${clientId}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isRead: true, // Messages sent by current user are automatically read
+      pending: true // Mark as pending until confirmed
+    };
+    
+    // Optimistically add to UI
+    setMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    
+    // Add to conversation
+    setAllConversations(prevConversations => {
+      const updatedConversations = [...prevConversations];
+      const index = updatedConversations.findIndex(conv => conv.id === selectedConversation.id);
+      
+      if (index !== -1) {
+        const currentMessages = updatedConversations[index].messages || [];
+        updatedConversations[index] = {
+          ...updatedConversations[index],
+          messages: [...currentMessages, optimisticMessage]
         };
-        setMessages([...messages, optimisticMessage]);
-        console.log('Message sent via WebSocket');
-        
-      } catch (error) {
-        console.error('Error sending message via WebSocket, falling back to REST API:', error);
-        // Fall back to REST API if WebSocket fails
-        fallbackToRESTAPI();
       }
-    } else {
-      console.warn('WebSocket not connected, using REST API instead');
-      // Fall back to REST API if WebSocket isn't connected
-      fallbackToRESTAPI();
+      
+      return updatedConversations;
+    });
+    
+    let messageSent = false;
+    let sendAttempts = 0;
+    const maxSendAttempts = 3;
+    
+    // Try WebSocket first with retry logic
+    if (wsRef.current && wsConnected) {
+      while (!messageSent && sendAttempts < maxSendAttempts) {
+        try {
+          sendAttempts++;
+          // Send message directly through WebSocket for instant delivery
+          wsRef.current.send(JSON.stringify(messageData));
+          console.log(`Message sent via WebSocket (attempt ${sendAttempts})`);
+          messageSent = true;
+          break;
+        } catch (error) {
+          console.error(`Error sending message via WebSocket (attempt ${sendAttempts}/${maxSendAttempts}):`, error);
+          
+          if (sendAttempts < maxSendAttempts) {
+            // Short delay before retry
+            await new Promise(resolve => setTimeout(resolve, 500 * sendAttempts));
+          }
+        }
+      }
     }
     
-    // Fallback function to use REST API if WebSocket fails
-    async function fallbackToRESTAPI() {
+    // If WebSocket fails or is not connected, use REST API as fallback
+    if (!messageSent) {
+      console.warn('WebSocket messaging failed or not available, using REST API instead');
       try {
         const newMessage = await createMessage(messageData);
         console.log('Message created successfully via REST API:', newMessage);
-        setMessages([...messages, newMessage]);
+        
+        // Update the optimistic message with the server-generated ID and remove pending status
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            (msg.clientId === clientId) ? { ...newMessage, isRead: true } : msg
+          )
+        );
+        
+        // Update in conversation too
+        setAllConversations(prevConversations => {
+          const updatedConversations = [...prevConversations];
+          const index = updatedConversations.findIndex(conv => conv.id === selectedConversation.id);
+          
+          if (index !== -1) {
+            updatedConversations[index] = {
+              ...updatedConversations[index],
+              messages: updatedConversations[index].messages?.map(msg => 
+                (msg.clientId === clientId) ? { ...newMessage, isRead: true } : msg
+              ) || []
+            };
+          }
+          
+          return updatedConversations;
+        });
+        
+        messageSent = true;
       } catch (error) {
         console.error('Error creating message via REST API:', error);
+        
+        // Mark the message as failed
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            (msg.clientId === clientId) 
+              ? { ...msg, pending: false, failed: true, error: 'Failed to send message' } 
+              : msg
+          )
+        );
+        
+        // Update in conversation too
+        setAllConversations(prevConversations => {
+          const updatedConversations = [...prevConversations];
+          const index = updatedConversations.findIndex(conv => conv.id === selectedConversation.id);
+          
+          if (index !== -1) {
+            updatedConversations[index] = {
+              ...updatedConversations[index],
+              messages: updatedConversations[index].messages?.map(msg => 
+                (msg.clientId === clientId) 
+                  ? { ...msg, pending: false, failed: true, error: 'Failed to send message' } 
+                  : msg
+              ) || []
+            };
+          }
+          
+          return updatedConversations;
+        });
+        
+        // Show error to user
+        alert('Failed to send message. Please try again.');
       }
+    }
+    
+    // If we're here and messageSent is still false, both WebSocket and REST API failed
+    if (!messageSent) {
+      console.error('All message sending methods failed');
     }
   };
 
