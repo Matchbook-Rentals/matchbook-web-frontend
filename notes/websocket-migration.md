@@ -11,8 +11,19 @@ The application previously used Server-Sent Events (SSE) for one-way real-time m
 3. **Reduced overhead**: WebSockets have less header overhead after the initial handshake.
 4. **Better browser support**: WebSockets are widely supported in all modern browsers.
 5. **Better handling of reconnections**: Our new implementation includes robust reconnection logic.
+6. **Improved perceived latency**: Messages appear instantly since they go through WebSockets first.
 
 ## Implementation Details
+
+### Architecture
+
+We've implemented a "WebSocket-first" architecture with the following flow:
+
+1. **Client → WebSocket server**: Messages are sent directly from the client to the WebSocket server
+2. **WebSocket server → Recipients**: Messages are immediately delivered to all connected recipients  
+3. **WebSocket server → Main server**: Messages are persisted asynchronously in the database
+
+This approach offers the best user experience as messages appear instantly regardless of database latency.
 
 ### Server-Side (Go)
 
@@ -24,8 +35,9 @@ The Go server has been updated to use the Gorilla WebSocket library:
    - Clients are identified by the `id` query parameter.
 
 2. **Message Delivery**:
-   - Messages are delivered through the WebSocket connection instead of SSE.
-   - The `/send-message` endpoint remains unchanged for backward compatibility.
+   - Incoming messages are immediately delivered to connected recipients
+   - Messages are asynchronously forwarded to the main API server for persistence
+   - The `/send-message` HTTP endpoint remains for backward compatibility
 
 3. **Connection Management**:
    - Each client connection now has read and write goroutines (readPump and writePump).
@@ -42,29 +54,54 @@ The React client now uses the native WebSocket API:
    - Connection status is tracked and displayed to users.
 
 2. **Message Handling**:
+   - Outgoing messages are sent directly through the WebSocket connection
+   - Optimistic UI updates before server confirmation
+   - Fallback to REST API if WebSocket connection fails
    - Messages are received through the WebSocket's `onmessage` handler.
-   - The message processing logic remains largely the same.
 
 3. **UI Improvements**:
    - Added connection status indicator.
    - Enhanced testing tools for WebSocket diagnostics.
 
+### Main API Server (Next.js)
+
+The Next.js server has a new API endpoint:
+
+1. `/api/messages/save`: 
+   - Receives messages from the WebSocket server
+   - Persists them in the database
+   - Updates conversation metadata
+
 ## API Changes
 
 1. The endpoint for real-time connections changed from `/events?id={userId}` to `/ws?id={userId}`.
 2. The API for sending messages (`/send-message`) remains unchanged for compatibility.
+3. New API endpoint for message persistence: `/api/messages/save`
 
 ## Backwards Compatibility
 
 For backward compatibility, the old SSE endpoint at `/api/sse/route.ts` returns a JSON response with information about the new WebSocket endpoint. This allows older clients to be informed of the migration without breaking completely.
+
+The REST API message sending endpoint is still supported and serves as a fallback if WebSocket connections aren't available.
+
+## Handling Edge Cases
+
+Several edge cases are handled in this implementation:
+
+1. **WebSocket connection fails**: Client falls back to REST API
+2. **Database persistence fails**: WebSocket server notifies client but message is still delivered
+3. **Client on multiple devices**: Messages are delivered to all instances of a user
+4. **Reconnection after disconnect**: Exponential backoff with maximum retry count
+5. **Server restart**: Clean reconnection process with connection status monitoring
 
 ## Deployment Considerations
 
 When deploying this change:
 
 1. Deploy the Go server changes first.
-2. Then deploy the client-side changes.
-3. Monitor connection rates and errors during the transition.
+2. Deploy the API endpoint for message persistence.
+3. Then deploy the client-side changes.
+4. Monitor connection rates and errors during the transition.
 
 ## Testing
 
@@ -92,3 +129,4 @@ Potential future enhancements:
 3. Add typing indicators
 4. Support for binary message formats (for more efficient file transfers)
 5. WebSocket multiplexing for different message types
+6. Add a message queue for better handling of database persistence failures

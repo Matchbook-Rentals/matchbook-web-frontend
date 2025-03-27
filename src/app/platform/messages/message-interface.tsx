@@ -468,7 +468,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       content: newMessageInput, // This can be empty string now
       senderRole: userType,
       conversationId: selectedConversation.id,
-      receiverId: otherParticipant.User.id
+      receiverId: otherParticipant.User.id,
+      senderId: user?.id
     };
 
     // Add file information if available
@@ -481,12 +482,45 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
 
     console.log('Message data to send:', messageData);
-    try {
-      const newMessage = await createMessage(messageData);
-      console.log('Message created successfully:', newMessage);
-      setMessages([...messages, newMessage]);
-    } catch (error) {
-      console.error('Error creating message:', error);
+    
+    // Check if we have a valid WebSocket connection
+    if (wsRef.current && wsConnected) {
+      try {
+        // Send message directly through WebSocket for instant delivery
+        wsRef.current.send(JSON.stringify(messageData));
+        
+        // Optimistically add message to UI
+        // Note: We'll get this message back from the WebSocket too, but this provides immediate feedback
+        const optimisticMessage = {
+          ...messageData,
+          id: `temp-${Date.now()}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          isRead: true // Messages sent by current user are automatically read
+        };
+        setMessages([...messages, optimisticMessage]);
+        console.log('Message sent via WebSocket');
+        
+      } catch (error) {
+        console.error('Error sending message via WebSocket, falling back to REST API:', error);
+        // Fall back to REST API if WebSocket fails
+        fallbackToRESTAPI();
+      }
+    } else {
+      console.warn('WebSocket not connected, using REST API instead');
+      // Fall back to REST API if WebSocket isn't connected
+      fallbackToRESTAPI();
+    }
+    
+    // Fallback function to use REST API if WebSocket fails
+    async function fallbackToRESTAPI() {
+      try {
+        const newMessage = await createMessage(messageData);
+        console.log('Message created successfully via REST API:', newMessage);
+        setMessages([...messages, newMessage]);
+      } catch (error) {
+        console.error('Error creating message via REST API:', error);
+      }
     }
   };
 
