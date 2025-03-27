@@ -44,6 +44,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const { user } = useUser();
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
@@ -122,8 +123,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     const BASE_RECONNECT_DELAY = 2000; // 2 seconds (reduced from 3)
     const PING_INTERVAL = 20000; // 20 seconds
     
-    // Create ping interval to keep connection alive
-    const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    // Use the pingIntervalRef defined at component level
     
     const connectWebSocket = () => {
       if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {

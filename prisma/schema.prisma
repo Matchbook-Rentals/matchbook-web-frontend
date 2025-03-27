@@ -309,7 +309,7 @@ model Booking {
   id           String        @id @default(uuid())
   userId       String
   listingId    String
-  tripId       String?        
+  tripId       String?
   matchId      String        @unique
   startDate    DateTime
   endDate      DateTime
@@ -324,8 +324,8 @@ model Booking {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   match   Match   @relation(fields: [matchId], references: [id])
-  trip    Trip?    @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  
+  trip    Trip?   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
   @@index([tripId])
 }
 
@@ -348,8 +348,8 @@ model Trip {
   numChildren    Int        @default(0)
   userId         String
   tripStatus     TripStatus @default(searching)
-  flexibleStart Int @default(0)
-  flexibleEnd Int @default(0)
+  flexibleStart  Int        @default(0)
+  flexibleEnd    Int        @default(0)
 
   //Num Filters
   minPrice     Int?
@@ -499,6 +499,7 @@ model Message {
   fileName       String?
   fileKey        String?
   fileType       String?
+  metadata       String?  @db.Text // Store JSON metadata like clientId, delivery status, etc.
 
   sender       User          @relation("MessageSender", fields: [senderId], references: [id])
   conversation Conversation  @relation(fields: [conversationId], references: [id])
@@ -514,7 +515,7 @@ model Conversation {
   isGroup      Boolean                   @default(false)
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
-  listingId    String?                   
+  listingId    String?
   messages     Message[]
   participants ConversationParticipant[]
 }
@@ -606,22 +607,22 @@ model Maybe {
 }
 
 model Application {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isDefault Boolean?  @default(false)
-  tripId    String?
-  userId    String
-  isComplete Boolean @default(false)
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isDefault  Boolean? @default(false)
+  tripId     String?
+  userId     String
+  isComplete Boolean  @default(false)
 
   // Personal Info
-  firstName        String?
-  middleName       String?
-  lastName         String?
-  noMiddleName     Boolean? @default(false)
-  dateOfBirth      DateTime?
-  ssn              String?  // Encrypted value to be stored
-  
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  noMiddleName Boolean?  @default(false)
+  dateOfBirth  DateTime?
+  ssn          String? // Encrypted value to be stored
+
   residentialHistories ResidentialHistory[]
 
   // Comments to explain Yes answers
@@ -635,7 +636,7 @@ model Application {
   // Relationships
   user               User                @relation(fields: [userId], references: [id])
   trip               Trip?               @relation(fields: [tripId], references: [id])
-  identifications    Identification[]    // Keep as one-to-many temporarily
+  identifications    Identification[] // Keep as one-to-many temporarily
   incomes            Income[]
   verificationImages VerificationImage[]
 
@@ -649,8 +650,8 @@ model Identification {
   applicationId String
   idType        String
   idNumber      String
-  idPhotos      IDPhoto[]   // One-to-many relationship with ID photos
-  isPrimary     Boolean     @default(false)  // Flag for the primary ID
+  idPhotos      IDPhoto[] // One-to-many relationship with ID photos
+  isPrimary     Boolean     @default(false) // Flag for the primary ID
 
   @@index([applicationId])
 }
@@ -802,19 +803,19 @@ model Lease {
 }
 
 model BlogArticle {
-  id         String     @id @default(cuid())
-  slug       String     @unique
-  title      String     @db.VarChar(255)
-  content    String     @db.LongText
-  excerpt    String?     @db.Text
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  imageUrl   String?
-  published  Boolean    @default(false)
-  authorName String     @default("The Matchbook Team")
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String     @db.VarChar(255)
+  content     String     @db.LongText
+  excerpt     String?    @db.Text
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  imageUrl    String?
+  published   Boolean    @default(false)
+  authorName  String     @default("The Matchbook Team")
   authorTitle String?
-  categories Category[]
-  tags       Tag[]
+  categories  Category[]
+  tags        Tag[]
 
   @@index([slug])
   @@index([createdAt])
@@ -851,29 +852,29 @@ model Ticket {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   resolvedAt  DateTime?
-  
+
   // User information
-  email       String
-  name        String?
-  userId      String?   // Optional: link to user if they're logged in
-  
+  email  String
+  name   String?
+  userId String? // Optional: link to user if they're logged in
+
   // Context information
-  pageUrl     String?
-  userAgent   String?
-  
+  pageUrl   String?
+  userAgent String?
+
   // Category/type of issue
-  category    String?   // bug, feature-request, support, complaint, etc.
-  priority    String?   // low, medium, high, urgent
-  
+  category String? // bug, feature-request, support, complaint, etc.
+  priority String? // low, medium, high, urgent
+
   // Internal tracking
-  assignedTo  String?   // Admin/support person email
-  notifyEmail String?   // Email to send notifications to (configurable)
-  supportNotes String?  @db.Text  // Internal notes for support staff
-  
+  assignedTo   String? // Admin/support person email
+  notifyEmail  String? // Email to send notifications to (configurable)
+  supportNotes String? @db.Text // Internal notes for support staff
+
   // Relationships
-  responses   TicketResponse[]
-  user        User?     @relation(fields: [userId], references: [id])
-  
+  responses TicketResponse[]
+  user      User?            @relation(fields: [userId], references: [id])
+
   @@index([userId])
   @@index([status])
   @@index([category])
@@ -886,16 +887,16 @@ model TicketResponse {
   isFromStaff Boolean  @default(false)
   authorName  String?
   authorEmail String?
-  
+
   // Relationship
-  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  ticketId    String
-  
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId String
+
   @@index([ticketId])
 }
 
 model ResidentialHistory {
-  id                  String      @id @default(uuid())
+  id                  String  @id @default(uuid())
   street              String?
   apt                 String?
   city                String?
@@ -910,6 +911,6 @@ model ResidentialHistory {
   landlordPhoneNumber String?
   index               Int?
 
-  application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId       String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
 }

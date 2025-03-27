@@ -37,7 +37,10 @@ export async function POST(request: NextRequest) {
       imgUrl,
       fileName,
       fileKey,
-      fileType
+      fileType,
+      createdAt, // Timestamp from the Go server
+      updatedAt,
+      clientId
     } = messageData;
 
     // Create the message in the database
@@ -53,22 +56,37 @@ export async function POST(request: NextRequest) {
           fileName,
           fileKey,
           fileType,
+          // Use provided timestamps if available, otherwise use current time
+          ...(createdAt && { createdAt: new Date(createdAt) }),
+          ...(updatedAt && { updatedAt: new Date(updatedAt) }),
+          // Store clientId in metadata for tracking and deduplication
+          ...(clientId && { 
+            metadata: JSON.stringify({
+              clientId,
+              source: 'websocket',
+              receivedAt: new Date().toISOString()
+            })
+          })
         },
       });
 
       // Also update the conversation's updatedAt field to mark it as recently active
+      // Use the message's timestamp if available to maintain consistency
       await prisma.conversation.update({
         where: { id: conversationId },
         data: { 
-          updatedAt: new Date() 
+          updatedAt: createdAt ? new Date(createdAt) : new Date() 
         },
       });
 
       // Log successful message persistence 
       console.log('Message persisted in database:', { 
         id: savedMessage.id, 
+        clientId: clientId || 'none',
         hasContent: !!savedMessage.content,
-        hasAttachment: !!savedMessage.imgUrl
+        hasAttachment: !!savedMessage.imgUrl,
+        usedProvidedTimestamp: !!createdAt,
+        timestamp: savedMessage.createdAt
       });
 
       return NextResponse.json({
