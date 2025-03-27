@@ -14,12 +14,15 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 type Client struct {
 	ID      string
-	Writer  http.ResponseWriter
-	Flusher http.Flusher
+	Conn    *websocket.Conn
+	Send    chan []byte
+	Lock    sync.Mutex
 }
 
 type Message struct {
@@ -37,6 +40,14 @@ type Message struct {
 var (
 	clients = make(map[string]*Client)
 	mutex   = &sync.Mutex{}
+	upgrader = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			// Allow all connections - modify as needed for production
+			return true
+		},
+	}
 )
 
 // setupErrorHandling sets up a recovery middleware to catch panics
@@ -74,14 +85,14 @@ func main() {
 	log.Printf("Server starting...")
 	
 	// Set up handlers with error recovery and logging
-	http.HandleFunc("/events", setupLogging(setupErrorHandling(handleSSE)))
+	http.HandleFunc("/ws", setupLogging(setupErrorHandling(handleWebSocket)))
 	http.HandleFunc("/send-message", setupLogging(setupErrorHandling(handleSendMessage)))
 
 	// Start the client monitor
 	startClientMonitor()
 
 	port := 3000
-	log.Printf("SSE server running on port %d\n", port)
+	log.Printf("WebSocket server running on port %d\n", port)
 
 	// Create server with graceful shutdown capability
 	server := &http.Server{
@@ -125,6 +136,10 @@ func main() {
 				
 				// Clear client map on error
 				mutex.Lock()
+				for _, client := range clients {
+					client.Conn.Close()
+					close(client.Send)
+				}
 				clients = make(map[string]*Client)
 				mutex.Unlock()
 				
@@ -161,6 +176,10 @@ func main() {
 						log.Printf("CRITICAL: Server health check failed %d times, forcing restart", maxFailCount)
 						// Clear client map
 						mutex.Lock()
+						for _, client := range clients {
+							client.Conn.Close()
+							close(client.Send)
+						}
 						clients = make(map[string]*Client)
 						mutex.Unlock()
 						
@@ -210,12 +229,14 @@ func main() {
 	log.Printf("Closing %d client connections...", len(clients))
 	mutex.Lock()
 	for id, client := range clients {
-		// Notify clients about shutdown
-		_, sendErr := fmt.Fprintf(client.Writer, "data: {\"type\":\"connection\",\"status\":\"server_shutdown\"}\n\n")
-		if sendErr != nil {
-			log.Printf("Error notifying client %s of shutdown: %v", id, sendErr)
-		}
-		client.Flusher.Flush()
+		// Notify clients about shutdown and close connections
+		shutdownMsg, _ := json.Marshal(map[string]interface{}{
+			"type": "connection",
+			"status": "server_shutdown",
+		})
+		client.Conn.WriteMessage(websocket.TextMessage, shutdownMsg)
+		client.Conn.Close()
+		close(client.Send)
 		delete(clients, id)
 	}
 	mutex.Unlock()
@@ -223,15 +244,8 @@ func main() {
 	log.Println("Server shutdown complete")
 }
 
-func handleSSE(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/event-stream")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Connection", "keep-alive")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-
-	// Log basic connection info
-	log.Printf("SSE Connection attempt from: %s", r.RemoteAddr)
-
+// WebSocket handler
+func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	clientID := r.URL.Query().Get("id")
 	if clientID == "" {
 		logWithConnCount("Error: Client attempted to connect without an ID")
@@ -241,19 +255,20 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 
 	// Normalize the client ID to avoid inconsistencies
 	clientID = strings.TrimSpace(clientID)
-	log.Printf("Processing SSE connection for client ID: %s", clientID)
+	log.Printf("Processing WebSocket connection for client ID: %s", clientID)
 
-	flusher, ok := w.(http.Flusher)
-	if !ok {
-		logWithConnCount("Error: Streaming unsupported for client: %s", clientID)
-		http.Error(w, "Streaming unsupported", http.StatusInternalServerError)
+	// Upgrade HTTP connection to WebSocket
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("Error upgrading to WebSocket: %v", err)
 		return
 	}
 
+	// Create a new client with a send channel for outgoing messages
 	client := &Client{
-		ID:      clientID,
-		Writer:  w,
-		Flusher: flusher,
+		ID:   clientID,
+		Conn: conn,
+		Send: make(chan []byte, 256), // Buffer for outgoing messages
 	}
 
 	// Use a timeout for mutex operations to prevent deadlocks
@@ -272,7 +287,7 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 	case <-lockTimeout.C:
 		// Failed to acquire lock in reasonable time
 		log.Printf("WARNING: Mutex lock timeout for client: %s - possible deadlock", clientID)
-		http.Error(w, "Server busy, try again later", http.StatusServiceUnavailable)
+		conn.Close()
 		return
 	}
 	
@@ -280,14 +295,14 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 	// Handle existing connection more gracefully
 	if oldClient, exists := clients[clientID]; exists {
 		logWithConnCount(fmt.Sprintf("Replacing existing connection for client: %s", clientID))
-		// Try to close the old connection if possible
-		closeMsg := "data: {\"type\":\"connection\",\"status\":\"replaced\"}\n\n"
-		_, err := fmt.Fprintf(oldClient.Writer, closeMsg)
-		if err == nil {
-			oldClient.Flusher.Flush()
-		} else {
-			log.Printf("Error notifying old client: %v", err)
-		}
+		// Close the old connection
+		closeMsg, _ := json.Marshal(map[string]interface{}{
+			"type": "connection",
+			"status": "replaced",
+		})
+		oldClient.Conn.WriteMessage(websocket.TextMessage, closeMsg)
+		oldClient.Conn.Close()
+		close(oldClient.Send)
 	}
 	clients[clientID] = client
 	clientCount := len(clients)
@@ -295,76 +310,104 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 
 	logWithConnCount(fmt.Sprintf("New client connected: %s (total: %d)", clientID, clientCount))
 
-	// Send an initial message to confirm connection
-	connectionMsg := fmt.Sprintf("data: {\"type\":\"connection\",\"status\":\"connected\",\"clientId\":\"%s\"}\n\n", clientID)
-	_, writeErr := fmt.Fprint(w, connectionMsg)
-	if writeErr != nil {
-		log.Printf("Error sending initial message to client %s: %v", clientID, writeErr)
-		return
-	}
-	flusher.Flush()
+	// Start goroutines for reading and writing messages
+	go client.writePump()
+	go client.readPump()
 
-	// Set up cleanup in case of disconnection
+	// Send an initial message to confirm connection
+	connectionMsg, _ := json.Marshal(map[string]interface{}{
+		"type": "connection",
+		"status": "connected",
+		"clientId": clientID,
+	})
+	client.Send <- connectionMsg
+}
+
+// readPump handles incoming messages from the client
+func (c *Client) readPump() {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("PANIC in SSE handler for client %s: %v\n%s", clientID, r, debug.Stack())
+			log.Printf("PANIC in readPump for client %s: %v\n%s", c.ID, r, debug.Stack())
 		}
 		
+		// Close connection on exit
+		c.Conn.Close()
+		
+		// Remove client from map
 		mutex.Lock()
-		delete(clients, clientID)
+		delete(clients, c.ID)
 		remainingClients := len(clients)
 		mutex.Unlock()
 		
-		logWithConnCount(fmt.Sprintf("Client disconnected: %s (remaining: %d)", clientID, remainingClients))
+		logWithConnCount(fmt.Sprintf("Client disconnected: %s (remaining: %d)", c.ID, remainingClients))
 	}()
 
-	// Keep the connection alive with more robust error handling
-	keepaliveTicker := time.NewTicker(10 * time.Second)
-	defer keepaliveTicker.Stop()
-	
-	// Count consecutive errors
-	consecutiveErrors := 0
-	maxConsecutiveErrors := 3
+	// Configure connection parameters
+	c.Conn.SetReadLimit(512 * 1024) // 512KB max message size
+	c.Conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+	c.Conn.SetPongHandler(func(string) error {
+		c.Conn.SetReadDeadline(time.Now().Add(60 * time.Second))
+		return nil
+	})
 
-	disconnectChan := make(chan struct{})
-	
-	// Start a goroutine to listen for client disconnection
-	go func() {
-		<-r.Context().Done()
-		close(disconnectChan)
+	// Read messages from the client
+	for {
+		_, message, err := c.Conn.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, 
+				websocket.CloseGoingAway, 
+				websocket.CloseAbnormalClosure,
+				websocket.CloseNormalClosure) {
+				log.Printf("WebSocket error for client %s: %v", c.ID, err)
+			}
+			break
+		}
+		
+		// Process incoming messages (if needed)
+		// For now, we're just logging them
+		log.Printf("Received message from client %s: %s", c.ID, string(message))
+	}
+}
+
+// writePump handles outgoing messages to the client
+func (c *Client) writePump() {
+	ticker := time.NewTicker(30 * time.Second)
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("PANIC in writePump for client %s: %v\n%s", c.ID, r, debug.Stack())
+		}
+		ticker.Stop()
+		c.Conn.Close()
 	}()
 
 	for {
 		select {
-		case <-disconnectChan:
-			log.Printf("Client %s context done - closing connection", clientID)
-			return
+		case message, ok := <-c.Send:
+			c.Conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
+			if !ok {
+				// Channel was closed
+				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			c.Lock.Lock()
+			err := c.Conn.WriteMessage(websocket.TextMessage, message)
+			c.Lock.Unlock()
 			
-		case <-keepaliveTicker.C:
-			// Send a more robust keepalive with proper format
-			_, err := fmt.Fprintf(w, ": keepalive %d\n\n", time.Now().Unix())
 			if err != nil {
-				consecutiveErrors++
-				log.Printf("Error sending keepalive to client %s (%d/%d): %v", 
-					clientID, consecutiveErrors, maxConsecutiveErrors, err)
-				
-				if consecutiveErrors >= maxConsecutiveErrors {
-					log.Printf("Too many consecutive errors for client %s, closing connection", clientID)
-					return
-				}
-			} else {
-				// Reset error count on successful message
-				if consecutiveErrors > 0 {
-					log.Printf("Keepalive succeeded for client %s after %d errors", clientID, consecutiveErrors)
-					consecutiveErrors = 0
-				}
+				log.Printf("Error writing to client %s: %v", c.ID, err)
+				return
 			}
 			
-			flusher.Flush()
+		case <-ticker.C:
+			// Send ping message
+			c.Lock.Lock()
+			err := c.Conn.WriteMessage(websocket.PingMessage, nil)
+			c.Lock.Unlock()
 			
-			// Log less frequently to avoid filling logs
-			if time.Now().Minute()%5 == 0 && time.Now().Second() < 10 {
-				logWithConnCount(fmt.Sprintf("Keepalive sent to client: %s", clientID))
+			if err != nil {
+				log.Printf("Error sending ping to client %s: %v", c.ID, err)
+				return
 			}
 		}
 	}
@@ -551,21 +594,20 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 				}
 			}()
 			
-			_, err := fmt.Fprintf(c.Writer, "data: %s\n\n", messageJSON)
-			if err != nil {
-				log.Printf("[%s] Error sending to client %d: %v", reqID, idx, err)
+			// Send the message through the client's send channel
+			select {
+			case c.Send <- messageJSON:
+				select {
+				case sendOk <- true:
+				default:
+				}
+			default:
+				// Client's send buffer is full
+				log.Printf("[%s] Error: Client %d send buffer full", reqID, idx)
 				select {
 				case sendOk <- false:
 				default:
 				}
-				return
-			}
-			
-			c.Flusher.Flush()
-			
-			select {
-			case sendOk <- true:
-			default:
 			}
 		}(client, i)
 		

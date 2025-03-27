@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from "@clerk/nextjs";
 import { Conversation } from '@prisma/client';
 import ConversationList from './components/ConversationList';
@@ -42,12 +42,14 @@ interface MessageData {
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
-
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
   const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
-  const [sseMessages, setSseMessages] = useState<any[]>([]);
+  const [wsMessages, setWsMessages] = useState<any[]>([]);
   const [testEmail, setTestEmail] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
@@ -59,9 +61,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [tabs, setTabs] = useState('all');
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [wsConnected, setWsConnected] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
 
-  const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL
-  const url = `${baseUrl}/events?id=${user?.id}`
+  const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL;
+  const wsUrl = `${baseUrl?.replace(/^http/, 'ws')}/ws?id=${user?.id}`;
 
   // Check if user is admin
   useEffect(() => {
@@ -110,180 +114,232 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     fetchConversation();
   }, [selectedConversationIndex, allConversations, user]);
 
+  // WebSocket connection setup
   useEffect(() => {
     if (!user?.id) return;
 
-    let eventSource: EventSource | null = null;
-    let retryCount = 0;
-    const maxRetries = 5;
-    const retryDelay = 3000; // 3 seconds
-
-    const connectSSE = () => {
-      if (retryCount >= maxRetries) {
-        console.error('Max SSE connection retries reached');
-        setTimeout(() => {
-          retryCount = 0;
-          connectSSE();
-        }, 30000); // 30 seconds
+    const MAX_RECONNECT_ATTEMPTS = 5;
+    const BASE_RECONNECT_DELAY = 3000; // 3 seconds
+    
+    const connectWebSocket = () => {
+      if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        console.error('Max WebSocket connection attempts reached');
+        setWsMessages(prev => [...prev, { 
+          type: 'error', 
+          message: `Maximum reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached. Will try again in 30 seconds.`, 
+          timestamp: new Date().toISOString() 
+        }]);
+        
+        // Reset retry counter after 30 seconds and try again
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current);
+        }
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          setConnectionAttempts(0);
+          connectWebSocket();
+        }, 30000);
+        
         return;
       }
 
       // Close existing connection if any
-      if (eventSource) {
-        eventSource.close();
+      if (wsRef.current) {
+        wsRef.current.close();
       }
 
-      console.log(`Connecting to SSE: ${url}`);
-      console.log('Initiating new SSE connection...');
-      setSseMessages(prev => [...prev, { type: 'info', message: `Initiating new SSE connection to: ${url}`, timestamp: new Date().toISOString() }]);
-      eventSource = new EventSource(url);
+      console.log(`Connecting to WebSocket: ${wsUrl}`);
+      setWsMessages(prev => [...prev, { 
+        type: 'info', 
+        message: `Initiating new WebSocket connection to: ${wsUrl}`, 
+        timestamp: new Date().toISOString() 
+      }]);
+      
+      try {
+        const ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
 
-      eventSource.onopen = () => {
-        console.log('SSE connection opened');
-        setSseMessages(prev => [...prev, { type: 'success', message: 'SSE connection opened successfully', timestamp: new Date().toISOString() }]);
-        retryCount = 0; // Reset retry count on successful connection
-      };
+        ws.onopen = () => {
+          console.log('WebSocket connection opened');
+          setWsConnected(true);
+          setConnectionAttempts(0);
+          setWsMessages(prev => [...prev, { 
+            type: 'success', 
+            message: 'WebSocket connection opened successfully', 
+            timestamp: new Date().toISOString() 
+          }]);
+        };
 
-      eventSource.onmessage = (event) => {
-        console.log('SSE message received:', event);
-        if (event.data.trim() === ': keepalive') {
-          // Ignore heartbeat messages
-          console.log('Keepalive received');
-          return;
-        }
-
-        try {
-          const message = JSON.parse(event.data);
+        ws.onmessage = (event) => {
+          console.log('WebSocket message received:', event.data);
           
-          // Mark incoming messages as unread by default if they're not from the current user
-          if (message.senderId !== user?.id) {
-            message.isRead = false;
-          } else {
-            message.isRead = true; // Messages sent by current user are automatically read
-          }
-          
-          setSseMessages((prevMessages) => [...prevMessages, message]);
+          try {
+            const message = JSON.parse(event.data);
+            
+            // Handle connection status messages
+            if (message.type === 'connection') {
+              setWsMessages(prev => [...prev, { 
+                type: 'info', 
+                message: `Connection status: ${message.status}`, 
+                timestamp: new Date().toISOString() 
+              }]);
+              return;
+            }
+            
+            // Mark incoming messages as unread by default if they're not from the current user
+            if (message.senderId !== user?.id) {
+              message.isRead = false;
+            } else {
+              message.isRead = true; // Messages sent by current user are automatically read
+            }
+            
+            setWsMessages((prevMessages) => [...prevMessages, message]);
 
-          // Update unread message counters based on the message's conversation type
-          const messageConversation = allConversations.find(conv => conv.id === message.conversationId);
-          if (messageConversation) {
-            // Find the user's role in this conversation
-            const userParticipant = messageConversation.participants.find(
-              participant => participant.userId === user?.id
-            );
+            // Update unread message counters based on the message's conversation type
+            const messageConversation = allConversations.find(conv => conv.id === message.conversationId);
+            if (messageConversation) {
+              // Find the user's role in this conversation
+              const userParticipant = messageConversation.participants.find(
+                participant => participant.userId === user?.id
+              );
 
-            if (userParticipant) {
-              const messageRole = userParticipant.role;
+              if (userParticipant) {
+                const messageRole = userParticipant.role;
 
-              // Check if this message's conversation is currently selected/open
-              const isConversationOpen = selectedConversationIndex !== null &&
-                allConversations[selectedConversationIndex]?.id === message.conversationId;
+                // Check if this message's conversation is currently selected/open
+                const isConversationOpen = selectedConversationIndex !== null &&
+                  allConversations[selectedConversationIndex]?.id === message.conversationId;
 
-              // Increment unread counter if the conversation is not open
-              if (!isConversationOpen) {
-                if (messageRole === 'Host') {
-                  setUnreadHostMessages(prev => prev + 1);
-                } else if (messageRole === 'Tenant') {
-                  setUnreadTenantMessages(prev => prev + 1);
+                // Increment unread counter if the conversation is not open
+                if (!isConversationOpen) {
+                  if (messageRole === 'Host') {
+                    setUnreadHostMessages(prev => prev + 1);
+                  } else if (messageRole === 'Tenant') {
+                    setUnreadTenantMessages(prev => prev + 1);
+                  }
                 }
               }
             }
-          }
 
-          // Check if this message is from a conversation we already know about
-          const conversationExists = allConversations.some(conv => conv.id === message.conversationId);
+            // Check if this message is from a conversation we already know about
+            const conversationExists = allConversations.some(conv => conv.id === message.conversationId);
 
-          if (!conversationExists) {
-            console.log('New conversation detected. Fetching updated conversations...');
-            // Fetch all conversations to get the new one
-            const fetchNewConversations = async () => {
-              try {
-                const updatedConversations = await getAllConversations();
-                if (updatedConversations) {
-                  setAllConversations(updatedConversations);
+            if (!conversationExists) {
+              console.log('New conversation detected. Fetching updated conversations...');
+              // Fetch all conversations to get the new one
+              const fetchNewConversations = async () => {
+                try {
+                  const updatedConversations = await getAllConversations();
+                  if (updatedConversations) {
+                    setAllConversations(updatedConversations);
 
-                  // Find the index of the new conversation to select it
-                  const newConvIndex = updatedConversations.findIndex(
-                    conv => conv.id === message.conversationId
-                  );
+                    // Find the index of the new conversation to select it
+                    const newConvIndex = updatedConversations.findIndex(
+                      conv => conv.id === message.conversationId
+                    );
 
-                  if (newConvIndex !== -1) {
-                    setSelectedConversationIndex(newConvIndex);
+                    if (newConvIndex !== -1) {
+                      setSelectedConversationIndex(newConvIndex);
+                    }
                   }
+                } catch (error) {
+                  console.error('Failed to fetch new conversations:', error);
                 }
-              } catch (error) {
-                console.error('Failed to fetch new conversations:', error);
-              }
-            };
+              };
 
-            fetchNewConversations();
-          } else {
-            // Update existing conversation with the new message
-            setAllConversations((prevConversations) => {
-              const updatedConversations = [...prevConversations];
-              const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
-              if (index !== -1) {
-                // Create a new array if messages property doesn't exist yet
-                const currentMessages = updatedConversations[index].messages || [];
-                
-                // Check if this conversation is currently selected/open
-                const isConversationOpen = selectedConversationIndex !== null && 
-                  updatedConversations[selectedConversationIndex]?.id === message.conversationId;
-                
-                // If the conversation is open and the message is from another user, mark it as read
-                if (isConversationOpen && message.senderId !== user?.id) {
-                  message.isRead = true;
+              fetchNewConversations();
+            } else {
+              // Update existing conversation with the new message
+              setAllConversations((prevConversations) => {
+                const updatedConversations = [...prevConversations];
+                const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+                if (index !== -1) {
+                  // Create a new array if messages property doesn't exist yet
+                  const currentMessages = updatedConversations[index].messages || [];
+                  
+                  // Check if this conversation is currently selected/open
+                  const isConversationOpen = selectedConversationIndex !== null && 
+                    updatedConversations[selectedConversationIndex]?.id === message.conversationId;
+                  
+                  // If the conversation is open and the message is from another user, mark it as read
+                  if (isConversationOpen && message.senderId !== user?.id) {
+                    message.isRead = true;
+                  }
+                  
+                  updatedConversations[index] = {
+                    ...updatedConversations[index],
+                    messages: [...currentMessages, message]
+                  };
                 }
-                
-                updatedConversations[index] = {
-                  ...updatedConversations[index],
-                  messages: [...currentMessages, message]
-                };
-              }
-              return updatedConversations;
-            });
+                return updatedConversations;
+              });
+            }
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error, event.data);
           }
-        } catch (error) {
-          console.error('Error parsing SSE message:', error, event.data);
-        }
-      };
+        };
 
-      eventSource.onerror = (error) => {
-        console.error('SSE connection error:', error);
-        setSseMessages(prev => [...prev, {
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          setWsConnected(false);
+          setWsMessages(prev => [...prev, {
+            type: 'error',
+            message: 'WebSocket connection error encountered',
+            timestamp: new Date().toISOString()
+          }]);
+        };
+
+        ws.onclose = (event) => {
+          console.log(`WebSocket closed with code ${event.code}:`, event.reason);
+          setWsConnected(false);
+          setWsMessages(prev => [...prev, {
+            type: 'info',
+            message: `WebSocket connection closed: ${event.reason || 'No reason provided'}`,
+            timestamp: new Date().toISOString()
+          }]);
+
+          // Attempt to reconnect with exponential backoff
+          const reconnectDelay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
+          setConnectionAttempts(prev => prev + 1);
+          
+          console.log(`Reconnecting in ${reconnectDelay}ms (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`);
+          setWsMessages(prev => [...prev, {
+            type: 'info',
+            message: `Reconnecting in ${reconnectDelay}ms (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
+            timestamp: new Date().toISOString()
+          }]);
+          
+          if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current);
+          }
+          
+          reconnectTimeoutRef.current = setTimeout(() => {
+            connectWebSocket();
+          }, reconnectDelay);
+        };
+      } catch (error) {
+        console.error('Error creating WebSocket:', error);
+        setWsMessages(prev => [...prev, {
           type: 'error',
-          message: `SSE connection error encountered`,
+          message: `Failed to create WebSocket: ${error}`,
           timestamp: new Date().toISOString()
         }]);
-
-        // Close the current connection
-        if (eventSource) {
-          eventSource.close();
-          eventSource = null;
-        }
-
-        // Attempt to reconnect after delay
-        retryCount++;
-        console.log(`Retrying SSE connection (${retryCount}/${maxRetries}) in ${retryDelay}ms`);
-        setSseMessages(prev => [...prev, {
-          type: 'info',
-          message: `Retrying SSE connection (attempt ${retryCount}/${maxRetries}) in ${retryDelay}ms`,
-          timestamp: new Date().toISOString()
-        }]);
-        setTimeout(connectSSE, retryDelay);
-      };
-    };
-
-    connectSSE();
-
-    return () => {
-      console.log('Closing SSE connection');
-      if (eventSource) {
-        eventSource.close();
-        eventSource = null;
       }
     };
-  }, [user, url]);
+
+    connectWebSocket();
+
+    return () => {
+      console.log('Closing WebSocket connection');
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
+  }, [user, wsUrl, connectionAttempts]);
 
   // Detect mobile screen size
   useEffect(() => {
@@ -553,6 +609,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         </div>
       </div>
 
+      {/* Connection Status Indicator */}
+      <div className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${wsConnected ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+        {wsConnected ? 'Connected' : 'Disconnected'}
+      </div>
+
       {/* Admin Testing Tools Section - Only visible if not completely hidden */}
       {isAdmin && !hideTestingSection && (
         <>
@@ -606,19 +667,44 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 </button>
                 <button
                   className="px-4 py-2 bg-gray-500 rounded-md hover:bg-gray-600 text-white"
-                  onClick={() => setSseMessages([])}
+                  onClick={() => setWsMessages([])}
                 >
-                  Clear SSE Log
+                  Clear WS Log
                 </button>
               </div>
 
-              {/* SSE Log Section */}
+              {/* WebSocket Connection Details */}
+              <div className="flex items-center mb-3 space-x-2">
+                <div className={`w-3 h-3 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-sm font-medium">
+                  WebSocket: {wsConnected ? 'Connected' : 'Disconnected'}
+                </span>
+                {!wsConnected && connectionAttempts > 0 && (
+                  <span className="text-xs text-gray-500">
+                    (Attempt {connectionAttempts}/{5})
+                  </span>
+                )}
+                <button
+                  className="ml-auto px-3 py-1 bg-blue-500 rounded-md hover:bg-blue-600 text-white text-sm"
+                  onClick={() => {
+                    setConnectionAttempts(0);
+                    if (wsRef.current) {
+                      wsRef.current.close();
+                    }
+                  }}
+                  disabled={connectionAttempts === 0 && wsConnected}
+                >
+                  Reconnect
+                </button>
+              </div>
+
+              {/* WebSocket Log Section */}
               <div className="mt-6 bg-gray-900 rounded-lg p-4">
-                <h4 className="text-md font-semibold mb-2 text-white">SSE Connection Log</h4>
+                <h4 className="text-md font-semibold mb-2 text-white">WebSocket Connection Log</h4>
                 <div className="bg-gray-800 rounded p-3 overflow-auto max-h-80 text-sm text-white">
-                  {sseMessages.length > 0 ? (
+                  {wsMessages.length > 0 ? (
                     <div className="space-y-2">
-                      {sseMessages.map((msg, index) => (
+                      {wsMessages.map((msg, index) => (
                         <div key={index} className={`p-2 rounded ${
                           msg.type === 'error' ? 'bg-red-900 text-red-100' :
                           msg.type === 'success' ? 'bg-green-900 text-green-100' :
@@ -644,7 +730,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                       ))}
                     </div>
                   ) : (
-                    <div className="text-gray-400 italic p-2">No SSE events logged yet</div>
+                    <div className="text-gray-400 italic p-2">No WebSocket events logged yet</div>
                   )}
                 </div>
               </div>

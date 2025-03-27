@@ -1,69 +1,31 @@
-// app/api/sse/route.js
+// app/api/ws/route.ts
 
 // Import the Message type from your Prisma schema
 import { Message } from '@prisma/client';
 
+// This NextJS edge API route is just a stub for compatibility with the previous SSE implementation
+// The actual WebSocket connections are handled directly by the Go server
+
 export const dynamic = 'force-dynamic'; // This ensures the route is always dynamically rendered
 
-// Store active connections
-const connections: Map<string, ReadableStreamController<any>> = new Map();
-
 export async function GET(request: Request) {
+  // Redirect to the actual WebSocket server
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id') || 'defaultId';
-  console.log('id', id);
-
-  // Set headers for SSE
-  const headers = {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-  };
-
-  // Create a response with the correct headers
-  const response = new Response(
-    new ReadableStream({
-      start(controller) {
-        // Store the connection
-        connections.set(id, controller);
-
-        // Send heartbeat every 3 seconds
-        const heartbeatInterval = setInterval(() => {
-          if (connections.has(id)) {
-            const encoder = new TextEncoder();
-            controller.enqueue(encoder.encode(': heartbeat\n\n'));
-          } else {
-            clearInterval(heartbeatInterval);
-          }
-        }, 3000);
-
-        // Cleanup
-        request.signal.onabort = () => {
-          connections.delete(id);
-          controller.close();
-          clearInterval(heartbeatInterval);
-        };
-      },
-      cancel() {
-        console.log(`SSE Connection closed for id: ${id}`);
-        connections.delete(id);
-      },
-    }),
-    { headers }
-  );
-
-  return response;
+  
+  return new Response(JSON.stringify({
+    message: 'WebSocket server endpoint has moved',
+    wsEndpoint: `${process.env.NEXT_PUBLIC_GO_SERVER_URL}/ws?id=${id}`,
+  }), { 
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
 }
 
-
-// Updated function to send a message to a specific connection
+// This is kept for backward compatibility but no longer actually sends messages
+// The frontend now connects directly to the WebSocket server
 export function sendMessageToConnection(message: Message) {
-  console.log('Sending message to connection', message);
-  console.log('Connections', connections);
-  const controller = connections.get(message.receiverId);
-  if (controller) {
-    const messageJSON = JSON.stringify(message);
-    const encoder = new TextEncoder();
-    controller.enqueue(encoder.encode(`data: ${messageJSON}\n\n`));
-  }
+  console.log('sendMessageToConnection is deprecated. Messages are sent directly to the WebSocket server.');
 }

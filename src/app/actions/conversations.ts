@@ -2,7 +2,6 @@
 import prisma from '@/lib/prismadb';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server'
-import { sendMessageToConnection } from '../api/sse/route';
 
 // Helper function to check authentication
 async function checkAuth() {
@@ -193,10 +192,9 @@ export async function createMessage(data: {
     throw error;
   }
 
-  // Send message to Go server for real-time updates
+  // Send message to Go server WebSocket for real-time updates
   try {
-    // Convert message to a payload object and check which fields are supported by the Go server
-    // Apparently the Go server doesn't accept fileName, fileKey, or fileType fields
+    // Convert message to a payload object compatible with the WebSocket server
     const goServerPayload = {
       id: message.id,
       conversationId: message.conversationId,
@@ -205,7 +203,10 @@ export async function createMessage(data: {
       content: message.content || "", // Ensure content is at least an empty string
       senderRole: data.senderRole,
       imgUrl: message.imgUrl,
-      // Removing fileName, fileKey, fileType which are causing the error
+      // Include other fields that are now supported by the WebSocket server
+      fileName: message.fileName,
+      fileKey: message.fileKey,
+      fileType: message.fileType,
       createdAt: message.createdAt,
       updatedAt: message.updatedAt
     };
