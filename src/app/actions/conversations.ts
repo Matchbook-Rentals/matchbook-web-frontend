@@ -98,7 +98,7 @@ export async function getConversation(id: string) {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'asc', // Get messages in chronological order
+          createdAt: 'desc', // Get messages in reverse chronological order
         },
         take: 50, // Limit to the most recent 50 messages
       },
@@ -275,7 +275,7 @@ export async function getAllConversations() {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'asc', // Get messages in chronological order
+          createdAt: 'desc', // Get messages in reverse chronological order
         },
         take: 50, // Limit to the most recent 50 messages
       },
@@ -314,7 +314,7 @@ export async function getRecentConversationsWithMessages(limit: number = 15) {
     include: {
       messages: {
         orderBy: {
-          createdAt: 'asc', // Get messages in chronological order
+          createdAt: 'desc', // Get messages in reverse chronological order
         },
         take: 50, // Limit to most recent 50 messages per conversation
       },

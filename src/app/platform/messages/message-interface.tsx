@@ -106,7 +106,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         const conversation = allConversations[selectedConversationIndex];
         console.log(`Setting messages for conversation ${conversation.id}`);
         // All conversations now come with messages, so we can just use them directly
-        setMessages(conversation.messages || []);
+        // Reverse the order of messages to display newest last (since we're fetching desc from server)
+        setMessages([...(conversation.messages || [])].reverse());
       } else {
         setMessages([]);
       }
@@ -364,7 +365,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                     
                     updatedConversations[index] = {
                       ...updatedConversations[index],
-                      messages: [...currentMessages, message]
+                      // Add new message to the beginning of the array since we're retrieving in desc order
+                      messages: [message, ...currentMessages]
                     };
                     
                     return updatedConversations;
@@ -648,7 +650,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       pending: true // Mark as pending until confirmed
     };
     
-    // Optimistically add to UI
+    // Optimistically add to UI at the end (since messages are now displayed oldest to newest)
     setMessages(prevMessages => [...prevMessages, optimisticMessage]);
     
     // Add to conversation
@@ -660,7 +662,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         const currentMessages = updatedConversations[index].messages || [];
         updatedConversations[index] = {
           ...updatedConversations[index],
-          messages: [...currentMessages, optimisticMessage]
+          // Add to beginning of array for proper ordering when we reverse in the UI
+          messages: [optimisticMessage, ...currentMessages]
         };
       }
       

@@ -58,6 +58,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   // Helper function to check if a conversation has unread messages
+  // Works with messages in any order since it uses 'some'
   const hasUnreadMessages = (conv: ExtendedConversation) => {
     return conv.messages?.some(message =>
       message.senderId !== user.id && !message.isRead
@@ -94,13 +95,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
     // If showUnreadOnly is true, filter for conversations with unread messages
     if (showUnreadOnly) {
-      // Check for any unread messages in the conversation
-      // A message is considered unread if it's from the other participant (not current user)
-      const hasUnreadMessages = conv.messages?.some(message =>
-        message.senderId !== user.id && !message.isRead
-      );
-
-      return matchesSearch && hasUnreadMessages;
+      // Use the hasUnreadMessages helper function we already defined
+      return matchesSearch && hasUnreadMessages(conv);
     }
 
     return matchesSearch;
@@ -175,8 +171,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
         {filteredConversations && filteredConversations.length > 0 ? (
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
+            // Since messages are now in reverse chronological order (newest first),
+            // the newest message is the first one in the array
             const lastMessage = conv.messages && conv.messages.length > 0
-              ? conv.messages[conv.messages.length - 1]
+              ? conv.messages[0]
               : null;
 
             return (
