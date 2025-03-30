@@ -46,6 +46,7 @@ type Message struct {
 	IsTyping       bool      `json:"isTyping,omitempty"` // Flag for typing indicators
 	IsRead         bool      `json:"isRead,omitempty"`   // Flag for read receipts
 	MessageIDs     []string  `json:"messageIds,omitempty"` // List of message IDs marked as read
+	Timestamp      string    `json:"timestamp,omitempty"`  // Timestamp for timestamp-based read receipts
 }
 
 var (
@@ -510,18 +511,27 @@ func processIncomingMessage(c *Client, rawMessage []byte) {
 	// Handle read receipt events
 	if msg.Type == "read_receipt" {
 		// Validate required fields for read receipts
-		if msg.ReceiverID == "" || msg.ConversationID == "" || len(msg.MessageIDs) == 0 {
+		if msg.ReceiverID == "" || msg.ConversationID == "" {
 			log.Printf("Error: Missing required fields in read receipt from client %s", c.ID)
 			errorMsg, _ := json.Marshal(map[string]interface{}{
 				"type": "error",
-				"message": "Receiver ID, Conversation ID, and Message IDs are required for read receipts",
+				"message": "Receiver ID and Conversation ID are required for read receipts",
 			})
 			c.Send <- errorMsg
 			return
 		}
-		
-		log.Printf("Client %s marked messages as read in conversation %s: %v", 
-			c.ID, msg.ConversationID, msg.MessageIDs)
+
+		// Log differently depending on whether we're using message IDs or timestamp
+		if len(msg.MessageIDs) > 0 {
+			log.Printf("Client %s marked messages as read in conversation %s: %v", 
+				c.ID, msg.ConversationID, msg.MessageIDs)
+		} else if msg.Timestamp != "" {
+			log.Printf("Client %s marked messages as read in conversation %s up to timestamp: %s", 
+				c.ID, msg.ConversationID, msg.Timestamp)
+		} else {
+			log.Printf("Client %s sent read receipt for conversation %s without message IDs or timestamp", 
+				c.ID, msg.ConversationID)
+		}
 		
 		// Distribute read receipt to connected clients
 		deliverMessageToClients(fmt.Sprintf("read-%d", time.Now().UnixNano()), msg)

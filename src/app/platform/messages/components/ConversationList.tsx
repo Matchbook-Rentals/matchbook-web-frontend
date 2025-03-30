@@ -33,12 +33,12 @@ interface ExtendedConversation extends Conversation {
 
 interface ConversationListProps {
   conversations: ExtendedConversation[];
-  onSelectConversation: (index: number) => void;
+  onSelectConversation: (conversationId: string) => void;
   onCreateConversation: (email: string) => void;
   user: UserResource;
   onTabChange?: (tab: string) => void;
   activeTab?: string;
-  selectedConversationIndex?: number;
+  selectedConversationId?: string;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
@@ -48,7 +48,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   user,
   onTabChange,
   activeTab = 'all',
-  selectedConversationIndex
+  selectedConversationId
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
@@ -180,8 +180,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
             return (
               <div
                 key={conv.id}
-                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationIndex === index ? 'bg-[#AC8D9015]' : ''} hover:bg-[#AC8D9015] transition-shadow duration-200`}
-                onClick={() => onSelectConversation(index)}
+                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationId === conv.id ? 'bg-[#AC8D9015]' : ''} hover:bg-[#AC8D9015] transition-shadow duration-200`}
+                onClick={() => onSelectConversation(conv.id)}
               >
                 <div className="p-3 flex items-center h-full w-full">
                   <div className="relative flex-shrink-0">

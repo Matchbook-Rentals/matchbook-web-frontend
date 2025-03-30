@@ -5,6 +5,7 @@ import { Conversation } from '@prisma/client';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import { getConversation, createMessage, createConversation, deleteConversation, getAllConversations, getRecentConversationsWithMessages } from '@/app/actions/conversations';
+import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
 
 // Define the expanded Conversation type that includes the messages and participants
 interface ConversationParticipant {
@@ -42,6 +43,7 @@ interface MessageData {
   isTyping?: boolean; // For typing indicator status
   isRead?: boolean; // For read receipt status
   messageIds?: string[]; // For marking multiple messages as read
+  timestamp?: string; // For timestamp-based read receipts
 }
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
@@ -52,7 +54,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   
   const [userType, setUserType] = useState<'Host' | 'Tenant'>('Tenant');
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>(conversations);
-  const [selectedConversationIndex, setSelectedConversationIndex] = useState<number | null>(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [wsMessages, setWsMessages] = useState<any[]>([]);
   const [testEmail, setTestEmail] = useState('');
@@ -85,42 +87,26 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setShowTestingTools(false); // Hide testing tools if not admin
     }
   }, [user]);
-  
-  // Load initial conversations
-  useEffect(() => {
-    if (!user) return;
-    
-    const loadConversations = async () => {
-      try {
-        console.log('Loading initial conversations...');
-        const conversations = await getAllConversations();
-        setAllConversations(conversations);
-        console.log(`Loaded ${conversations.length} conversations with message history`);
-      } catch (error) {
-        console.error('Error loading conversations:', error);
-      }
-    };
-    
-    loadConversations();
-  }, [user]);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchConversation = async () => {
-      if (selectedConversationIndex !== null) {
-        const conversation = allConversations[selectedConversationIndex];
-        console.log(`Setting messages for conversation ${conversation.id}`);
-        // All conversations now come with messages, so we can just use them directly
-        // Reverse the order of messages to display newest last (since we're fetching desc from server)
-        setMessages([...(conversation.messages || [])].reverse());
+      if (selectedConversationId !== null) {
+        const conversation = allConversations.find(conv => conv.id === selectedConversationId);
+        if (conversation) {
+          console.log(`Setting messages for conversation ${conversation.id}`);
+          // All conversations now come with messages, so we can just use them directly
+          // Reverse the order of messages to display newest last (since we're fetching desc from server)
+          setMessages([...(conversation.messages || [])].reverse());
+        }
       } else {
         setMessages([]);
       }
     };
 
     fetchConversation();
-  }, [selectedConversationIndex, allConversations, user]);
+  }, [selectedConversationId, allConversations, user]);
 
   // Cleanup typing timeouts
   useEffect(() => {
@@ -314,36 +300,74 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             
             // Handle read receipt messages
             if (message.type === 'read_receipt') {
-              if (message.senderId !== user?.id) { // Only process read receipts from other users
-                // Mark messages as read in the UI
-                setAllConversations(prevConversations => {
-                  const updatedConversations = [...prevConversations];
-                  const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
-                  
-                  if (index !== -1 && updatedConversations[index].messages) {
-                    updatedConversations[index].messages = updatedConversations[index].messages.map(msg => {
-                      // If this message ID is in the read receipt message IDs list, mark it as read
-                      if (message.messageIds?.includes(msg.id)) {
-                        return { ...msg, isRead: true };
-                      }
-                      return msg;
-                    });
-                  }
-                  
-                  return updatedConversations;
-                });
+              // Make sure we have a senderId - if not, this might be an old format message
+              if (!message.senderId) {
+                console.warn('Received read receipt without senderId, adding from message data');
+                message.senderId = message.content || 'unknown';
+              }
                 
-                // Also update current messages array if it's the active conversation
-                if (selectedConversationIndex !== null && 
-                    allConversations[selectedConversationIndex]?.id === message.conversationId) {
-                  setMessages(prevMessages => 
-                    prevMessages.map(msg => {
-                      if (message.messageIds?.includes(msg.id)) {
-                        return { ...msg, isRead: true };
-                      }
-                      return msg;
-                    })
-                  );
+              if (message.senderId !== user?.id) { // Only process read receipts from other users
+                // Mark messages as read in the UI based on timestamp
+                let readTimestamp = null;
+                try {
+                  if (message.timestamp) {
+                    readTimestamp = new Date(message.timestamp);
+                    // Validate the timestamp is a real date
+                    if (isNaN(readTimestamp.getTime())) {
+                      console.warn('Invalid timestamp in read receipt:', message.timestamp);
+                      readTimestamp = new Date(); // Default to current time if invalid
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error parsing timestamp:', error);
+                  readTimestamp = new Date(); // Default to current time on error
+                }
+                
+                if (readTimestamp) {
+                  console.log('Processing read receipt with timestamp:', readTimestamp.toISOString(), 'for conversation:', message.conversationId);
+                  
+                  setAllConversations(prevConversations => {
+                    const updatedConversations = [...prevConversations];
+                    const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+                    
+                    if (index !== -1 && updatedConversations[index].messages) {
+                      updatedConversations[index].messages = updatedConversations[index].messages.map(msg => {
+                        // Mark as read if message was created before or at the read timestamp
+                        try {
+                          const msgCreatedAt = new Date(msg.createdAt);
+                          if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
+                            console.log('Marking message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
+                            return { ...msg, isRead: true };
+                          }
+                        } catch (err) {
+                          console.error('Error processing message date:', err, msg);
+                        }
+                        return msg;
+                      });
+                    }
+                    
+                    return updatedConversations;
+                  });
+                  
+                  // Also update current messages array if it's the active conversation
+                  if (selectedConversationId !== null && 
+                      selectedConversationId === message.conversationId) {
+                    setMessages(prevMessages => 
+                      prevMessages.map(msg => {
+                        // Mark as read if message was created before or at the read timestamp
+                        try {
+                          const msgCreatedAt = new Date(msg.createdAt);
+                          if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
+                            console.log('Marking active message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
+                            return { ...msg, isRead: true };
+                          }
+                        } catch (err) {
+                          console.error('Error processing active message date:', err, msg);
+                        }
+                        return msg;
+                      })
+                    );
+                  }
                 }
               }
               return;
@@ -389,8 +413,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 const messageRole = userParticipant.role;
 
                 // Check if this message's conversation is currently selected/open
-                const isConversationOpen = selectedConversationIndex !== null &&
-                  allConversations[selectedConversationIndex]?.id === message.conversationId;
+                const isConversationOpen = selectedConversationId !== null &&
+                  selectedConversationId === message.conversationId;
 
                 // Increment unread counter if the conversation is not open
                 if (!isConversationOpen) {
@@ -421,7 +445,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                     );
 
                     if (newConvIndex !== -1) {
-                      setSelectedConversationIndex(newConvIndex);
+                      setSelectedConversationId(message.conversationId);
                     }
                   }
                 } catch (error) {
@@ -450,8 +474,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                   
                   if (!messageAlreadyExists) {
                     // Check if this conversation is currently selected/open
-                    const isConversationOpen = selectedConversationIndex !== null && 
-                      updatedConversations[selectedConversationIndex]?.id === message.conversationId;
+                    const isConversationOpen = selectedConversationId !== null && 
+                      selectedConversationId === message.conversationId;
                     
                     // If the conversation is open and the message is from another user, mark it as read
                     if (isConversationOpen && message.senderId !== user?.id) {
@@ -608,7 +632,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     return () => {
       window.removeEventListener('resize', checkIfMobile);
     };
-  }, [user, allConversations, selectedConversationIndex]);
+  }, [user, allConversations, selectedConversationId]);
 
   useEffect(() => {
     if (!user || !isMobile) return;
@@ -617,11 +641,14 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     setSidebarVisible(true);
   }, [isMobile, user]);
 
-  const handleSelectConversation = async (index: number) => {
-    setSelectedConversationIndex(index);
+  const handleSelectConversation = async (conversationId: string) => {
+    setSelectedConversationId(conversationId);
+
+    // Find the conversation by id
+    const conversation = allConversations.find(conv => conv.id === conversationId);
+    if (!conversation) return;
 
     // Clear relevant unread message counter when selecting a conversation
-    const conversation = allConversations[index];
     const userParticipant = conversation.participants.find(
       participant => participant.userId === user?.id
     );
@@ -632,23 +659,17 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setUnreadTenantMessages(0);
     }
 
-    // Mark all messages in this conversation as read
-    // This is a local state update only - in a real app, you would call an API to update the read status
-    let unreadMessages: string[] = [];
+    // Mark all messages in this conversation as read using the current timestamp
+    const currentTimestamp = new Date();
     
     setAllConversations(prevConversations => {
       const updatedConversations = [...prevConversations];
-      const conversationToUpdate = updatedConversations[index];
+      const conversationToUpdate = updatedConversations.find(conv => conv.id === conversationId);
       
       if (conversationToUpdate && conversationToUpdate.messages) {
-        // Collect IDs of unread messages from other participants
-        unreadMessages = conversationToUpdate.messages
-          .filter(message => message.senderId !== user?.id && !message.isRead && message.id)
-          .map(message => message.id);
-        
         // Mark all messages from other participants as read
         conversationToUpdate.messages = conversationToUpdate.messages.map(message => {
-          if (message.senderId !== user?.id) {
+          if (message.senderId !== user?.id && !message.isRead) {
             return { ...message, isRead: true };
           }
           return message;
@@ -658,30 +679,45 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       return updatedConversations;
     });
 
-    // Send read receipt via WebSocket if there are unread messages
-    if (unreadMessages.length > 0 && wsRef.current && wsConnected) {
-      const otherParticipant = conversation.participants.find(
-        participant => participant.userId !== user?.id
-      );
+    // Persist read status to the database using timestamp approach
+    try {
+      // Use the imported server action
+      const result = await markMessagesAsReadByTimestamp(conversation.id, currentTimestamp);
       
-      if (otherParticipant && otherParticipant.User.id) {
-        try {
-          const readReceiptData: MessageData = {
-            type: 'read_receipt',
-            conversationId: conversation.id,
-            receiverId: otherParticipant.User.id,
-            senderRole: userParticipant?.role as 'Host' | 'Tenant' || 'Tenant',
-            content: '',
-            messageIds: unreadMessages,
-            isRead: true
-          };
+      if (!result.success) {
+        console.error('Error persisting read status:', result.error);
+      } else if (result.count > 0) {
+        console.log(`Marked ${result.count} messages as read in the database`);
+        
+        // Send read receipt with timestamp via WebSocket if messages were marked as read
+        if (wsRef.current && wsConnected) {
+          const otherParticipant = conversation.participants.find(
+            participant => participant.userId !== user?.id
+          );
           
-          wsRef.current.send(JSON.stringify(readReceiptData));
-          console.log('Sent read receipt for messages:', unreadMessages);
-        } catch (error) {
-          console.error('Failed to send read receipt:', error);
+          if (otherParticipant && otherParticipant.User.id) {
+            try {
+              const readReceiptData: MessageData = {
+                type: 'read_receipt',
+                conversationId: conversation.id,
+                receiverId: otherParticipant.User.id,
+                senderId: user?.id, // Add sender ID for proper identification
+                senderRole: userParticipant?.role === 'Host' ? 'Host' : 'Tenant', // Fix potential logic issue
+                content: '',
+                timestamp: currentTimestamp.toISOString(), // Send timestamp instead of message IDs
+                isRead: true
+              };
+              
+              wsRef.current.send(JSON.stringify(readReceiptData));
+              console.log('Sent timestamp-based read receipt for conversation:', conversation.id);
+            } catch (error) {
+              console.error('Failed to send read receipt:', error);
+            }
+          }
         }
       }
+    } catch (error) {
+      console.error('Failed to mark messages as read in the database:', error);
     }
 
     // On mobile, hide the sidebar immediately after selection
@@ -704,7 +740,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         }
         // Clear the local state
         setAllConversations([]);
-        setSelectedConversationIndex(null);
+        setSelectedConversationId(null);
         setMessages([]);
       } catch (error) {
         console.error('Failed to delete conversations:', error);
@@ -717,11 +753,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
   // Handle typing events from the textarea
   const handleTypingStatus = (isTyping: boolean) => {
-    if (selectedConversationIndex === null || !wsRef.current || !wsConnected) {
+    if (selectedConversationId === null || !wsRef.current || !wsConnected) {
       return;
     }
 
-    const selectedConversation = allConversations[selectedConversationIndex];
+    const selectedConversation = allConversations.find(conv => conv.id === selectedConversationId);
+    if (!selectedConversation) return;
     
     // Find the other participant
     const otherParticipant = selectedConversation.participants.find(
@@ -762,7 +799,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     console.log('Input params:', { newMessageInput, fileUrl, fileName, fileKey, fileType });
     
     // Remove the trim check to allow empty string messages with attachments
-    if (selectedConversationIndex === null) {
+    if (selectedConversationId === null) {
       console.error('No conversation selected');
       return;
     }
@@ -770,7 +807,11 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     // Send typing false status to stop typing indicator
     handleTypingStatus(false);
 
-    const selectedConversation = allConversations[selectedConversationIndex];
+    const selectedConversation = allConversations.find(conv => conv.id === selectedConversationId);
+    if (!selectedConversation) {
+      console.error('Selected conversation not found');
+      return;
+    }
     console.log('Selected conversation:', selectedConversation.id);
 
     // Find the other participant who isn't the current user
@@ -1034,7 +1075,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             user={user as any}
             onTabChange={handleTabChange}
             activeTab={tabs}
-            selectedConversationIndex={selectedConversationIndex !== null ? selectedConversationIndex : undefined}
+            selectedConversationId={selectedConversationId}
           />
         </div>
 
@@ -1045,18 +1086,21 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
         >
           <MessageArea
-            selectedConversation={selectedConversationIndex !== null ? allConversations[selectedConversationIndex] : null}
+            selectedConversation={selectedConversationId !== null ? 
+              allConversations.find(conv => conv.id === selectedConversationId) || null : null}
             messages={messages}
             onSendMessage={handleSendMessage}
             currentUserId={user?.id}
             currentUserImage={user?.imageUrl}
             onBack={toggleSidebar}
             onTyping={handleTypingStatus}
-            isOtherUserTyping={selectedConversationIndex !== null && 
-              typingUsers[`${allConversations[selectedConversationIndex].id}:${
-                allConversations[selectedConversationIndex].participants.find(
-                  p => p.userId !== user?.id
-                )?.userId || ''}`]?.isTyping || false}
+            isOtherUserTyping={selectedConversationId !== null && 
+              (() => {
+                const selectedConvo = allConversations.find(conv => conv.id === selectedConversationId);
+                if (!selectedConvo) return false;
+                const otherUserId = selectedConvo.participants.find(p => p.userId !== user?.id)?.userId || '';
+                return typingUsers[`${selectedConversationId}:${otherUserId}`]?.isTyping || false;
+              })()}
           />
         </div>
       </div>

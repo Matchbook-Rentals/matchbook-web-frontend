@@ -316,17 +316,37 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
                       {message.senderId === currentUserId && (
                         <div className="flex justify-end mt-1">
-                          <span className="text-xs text-right">
-                            {message.isRead ? (
-                              <span className="text-blue-500">Read</span>
-                            ) : message.pending ? (
-                              <span className="text-gray-400">Sending...</span>
-                            ) : message.failed ? (
-                              <span className="text-red-500">Failed</span>
-                            ) : (
-                              <span className="text-gray-400">Delivered</span>
-                            )}
-                          </span>
+                          {message.pending ? (
+                            <span className="text-xs text-gray-400 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="6" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                              </svg>
+                            </span>
+                          ) : message.failed ? (
+                            <span className="text-xs text-red-500 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                              </svg>
+                            </span>
+                          ) : message.isRead ? (
+                            <span className="text-xs text-blue-500 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                                <circle cx="12" cy="12" r="10" fill="white" />
+                                <polyline points="7 13 10 16 17 9" stroke="#404040" />
+                              </svg>
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400 flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="7 13 10 16 17 9" />
+                              </svg>
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
