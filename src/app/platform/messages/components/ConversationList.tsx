@@ -91,7 +91,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   // Filter conversations based on search term and unread status
   const filteredConversations = conversations.filter(conv => {
     const { displayName } = getParticipantInfo(conv, user);
-    const matchesSearch = displayName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = displayName?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
 
     // If showUnreadOnly is true, filter for conversations with unread messages
     if (showUnreadOnly) {
