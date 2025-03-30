@@ -63,7 +63,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   useEffect(() => {
     const checkIfMobile = () => {
-      // MD breakpoint in Tailwind is 768px
       setIsMobile(window.innerWidth < 768);
     };
 
@@ -76,7 +75,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
   }, []);
 
-  // Focus textarea when conversation is selected (only on desktop)
   useEffect(() => {
     if (selectedConversation && textareaRef.current && !isMobile) {
       textareaRef.current.focus();
@@ -92,7 +90,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   useEffect(() => {
     return () => {
       setIsExiting(false);
-      // Clear typing timeout
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
@@ -102,18 +99,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleBackClick = () => {
     if (isMobile) {
       setIsExiting(true);
-
-      // Wait for the animation to complete before toggling the sidebar
       setTimeout(() => {
         if (onBack) {
           onBack();
         }
-
-        // Reset the exiting state after the sidebar toggle is complete
         setTimeout(() => {
           setIsExiting(false);
         }, 100);
-      }, 250); // Slightly shorter than the CSS transition duration
+      }, 250);
     } else if (onBack) {
       onBack();
     }
@@ -145,8 +138,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       if (messageAttachments.length > 0) {
         const attachment = messageAttachments[0];
         console.log('Sending message with attachment:', attachment);
-        // With the database change, we can now send empty content with attachments
-        const messageContent = newMessageInput.trim() || ""; // Empty string is fine now
+        const messageContent = newMessageInput.trim() || "";
         console.log('Message content to send:', messageContent ? `"${messageContent}"` : '<empty string>');
         onSendMessage(
           messageContent,
@@ -218,16 +210,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
-  // Create the className string explicitly
   const messageContainerClassName = `flex flex-col h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
-    // Main container
     <div className={messageContainerClassName}>
-
-      {/* Header Section - Shows participant info when conversation is selected */}
-      <div className='h-[72px] border-b-2 flex items-center' >
-
+      <div className='h-[72px] border-b-2 flex items-center'>
         {selectedConversation ? (
           <div className="w-full relative flex items-center pr-4">
             {onBack && (
@@ -238,7 +225,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 <ArrowLeftIcon size={20} />
               </button>
             )}
-
             <div className="flex items-center justify-center w-full md:justify-start md:pl-[calc(2.5vw+7px)]">
               <img
                 src={participantInfo.imageUrl}
@@ -251,7 +237,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             </div>
           </div>
         ) : (
-          /* Empty header with just back button when no conversation is selected */
           <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
             {onBack && isMobile && (
               <button
@@ -268,16 +253,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         )}
       </div>
 
-
-      {/* Messages Container */}
-      <div className="flex-1 relative overflow-hidden ">
-
-
-        <ScrollArea
-          ref={scrollAreaRef}
-          className="h-full overflow-hidden" >
-
-          {/* Messages Content */}
+      <div className="flex-1 relative overflow-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full overflow-hidden">
           <div ref={messageContainerRef} className="p-2 md:pl-[calc(2.5vw+7px)] md:pr-[calc(2.5vw+7px)] min-h-full">
             {selectedConversation ? (
               messages && messages.length > 0 ? (
@@ -294,10 +271,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       </div>
                     )}
                     <div
-                      className={`max-w-[70%] text-black  rounded-[15px] py-[6px] border border-gray-200 overflow-hidden ${message.senderId === currentUserId
-                        ? 'bg-[#3f3f3f] text-white pl-5 pr-5 font-medium rounded-br-none'
-                        : 'bg-[#AC8D9015] pr-5 pl-5 rounded-bl-none font-normal'
-                        }`}
+                      className={`max-w-[70%] text-black rounded-[15px] py-[6px] border border-gray-200 overflow-hidden ${
+                        message.senderId === currentUserId
+                          ? 'bg-[#3f3f3f] text-white pl-5 pr-5 font-medium rounded-br-none'
+                          : 'bg-[#AC8D9015] pr-5 pl-5 rounded-bl-none font-normal'
+                      }`}
                     >
                       {message.imgUrl && (
                         <div className={message.content ? "mb-2" : ""}>
@@ -336,8 +314,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                         </div>
                       )}
                       {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
-                      
-                      {/* Read receipt indicator */}
                       {message.senderId === currentUserId && (
                         <div className="flex justify-end mt-1">
                           <span className="text-xs text-right">
@@ -373,27 +349,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                     <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
                   </div>
                 </div>
-              )}
-              
-              {/* Typing indicator */}
-              {isOtherUserTyping && (
-                <div className="flex justify-start mb-4">
-                  <div className="relative">
-                    <img
-                      src={participantInfo.imageUrl}
-                      alt="Profile"
-                      className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
-                    />
-                    <div className="w-8 mr-2" />
-                  </div>
-                  <div className="max-w-[70%] bg-[#AC8D9015] pl-5 pr-5 rounded-[15px] rounded-bl-none py-[6px] border border-gray-200">
-                    <div className="flex space-x-1 items-center h-5 mb-[2px]">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                    </div>
-                  </div>
-                </div>
               )
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
@@ -402,22 +357,38 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 </div>
               </div>
             )}
+            {isOtherUserTyping && (
+              <div className="flex justify-start mb-4">
+                <div className="relative">
+                  <img
+                    src={participantInfo.imageUrl}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
+                  />
+                  <div className="w-8 mr-2" />
+                </div>
+                <div className="max-w-[70%] bg-[#AC8D9015] pl-5 pr-5 rounded-[15px] rounded-bl-none py-[6px] border border-gray-200">
+                  <div className="flex space-x-1 items-center h-5 mb-[2px]">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={bottomRef} className="h-1" />
           </div>
         </ScrollArea>
       </div>
 
-      {/* Message Input Section */}
       <div className="p-4 bg-background">
-
-        {/* Attachments Preview Area */}
         <div className="flex flex-wrap gap-2 mb-2">
           {messageAttachments.map((attachment, index) => (
             <div key={index} className="inline-block rounded">
               {isImageFile(attachment.fileName || '') ? (
                 <div className="p-2 bg-white relative">
                   <button
-                    className="absolute top-1 test right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
+                    className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
                     onClick={() => {
                       setMessageAttachments(prev => prev.filter((_, i) => i !== index));
                     }}
@@ -454,7 +425,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           ))}
         </div>
 
-        {/* Message Input Bar */}
         <div
           className="flex items-center bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out"
           style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
@@ -466,26 +436,18 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             value={newMessageInput}
             onChange={(e) => {
               setNewMessageInput(e.target.value);
-              // Auto-resize textarea up to 3x original height
               const textarea = e.target;
-              textarea.style.height = "44px"; // Reset to default height
+              textarea.style.height = "44px";
               const scrollHeight = textarea.scrollHeight;
               if (scrollHeight > 44) {
-                const newHeight = Math.min(scrollHeight, 132); // Max 3x the original height
+                const newHeight = Math.min(scrollHeight, 132);
                 textarea.style.height = `${newHeight}px`;
               }
-              
-              // Send typing indicator when user starts typing
               if (onTyping && selectedConversation) {
-                // Clear any existing timeout
                 if (typingTimeoutRef.current) {
                   clearTimeout(typingTimeoutRef.current);
                 }
-                
-                // Send typing indicator
                 onTyping(true);
-                
-                // Set timeout to stop typing indicator after 3 seconds of inactivity
                 typingTimeoutRef.current = setTimeout(() => {
                   if (onTyping) {
                     onTyping(false);
@@ -498,7 +460,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             rows={1}
           />
 
-          {/* Action Buttons Container */}
           <div className="flex items-center px-2">
             <div className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}>
               <UploadButton
@@ -507,16 +468,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 onUploadError={(error) => alert(error.message)}
                 className="p-0"
                 content={{
-                  button({ ready, isUploading }) {
-                    return (
-                      <div className="relative">
-                        {!isUploading && <PaperclipIcon className="w-5 h-5 text-gray-600" />}
-                        {isUploading && (
-                          <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
-                        )}
-                      </div>
-                    );
-                  },
+                  button: ({ ready, isUploading }) => (
+                    <div className="relative">
+                      {!isUploading && <PaperclipIcon className="w-5 h-5 text-gray-600" />}
+                      {isUploading && (
+                        <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                      )}
+                    </div>
+                  ),
                   allowedContent: 'Image upload'
                 }}
                 appearance={{
@@ -539,7 +498,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       </div>
 
-      {/* File Preview Dialog */}
       <Dialog open={!!selectedFile} onOpenChange={(open) => !open && setSelectedFile(null)}>
         <DialogContent className="max-w-3xl" hideCloseButton={false}>
           {selectedFile && (
