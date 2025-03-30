@@ -49,6 +49,8 @@
 ----- [ ] Create review pop-up for host and listing, dospaly on host name click
 ----- [ ]  Move to websockets, digital ocean 
 ----- [ ]  standalone images no bubble no avatar
+----- [ ]  REVERSE ORDER at server action level AFTER order by pull
+
 
 - [ ] Preferences
 ----- [ ] shorten

@@ -259,22 +259,22 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             {selectedConversation ? (
               messages && messages.length > 0 ? (
                 messages.map((message) => (
-                  <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-4`}>
+                  <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-2`}>
                     {message.senderId !== currentUserId && (
                       <div className="relative">
                         <img
                           src={participantInfo.imageUrl}
                           alt="Profile"
-                          className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
+                          className="w-9 h-9 rounded-full mr-2 absolute bottom-[-12px]"
                         />
-                        <div className="w-8 mr-2" />
+                        <div className="w-8 mr-4" />
                       </div>
                     )}
                     <div
-                      className={`max-w-[70%] text-black rounded-[15px] py-[6px] border border-gray-200 overflow-hidden ${
+                      className={`max-w-[70%] text-black rounded-2xl py-3 border border-gray-200 overflow-hidden ${
                         message.senderId === currentUserId
-                          ? 'bg-[#3f3f3f] text-white pl-5 pr-5 font-medium rounded-br-none'
-                          : 'bg-[#AC8D9015] pr-5 pl-5 rounded-bl-none font-normal'
+                          ? 'bg-zinc-800 text-white pl-5 pr-5 font-medium rounded-br-none'
+                          : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal'
                       }`}
                     >
                       {message.imgUrl && (
