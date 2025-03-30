@@ -38,6 +38,10 @@ interface MessageData {
   fileName?: string;
   fileKey?: string;
   fileType?: string;
+  type?: string; // For typing indicators and read receipts
+  isTyping?: boolean; // For typing indicator status
+  isRead?: boolean; // For read receipt status
+  messageIds?: string[]; // For marking multiple messages as read
 }
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
@@ -64,6 +68,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
   const [isMobile, setIsMobile] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const [typingUsers, setTypingUsers] = useState<Record<string, {isTyping: boolean, timestamp: number}>>({});
+  const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
 
   const baseUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL;
   const wsUrl = `${baseUrl?.replace(/^http/, 'ws')}/ws?id=${user?.id}`;
@@ -115,6 +121,20 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
     fetchConversation();
   }, [selectedConversationIndex, allConversations, user]);
+
+  // Cleanup typing timeouts
+  useEffect(() => {
+    return () => {
+      // Clear all typing timeouts
+      Object.values(typingTimeoutRef.current).forEach(timeout => {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+      });
+      // Reset typing users state
+      setTypingUsers({});
+    };
+  }, []);
 
   // WebSocket connection setup with more robust reconnection logic
   useEffect(() => {
@@ -251,6 +271,81 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 message: `Connection status: ${message.status}`, 
                 timestamp: new Date().toISOString() 
               }]);
+              return;
+            }
+            
+            // Handle typing indicator messages
+            if (message.type === 'typing') {
+              if (message.senderId !== user?.id) { // Only process typing indicators from other users
+                const conversationId = message.conversationId;
+                const userId = message.senderId;
+                const typingKey = `${conversationId}:${userId}`;
+                
+                // Clear any existing timeout for this user
+                if (typingTimeoutRef.current[typingKey]) {
+                  clearTimeout(typingTimeoutRef.current[typingKey]);
+                }
+                
+                // Update typing status
+                setTypingUsers(prev => ({
+                  ...prev,
+                  [typingKey]: {
+                    isTyping: message.isTyping,
+                    timestamp: Date.now()
+                  }
+                }));
+                
+                // If user is typing, set a timeout to clear the typing indicator after 5 seconds
+                if (message.isTyping) {
+                  typingTimeoutRef.current[typingKey] = setTimeout(() => {
+                    setTypingUsers(prev => {
+                      const newState = { ...prev };
+                      // Only clear if it's still the same typing session (check timestamp)
+                      if (newState[typingKey] && Date.now() - newState[typingKey].timestamp >= 5000) {
+                        newState[typingKey] = { isTyping: false, timestamp: Date.now() };
+                      }
+                      return newState;
+                    });
+                  }, 5000);
+                }
+              }
+              return;
+            }
+            
+            // Handle read receipt messages
+            if (message.type === 'read_receipt') {
+              if (message.senderId !== user?.id) { // Only process read receipts from other users
+                // Mark messages as read in the UI
+                setAllConversations(prevConversations => {
+                  const updatedConversations = [...prevConversations];
+                  const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
+                  
+                  if (index !== -1 && updatedConversations[index].messages) {
+                    updatedConversations[index].messages = updatedConversations[index].messages.map(msg => {
+                      // If this message ID is in the read receipt message IDs list, mark it as read
+                      if (message.messageIds?.includes(msg.id)) {
+                        return { ...msg, isRead: true };
+                      }
+                      return msg;
+                    });
+                  }
+                  
+                  return updatedConversations;
+                });
+                
+                // Also update current messages array if it's the active conversation
+                if (selectedConversationIndex !== null && 
+                    allConversations[selectedConversationIndex]?.id === message.conversationId) {
+                  setMessages(prevMessages => 
+                    prevMessages.map(msg => {
+                      if (message.messageIds?.includes(msg.id)) {
+                        return { ...msg, isRead: true };
+                      }
+                      return msg;
+                    })
+                  );
+                }
+              }
               return;
             }
             
@@ -539,11 +634,18 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
 
     // Mark all messages in this conversation as read
     // This is a local state update only - in a real app, you would call an API to update the read status
+    let unreadMessages: string[] = [];
+    
     setAllConversations(prevConversations => {
       const updatedConversations = [...prevConversations];
       const conversationToUpdate = updatedConversations[index];
       
       if (conversationToUpdate && conversationToUpdate.messages) {
+        // Collect IDs of unread messages from other participants
+        unreadMessages = conversationToUpdate.messages
+          .filter(message => message.senderId !== user?.id && !message.isRead && message.id)
+          .map(message => message.id);
+        
         // Mark all messages from other participants as read
         conversationToUpdate.messages = conversationToUpdate.messages.map(message => {
           if (message.senderId !== user?.id) {
@@ -555,6 +657,32 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       
       return updatedConversations;
     });
+
+    // Send read receipt via WebSocket if there are unread messages
+    if (unreadMessages.length > 0 && wsRef.current && wsConnected) {
+      const otherParticipant = conversation.participants.find(
+        participant => participant.userId !== user?.id
+      );
+      
+      if (otherParticipant && otherParticipant.User.id) {
+        try {
+          const readReceiptData: MessageData = {
+            type: 'read_receipt',
+            conversationId: conversation.id,
+            receiverId: otherParticipant.User.id,
+            senderRole: userParticipant?.role as 'Host' | 'Tenant' || 'Tenant',
+            content: '',
+            messageIds: unreadMessages,
+            isRead: true
+          };
+          
+          wsRef.current.send(JSON.stringify(readReceiptData));
+          console.log('Sent read receipt for messages:', unreadMessages);
+        } catch (error) {
+          console.error('Failed to send read receipt:', error);
+        }
+      }
+    }
 
     // On mobile, hide the sidebar immediately after selection
     if (isMobile) {
@@ -587,6 +715,42 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     }
   };
 
+  // Handle typing events from the textarea
+  const handleTypingStatus = (isTyping: boolean) => {
+    if (selectedConversationIndex === null || !wsRef.current || !wsConnected) {
+      return;
+    }
+
+    const selectedConversation = allConversations[selectedConversationIndex];
+    
+    // Find the other participant
+    const otherParticipant = selectedConversation.participants.find(
+      participant => participant.User.id !== user?.id
+    );
+
+    if (!otherParticipant) {
+      return;
+    }
+
+    // Send typing status via WebSocket
+    try {
+      const typingData: MessageData = {
+        type: 'typing',
+        isTyping: isTyping,
+        conversationId: selectedConversation.id,
+        receiverId: otherParticipant.User.id,
+        senderRole: userType,
+        content: '', // Empty content for typing indicator
+        senderId: user?.id
+      };
+      
+      wsRef.current.send(JSON.stringify(typingData));
+      console.log(`Sent typing status: ${isTyping}`);
+    } catch (error) {
+      console.error('Failed to send typing status:', error);
+    }
+  };
+
   const handleSendMessage = async (
     newMessageInput: string,
     fileUrl?: string,
@@ -602,6 +766,9 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       console.error('No conversation selected');
       return;
     }
+
+    // Send typing false status to stop typing indicator
+    handleTypingStatus(false);
 
     const selectedConversation = allConversations[selectedConversationIndex];
     console.log('Selected conversation:', selectedConversation.id);
@@ -620,7 +787,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     // Generate a client-side ID for this message to help with tracking and deduplication
     const clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
     
-    const messageData: MessageData & { clientId?: string } = {
+    const messageData: MessageData & { clientId?: string, senderId?: string } = {
       content: newMessageInput, // This can be empty string now
       senderRole: userType,
       conversationId: selectedConversation.id,
@@ -884,6 +1051,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             currentUserId={user?.id}
             currentUserImage={user?.imageUrl}
             onBack={toggleSidebar}
+            onTyping={handleTypingStatus}
+            isOtherUserTyping={selectedConversationIndex !== null && 
+              typingUsers[`${allConversations[selectedConversationIndex].id}:${
+                allConversations[selectedConversationIndex].participants.find(
+                  p => p.userId !== user?.id
+                )?.userId || ''}`]?.isTyping || false}
           />
         </div>
       </div>

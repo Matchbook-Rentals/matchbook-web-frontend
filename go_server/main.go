@@ -42,7 +42,10 @@ type Message struct {
 	CreatedAt      time.Time `json:"createdAt,omitempty"`
 	UpdatedAt      time.Time `json:"updatedAt,omitempty"`
 	ClientID       string    `json:"clientId,omitempty"` // Client-generated ID for tracking and deduplication
-	Type           string    `json:"type,omitempty"`     // Message type (e.g., "ping", "text", "connection")
+	Type           string    `json:"type,omitempty"`     // Message type (e.g., "ping", "text", "connection", "typing", "read_receipt")
+	IsTyping       bool      `json:"isTyping,omitempty"` // Flag for typing indicators
+	IsRead         bool      `json:"isRead,omitempty"`   // Flag for read receipts
+	MessageIDs     []string  `json:"messageIds,omitempty"` // List of message IDs marked as read
 }
 
 var (
@@ -483,7 +486,52 @@ func processIncomingMessage(c *Client, rawMessage []byte) {
 		msg.SenderID = c.UserID
 	}
 
-	// Validate required fields for actual messages
+	// Handle typing indicator events, which don't need persistence
+	if msg.Type == "typing" {
+		// Validate required fields for typing indicators
+		if msg.ReceiverID == "" || msg.ConversationID == "" {
+			log.Printf("Error: Missing receiver ID or conversation ID in typing indicator from client %s", c.ID)
+			errorMsg, _ := json.Marshal(map[string]interface{}{
+				"type": "error",
+				"message": "Receiver ID and Conversation ID are required for typing indicators",
+			})
+			c.Send <- errorMsg
+			return
+		}
+		
+		// Log at debug level to avoid noise
+		log.Printf("Client %s typing status: %v in conversation %s", c.ID, msg.IsTyping, msg.ConversationID)
+		
+		// Immediately distribute typing status to connected clients and return
+		deliverMessageToClients(fmt.Sprintf("typing-%d", time.Now().UnixNano()), msg)
+		return
+	}
+	
+	// Handle read receipt events
+	if msg.Type == "read_receipt" {
+		// Validate required fields for read receipts
+		if msg.ReceiverID == "" || msg.ConversationID == "" || len(msg.MessageIDs) == 0 {
+			log.Printf("Error: Missing required fields in read receipt from client %s", c.ID)
+			errorMsg, _ := json.Marshal(map[string]interface{}{
+				"type": "error",
+				"message": "Receiver ID, Conversation ID, and Message IDs are required for read receipts",
+			})
+			c.Send <- errorMsg
+			return
+		}
+		
+		log.Printf("Client %s marked messages as read in conversation %s: %v", 
+			c.ID, msg.ConversationID, msg.MessageIDs)
+		
+		// Distribute read receipt to connected clients
+		deliverMessageToClients(fmt.Sprintf("read-%d", time.Now().UnixNano()), msg)
+		
+		// Also persist read receipts to the database
+		go sendMessageToMainServer(fmt.Sprintf("read-%d", time.Now().UnixNano()), msg)
+		return
+	}
+
+	// For regular messages, validate required fields
 	if msg.ReceiverID == "" {
 		log.Printf("Error: Missing receiver ID in message from client %s", c.ID)
 		errorMsg, _ := json.Marshal(map[string]interface{}{

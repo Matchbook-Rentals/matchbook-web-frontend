@@ -14,6 +14,8 @@ interface MessageAreaProps {
   currentUserId: string | undefined;
   currentUserImage?: string | null;
   onBack?: () => void;
+  onTyping?: (isTyping: boolean) => void;
+  isOtherUserTyping?: boolean;
 }
 
 interface MessageFile {
@@ -42,7 +44,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   onSendMessage,
   currentUserId,
   currentUserImage = "/placeholder-avatar.png",
-  onBack
+  onBack,
+  onTyping,
+  isOtherUserTyping = false
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
@@ -55,6 +59,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -87,6 +92,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   useEffect(() => {
     return () => {
       setIsExiting(false);
+      // Clear typing timeout
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -210,8 +219,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
   // Create the className string explicitly
-  const messageContainerClassName = `flex flex-col  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
-    } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     // Main container
@@ -328,6 +336,23 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                         </div>
                       )}
                       {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
+                      
+                      {/* Read receipt indicator */}
+                      {message.senderId === currentUserId && (
+                        <div className="flex justify-end mt-1">
+                          <span className="text-xs text-right">
+                            {message.isRead ? (
+                              <span className="text-blue-500">Read</span>
+                            ) : message.pending ? (
+                              <span className="text-gray-400">Sending...</span>
+                            ) : message.failed ? (
+                              <span className="text-red-500">Failed</span>
+                            ) : (
+                              <span className="text-gray-400">Delivered</span>
+                            )}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {message.senderId === currentUserId && (
                       <div className="relative">
@@ -346,6 +371,27 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
                     <p className="text-gray-700 mb-3">No messages yet.</p>
                     <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Typing indicator */}
+              {isOtherUserTyping && (
+                <div className="flex justify-start mb-4">
+                  <div className="relative">
+                    <img
+                      src={participantInfo.imageUrl}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
+                    />
+                    <div className="w-8 mr-2" />
+                  </div>
+                  <div className="max-w-[70%] bg-[#AC8D9015] pl-5 pr-5 rounded-[15px] rounded-bl-none py-[6px] border border-gray-200">
+                    <div className="flex space-x-1 items-center h-5 mb-[2px]">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
                   </div>
                 </div>
               )
@@ -427,6 +473,24 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               if (scrollHeight > 44) {
                 const newHeight = Math.min(scrollHeight, 132); // Max 3x the original height
                 textarea.style.height = `${newHeight}px`;
+              }
+              
+              // Send typing indicator when user starts typing
+              if (onTyping && selectedConversation) {
+                // Clear any existing timeout
+                if (typingTimeoutRef.current) {
+                  clearTimeout(typingTimeoutRef.current);
+                }
+                
+                // Send typing indicator
+                onTyping(true);
+                
+                // Set timeout to stop typing indicator after 3 seconds of inactivity
+                typingTimeoutRef.current = setTimeout(() => {
+                  if (onTyping) {
+                    onTyping(false);
+                  }
+                }, 3000);
               }
             }}
             onKeyPress={handleKeyPress}
