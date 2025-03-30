@@ -331,18 +331,19 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                     const index = updatedConversations.findIndex(conv => conv.id === message.conversationId);
                     
                     if (index !== -1 && updatedConversations[index].messages) {
-                      updatedConversations[index].messages = updatedConversations[index].messages.map(msg => {
+                      // Update messages in place
+                      updatedConversations[index].messages.forEach(msg => {
                         // Mark as read if message was created before or at the read timestamp
                         try {
                           const msgCreatedAt = new Date(msg.createdAt);
                           if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
                             console.log('Marking message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
-                            return { ...msg, isRead: true };
+                            // Update in place to avoid re-rendering issues
+                            Object.assign(msg, { isRead: true });
                           }
                         } catch (err) {
                           console.error('Error processing message date:', err, msg);
                         }
-                        return msg;
                       });
                     }
                     
@@ -359,7 +360,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                           const msgCreatedAt = new Date(msg.createdAt);
                           if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
                             console.log('Marking active message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
-                            return { ...msg, isRead: true };
+                            // Update message in place instead of creating new object
+                            Object.assign(msg, { isRead: true });
                           }
                         } catch (err) {
                           console.error('Error processing active message date:', err, msg);
@@ -482,10 +484,27 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                       message.isRead = true;
                     }
                     
+                    // Check if this is an update to an optimistic message we've already added
+                    const existingMsgIndex = currentMessages.findIndex(msg => 
+                      (message.clientId && msg.clientId === message.clientId) ||
+                      (message.id && msg.id === message.id)
+                    );
+                    
+                    if (existingMsgIndex !== -1) {
+                      // Update the existing message in place to avoid flickering
+                      Object.assign(currentMessages[existingMsgIndex], {
+                        ...message,
+                        pending: false,
+                        isRead: message.senderId === user?.id ? true : message.isRead
+                      });
+                    } else {
+                      // Add new message to the beginning of the array since we're retrieving in desc order
+                      currentMessages.unshift(message);
+                    }
+                    
                     updatedConversations[index] = {
                       ...updatedConversations[index],
-                      // Add new message to the beginning of the array since we're retrieving in desc order
-                      messages: [message, ...currentMessages]
+                      messages: currentMessages
                     };
                     
                     return updatedConversations;
@@ -854,12 +873,12 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       id: `temp-${clientId}`,
       createdAt: new Date(),
       updatedAt: new Date(),
-      isRead: true, // Messages sent by current user are automatically read
+      isRead: false, // Messages sent by current user are automatically read
       pending: true // Mark as pending until confirmed
     };
     
     // Optimistically add to UI at the end (since messages are now displayed oldest to newest)
-    setMessages(prevMessages => [...prevMessages, optimisticMessage]);
+    //setMessages(prevMessages => [...prevMessages, optimisticMessage]);
     
     // Add to conversation
     setAllConversations(prevConversations => {
@@ -868,10 +887,22 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       
       if (index !== -1) {
         const currentMessages = updatedConversations[index].messages || [];
+        
+        // Check if we already have a message with this clientId (shouldn't happen, but just in case)
+        const existingIndex = currentMessages.findIndex(msg => msg.clientId === clientId);
+        
+        if (existingIndex !== -1) {
+          // If somehow the message already exists, update it instead of adding a new one
+          currentMessages[existingIndex] = optimisticMessage;
+        } else {
+          // Add to beginning of array for proper ordering when we reverse in the UI
+          //currentMessages.unshift(optimisticMessage);
+          currentMessages.push(optimisticMessage);
+        }
+        
         updatedConversations[index] = {
           ...updatedConversations[index],
-          // Add to beginning of array for proper ordering when we reverse in the UI
-          messages: [optimisticMessage, ...currentMessages]
+          messages: currentMessages
         };
       }
       
@@ -911,24 +942,39 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         console.log('Message created successfully via REST API:', newMessage);
         
         // Update the optimistic message with the server-generated ID and remove pending status
+        // Preserve the original message object but update its properties
         setMessages(prevMessages => 
-          prevMessages.map(msg => 
-            (msg.clientId === clientId) ? { ...newMessage, isRead: true } : msg
-          )
+          prevMessages.map(msg => {
+            if (msg.clientId === clientId) {
+              // Update existing message in place without changing its reference
+              // This prevents the message from disappearing and reappearing in the UI
+              Object.assign(msg, {
+                ...newMessage,
+                isRead: true,
+                pending: false
+              });
+              return msg;
+            }
+            return msg;
+          })
         );
         
-        // Update in conversation too
+        // Update in conversation too using the same approach
         setAllConversations(prevConversations => {
           const updatedConversations = [...prevConversations];
           const index = updatedConversations.findIndex(conv => conv.id === selectedConversation.id);
           
-          if (index !== -1) {
-            updatedConversations[index] = {
-              ...updatedConversations[index],
-              messages: updatedConversations[index].messages?.map(msg => 
-                (msg.clientId === clientId) ? { ...newMessage, isRead: true } : msg
-              ) || []
-            };
+          if (index !== -1 && updatedConversations[index].messages) {
+            // Update each message in place rather than creating new array
+            updatedConversations[index].messages.forEach(msg => {
+              if (msg.clientId === clientId) {
+                Object.assign(msg, {
+                  ...newMessage,
+                  isRead: true,
+                  pending: false
+                });
+              }
+            });
           }
           
           return updatedConversations;
@@ -938,29 +984,37 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       } catch (error) {
         console.error('Error creating message via REST API:', error);
         
-        // Mark the message as failed
+        // Mark the message as failed - update in place
         setMessages(prevMessages => 
-          prevMessages.map(msg => 
-            (msg.clientId === clientId) 
-              ? { ...msg, pending: false, failed: true, error: 'Failed to send message' } 
-              : msg
-          )
+          prevMessages.map(msg => {
+            if (msg.clientId === clientId) {
+              // Update the message properties in place
+              Object.assign(msg, {
+                pending: false, 
+                failed: true, 
+                error: 'Failed to send message'
+              });
+            }
+            return msg;
+          })
         );
         
-        // Update in conversation too
+        // Update in conversation too - same in-place modification approach
         setAllConversations(prevConversations => {
           const updatedConversations = [...prevConversations];
           const index = updatedConversations.findIndex(conv => conv.id === selectedConversation.id);
           
-          if (index !== -1) {
-            updatedConversations[index] = {
-              ...updatedConversations[index],
-              messages: updatedConversations[index].messages?.map(msg => 
-                (msg.clientId === clientId) 
-                  ? { ...msg, pending: false, failed: true, error: 'Failed to send message' } 
-                  : msg
-              ) || []
-            };
+          if (index !== -1 && updatedConversations[index].messages) {
+            // Update each message in place to maintain reference
+            updatedConversations[index].messages.forEach(msg => {
+              if (msg.clientId === clientId) {
+                Object.assign(msg, {
+                  pending: false, 
+                  failed: true, 
+                  error: 'Failed to send message'
+                });
+              }
+            });
           }
           
           return updatedConversations;
