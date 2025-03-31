@@ -180,7 +180,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             return (
               <div
                 key={conv.id}
-                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationId === conv.id ? 'bg-gray-100' : ''} hover:bg-gray-100 transition-shadow duration-200`}
+                className={`w-full mb-3 rounded-lg cursor-pointer ${selectedConversationId === conv.id ? 'bg-[#f6f3f4]' : ''} hover:bg-[#f6f3f4] transition-shadow duration-200`}
                 onClick={() => onSelectConversation(conv.id)}
               >
                 <div className="p-3 flex items-center h-full w-full">
