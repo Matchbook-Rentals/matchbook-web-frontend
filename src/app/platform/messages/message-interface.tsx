@@ -255,7 +255,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
               setWsMessages(prev => [...prev, { 
                 type: 'info', 
                 message: `Connection status: ${message.status}`, 
-                timestamp: new Date().toISOString() 
+                timestamp: Date.now() 
               }]);
               return;
             }
@@ -310,41 +310,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 // Mark messages as read in the UI based on timestamp
                 let readTimestamp = null;
                 try {
-                  if (message.timestamp) {
-                    // Log the raw timestamp for debugging
-                    console.log('Raw timestamp received:', message.timestamp, 'Type:', typeof message.timestamp);
-                    
-                    // Try to parse the timestamp safely, with extensive error logging
-                    try {
-                      if (typeof message.timestamp === 'string') {
-                        // First try parsing as a numeric string
-                        const numericValue = parseInt(message.timestamp.trim(), 10);
-                        if (!isNaN(numericValue)) {
-                          console.log('Parsed timestamp as number:', numericValue);
-                          readTimestamp = new Date(numericValue);
-                        } else {
-                          // If not a number, try as ISO string
-                          console.log('Trying as ISO string');
-                          readTimestamp = new Date(message.timestamp);
-                        }
-                      } else if (typeof message.timestamp === 'number') {
-                        console.log('Timestamp is already a number:', message.timestamp);
-                        readTimestamp = new Date(message.timestamp);
-                      } else {
-                        console.warn('Timestamp is neither string nor number:', message.timestamp);
-                        readTimestamp = new Date();
-                      }
-                    } catch (parseError) {
-                      console.error('Error parsing timestamp:', parseError, message.timestamp);
-                      readTimestamp = new Date();
-                    }
-                    
-                    // Validate the timestamp is a real date
-                    if (isNaN(readTimestamp.getTime())) {
-                      console.warn('Invalid date after parsing:', message.timestamp);
-                      readTimestamp = new Date(); // Default to current time if invalid
-                    }
-                  }
+                  // Use the timestamp from the websocket message
+                  readTimestamp = new Date(message.timestamp);
                 } catch (error) {
                   console.error('Error parsing timestamp:', error);
                   readTimestamp = new Date(); // Default to current time on error
@@ -407,6 +374,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                             console.log('✅ Marking message as read:', msg.id);
                             // Update in place to avoid re-rendering issues
                             Object.assign(msg, { isRead: true });
+                            // Keep original timestamp from message
                           }
                         } catch (err) {
                           console.error('Error processing message date:', err, msg);
@@ -469,6 +437,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                             console.log('✅ Marking active message as read:', msg.id);
                             // Update message in place instead of creating new object
                             Object.assign(msg, { isRead: true });
+                            // Keep original timestamp from message
                           }
                         } catch (err) {
                           console.error('Error processing active message date:', err, msg);
@@ -505,7 +474,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             
             // Add a unique client-side ID if not present to help with deduplication
             if (!message.clientId) {
-              message.clientId = `client-${new Date().toISOString()}-${Math.random().toString(36).substring(2, 15)}`;
+              message.clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
             }
             
             setWsMessages((prevMessages) => [...prevMessages, message]);
@@ -796,7 +765,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         // Mark all messages from other participants as read
         conversationToUpdate.messages = conversationToUpdate.messages.map(message => {
           if (message.senderId !== user?.id && !message.isRead) {
-            return { ...message, isRead: true };
+            return { ...message, isRead: true }; // Keep original timestamp
           }
           return message;
         });
@@ -830,7 +799,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 senderId: user?.id, // Add sender ID for proper identification
                 senderRole: userParticipant?.role === 'Host' ? 'Host' : 'Tenant', // Fix potential logic issue
                 content: '',
-                timestamp: currentTimestamp.getTime(),
+                timestamp: Date.now(), // Use current timestamp when sending read receipt
                 isRead: true
               };
               
@@ -1376,7 +1345,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                             </span>
                             {msg.timestamp && (
                               <span className="text-xs opacity-80">
-                                {new Date(msg.timestamp).toLocaleTimeString()}
+                                {new Date().toLocaleTimeString()}
                               </span>
                             )}
                           </div>

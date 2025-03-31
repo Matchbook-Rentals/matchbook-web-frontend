@@ -330,9 +330,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                             message === messages
                               .filter(m => m.senderId === currentUserId)
                               .slice(-1)[0] && (
-                              <span className="text-xs text-gray-400">
+                              <span onClick={() => console.log(message.timestamp)} className="text-xs text-gray-400">
                                 {message.isRead ? (
-                                  `Read • ${new Date(message.timestamp).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
+                                  `Read ${new Date(message.updatedAt).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
                                 ) : (
                                   "Delivered"
                                 )}
@@ -391,8 +391,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className="p-4 bg-background">
-        <div className="flex flex-wrap gap-2 mb-2">
+      <div className="py-1 px-12 bg-background">
+        <div className="flex flex-wrap justify-end gap-2 mb-2">
           {messageAttachments.map((attachment, index) => (
             <div key={index} className="inline-block rounded">
               {isImageFile(attachment.fileName || '') ? (

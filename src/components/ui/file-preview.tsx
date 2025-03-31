@@ -189,7 +189,7 @@ export function FilePreview({
 
   return (
     <Card
-      className={`relative overflow-hidden ${sizes[previewSize].card} ${className} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`relativte test overflow-hidden ${sizes[previewSize].card} ${className} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {/* X icon to delete attachment */}
@@ -208,52 +208,54 @@ export function FilePreview({
       )}
 
       {/* File preview/icon */}
-      <div className="flex flex-col items-center justify-center h-full p-2">
+      <div className="flex flex-row-reverse items-center justify-between h-full p-2">
         {isImage ? (
-          <div className="relative w-full h-3/4 flex items-center justify-center">
+          <div className="relative w-2/3 h-full flex items-center justify-center">
             <Image
               src={fileUrl}
               alt={file.fileName}
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
               className={`object-contain ${sizes[previewSize].image}`}
             />
           </div>
         ) : (
-          <div className="flex items-center justify-center h-3/4">
+          <div className="flex items-center justify-center h-3/4 w-2/3">
             <FileIconComponent />
           </div>
         )}
 
-        {/* File name */}
-        <div className="text-center mt-1 px-1">
-          <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
-            {file.fileName}
-          </p>
-          {file.fileSize && (
-            <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+        <div className="flex flex-col w-1/3">
+          {/* File name */}
+          <div className="px-1">
+            <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
+              {file.fileName}
+            </p>
+            {file.fileSize && (
+              <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center mt-1 space-x-1">
+            {allowDownload && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={handleDownload}
+                disabled={isLoading}
+              >
+                <Download size={14} />
+              </Button>
+            )}
+          </div>
+
+          {/* Error message */}
+          {error && (
+            <p className="text-xs text-red-500 mt-1">{error}</p>
           )}
         </div>
-
-        {/* Action buttons */}
-        <div className="flex items-center justify-center mt-1 space-x-1">
-          {allowDownload && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={handleDownload}
-              disabled={isLoading}
-            >
-              <Download size={14} />
-            </Button>
-          )}
-        </div>
-
-        {/* Error message */}
-        {error && (
-          <p className="text-xs text-red-500 text-center mt-1">{error}</p>
-        )}
       </div>
     </Card>
   );
