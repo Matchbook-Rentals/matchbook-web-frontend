@@ -43,7 +43,7 @@ interface MessageData {
   isTyping?: boolean; // For typing indicator status
   isRead?: boolean; // For read receipt status
   messageIds?: string[]; // For marking multiple messages as read
-  timestamp?: string; // For timestamp-based read receipts
+  timestamp?: number; // For timestamp-based read receipts
 }
 
 const MessageInterface = ({ conversations }: { conversations: ExtendedConversation[] }) => {
@@ -138,7 +138,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         setWsMessages(prev => [...prev, { 
           type: 'error', 
           message: `Maximum reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached. Will try again in 30 seconds.`, 
-          timestamp: new Date().toISOString() 
+          timestamp: Date.now() 
         }]);
         
         // Reset retry counter after 30 seconds and try again
@@ -174,7 +174,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
       setWsMessages(prev => [...prev, { 
         type: 'info', 
         message: `Initiating new WebSocket connection to: ${wsUrl} (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`, 
-        timestamp: new Date().toISOString() 
+        timestamp: Date.now()
       }]);
       
       try {
@@ -188,7 +188,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             setWsMessages(prev => [...prev, {
               type: 'warning',
               message: 'WebSocket connection attempt timed out',
-              timestamp: new Date().toISOString()
+              timestamp: Date.now()
             }]);
             
             try {
@@ -220,7 +220,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           setWsMessages(prev => [...prev, { 
             type: 'success', 
             message: 'WebSocket connection opened successfully', 
-            timestamp: new Date().toISOString() 
+            timestamp: Date.now()
           }]);
           
           // Set up a ping interval to keep the connection alive
@@ -277,7 +277,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                   ...prev,
                   [typingKey]: {
                     isTyping: message.isTyping,
-                    timestamp: new Date().toISOString()
+                    timestamp: Date.now()
                   }
                 }));
                 
@@ -287,8 +287,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                     setTypingUsers(prev => {
                       const newState = { ...prev };
                       // Only clear if it's still the same typing session (check timestamp)
-                      if (newState[typingKey] && (new Date().getTime() - new Date(newState[typingKey].timestamp).getTime()) >= 5000) {
-                        newState[typingKey] = { isTyping: false, timestamp: new Date().toISOString() };
+                      if (newState[typingKey] && (Date.now() - newState[typingKey].timestamp) >= 5000) {
+                        newState[typingKey] = { isTyping: false, timestamp: Date.now() };
                       }
                       return newState;
                     });
@@ -311,10 +311,37 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 let readTimestamp = null;
                 try {
                   if (message.timestamp) {
-                    readTimestamp = new Date(message.timestamp);
+                    // Log the raw timestamp for debugging
+                    console.log('Raw timestamp received:', message.timestamp, 'Type:', typeof message.timestamp);
+                    
+                    // Try to parse the timestamp safely, with extensive error logging
+                    try {
+                      if (typeof message.timestamp === 'string') {
+                        // First try parsing as a numeric string
+                        const numericValue = parseInt(message.timestamp.trim(), 10);
+                        if (!isNaN(numericValue)) {
+                          console.log('Parsed timestamp as number:', numericValue);
+                          readTimestamp = new Date(numericValue);
+                        } else {
+                          // If not a number, try as ISO string
+                          console.log('Trying as ISO string');
+                          readTimestamp = new Date(message.timestamp);
+                        }
+                      } else if (typeof message.timestamp === 'number') {
+                        console.log('Timestamp is already a number:', message.timestamp);
+                        readTimestamp = new Date(message.timestamp);
+                      } else {
+                        console.warn('Timestamp is neither string nor number:', message.timestamp);
+                        readTimestamp = new Date();
+                      }
+                    } catch (parseError) {
+                      console.error('Error parsing timestamp:', parseError, message.timestamp);
+                      readTimestamp = new Date();
+                    }
+                    
                     // Validate the timestamp is a real date
                     if (isNaN(readTimestamp.getTime())) {
-                      console.warn('Invalid timestamp in read receipt:', message.timestamp);
+                      console.warn('Invalid date after parsing:', message.timestamp);
                       readTimestamp = new Date(); // Default to current time if invalid
                     }
                   }
@@ -324,7 +351,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 }
                 
                 if (readTimestamp) {
-                  console.log('Processing read receipt with timestamp:', readTimestamp.toISOString(), 'for conversation:', message.conversationId);
+                  console.log('Processing read receipt with timestamp:', readTimestamp.getTime(), 'for conversation:', message.conversationId);
                   
                   setAllConversations(prevConversations => {
                     const updatedConversations = [...prevConversations];
@@ -335,9 +362,49 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                       updatedConversations[index].messages.forEach(msg => {
                         // Mark as read if message was created before or at the read timestamp
                         try {
-                          const msgCreatedAt = new Date(msg.createdAt);
+                          // Log the raw message creation date for debugging
+                          console.log('Message created at (raw):', msg.createdAt, 'Type:', typeof msg.createdAt);
+                          
+                          let msgCreatedAt;
+                          // Handle different possible formats of createdAt
+                          if (typeof msg.createdAt === 'string') {
+                            // Try parsing as timestamp first
+                            const numericValue = parseInt(msg.createdAt, 10);
+                            if (!isNaN(numericValue)) {
+                              msgCreatedAt = new Date(numericValue);
+                              console.log('Parsed createdAt as number:', numericValue);
+                            } else {
+                              msgCreatedAt = new Date(msg.createdAt);
+                              console.log('Parsed createdAt as date string');
+                            }
+                          } else if (typeof msg.createdAt === 'number') {
+                            msgCreatedAt = new Date(msg.createdAt);
+                            console.log('CreatedAt is a number:', msg.createdAt);
+                          } else if (msg.createdAt instanceof Date) {
+                            msgCreatedAt = msg.createdAt;
+                            console.log('CreatedAt is already a Date object');
+                          } else {
+                            console.warn('Unrecognized createdAt format:', msg.createdAt);
+                            msgCreatedAt = new Date(); // Default
+                          }
+                          
+                          // Validate the date
+                          if (isNaN(msgCreatedAt.getTime())) {
+                            console.error('Invalid createdAt date:', msg.createdAt);
+                            return; // Skip this message
+                          }
+                          
+                          // Log comparison values for debugging
+                          console.log(
+                            'Comparing dates -', 
+                            'Message:', msg.id,
+                            'CreatedAt:', msgCreatedAt.getTime(),
+                            'ReadTimestamp:', readTimestamp.getTime(),
+                            'Comparison result:', msgCreatedAt <= readTimestamp
+                          );
+                          
                           if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
-                            console.log('Marking message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
+                            console.log('✅ Marking message as read:', msg.id);
                             // Update in place to avoid re-rendering issues
                             Object.assign(msg, { isRead: true });
                           }
@@ -357,9 +424,49 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                       prevMessages.map(msg => {
                         // Mark as read if message was created before or at the read timestamp
                         try {
-                          const msgCreatedAt = new Date(msg.createdAt);
+                          // Log the raw message creation date for debugging
+                          console.log('Active message created at (raw):', msg.createdAt, 'Type:', typeof msg.createdAt);
+                          
+                          let msgCreatedAt;
+                          // Handle different possible formats of createdAt
+                          if (typeof msg.createdAt === 'string') {
+                            // Try parsing as timestamp first
+                            const numericValue = parseInt(msg.createdAt, 10);
+                            if (!isNaN(numericValue)) {
+                              msgCreatedAt = new Date(numericValue);
+                              console.log('Parsed active createdAt as number:', numericValue);
+                            } else {
+                              msgCreatedAt = new Date(msg.createdAt);
+                              console.log('Parsed active createdAt as date string');
+                            }
+                          } else if (typeof msg.createdAt === 'number') {
+                            msgCreatedAt = new Date(msg.createdAt);
+                            console.log('Active createdAt is a number:', msg.createdAt);
+                          } else if (msg.createdAt instanceof Date) {
+                            msgCreatedAt = msg.createdAt;
+                            console.log('Active createdAt is already a Date object');
+                          } else {
+                            console.warn('Unrecognized active createdAt format:', msg.createdAt);
+                            msgCreatedAt = new Date(); // Default
+                          }
+                          
+                          // Validate the date
+                          if (isNaN(msgCreatedAt.getTime())) {
+                            console.error('Invalid active createdAt date:', msg.createdAt);
+                            return msg; // Skip this message, return unchanged
+                          }
+                          
+                          // Log comparison values for debugging
+                          console.log(
+                            'Comparing active dates -', 
+                            'Message:', msg.id,
+                            'CreatedAt:', msgCreatedAt.getTime(),
+                            'ReadTimestamp:', readTimestamp.getTime(),
+                            'Comparison result:', msgCreatedAt <= readTimestamp
+                          );
+                          
                           if (msg.senderId === user?.id && !msg.isRead && msgCreatedAt <= readTimestamp) {
-                            console.log('Marking active message as read:', msg.id, 'created at:', msgCreatedAt.toISOString());
+                            console.log('✅ Marking active message as read:', msg.id);
                             // Update message in place instead of creating new object
                             Object.assign(msg, { isRead: true });
                           }
@@ -381,7 +488,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
               setWsMessages(prev => [...prev, { 
                 type: 'error', 
                 message: `Persistence error for message: ${message.originalMessageId}`, 
-                timestamp: new Date().toISOString() 
+                timestamp: Date.now()
               }]);
               
               // Show an error toast or notification to the user
@@ -528,7 +635,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           setWsMessages(prev => [...prev, {
             type: 'error',
             message: 'WebSocket connection error encountered',
-            timestamp: new Date().toISOString()
+            timestamp: Date.now()
           }]);
           
           // Clean up ping interval if it exists
@@ -552,7 +659,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           setWsMessages(prev => [...prev, {
             type: 'info',
             message: `WebSocket connection closed: ${event.reason || 'No reason provided'} (code: ${event.code})`,
-            timestamp: new Date().toISOString()
+            timestamp: Date.now()
           }]);
 
           // Determine if this was a clean close or not
@@ -572,7 +679,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
           setWsMessages(prev => [...prev, {
             type: 'info',
             message: `Reconnecting in ${reconnectDelay}ms (attempt ${connectionAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-            timestamp: new Date().toISOString()
+            timestamp: Date.now()
           }]);
           
           if (reconnectTimeoutRef.current) {
@@ -588,7 +695,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
         setWsMessages(prev => [...prev, {
           type: 'error',
           message: `Failed to create WebSocket: ${error}`,
-          timestamp: new Date().toISOString()
+          timestamp: Date.now()
         }]);
         
         // Retry after delay
@@ -723,7 +830,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 senderId: user?.id, // Add sender ID for proper identification
                 senderRole: userParticipant?.role === 'Host' ? 'Host' : 'Tenant', // Fix potential logic issue
                 content: '',
-                timestamp: currentTimestamp.getTime().toString(), // Send timestamp as numeric string
+                timestamp: currentTimestamp.getTime(),
                 isRead: true
               };
               
@@ -845,7 +952,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     console.log('Recipient found:', otherParticipant.User.id);
 
     // Generate a client-side ID for this message to help with tracking and deduplication
-    const clientId = `client-${new Date().toISOString()}-${Math.random().toString(36).substring(2, 15)}`;
+    const clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
     
     const messageData: MessageData & { clientId?: string, senderId?: string } = {
       content: newMessageInput, // This can be empty string now

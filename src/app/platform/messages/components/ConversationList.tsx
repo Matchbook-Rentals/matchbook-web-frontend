@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Conversation } from '@prisma/client';
 import { UserResource } from '@clerk/types';
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Inbox, Home, Key, HeadphonesIcon } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 // Define the conversation participant structure
 interface ConversationParticipant {
@@ -52,6 +57,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const toggleUnreadOnly = () => {
     setShowUnreadOnly(!showUnreadOnly);
@@ -117,22 +123,65 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
 
       {/* Role Filter and Unread Toggle */}
-      <div className=" pb-2 text-black">
+      <div className="pb-2 text-black">
         <div className="flex items-center space-x-4">
-          <div className="relative">
-            <select
-              value={activeTab}
-              onChange={(e) => onTabChange?.(e.target.value)}
-              className="appearance-none bg-black text-white border border-black rounded-full py-1 px-4 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-            >
-              <option value="all">All</option>
-              <option value="Host">Host</option>
-              <option value="Tenant">Renter</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-              <ChevronDown className="h-4 w-4" />
-            </div>
-          </div>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
+                {activeTab === 'all' ? 'All' : activeTab}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <div className="flex flex-col">
+                <Button
+                  variant="ghost"
+                  className="justify-start rounded-none"
+                  onClick={() => {
+                    onTabChange?.('all');
+                    setOpen(false);
+                  }}
+                >
+                  <Inbox className="mr-4 h-4 w-4" />
+                  All
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="justify-start rounded-none"
+                  onClick={() => {
+                    onTabChange?.('Hosting');
+                    setOpen(false);
+                  }}
+                >
+                  <Home className="mr-4 h-4 w-4" />
+                  Hosting
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="justify-start rounded-none"
+                  onClick={() => {
+                    onTabChange?.('Renting');
+                    setOpen(false);
+                  }}
+                >
+                  <Key className="mr-4 h-4 w-4" />
+                  Renting
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="justify-start rounded-none"
+                  onClick={() => {
+                    onTabChange?.('Support');
+                    setOpen(false);
+                  }}
+                >
+                  <HeadphonesIcon className="mr-4 h-4 w-4" />
+                  Support
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
           <div className="flex items-center">
             <input
               type="checkbox"
