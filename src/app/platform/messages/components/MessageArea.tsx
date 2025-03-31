@@ -274,7 +274,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug   overflow-hidden ${
                         message.senderId === currentUserId
                           ? 'bg-gray-900 shadow-md text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
-                          : 'bg-[#f6f3f4] pr-5 pl-5 rounded-bl-none font-normal border-gray-200'
+                          : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200'
                       }`}
                     >
                       {message.imgUrl && (
