@@ -127,16 +127,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="flex items-center space-x-4">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
+              <Button  className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
                 {activeTab === 'all' ? 'All' : activeTab}
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className=" w-[200px] ml-4 p-0 ">
               <div className="flex flex-col">
                 <Button
                   variant="ghost"
-                  className="justify-start rounded-none"
+                  className="justify-start hover:bg-gray-100 rounded-none"
                   onClick={() => {
                     onTabChange?.('all');
                     setOpen(false);
@@ -147,7 +147,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 </Button>
                 <Button
                   variant="ghost"
-                  className="justify-start rounded-none"
+                  className="justify-start  hover:bg-gray-100 rounded-none"
                   onClick={() => {
                     onTabChange?.('Hosting');
                     setOpen(false);
@@ -158,7 +158,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 </Button>
                 <Button
                   variant="ghost"
-                  className="justify-start rounded-none"
+                  className="justify-start hover:bg-gray-100 rounded-none"
                   onClick={() => {
                     onTabChange?.('Renting');
                     setOpen(false);
@@ -169,7 +169,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 </Button>
                 <Button
                   variant="ghost"
-                  className="justify-start rounded-none"
+                  className="justify-start hover:bg-gray-100 rounded-none"
                   onClick={() => {
                     onTabChange?.('Support');
                     setOpen(false);
