@@ -228,7 +228,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             if (ws.readyState === WebSocket.OPEN) {
               // Send a small ping message
               try {
-                ws.send(JSON.stringify({ type: 'ping', timestamp: new Date().toISOString() }));
+                ws.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
               } catch (error) {
                 console.warn('Error sending ping:', error);
               }
@@ -723,7 +723,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                 senderId: user?.id, // Add sender ID for proper identification
                 senderRole: userParticipant?.role === 'Host' ? 'Host' : 'Tenant', // Fix potential logic issue
                 content: '',
-                timestamp: currentTimestamp.toISOString(), // Send timestamp instead of message IDs
+                timestamp: currentTimestamp.getTime().toString(), // Send timestamp as numeric string
                 isRead: true
               };
               
