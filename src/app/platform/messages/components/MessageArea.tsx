@@ -273,7 +273,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                     <div
                       className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug shadow-md overflow-hidden ${
                         message.senderId === currentUserId
-                          ? 'bg-gray-900  text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
+                          ? 'bg-gray-700  text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
                           : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200'
                       }`}
                     >
@@ -377,7 +377,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   />
                   <div className="w-8 mr-3" />
                 </div>
-                <div className="max-w-[70%] bg-gray-100 shadow-md pl-5 pr-5 rounded-[15px] rounded-bl-none pt-3 pb-1 border border-gray-200">
+                <div className="max-w-[70%] bg-gray-100 shadow-md pl-5 pr-5 rounded-[15px] rounded-bl-none pt-3 pb-2 border border-gray-200">
                   <div className="flex space-x-1 items-center h-5 mb-[2px]">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
