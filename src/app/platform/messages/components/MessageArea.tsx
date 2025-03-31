@@ -267,14 +267,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           alt="Profile"
                           className="w-9 h-9 rounded-full mr-2 absolute bottom-[-12px]"
                         />
-                        <div className="w-8 mr-4" />
+                        <div className="w-8 mr-3" />
                       </div>
                     )}
                     <div
-                      className={`max-w-[70%] text-black rounded-2xl py-3 border border-gray-200 overflow-hidden ${
+                      className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug   overflow-hidden ${
                         message.senderId === currentUserId
-                          ? 'bg-zinc-800 text-white pl-5 pr-5 font-medium rounded-br-none'
-                          : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal'
+                          ? 'bg-gray-900 shadow-md text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
+                          : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200'
                       }`}
                     >
                       {message.imgUrl && (
@@ -313,7 +313,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                           )}
                         </div>
                       )}
-                      {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word' }}>{message.content}</div>}
+                      {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}>{message.content}</div>}
                       {message.senderId === currentUserId && (
                         <div className="flex justify-end mt-1">
                           {message.pending ? (
