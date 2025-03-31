@@ -116,7 +116,7 @@ func main() {
 	// Start the client monitor with more frequent logging
 	startClientMonitor()
 
-	port := 3000
+	port := 3001
 	log.Printf("WebSocket server running on port %d\n", port)
 
 	// Create server with graceful shutdown capability

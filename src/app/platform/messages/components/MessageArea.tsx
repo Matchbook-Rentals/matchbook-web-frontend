@@ -232,7 +232,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 className="w-12 h-12 rounded-full mr-4"
               />
               <div className="flex justify-between w-full gap-4">
-                <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[20px] font-bold leading-tight">{participantInfo.displayName}</p>
+                <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>
               </div>
             </div>
           </div>
@@ -314,50 +314,40 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                         </div>
                       )}
                       {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}>{message.content}</div>}
-                      {message.senderId === currentUserId && (
-                        <div className="flex justify-end mt-1">
-                          {message.pending ? (
-                            <span className="text-xs text-gray-400 flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="12" y1="6" x2="12" y2="12" />
-                                <line x1="12" y1="16" x2="12.01" y2="16" />
-                              </svg>
-                            </span>
-                          ) : message.failed ? (
-                            <span className="text-xs text-red-500 flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                                <circle cx="12" cy="12" r="10" />
-                                <line x1="15" y1="9" x2="9" y2="15" />
-                                <line x1="9" y1="9" x2="15" y2="15" />
-                              </svg>
-                            </span>
-                          ) : message.isRead ? (
-                            <span className="text-xs text-blue-500 flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                                <circle cx="12" cy="12" r="10" fill="white" />
-                                <polyline points="7 13 10 16 17 9" stroke="#404040" />
-                              </svg>
-                            </span>
-                          ) : (
-                            <span className="text-xs text-gray-400 flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="7 13 10 16 17 9" />
-                              </svg>
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
                     {message.senderId === currentUserId && (
-                      <div className="relative">
+                      <div className="flex items-end">
+                        <div className="flex flex-col justify-end ml-2 mr-2">
+                          {message.pending ? (
+                            <span className="text-xs text-gray-400">
+                              Sending...
+                            </span>
+                          ) : message.failed ? (
+                            <span className="text-xs text-red-500">
+                              Failed to send
+                            </span>
+                          ) : (
+                            message === messages
+                              .filter(m => m.senderId === currentUserId)
+                              .slice(-1)[0] && (
+                              <span className="text-xs text-gray-400">
+                                {message.isRead ? (
+                                  `Read • ${new Date(message.timestamp).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
+                                ) : (
+                                  "Delivered"
+                                )}
+                              </span>
+                            )
+                          )}
+                        </div>
+                        <div className="relative">
                         <img
                           src={currentUserImage || "/placeholder-avatar.png"}
                           alt="Your profile"
                           className="w-8 h-8 rounded-full ml-2 absolute bottom-[-12px]"
                         />
                         <div className="w-8 ml-2" />
+                                                </div>
                       </div>
                     )}
                   </div>

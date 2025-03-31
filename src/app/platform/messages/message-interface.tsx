@@ -228,7 +228,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             if (ws.readyState === WebSocket.OPEN) {
               // Send a small ping message
               try {
-                ws.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+                ws.send(JSON.stringify({ type: 'ping', timestamp: new Date().toISOString() }));
               } catch (error) {
                 console.warn('Error sending ping:', error);
               }
@@ -277,7 +277,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                   ...prev,
                   [typingKey]: {
                     isTyping: message.isTyping,
-                    timestamp: Date.now()
+                    timestamp: new Date().toISOString()
                   }
                 }));
                 
@@ -287,8 +287,8 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
                     setTypingUsers(prev => {
                       const newState = { ...prev };
                       // Only clear if it's still the same typing session (check timestamp)
-                      if (newState[typingKey] && Date.now() - newState[typingKey].timestamp >= 5000) {
-                        newState[typingKey] = { isTyping: false, timestamp: Date.now() };
+                      if (newState[typingKey] && (new Date().getTime() - new Date(newState[typingKey].timestamp).getTime()) >= 5000) {
+                        newState[typingKey] = { isTyping: false, timestamp: new Date().toISOString() };
                       }
                       return newState;
                     });
@@ -398,7 +398,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
             
             // Add a unique client-side ID if not present to help with deduplication
             if (!message.clientId) {
-              message.clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+              message.clientId = `client-${new Date().toISOString()}-${Math.random().toString(36).substring(2, 15)}`;
             }
             
             setWsMessages((prevMessages) => [...prevMessages, message]);
@@ -845,7 +845,7 @@ const MessageInterface = ({ conversations }: { conversations: ExtendedConversati
     console.log('Recipient found:', otherParticipant.User.id);
 
     // Generate a client-side ID for this message to help with tracking and deduplication
-    const clientId = `client-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+    const clientId = `client-${new Date().toISOString()}-${Math.random().toString(36).substring(2, 15)}`;
     
     const messageData: MessageData & { clientId?: string, senderId?: string } = {
       content: newMessageInput, // This can be empty string now

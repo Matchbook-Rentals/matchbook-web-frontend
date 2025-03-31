@@ -50,7 +50,7 @@
 ----- [ ]  Move to websockets, digital ocean 
 ----- [ ]  standalone images no bubble no avatar
 ----- [ ]  REVERSE ORDER at server action level AFTER order by pull
-
+----- [ ]  bg-gray-100 and zinc-800, mr-3 mb-2, rounded-2xl, shadow
 
 - [ ] Preferences
 ----- [ ] shorten
