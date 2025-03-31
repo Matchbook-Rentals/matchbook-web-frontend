@@ -368,16 +368,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               </div>
             )}
             {isOtherUserTyping && (
-              <div className="flex justify-start mb-4">
+              <div className="flex justify-start mb-4 mt-4">
                 <div className="relative">
                   <img
                     src={participantInfo.imageUrl}
                     alt="Profile"
-                    className="w-8 h-8 rounded-full mr-2 absolute bottom-[-12px]"
+                    className="w-9 h-9 rounded-full mr-3 absolute bottom-[-12px]"
                   />
-                  <div className="w-8 mr-2" />
+                  <div className="w-8 mr-3" />
                 </div>
-                <div className="max-w-[70%] bg-[#AC8D9015] pl-5 pr-5 rounded-[15px] rounded-bl-none py-[6px] border border-gray-200">
+                <div className="max-w-[70%] bg-gray-100 shadow-md pl-5 pr-5 rounded-[15px] rounded-bl-none pt-3 pb-1 border border-gray-200">
                   <div className="flex space-x-1 items-center h-5 mb-[2px]">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
