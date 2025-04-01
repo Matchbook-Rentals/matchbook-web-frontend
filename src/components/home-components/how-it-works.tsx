@@ -7,17 +7,17 @@ export const HowItWorks = (): JSX.Element => {
     { 
       number: "1", 
       title: "Find the Perfect Place",
-      imgUrl: "https://placehold.co/250x250/png"
+      imgUrl: "/marketing-images/step-1.png"
     },
     { 
       number: "2", 
       title: "Apply with a 1-Click",
-      imgUrl: "https://placehold.co/250x250/png"
+      imgUrl: "/marketing-images/step-2.png"
     },
     { 
       number: "3", 
       title: "Match & Book",
-      imgUrl: "https://placehold.co/250x250/png"
+      imgUrl: "/marketing-images/step-3.png"
     },
   ];
 

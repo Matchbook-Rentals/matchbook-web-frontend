@@ -49,6 +49,7 @@ import Footer from "@/components/marketing-landing-components/footer";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
 import { Button } from "@/components/ui/button";
 import { HowItWorks } from "@/components/home-components/how-it-works";
+import { RentersLoveMatchbook } from "@/components/home-components/renters-love-matchbook";
 
 
 const WebHomePage = () => {
@@ -60,6 +61,7 @@ const WebHomePage = () => {
       <Hero />
       <RentEasyCopy />
       <HowItWorks />
+      <RentersLoveMatchbook />
 
       <div className="container mx-auto px-4 my-36">
         <h2 className="text-[#281D1B] font-lora text-[48px] font-semibold leading-[52px] tracking-[-0.96px] mb-6">
