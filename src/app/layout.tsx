@@ -1,10 +1,15 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, Cutive } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
+const cutive = Cutive({ 
+  weight: [ '400'],
+  subsets: ["latin"],
+  variable: '--font-cutive'
+});
 const poppins = Poppins({ 
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   subsets: ["latin"],

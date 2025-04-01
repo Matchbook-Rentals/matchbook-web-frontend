@@ -55,7 +55,7 @@ export const RentersLoveMatchbook = (): JSX.Element => {
   return (
     <section className="relative w-full max-w-[1344px] mx-auto">
       <div className="flex flex-col items-center gap-16 py-12">
-        <h1 className="font-['Cutive',Helvetica] font-normal text-[#1d221b] text-5xl text-center tracking-[-0.48px] leading-[52px]">
+        <h1 className="font-['Cutive',serif] font-normal text-[#1d221b] text-5xl text-center tracking-[-0.48px] leading-[52px]">
           Why Renters love MatchBook
         </h1>
 
@@ -66,10 +66,10 @@ export const RentersLoveMatchbook = (): JSX.Element => {
                 {feature.alignment === "left" ? (
                   <>
                     <div className="flex flex-col w-full md:w-1/2 space-y-4">
-                      <h2 className="font-['Cutive',Helvetica] font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
+                      <h2 className="font-['Cutive',serif] font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                         {feature.title}
                       </h2>
-                      <p className="font-['Poppins',Helvetica] font-medium text-[#1d221b] text-2xl tracking-[0] leading-[30px]">
+                      <p className="font-poppins font-medium text-[#1d221b] text-2xl tracking-[0] leading-[30px]">
                         {feature.description}
                       </p>
                     </div>
@@ -91,10 +91,10 @@ export const RentersLoveMatchbook = (): JSX.Element => {
                       />
                     </div>
                     <div className="flex flex-col w-full md:w-1/2 space-y-4 text-left md:text-right order-1 md:order-2">
-                      <h2 className="font-['Cutive',Helvetica] font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
+                      <h2 className="font-['Cutive',serif] font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                         {feature.title}
                       </h2>
-                      <p className="font-['Poppins',Helvetica] font-medium text-[#1d221b] text-2xl tracking-[0] leading-[30px]">
+                      <p className="font-poppins font-medium text-[#1d221b] text-2xl tracking-[0] leading-[30px]">
                         {feature.description}
                       </p>
                     </div>
