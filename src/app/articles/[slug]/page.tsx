@@ -53,7 +53,8 @@ export default async function ArticlePage({ params }: Params) {
             p: ({node, ...props}) => <p className="mb-2" {...props} />,
             img: ({node, ...props}) => <img className="w-full h-auto my-4" {...props} />,
             a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
-            ul: ({node, ...props}) => <ul className="list-disc ml-4" {...props} />
+            ul: ({node, ...props}) => <ul className="list-disc ml-4" {...props} />,
+            strong: ({node, ...props}) => <strong className="font-semibold" {...props} />
           }}
         >{article.content}</ReactMarkdown>
       </article>
