@@ -149,6 +149,9 @@ const config = {
         montserrat: ['Poppins', 'sans-serif'],
         sans: ['Poppins', 'sans-serif'],
         jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+        lora: ['Lora', 'serif'],
+        poppins: ['Poppins', 'sans-serif'],
+        cutive: ['Cutive', 'serif'],
       },
       fontWeight: {
         light: '300',

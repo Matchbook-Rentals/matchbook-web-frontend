@@ -44,14 +44,11 @@ const CountdownDialog = ({ isOpen, setIsOpen, autoOpen = false }: CountdownDialo
 import "@/app/utils/animaStyles.css";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Hero from "@/components/home-components/hero";
-import AdCopy from "@/components/home-components/adCopy";
-import MarketingList from "@/components/marketing-landing-components/marketing-list";
 import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
 import Footer from "@/components/marketing-landing-components/footer";
-import { SingleFamilyIcon, ApartmentIcon } from "@/components/icons";
-import TabSelector from "@/components/ui/tab-selector";
 import { MarketingSteps } from "@/components/marketing-landing-components/how-it-works";
 import { Button } from "@/components/ui/button";
+import { HowItWorks } from "@/components/home-components/how-it-works";
 
 
 const WebHomePage = () => {
@@ -62,6 +59,7 @@ const WebHomePage = () => {
       <MatchbookHeader handleListProperty={() => setIsOpen(true)} />
       <Hero />
       <RentEasyCopy />
+      <HowItWorks />
 
       <div className="container mx-auto px-4 my-36">
         <h2 className="text-[#281D1B] font-lora text-[48px] font-semibold leading-[52px] tracking-[-0.96px] mb-6">
@@ -144,7 +142,6 @@ const WebHomePage = () => {
 
       <div className="scale-75 mb-12">
         <CountdownDialog autoOpen isOpen={isOpen} setIsOpen={setIsOpen} />
-        <MarketingSteps />
         <div className="flex w-full justify-center"> <img className="h-20 mb-36 mt-36" src="/heart-logo.png" /> </div>
         <div className="justify-center flex border-b-0 mx-auto w-1/2 p-6">
           <Button
