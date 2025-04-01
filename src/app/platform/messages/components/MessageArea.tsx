@@ -100,17 +100,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   }, []);
 
   const handleBackClick = () => {
+    if (!onBack) return;
+    
     if (isMobile) {
       setIsExiting(true);
       setTimeout(() => {
-        if (onBack) {
-          onBack();
-        }
+        onBack();
         setTimeout(() => {
           setIsExiting(false);
         }, 100);
       }, 250);
-    } else if (onBack) {
+    } else {
       onBack();
     }
   };
@@ -133,33 +133,25 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   }, [messages]);
 
   const handleSend = () => {
-    console.log('=== HANDLE SEND ===');
-    console.log('Message input:', newMessageInput);
-    console.log('Message attachments:', messageAttachments);
-
-    if (newMessageInput.trim() || messageAttachments.length > 0) {
-      if (messageAttachments.length > 0) {
-        const attachment = messageAttachments[0];
-        console.log('Sending message with attachment:', attachment);
-        const messageContent = newMessageInput.trim() || "";
-        console.log('Message content to send:', messageContent ? `"${messageContent}"` : '<empty string>');
-        onSendMessage(
-          messageContent,
-          attachment.fileUrl,
-          attachment.fileName,
-          attachment.fileKey,
-          attachment.fileType
-        );
-      } else {
-        console.log('Sending text-only message');
-        onSendMessage(newMessageInput);
-      }
-
-      setNewMessageInput('');
-      setMessageAttachments([]);
+    const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
+    if (!hasContent) return;
+    
+    if (messageAttachments.length > 0) {
+      const attachment = messageAttachments[0];
+      const messageContent = newMessageInput.trim() || "";
+      onSendMessage(
+        messageContent,
+        attachment.fileUrl,
+        attachment.fileName,
+        attachment.fileKey,
+        attachment.fileType
+      );
     } else {
-      console.log('No content to send');
+      onSendMessage(newMessageInput);
     }
+
+    setNewMessageInput('');
+    setMessageAttachments([]);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -184,6 +176,42 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleFileClick = (file: MessageFile) => {
     setSelectedFile(file);
   };
+  
+  const renderFileAttachment = (fileUrl: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
+    const fileObject = {
+      fileUrl,
+      fileName,
+      fileKey,
+      fileType
+    };
+    
+    if (isImageFile(fileName)) {
+      return (
+        <Image
+          src={fileUrl}
+          alt="Message Attachment"
+          width={250}
+          height={250}
+          className="rounded cursor-pointer"
+          onClick={() => handleFileClick(fileObject)}
+        />
+      );
+    }
+    
+    return (
+      <FilePreview
+        file={{
+          fileUrl,
+          fileKey: fileKey || fileUrl,
+          fileName,
+          fileType
+        }}
+        previewSize="small"
+        allowPreview={false}
+        onClick={() => handleFileClick(fileObject)}
+      />
+    );
+  };
 
   const getParticipantInfo = () => {
     if (!selectedConversation || !selectedConversation.participants) {
@@ -199,11 +227,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     }
 
     const { User } = otherParticipant;
-    const displayName = User.fullName
-      ? User.fullName
-      : User.firstName && User.lastName
-        ? `${User.firstName} ${User.lastName}`
-        : User.firstName || User.lastName || User.email || "Unknown";
+    let displayName = "Unknown";
+    
+    if (User.fullName) {
+      displayName = User.fullName;
+    } else if (User.firstName && User.lastName) {
+      displayName = `${User.firstName} ${User.lastName}`;
+    } else if (User.firstName || User.lastName) {
+      displayName = User.firstName || User.lastName;
+    } else if (User.email) {
+      displayName = User.email;
+    }
 
     return {
       displayName,
@@ -213,6 +247,169 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
+  const renderMessageContent = () => {
+    if (!selectedConversation) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
+            <p className="text-gray-500 text-sm">Select a conversation from the list to get started</p>
+          </div>
+        </div>
+      );
+    }
+    
+    if (!messages || messages.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
+            <p className="text-gray-700 mb-3">No messages yet.</p>
+            <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
+          </div>
+        </div>
+      );
+    }
+    
+    return messages.map((message) => {
+      // Check if message contains only an image and no text content
+      const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
+      const isCurrentUser = message.senderId === currentUserId;
+      const justifyClass = isCurrentUser ? 'justify-end' : 'justify-start';
+      
+      const messageFile = {
+        fileUrl: message.imgUrl,
+        fileName: message.fileName || 'attachment',
+        fileKey: message.fileKey,
+        fileType: message.fileType
+      };
+      
+      const showSenderAvatar = !isCurrentUser && !isImageOnlyMessage;
+      const bubbleStyles = isCurrentUser
+        ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
+        : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
+      
+      const renderMessageStatus = () => {
+        if (message.pending) {
+          return <span className="text-xs text-gray-400">Sending...</span>;
+        }
+        
+        if (message.failed) {
+          return <span className="text-xs text-red-500">Failed to send</span>;
+        }
+        
+        const isLastUserMessage = message === messages
+          .filter(m => m.senderId === currentUserId)
+          .slice(-1)[0];
+          
+        if (isLastUserMessage) {
+          const readStatus = message.isRead 
+            ? `Read ${new Date(message.updatedAt).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
+            : "Delivered";
+          return <span className="text-xs text-gray-400">{readStatus}</span>;
+        }
+        
+        return null;
+      };
+      
+      return (
+        <div key={message.id} className="mb-3">
+          <div className={`flex ${justifyClass}`}>
+            {showSenderAvatar && (
+              <div className="relative">
+                <img
+                  src={participantInfo.imageUrl}
+                  alt="Profile"
+                  className="w-9 h-9 rounded-full mr-2 absolute bottom-[-12px]"
+                />
+                <div className="w-8 mr-3" />
+              </div>
+            )}
+            
+            {isImageOnlyMessage ? (
+              // Image-only message without chat bubble
+              <div className="max-w-[70%] mt-6">
+                <Image
+                  src={message.imgUrl}
+                  alt="Message Attachment"
+                  width={375}
+                  height={375}
+                  className="cursor-pointer rounded-lg"
+                  onClick={() => handleFileClick(messageFile)}
+                />
+              </div>
+            ) : (
+              // Message with chat bubble
+              <div
+                className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug shadow-md overflow-hidden ${bubbleStyles}`}
+              >
+                {message.imgUrl && (
+                  <div className={message.content ? "mb-2" : ""}>
+                    {renderFileAttachment(
+                      message.imgUrl,
+                      message.fileName || 'attachment',
+                      message.fileKey,
+                      message.fileType
+                    )}
+                  </div>
+                )}
+                {message.content && (
+                  <div 
+                    className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" 
+                    style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}
+                  >
+                    {message.content}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {isCurrentUser && renderMessageStatus() && (
+            <div className={`flex ${justifyClass} mt-1`}>
+              <div className="text-right mr-1">
+                {renderMessageStatus()}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    });
+  };
+
+  const renderFullSizeFile = () => {
+    if (!selectedFile) return null;
+    
+    const fileObject = {
+      fileUrl: selectedFile.fileUrl,
+      fileKey: selectedFile.fileKey || selectedFile.fileUrl,
+      fileName: selectedFile.fileName || 'attachment',
+      fileType: selectedFile.fileType,
+    };
+    
+    if (isImageFile(selectedFile.fileName || '')) {
+      return (
+        <Image
+          src={selectedFile.fileUrl}
+          alt="Enlarged Image"
+          width={800}
+          height={800}
+          className="max-h-[70vh] w-auto object-contain"
+          priority
+        />
+      );
+    }
+    
+    return (
+      <div className="flex flex-col items-center">
+        <FilePreview
+          file={fileObject}
+          previewSize="large"
+          allowDownload={true}
+          allowPreview={false}
+        />
+      </div>
+    );
+  };
+  
   const messageContainerClassName = `flex flex-col  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
@@ -272,139 +469,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       <div className="flex-1 relative overflow-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full overflow-hidden">
           <div ref={messageContainerRef} className="p-2 md:pl-[calc(2.5vw+7px)]  min-h-full">
-            {selectedConversation ? (
-              messages && messages.length > 0 ? (
-                messages.map((message) => {
-                  // Check if message contains only an image and no text content
-                  const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
-                  
-                  return (
-                  <div key={message.id} className={`flex ${message.senderId === currentUserId ? 'justify-end' : 'justify-start'} mb-2`}>
-                    {message.senderId !== currentUserId && !isImageOnlyMessage && (
-                      <div className="relative">
-                        <img
-                          src={participantInfo.imageUrl}
-                          alt="Profile"
-                          className="w-9 h-9 rounded-full mr-2 absolute bottom-[-12px]"
-                        />
-                        <div className="w-8 mr-3" />
-                      </div>
-                    )}
-                    
-                    {isImageOnlyMessage ? (
-                      // Image-only message without chat bubble
-                      <div className="max-w-[70%] mt-6">
-                        <Image
-                          src={message.imgUrl}
-                          alt="Message Attachment"
-                          width={375}
-                          height={375}
-                          className="cursor-pointer rounded-lg"
-                          onClick={() => handleFileClick({
-                            fileUrl: message.imgUrl,
-                            fileName: message.fileName || 'attachment',
-                            fileKey: message.fileKey,
-                            fileType: message.fileType
-                          })}
-                        />
-                      </div>
-                    ) : (
-                      // Message with chat bubble
-                      <div
-                        className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug shadow-md overflow-hidden ${
-                          message.senderId === currentUserId
-                            ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
-                            : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200'
-                        }`}
-                      >
-                        {message.imgUrl && (
-                          <div className={message.content ? "mb-2" : ""}>
-                            {isImageFile(message.fileName || '') ? (
-                              <Image
-                                src={message.imgUrl}
-                                alt="Message Attachment"
-                                width={250}
-                                height={250}
-                                className="rounded cursor-pointer"
-                                onClick={() => handleFileClick({
-                                  fileUrl: message.imgUrl,
-                                  fileName: message.fileName || 'attachment',
-                                  fileKey: message.fileKey,
-                                  fileType: message.fileType
-                                })}
-                              />
-                            ) : (
-                              <FilePreview
-                                file={{
-                                  fileUrl: message.imgUrl,
-                                  fileKey: message.fileKey || message.imgUrl,
-                                  fileName: message.fileName || 'attachment',
-                                  fileType: message.fileType
-                                }}
-                                previewSize="small"
-                                allowPreview={false}
-                                onClick={() => handleFileClick({
-                                  fileUrl: message.imgUrl,
-                                  fileName: message.fileName || 'attachment',
-                                  fileKey: message.fileKey,
-                                  fileType: message.fileType
-                                })}
-                              />
-                            )}
-                          </div>
-                        )}
-                        {message.content && <div className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}>{message.content}</div>}
-                      </div>
-                    )}
-                    
-                    {message.senderId === currentUserId && (
-                      <div className="flex items-end">
-                        <div className="flex flex-col justify-end ml-2 mr-2">
-                          {message.pending ? (
-                            <span className="text-xs text-gray-400">
-                              Sending...
-                            </span>
-                          ) : message.failed ? (
-                            <span className="text-xs text-red-500">
-                              Failed to send
-                            </span>
-                          ) : (
-                            message === messages
-                              .filter(m => m.senderId === currentUserId)
-                              .slice(-1)[0] && (
-                              <span onClick={() => console.log(message.timestamp)} className="text-xs text-gray-400">
-                                {message.isRead ? (
-                                  `Read ${new Date(message.updatedAt).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
-                                ) : (
-                                  "Delivered"
-                                )}
-                              </span>
-                            )
-                          )}
-                        </div>
-                        <div className="relative">
-                        <div className="w-8 ml-2" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  );
-                })
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full">
-                  <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
-                    <p className="text-gray-700 mb-3">No messages yet.</p>
-                    <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
-                  </div>
-                </div>
-              )
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full">
-                <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
-                  <p className="text-gray-500 text-sm">Select a conversation from the list to get started</p>
-                </div>
-              </div>
-            )}
+            {renderMessageContent()}
             {isOtherUserTyping && (
               <div className="flex justify-start mb-4 mt-4">
                 <div className="relative">
@@ -431,46 +496,51 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
       <div className="py-1 px-12 bg-background">
         <div className="flex flex-wrap justify-end gap-2 mb-2">
-          {messageAttachments.map((attachment, index) => (
-            <div key={index} className="inline-block rounded">
-              {isImageFile(attachment.fileName || '') ? (
-                <div className="p-2 bg-white relative">
-                  <button
-                    className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
-                    onClick={() => {
-                      setMessageAttachments(prev => prev.filter((_, i) => i !== index));
-                    }}
-                  >
-                    <X size={14} />
-                  </button>
-                  <Image
-                    src={attachment.fileUrl}
-                    alt="Message Attachment"
-                    width={375}
-                    height={375}
-                    className="cursor-pointer"
+          {messageAttachments.map((attachment, index) => {
+            const handleRemove = () => {
+              setMessageAttachments(prev => prev.filter((_, i) => i !== index));
+            };
+            
+            const isImage = isImageFile(attachment.fileName || '');
+            const fileObject = {
+              fileUrl: attachment.fileUrl,
+              fileKey: attachment.fileKey || attachment.fileUrl,
+              fileName: attachment.fileName || 'attachment',
+              fileType: attachment.fileType
+            };
+            
+            return (
+              <div key={index} className="inline-block rounded">
+                {isImage ? (
+                  <div className="p-2 bg-white relative">
+                    <button
+                      className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
+                      onClick={handleRemove}
+                    >
+                      <X size={14} />
+                    </button>
+                    <Image
+                      src={attachment.fileUrl}
+                      alt="Message Attachment"
+                      width={375}
+                      height={375}
+                      className="cursor-pointer"
+                      onClick={() => handleFileClick(attachment)}
+                    />
+                  </div>
+                ) : (
+                  <FilePreview
+                    file={fileObject}
+                    previewSize="small"
+                    allowPreview={false}
+                    showRemove={true}
+                    onRemove={handleRemove}
                     onClick={() => handleFileClick(attachment)}
                   />
-                </div>
-              ) : (
-                <FilePreview
-                  file={{
-                    fileUrl: attachment.fileUrl,
-                    fileKey: attachment.fileKey || attachment.fileUrl,
-                    fileName: attachment.fileName || 'attachment',
-                    fileType: attachment.fileType
-                  }}
-                  previewSize="small"
-                  allowPreview={false}
-                  showRemove={true}
-                  onRemove={() => {
-                    setMessageAttachments(prev => prev.filter((_, i) => i !== index));
-                  }}
-                  onClick={() => handleFileClick(attachment)}
-                />
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
 
         <div
@@ -551,30 +621,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           {selectedFile && (
             <div className="flex flex-col justify-center items-center">
               <h3 className="text-lg font-medium mb-4">{selectedFile.fileName}</h3>
-              {isImageFile(selectedFile.fileName || '') ? (
-                <Image
-                  src={selectedFile.fileUrl}
-                  alt="Enlarged Image"
-                  width={800}
-                  height={800}
-                  className="max-h-[70vh] w-auto object-contain"
-                  priority
-                />
-              ) : (
-                <div className="flex flex-col items-center">
-                  <FilePreview
-                    file={{
-                      fileUrl: selectedFile.fileUrl,
-                      fileKey: selectedFile.fileKey || selectedFile.fileUrl,
-                      fileName: selectedFile.fileName || 'attachment',
-                      fileType: selectedFile.fileType,
-                    }}
-                    previewSize="large"
-                    allowDownload={true}
-                    allowPreview={false}
-                  />
-                </div>
-              )}
+              {renderFullSizeFile()}
             </div>
           )}
         </DialogContent>
