@@ -5,6 +5,7 @@ import prisma from '@/lib/prismadb'
 import SearchListingDetailsView from '@/app/platform/trips/(trips-components)/search-listing-details-view'
 import { useTripContext } from '@/contexts/trip-context-provider'
 import { useUser } from '@clerk/nextjs'
+import { PAGE_MARGIN } from '@/constants/styles'
 
 interface ListingPageProps {
   params: {
@@ -47,7 +48,7 @@ export default function SearchListingPage({ params }: ListingPageProps) {
   }
 
   return (
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6">
+      <div className={`${PAGE_MARGIN}`}>
         <SearchListingDetailsView listingId={params.listingId} />
       </div>
   )
