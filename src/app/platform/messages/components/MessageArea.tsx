@@ -311,7 +311,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       };
       
       return (
-        <div key={message.id} className="mb-3">
+        <div key={message.id} className="mb-3 pr-1 md:pr-3">
           <div className={`flex ${justifyClass}`}>
             {showSenderAvatar && (
               <div className="relative">
