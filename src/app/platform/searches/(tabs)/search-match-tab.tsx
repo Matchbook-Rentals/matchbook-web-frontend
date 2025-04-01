@@ -228,50 +228,6 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   // Main component render
   return (
     <>
-      {/* Conditionally rendered top control box */}
-      {!isDetailsVisible && showListings[0] && (
-        <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
-          <div className='flex justify-between items-center'>
-            <div className='flex flex-col'>
-              <p className='text-lg font-medium'>{showListings[0].title}</p>
-              <p className='text-sm'>Hosted by {showListings[0].user?.firstName}</p>
-            </div>
-            <div className='flex items-center gap-x-4'>
-              <p className='text-lg font-medium'>${showListings[0].price?.toLocaleString()}/month</p>
-              <div className="flex items-center gap-x-3">
-                <button
-                  onClick={() => handleReject(showListings[0])}
-                  className={`w-[50px] drop-shadow aspect-square
-               flex items-center justify-center rounded-full
-            hover:opacity-90 transition-opacity bg-gradient-to-br from-[#E697A2] to-[#B6767C]`}
-                >
-                  <RejectIcon className={`w-[60%] h-[60%] text-white`} />
-                </button>
-
-                <button
-                  onClick={() => handleBack()}
-                  className={`w-[40px] drop-shadow aspect-square
-               flex items-center justify-center rounded-full
-               hover:opacity-90 transition-opacity
-               bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
-                >
-                  <ReturnIcon className={`w-[60%] h-[60%] text-white`} />
-                </button>
-
-                <button
-                  onClick={() => handleLike(showListings[0])}
-                  className={`w-[50px] drop-shadow aspect-square flex
-            items-center justify-center rounded-full
-            hover:opacity-90 transition-opacity
-            bg-gradient-to-br from-[#A3B899] to-[#5F6F58]`}
-                >
-                  <BrandHeart className={`w-[60%] h-[60%]`} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
@@ -295,7 +251,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         </div>
 
         {/* Location section */}
-        <div className="pb-20 mt-3" ref={locationSectionRef}>
+        <div className="pb-20 md:pb-0 mt-3" ref={locationSectionRef}>
           <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
           <div className=" pb-3 text-[#404040] text-[20px] font-normal">
