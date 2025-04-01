@@ -26,7 +26,7 @@ export default async function ArticlePage({ params }: Params) {
   }
 
   return (
-    <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto px-4 py-8`}>
+    <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto  px-4 py-8`}>
       <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">
         <Link href="/articles" className="hover:underline">Articles</Link> &gt; {article.title}
       </h1>
@@ -45,7 +45,7 @@ export default async function ArticlePage({ params }: Params) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
         />
       )}
-      <article className="prose prose-sm md:prose-base lg:prose-lg mb-8">
+      <article className="w-full prose-sm md:prose-base lg:prose-lg mb-8">
         <ReactMarkdown
           components={{
             h1: ({node, ...props}) => <h1 className="text-[36px] font-semibold my-3" {...props} />,
