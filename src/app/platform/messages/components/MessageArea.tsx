@@ -6,6 +6,9 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
 import { isImageFile, getFileUrl } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DialogTrigger } from '@radix-ui/react-dialog';
+import { Button } from '@/components/ui/button';
+import { UserRating } from '@/components/reviews/host-review';
 
 interface MessageAreaProps {
   selectedConversation: any;
@@ -233,6 +236,19 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               />
               <div className="flex justify-between w-full gap-4">
                 <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button>
+                      Show Review
+                    </Button>
+
+                  </DialogTrigger>
+                  <DialogContent className='' >
+                    <UserRating avatarImgUrl={participantInfo.imageUrl}/>
+
+                  </DialogContent>
+
+                </Dialog>
               </div>
             </div>
           </div>

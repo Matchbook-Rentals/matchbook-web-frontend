@@ -59,6 +59,12 @@
 ----- [ ] widen padding to accomadate focus ring on price serach
 ----- [ ] black focus ring
 
+- [ ] Bookings
+----- [ ] new city pic
+----- [ ] blue bar lol
+----- [ ] no ovular num 
+----- [ ] black checkbox 
+
 try to force invalidate cache bring up to speed
 
 - [ ] MAP

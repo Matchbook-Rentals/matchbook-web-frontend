@@ -213,15 +213,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete, headerText
           </div>
         </div>
         
-        {/* Progress bar for active bookings */}
-        {booking.status === 'active' && (
-          <div className="bg-gray-100 h-4 w-full">
-            <div 
-              className="bg-blueBrand h-full transition-all duration-500 ease-in-out"
-              style={{ width: `${Math.min(100, Math.max(0, 100 - (daysLeft / 30) * 100))}%` }}
-            ></div>
-          </div>
-        )}
       </div>
     </>
   )
