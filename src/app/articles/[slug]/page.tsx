@@ -40,7 +40,7 @@ export default async function ArticlePage({ params }: Params) {
           alt={article.title}
           width={1515}
           height={337}
-          className="w-full h-auto mb-4 rounded-lg object-cover"
+          className="w-full h-auto mb-4 rounded-lg object-cover max-h-[40vh]"
           priority={true}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1515px"
         />

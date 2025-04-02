@@ -34,7 +34,7 @@ export default async function Home() {
             <SocialLinks className='mb-1' />
           </div>
           <Image
-            src={`/article-images/introduction.png`}
+            src={`${article.imageUrl}`}
             alt={article.title || 'Blog article image'}
             width={1515}
             height={375}
