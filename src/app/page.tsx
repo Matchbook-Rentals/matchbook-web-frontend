@@ -51,6 +51,7 @@ import { HowItWorks } from "@/components/home-components/how-it-works";
 import { RentersLoveMatchbook } from "@/components/home-components/renters-love-matchbook";
 import { BecomeHostCopy } from "@/components/home-components/become-host";
 import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
+import { PlaceYouLove } from "@/components/home-components/place-you-love";
 
 
 const WebHomePage = () => {
@@ -65,6 +66,8 @@ const WebHomePage = () => {
       <RentersLoveMatchbook />
       <BecomeHostCopy />
       <ProsConsGrid />
+      <PlaceYouLove />
+      
 
       <div className="scale-75 mb-12">
         <CountdownDialog autoOpen isOpen={isOpen} setIsOpen={setIsOpen} />

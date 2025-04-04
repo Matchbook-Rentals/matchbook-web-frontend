@@ -4,7 +4,7 @@ import { Button } from "../../components/ui/button";
 
 export const BecomeHostCopy = (): JSX.Element => {
   return (
-    <section className="flex flex-col max-w-[1260px] w-full mx-auto items-center gap-9 py-8">
+    <section className="flex flex-col max-w-[1260px] my-40 w-full mx-auto items-center gap-9 py-8">
       <h1 className="w-full font-['Poppins',Helvetica] font-medium text-[#271c1a] text-5xl text-center tracking-[-0.96px] leading-[68px]">
         Interested in becoming a host?
       </h1>
