@@ -51,6 +51,7 @@
 ----- [ ]  standalone images no bubble no avatar
 ----- [ ]  REVERSE ORDER at server action level AFTER order by pull
 ----- [ ]  bg-gray-100 and zinc-800, mr-3 mb-2, rounded-2xl, shadow
+----- [ ]  Message from server (2025/04/04 02:11:32.002528 main.go:464: Error parsing message from client user_2idK9C7KG6Hej6HiEfZQXetFD2x: json: cannot unmarshal number into Go struct field Message.timestamp of type string)
 
 - [ ] Preferences
 ----- [ ] shorten
@@ -100,7 +101,10 @@ try to force invalidate cache bring up to speed
 - [ ] new search padding
 - [ ] edti trip in pip upj
 - [ ] navbar no sticky
+- [ ] navbar no sticky
 
+-HOME
+- [ ] carousel auto loop for How matchbook works
 # MVP
 - [ ] Sign in / SIgn up
 - [ ] Verification

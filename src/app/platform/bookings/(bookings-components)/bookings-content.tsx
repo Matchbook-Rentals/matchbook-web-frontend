@@ -203,8 +203,9 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             <input 
                               type="checkbox" 
                               id="upcoming" 
-                              className="h-4 w-4 text-blueBrand focus:ring-blueBrand border-gray-300 rounded"
+                              className="h-4 w-4 text-black  checked:bg-black focus:ring-black border-gray-300 rounded"
                               checked={filters.upcoming}
+                              style={{accentColor: 'black'}}
                               onChange={() => handleFilterChange('upcoming')}
                             />
                             <label htmlFor="upcoming" className="ml-2 block text-sm text-gray-700">Upcoming</label>
@@ -217,7 +218,8 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             <input 
                               type="checkbox" 
                               id="past" 
-                              className="h-4 w-4 text-blueBrand focus:ring-blueBrand border-gray-300 rounded"
+                              style={{accentColor: 'black'}}
+                              className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                               checked={filters.past}
                               onChange={() => handleFilterChange('past')}
                             />
@@ -231,7 +233,8 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             <input 
                               type="checkbox" 
                               id="cancelled" 
-                              className="h-4 w-4 text-blueBrand focus:ring-blueBrand border-gray-300 rounded"
+                              style={{accentColor: 'black'}}
+                              className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                               checked={filters.cancelled}
                               onChange={() => handleFilterChange('cancelled')}
                             />
