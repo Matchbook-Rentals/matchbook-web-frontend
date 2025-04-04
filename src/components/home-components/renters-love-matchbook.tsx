@@ -54,11 +54,29 @@ export const RentersLoveMatchbook = (): JSX.Element => {
 
         {features.map((feature, index) => (
           <Card key={feature.id} className="w-full border-none shadow-none">
-            <CardContent className="flex flex-col py-0 ">
-              <div className="flex flex-col md:flex-row space-y-2  max-h-[250px] items-center gap-0">
+            <CardContent className="flex flex-col py-0">
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0 md:max-h-[250px]">
+                {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
+                <div className="flex flex-col w-full md:hidden space-y-6">
+                  <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px] text-left">
+                    {feature.title}
+                  </h2>
+                  <p className="font-poppins font-normal text-[#1d221b] text-xl tracking-[0] leading-[30px] text-left">
+                    {feature.description}
+                  </p>
+                  <div className="flex justify-center w-full">
+                    <img
+                      className="w-auto h-auto object-cover max-h-[200px]"
+                      alt={feature.imageAlt}
+                      src={feature.image}
+                    />
+                  </div>
+                </div>
+                
+                {/* Desktop only: alternating layout */}
                 {index % 2 === 1 ? (
                   <>
-                    <div className="flex flex-col items-center md:items-start pr-2 w-full space-y-12">
+                    <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-12">
                       <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                         {feature.title}
                       </h2>
@@ -66,9 +84,9 @@ export const RentersLoveMatchbook = (): JSX.Element => {
                         {feature.description}
                       </p>
                     </div>
-                    <div className="w-full md:w-1/2 justify-center  md:justify-end items-center h-full">
+                    <div className="hidden md:flex w-1/2 justify-end items-center h-full">
                       <img
-                        className="w-auto h-auto object-cover max-h-[250px] md:ml-auto "
+                        className="w-auto h-auto object-cover max-h-[250px] ml-auto"
                         alt={feature.imageAlt}
                         src={feature.image}
                       />
@@ -76,18 +94,18 @@ export const RentersLoveMatchbook = (): JSX.Element => {
                   </>
                 ) : (
                   <>
-                    <div className="w-full md:w-1/2 flex justify-center md:justify-start items-center h-full">
+                    <div className="hidden md:flex w-1/2 justify-start items-center h-full">
                       <img
                         className="w-auto h-auto object-cover max-h-[250px]"
                         alt={feature.imageAlt}
                         src={feature.image}
                       />
                     </div>
-                    <div className="flex flex-col items-center md:items-end pl-2 w-full space-y-12">
-                      <h2 className="font-normal text-center md:text-right text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
+                    <div className="hidden md:flex flex-col items-end pl-2 w-full space-y-12">
+                      <h2 className="font-normal text-right text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                         {feature.title}
                       </h2>
-                      <p className="font-poppins font-normal text-center md:text-right text-[#1d221b] text-xl tracking-[0] leading-[30px]">
+                      <p className="font-poppins font-normal text-right text-[#1d221b] text-xl tracking-[0] leading-[30px]">
                         {feature.description}
                       </p>
                     </div>
