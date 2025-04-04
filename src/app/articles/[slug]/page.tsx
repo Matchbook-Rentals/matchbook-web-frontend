@@ -8,8 +8,6 @@ import Image from 'next/image';
 import SocialLinks from '@/components/SocialLinks';
 import { Poppins } from 'next/font/google';
 
-const poppins = Poppins({ subsets: ["latin"], weight: "400", variable: '--font-poppins' });
-
 interface Params {
   params: {
     slug: string;

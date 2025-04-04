@@ -161,13 +161,13 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
 
   return (
     <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
-      <div className='flex items-center mb-4 '>
+      <div className='flex items-center mb-8 '>
         <div className='flex flex-col w-1/2'>
           <h1 className='text-[32px] font-medium '>Your Bookings</h1>
         </div>
         <div className="hidden sm:block w-full md:w-1/2 mx-auto">
           <Image
-            src="/city-skyline.png"
+            src="/san-francisco.png"
             alt="Village footer"
             width={1200}
             height={516}
@@ -210,7 +210,7 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             />
                             <label htmlFor="upcoming" className="ml-2 block text-sm text-gray-700">Upcoming</label>
                           </div>
-                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{upcomingCount}</span>
+                          <span className="text-xs bg-blue-100 text-blue-800 flex justify-center items-center h-5 w-5 rounded-full">{upcomingCount}</span>
                         </div>
                         
                         <div className="flex items-center justify-between">
@@ -225,7 +225,7 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             />
                             <label htmlFor="past" className="ml-2 block text-sm text-gray-700">Past</label>
                           </div>
-                          <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">{pastCount}</span>
+                          <span className="text-xs bg-gray-100 text-gray-800 h-5 w-5 flex justify-center items-center rounded-full">{pastCount}</span>
                         </div>
                         
                         <div className="flex items-center justify-between">
@@ -240,7 +240,7 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
                             />
                             <label htmlFor="cancelled" className="ml-2 block text-sm text-gray-700">Cancelled</label>
                           </div>
-                          <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">{cancelledCount}</span>
+                          <span className="text-xs bg-red-100 text-red-800 flex justify-center items-center h-5 w-5 rounded-full">{cancelledCount}</span>
                         </div>
                       </>
                     );
