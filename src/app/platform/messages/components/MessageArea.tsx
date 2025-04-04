@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
 import { PaperclipIcon, ArrowLeftIcon, X } from 'lucide-react';
 import Image from "next/image";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
 import { isImageFile, getFileUrl } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -101,7 +101,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const handleBackClick = () => {
     if (!onBack) return;
-    
+
     if (isMobile) {
       setIsExiting(true);
       setTimeout(() => {
@@ -135,7 +135,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
     if (!hasContent) return;
-    
+
     if (messageAttachments.length > 0) {
       const attachment = messageAttachments[0];
       const messageContent = newMessageInput.trim() || "";
@@ -176,7 +176,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleFileClick = (file: MessageFile) => {
     setSelectedFile(file);
   };
-  
+
   const renderFileAttachment = (fileUrl: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
     const fileObject = {
       fileUrl,
@@ -184,7 +184,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       fileKey,
       fileType
     };
-    
+
     if (isImageFile(fileName)) {
       return (
         <Image
@@ -197,7 +197,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       );
     }
-    
+
     return (
       <FilePreview
         file={{
@@ -228,7 +228,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     const { User } = otherParticipant;
     let displayName = "Unknown";
-    
+
     if (User.fullName) {
       displayName = User.fullName;
     } else if (User.firstName && User.lastName) {
@@ -257,7 +257,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       );
     }
-    
+
     if (!messages || messages.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center h-full">
@@ -268,48 +268,48 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </div>
       );
     }
-    
+
     return messages.map((message) => {
       // Check if message contains only an image and no text content
       const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
       const isCurrentUser = message.senderId === currentUserId;
       const justifyClass = isCurrentUser ? 'justify-end' : 'justify-start';
-      
+
       const messageFile = {
         fileUrl: message.imgUrl,
         fileName: message.fileName || 'attachment',
         fileKey: message.fileKey,
         fileType: message.fileType
       };
-      
+
       const showSenderAvatar = !isCurrentUser && !isImageOnlyMessage;
       const bubbleStyles = isCurrentUser
         ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
         : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
-      
+
       const renderMessageStatus = () => {
         if (message.pending) {
           return <span className="text-xs text-gray-400">Sending...</span>;
         }
-        
+
         if (message.failed) {
           return <span className="text-xs text-red-500">Failed to send</span>;
         }
-        
+
         const isLastUserMessage = message === messages
           .filter(m => m.senderId === currentUserId)
           .slice(-1)[0];
-          
+
         if (isLastUserMessage) {
-          const readStatus = message.isRead 
-            ? `Read ${new Date(message.updatedAt).toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`
+          const readStatus = message.isRead
+            ? `Read ${new Date(message.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
             : "Delivered";
           return <span className="text-xs text-gray-400">{readStatus}</span>;
         }
-        
+
         return null;
       };
-      
+
       return (
         <div key={message.id} className="mb-3 pr-1 md:pr-3">
           <div className={`flex ${justifyClass}`}>
@@ -323,7 +323,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 <div className="w-8 mr-3" />
               </div>
             )}
-            
+
             {isImageOnlyMessage ? (
               // Image-only message without chat bubble
               <div className="max-w-[70%] mt-6">
@@ -352,8 +352,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   </div>
                 )}
                 {message.content && (
-                  <div 
-                    className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta" 
+                  <div
+                    className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta"
                     style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}
                   >
                     {message.content}
@@ -362,7 +362,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               </div>
             )}
           </div>
-          
+
           {isCurrentUser && renderMessageStatus() && (
             <div className={`flex ${justifyClass} mt-1`}>
               <div className="text-right mr-1">
@@ -377,14 +377,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const renderFullSizeFile = () => {
     if (!selectedFile) return null;
-    
+
     const fileObject = {
       fileUrl: selectedFile.fileUrl,
       fileKey: selectedFile.fileKey || selectedFile.fileUrl,
       fileName: selectedFile.fileName || 'attachment',
       fileType: selectedFile.fileType,
     };
-    
+
     if (isImageFile(selectedFile.fileName || '')) {
       return (
         <Image
@@ -397,7 +397,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       );
     }
-    
+
     return (
       <div className="flex flex-col items-center">
         <FilePreview
@@ -409,7 +409,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       </div>
     );
   };
-  
+
   const messageContainerClassName = `flex flex-col  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
@@ -441,7 +441,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
                   </DialogTrigger>
                   <DialogContent className='' >
-                    <UserRating avatarImgUrl={participantInfo.imageUrl}/>
+                    <DialogHeader className='flex justify-center w-full text-center'> <p className='flex justify-center text-lg font-medium'> Reviews for {participantInfo.displayName} </p> </DialogHeader>
+                    <UserRating avatarImgUrl={participantInfo.imageUrl} />
 
                   </DialogContent>
 
@@ -500,7 +501,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             const handleRemove = () => {
               setMessageAttachments(prev => prev.filter((_, i) => i !== index));
             };
-            
+
             const isImage = isImageFile(attachment.fileName || '');
             const fileObject = {
               fileUrl: attachment.fileUrl,
@@ -508,7 +509,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               fileName: attachment.fileName || 'attachment',
               fileType: attachment.fileType
             };
-            
+
             return (
               <div key={index} className="inline-block rounded">
                 {isImage ? (

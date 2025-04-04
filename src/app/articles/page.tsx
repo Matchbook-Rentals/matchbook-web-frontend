@@ -2,13 +2,11 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { PAGE_MARGIN } from '@/constants/styles';
 import prisma from '@/lib/prismadb'
+import { Poppins } from 'next/font/google';
 import { BlogArticle } from '@prisma/client';
 import SocialLinks from '@/components/SocialLinks';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Montserrat } from 'next/font/google';
-
-const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 
 async function getBlogArticles(): Promise<BlogArticle[]> {
   const articles = await prisma.blogArticle.findMany({
@@ -24,14 +22,13 @@ export default async function Home() {
 
   return (
     <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
-      <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">Articles</h1>
+      <h1 className="text-[32px] font-medium text-left mb-4 md:mb-8 ">Articles</h1>
       {articles.map((article) => (
         <React.Fragment key={article.id}>
-          <div className='flex justify-between px-1'>
-            <h3 className={`${montserrat.className}`}>
+          <div className='flex justify-between px-0 mt-8'>
+            <h3 className={``}>
               {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(article.createdAt))}
             </h3>
-            <SocialLinks className='mb-1' />
           </div>
           <Image
             src={`${article.imageUrl}`}
