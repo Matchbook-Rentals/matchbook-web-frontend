@@ -25,6 +25,8 @@ export const useWebSocket = (
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   // Add a ref to track if we're already connecting
   const isConnectingRef = useRef(false);
+  // Track the last cleanup time to avoid Strict Mode double mounting issues
+  const lastCleanupTimeRef = useRef(0);
 
   const connectWebSocket = () => {
     const MAX_RECONNECT_ATTEMPTS = 10;
@@ -51,6 +53,8 @@ export const useWebSocket = (
     if (wsRef.current) {
       console.log('[WebSocket] Closing existing connection');
       wsRef.current.close();
+      // Ensure we don't try to use the websocket during closing
+      wsRef.current = null;
     }
     if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
 
@@ -129,9 +133,31 @@ export const useWebSocket = (
   };
 
   useEffect(() => {
-    connectWebSocket();
+    // In development, React Strict Mode will mount, unmount, and remount components 
+    // Keep track of the last cleanup time to avoid unwanted remounts
+    const mountTimestamp = Date.now();
+    
+    // Only connect if not in a quick remount cycle (for React Strict Mode)
+    if (Date.now() - lastCleanupTimeRef.current > 500) {
+      console.log('[WebSocket] Initial mount or URL change, connecting...');
+      connectWebSocket();
+    } else {
+      console.log('[WebSocket] Remount detected, skipping immediate reconnect');
+      // Still set the connecting flag to prevent double connections
+      isConnectingRef.current = true;
+      // Schedule a connect with a small delay to let the component stabilize
+      setTimeout(() => {
+        console.log('[WebSocket] Delayed connect after remount');
+        isConnectingRef.current = false;
+        connectWebSocket();
+      }, 100);
+    }
 
     return () => {
+      // Store the timestamp of this cleanup
+      lastCleanupTimeRef.current = Date.now();
+      console.log(`[WebSocket] Component unmounting after ${Date.now() - mountTimestamp}ms`);
+      
       // Cleanup on unmount with proper closing sequence
       if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
       if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
@@ -143,10 +169,17 @@ export const useWebSocket = (
           // Send a close frame with a normal closure code
           wsRef.current.close(1000, 'Component unmounting');
           
+          // Immediately null the ref to prevent double-close attempts
+          const ws = wsRef.current;
+          wsRef.current = null;
+          isConnectingRef.current = false;
+          
           // Give it a bit of time to send the close frame before cleaning up
+          // But don't retain a reference to wsRef to avoid race conditions
           setTimeout(() => {
-            wsRef.current = null;
-            isConnectingRef.current = false;
+            if (ws.readyState !== WebSocket.CLOSED) {
+              console.log('[WebSocket] Forcing close after timeout');
+            }
           }, 300);
         } catch (e) {
           console.error('[WebSocket] Error during clean close:', e);
