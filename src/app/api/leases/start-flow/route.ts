@@ -10,12 +10,9 @@ const defaultLease = '1c447c5d-b082-4875-a6f3-4637db4205e9';
 
 export async function POST(request: NextRequest) {
   const { userId } = auth();
-  console.log('HITTING')
-  prisma.match.delete({
-    where: {
-      id: '12d0ea42-8ae4-46b8-92ef-375976c879f3'
-    }
-  })
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     // This will need to be a switch based on lease location and num tenants
     const templateId = defaultLease;
@@ -24,6 +21,10 @@ export async function POST(request: NextRequest) {
 
     // Get the request body
     const body = await request.json();
+    
+    if (!body.housingRequestId) {
+      return NextResponse.json({ error: 'Missing required field: housingRequestId' }, { status: 400 });
+    }
 
     const housingRequest = await prisma?.housingRequest.findUnique({
       where: { id: body.housingRequestId },
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       match = await prisma.match.create({
         data: {
           tripId: housingRequest.trip.id,
-          listingId: housingRequest.trip.id,
+          listingId: housingRequest.listing.id, // Fixed: was using trip.id instead of listing.id
           monthlyRent,
         }
       })
