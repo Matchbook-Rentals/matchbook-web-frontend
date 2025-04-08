@@ -18,10 +18,14 @@ import { useUser } from "@clerk/nextjs"
 
 export default function VerificationClient({ 
   paymentStatus,
-  serverHasPurchase
+  serverHasPurchase,
+  reviewMode,
+  sessionId
 }: { 
   paymentStatus?: string;
   serverHasPurchase?: boolean;
+  reviewMode?: boolean;
+  sessionId?: string;
 }) {
   const [showForm, setShowForm] = useState(false)
   const [showPayment, setShowPayment] = useState(false)
@@ -31,9 +35,36 @@ export default function VerificationClient({
   const [hasPurchase, setHasPurchase] = useState<boolean>(serverHasPurchase || false)
   const { user } = useUser()
 
-  // Check URL params for payment success on component mount
+  // Check URL params for payment success or review mode on component mount
   useEffect(() => {
-    if (paymentStatus === 'success') {
+    // Set form to show in review mode
+    if (reviewMode) {
+      setShowForm(true);
+      setPaymentComplete(true);
+      
+      // If we have a session ID, verify it matches the one in localStorage
+      if (sessionId) {
+        const storedSessionId = localStorage.getItem('verificationSessionId');
+        if (storedSessionId === sessionId) {
+          console.log('Session ID verified');
+        } else {
+          console.warn('Session ID mismatch - stored:', storedSessionId, 'received:', sessionId);
+        }
+      }
+      
+      // Load form data regardless (server already verified session)
+      try {
+        const savedFormData = JSON.parse(localStorage.getItem('verificationFormData') || '{}');
+        if (savedFormData && Object.keys(savedFormData).length > 0) {
+          setFormData(savedFormData);
+          form.reset(savedFormData);
+        }
+      } catch (error) {
+        console.error('Error parsing saved form data:', error);
+      }
+    }
+    // Legacy handling for payment success
+    else if (paymentStatus === 'success') {
       setPaymentComplete(true);
       
       // Check if we have saved form data
@@ -48,7 +79,7 @@ export default function VerificationClient({
         console.error('Error parsing saved form data:', error);
       }
     }
-  }, [paymentStatus]);
+  }, [paymentStatus, reviewMode, sessionId]);
 
   // Initialize from server-side purchase check and get form data if needed
   useEffect(() => {
@@ -158,8 +189,9 @@ export default function VerificationClient({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            type: 'backgroundVerification',
-            userId: user.id
+            type: 'matchbookVerification',
+            userId: user.id,
+            sessionId: sessionId || localStorage.getItem('verificationSessionId') || undefined
           }),
         });
       }
@@ -189,8 +221,9 @@ export default function VerificationClient({
       // Store the API response
       setApiResponse(result);
       
-      // Clear saved form data
+      // Clear all saved verification data
       localStorage.removeItem('verificationFormData');
+      localStorage.removeItem('verificationSessionId');
       setHasPurchase(false);
     } catch (error) {
       console.error("Error submitting verification request:", error);

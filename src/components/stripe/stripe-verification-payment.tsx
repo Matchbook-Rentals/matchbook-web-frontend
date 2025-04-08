@@ -66,10 +66,13 @@ const VerificationCheckoutForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
     setIsLoading(true);
 
+    // Get the stored session ID
+    const sessionId = localStorage.getItem('verificationSessionId') || '';
+    
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/platform/verification?payment=success`,
+        return_url: `${window.location.origin}/platform/verification/review?session_id=${sessionId}`,
         receipt_email: email,
       },
     });
@@ -131,18 +134,25 @@ export default function StripeVerificationPayment({
         localStorage.setItem('verificationFormData', JSON.stringify(formData));
         console.log('Form data saved to localStorage:', formData);
         
+        const returnUrl = `${window.location.origin}/platform/verification/review`;
+        
         const response = await fetch('/api/create-payment-intent/background-verification', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({}),  // No need to send amount as it's fixed at $25
+          body: JSON.stringify({ returnUrl }),
         });
 
         const data = await response.json();
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to create payment intent');
+        }
+
+        // Store the session ID in localStorage for verification after redirect
+        if (data.sessionId) {
+          localStorage.setItem('verificationSessionId', data.sessionId);
         }
 
         setClientSecret(data.clientSecret);

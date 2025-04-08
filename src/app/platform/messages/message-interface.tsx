@@ -216,10 +216,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useMobileDetect();
   
-  // Generate the WebSocket URL using the new TypeScript server
-  // Replace with your actual server URL when deploying
-  const wsUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'ws://localhost:8080';
-
+  // Handle WebSocket messages
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
     
@@ -246,7 +243,14 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
+  // Use existing environment variable for Socket.IO server URL
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
+  
+  // Log environment variables to help with debugging
+  useEffect(() => {
+    console.log('Socket.IO Environment Variables:');
+    console.log('NEXT_PUBLIC_GO_SERVER_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set, using default)');
+  }, []);
 
   const connectSocket = () => {
     if (socketRef.current) {
@@ -262,10 +266,16 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     try {
       console.log(`Connecting to Socket.IO: ${socketUrl}`);
       const socket = io(socketUrl, {
-        query: { userId: user?.id || '' },
-        reconnectionAttempts: 3,
+        query: { 
+          userId: user?.id || '',
+          client: 'web'
+        },
+        reconnectionAttempts: 5,
         reconnectionDelay: 1000,
-        timeout: 10000
+        timeout: 20000,
+        transports: ['polling', 'websocket'],
+        forceNew: true,
+        autoConnect: true
       });
       
       socket.on('connect', () => {

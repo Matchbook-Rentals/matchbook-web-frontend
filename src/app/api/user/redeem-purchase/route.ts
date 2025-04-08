@@ -13,20 +13,50 @@ export async function POST(req: Request) {
     
     // Parse request body
     const body = await req.json();
-    const { type } = body;
+    const { type, sessionId } = body;
     
     if (!type) {
       return NextResponse.json({ error: 'Type is required' }, { status: 400 });
     }
     
-    // Find the first unredeemed purchase of the specified type
-    const purchase = await prismadb.purchase.findFirst({
-      where: {
-        userId,
-        type,
-        isRedeemed: false
+    // Build the query to find the right purchase
+    const query: any = {
+      userId,
+      type,
+      isRedeemed: false
+    };
+    
+    // If a session ID is provided, look for purchases with that session ID in metadata
+    let purchase = null;
+    
+    if (sessionId) {
+      // First try to find the purchase with the exact session ID
+      const purchases = await prismadb.purchase.findMany({
+        where: query
+      });
+      
+      // Search through purchases for matching session ID in metadata
+      for (const p of purchases) {
+        try {
+          if (p.metadata) {
+            const metadata = JSON.parse(p.metadata as string);
+            if (metadata.sessionId === sessionId) {
+              purchase = p;
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing purchase metadata:', error);
+        }
       }
-    });
+    }
+    
+    // If no purchase was found with the session ID, fall back to the first matching purchase
+    if (!purchase) {
+      purchase = await prismadb.purchase.findFirst({
+        where: query
+      });
+    }
     
     if (!purchase) {
       return NextResponse.json({ error: 'No unredeemed purchase found' }, { status: 404 });

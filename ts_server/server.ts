@@ -13,21 +13,36 @@ import {
 } from '../src/types/websocket';
 
 // Environment variables with fallbacks
-const PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8080;
-const CLIENT_TIMEOUT_MS = 30000; // 30 seconds
-const PING_INTERVAL_MS = 20000; // 20 seconds
+const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) : 8080;
+const CLIENT_TIMEOUT_MS = 60000; // 60 seconds
+const PING_INTERVAL_MS = 25000; // 25 seconds
+
+// Log all environment variables at startup for debugging
+console.log('Socket.IO Server Starting');
+console.log('Environment variables:');
+console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || '(not set, using default 8080)');
+console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
+console.log('NEXT_PUBLIC_GO_SERVER_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set)');
 
 // Create Express app and HTTP server
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
 
-// Create Socket.IO server
+// Create Socket.IO server with improved configuration
 const io = new Server(server, {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+    credentials: true
+  },
+  transports: ['polling', 'websocket'],
+  pingTimeout: 60000,
+  pingInterval: 25000,
+  connectTimeout: 20000,
+  allowEIO3: true,
+  maxHttpBufferSize: 1e8, // 100MB
+  parser: require('socket.io-parser')
 });
 
 // Map to store all connected clients
@@ -205,8 +220,17 @@ io.on('connection', (socket: any) => {
     return;
   }
   
-  console.log(`User ID found: ${userId}`);
-
+  console.log(`Parsed userId from connection: ${userId}`);
+  
+  // Check if user already has connections
+  let userConnections = 0;
+  for (const [_, client] of clients.entries()) {
+    if (client.userId === userId) {
+      userConnections++;
+    }
+  }
+  console.log(`User ${userId} already has ${userConnections} active connections`);
+  
   // Generate a unique client ID
   const clientId = `${userId}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   totalConnections++;
@@ -224,6 +248,18 @@ io.on('connection', (socket: any) => {
     clientId
   };
   client.send(connectionMessage);
+  
+  // Log any socket.io transport change
+  socket.conn.on('upgrade', (transport: any) => {
+    console.log(`Socket.IO client ${clientId} transport upgraded to: ${transport.name}`);
+  });
+  
+  // Log explicit ping/pong activity (helps with debugging timeout issues)
+  socket.conn.on('packet', (packet: any) => {
+    if (packet.type === 'ping' || packet.type === 'pong') {
+      console.log(`Socket.IO ${packet.type} for client ${clientId}`);
+    }
+  });
 
   // Handle message events
   socket.on('message', (message: WebSocketMessage) => {

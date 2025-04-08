@@ -49,20 +49,27 @@ export async function POST(req: Request) {
       // Extract metadata
       const { userId, type } = paymentIntent.metadata;
       
-      if (type === 'backgroundVerification') {
-        // Create a purchase record with isRedeemed=false
+      if (type === 'matchbookVerification') {
+        // Extract the session ID
+        const sessionId = paymentIntent.metadata.sessionId;
+        
+        // Create a purchase record with isRedeemed=false and store the session ID
         await prismadb.purchase.create({
           data: {
-            type: 'backgroundVerification',
+            type: 'matchbookVerification',
             amount: paymentIntent.amount,
             userId: userId || null,
             email: paymentIntent.receipt_email || null,
             status: 'completed',
             isRedeemed: false,
+            metadata: JSON.stringify({ 
+              sessionId,
+              paymentIntentId: paymentIntent.id 
+            }),
           },
         });
         
-        console.log(`User ${userId} verification payment succeeded - purchase created`);
+        console.log(`User ${userId} verification payment succeeded - purchase created with session ID: ${sessionId}`);
       }
     }
 

@@ -46,6 +46,10 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  env: {
+    // WebSocket server URL
+    NEXT_PUBLIC_GO_SERVER_URL: process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080'
+  }
 }
 
 module.exports = nextConfig
