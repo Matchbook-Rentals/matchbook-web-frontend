@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from '@clerk/nextjs';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import {
@@ -284,8 +283,7 @@ const clearTypingTimeout = (
 /**
  * Main Message Interface Component
  */
-const MessageInterface = ({ conversations: initialConversations }: { conversations: ExtendedConversation[] }) => {
-  const { user } = useUser();
+const MessageInterface = ({ conversations: initialConversations, user }: { conversations: ExtendedConversation[], user: {id: string} }) => {
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);

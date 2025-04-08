@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -48,7 +49,7 @@ type Message struct {
 	IsTyping       bool      `json:"isTyping,omitempty"`
 	IsRead         bool      `json:"isRead,omitempty"`
 	MessageIDs     []string  `json:"messageIds,omitempty"`
-	Timestamp      string    `json:"timestamp,omitempty"`
+	Timestamp      string    `json:"timestamp,omitempty"` // Will be handled separately with custom unmarshaling
 }
 
 // TimedRWMutex wraps sync.RWMutex to log long-held locks.
@@ -124,9 +125,10 @@ func setupLogging(handler http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
-	log.Printf("Server starting... (version 2.0.1 - mutex fixes)")
+	log.Printf("Server starting... (version 2.0.2 - timestamp handling)")
 	log.Printf("Go version: %s, GOMAXPROCS: %d", runtime.Version(), runtime.GOMAXPROCS(0))
 	log.Printf("Main server API URL: %s", mainServerAPIURL)
+	log.Printf("Added handling for numeric/string timestamp conversion")
 
 	http.HandleFunc("/ws", setupLogging(setupErrorHandling(handleWebSocket)))
 	http.HandleFunc("/send-message", setupLogging(setupErrorHandling(handleSendMessage)))
@@ -352,19 +354,49 @@ func (c *Client) cleanup() {
 	mutex.Unlock()
 }
 
+// CustomMessage is used to handle numeric timestamp values
+type CustomMessage struct {
+	Message
+	RawTimestamp json.RawMessage `json:"timestamp,omitempty"`
+}
+
 // processIncomingMessage handles an incoming message.
 func processIncomingMessage(c *Client, rawMessage []byte) {
-	var msg Message
-	if err := json.Unmarshal(rawMessage, &msg); err != nil {
+	var customMsg CustomMessage
+	if err := json.Unmarshal(rawMessage, &customMsg); err != nil {
 		log.Printf("Parse error from client %s: %v", c.ID, err)
 		c.Send <- errorJSON("Invalid message format")
 		return
 	}
+	
+	// Handle the timestamp field which could be a number or string
+	if customMsg.RawTimestamp != nil {
+		// Try to unmarshal as string first
+		var strTimestamp string
+		if err := json.Unmarshal(customMsg.RawTimestamp, &strTimestamp); err != nil {
+			// If it fails, try as number and convert to string
+			var numTimestamp json.Number
+			if err := json.Unmarshal(customMsg.RawTimestamp, &numTimestamp); err == nil {
+				customMsg.Timestamp = numTimestamp.String()
+				log.Printf("Successfully converted numeric timestamp %s to string for client %s", numTimestamp.String(), c.ID)
+			} else {
+				log.Printf("Timestamp parse error from client %s: %v, raw value: %s", c.ID, err, string(customMsg.RawTimestamp))
+				// Continue anyway, timestamp is optional
+			}
+		} else {
+			customMsg.Timestamp = strTimestamp
+			log.Printf("Received string timestamp %s from client %s", strTimestamp, c.ID)
+		}
+	}
+	
+	// Convert to regular Message
+	msg := customMsg.Message
 
 	if msg.Type == "ping" {
+		timestamp := time.Now().UnixNano() / int64(time.Millisecond)
 		resp, _ := json.Marshal(map[string]interface{}{
 			"type":       "ping",
-			"timestamp":  time.Now().UnixNano() / int64(time.Millisecond),
+			"timestamp":  fmt.Sprintf("%d", timestamp), // Convert to string for consistency
 			"serverTime": time.Now().Format(time.RFC3339),
 		})
 		c.Send <- resp
@@ -569,22 +601,54 @@ func handleSendMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var msg Message
-	if err := json.NewDecoder(r.Body).Decode(&msg); err != nil {
+	// Read the request body
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("[%s] Failed to read request body: %v", reqID, err)
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+	
+	// Use the CustomMessage to handle timestamp correctly
+	var customMsg CustomMessage
+	if err := json.Unmarshal(body, &customMsg); err != nil {
 		log.Printf("[%s] Decode error: %v", reqID, err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
+	
+	// Handle timestamp conversion if necessary
+	if customMsg.RawTimestamp != nil {
+		var strTimestamp string
+		if err := json.Unmarshal(customMsg.RawTimestamp, &strTimestamp); err != nil {
+			var numTimestamp json.Number
+			if err := json.Unmarshal(customMsg.RawTimestamp, &numTimestamp); err == nil {
+				customMsg.Timestamp = numTimestamp.String()
+				log.Printf("[%s] Converted numeric timestamp %s to string", reqID, numTimestamp.String())
+			} else {
+				log.Printf("[%s] Timestamp parse error: %v, raw value: %s", reqID, err, string(customMsg.RawTimestamp))
+			}
+		} else {
+			customMsg.Timestamp = strTimestamp
+		}
+	}
+	
+	msg := customMsg.Message
 
 	if msg.ReceiverID == "" {
 		http.Error(w, "Receiver ID required", http.StatusBadRequest)
 		return
 	}
 
+	// If timestamp is a number in client-side code, ensure it's stored as string
+	if msg.Timestamp != "" {
+		log.Printf("[%s] Using timestamp value: %s", reqID, msg.Timestamp)
+	}
+
 	success := deliverMessageToClients(reqID, msg)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":   "Message " + map[bool]string{true: "delivered", false: "received, recipient not connected"}[success],
+		"status":    "Message " + map[bool]string{true: "delivered", false: "received, recipient not connected"}[success],
 		"delivered": success,
 	})
 }
