@@ -26,100 +26,20 @@ interface MessageData {
   conversationId: string;
   receiverId: string;
   senderId?: string;
+  id?: string;
   type?: string;
   imgUrl?: string;
   fileName?: string;
   fileKey?: string;
   fileType?: string;
   isTyping?: boolean;
-  timestamp?: number | string;
+  timestamp?: string;
+  messageIds?: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-/**
- * Custom hook to manage WebSocket connection
- */
-const useWebSocket = (url: string, options: {
-  onMessage: (message: any) => void;
-  onError: (error: Event) => void;
-  onClose: (event: CloseEvent) => void;
-  onOpen: (event: Event) => void;
-}) => {
-  const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [connectionAttempts, setConnectionAttempts] = useState(0);
-
-  const connectWebSocket = () => {
-    const MAX_RECONNECT_ATTEMPTS = 10;
-    const BASE_RECONNECT_DELAY = 2000;
-    const PING_INTERVAL = 20000;
-
-    if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {
-      setTimeout(() => {
-        setConnectionAttempts(0);
-        connectWebSocket();
-      }, 30000);
-      return;
-    }
-
-    if (wsRef.current) wsRef.current.close();
-    if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
-
-    wsRef.current = new WebSocket(url);
-
-    wsRef.current.onopen = (event) => {
-      setIsConnected(true);
-      setConnectionAttempts(0);
-      options.onOpen(event);
-      pingIntervalRef.current = setInterval(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
-        }
-      }, PING_INTERVAL);
-    };
-
-    wsRef.current.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type !== 'ping') options.onMessage(message);
-    };
-
-    wsRef.current.onerror = (error) => {
-      setIsConnected(false);
-      options.onError(error);
-    };
-
-    wsRef.current.onclose = (event) => {
-      setIsConnected(false);
-      options.onClose(event);
-      if (!event.wasClean) {
-        const delay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
-        reconnectTimeoutRef.current = setTimeout(() => {
-          setConnectionAttempts((prev) => prev + 1);
-          connectWebSocket();
-        }, delay);
-      }
-    };
-  };
-
-  useEffect(() => {
-    connectWebSocket();
-    return () => {
-      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-      if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
-      wsRef.current?.close();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
-
-  const send = (data: any) => {
-    if (wsRef.current && isConnected) {
-      wsRef.current.send(JSON.stringify(data));
-    }
-  };
-
-  return { ws: wsRef.current, isConnected, connectionAttempts, send };
-};
+import useWebSocket from '@/hooks/use-websocket';
 
 /**
  * Custom hook to detect mobile devices
@@ -297,8 +217,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useMobileDetect();
   
-  // Generate the WebSocket URL only if user exists
-  const wsUrl = user ? `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace(/^http/, 'ws')}/ws?id=${user.id}` : '';
+  // Generate the WebSocket URL using the new TypeScript server
+  // Replace with your actual server URL when deploying
+  const wsUrl = process.env.NEXT_PUBLIC_WS_SERVER_URL || 'ws://localhost:8080';
 
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
@@ -320,12 +241,16 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     }
   };
 
-  const ws = useWebSocket(wsUrl, {
-    onMessage: handleWebSocketMessage,
-    onError: (error) => console.error('WebSocket Error:', error),
-    onClose: (event) => console.log('WebSocket Closed:', event.code),
-    onOpen: () => console.log('WebSocket Connected'),
-  });
+  const ws = useWebSocket(
+    wsUrl,
+    user?.id || '',
+    {
+      onMessage: handleWebSocketMessage,
+      onError: (error) => console.error('WebSocket Error:', error),
+      onClose: (event) => console.log('WebSocket Closed:', event.code),
+      onOpen: () => console.log('WebSocket Connected'),
+    }
+  );
 
   // Initialize conversations when user data is available
   useEffect(() => {
@@ -409,6 +334,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         receiverId: receiver.userId,
         senderId: user.id,
         timestamp: timestamp.toISOString(),
+        messageIds: conv.messages
+          .filter(m => m.senderId !== user.id && !m.isRead)
+          .map(m => m.id)
       });
     }
     await markMessagesAsReadByTimestamp(conversationId, timestamp);
@@ -434,6 +362,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       receiverId: receiver.userId,
       senderId: user.id,
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
+      id: clientId,
+      timestamp: new Date().toISOString(),
       ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
     };
 

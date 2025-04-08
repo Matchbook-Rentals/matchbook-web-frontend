@@ -13,7 +13,7 @@ import { UserRating } from '@/components/reviews/host-review';
 interface MessageAreaProps {
   selectedConversation: any;
   messages: any[];
-  onSendMessage: (message: string, fileUrl?: string, fileName?: string, fileKey?: string, fileType?: string) => void;
+  onSendMessage: (message: string, file?: { url?: string; name?: string; key?: string; type?: string }) => void;
   currentUserId: string | undefined;
   currentUserImage?: string | null;
   onBack?: () => void;
@@ -141,10 +141,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       const messageContent = newMessageInput.trim() || "";
       onSendMessage(
         messageContent,
-        attachment.fileUrl,
-        attachment.fileName,
-        attachment.fileKey,
-        attachment.fileType
+        {
+          url: attachment.fileUrl,
+          name: attachment.fileName,
+          key: attachment.fileKey,
+          type: attachment.fileType
+        }
       );
     } else {
       onSendMessage(newMessageInput);

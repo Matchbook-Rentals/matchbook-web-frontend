@@ -53,7 +53,7 @@ export interface WebSocketErrorMessage {
 
 export interface WebSocketPingResponse {
   type: "ping";
-  timestamp: number; // ms timestamp
+  timestamp: string; // ms timestamp as string for consistency
   serverTime: string;
 }
 
@@ -65,3 +65,14 @@ export type WebSocketResponse =
   | WebSocketPersistenceError
   | WebSocketErrorMessage
   | WebSocketPingResponse;
+
+// Server-side types
+export interface Client {
+  id: string;
+  userId: string;
+  socket: WebSocket;
+  send: (message: any) => void;
+  closed: boolean;
+}
+
+export type ClientsMap = Map<string, Client>;
