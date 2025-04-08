@@ -297,6 +297,9 @@ export async function getAllConversations() {
       updatedAt: 'desc',
     },
   });
+  for (let convo of conversations) {
+    convo.messages = convo.messages.reverse();
+  }
   return conversations;
 }
 

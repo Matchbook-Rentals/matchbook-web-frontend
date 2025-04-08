@@ -36,7 +36,7 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
     credentials: true
   },
-  transports: ['polling', 'websocket'],
+  transports: ['websocket', 'polling'], // Prioritize websocket first
   pingTimeout: 60000,
   pingInterval: 25000,
   connectTimeout: 20000,
@@ -210,8 +210,17 @@ io.on('connection', (socket: any) => {
   console.log('Connection handshake:', socket.handshake.query);
   
   // Try to get userId from different possible locations
-  const userId = socket.handshake.query.userId || 
-                socket.handshake.query.id ||
+  // Handle the "Object: null prototype" issue that can happen with query params
+  let handshakeQuery = socket.handshake.query;
+  
+  // If the query is an Object.create(null), convert it to a regular object
+  if (Object.getPrototypeOf(handshakeQuery) === null) {
+    console.log('Detected null prototype query object, converting to regular object');
+    handshakeQuery = { ...handshakeQuery };
+  }
+  
+  const userId = handshakeQuery.userId || 
+                handshakeQuery.id ||
                 socket.handshake.auth?.userId;
   
   if (!userId) {

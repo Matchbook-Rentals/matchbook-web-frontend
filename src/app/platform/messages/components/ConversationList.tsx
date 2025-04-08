@@ -220,10 +220,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
         {filteredConversations && filteredConversations.length > 0 ? (
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
-            // Since messages are now in reverse chronological order (newest first),
-            // the newest message is the first one in the array
             const lastMessage = conv.messages && conv.messages.length > 0
-              ? conv.messages[0]
+              ? conv.messages[conv.messages.length -1]
               : null;
 
             return (

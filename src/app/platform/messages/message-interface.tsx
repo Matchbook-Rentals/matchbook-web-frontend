@@ -273,9 +273,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
         timeout: 20000,
-        transports: ['polling', 'websocket'],
+        transports: ['websocket', 'polling'],
         forceNew: true,
-        autoConnect: true
+        autoConnect: true,
+        // Fix for "Object: null prototype" issue
+        parser: require('socket.io-parser')
       });
       
       socket.on('connect', () => {
@@ -316,6 +318,20 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       socket.on('connect_error', (error) => {
         console.error('Socket.IO Connection Error:', error);
         setIsConnected(false);
+        
+        // Log detailed error for debugging
+        console.error('Connection error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+          // Additional error properties on non-standard errors
+          ...Object.getOwnPropertyNames(error).reduce((acc, key) => {
+            if (!['name', 'message', 'stack'].includes(key)) {
+              try { acc[key] = (error as any)[key]; } catch {}
+            }
+            return acc;
+          }, {} as Record<string, any>)
+        });
       });
       
       socketRef.current = socket;
@@ -490,7 +506,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   const filteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
   const selectedConversation = allConversations.find((c) => c.id === selectedConversationId) || null;
-  const messages = selectedConversation ? [...selectedConversation.messages].reverse() : [];
+  const messages = selectedConversation ? [...selectedConversation.messages] : [];
   const isOtherUserTyping =
     selectedConversationId &&
     typingUsers[`${selectedConversationId}:${selectedConversation?.participants.find((p) => p.userId !== user.id)?.userId}`]?.isTyping;

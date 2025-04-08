@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
+import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 
 export default function AboutHostingPage(): React.ReactNode {
   // Feature data for mapping
@@ -11,7 +12,7 @@ export default function AboutHostingPage(): React.ReactNode {
       title: "Application Management, Simplified",
       description:
         "Receive, review, and approve applications effortlessly on our platform.",
-      image: "/tempimageh8vdhu-1.png",
+      image: "/marketing-images/laptop-application.png",
       imageAlt: "Application management illustration",
       align: "left",
     },
@@ -25,27 +26,29 @@ export default function AboutHostingPage(): React.ReactNode {
       title: "Connect with Matchbook Verified Renters",
       description:
         "Pre-screened and ready to book. Renters pay upfront for their background, credit, and eviction check, giving you instant access to verified details. Choose to accept only MatchBook Verified Renters for a worry-free experience.",
+      image: "/marketing-images/id-application.png",
+      imageAlt: "Application management illustration",
       align: "left",
     },
     {
       title: "Real Reviews, Reliable Renters, Worry-Free Renting",
       description:
         "Choose renters you can trust. Our review system gives you insight into their past rentals, making worry-free renting a reality.",
-      image: "/tempimagezhbqyr-1.png",
-      imageAlt: "Reviews illustration",
       align: "right",
     },
     {
       title: "Ditch the paperwork",
       description:
         "Bookings generate automatic rental agreements, streamlining the leasing process—no paperwork, no waiting. Your business, modernized.",
-      image: "/tempimagenhymt3-1.png",
-      imageAlt: "Paperless documentation illustration",
+      image: "/marketing-images/SHREDZ.png",
+      imageAlt: "Reviews illustration",
       align: "left",
     },
   ];
 
   return (
+    <>
+    <MatchbookHeader />
     <div className="flex flex-col items-center bg-white overflow-hidden">
       {/* Hero Section */}
       <section className="w-full max-w-[1344px] px-8 py-16 flex flex-col items-center">
@@ -105,5 +108,6 @@ export default function AboutHostingPage(): React.ReactNode {
         </Button>
       </section>
     </div>
+    </>
   );
 };

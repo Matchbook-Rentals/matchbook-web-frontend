@@ -150,8 +150,17 @@ io.on('connection', (socket) => {
   console.log('New Socket.IO connection attempt:', socket.id);
   console.log('Connection handshake:', socket.handshake.query);
   
+  // Handle the "Object: null prototype" issue that can happen with query params
+  let handshakeQuery = socket.handshake.query;
+  
+  // If the query is an Object.create(null), convert it to a regular object
+  if (handshakeQuery && Object.getPrototypeOf(handshakeQuery) === null) {
+    console.log('Detected null prototype query object, converting to regular object');
+    handshakeQuery = { ...handshakeQuery };
+  }
+  
   // Get userId from query parameters
-  const userId = socket.handshake.query.userId;
+  const userId = handshakeQuery.userId;
   
   console.log('Parsed userId from connection:', userId);
   
