@@ -19,6 +19,7 @@ import {
   BoldSignLease,
   Maybe,
 } from "@prisma/client";
+export * from './websocket';
 
 export interface TripAndMatches extends Trip {
   favorites: Favorite[];

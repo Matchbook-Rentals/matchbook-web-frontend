@@ -1,5 +1,7 @@
 # TO DOs
 
+Rewrite fxs and go server
+
 - [ ] APIS 
 ----- [ ] batching for geocodes and autocmplete after half of per second rate limits PositionStack
 ----- [ ] City use our own lookup 
