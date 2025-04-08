@@ -9,17 +9,24 @@ export async function createMessage(data: any) {
 
     const message = await prisma.message.create({
       data: {
-        content: data.content,
+        content: data.content || "",
         senderId: userId,
-        receiverId: data.receiverId,
-        senderRole: data.senderRole,
-        receiverRole: data.receiverRole,
+        conversationId: data.conversationId,
+        imgUrl: data.imgUrl,
+        fileName: data.fileName,
+        fileKey: data.fileKey,
+        fileType: data.fileType,
+        metadata: data.senderRole ? JSON.stringify({
+          senderRole: data.senderRole,
+          receiverRole: data.receiverRole
+        }) : undefined
       },
     });
 
     return { success: true, message };
   } catch (error) {
-    return { success: false, error: error.message };
+    console.error('Error creating message:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error occurred' };
   }
 }
 
@@ -61,6 +68,6 @@ export async function markMessagesAsReadByTimestamp(conversationId: string, time
     return { success: true, count: updateResult.count };
   } catch (error) {
     console.error('Error marking messages as read by timestamp:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error occurred' };
   }
 }

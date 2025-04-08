@@ -3,7 +3,7 @@
 import prisma from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
-import { Listing, ListingUnavailability } from "@prisma/client";
+import { Listing, ListingUnavailability, Prisma } from "@prisma/client";
 
 const checkAuth = async () => {
   const { userId } = auth();
@@ -31,17 +31,19 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     }
 
     // First, get just the listing IDs and distances within the radius
-    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
-      SELECT l.id,
-      (${earthRadiusMiles} * acos(
-        cos(radians(${lat})) * cos(radians(l.latitude)) *
-        cos(radians(l.longitude) - radians(${lng})) +
-        sin(radians(${lat})) * sin(radians(l.latitude))
-      )) AS distance
-      FROM Listing l
-      HAVING distance <= ${radiusMiles}
-      ORDER BY distance
-    `;
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>(
+      Prisma.sql`
+        SELECT l.id,
+        (${earthRadiusMiles} * acos(
+          cos(radians(${lat})) * cos(radians(l.latitude)) *
+          cos(radians(l.longitude) - radians(${lng})) +
+          sin(radians(${lat})) * sin(radians(l.latitude))
+        )) AS distance
+        FROM Listing l
+        HAVING distance <= ${radiusMiles}
+        ORDER BY distance
+      `
+    );
 
     if (listingsWithDistance.length === 0) {
       console.log('No listings found within the specified radius.');

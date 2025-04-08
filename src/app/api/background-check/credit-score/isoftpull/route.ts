@@ -22,7 +22,9 @@ export async function POST(request: Request) {
 
     // Get the request body
     const body = await request.json();
-    console.log('Received request body:', JSON.stringify(body, null, 2));
+    const safeBody = { ...body };
+    if (safeBody.ssn) safeBody.ssn = '***-**-' + safeBody.ssn.slice(-4);
+    console.log('Received request body:', JSON.stringify(safeBody, null, 2));
 
     // Validate required fields
     const requiredFields = ['first_name', 'last_name', 'address', 'city', 'state', 'zip', 'ssn'];

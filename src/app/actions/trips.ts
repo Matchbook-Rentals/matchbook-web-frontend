@@ -328,7 +328,7 @@ export async function editTrip(tripId: string, tripData: {
   }
 }
 
-export const updateTripFilters = async (tripId: string, filters: Object): Promise<TripAndMatches> => {
+export async function updateTripFilters(tripId: string, filters: Object): Promise<TripAndMatches> {
   // Check authentication
   const { userId } = auth();
   if (!userId) {
@@ -336,10 +336,36 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
   }
 
   try {
+    // First verify the trip belongs to the user
+    const existingTrip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      select: { userId: true }
+    });
+    
+    if (!existingTrip) {
+      throw new Error('Trip not found');
+    }
+    
+    if (existingTrip.userId !== userId) {
+      throw new Error('Unauthorized to update this trip');
+    }
+    
+    const safeFilters: any = {};
+    const allowedFields = [
+      'minPrice', 'maxPrice', 'minBedrooms', 'maxBedrooms', 
+      'minBathrooms', 'maxBathrooms', 'amenities', 'propertyTypes'
+    ];
+    
+    Object.keys(filters).forEach(key => {
+      if (allowedFields.includes(key)) {
+        safeFilters[key] = (filters as any)[key];
+      }
+    });
+    
     // Update trip with new filters
     const updatedTrip = await prisma.trip.update({
       where: { id: tripId },
-      data: { ...filters },
+      data: safeFilters,
       include: {
         matches: true,
         dislikes: true,
@@ -354,10 +380,9 @@ export const updateTripFilters = async (tripId: string, filters: Object): Promis
       revalidateTag(`trip-${tripId}`),
     ]);
 
-    return updatedTrip;
+    return updatedTrip as TripAndMatches;
 
   } catch (error) {
-    console.log('FILTERS', filters)
     console.error('Error updating trip filters:', error);
     throw new Error('Failed to update trip filters');
   }

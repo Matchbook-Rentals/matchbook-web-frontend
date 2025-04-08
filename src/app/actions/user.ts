@@ -71,6 +71,15 @@ export async function updateUserLogin(timestamp: Date) {
     if (!clerkUser?.id) {
       throw new Error('User ID is missing')
     }
+    
+    if (!(timestamp instanceof Date) || isNaN(timestamp.getTime())) {
+      return { success: false, error: 'Invalid timestamp provided' };
+    }
+    
+    const now = new Date();
+    if (timestamp > now) {
+      return { success: false, error: 'Timestamp cannot be in the future' };
+    }
 
     const dbUser = await prisma.user.findUnique({
       where: { id: clerkUser.id }

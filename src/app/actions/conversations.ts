@@ -156,6 +156,25 @@ export async function createMessage(data: {
 }) {
   const userId = await checkAuth();
 
+  if (!data.conversationId) {
+    throw new Error('Conversation ID is required');
+  }
+  
+  if (!data.receiverId) {
+    throw new Error('Receiver ID is required');
+  }
+  
+  const isParticipant = await prisma.conversationParticipant.findFirst({
+    where: {
+      conversationId: data.conversationId,
+      userId
+    }
+  });
+  
+  if (!isParticipant) {
+    throw new Error('Unauthorized: User is not a participant in this conversation');
+  }
+
   // Extract the fields that exist in the Prisma schema
   const { content, conversationId, imgUrl, fileName, fileKey, fileType } = data;
   

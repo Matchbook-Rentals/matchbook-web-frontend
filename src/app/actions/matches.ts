@@ -6,6 +6,8 @@ import { calculateRent } from '@/lib/calculate-rent'
 import { Trip, Listing, Notification } from '@prisma/client'
 import { createNotification } from './notifications'
 
+type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>
+
 // Helper function to check authentication
 async function checkAuth() {
   const { userId } = auth()
@@ -33,6 +35,7 @@ export async function createMatch(trip: Trip, listing: Listing) {
       url: `/platform/searches/?tab=matchbook&searchId=${trip.id}`,
       actionType: 'view',
       actionId: trip.id,
+      unread: true
     }
     createNotification(notificationData)
     return { success: true, match }
@@ -45,7 +48,8 @@ export async function createMatch(trip: Trip, listing: Listing) {
 // Read a match by id
 export async function getMatch(id: string) {
   try {
-    await checkAuth()
+    const userId = await checkAuth()
+    
     const match = await prisma.match.findUnique({
       where: { id },
       include: {
@@ -56,6 +60,14 @@ export async function getMatch(id: string) {
         // TODO: add housingRequest
       },
     })
+    
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+    
+    if (match.trip.userId !== userId && match.listing.userId !== userId) {
+      return { success: false, error: 'Unauthorized: You do not have permission to access this match' }
+    }
     return { success: true, match }
   } catch (error) {
     console.error('Error fetching match:', error)
@@ -66,7 +78,28 @@ export async function getMatch(id: string) {
 // Update a match
 export async function updateMatch(id: string, tripId?: string, matchId?: string) {
   try {
-    await checkAuth()
+    const userId = await checkAuth()
+    
+    const existingMatch = await prisma.match.findUnique({
+      where: { id },
+      include: {
+        trip: {
+          select: { userId: true }
+        },
+        listing: {
+          select: { userId: true }
+        }
+      }
+    })
+    
+    if (!existingMatch) {
+      return { success: false, error: 'Match not found' }
+    }
+    
+    if (existingMatch.trip.userId !== userId && existingMatch.listing.userId !== userId) {
+      return { success: false, error: 'Unauthorized: You do not have permission to update this match' }
+    }
+    
     const match = await prisma.match.update({
       where: { id },
       data: {
@@ -84,7 +117,28 @@ export async function updateMatch(id: string, tripId?: string, matchId?: string)
 // Delete a match
 export async function deleteMatch(id: string) {
   try {
-    await checkAuth()
+    const userId = await checkAuth()
+    
+    const existingMatch = await prisma.match.findUnique({
+      where: { id },
+      include: {
+        trip: {
+          select: { userId: true }
+        },
+        listing: {
+          select: { userId: true }
+        }
+      }
+    })
+    
+    if (!existingMatch) {
+      return { success: false, error: 'Match not found' }
+    }
+    
+    if (existingMatch.trip.userId !== userId && existingMatch.listing.userId !== userId) {
+      return { success: false, error: 'Unauthorized: You do not have permission to delete this match' }
+    }
+    
     await prisma.match.delete({
       where: { id },
     })
@@ -98,7 +152,21 @@ export async function deleteMatch(id: string) {
 // Get all matches for a trip
 export async function getMatchesForTrip(tripId: string) {
   try {
-    await checkAuth()
+    const userId = await checkAuth()
+    
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      select: { userId: true }
+    });
+    
+    if (!trip) {
+      return { success: false, error: 'Trip not found' }
+    }
+    
+    if (trip.userId !== userId) {
+      return { success: false, error: 'Unauthorized: You do not have permission to access matches for this trip' }
+    }
+    
     const matches = await prisma.match.findMany({
       where: { tripId },
     })

@@ -3,13 +3,33 @@
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { createNotification } from './notifications'
+import { Notification } from '@prisma/client'
+
+type NotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>
 import { HousingRequest } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 
 
 export async function getHousingRequestsByListingId(listingId: string) {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+  
   try {
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+    
+    if (!listing) {
+      throw new Error('Listing not found');
+    }
+    
+    if (listing.userId !== userId) {
+      throw new Error('Unauthorized: You do not have permission to view housing requests for this listing');
+    }
     const housingRequests = await prisma.housingRequest.findMany({
       where: {
         listingId: listingId,
@@ -62,12 +82,13 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
 
     const messageContent = `${requesterName.trim()} wants to stay at your property ${listing.title}`;
 
-    const notificationData: CreateNotificationInput = {
+    const notificationData: NotificationInput = {
       userId: listing.userId,
       content: 'New Housing Request',
       url: `/platform/host-dashboard/${listing.id}?tab=applications`,
       actionType: 'view',
       actionId: newHousingRequest.id,
+      unread: true
     }
     createNotification(notificationData)
 
@@ -80,8 +101,25 @@ export const createDbHousingRequest = async (trip: TripAndMatches, listing: List
 };
 
 export const deleteDbHousingRequest = async (tripId: string, listingId: string) => {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+  
   console.log(`Deleting HousingRequest with trip ${tripId} and listing ${listingId}`);
   try {
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      select: { userId: true }
+    });
+    
+    if (!trip) {
+      throw new Error('Trip not found');
+    }
+    
+    if (trip.userId !== userId) {
+      throw new Error('Unauthorized: You do not have permission to modify this trip');
+    }
     // Delete the favorite
     const deletedRequest = await prisma.housingRequest.delete({
       where: {
@@ -136,7 +174,7 @@ export async function optimisticApplyDb(tripId: string, listing: ListingAndImage
 
     if (!trip) throw new Error('Trip not found');
 
-    const housingRequest = await createDbHousingRequest(trip, listing);
+    const housingRequest = await createDbHousingRequest(trip as unknown as TripAndMatches, listing);
 
     return { success: true, housingRequest };
   } catch (error) {

@@ -88,7 +88,34 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
-			return true // Adjust for production
+			origin := r.Header.Get("Origin")
+			allowedOrigins := []string{
+				"http://localhost:3000",
+				"https://localhost:3000",
+				"https://matchbook-rentals.com",
+				"https://www.matchbook-rentals.com",
+			}
+			
+			if origin == "" {
+				return false
+			}
+			
+			for _, allowed := range allowedOrigins {
+				if origin == allowed {
+					return true
+				}
+			}
+			
+			if envAllowedOrigins := os.Getenv("ALLOWED_WEBSOCKET_ORIGINS"); envAllowedOrigins != "" {
+				for _, allowed := range strings.Split(envAllowedOrigins, ",") {
+					if origin == strings.TrimSpace(allowed) {
+						return true
+					}
+				}
+			}
+			
+			log.Printf("Rejected WebSocket connection from unauthorized origin: %s", origin)
+			return false
 		},
 	}
 )
@@ -105,8 +132,16 @@ func setupErrorHandling(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				log.Printf("PANIC RECOVERED: %v\nStack Trace:\n%s", err, debug.Stack())
-				http.Error(w, "Internal server error", http.StatusInternalServerError)
+				stackTrace := debug.Stack()
+				errorID := fmt.Sprintf("err-%d", time.Now().UnixNano())
+				
+				log.Printf("[%s] PANIC RECOVERED: %v", errorID, err)
+				
+				if os.Getenv("GO_ENV") != "production" {
+					log.Printf("[%s] Stack Trace:\n%s", errorID, stackTrace)
+				}
+				
+				http.Error(w, fmt.Sprintf("Internal server error (ID: %s)", errorID), http.StatusInternalServerError)
 			}
 		}()
 		handler(w, r)
