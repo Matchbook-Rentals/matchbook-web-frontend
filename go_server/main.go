@@ -88,8 +88,12 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
-			return true // Adjust for production
+			// More permissive CORS handling for WebSockets
+			// In production, you should limit this to specific origins
+			return true
 		},
+		// Adding additional headers to handle CORS preflight requests
+		HandshakeTimeout: 30 * time.Second,
 	}
 )
 
@@ -131,6 +135,15 @@ func main() {
 	http.HandleFunc("/ws", setupLogging(setupErrorHandling(handleWebSocket)))
 	http.HandleFunc("/send-message", setupLogging(setupErrorHandling(handleSendMessage)))
 	http.HandleFunc("/health-check", setupErrorHandling(func(w http.ResponseWriter, r *http.Request) {
+		// Add CORS headers to health check endpoint
+		addCorsHeaders(w)
+		
+		// Handle OPTIONS preflight request
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		
 		mutex.RLock()
 		clientCount := len(clients)
 		mutex.RUnlock()
@@ -139,6 +152,7 @@ func main() {
 			"status":      "OK",
 			"time":        time.Now().Format(time.RFC3339),
 			"connections": clientCount,
+			"version":     "2.0.1",
 		})
 	}))
 
@@ -238,9 +252,30 @@ func main() {
 	log.Println("Server shutdown complete")
 }
 
+// addCorsHeaders adds CORS headers to the response
+func addCorsHeaders(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+	w.Header().Set("Access-Control-Max-Age", "86400") // 24 hours
+}
+
 // handleWebSocket manages new WebSocket connections.
 func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+	// Add CORS headers for preflight OPTIONS requests
+	if r.Method == "OPTIONS" {
+		addCorsHeaders(w)
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	
 	log.Printf("DEBUG: Entered handleWebSocket from %s", r.RemoteAddr)
+	
+	// Log request headers for debugging
+	log.Printf("DEBUG: Request headers from %s:", r.RemoteAddr)
+	for name, values := range r.Header {
+		log.Printf("  %s: %s", name, values)
+	}
 	
 	clientID := strings.TrimSpace(r.URL.Query().Get("id"))
 	log.Printf("DEBUG: Client ID extracted: '%s'", clientID)
@@ -260,9 +295,24 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	log.Printf("DEBUG: Attempting WebSocket upgrade for %s", clientID)
+	
+	// Add CORS headers to response
+	addCorsHeaders(w)
+	
+	// Add additional response headers to help with WebSocket connectivity
+	w.Header().Set("Connection", "Upgrade")
+	w.Header().Set("Upgrade", "websocket")
+	
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Upgrade error for client %s: %v", clientID, err)
+		// Log specific details about headers to diagnose upgrade issues
+		log.Printf("Origin header: %s", r.Header.Get("Origin"))
+		log.Printf("Host header: %s", r.Header.Get("Host")) 
+		log.Printf("Connection header: %s", r.Header.Get("Connection"))
+		log.Printf("Upgrade header: %s", r.Header.Get("Upgrade"))
+		log.Printf("Sec-WebSocket-Key header: %s", r.Header.Get("Sec-WebSocket-Key"))
+		log.Printf("Sec-WebSocket-Version header: %s", r.Header.Get("Sec-WebSocket-Version"))
 		return
 	}
 	log.Printf("DEBUG: Upgrade successful for %s", clientID)

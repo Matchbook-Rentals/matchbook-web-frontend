@@ -162,7 +162,7 @@ const updateTypingStatus = (
   isTyping: boolean
 ) => ({
   ...typingUsers,
-  [`${conversationId}:${senderId}`]: { isTyping, timestamp: Date.now() },
+  [`${conversationId}:${senderId}`]: { isTyping, timestamp: Date.now().toString() },
 });
 
 /**
@@ -238,17 +238,39 @@ const MessageInterface = ({
     }
   };
 
+  // Use a more robust websocket handler
   const ws = useWebSocket(wsUrl, {
     onMessage: handleWebSocketMessage,
     onError: (error) => {
       console.error('WebSocket Error:', error);
       console.log('WebSocket URL:', wsUrl);
+      console.log('Network Status:', navigator.onLine ? 'Online' : 'Offline');
+      // Use a same-origin endpoint to check network connectivity
+      try {
+        // Using a same-origin endpoint that always exists to avoid CORS issues
+        const testFetch = fetch('/favicon.ico', { 
+          method: 'HEAD',
+          cache: 'no-store' 
+        })
+          .then(() => console.log('Network check: Same-origin request successful'))
+          .catch(err => console.log('Network check: Same-origin request failed', err));
+      } catch (e) {
+        console.log('Network check failed:', e);
+      }
     },
     onClose: (event) => {
       console.log('WebSocket Closed:', event.code, 'Clean:', event.wasClean, 'Reason:', event.reason || 'No reason provided');
+      // Add suggestions based on close code
+      if (event.code === 1006) {
+        console.log('Possible causes for code 1006:');
+        console.log('- Network interruption between client and server');
+        console.log('- Proxy/firewall/load balancer dropped the connection');
+        console.log('- Server restarted or crashed');
+      }
     },
     onOpen: (event) => {
       console.log('WebSocket Connected Successfully to:', wsUrl);
+      console.log('Connection established at:', new Date().toISOString());
     },
   });
   
@@ -310,7 +332,7 @@ const MessageInterface = ({
         senderId: user.id,
         senderRole: conv.participants.find((p) => p.userId === user.id)?.role,
         content: '',
-        timestamp: Date.now(),
+        timestamp: Date.now().toString(),
       });
     }
   };

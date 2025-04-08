@@ -110,7 +110,7 @@ class MockWebSocket {
         this.onmessage({
           data: JSON.stringify({
             type: 'ping',
-            timestamp: Date.now(),
+            timestamp: Date.now().toString(),
             serverTime: new Date().toISOString()
           })
         });
@@ -263,7 +263,7 @@ describe('MessageInterface Component', () => {
           receiverId: 'user1',
           conversationId: 'conv1',
           isTyping: true,
-          timestamp: Date.now()
+          timestamp: Date.now().toString()
         })
       });
     });

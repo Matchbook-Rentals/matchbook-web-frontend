@@ -40,7 +40,7 @@ const useWebSocket = (url: string, options: {
       options.onOpen(event);
       pingIntervalRef.current = setInterval(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+          wsRef.current.send(JSON.stringify({ type: 'ping', timestamp: Date.now().toString() }));
         }
       }, PING_INTERVAL);
     };
@@ -112,7 +112,7 @@ class MockWebSocket {
         this.onmessage({
           data: JSON.stringify({
             type: 'ping',
-            timestamp: Date.now(),
+            timestamp: Date.now().toString(),
             serverTime: new Date().toISOString()
           })
         });
@@ -160,7 +160,7 @@ function TestComponent({
 
   useEffect(() => {
     if (triggerSend && isConnected) {
-      send({ type: 'ping', timestamp: Date.now() });
+      send({ type: 'ping', timestamp: Date.now().toString() });
     }
   }, [triggerSend, isConnected, send]);
 
