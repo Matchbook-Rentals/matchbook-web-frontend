@@ -31,7 +31,20 @@ export async function executeSqlQuery(query: string) {
       }
     }
 
-    // Execute query
+    if (lowercaseQuery.includes(';') || 
+        lowercaseQuery.includes('--') || 
+        lowercaseQuery.includes('/*') ||
+        lowercaseQuery.includes('*/') ||
+        lowercaseQuery.includes('union') ||
+        lowercaseQuery.includes('drop') ||
+        lowercaseQuery.includes('alter') ||
+        lowercaseQuery.includes('truncate')) {
+      return {
+        success: false,
+        error: 'Potentially unsafe SQL query detected. Please remove any semicolons, comments, or unsafe keywords.'
+      }
+    }
+    
     const result = await prisma.$queryRawUnsafe(query)
     
     return {
