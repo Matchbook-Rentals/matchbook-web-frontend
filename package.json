@@ -10,7 +10,9 @@
     "lint": "next lint",
     "ws:dev": "ts-node --project tsconfig.server.json ts_server/server.ts",
     "ws:build": "tsc --project tsconfig.server.json",
-    "ws:start": "node dist/ts_server/server.js"
+    "ws:start": "node dist/ts_server/server.js",
+    "ws:start:js": "node ts_server/server.js",
+    "ws:deploy": "npm install && npm run ws:start:js"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.3",

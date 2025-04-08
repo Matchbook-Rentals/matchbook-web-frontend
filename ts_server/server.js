@@ -1,17 +1,8 @@
-// Import types
+// Simple WebSocket server implementation using CommonJS
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
-const { WebSocketServer } = WebSocket;
 const cors = require('cors');
-import { 
-  ClientsMap, 
-  Client, 
-  WebSocketMessage, 
-  WebSocketConnectionMessage,
-  WebSocketResponse,
-  WebSocketPingResponse
-} from '../src/types/websocket';
 
 // Environment variables with fallbacks
 const PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8080;
@@ -24,10 +15,10 @@ app.use(cors());
 const server = http.createServer(app);
 
 // Create WebSocket server
-const wss = new WebSocketServer({ server });
+const wss = new WebSocket.Server({ server });
 
 // Map to store all connected clients
-const clients: ClientsMap = new Map();
+const clients = new Map();
 
 // Statistics for monitoring
 let totalConnections = 0;
@@ -36,11 +27,11 @@ let messagesReceived = 0;
 
 /**
  * Sends a message to a specific client
- * @param clientId The ID of the client to send to
- * @param message The message to send
- * @returns true if message was sent, false otherwise
+ * @param {string} clientId The ID of the client to send to
+ * @param {object} message The message to send
+ * @returns {boolean} true if message was sent, false otherwise
  */
-function sendToClient(clientId: string, message: WebSocketResponse): boolean {
+function sendToClient(clientId, message) {
   const client = clients.get(clientId);
   if (!client || client.closed) {
     console.log(`Cannot send to client ${clientId} - not connected or closed`);
@@ -59,10 +50,10 @@ function sendToClient(clientId: string, message: WebSocketResponse): boolean {
 
 /**
  * Sends a message to all clients except the sender
- * @param message The message to broadcast
- * @param senderId The ID of the sender to exclude
+ * @param {object} message The message to broadcast
+ * @param {string} senderId The ID of the sender to exclude
  */
-function broadcast(message: WebSocketResponse, senderId?: string): void {
+function broadcast(message, senderId) {
   clients.forEach((client, id) => {
     if (id !== senderId && !client.closed) {
       try {
@@ -77,18 +68,18 @@ function broadcast(message: WebSocketResponse, senderId?: string): void {
 
 /**
  * Creates a new client instance
- * @param id Client ID
- * @param userId User ID
- * @param socket WebSocket connection
- * @returns Client object
+ * @param {string} id Client ID
+ * @param {string} userId User ID
+ * @param {WebSocket} socket WebSocket connection
+ * @returns {object} Client object
  */
-function createClient(id: string, userId: string, socket: WebSocket): Client {
+function createClient(id, userId, socket) {
   return {
     id,
     userId,
     socket,
     closed: false,
-    send: (message: any) => {
+    send: (message) => {
       try {
         if (!socket || socket.readyState !== WebSocket.OPEN) return;
         socket.send(typeof message === 'string' ? message : JSON.stringify(message));
@@ -102,10 +93,10 @@ function createClient(id: string, userId: string, socket: WebSocket): Client {
 
 /**
  * Closes a client connection
- * @param clientId The ID of the client to close
- * @param reason Reason for closing
+ * @param {string} clientId The ID of the client to close
+ * @param {string} reason Reason for closing
  */
-function closeClient(clientId: string, reason: string): void {
+function closeClient(clientId, reason) {
   const client = clients.get(clientId);
   if (!client) return;
 
@@ -123,9 +114,9 @@ function closeClient(clientId: string, reason: string): void {
 
 /**
  * Handles direct messages between users
- * @param message The message to process
+ * @param {object} message The message to process
  */
-function handleDirectMessage(message: WebSocketMessage): void {
+function handleDirectMessage(message) {
   if (!message.receiverId) {
     console.error('Missing receiverId in direct message');
     return;
@@ -150,8 +141,8 @@ function handleDirectMessage(message: WebSocketMessage): void {
 /**
  * Handle WebSocket connection
  */
-wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
-  const url = new URL(req.url || '', 'http://localhost');
+wss.on('connection', (socket, req) => {
+  const url = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`);
   const userId = url.searchParams.get('id');
   
   if (!userId) {
@@ -171,7 +162,7 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
   console.log(`New connection: Client ${clientId} for user ${userId}. Total clients: ${clients.size}`);
 
   // Send connection confirmation
-  const connectionMessage: WebSocketConnectionMessage = {
+  const connectionMessage = {
     type: 'connection',
     status: 'connected',
     clientId
@@ -185,7 +176,7 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
       return;
     }
 
-    const pingResponse: WebSocketPingResponse = {
+    const pingResponse = {
       type: 'ping',
       timestamp: Date.now().toString(),
       serverTime: new Date().toISOString()
@@ -201,10 +192,10 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
   }, PING_INTERVAL_MS);
 
   // Handle incoming messages
-  socket.on('message', (data: WebSocket.Data) => {
+  socket.on('message', (data) => {
     messagesReceived++;
     
-    let message: WebSocketMessage;
+    let message;
     try {
       message = JSON.parse(data.toString());
     } catch (err) {
@@ -242,14 +233,14 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
   });
 
   // Handle disconnection
-  socket.on('close', (code: number) => {
+  socket.on('close', (code) => {
     console.log(`Client ${clientId} disconnected with code ${code}. Removing from clients list.`);
     clearInterval(pingTimer);
     closeClient(clientId, `WebSocket closed: ${code}`);
   });
 
   // Handle errors
-  socket.on('error', (err: Error) => {
+  socket.on('error', (err) => {
     console.error(`Error with client ${clientId}:`, err);
     clearInterval(pingTimer);
     closeClient(clientId, `Socket error: ${err.message}`);
@@ -267,7 +258,7 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
 });
 
 // API endpoints for server status and stats
-app.get('/health', (_: express.Request, res: express.Response) => {
+app.get('/health', (_, res) => {
   res.status(200).json({
     status: 'ok',
     uptime: process.uptime(),
@@ -281,7 +272,7 @@ app.get('/health', (_: express.Request, res: express.Response) => {
   });
 });
 
-app.get('/stats', (_: express.Request, res: express.Response) => {
+app.get('/stats', (_, res) => {
   const activeUsers = new Set(Array.from(clients.values()).map(client => client.userId)).size;
   
   res.status(200).json({
@@ -306,14 +297,14 @@ function shutdown() {
   console.log('Shutting down WebSocket server...');
   
   // Notify all clients
-  clients.forEach((client, id) => {
+  clients.forEach((client) => {
     try {
       client.send({
         type: 'connection',
         status: 'server_shutdown'
       });
     } catch (err) {
-      console.error(`Error sending shutdown notice to client ${id}:`, err);
+      console.error(`Error sending shutdown notice to client ${client.id}:`, err);
     }
   });
   

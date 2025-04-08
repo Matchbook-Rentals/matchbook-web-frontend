@@ -3,7 +3,10 @@
  * Provides a cleaner interface to the WebSocket server from client code
  */
 
-import * as NodeJS from 'node:events';
+// Define NodeJS.Timeout interface if needed
+declare namespace NodeJS {
+  interface Timeout {}
+}
 import { WebSocketMessage } from "../src/types/websocket";
 
 /**
