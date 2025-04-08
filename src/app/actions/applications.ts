@@ -666,7 +666,23 @@ export async function deleteIncome(incomeId: string) {
 }
 
 export async function markComplete(applicationId: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+  
   try {
+    const existingApp = await prisma.application.findUnique({
+      where: { id: applicationId },
+      select: { userId: true }
+    });
+    
+    if (!existingApp) {
+      return { success: false, error: 'Application not found' };
+    }
+    
+    if (existingApp.userId !== userId) {
+      return { success: false, error: 'Unauthorized access to application' };
+    }
+    
     const application = await prisma.application.update({
       where: { id: applicationId },
       data: { isComplete: true },
@@ -679,7 +695,23 @@ export async function markComplete(applicationId: string) {
 }
 
 export async function getFullApplication(applicationId: string) {
+  const { userId } = auth();
+  if (!userId) return { success: false, error: 'Unauthorized' };
+  
   try {
+    const existingApp = await prisma.application.findUnique({
+      where: { id: applicationId },
+      select: { userId: true }
+    });
+    
+    if (!existingApp) {
+      return { success: false, error: 'Application not found' };
+    }
+    
+    if (existingApp.userId !== userId) {
+      return { success: false, error: 'Unauthorized access to application' };
+    }
+    
     const application = await prisma.application.findUnique({
       where: { id: applicationId },
       include: {
