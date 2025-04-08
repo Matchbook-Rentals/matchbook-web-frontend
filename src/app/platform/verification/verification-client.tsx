@@ -17,16 +17,18 @@ import StripeVerificationPayment from "@/components/stripe/stripe-verification-p
 import { useUser } from "@clerk/nextjs"
 
 export default function VerificationClient({ 
-  paymentStatus 
+  paymentStatus,
+  serverHasPurchase
 }: { 
-  paymentStatus?: string 
+  paymentStatus?: string;
+  serverHasPurchase?: boolean;
 }) {
   const [showForm, setShowForm] = useState(false)
   const [showPayment, setShowPayment] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<VerificationFormValues | null>(null)
   const [paymentComplete, setPaymentComplete] = useState<boolean>(paymentStatus === 'success')
-  const [hasPurchase, setHasPurchase] = useState<boolean>(false)
+  const [hasPurchase, setHasPurchase] = useState<boolean>(serverHasPurchase || false)
   const { user } = useUser()
 
   // Check URL params for payment success on component mount
@@ -48,10 +50,29 @@ export default function VerificationClient({
     }
   }, [paymentStatus]);
 
-  // Check if user has a verification purchase
+  // Initialize from server-side purchase check and get form data if needed
+  useEffect(() => {
+    if (serverHasPurchase) {
+      setHasPurchase(true);
+      setShowForm(true);
+      
+      // Try to get form data from localStorage if we have a purchase
+      try {
+        const savedFormData = JSON.parse(localStorage.getItem('verificationFormData') || '{}');
+        if (savedFormData && Object.keys(savedFormData).length > 0) {
+          setFormData(savedFormData);
+          form.reset(savedFormData);
+        }
+      } catch (error) {
+        console.error('Error parsing saved form data:', error);
+      }
+    }
+  }, [serverHasPurchase]);
+  
+  // Fallback client-side check in case the server check didn't work
   useEffect(() => {
     const checkPurchase = async () => {
-      if (user?.id) {
+      if (user?.id && !serverHasPurchase) {
         try {
           const response = await fetch(`/api/user/purchases?type=backgroundVerification&userId=${user.id}`);
           const data = await response.json();
@@ -61,6 +82,8 @@ export default function VerificationClient({
             const unredeemedPurchase = data.purchases.find((p: any) => p.isRedeemed === false);
             if (unredeemedPurchase) {
               setHasPurchase(true);
+              setShowForm(true);
+              
               // Try to get form data from localStorage if we have a purchase
               try {
                 const savedFormData = JSON.parse(localStorage.getItem('verificationFormData') || '{}');
@@ -80,7 +103,7 @@ export default function VerificationClient({
     };
 
     checkPurchase();
-  }, [user]);
+  }, [user, serverHasPurchase]);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -263,7 +286,7 @@ export default function VerificationClient({
             {paymentComplete ? "Payment Successful!" : "Previous Payment Found"}
           </h2>
           <p className="text-gray-600 mb-4">
-            Please review your information below and click "Submit Verification Request" when you're ready.
+            Please review your information below and click &quot;Submit Verification Request&quot; when you&apos;re ready.
             This information will be used for your background check.
           </p>
         </div>
