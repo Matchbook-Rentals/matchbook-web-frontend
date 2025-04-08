@@ -57,6 +57,7 @@ const useWebSocket = (url: string, options: {
     const PING_INTERVAL = 20000;
 
     if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      console.log(`[WebSocket] Max reconnect attempts (${MAX_RECONNECT_ATTEMPTS}) reached. Waiting 30s before trying again.`);
       setTimeout(() => {
         setConnectionAttempts(0);
         connectWebSocket();
@@ -64,9 +65,13 @@ const useWebSocket = (url: string, options: {
       return;
     }
 
-    if (wsRef.current) wsRef.current.close();
+    if (wsRef.current) {
+      console.log('[WebSocket] Closing existing connection');
+      wsRef.current.close();
+    }
     if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
 
+    console.log(`[WebSocket] Attempting connection to ${url} (attempt ${connectionAttempts + 1})`);
     wsRef.current = new WebSocket(url);
 
     wsRef.current.onopen = (event) => {
@@ -115,6 +120,7 @@ const useWebSocket = (url: string, options: {
 
   const send = (data: any) => {
     if (wsRef.current && isConnected) {
+      console.log('SEND', data)
       wsRef.current.send(JSON.stringify(data));
     }
   };
@@ -301,7 +307,7 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   const [isAdmin, setIsAdmin] = useState(false);
 
   const isMobile = useMobileDetect();
-  const wsUrl = `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace(/^http/, 'ws')}/ws?id=${user.id}`;
+  const wsUrl = `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace('http', 'ws')}/ws?id=${user.id}`;
 
   const handleWebSocketMessage = (message: any) => {
     if (message.type === 'message') {
@@ -323,9 +329,16 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
 
   const ws = useWebSocket(wsUrl, {
     onMessage: handleWebSocketMessage,
-    onError: (error) => console.error('WebSocket Error:', error),
-    onClose: (event) => console.log('WebSocket Closed:', event.code),
-    onOpen: () => console.log('WebSocket Connected'),
+    onError: (error) => {
+      console.error('WebSocket Error:', error);
+      console.log('WebSocket URL:', wsUrl);
+    },
+    onClose: (event) => {
+      console.log('WebSocket Closed:', event.code, 'Clean:', event.wasClean, 'Reason:', event.reason || 'No reason provided');
+    },
+    onOpen: (event) => {
+      console.log('WebSocket Connected Successfully to:', wsUrl);
+    },
   });
 
   useEffect(() => {
