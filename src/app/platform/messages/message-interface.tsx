@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import { useUser } from '@clerk/nextjs';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
-import { useWebSocket, useMobileDetect } from './components/hooks';
 import {
   getAllConversations,
   createConversation,
@@ -35,6 +35,109 @@ interface MessageData {
   isTyping?: boolean;
   timestamp?: number | string;
 }
+
+/**
+ * Custom hook to manage WebSocket connection
+ */
+const useWebSocket = (url: string, options: {
+  onMessage: (message: any) => void;
+  onError: (error: Event) => void;
+  onClose: (event: CloseEvent) => void;
+  onOpen: (event: Event) => void;
+}) => {
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
+
+  const connectWebSocket = () => {
+    const MAX_RECONNECT_ATTEMPTS = 10;
+    const BASE_RECONNECT_DELAY = 2000;
+    const PING_INTERVAL = 20000;
+
+    if (connectionAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      setTimeout(() => {
+        setConnectionAttempts(0);
+        connectWebSocket();
+      }, 30000);
+      return;
+    }
+
+    if (wsRef.current) wsRef.current.close();
+    if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
+
+    wsRef.current = new WebSocket(url);
+
+    wsRef.current.onopen = (event) => {
+      setIsConnected(true);
+      setConnectionAttempts(0);
+      options.onOpen(event);
+      pingIntervalRef.current = setInterval(() => {
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+        }
+      }, PING_INTERVAL);
+    };
+
+    wsRef.current.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type !== 'ping') options.onMessage(message);
+    };
+
+    wsRef.current.onerror = (error) => {
+      setIsConnected(false);
+      options.onError(error);
+    };
+
+    wsRef.current.onclose = (event) => {
+      setIsConnected(false);
+      options.onClose(event);
+      if (!event.wasClean) {
+        const delay = BASE_RECONNECT_DELAY * Math.pow(1.5, connectionAttempts);
+        reconnectTimeoutRef.current = setTimeout(() => {
+          setConnectionAttempts((prev) => prev + 1);
+          connectWebSocket();
+        }, delay);
+      }
+    };
+  };
+
+  useEffect(() => {
+    connectWebSocket();
+    return () => {
+      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
+      if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
+      wsRef.current?.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
+
+  const send = (data: any) => {
+    if (wsRef.current && isConnected) {
+      wsRef.current.send(JSON.stringify(data));
+    }
+  };
+
+  return { ws: wsRef.current, isConnected, connectionAttempts, send };
+};
+
+/**
+ * Custom hook to detect mobile devices
+ */
+const useMobileDetect = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkMobile = () => setIsMobile(window.innerWidth < 768);
+
+  useEffect(() => {
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return isMobile;
+};
 
 /**
  * Utility function to add a message to a conversation
@@ -162,7 +265,7 @@ const updateTypingStatus = (
   isTyping: boolean
 ) => ({
   ...typingUsers,
-  [`${conversationId}:${senderId}`]: { isTyping, timestamp: Date.now().toString() },
+  [`${conversationId}:${senderId}`]: { isTyping, timestamp: Date.now() },
 });
 
 /**
@@ -181,26 +284,10 @@ const clearTypingTimeout = (
 /**
  * Main Message Interface Component
  */
-interface UserData {
-  id: string;
-  imageUrl?: string;
-  firstName?: string;
-  publicMetadata?: {
-    role?: string;
-  };
-}
+const MessageInterface = ({ conversations: initialConversations }: { conversations: ExtendedConversation[] }) => {
+  const { user } = useUser();
+  if (!user) return null;
 
-const MessageInterface = ({ 
-  conversations: initialConversations,
-  userData 
-}: { 
-  conversations: ExtendedConversation[],
-  userData: UserData 
-}) => {
-  // Use the passed userData instead of fetching it again
-  const user = userData;
-  
-  // Move all hooks to the top level, unconditionally
   const [allConversations, setAllConversations] = useState(initialConversations);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -212,15 +299,11 @@ const MessageInterface = ({
   >({});
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const [isAdmin, setIsAdmin] = useState(false);
+
   const isMobile = useMobileDetect();
-  
-  // Web socket URL is defined inside the component where it has access to user.id
-  const wsUrl = user ? `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace('http', 'ws') || 'ws://localhost:3001'}/ws?id=${user.id}` : '';
-  console.log('WebSocket URL:', wsUrl);
+  const wsUrl = `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace(/^http/, 'ws')}/ws?id=${user.id}`;
 
   const handleWebSocketMessage = (message: any) => {
-    if (!user) return;
-    
     if (message.type === 'message') {
       setAllConversations((prev) =>
         addMessageToConversation(prev, message.conversationId, {
@@ -238,47 +321,15 @@ const MessageInterface = ({
     }
   };
 
-  // Use a more robust websocket handler
   const ws = useWebSocket(wsUrl, {
     onMessage: handleWebSocketMessage,
-    onError: (error) => {
-      console.error('WebSocket Error:', error);
-      console.log('WebSocket URL:', wsUrl);
-      console.log('Network Status:', navigator.onLine ? 'Online' : 'Offline');
-      // Use a same-origin endpoint to check network connectivity
-      try {
-        // Using a same-origin endpoint that always exists to avoid CORS issues
-        const testFetch = fetch('/favicon.ico', { 
-          method: 'HEAD',
-          cache: 'no-store' 
-        })
-          .then(() => console.log('Network check: Same-origin request successful'))
-          .catch(err => console.log('Network check: Same-origin request failed', err));
-      } catch (e) {
-        console.log('Network check failed:', e);
-      }
-    },
-    onClose: (event) => {
-      console.log('WebSocket Closed:', event.code, 'Clean:', event.wasClean, 'Reason:', event.reason || 'No reason provided');
-      // Add suggestions based on close code
-      if (event.code === 1006) {
-        console.log('Possible causes for code 1006:');
-        console.log('- Network interruption between client and server');
-        console.log('- Proxy/firewall/load balancer dropped the connection');
-        console.log('- Server restarted or crashed');
-      }
-    },
-    onOpen: (event) => {
-      console.log('WebSocket Connected Successfully to:', wsUrl);
-      console.log('Connection established at:', new Date().toISOString());
-    },
+    onError: (error) => console.error('WebSocket Error:', error),
+    onClose: (event) => console.log('WebSocket Closed:', event.code),
+    onOpen: () => console.log('WebSocket Connected'),
   });
-  
-  // Define all useEffect hooks unconditionally
+
   useEffect(() => {
-    if (user) {
-      setIsAdmin(user.publicMetadata?.role === 'admin');
-    }
+    setIsAdmin(user.publicMetadata?.role === 'admin');
   }, [user]);
 
   useEffect(() => {
@@ -289,13 +340,8 @@ const MessageInterface = ({
       };
     }
   }, [isMobile, sidebarVisible]);
-  
-  // Early return after all hooks are defined
-  if (!user) return null;
 
   const updateUnreadCounts = (message: any) => {
-    if (!user) return;
-    
     const conv = allConversations.find((c) => c.id === message.conversationId);
     if (conv && selectedConversationId !== message.conversationId && message.senderId !== user.id) {
       const userRole = conv.participants.find((p) => p.userId === user.id)?.role;
@@ -305,8 +351,6 @@ const MessageInterface = ({
   };
 
   const handleTypingMessage = (message: any) => {
-    if (!user) return;
-    
     const key = `${message.conversationId}:${message.senderId}`;
     setTypingUsers((prev) => updateTypingStatus(prev, message.conversationId, message.senderId, message.isTyping));
     if (message.isTyping) {
@@ -318,8 +362,6 @@ const MessageInterface = ({
   };
 
   const sendTypingStatus = (isTyping: boolean) => {
-    if (!user) return;
-    
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     if (!conv || !ws.isConnected) return;
     const receiver = conv.participants.find((p) => p.userId !== user.id);
@@ -332,14 +374,12 @@ const MessageInterface = ({
         senderId: user.id,
         senderRole: conv.participants.find((p) => p.userId === user.id)?.role,
         content: '',
-        timestamp: Date.now().toString(),
+        timestamp: Date.now(),
       });
     }
   };
 
   const handleSelectConversation = async (conversationId: string) => {
-    if (!user) return;
-    
     setSelectedConversationId(conversationId);
     setSidebarVisible(!isMobile);
     const conv = allConversations.find((c) => c.id === conversationId);
@@ -368,7 +408,7 @@ const MessageInterface = ({
     content: string,
     file?: { url?: string; name?: string; key?: string; type?: string }
   ) => {
-    if (!user || !selectedConversationId) return;
+    if (!selectedConversationId) return;
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     if (!conv) return;
     const receiver = conv.participants.find((p) => p.userId !== user.id);
@@ -405,8 +445,6 @@ const MessageInterface = ({
   };
 
   const handleCreateConversation = async (email: string) => {
-    if (!user) return;
-    
     const newConv = await createConversation(email, 'Host', 'Tenant');
     setAllConversations((prev) => [...prev, { ...newConv, messages: [], participants: newConv.participants }]);
   };

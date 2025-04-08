@@ -88,12 +88,8 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
-			// More permissive CORS handling for WebSockets
-			// In production, you should limit this to specific origins
-			return true
+			return true // Adjust for production
 		},
-		// Adding additional headers to handle CORS preflight requests
-		HandshakeTimeout: 30 * time.Second,
 	}
 )
 
@@ -102,7 +98,6 @@ func init() {
 		mainServerAPIURL = "http://localhost:3000/api/messages/save"
 	}
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
-	log.SetOutput(os.Stdout) // Ensure logs go to standard output
 }
 
 // Middleware for error recovery.
@@ -129,22 +124,13 @@ func setupLogging(handler http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
-	log.Printf("Server starting... (version 2.0.2 - improved logging)")
+	log.Printf("Server starting... (version 2.0.1 - mutex fixes)")
 	log.Printf("Go version: %s, GOMAXPROCS: %d", runtime.Version(), runtime.GOMAXPROCS(0))
 	log.Printf("Main server API URL: %s", mainServerAPIURL)
 
 	http.HandleFunc("/ws", setupLogging(setupErrorHandling(handleWebSocket)))
 	http.HandleFunc("/send-message", setupLogging(setupErrorHandling(handleSendMessage)))
 	http.HandleFunc("/health-check", setupErrorHandling(func(w http.ResponseWriter, r *http.Request) {
-		// Add CORS headers to health check endpoint
-		addCorsHeaders(w)
-		
-		// Handle OPTIONS preflight request
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		
 		mutex.RLock()
 		clientCount := len(clients)
 		mutex.RUnlock()
@@ -153,7 +139,6 @@ func main() {
 			"status":      "OK",
 			"time":        time.Now().Format(time.RFC3339),
 			"connections": clientCount,
-			"version":     "2.0.2",
 		})
 	}))
 
@@ -253,71 +238,20 @@ func main() {
 	log.Println("Server shutdown complete")
 }
 
-// addCorsHeaders adds CORS headers to the response
-func addCorsHeaders(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
-	w.Header().Set("Access-Control-Max-Age", "86400") // 24 hours
-}
-
 // handleWebSocket manages new WebSocket connections.
 func handleWebSocket(w http.ResponseWriter, r *http.Request) {
-	// Add CORS headers for preflight OPTIONS requests
-	if r.Method == "OPTIONS" {
-		addCorsHeaders(w)
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-	
-	log.Printf("DEBUG: Entered handleWebSocket from %s", r.RemoteAddr)
-	
-	// Log request headers for debugging
-	log.Printf("DEBUG: Request headers from %s:", r.RemoteAddr)
-	for name, values := range r.Header {
-		log.Printf("  %s: %s", name, values)
-	}
-	
 	clientID := strings.TrimSpace(r.URL.Query().Get("id"))
-	log.Printf("DEBUG: Client ID extracted: '%s'", clientID)
-	
 	if clientID == "" {
 		logWithConnCount("Error: Client attempted to connect without an ID")
 		http.Error(w, "Client ID required", http.StatusBadRequest)
 		return
 	}
 
-	logWithConnCount(fmt.Sprintf("Connection attempt from client: %s at %s", clientID, r.RemoteAddr))
-	
-	// Log headers for debugging
-	log.Printf("DEBUG: Request headers for client %s:", clientID)
-	for name, values := range r.Header {
-		log.Printf("  %s: %s", name, values)
-	}
-	
-	log.Printf("DEBUG: Attempting WebSocket upgrade for %s", clientID)
-	
-	// Add this log to confirm the upgrade is about to be attempted
-	log.Printf("DEBUG: Preparing to upgrade connection for client %s with headers: Connection=%s, Upgrade=%s",
-		clientID, r.Header.Get("Connection"), r.Header.Get("Upgrade"))
-	
-	// Add CORS headers to response
-	addCorsHeaders(w)
-	
-	// Add additional response headers to help with WebSocket connectivity
-	w.Header().Set("Connection", "Upgrade")
-	w.Header().Set("Upgrade", "websocket")
-	
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		// Enhance error logging with more context
-		log.Printf("ERROR: WebSocket upgrade failed for client %s: %v", clientID, err)
-		log.Printf("DEBUG: Client request headers during failure - Origin=%s, Host=%s, Connection=%s, Upgrade=%s, Sec-WebSocket-Key=%s, Sec-WebSocket-Version=%s",
-			r.Header.Get("Origin"), r.Header.Get("Host"), r.Header.Get("Connection"), r.Header.Get("Upgrade"),
-			r.Header.Get("Sec-WebSocket-Key"), r.Header.Get("Sec-WebSocket-Version"))
+		log.Printf("Upgrade error: %v", err)
 		return
 	}
-	log.Printf("DEBUG: Upgrade successful for %s", clientID)
 
 	client := &Client{
 		ID:     clientID,
