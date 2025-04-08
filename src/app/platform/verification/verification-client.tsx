@@ -6,17 +6,81 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import Image from "next/image"
 import { 
   verificationSchema, 
   type VerificationFormValues,
 } from "./utils"
+import StripeVerificationPayment from "@/components/stripe/stripe-verification-payment"
+import { useUser } from "@clerk/nextjs"
 
-export default function VerificationClient() {
+export default function VerificationClient({ 
+  paymentStatus 
+}: { 
+  paymentStatus?: string 
+}) {
   const [showForm, setShowForm] = useState(false)
+  const [showPayment, setShowPayment] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState<VerificationFormValues | null>(null)
+  const [paymentComplete, setPaymentComplete] = useState<boolean>(paymentStatus === 'success')
+  const [hasPurchase, setHasPurchase] = useState<boolean>(false)
+  const { user } = useUser()
+
+  // Check URL params for payment success on component mount
+  useEffect(() => {
+    if (paymentStatus === 'success') {
+      setPaymentComplete(true);
+      
+      // Check if we have saved form data
+      try {
+        const savedFormData = JSON.parse(localStorage.getItem('verificationFormData') || '{}');
+        if (savedFormData && Object.keys(savedFormData).length > 0) {
+          setFormData(savedFormData);
+          form.reset(savedFormData);
+          setShowForm(true);
+        }
+      } catch (error) {
+        console.error('Error parsing saved form data:', error);
+      }
+    }
+  }, [paymentStatus]);
+
+  // Check if user has a verification purchase
+  useEffect(() => {
+    const checkPurchase = async () => {
+      if (user?.id) {
+        try {
+          const response = await fetch(`/api/user/purchases?type=backgroundVerification&userId=${user.id}`);
+          const data = await response.json();
+          
+          if (response.ok && data.purchases && data.purchases.length > 0) {
+            // Find any unredeemed purchases
+            const unredeemedPurchase = data.purchases.find((p: any) => p.isRedeemed === false);
+            if (unredeemedPurchase) {
+              setHasPurchase(true);
+              // Try to get form data from localStorage if we have a purchase
+              try {
+                const savedFormData = JSON.parse(localStorage.getItem('verificationFormData') || '{}');
+                if (savedFormData && Object.keys(savedFormData).length > 0) {
+                  setFormData(savedFormData);
+                  form.reset(savedFormData);
+                }
+              } catch (error) {
+                console.error('Error parsing saved form data:', error);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error checking purchase status:', error);
+        }
+      }
+    };
+
+    checkPurchase();
+  }, [user]);
 
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
@@ -45,6 +109,14 @@ export default function VerificationClient() {
   const [errorDetails, setErrorDetails] = useState<string | null>(null);
   const [showErrorDetails, setShowErrorDetails] = useState(false);
 
+  function validateForm(data: VerificationFormValues) {
+    // Store form data for both local state and to potentially retrieve after payment redirect
+    setFormData(data);
+    localStorage.setItem('verificationFormData', JSON.stringify(data));
+    // Show the payment form
+    setShowPayment(true);
+  }
+  
   async function onSubmit(data: VerificationFormValues) {
     setIsSubmitting(true);
     setApiResponse(null);
@@ -54,6 +126,20 @@ export default function VerificationClient() {
     
     try {
       console.log("Submitting verification request...");
+      
+      // Mark the purchase as redeemed first
+      if (user?.id && hasPurchase) {
+        await fetch('/api/user/redeem-purchase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'backgroundVerification',
+            userId: user.id
+          }),
+        });
+      }
       
       // Call the API endpoint
       const response = await fetch('/api/background-check', {
@@ -79,6 +165,10 @@ export default function VerificationClient() {
       
       // Store the API response
       setApiResponse(result);
+      
+      // Clear saved form data
+      localStorage.removeItem('verificationFormData');
+      setHasPurchase(false);
     } catch (error) {
       console.error("Error submitting verification request:", error);
       // Only set general error message if there isn't a specific API error
@@ -135,6 +225,22 @@ export default function VerificationClient() {
       </div>
     )
   }
+  
+  // Show payment form after user info is collected
+  if (showPayment && formData) {
+    return (
+      <StripeVerificationPayment 
+        formData={formData}
+        onPaymentSuccess={() => {
+          // After payment, don't submit immediately. We'll wait for webhook to create purchase
+          setShowPayment(false);
+        }}
+        onCancel={() => {
+          setShowPayment(false);
+        }}
+      />
+    );
+  }
 
   // Screening form
   return (
@@ -150,12 +256,25 @@ export default function VerificationClient() {
       </div>
       
       <h1 className="text-3xl font-bold mb-8 text-center">Complete Background Screening</h1>
-      <p className="text-center mb-6 text-gray-600">
-        This screening includes both National Criminal History Search and Evictions & Property Damage Check
-      </p>
+      
+      {paymentComplete || hasPurchase ? (
+        <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-blue-800 mb-4">
+            {paymentComplete ? "Payment Successful!" : "Previous Payment Found"}
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please review your information below and click "Submit Verification Request" when you're ready.
+            This information will be used for your background check.
+          </p>
+        </div>
+      ) : (
+        <p className="text-center mb-6 text-gray-600">
+          This screening includes both National Criminal History Search and Evictions & Property Damage Check
+        </p>
+      )}
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(hasPurchase ? onSubmit : validateForm)} className="space-y-8">
           {errorMessage && (
             <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-6">
               <h3 className="font-medium mb-1">Error Submitting Request</h3>
@@ -502,13 +621,23 @@ export default function VerificationClient() {
           ) : (
             <>
               <div className="flex justify-center mt-8">
-                <Button 
-                  type="submit" 
-                  className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Processing..." : "Submit Verification Request - $25.00"}
-                </Button>
+                {hasPurchase ? (
+                  <Button 
+                    type="submit" 
+                    className="px-8 py-6 text-lg bg-green-600 hover:bg-green-700 text-white"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Verification Request"}
+                  </Button>
+                ) : (
+                  <Button 
+                    type="submit" 
+                    className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
+                    disabled={isSubmitting}
+                  >
+                    Continue to Payment - $25.00
+                  </Button>
+                )}
               </div>
               
               <div className="text-center text-sm text-gray-500 mt-4">

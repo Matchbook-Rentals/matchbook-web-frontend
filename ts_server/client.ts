@@ -130,6 +130,12 @@ export class WebSocketClient {
         
         if (this.options.onClose) this.options.onClose(event);
         
+        // With auto-reconnect disabled, we don't need to handle reconnection logic here
+        if (this.options.reconnect?.enabled === false) {
+          console.log('Auto-reconnect disabled, not attempting to reconnect');
+          return;
+        }
+        
         // Only attempt to reconnect on abnormal closures
         // 1000 (Normal Closure) or 1001 (Going Away) should not trigger reconnect
         const abnormalClosure = event.code !== 1000 && event.code !== 1001;
@@ -147,15 +153,34 @@ export class WebSocketClient {
       };
 
       this.ws.onerror = (event: Event) => {
-        console.error('WebSocket client error:', {
+        // Try to extract more useful error information
+        const errorDetails = {
           url: this.url,
           readyState: this.ws?.readyState,
           userId: this.userId,
           clientId: this.clientId,
-          reconnectAttempts: this.reconnectAttempts
+          reconnectAttempts: this.reconnectAttempts,
+          // Include all enumerable and non-enumerable properties
+          eventDetails: Object.getOwnPropertyNames(event).reduce((acc, key) => {
+            try {
+              acc[key] = (event as any)[key];
+            } catch (e) {
+              acc[key] = 'Unable to access property';
+            }
+            return acc;
+          }, {} as Record<string, any>)
+        };
+        
+        console.error('WebSocket client error:', errorDetails);
+        
+        // Create an enhanced error object with additional details
+        const enhancedEvent = Object.assign(event, { 
+          details: errorDetails,
+          message: 'WebSocket connection error',
+          timestamp: new Date().toISOString()
         });
         
-        if (this.options.onError) this.options.onError(event);
+        if (this.options.onError) this.options.onError(enhancedEvent);
       };
     } catch (error) {
       console.error('Error creating WebSocket:', error);

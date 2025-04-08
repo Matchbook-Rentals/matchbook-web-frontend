@@ -14,10 +14,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // New function to handle different purchase types
 const handleSuccessfulPurchase = async (session: any) => {
   switch (session.metadata?.type) {
-    case 'backgroundCheck':
+    case 'matchbookVerification':
       await prisma.purchase.create({
         data: {
-          type: 'backgroundCheck',
+          type: 'matchbookVerification',
           amount: session.amount_total,
           userId: session.metadata?.userId || null,
           email: session.customer_details?.email || null,

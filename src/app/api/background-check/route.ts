@@ -7,9 +7,9 @@ import {
 
 // Use the provided test credentials
 const ACCOUNT_DETAILS = {
-  account: "matchbook",
-  username: "Tyler.Bennett@matchbookrentals.com",
-  password: "Cd@QrP5gRVqFyBH"
+  account: process.env.ACCIO_ACCOUNT,
+  username: process.env.ACCIO_USERNAME,
+  password: process.env.ACCIO_PASSWORD
 };
 
 // For debugging - log requests and responses fully
