@@ -26,9 +26,7 @@ export async function POST(request: NextRequest) {
   if (body.dob) queryParams.append('DOB', body.dob);
 
   const url = `${BASE_URL}?${queryParams.toString()}`;
-  console.log(url);
-  console.log(PASSWORD);
-  console.log(ACCOUNT_ID);
+  console.log('Making SearchBug people search API request');
 
   try {
     // const response = await fetch(url);
@@ -820,4 +818,4 @@ const sampleData = {
       "reportID": "oAooQvxmvwBi.7nTydA=="
     }
   }
-} 
+}  
