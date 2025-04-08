@@ -41,9 +41,16 @@ export default function VerificationClient() {
   
   const [showResponseDetails, setShowResponseDetails] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
+  const [showErrorDetails, setShowErrorDetails] = useState(false);
+
   async function onSubmit(data: VerificationFormValues) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     setApiResponse(null);
+    setErrorMessage(null);
+    setErrorDetails(null);
+    setShowErrorDetails(false);
     
     try {
       console.log("Submitting verification request...");
@@ -61,18 +68,23 @@ export default function VerificationClient() {
       console.log("API Response:", result);
       
       if (!response.ok) {
+        // Show detailed error from API
+        setErrorMessage(result.error || 'Failed to submit verification request');
+        // Store full details for debugging
+        if (result.details) {
+          setErrorDetails(result.details);
+        }
         throw new Error(result.error || 'Failed to submit verification request');
       }
       
       // Store the API response
       setApiResponse(result);
-      
-      // Show success message but don't return to welcome screen yet
-      // So the user can see the response details
-      alert(`Verification request submitted successfully! Order number: ${result.orderNumber}`);
     } catch (error) {
       console.error("Error submitting verification request:", error);
-      alert("There was an error submitting your verification request. Please try again.");
+      // Only set general error message if there isn't a specific API error
+      if (!errorMessage) {
+        setErrorMessage("There was an error submitting your verification request. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -144,6 +156,60 @@ export default function VerificationClient() {
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {errorMessage && (
+            <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-md mb-6">
+              <h3 className="font-medium mb-1">Error Submitting Request</h3>
+              <p>{errorMessage}</p>
+              
+              {errorDetails && (
+                <div className="mt-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowErrorDetails(!showErrorDetails)}
+                    className="mb-2 text-red-700 border-red-300"
+                  >
+                    {showErrorDetails ? "Hide" : "Show"} Error Details
+                  </Button>
+                  
+                  {showErrorDetails && (
+                    <div className="bg-white p-3 rounded-md border border-red-200 overflow-auto max-h-60 mt-2">
+                      <pre className="text-xs font-mono whitespace-pre-wrap break-words text-red-700">
+                        {errorDetails}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              <div className="flex justify-between mt-3">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-red-600" 
+                  onClick={() => {
+                    setErrorMessage(null);
+                    setErrorDetails(null);
+                    setShowErrorDetails(false);
+                  }}
+                >
+                  Dismiss
+                </Button>
+                
+                {/* Add a retry button as a convenience */}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-red-300 text-red-700"
+                  onClick={() => form.handleSubmit(onSubmit)()}
+                >
+                  Retry Submission
+                </Button>
+              </div>
+            </div>
+          )}
+
           <Card className="p-6">
             <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

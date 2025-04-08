@@ -9,8 +9,11 @@ import {
 const ACCOUNT_DETAILS = {
   account: "matchbook",
   username: "Tyler.Bennett@matchbookrentals.com",
-  password: "TylerBennet13#!"
+  password: "Cd@QrP5gRVqFyBH"
 };
+
+// For debugging - log requests and responses fully
+const DEBUG = true; // Set to false in production
 
 // API endpoint to handle background check requests
 export async function POST(request: Request) {
@@ -32,27 +35,54 @@ export async function POST(request: Request) {
     // Generate XML for the combined check
     const xmlPayload = generateVerificationXml(data, ACCOUNT_DETAILS);
     
-    console.log("XML Payload:", xmlPayload);
+    if (DEBUG) {
+      console.log("=== XML REQUEST PAYLOAD ===");
+      console.log(xmlPayload);
+      console.log("==========================");
+    }
     
     // Send XML to Accio Data API for testing
     const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
       method: "POST",
       headers: {
-        "Content-Type": "application/xml",
+        "Content-Type": "text/xml", // Fixed Content-Type as required by API
       },
       body: xmlPayload,
     });
     
-    // Check if the request was successful
-    if (!accioResponse.ok) {
-      const errorText = await accioResponse.text();
-      console.error("Error from Accio API:", errorText);
-      throw new Error(`API returned ${accioResponse.status}: ${errorText}`);
+    // Get response text regardless of status code
+    const responseText = await accioResponse.text();
+    
+    if (DEBUG) {
+      console.log("=== ACCIO API RESPONSE ===");
+      console.log("Status:", accioResponse.status, accioResponse.statusText);
+      console.log("Response Text:", responseText);
+      console.log("=========================");
     }
     
-    // Parse the response from Accio
-    const responseText = await accioResponse.text();
-    console.log("Accio API Response:", responseText);
+    // Check for XML error nodes in the response
+    if (responseText.includes("<error") || !accioResponse.ok) {
+      console.error("Error from Accio API:", responseText);
+      
+      // Try to extract error message from XML
+      let errorMessage = "Unknown error occurred";
+      try {
+        const errorMatch = responseText.match(/<errortext>(.*?)<\/errortext>/);
+        if (errorMatch && errorMatch[1]) {
+          errorMessage = errorMatch[1];
+        }
+      } catch (err) {
+        console.warn("Could not parse error from response", err);
+      }
+      
+      return NextResponse.json(
+        { 
+          error: errorMessage,
+          details: responseText
+        },
+        { status: 400 }
+      );
+    }
     
     // Extract order number if available (this would be implementation-specific)
     let orderNumber = "BC-" + Math.floor(Math.random() * 10000000);
@@ -74,9 +104,18 @@ export async function POST(request: Request) {
     });
     
   } catch (error) {
-    console.error("Error processing background check request:", error);
+    if (DEBUG) {
+      console.error("=== API ERROR ===");
+      console.error("Error processing background check request:", error);
+      console.error("==================");
+    }
+    
+    // Provide more details in development mode
     return NextResponse.json(
-      { error: "Failed to process background check request" },
+      { 
+        error: "Failed to process background check request", 
+        details: DEBUG ? (error instanceof Error ? error.stack : String(error)) : undefined
+      },
       { status: 500 }
     );
   }
