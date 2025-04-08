@@ -59,7 +59,7 @@ const WebHomePage = () => {
 
   return (
     <>
-      <MatchbookHeader handleListProperty={() => setIsOpen(true)} />
+      <MatchbookHeader  />
       <Hero />
       <RentEasyCopy />
       <HowItWorks />

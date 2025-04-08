@@ -1,25 +1,39 @@
-// Simple Socket.IO server implementation using CommonJS
+// Socket.IO server implementation for Matchbook
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 
 // Environment variables with fallbacks
-const PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8080;
-const CLIENT_TIMEOUT_MS = 30000; // 30 seconds
-const PING_INTERVAL_MS = 20000; // 20 seconds
+const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) : 8080;
+const CLIENT_TIMEOUT_MS = 60000; // 60 seconds
+const PING_INTERVAL_MS = 25000; // 25 seconds
+
+// Log all environment variables at startup for debugging
+console.log('Socket.IO Server Starting');
+console.log('Environment variables:');
+console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || '(not set, using default 8080)');
+console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
+console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_SOCKET_IO_URL || '(not set)');
 
 // Create Express app and HTTP server
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
 
-// Create Socket.IO server
+// Create Socket.IO server with improved configuration
 const io = new Server(server, {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+    credentials: true
+  },
+  transports: ['websocket', 'polling'], // Prioritize websocket first
+  pingTimeout: CLIENT_TIMEOUT_MS,
+  pingInterval: PING_INTERVAL_MS,
+  connectTimeout: 20000,
+  allowEIO3: true,
+  maxHttpBufferSize: 1e8, // 100MB
 });
 
 // Map to store all connected clients
@@ -87,7 +101,22 @@ function createClient(id, userId, socket) {
     send: (message) => {
       try {
         if (!socket || !socket.connected) return;
-        socket.emit('message', typeof message === 'string' ? JSON.parse(message) : message);
+        
+        // If the message is a string, parse it to an object
+        const messageObj = typeof message === 'string' ? JSON.parse(message) : message;
+        
+        // Make sure it has the basic required fields
+        if (messageObj && (!messageObj.type && messageObj.content)) {
+          messageObj.type = 'message';
+        }
+        
+        // Add timestamp if missing
+        if (!messageObj.timestamp) {
+          messageObj.timestamp = new Date().toISOString();
+        }
+        
+        console.log(`Socket.IO emitting message to client ${id}:`, messageObj);
+        socket.emit('message', messageObj);
         messagesSent++;
       } catch (err) {
         console.error(`Error sending to client ${id}:`, err);
@@ -130,43 +159,60 @@ function handleDirectMessage(message) {
   // Find all client connections for this receiver
   const receiversConnections = Array.from(clients.entries())
     .filter(([_, client]) => client.userId === message.receiverId)
-    .map(([id]) => id);
+    .map(([id, client]) => ({ id, client }));
 
   if (receiversConnections.length === 0) {
     console.log(`No connected clients for receiverId ${message.receiverId}`);
     return;
   }
 
+  console.log(`Found ${receiversConnections.length} connections for receiverId ${message.receiverId}`);
+
   // Send to all client connections of this user
-  receiversConnections.forEach(clientId => {
-    sendToClient(clientId, message);
-  });
+  let deliverySuccessful = false;
+  for (const { id, client } of receiversConnections) {
+    try {
+      // Log the actual message being sent
+      console.log(`Sending message to client ${id} (userId: ${client.userId}):`, message);
+      
+      // Send the message
+      const success = sendToClient(id, message);
+      deliverySuccessful = deliverySuccessful || success;
+      
+      console.log(`Message delivery to client ${id}: ${success ? 'SUCCESS' : 'FAILED'}`);
+    } catch (err) {
+      console.error(`Error delivering message to client ${id}:`, err);
+    }
+  }
+
+  // Log delivery status
+  if (deliverySuccessful) {
+    console.log(`Message successfully delivered to at least one client for user ${message.receiverId}`);
+  } else {
+    console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+  }
 }
 
 /**
  * Handle Socket.IO connection
  */
 io.on('connection', (socket) => {
-  console.log('New Socket.IO connection attempt:', socket.id);
+  console.log(`New Socket.IO connection: ${socket.id}`);
   console.log('Connection handshake:', socket.handshake.query);
   
+  // Try to get userId from different possible locations
   // Handle the "Object: null prototype" issue that can happen with query params
   let handshakeQuery = socket.handshake.query;
   
   // If the query is an Object.create(null), convert it to a regular object
-  if (handshakeQuery && Object.getPrototypeOf(handshakeQuery) === null) {
+  if (Object.getPrototypeOf(handshakeQuery) === null) {
     console.log('Detected null prototype query object, converting to regular object');
     handshakeQuery = { ...handshakeQuery };
   }
   
-  // Get userId from query parameters
-  const userId = handshakeQuery.userId;
-  
-  console.log('Parsed userId from connection:', userId);
-  
-  // Check current connections for this user
-  const existingConnectionsForUser = [...clients.values()].filter(c => c.userId === userId).length;
-  console.log(`User ${userId} already has ${existingConnectionsForUser} active connections`);
+  const userId = handshakeQuery.userId || 
+                handshakeQuery.id ||
+                socket.handshake.auth?.userId;
   
   if (!userId) {
     console.error('Connection rejected: No user ID provided');
@@ -174,13 +220,24 @@ io.on('connection', (socket) => {
     return;
   }
   
+  console.log(`Parsed userId from connection: ${userId}`);
+  
+  // Check if user already has connections
+  let userConnections = 0;
+  for (const [_, client] of clients.entries()) {
+    if (client.userId === userId) {
+      userConnections++;
+    }
+  }
+  console.log(`User ${userId} already has ${userConnections} active connections`);
+  
   // Limit connections per user (prevent connection leaks)
   const MAX_CONNECTIONS_PER_USER = 3;
-  if (existingConnectionsForUser >= MAX_CONNECTIONS_PER_USER) {
-    console.warn(`Too many connections for user ${userId} (${existingConnectionsForUser}). Closing oldest connections.`);
+  if (userConnections >= MAX_CONNECTIONS_PER_USER) {
+    console.warn(`Too many connections for user ${userId} (${userConnections}). Closing oldest connections.`);
     
     // Find connections for this user and sort by creation time
-    const userConnections = [...clients.entries()]
+    const userConnectionList = [...clients.entries()]
       .filter(([_, client]) => client.userId === userId)
       .sort((a, b) => {
         const idA = a[0].split('-')[1] || '0'; // Extract timestamp from clientId
@@ -189,7 +246,7 @@ io.on('connection', (socket) => {
       });
     
     // Close all but the most recent connections
-    const connectionsToClose = userConnections.slice(0, userConnections.length - (MAX_CONNECTIONS_PER_USER - 1));
+    const connectionsToClose = userConnectionList.slice(0, userConnectionList.length - (MAX_CONNECTIONS_PER_USER - 1));
     connectionsToClose.forEach(([clientId]) => {
       closeClient(clientId, 'Too many connections for this user');
     });
@@ -217,40 +274,93 @@ io.on('connection', (socket) => {
   socket.on('message', (message) => {
     messagesReceived++;
     
+    // Enhanced message reception logging
+    console.log(`[MESSAGE RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
+    console.log(`Message content:`, message);
+    
+    // Validate message structure
+    if (!message) {
+      console.error('Received empty message');
+      return;
+    }
+    
     // Add timestamp if not present
     if (!message.timestamp) {
       message.timestamp = new Date().toISOString();
     }
 
-    console.log(`Received message from user ${userId} (client ${clientId})`);
+    // Add sender information if missing
+    if (!message.senderId) {
+      message.senderId = userId;
+    }
+    
+    // Default to text message type if not specified
+    if (!message.type && message.content) {
+      message.type = 'message';
+    }
+
+    console.log(`Processed message from user ${userId} (client ${clientId}):`, message);
 
     // Handle direct messages between users
     if (message.receiverId) {
+      console.log(`Routing message to ${message.receiverId}:`, message);
       handleDirectMessage(message);
+    } else {
+      console.warn(`Message missing receiverId - cannot route:`, message);
     }
   });
   
   // Handle typing events
   socket.on('typing', (message) => {
     messagesReceived++;
-    message.type = 'typing';
     
-    console.log(`Received typing from user ${userId} (client ${clientId})`);
+    // Enhanced typing event logging
+    console.log(`[TYPING RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
+    console.log(`Typing event details:`, message);
+    
+    // Ensure message is properly structured
+    if (!message) {
+      console.error('Received empty typing event');
+      return;
+    }
+    
+    message.type = 'typing';
+    message.senderId = message.senderId || userId;
+    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    console.log(`Received typing from user ${userId} (client ${clientId}) to ${message.receiverId}`);
     
     if (message.receiverId) {
       handleDirectMessage(message);
+    } else {
+      console.warn(`Typing event missing receiverId - cannot route`);
     }
   });
   
   // Handle read receipt events
   socket.on('read_receipt', (message) => {
     messagesReceived++;
-    message.type = 'read_receipt';
     
-    console.log(`Received read receipt from user ${userId} (client ${clientId})`);
+    // Enhanced read receipt logging
+    console.log(`[READ_RECEIPT RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
+    console.log(`Read receipt details:`, message);
+    
+    // Ensure message is properly structured
+    if (!message) {
+      console.error('Received empty read receipt event');
+      return;
+    }
+    
+    message.type = 'read_receipt';
+    message.senderId = message.senderId || userId;
+    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    console.log(`Received read receipt from user ${userId} (client ${clientId}) for recipient ${message.receiverId}`);
     
     if (message.receiverId) {
       handleDirectMessage(message);
+    } else {
+      console.warn(`Read receipt missing receiverId - cannot route`);
     }
   });
 
