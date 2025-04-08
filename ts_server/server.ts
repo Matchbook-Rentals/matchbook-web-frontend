@@ -1,8 +1,7 @@
 // Import types
 const express = require('express');
 const http = require('http');
-const WebSocket = require('ws');
-const { WebSocketServer } = WebSocket;
+const { Server } = require('socket.io');
 const cors = require('cors');
 import { 
   ClientsMap, 
@@ -23,8 +22,13 @@ const app = express();
 app.use(cors());
 const server = http.createServer(app);
 
-// Create WebSocket server
-const wss = new WebSocketServer({ server });
+// Create Socket.IO server
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
 
 // Map to store all connected clients
 const clients: ClientsMap = new Map();
@@ -79,10 +83,10 @@ function broadcast(message: WebSocketResponse, senderId?: string): void {
  * Creates a new client instance
  * @param id Client ID
  * @param userId User ID
- * @param socket WebSocket connection
+ * @param socket Socket.IO connection
  * @returns Client object
  */
-function createClient(id: string, userId: string, socket: WebSocket): Client {
+function createClient(id: string, userId: string, socket: any): Client {
   return {
     id,
     userId,
@@ -90,8 +94,8 @@ function createClient(id: string, userId: string, socket: WebSocket): Client {
     closed: false,
     send: (message: any) => {
       try {
-        if (!socket || socket.readyState !== WebSocket.OPEN) return;
-        socket.send(typeof message === 'string' ? message : JSON.stringify(message));
+        if (!socket || !socket.connected) return;
+        socket.emit('message', typeof message === 'string' ? JSON.parse(message) : message);
         messagesSent++;
       } catch (err) {
         console.error(`Error sending to client ${id}:`, err);
@@ -113,7 +117,7 @@ function closeClient(clientId: string, reason: string): void {
   
   try {
     client.closed = true;
-    client.socket.close();
+    client.socket.disconnect(true);
   } catch (err) {
     console.error(`Error closing client ${clientId}:`, err);
   } finally {
@@ -148,15 +152,14 @@ function handleDirectMessage(message: WebSocketMessage): void {
 }
 
 /**
- * Handle WebSocket connection
+ * Handle Socket.IO connection
  */
-wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
-  const url = new URL(req.url || '', 'http://localhost');
-  const userId = url.searchParams.get('id');
+io.on('connection', (socket: any) => {
+  const userId = socket.handshake.query.userId;
   
   if (!userId) {
     console.error('Connection rejected: No user ID provided');
-    socket.close(1008, 'Missing user ID');
+    socket.disconnect(true);
     return;
   }
 
@@ -178,90 +181,66 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
   };
   client.send(connectionMessage);
 
-  // Ping timer to keep connection alive and detect disconnects
-  const pingTimer = setInterval(() => {
-    if (socket.readyState !== WebSocket.OPEN) {
-      clearInterval(pingTimer);
-      return;
-    }
-
-    const pingResponse: WebSocketPingResponse = {
-      type: 'ping',
-      timestamp: Date.now().toString(),
-      serverTime: new Date().toISOString()
-    };
-    
-    try {
-      socket.send(JSON.stringify(pingResponse));
-    } catch (err) {
-      console.error(`Error sending ping to client ${clientId}:`, err);
-      clearInterval(pingTimer);
-      closeClient(clientId, 'Failed ping');
-    }
-  }, PING_INTERVAL_MS);
-
-  // Handle incoming messages
-  socket.on('message', (data: WebSocket.Data) => {
+  // Handle message events
+  socket.on('message', (message: WebSocketMessage) => {
     messagesReceived++;
     
-    let message: WebSocketMessage;
-    try {
-      message = JSON.parse(data.toString());
-    } catch (err) {
-      console.error(`Invalid message format from client ${clientId}:`, err);
-      return;
-    }
-
-    // Add clientId and timestamp if not present
+    // Add timestamp if not present
     if (!message.timestamp) {
       message.timestamp = new Date().toISOString();
     }
 
-    console.log(`Received ${message.type || 'message'} from user ${userId} (client ${clientId})`);
+    console.log(`Received message from user ${userId} (client ${clientId})`);
 
-    // Handle different message types
-    if (message.type === 'ping') {
-      // No need to do anything for client pings - our server-side ping handles keepalive
-      return;
-    }
-    
     // Handle direct messages between users
     if (message.receiverId) {
       handleDirectMessage(message);
     }
+  });
+  
+  // Handle typing events
+  socket.on('typing', (message: WebSocketMessage) => {
+    messagesReceived++;
+    message.type = 'typing';
     
-    // Handle typing indicators
-    if (message.type === 'typing' && message.receiverId) {
+    console.log(`Received typing from user ${userId} (client ${clientId})`);
+    
+    if (message.receiverId) {
       handleDirectMessage(message);
     }
+  });
+  
+  // Handle read receipt events
+  socket.on('read_receipt', (message: WebSocketMessage) => {
+    messagesReceived++;
+    message.type = 'read_receipt';
     
-    // Handle read receipts
-    if (message.type === 'read_receipt' && message.receiverId) {
+    console.log(`Received read receipt from user ${userId} (client ${clientId})`);
+    
+    if (message.receiverId) {
       handleDirectMessage(message);
     }
   });
 
   // Handle disconnection
-  socket.on('close', (code: number) => {
-    console.log(`Client ${clientId} disconnected with code ${code}. Removing from clients list.`);
-    clearInterval(pingTimer);
-    closeClient(clientId, `WebSocket closed: ${code}`);
+  socket.on('disconnect', (reason: string) => {
+    console.log(`Client ${clientId} disconnected: ${reason}. Removing from clients list.`);
+    closeClient(clientId, `Socket disconnected: ${reason}`);
   });
 
   // Handle errors
   socket.on('error', (err: Error) => {
     console.error(`Error with client ${clientId}:`, err);
-    clearInterval(pingTimer);
     closeClient(clientId, `Socket error: ${err.message}`);
   });
 
-  // Set a timeout to auto-close idle connections
+  // Set a timeout to auto-close idle connections (Socket.IO has built-in ping/pong)
   const timeout = setTimeout(() => {
     closeClient(clientId, 'Connection timeout');
   }, CLIENT_TIMEOUT_MS);
 
-  // Clear timeout when the socket closes
-  socket.on('close', () => {
+  // Clear timeout when the socket disconnects
+  socket.on('disconnect', () => {
     clearTimeout(timeout);
   });
 });
@@ -306,6 +285,8 @@ function shutdown() {
   console.log('Shutting down WebSocket server...');
   
   // Notify all clients
+  io.emit('disconnect', { reason: 'server_shutdown' });
+  
   clients.forEach((client, id) => {
     try {
       client.send({

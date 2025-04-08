@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import {
@@ -38,8 +39,6 @@ interface MessageData {
   createdAt?: string;
   updatedAt?: string;
 }
-
-import useWebSocket from '@/hooks/use-websocket';
 
 /**
  * Custom hook to detect mobile devices
@@ -241,23 +240,97 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     }
   };
 
-  const ws = useWebSocket(
-    wsUrl,
-    user?.id || '',
-    {
-      onMessage: handleWebSocketMessage,
-      onError: (error) => console.error('WebSocket Error:', error),
-      onClose: (event) => console.log('WebSocket Closed:', event.code),
-      onOpen: () => console.log('WebSocket Connected'),
-    }
-  );
+  // Socket.io management
+  const socketRef = useRef<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
 
-  // Initialize conversations when user data is available
+  const connectSocket = () => {
+    if (socketRef.current) {
+      console.log('Socket already exists, disconnecting first');
+      socketRef.current.disconnect();
+    }
+    
+    if (connectionAttempts >= 3) {
+      console.log('Too many connection attempts, stopping');
+      return;
+    }
+    
+    try {
+      console.log(`Connecting to Socket.IO: ${socketUrl}`);
+      const socket = io(socketUrl, {
+        query: { userId: user?.id || '' },
+        reconnectionAttempts: 3,
+        reconnectionDelay: 1000,
+        timeout: 10000
+      });
+      
+      socket.on('connect', () => {
+        console.log('Socket.IO Connected');
+        setIsConnected(true);
+        setConnectionAttempts(0);
+      });
+      
+      socket.on('message', (data) => {
+        console.log('Received message:', data);
+        handleWebSocketMessage(data);
+      });
+      
+      socket.on('typing', (data) => {
+        console.log('Received typing status:', data);
+        handleWebSocketMessage({...data, type: 'typing'});
+      });
+      
+      socket.on('read_receipt', (data) => {
+        console.log('Received read receipt:', data);
+        handleWebSocketMessage({...data, type: 'read_receipt'});
+      });
+      
+      socket.on('disconnect', (reason) => {
+        console.log('Socket.IO Disconnected:', reason);
+        setIsConnected(false);
+        setConnectionAttempts(prev => prev + 1);
+        
+        if (reason === 'io server disconnect') {
+          // The server has forcefully disconnected the socket
+          reconnectTimeoutRef.current = setTimeout(() => {
+            connectSocket();
+          }, 5000);
+        }
+        // Socket.IO will automatically try to reconnect for other reasons
+      });
+      
+      socket.on('connect_error', (error) => {
+        console.error('Socket.IO Connection Error:', error);
+        setIsConnected(false);
+      });
+      
+      socketRef.current = socket;
+    } catch (error) {
+      console.error('Failed to create Socket.IO connection:', error);
+      setConnectionAttempts(prev => prev + 1);
+    }
+  };
+
+  // Initialize conversations and connect to Socket.IO when user data is available
   useEffect(() => {
     if (user) {
       setAllConversations(initialConversations);
       setIsAdmin(user.publicMetadata?.role === 'admin');
+      connectSocket();
     }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+    };
   }, [user, initialConversations]);
 
   useEffect(() => {
@@ -295,12 +368,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (!user || !selectedConversationId) return;
     
     const conv = allConversations.find((c) => c.id === selectedConversationId);
-    if (!conv || !ws.isConnected) return;
+    if (!conv || !isConnected || !socketRef.current) return;
     
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (receiver) {
-      ws.send({
-        type: 'typing',
+      const message = {
         isTyping,
         conversationId: selectedConversationId,
         receiverId: receiver.userId,
@@ -308,7 +380,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         senderRole: conv.participants.find((p) => p.userId === user.id)?.role,
         content: '',
         timestamp: Date.now(),
-      });
+      };
+      socketRef.current.emit('typing', message);
     }
   };
 
@@ -327,9 +400,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const timestamp = new Date();
     setAllConversations((prev) => markMessagesAsRead(prev, conversationId, user.id, timestamp));
     const receiver = conv.participants.find((p) => p.userId !== user.id);
-    if (ws.isConnected && receiver) {
-      ws.send({
-        type: 'read_receipt',
+    if (isConnected && socketRef.current && receiver) {
+      const message = {
         conversationId,
         receiverId: receiver.userId,
         senderId: user.id,
@@ -337,7 +409,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         messageIds: conv.messages
           .filter(m => m.senderId !== user.id && !m.isRead)
           .map(m => m.id)
-      });
+      };
+      socketRef.current.emit('read_receipt', message);
     }
     await markMessagesAsReadByTimestamp(conversationId, timestamp);
   };
@@ -370,8 +443,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, clientId);
     setAllConversations((prev) => addMessageToConversation(prev, selectedConversationId, optimisticMessage));
 
-    if (ws.isConnected) {
-      ws.send(messageData);
+    if (isConnected && socketRef.current) {
+      socketRef.current.emit('message', messageData);
     } else {
       try {
         const newMessage = await sendMessageViaRest(messageData, createMessage);
@@ -445,26 +518,29 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       </div>
       <div
         className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${
-          ws.isConnected ? 'bg-green-500' : ws.connectionDisabled ? 'bg-yellow-500' : 'bg-red-500'
+          isConnected ? 'bg-green-500' : (connectionAttempts >= 3) ? 'bg-yellow-500' : 'bg-red-500'
         } text-white`}
       >
-        {ws.isConnected ? (
+        {isConnected ? (
           'Connected'
-        ) : ws.connectionDisabled ? (
+        ) : (connectionAttempts >= 3) ? (
           <button 
-            onClick={() => ws.resetCircuitBreaker()} 
+            onClick={() => {
+              setConnectionAttempts(0);
+              connectSocket();
+            }} 
             className="flex items-center"
           >
-            <span>Connection paused</span>
+            <span>Connection failed</span>
             <span className="ml-2 text-xs">(Click to retry)</span>
           </button>
         ) : (
           <button 
-            onClick={() => ws.reconnect()} 
+            onClick={connectSocket} 
             className="flex items-center"
           >
             <span>Disconnected</span>
-            <span className="ml-2 text-xs">({ws.connectionAttempts > 0 ? `Retry ${ws.connectionAttempts}/3` : 'Click to retry'})</span>
+            <span className="ml-2 text-xs">({connectionAttempts > 0 ? `Retry ${connectionAttempts}/3` : 'Click to connect'})</span>
           </button>
         )}
       </div>
