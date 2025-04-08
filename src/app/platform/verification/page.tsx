@@ -20,7 +20,7 @@ export default async function VerificationPage({
     const purchases = await prismadb.purchase.findMany({
       where: {
         userId,
-        type: 'backgroundVerification',
+        type: 'matchbookVerification',
         isRedeemed: false
       }
     })

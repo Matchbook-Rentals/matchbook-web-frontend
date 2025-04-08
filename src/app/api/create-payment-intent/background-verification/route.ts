@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       currency: 'usd',
       metadata: {
         userId,
-        type: 'backgroundVerification',
+        type: 'matchbookVerification',
       },
       // Set up automatic payment methods for better UX
       automatic_payment_methods: {

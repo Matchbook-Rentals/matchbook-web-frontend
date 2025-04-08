@@ -95,7 +95,22 @@ function createClient(id: string, userId: string, socket: any): Client {
     send: (message: any) => {
       try {
         if (!socket || !socket.connected) return;
-        socket.emit('message', typeof message === 'string' ? JSON.parse(message) : message);
+        
+        // If the message is a string, parse it to an object
+        const messageObj = typeof message === 'string' ? JSON.parse(message) : message;
+        
+        // Make sure it has the basic required fields
+        if (messageObj && (!messageObj.type && messageObj.content)) {
+          messageObj.type = 'message';
+        }
+        
+        // Add timestamp if missing
+        if (!messageObj.timestamp) {
+          messageObj.timestamp = new Date().toISOString();
+        }
+        
+        console.log(`Socket.IO emitting message to client ${id}:`, messageObj);
+        socket.emit('message', messageObj);
         messagesSent++;
       } catch (err) {
         console.error(`Error sending to client ${id}:`, err);
@@ -138,30 +153,59 @@ function handleDirectMessage(message: WebSocketMessage): void {
   // Find all client connections for this receiver
   const receiversConnections = Array.from(clients.entries())
     .filter(([_, client]) => client.userId === message.receiverId)
-    .map(([id]) => id);
+    .map(([id, client]) => ({ id, client }));
 
   if (receiversConnections.length === 0) {
     console.log(`No connected clients for receiverId ${message.receiverId}`);
     return;
   }
 
+  console.log(`Found ${receiversConnections.length} connections for receiverId ${message.receiverId}`);
+
   // Send to all client connections of this user
-  receiversConnections.forEach(clientId => {
-    sendToClient(clientId, message);
-  });
+  let deliverySuccessful = false;
+  for (const { id, client } of receiversConnections) {
+    try {
+      // Log the actual message being sent
+      console.log(`Sending message to client ${id} (userId: ${client.userId}):`, message);
+      
+      // Send the message
+      const success = sendToClient(id, message);
+      deliverySuccessful = deliverySuccessful || success;
+      
+      console.log(`Message delivery to client ${id}: ${success ? 'SUCCESS' : 'FAILED'}`);
+    } catch (err) {
+      console.error(`Error delivering message to client ${id}:`, err);
+    }
+  }
+
+  // Log delivery status
+  if (deliverySuccessful) {
+    console.log(`Message successfully delivered to at least one client for user ${message.receiverId}`);
+  } else {
+    console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+  }
 }
 
 /**
  * Handle Socket.IO connection
  */
 io.on('connection', (socket: any) => {
-  const userId = socket.handshake.query.userId;
+  console.log(`New Socket.IO connection: ${socket.id}`);
+  console.log('Connection handshake:', socket.handshake.query);
+  
+  // Try to get userId from different possible locations
+  const userId = socket.handshake.query.userId || 
+                socket.handshake.query.id ||
+                socket.handshake.auth?.userId;
   
   if (!userId) {
     console.error('Connection rejected: No user ID provided');
     socket.disconnect(true);
     return;
   }
+  
+  console.log(`User ID found: ${userId}`);
 
   // Generate a unique client ID
   const clientId = `${userId}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -185,40 +229,83 @@ io.on('connection', (socket: any) => {
   socket.on('message', (message: WebSocketMessage) => {
     messagesReceived++;
     
+    console.log(`Received raw message from socket ${socket.id} (user ${userId}, client ${clientId}):`, message);
+    
+    // Validate message structure
+    if (!message) {
+      console.error('Received empty message');
+      return;
+    }
+    
     // Add timestamp if not present
     if (!message.timestamp) {
       message.timestamp = new Date().toISOString();
     }
 
-    console.log(`Received message from user ${userId} (client ${clientId})`);
+    // Add sender information if missing
+    if (!message.senderId) {
+      message.senderId = userId;
+    }
+    
+    // Default to text message type if not specified
+    if (!message.type && message.content) {
+      message.type = 'message';
+    }
+
+    console.log(`Processed message from user ${userId} (client ${clientId}):`, message);
 
     // Handle direct messages between users
     if (message.receiverId) {
+      console.log(`Routing message to ${message.receiverId}:`, message);
       handleDirectMessage(message);
+    } else {
+      console.warn(`Message missing receiverId - cannot route:`, message);
     }
   });
   
   // Handle typing events
   socket.on('typing', (message: WebSocketMessage) => {
     messagesReceived++;
-    message.type = 'typing';
     
-    console.log(`Received typing from user ${userId} (client ${clientId})`);
+    // Ensure message is properly structured
+    if (!message) {
+      console.error('Received empty typing event');
+      return;
+    }
+    
+    message.type = 'typing';
+    message.senderId = message.senderId || userId;
+    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    console.log(`Received typing from user ${userId} (client ${clientId}) to ${message.receiverId}`);
     
     if (message.receiverId) {
       handleDirectMessage(message);
+    } else {
+      console.warn(`Typing event missing receiverId - cannot route`);
     }
   });
   
   // Handle read receipt events
   socket.on('read_receipt', (message: WebSocketMessage) => {
     messagesReceived++;
-    message.type = 'read_receipt';
     
-    console.log(`Received read receipt from user ${userId} (client ${clientId})`);
+    // Ensure message is properly structured
+    if (!message) {
+      console.error('Received empty read receipt event');
+      return;
+    }
+    
+    message.type = 'read_receipt';
+    message.senderId = message.senderId || userId;
+    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    console.log(`Received read receipt from user ${userId} (client ${clientId}) for recipient ${message.receiverId}`);
     
     if (message.receiverId) {
       handleDirectMessage(message);
+    } else {
+      console.warn(`Read receipt missing receiverId - cannot route`);
     }
   });
 

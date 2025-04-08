@@ -62,8 +62,11 @@ export class WebSocketClient {
    * @param options Configuration options
    */
   constructor(url: string, userId: string, options: Partial<WebSocketClientOptions> = {}) {
-    this.url = url.includes('?') ? `${url}&id=${userId}` : `${url}?id=${userId}`;
+    // For Socket.IO, we should pass userId as a query parameter
+    this.url = url.includes('?') ? `${url}&userId=${userId}` : `${url}?userId=${userId}`;
     this.userId = userId;
+    
+    console.log(`Creating WebSocket client for URL: ${this.url} with userId: ${userId}`);
     
     // Default options
     this.options = {
@@ -93,12 +96,22 @@ export class WebSocketClient {
 
     this.status = 'connecting';
     try {
+      console.log(`Connecting to WebSocket URL: ${this.url}`);
       this.ws = new WebSocket(this.url);
       
       this.ws.onopen = (event: Event) => {
         this.status = 'connected';
         this.reconnectAttempts = 0;
         this.startPingInterval();
+        console.log(`WebSocket connection established to ${this.url}`);
+        
+        // Send an initial identification message on successful connection
+        this.send({
+          type: 'connection',
+          senderId: this.userId,
+          content: 'Connection established'
+        });
+        
         if (this.options.onOpen) this.options.onOpen(event);
       };
 
@@ -112,8 +125,13 @@ export class WebSocketClient {
             this.clientId = data.clientId;
           }
           
-          // Skip ping messages from UI handling
-          if (data.type !== 'ping' && this.options.onMessage) {
+          // Debug log for message receipt (except ping messages)
+          if (data.type !== 'ping') {
+            console.log('WebSocket received message:', data);
+          }
+          
+          // Always pass messages to handler, even without specific type
+          if (this.options.onMessage) {
             this.options.onMessage(data);
           }
         } catch (error) {
@@ -219,10 +237,11 @@ export class WebSocketClient {
     }
 
     try {
-      // Add senderId and clientId if available
+      // Add senderId, clientId, and other required fields if available
       const message: Partial<WebSocketMessage> = {
         ...data,
-        senderId: this.userId
+        senderId: data.senderId || this.userId,
+        timestamp: data.timestamp || new Date().toISOString()
       };
       
       // Only add clientId if it exists
@@ -230,6 +249,12 @@ export class WebSocketClient {
         message.clientId = this.clientId;
       }
 
+      // Default to 'message' type if not specified and it's not a ping
+      if (!message.type && message.content) {
+        message.type = 'message';
+      }
+
+      console.log('WebSocket sending message:', message);
       this.ws.send(JSON.stringify(message));
       return true;
     } catch (error) {
