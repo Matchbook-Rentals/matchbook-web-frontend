@@ -1,7 +1,8 @@
-import express from 'express';
-import http from 'http';
+import * as express from 'express';
+import * as http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
-import cors from 'cors';
+import * as cors from 'cors';
+import * as process from 'process';
 import { 
   ClientsMap, 
   Client, 
@@ -265,7 +266,7 @@ wss.on('connection', (socket: WebSocket, req: http.IncomingMessage) => {
 });
 
 // API endpoints for server status and stats
-app.get('/health', (_, res) => {
+app.get('/health', (_: express.Request, res: express.Response) => {
   res.status(200).json({
     status: 'ok',
     uptime: process.uptime(),
@@ -279,7 +280,7 @@ app.get('/health', (_, res) => {
   });
 });
 
-app.get('/stats', (_, res) => {
+app.get('/stats', (_: express.Request, res: express.Response) => {
   const activeUsers = new Set(Array.from(clients.values()).map(client => client.userId)).size;
   
   res.status(200).json({

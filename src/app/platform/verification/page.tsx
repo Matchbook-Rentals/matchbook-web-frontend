@@ -7,14 +7,6 @@ import { PAGE_MARGIN } from "@/constants/styles"
 export default function VerificationPage() {
   return (
     <div className={`min-h-screen bg-background ${PAGE_MARGIN} `}>
-      {/* Breadcrumb */}
-        <nav className="flex items-center text-sm ">
-          <Link href="/platform/trips" className="hover:text-blue-400 transition-colors">
-            Trips
-          </Link>
-          <span className="mx-2">{">"}</span>
-          <span className="">MatchBook Verification</span>
-        </nav>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">

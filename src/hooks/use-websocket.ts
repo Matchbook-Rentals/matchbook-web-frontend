@@ -91,7 +91,12 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
    */
   const send = (data: Partial<WebSocketMessage>): boolean => {
     if (clientRef.current && isConnected) {
-      return clientRef.current.send(data);
+      // Make sure to include the userId if not already present
+      const messageData: Partial<WebSocketMessage> = {
+        ...data,
+        senderId: data.senderId || userId
+      };
+      return clientRef.current.send(messageData);
     }
     return false;
   };

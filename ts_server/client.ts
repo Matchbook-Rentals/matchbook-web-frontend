@@ -3,6 +3,7 @@
  * Provides a cleaner interface to the WebSocket server from client code
  */
 
+import * as NodeJS from 'node:events';
 import { WebSocketMessage } from "../src/types/websocket";
 
 /**
@@ -49,7 +50,7 @@ export class WebSocketClient {
   private reconnectTimer: NodeJS.Timeout | null = null;
   private pingTimer: NodeJS.Timeout | null = null;
   private userId: string;
-  private clientId: string | null = null;
+  private clientId?: string;
 
   /**
    * Create a new WebSocket client
@@ -169,9 +170,13 @@ export class WebSocketClient {
       // Add senderId and clientId if available
       const message: Partial<WebSocketMessage> = {
         ...data,
-        senderId: this.userId,
-        clientId: this.clientId
+        senderId: this.userId
       };
+      
+      // Only add clientId if it exists
+      if (this.clientId) {
+        message.clientId = this.clientId;
+      }
 
       this.ws.send(JSON.stringify(message));
       return true;
@@ -191,8 +196,8 @@ export class WebSocketClient {
   /**
    * Get client ID (available after successful connection)
    */
-  public getClientId(): string | null {
-    return this.clientId;
+  public getClientId(): string | undefined {
+    return this.clientId || undefined;
   }
 
   /**
