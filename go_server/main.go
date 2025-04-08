@@ -240,7 +240,11 @@ func main() {
 
 // handleWebSocket manages new WebSocket connections.
 func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+	log.Printf("DEBUG: Entered handleWebSocket from %s", r.RemoteAddr)
+	
 	clientID := strings.TrimSpace(r.URL.Query().Get("id"))
+	log.Printf("DEBUG: Client ID extracted: '%s'", clientID)
+	
 	if clientID == "" {
 		logWithConnCount("Error: Client attempted to connect without an ID")
 		http.Error(w, "Client ID required", http.StatusBadRequest)
@@ -249,11 +253,19 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	logWithConnCount(fmt.Sprintf("Connection attempt from client: %s at %s", clientID, r.RemoteAddr))
 	
+	// Log headers for debugging
+	log.Printf("DEBUG: Request headers for client %s:", clientID)
+	for name, values := range r.Header {
+		log.Printf("  %s: %s", name, values)
+	}
+	
+	log.Printf("DEBUG: Attempting WebSocket upgrade for %s", clientID)
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Upgrade error for client %s: %v", clientID, err)
 		return
 	}
+	log.Printf("DEBUG: Upgrade successful for %s", clientID)
 
 	client := &Client{
 		ID:     clientID,
