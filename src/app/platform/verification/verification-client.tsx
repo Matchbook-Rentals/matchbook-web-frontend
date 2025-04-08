@@ -32,10 +32,22 @@ export default function VerificationClient() {
     },
   })
 
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    message: string;
+    orderNumber: string;
+    responseDetails?: string;
+  } | null>(null);
+  
+  const [showResponseDetails, setShowResponseDetails] = useState(false);
+
   async function onSubmit(data: VerificationFormValues) {
     setIsSubmitting(true)
+    setApiResponse(null);
     
     try {
+      console.log("Submitting verification request...");
+      
       // Call the API endpoint
       const response = await fetch('/api/background-check', {
         method: 'POST',
@@ -46,14 +58,18 @@ export default function VerificationClient() {
       });
       
       const result = await response.json();
+      console.log("API Response:", result);
       
       if (!response.ok) {
         throw new Error(result.error || 'Failed to submit verification request');
       }
       
-      // Show success message
+      // Store the API response
+      setApiResponse(result);
+      
+      // Show success message but don't return to welcome screen yet
+      // So the user can see the response details
       alert(`Verification request submitted successfully! Order number: ${result.orderNumber}`);
-      setShowForm(false); // Return to welcome screen
     } catch (error) {
       console.error("Error submitting verification request:", error);
       alert("There was an error submitting your verification request. Please try again.");
@@ -355,20 +371,86 @@ export default function VerificationClient() {
             </div>
           </Card>
           
-          <div className="flex justify-center mt-8">
-            <Button 
-              type="submit" 
-              className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Processing..." : "Submit Verification Request - $25.00"}
-            </Button>
-          </div>
-          
-          <div className="text-center text-sm text-gray-500 mt-4">
-            <p>Your personal information is securely transmitted and processed according to industry standards.</p>
-            <p>Background checks are performed by our trusted partner Accio Data, Inc.</p>
-          </div>
+          {apiResponse ? (
+            <Card className="p-6 mt-8 bg-green-50 border-green-200">
+              <h2 className="text-xl font-semibold text-green-800 mb-4">Verification Request Submitted</h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-medium">Order Number:</h3>
+                  <p className="font-mono bg-white p-2 rounded border">{apiResponse.orderNumber}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium">Status:</h3>
+                  <p className="text-green-700">✓ {apiResponse.message}</p>
+                </div>
+                <p className="text-sm text-gray-600 pt-4 border-t">
+                  You can view your background check status by logging into your Matchbook account.
+                  The results will be processed automatically. You should receive results within 24-48 hours.
+                </p>
+                
+                {/* Developer testing section - would be removed in production */}
+                {apiResponse.responseDetails && (
+                  <div className="mt-4 border-t pt-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowResponseDetails(!showResponseDetails)}
+                      className="mb-2"
+                    >
+                      {showResponseDetails ? "Hide" : "Show"} API Response Details
+                    </Button>
+                    
+                    {showResponseDetails && (
+                      <div className="bg-gray-100 p-3 rounded-md border overflow-auto max-h-60">
+                        <pre className="text-xs font-mono whitespace-pre-wrap break-words">
+                          {apiResponse.responseDetails}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <div className="flex justify-between mt-4">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                  >
+                    Return to Verification Home
+                  </Button>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => {
+                      setApiResponse(null);
+                      setShowResponseDetails(false);
+                      form.reset();
+                    }}
+                  >
+                    Submit Another Request
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ) : (
+            <>
+              <div className="flex justify-center mt-8">
+                <Button 
+                  type="submit" 
+                  className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Processing..." : "Submit Verification Request - $25.00"}
+                </Button>
+              </div>
+              
+              <div className="text-center text-sm text-gray-500 mt-4">
+                <p>Your personal information is securely transmitted and processed according to industry standards.</p>
+                <p>Background checks are performed by our trusted partner Accio Data, Inc.</p>
+              </div>
+            </>
+          )}
         </form>
       </Form>
     </div>

@@ -27,6 +27,9 @@ export function generateVerificationXml(
   const { account, username, password } = accountDetails;
   const { firstName, lastName, ssn, dob, address, city, state, zip } = data;
   
+  // Create a unique order ID for tracking
+  const orderId = `MBWEB-${Date.now().toString().slice(-8)}`;
+  
   return `<?xml version="1.0" encoding="UTF-8"?>
 <New_Order>
   <login>
@@ -35,7 +38,7 @@ export function generateVerificationXml(
     <password>${password}</password>
   </login>
   <mode>PROD</mode>
-  <placeOrder>
+  <placeOrder number="${orderId}">
     <subject>
       <name_first>${firstName}</name_first>
       <name_last>${lastName}</name_last>
@@ -45,9 +48,12 @@ export function generateVerificationXml(
       <city>${city}</city>
       <state>${state}</state>
       <zip>${zip}</zip>
+      <email>verification@matchbookrentals.com</email>
+      <phone>555-123-4567</phone>
     </subject>
     <subOrder type="National" />
     <subOrder type="Evictions" />
+    <package>Matchbook Verification</package>
   </placeOrder>
 </New_Order>`;
 }

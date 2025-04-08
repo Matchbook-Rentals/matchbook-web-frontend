@@ -5,11 +5,11 @@ import {
   generateVerificationXml
 } from "@/app/platform/verification/utils";
 
-// Environment variables would be used in production
+// Use the provided test credentials
 const ACCOUNT_DETAILS = {
-  account: process.env.ACCIO_ACCOUNT || "matchbook",
-  username: process.env.ACCIO_USERNAME || "matchbook_api",
-  password: process.env.ACCIO_PASSWORD || "api_password_secure"
+  account: "matchbook",
+  username: "Tyler.Bennett@matchbookrentals.com",
+  password: "TylerBennet13#!"
 };
 
 // API endpoint to handle background check requests
@@ -34,18 +34,43 @@ export async function POST(request: Request) {
     
     console.log("XML Payload:", xmlPayload);
     
-    // TODO: Send XML to Accio Data API
-    // This would be an actual API call in production
-    // For now, we'll simulate a successful response
+    // Send XML to Accio Data API for testing
+    const accioResponse = await fetch("https://globalbackgroundscreening.bgsecured.com/c/p/researcherxml", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/xml",
+      },
+      body: xmlPayload,
+    });
     
-    // Mock API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Check if the request was successful
+    if (!accioResponse.ok) {
+      const errorText = await accioResponse.text();
+      console.error("Error from Accio API:", errorText);
+      throw new Error(`API returned ${accioResponse.status}: ${errorText}`);
+    }
     
-    // Mock successful response
+    // Parse the response from Accio
+    const responseText = await accioResponse.text();
+    console.log("Accio API Response:", responseText);
+    
+    // Extract order number if available (this would be implementation-specific)
+    let orderNumber = "BC-" + Math.floor(Math.random() * 10000000);
+    try {
+      // Try to extract order number from XML response (example pattern, adjust according to actual response)
+      const orderMatch = responseText.match(/<order_number>(.*?)<\/order_number>/);
+      if (orderMatch && orderMatch[1]) {
+        orderNumber = orderMatch[1];
+      }
+    } catch (err) {
+      console.warn("Could not parse order number from response", err);
+    }
+    
     return NextResponse.json({
       success: true,
       message: "Background check request submitted successfully",
-      orderNumber: "BC-" + Math.floor(Math.random() * 10000000)
+      orderNumber,
+      responseDetails: responseText
     });
     
   } catch (error) {

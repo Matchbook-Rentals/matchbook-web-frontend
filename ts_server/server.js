@@ -143,6 +143,9 @@ function handleDirectMessage(message) {
  */
 wss.on('connection', (socket, req) => {
   console.log('New WebSocket connection attempt:', req.url);
+  console.log('Connection headers:', JSON.stringify(req.headers));
+  console.log('Connection origin:', req.headers.origin);
+  console.log('Connection host:', req.headers.host);
   
   // Parse URL more safely - some clients might send just "/?id=123"
   let userId;
@@ -160,10 +163,35 @@ wss.on('connection', (socket, req) => {
   
   console.log('Parsed userId from connection:', userId);
   
+  // Check current connections for this user
+  const existingConnectionsForUser = [...clients.values()].filter(c => c.userId === userId).length;
+  console.log(`User ${userId} already has ${existingConnectionsForUser} active connections`);
+  
   if (!userId) {
     console.error('Connection rejected: No user ID provided');
     socket.close(1008, 'Missing user ID');
     return;
+  }
+  
+  // Limit connections per user (prevent connection leaks)
+  const MAX_CONNECTIONS_PER_USER = 3;
+  if (existingConnectionsForUser >= MAX_CONNECTIONS_PER_USER) {
+    console.warn(`Too many connections for user ${userId} (${existingConnectionsForUser}). Closing oldest connections.`);
+    
+    // Find connections for this user and sort by creation time
+    const userConnections = [...clients.entries()]
+      .filter(([_, client]) => client.userId === userId)
+      .sort((a, b) => {
+        const idA = a[0].split('-')[1] || '0'; // Extract timestamp from clientId
+        const idB = b[0].split('-')[1] || '0';
+        return Number(idA) - Number(idB); // Sort ascending (oldest first)
+      });
+    
+    // Close all but the most recent connections
+    const connectionsToClose = userConnections.slice(0, userConnections.length - (MAX_CONNECTIONS_PER_USER - 1));
+    connectionsToClose.forEach(([clientId]) => {
+      closeClient(clientId, 'Too many connections for this user');
+    });
   }
 
   // Generate a unique client ID
@@ -257,6 +285,8 @@ wss.on('connection', (socket, req) => {
   // Handle errors
   socket.on('error', (err) => {
     console.error(`Error with client ${clientId}:`, err);
+    console.error(`Client state when error occurred: readyState=${socket.readyState}, bufferedAmount=${socket.bufferedAmount}`);
+    console.error(`Full error details:`, JSON.stringify(err, Object.getOwnPropertyNames(err)));
     clearInterval(pingTimer);
     closeClient(clientId, `Socket error: ${err.message}`);
   });
@@ -290,12 +320,31 @@ app.get('/health', (_, res) => {
 app.get('/stats', (_, res) => {
   const activeUsers = new Set(Array.from(clients.values()).map(client => client.userId)).size;
   
+  // Get more detailed user connection stats
+  const userConnections = {};
+  clients.forEach(client => {
+    if (!userConnections[client.userId]) {
+      userConnections[client.userId] = 0;
+    }
+    userConnections[client.userId]++;
+  });
+  
+  // Get most active users (users with most connections)
+  const usersWithMultipleConnections = Object.entries(userConnections)
+    .filter(([_, count]) => count > 1)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10); // Show top 10
+  
   res.status(200).json({
     connections: clients.size,
     activeUsers,
     totalConnections,
     messagesSent,
-    messagesReceived
+    messagesReceived,
+    detailedStats: {
+      usersWithMultipleConnections,
+      connectionsByUser: userConnections,
+    }
   });
 });
 

@@ -444,17 +444,27 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         </div>
       </div>
       <div
-        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${ws.isConnected ? 'bg-green-500' : 'bg-red-500'} text-white`}
+        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${
+          ws.isConnected ? 'bg-green-500' : ws.connectionDisabled ? 'bg-yellow-500' : 'bg-red-500'
+        } text-white`}
       >
         {ws.isConnected ? (
           'Connected'
+        ) : ws.connectionDisabled ? (
+          <button 
+            onClick={() => ws.resetCircuitBreaker()} 
+            className="flex items-center"
+          >
+            <span>Connection paused</span>
+            <span className="ml-2 text-xs">(Click to retry)</span>
+          </button>
         ) : (
           <button 
             onClick={() => ws.reconnect()} 
             className="flex items-center"
           >
             <span>Disconnected</span>
-            <span className="ml-2 text-xs">({ws.connectionAttempts > 0 ? `Retry ${ws.connectionAttempts}/5` : 'Click to retry'})</span>
+            <span className="ml-2 text-xs">({ws.connectionAttempts > 0 ? `Retry ${ws.connectionAttempts}/3` : 'Click to retry'})</span>
           </button>
         )}
       </div>

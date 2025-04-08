@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createWebSocketClient, WebSocketClient, WebSocketClientOptions } from '../../ts_server/client';
 import { WebSocketMessage } from '../types/websocket';
 
@@ -26,7 +26,29 @@ interface UseWebSocketOptions {
 export function useWebSocket(url: string, userId: string, options: UseWebSocketOptions) {
   const [isConnected, setIsConnected] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const [connectionDisabled, setConnectionDisabled] = useState(false);
   const clientRef = useRef<WebSocketClient | null>(null);
+  const errorCountRef = useRef(0);
+  const circuitBreakerTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Implement circuit breaker pattern to prevent reconnection storms
+  const triggerCircuitBreaker = useCallback(() => {
+    // If too many errors, disable reconnection temporarily
+    setConnectionDisabled(true);
+    console.log('WebSocket: Circuit breaker triggered - pausing reconnection attempts for 60 seconds');
+    
+    // Reset after 60 seconds
+    if (circuitBreakerTimer.current) {
+      clearTimeout(circuitBreakerTimer.current);
+    }
+    
+    circuitBreakerTimer.current = setTimeout(() => {
+      console.log('WebSocket: Circuit breaker reset - reconnection enabled');
+      errorCountRef.current = 0;
+      setConnectionDisabled(false);
+      setConnectionAttempts(0);
+    }, 60000); // Wait 1 minute before trying again
+  }, []);
 
   // Set up WebSocket client
   useEffect(() => {
@@ -34,23 +56,39 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
       console.log('WebSocket: Missing url or userId', { url, userId });
       return;
     }
+    
+    if (connectionDisabled) {
+      console.log('WebSocket: Connection attempts temporarily disabled by circuit breaker');
+      return;
+    }
 
     console.log('WebSocket: Attempting connection to', url, 'with userId', userId);
 
     const clientOptions: Partial<WebSocketClientOptions> = {
       onOpen: (event) => {
-        console.log('WebSocket: Connected successfully', event);
+        console.log('WebSocket: Connected successfully');
         setIsConnected(true);
         setConnectionAttempts(0);
+        errorCountRef.current = 0; // Reset error count on successful connection
         if (options.onOpen) options.onOpen(event);
       },
       onMessage: (message) => {
-        console.log('WebSocket: Received message', message);
+        // Only log non-ping messages to reduce console noise
+        if (message.type !== 'ping') {
+          console.log('WebSocket: Received message', message);
+        }
         if (options.onMessage) options.onMessage(message);
       },
       onError: (error) => {
+        errorCountRef.current += 1;
         console.error('WebSocket: Connection error', error);
         setIsConnected(false);
+        
+        // If we've seen more than 5 errors in quick succession, trigger circuit breaker
+        if (errorCountRef.current > 5) {
+          triggerCircuitBreaker();
+        }
+        
         if (options.onError) options.onError(error);
       },
       onClose: (event) => {
@@ -59,10 +97,10 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
         if (options.onClose) options.onClose(event);
       },
       reconnect: {
-        enabled: true,
-        maxAttempts: 5, // Reduced to prevent too many reconnection attempts
-        baseDelay: 3000,
-        backoffFactor: 1.5
+        enabled: !connectionDisabled,
+        maxAttempts: 3, // Further reduced to prevent excessive reconnection attempts
+        baseDelay: 5000, // Increased base delay
+        backoffFactor: 2
       },
       pingInterval: 20000
     };
@@ -77,7 +115,7 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
         clientRef.current = null;
       }
     };
-  }, [url, userId, options.onMessage, options.onError, options.onClose, options.onOpen]);
+  }, [url, userId, connectionDisabled, options.onMessage, options.onError, options.onClose, options.onOpen]);
 
   // Track reconnection attempts
   useEffect(() => {
@@ -127,8 +165,17 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
   return { 
     isConnected, 
     connectionAttempts, 
+    connectionDisabled,
     send,
-    reconnect
+    reconnect,
+    resetCircuitBreaker: () => {
+      if (circuitBreakerTimer.current) {
+        clearTimeout(circuitBreakerTimer.current);
+      }
+      setConnectionDisabled(false);
+      errorCountRef.current = 0;
+      setConnectionAttempts(0);
+    }
   };
 }
 

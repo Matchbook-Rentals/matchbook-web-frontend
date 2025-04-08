@@ -147,6 +147,14 @@ export class WebSocketClient {
       };
 
       this.ws.onerror = (event: Event) => {
+        console.error('WebSocket client error:', {
+          url: this.url,
+          readyState: this.ws?.readyState,
+          userId: this.userId,
+          clientId: this.clientId,
+          reconnectAttempts: this.reconnectAttempts
+        });
+        
         if (this.options.onError) this.options.onError(event);
       };
     } catch (error) {
