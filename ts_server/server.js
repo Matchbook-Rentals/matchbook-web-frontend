@@ -142,8 +142,23 @@ function handleDirectMessage(message) {
  * Handle WebSocket connection
  */
 wss.on('connection', (socket, req) => {
-  const url = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`);
-  const userId = url.searchParams.get('id');
+  console.log('New WebSocket connection attempt:', req.url);
+  
+  // Parse URL more safely - some clients might send just "/?id=123"
+  let userId;
+  try {
+    // Try parsing as proper URL
+    const url = new URL(req.url || '', `http://${req.headers.host || 'localhost'}`);
+    userId = url.searchParams.get('id');
+  } catch (err) {
+    // Fallback to manual parsing if URL is malformed
+    console.log('Error parsing URL, using manual parsing:', err.message);
+    const urlString = req.url || '';
+    const idMatch = urlString.match(/[?&]id=([^&]*)/);
+    userId = idMatch ? idMatch[1] : null;
+  }
+  
+  console.log('Parsed userId from connection:', userId);
   
   if (!userId) {
     console.error('Connection rejected: No user ID provided');

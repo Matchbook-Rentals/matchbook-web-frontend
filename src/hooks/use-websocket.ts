@@ -30,29 +30,38 @@ export function useWebSocket(url: string, userId: string, options: UseWebSocketO
 
   // Set up WebSocket client
   useEffect(() => {
-    if (!url || !userId) return;
+    if (!url || !userId) {
+      console.log('WebSocket: Missing url or userId', { url, userId });
+      return;
+    }
+
+    console.log('WebSocket: Attempting connection to', url, 'with userId', userId);
 
     const clientOptions: Partial<WebSocketClientOptions> = {
       onOpen: (event) => {
+        console.log('WebSocket: Connected successfully', event);
         setIsConnected(true);
         setConnectionAttempts(0);
         if (options.onOpen) options.onOpen(event);
       },
       onMessage: (message) => {
+        console.log('WebSocket: Received message', message);
         if (options.onMessage) options.onMessage(message);
       },
       onError: (error) => {
+        console.error('WebSocket: Connection error', error);
         setIsConnected(false);
         if (options.onError) options.onError(error);
       },
       onClose: (event) => {
+        console.log('WebSocket: Connection closed', event.code, event.reason);
         setIsConnected(false);
         if (options.onClose) options.onClose(event);
       },
       reconnect: {
         enabled: true,
-        maxAttempts: 10,
-        baseDelay: 2000,
+        maxAttempts: 5, // Reduced to prevent too many reconnection attempts
+        baseDelay: 3000,
         backoffFactor: 1.5
       },
       pingInterval: 20000

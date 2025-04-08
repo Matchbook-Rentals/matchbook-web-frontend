@@ -103,16 +103,21 @@ export class WebSocketClient {
       };
 
       this.ws.onmessage = (event: MessageEvent) => {
-        const data = JSON.parse(event.data);
-        
-        // Handle connection message to capture clientId
-        if (data.type === 'connection' && data.status === 'connected' && data.clientId) {
-          this.clientId = data.clientId;
-        }
-        
-        // Skip ping messages from UI handling
-        if (data.type !== 'ping' && this.options.onMessage) {
-          this.options.onMessage(data);
+        try {
+          const data = JSON.parse(event.data);
+          
+          // Handle connection message to capture clientId
+          if (data.type === 'connection' && data.status === 'connected' && data.clientId) {
+            console.log('Received clientId:', data.clientId);
+            this.clientId = data.clientId;
+          }
+          
+          // Skip ping messages from UI handling
+          if (data.type !== 'ping' && this.options.onMessage) {
+            this.options.onMessage(data);
+          }
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error, event.data);
         }
       };
 
@@ -120,13 +125,24 @@ export class WebSocketClient {
         this.stopPingInterval();
         this.status = 'disconnected';
         
+        // Log more details about the close event
+        console.log(`WebSocket closed with code ${event.code}${event.reason ? ': ' + event.reason : ''}`);
+        
         if (this.options.onClose) this.options.onClose(event);
         
-        if (this.options.reconnect?.enabled && this.reconnectAttempts < (this.options.reconnect?.maxAttempts || 10)) {
+        // Only attempt to reconnect on abnormal closures
+        // 1000 (Normal Closure) or 1001 (Going Away) should not trigger reconnect
+        const abnormalClosure = event.code !== 1000 && event.code !== 1001;
+        
+        if (abnormalClosure && this.options.reconnect?.enabled && 
+            this.reconnectAttempts < (this.options.reconnect?.maxAttempts || 10)) {
+          console.log(`Scheduling reconnect attempt ${this.reconnectAttempts + 1} of ${this.options.reconnect?.maxAttempts || 10}`);
           this.scheduleReconnect();
         } else if (this.reconnectAttempts >= (this.options.reconnect?.maxAttempts || 10)) {
           this.status = 'failed';
           console.log('Max reconnection attempts reached, giving up');
+        } else {
+          console.log('Normal closure, not attempting to reconnect');
         }
       };
 

@@ -219,7 +219,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   
   // Generate the WebSocket URL using the new TypeScript server
   // Replace with your actual server URL when deploying
-  const wsUrl = process.env.NEXT_PUBLIC_WS_SERVER_URL || 'ws://localhost:8080';
+  const wsUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'ws://localhost:8080';
 
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
@@ -446,7 +446,17 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       <div
         className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${ws.isConnected ? 'bg-green-500' : 'bg-red-500'} text-white`}
       >
-        {ws.isConnected ? 'Connected' : 'Disconnected'}
+        {ws.isConnected ? (
+          'Connected'
+        ) : (
+          <button 
+            onClick={() => ws.reconnect()} 
+            className="flex items-center"
+          >
+            <span>Disconnected</span>
+            <span className="ml-2 text-xs">({ws.connectionAttempts > 0 ? `Retry ${ws.connectionAttempts}/5` : 'Click to retry'})</span>
+          </button>
+        )}
       </div>
       {isAdmin && <AdminTools onDeleteAll={handleDeleteAllConversations} />}
     </div>
