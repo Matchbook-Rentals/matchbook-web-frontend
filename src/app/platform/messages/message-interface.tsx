@@ -286,9 +286,7 @@ const clearTypingTimeout = (
  */
 const MessageInterface = ({ conversations: initialConversations }: { conversations: ExtendedConversation[] }) => {
   const { user } = useUser();
-  if (!user) return null;
-
-  const [allConversations, setAllConversations] = useState(initialConversations);
+  const [allConversations, setAllConversations] = useState<ExtendedConversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [tabs, setTabs] = useState<'all' | 'Host' | 'Tenant'>('all');
@@ -299,11 +297,14 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   >({});
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const [isAdmin, setIsAdmin] = useState(false);
-
   const isMobile = useMobileDetect();
-  const wsUrl = `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace(/^http/, 'ws')}/ws?id=${user.id}`;
+  
+  // Generate the WebSocket URL only if user exists
+  const wsUrl = user ? `${process.env.NEXT_PUBLIC_GO_SERVER_URL?.replace(/^http/, 'ws')}/ws?id=${user.id}` : '';
 
   const handleWebSocketMessage = (message: any) => {
+    if (!user) return;
+    
     if (message.type === 'message') {
       setAllConversations((prev) =>
         addMessageToConversation(prev, message.conversationId, {
@@ -328,9 +329,13 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
     onOpen: () => console.log('WebSocket Connected'),
   });
 
+  // Initialize conversations when user data is available
   useEffect(() => {
-    setIsAdmin(user.publicMetadata?.role === 'admin');
-  }, [user]);
+    if (user) {
+      setAllConversations(initialConversations);
+      setIsAdmin(user.publicMetadata?.role === 'admin');
+    }
+  }, [user, initialConversations]);
 
   useEffect(() => {
     if (isMobile) {
@@ -342,6 +347,8 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   }, [isMobile, sidebarVisible]);
 
   const updateUnreadCounts = (message: any) => {
+    if (!user) return;
+    
     const conv = allConversations.find((c) => c.id === message.conversationId);
     if (conv && selectedConversationId !== message.conversationId && message.senderId !== user.id) {
       const userRole = conv.participants.find((p) => p.userId === user.id)?.role;
@@ -362,8 +369,11 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   };
 
   const sendTypingStatus = (isTyping: boolean) => {
+    if (!user || !selectedConversationId) return;
+    
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     if (!conv || !ws.isConnected) return;
+    
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (receiver) {
       ws.send({
@@ -380,6 +390,8 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   };
 
   const handleSelectConversation = async (conversationId: string) => {
+    if (!user) return;
+    
     setSelectedConversationId(conversationId);
     setSidebarVisible(!isMobile);
     const conv = allConversations.find((c) => c.id === conversationId);
@@ -408,9 +420,11 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
     content: string,
     file?: { url?: string; name?: string; key?: string; type?: string }
   ) => {
-    if (!selectedConversationId) return;
+    if (!user || !selectedConversationId) return;
+    
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     if (!conv) return;
+    
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (!receiver) return;
 
@@ -445,6 +459,8 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   };
 
   const handleCreateConversation = async (email: string) => {
+    if (!user) return;
+    
     const newConv = await createConversation(email, 'Host', 'Tenant');
     setAllConversations((prev) => [...prev, { ...newConv, messages: [], participants: newConv.participants }]);
   };
@@ -457,6 +473,9 @@ const MessageInterface = ({ conversations: initialConversations }: { conversatio
   };
 
   const toggleSidebar = () => setSidebarVisible((prev) => !prev);
+
+  // Early return if user is not available
+  if (!user) return null;
 
   const filteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
   const selectedConversation = allConversations.find((c) => c.id === selectedConversationId) || null;
