@@ -103,14 +103,14 @@ const markMessagesAsRead = (
   allConversations: ExtendedConversation[],
   conversationId: string,
   userId: string,
-  timestamp: Date
+  timestamp: string
 ) => {
   return allConversations.map((conv) =>
     conv.id === conversationId
       ? {
           ...conv,
           messages: conv.messages.map((msg) =>
-            msg.senderId !== userId && new Date(msg.createdAt) <= timestamp
+            msg.senderId !== userId && msg.createdAt && new Date(msg.createdAt) <= new Date(timestamp)
               ? { ...msg, isRead: true }
               : msg
           ),
@@ -148,7 +148,7 @@ const createOptimisticMessage = (
   content,
   senderId,
   conversationId,
-  createdAt: new Date(),
+  createdAt: new Date().toISOString(),
   isRead: true,
   pending: true,
   clientId,
@@ -181,13 +181,13 @@ const sendMessageViaRest = async (
  * Utility function to update typing status
  */
 const updateTypingStatus = (
-  typingUsers: Record<string, { isTyping: boolean; timestamp: number }>,
+  typingUsers: Record<string, { isTyping: boolean; timestamp: string }>,
   conversationId: string,
   senderId: string,
   isTyping: boolean
 ) => ({
   ...typingUsers,
-  [`${conversationId}:${senderId}`]: { isTyping, timestamp: Date.now() },
+  [`${conversationId}:${senderId}`]: { isTyping, timestamp: new Date().toISOString() },
 });
 
 /**
@@ -214,7 +214,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
   const [unreadTenantMessages, setUnreadTenantMessages] = useState(0);
   const [typingUsers, setTypingUsers] = useState<
-    Record<string, { isTyping: boolean; timestamp: number }>
+    Record<string, { isTyping: boolean; timestamp: string }>
   >({});
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const [isAdmin, setIsAdmin] = useState(false);
@@ -243,7 +243,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
             conversationId: message.conversationId,
             receiverId: message.senderId,
             senderId: user.id,
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
             messageIds: [message.id]
           };
           socketRef.current.emit('read_receipt', readReceiptMessage);
@@ -262,7 +262,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       handleTypingMessage(message);
     } else if (message.type === 'read_receipt' && message.senderId !== user.id) {
       setAllConversations((prev) =>
-        markMessagesAsRead(prev, message.conversationId, user.id, new Date(message.timestamp))
+        markMessagesAsRead(prev, message.conversationId, user.id, message.timestamp)
       );
     }
   };
@@ -634,7 +634,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     );
     
     if (unreadMessages.length > 0) {
-      const timestamp = new Date();
+      const timestamp = new Date().toISOString();
       setAllConversations((prev) => markMessagesAsRead(prev, conversationId, user.id, timestamp));
       
       // Get the other participant for sending read receipt
@@ -649,7 +649,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         };
         socketRef.current.emit('read_receipt', message);
       }
-      await markMessagesAsReadByTimestamp(conversationId, timestamp);
+      await markMessagesAsReadByTimestamp(conversationId, new Date(timestamp));
     }
   };
 
@@ -675,7 +675,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
       id: clientId,
       clientId: clientId, // Ensure clientId is explicitly sent to match up response
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
     };
 

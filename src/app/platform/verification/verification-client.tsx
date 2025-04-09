@@ -20,12 +20,14 @@ export default function VerificationClient({
   paymentStatus,
   serverHasPurchase,
   reviewMode,
-  sessionId
+  sessionId,
+  applicationData
 }: { 
   paymentStatus?: string;
   serverHasPurchase?: boolean;
   reviewMode?: boolean;
   sessionId?: string;
+  applicationData?: Partial<VerificationFormValues>;
 }) {
   const [showForm, setShowForm] = useState(false)
   const [showPayment, setShowPayment] = useState(false)
@@ -79,7 +81,12 @@ export default function VerificationClient({
         console.error('Error parsing saved form data:', error);
       }
     }
-  }, [paymentStatus, reviewMode, sessionId]);
+    // Apply application data if available and no existing form data
+    else if (applicationData && Object.keys(applicationData).some(key => !!applicationData[key as keyof typeof applicationData])) {
+      // Log that we're prefilling with application data
+      console.log('Prefilling form with application data');
+    }
+  }, [paymentStatus, reviewMode, sessionId, applicationData]);
 
   // Initialize from server-side purchase check and get form data if needed
   useEffect(() => {
@@ -139,14 +146,14 @@ export default function VerificationClient({
   const form = useForm<VerificationFormValues>({
     resolver: zodResolver(verificationSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      ssn: "",
-      dob: "",
-      address: "",
-      city: "",
-      state: "",
-      zip: "",
+      firstName: applicationData?.firstName || "",
+      lastName: applicationData?.lastName || "",
+      ssn: "", // Always blank for security reasons
+      dob: applicationData?.dob || "",
+      address: applicationData?.address || "",
+      city: applicationData?.city || "",
+      state: applicationData?.state || "",
+      zip: applicationData?.zip || "",
     },
   })
 
@@ -239,6 +246,13 @@ export default function VerificationClient({
   // Handle start screening button click
   const handleStartScreening = () => {
     setShowForm(true)
+    
+    // Log when application data is available for prefill
+    if (applicationData && Object.keys(applicationData).some(key => 
+      key !== 'ssn' && !!applicationData[key as keyof typeof applicationData]
+    )) {
+      console.log('Using application data to prefill form fields')
+    }
   }
 
   // Initial welcome screen
@@ -324,9 +338,21 @@ export default function VerificationClient({
           </p>
         </div>
       ) : (
-        <p className="text-center mb-6 text-gray-600">
-          This screening includes both National Criminal History Search and Evictions & Property Damage Check
-        </p>
+        <>
+          <p className="text-center mb-6 text-gray-600">
+            This screening includes both National Criminal History Search and Evictions & Property Damage Check
+          </p>
+          {applicationData && Object.keys(applicationData).some(key => 
+            key !== 'ssn' && !!applicationData[key as keyof typeof applicationData]
+          ) && (
+            <div className="mb-8 bg-green-50 border border-green-200 rounded-lg p-4">
+              <p className="text-gray-700">
+                <span className="font-medium">Some fields have been pre-filled</span> with information from your application. 
+                Please review and complete any missing information.
+              </p>
+            </div>
+          )}
+        </>
       )}
       
       <Form {...form}>

@@ -252,22 +252,32 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         {lastMessage && lastMessage.updatedAt ? 
                           (() => {
                             try {
-                              const date = new Date(lastMessage.updatedAt);
-                              // Check if date is valid
-                              return !isNaN(date.getTime()) ? 
-                                date.toLocaleString(undefined, {
-                                  hour: 'numeric',
-                                  minute: 'numeric',
-                                  hour12: true
-                                }) : 
-                                // Fallback to createdAt if available
-                                (lastMessage.createdAt ? 
-                                  new Date(lastMessage.createdAt).toLocaleString(undefined, {
+                              // Try using updatedAt first
+                              if (typeof lastMessage.updatedAt === 'string') {
+                                const date = new Date(lastMessage.updatedAt);
+                                if (!isNaN(date.getTime())) {
+                                  return date.toLocaleTimeString([], {
                                     hour: 'numeric',
-                                    minute: 'numeric',
+                                    minute: '2-digit',
                                     hour12: true
-                                  }) : 
-                                  'Just now');
+                                  });
+                                }
+                              }
+                              
+                              // Fallback to createdAt
+                              if (lastMessage.createdAt && typeof lastMessage.createdAt === 'string') {
+                                const date = new Date(lastMessage.createdAt);
+                                if (!isNaN(date.getTime())) {
+                                  return date.toLocaleTimeString([], {
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                  });
+                                }
+                              }
+                              
+                              // Last resort
+                              return 'Just now';
                             } catch (e) {
                               console.log('Date parsing error:', e, lastMessage);
                               return 'Just now';

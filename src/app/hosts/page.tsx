@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
+import Footer from "@/components/marketing-landing-components/footer";
 
 export default function AboutHostingPage(): React.ReactNode {
   // Feature data for mapping
@@ -51,19 +52,19 @@ export default function AboutHostingPage(): React.ReactNode {
     <MatchbookHeader />
     <div className="flex flex-col items-center bg-white overflow-hidden">
       {/* Hero Section */}
-      <section className="w-full max-w-[1344px] px-8 py-16 lg:py-24 xl:py-32 flex flex-col items-center">
+      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 lg:py-20 xl:py-24 flex flex-col items-center">
         <h1 className="font-['Cutive',Helvetica] text-[120px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
           Earn More, Keep More
         </h1>
 
-        <h2 className="mt-16 lg:mt-24 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
+        <h2 className="mt-16 lg:mt-20 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
           Why Hosts Love MatchBook
         </h2>
       </section>
 
       {/* Features Section */}
-      <section className="w-full max-w-[1344px] px-8 mb-8 lg:mb-16">
-        <div className="flex flex-col gap-24 lg:gap-36">
+      <section className="w-full max-w-[1344px] px-8 lg:px-16 mb-8 lg:mb-12">
+        <div className="flex flex-col gap-8">
           {features.map((feature, index) => (
             <Card key={index} className="border-none shadow-none">
               <CardContent
@@ -96,17 +97,19 @@ export default function AboutHostingPage(): React.ReactNode {
       </section>
 
       {/* CTA Section */}
-      <section className="w-full max-w-[1344px] px-8 py-16 lg:py-28 xl:py-36 flex flex-col items-center gap-8 lg:gap-12">
+      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 mt-16 lg:py-20 xl:py-28 flex flex-col items-center gap-8 lg:gap-12">
         <h2 className="font-['Poppins',Helvetica] font-normal text-6xl text-[#1d221b] text-center leading-6 tracking-[0]">
           Best part? It&apos;s completely free.
         </h2>
 
-        <Button className="mt-8 lg:mt-16 px-8 py-3.5 bg-[#c68087ad] rounded-2xl hover:bg-[#c68087]">
+        <Button className="my-8 lg:my-16 px-8 py-3.5 bg-[#c68087ad] rounded-2xl hover:bg-[#c68087]">
           <span className="font-['Public_Sans',Helvetica] font-medium text-white text-xl tracking-[0] leading-6 whitespace-nowrap">
             List your Property
           </span>
         </Button>
       </section>
+        <div className="mt-12" />
+        <Footer />
     </div>
     </>
   );

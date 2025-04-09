@@ -528,9 +528,15 @@ io.on('connection', (socket) => {
       return;
     }
     
-    // Add timestamp if not present
+    // Add timestamp if not present or ensure it's ISO format
     if (!message.timestamp) {
       message.timestamp = new Date().toISOString();
+    } else if (message.timestamp instanceof Date) {
+      // Convert Date objects to ISO strings
+      message.timestamp = message.timestamp.toISOString();
+    } else if (typeof message.timestamp === 'number') {
+      // Convert timestamps in milliseconds to ISO strings
+      message.timestamp = new Date(message.timestamp).toISOString();
     }
 
     // Add sender information if missing
@@ -587,7 +593,15 @@ io.on('connection', (socket) => {
     
     message.type = 'typing';
     message.senderId = message.senderId || userId;
-    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    // Ensure timestamp is ISO string format
+    if (!message.timestamp) {
+      message.timestamp = new Date().toISOString();
+    } else if (message.timestamp instanceof Date) {
+      message.timestamp = message.timestamp.toISOString();
+    } else if (typeof message.timestamp === 'number') {
+      message.timestamp = new Date(message.timestamp).toISOString();
+    }
     
     console.log(`Received typing from user ${userId} (client ${clientId}) to ${message.receiverId}`);
     
@@ -614,7 +628,15 @@ io.on('connection', (socket) => {
     
     message.type = 'read_receipt';
     message.senderId = message.senderId || userId;
-    message.timestamp = message.timestamp || new Date().toISOString();
+    
+    // Ensure timestamp is ISO string format
+    if (!message.timestamp) {
+      message.timestamp = new Date().toISOString();
+    } else if (message.timestamp instanceof Date) {
+      message.timestamp = message.timestamp.toISOString();
+    } else if (typeof message.timestamp === 'number') {
+      message.timestamp = new Date(message.timestamp).toISOString();
+    }
     
     console.log(`Received read receipt from user ${userId} (client ${clientId}) for recipient ${message.receiverId}`);
     

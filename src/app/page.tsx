@@ -52,6 +52,7 @@ import { RentersLoveMatchbook } from "@/components/home-components/renters-love-
 import { BecomeHostCopy } from "@/components/home-components/become-host";
 import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
 import { PlaceYouLove } from "@/components/home-components/place-you-love";
+import RecentArticle from "@/components/home-components/recent-article";
 
 
 const WebHomePage = () => {
@@ -67,6 +68,7 @@ const WebHomePage = () => {
       <BecomeHostCopy />
       <ProsConsGrid />
       <PlaceYouLove />
+      <RecentArticle />
       
 
       <div className="scale-75 mb-12">
