@@ -51,23 +51,23 @@ export default function AboutHostingPage(): React.ReactNode {
     <MatchbookHeader />
     <div className="flex flex-col items-center bg-white overflow-hidden">
       {/* Hero Section */}
-      <section className="w-full max-w-[1344px] px-8 py-16 flex flex-col items-center">
+      <section className="w-full max-w-[1344px] px-8 py-16 lg:py-24 xl:py-32 flex flex-col items-center">
         <h1 className="font-['Cutive',Helvetica] text-[120px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
           Earn More, Keep More
         </h1>
 
-        <h2 className="mt-16 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
+        <h2 className="mt-16 lg:mt-24 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
           Why Hosts Love MatchBook
         </h2>
       </section>
 
       {/* Features Section */}
-      <section className="w-full max-w-[1344px] px-8">
-        <div className="flex flex-col gap-24">
+      <section className="w-full max-w-[1344px] px-8 mb-8 lg:mb-16">
+        <div className="flex flex-col gap-24 lg:gap-36">
           {features.map((feature, index) => (
             <Card key={index} className="border-none shadow-none">
               <CardContent
-                className={`flex ${feature.align === "right" ? "flex-row-reverse" : "flex-row"} items-center gap-8 p-0`}
+                className={`flex ${feature.align === "right" ? "flex-row-reverse" : "flex-row"} items-center gap-8 lg:gap-16 p-0`}
               >
                 <div
                   className={`flex-1 ${feature.align === "right" ? "text-right" : "text-left"}`}
@@ -96,12 +96,12 @@ export default function AboutHostingPage(): React.ReactNode {
       </section>
 
       {/* CTA Section */}
-      <section className="w-full max-w-[1344px] px-8 py-16 flex flex-col items-center gap-8">
+      <section className="w-full max-w-[1344px] px-8 py-16 lg:py-28 xl:py-36 flex flex-col items-center gap-8 lg:gap-12">
         <h2 className="font-['Poppins',Helvetica] font-normal text-6xl text-[#1d221b] text-center leading-6 tracking-[0]">
           Best part? It&apos;s completely free.
         </h2>
 
-        <Button className="mt-8 px-8 py-3.5 bg-[#c68087ad] rounded-2xl hover:bg-[#c68087]">
+        <Button className="mt-8 lg:mt-16 px-8 py-3.5 bg-[#c68087ad] rounded-2xl hover:bg-[#c68087]">
           <span className="font-['Public_Sans',Helvetica] font-medium text-white text-xl tracking-[0] leading-6 whitespace-nowrap">
             List your Property
           </span>

@@ -272,6 +272,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [isConnected, setIsConnected] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const heartbeatTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const failureCountRef = useRef(0);
+  const circuitOpenRef = useRef(false);
+  const circuitResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Use existing environment variable for Socket.IO server URL
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
@@ -282,111 +286,244 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     console.log('NEXT_PUBLIC_GO_SERVER_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set, using default)');
   }, []);
 
-  const connectSocket = () => {
+  // Monitor socket health with heartbeats
+  const startHeartbeat = (socket: Socket) => {
+    if (heartbeatTimeoutRef.current) {
+      clearTimeout(heartbeatTimeoutRef.current);
+    }
+    
+    // Send heartbeat every 30 seconds
+    const pingServer = () => {
+      if (socket && socket.connected) {
+        // Using a custom event that server will echo back
+        socket.emit('heartbeat', { timestamp: Date.now() }, (response: any) => {
+          if (!response) {
+            console.warn('No heartbeat response received');
+            checkCircuitBreaker();
+          }
+        });
+        
+        // Set up next heartbeat
+        heartbeatTimeoutRef.current = setTimeout(pingServer, 30000);
+      }
+    };
+    
+    // Start heartbeat cycle
+    pingServer();
+  };
+  
+  // Circuit breaker implementation
+  const MAX_FAILURES = 3;
+  const CIRCUIT_RESET_DELAY = 30000; // 30 seconds
+  
+  const checkCircuitBreaker = () => {
+    failureCountRef.current++;
+    if (failureCountRef.current >= MAX_FAILURES) {
+      // Open the circuit - stop trying to use socket
+      circuitOpenRef.current = true;
+      console.warn(`Circuit breaker opened after ${failureCountRef.current} failures`);
+      
+      // Try to reset after delay
+      if (circuitResetTimeoutRef.current) {
+        clearTimeout(circuitResetTimeoutRef.current);
+      }
+      
+      circuitResetTimeoutRef.current = setTimeout(() => {
+        console.log('Attempting to reset circuit breaker');
+        circuitOpenRef.current = false;
+        failureCountRef.current = 0;
+        // Try to reconnect
+        connectWithBackoff();
+      }, CIRCUIT_RESET_DELAY);
+    }
+  };
+  
+  const resetCircuitBreaker = () => {
+    failureCountRef.current = 0;
+    circuitOpenRef.current = false;
+    if (circuitResetTimeoutRef.current) {
+      clearTimeout(circuitResetTimeoutRef.current);
+      circuitResetTimeoutRef.current = null;
+    }
+  };
+
+  // Advanced connection retry with exponential backoff and jitter
+  const connectWithBackoff = () => {
     if (socketRef.current) {
       console.log('Socket already exists, disconnecting first');
       socketRef.current.disconnect();
     }
     
-    if (connectionAttempts >= 3) {
-      console.log('Too many connection attempts, stopping');
-      return;
-    }
+    const MAX_RETRIES = 5;
+    const INITIAL_DELAY = 1000;
+    const MAX_DELAY = 30000;
     
-    try {
-      console.log(`Connecting to Socket.IO: ${socketUrl}`);
-      const socket = io(socketUrl, {
-        query: { 
-          userId: user?.id || '',
-          client: 'web'
-        },
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-        timeout: 20000,
-        transports: ['websocket', 'polling'],
-        forceNew: true,
-        autoConnect: true,
-        // Fix for "Object: null prototype" issue
-        parser: require('socket.io-parser')
-      });
+    // Add jitter to prevent thundering herd problem
+    const getJitteredDelay = (baseDelay: number) => {
+      // Add random jitter of ±30%
+      const jitterFactor = 0.7 + (Math.random() * 0.6); // 0.7-1.3
+      return Math.min(baseDelay * jitterFactor, MAX_DELAY);
+    };
+    
+    const attemptConnection = (retryCount: number, retryDelay: number) => {
+      if (retryCount >= MAX_RETRIES) {
+        console.log('Maximum connection attempts reached, stopping');
+        return;
+      }
       
-      socket.on('connect', () => {
-        console.log('Socket.IO Connected');
-        setIsConnected(true);
-        setConnectionAttempts(0);
-      });
-      
-      socket.on('message', (data) => {
-        console.log('Received message:', data);
-        
-        // Check if this is a message response for a message we sent
-        // Server should echo back the message with clientId to confirm delivery
-        if (data.clientId && data.senderId === user?.id) {
-          // This is a response to our sent message, update it to remove pending status
-          // and set the delivery status if provided
-          setAllConversations((prev) =>
-            updateMessageInConversation(prev, data.conversationId, data.clientId, {
-              ...data,
-              pending: false,
-              id: data.id || data.clientId, // Use server ID if available
-              deliveryStatus: data.deliveryStatus || 'delivered', // Mark as delivered
-              deliveredAt: data.deliveredAt || new Date().toISOString() // Timestamp delivery
-            })
-          );
-          return;
-        }
-        
-        handleWebSocketMessage(data);
-      });
-      
-      socket.on('typing', (data) => {
-        console.log('Received typing status:', data);
-        handleWebSocketMessage({...data, type: 'typing'});
-      });
-      
-      socket.on('read_receipt', (data) => {
-        console.log('Received read receipt:', data);
-        handleWebSocketMessage({...data, type: 'read_receipt'});
-      });
-      
-      socket.on('disconnect', (reason) => {
-        console.log('Socket.IO Disconnected:', reason);
-        setIsConnected(false);
-        setConnectionAttempts(prev => prev + 1);
-        
-        if (reason === 'io server disconnect') {
-          // The server has forcefully disconnected the socket
-          reconnectTimeoutRef.current = setTimeout(() => {
-            connectSocket();
-          }, 5000);
-        }
-        // Socket.IO will automatically try to reconnect for other reasons
-      });
-      
-      socket.on('connect_error', (error) => {
-        console.error('Socket.IO Connection Error:', error);
-        setIsConnected(false);
-        
-        // Log detailed error for debugging
-        console.error('Connection error details:', {
-          name: error.name,
-          message: error.message,
-          stack: error.stack,
-          // Additional error properties on non-standard errors
-          ...Object.getOwnPropertyNames(error).reduce((acc, key) => {
-            if (!['name', 'message', 'stack'].includes(key)) {
-              try { acc[key] = (error as any)[key]; } catch {}
-            }
-            return acc;
-          }, {} as Record<string, any>)
+      try {
+        console.log(`Connecting to Socket.IO (attempt ${retryCount + 1}): ${socketUrl}`);
+        const socket = io(socketUrl, {
+          query: { 
+            userId: user?.id || '',
+            client: 'web'
+          },
+          reconnection: true,
+          reconnectionAttempts: 3,
+          reconnectionDelay: retryDelay,
+          timeout: 20000,
+          transports: ['websocket'], // Prefer WebSocket only
+          upgrade: false, // Disable transport upgrade
+          forceNew: true,
+          autoConnect: true,
         });
-      });
-      
-      socketRef.current = socket;
-    } catch (error) {
-      console.error('Failed to create Socket.IO connection:', error);
-      setConnectionAttempts(prev => prev + 1);
-    }
+        
+        // Monitor all socket lifecycle events for debugging
+        ['connect', 'connect_error', 'disconnect', 'reconnect', 
+         'reconnect_attempt', 'reconnect_error', 'reconnect_failed'].forEach(event => {
+          socket.on(event, (...args) => {
+            console.log(`Socket.IO ${event} event:`, ...args);
+          });
+        });
+        
+        socket.on('connect', () => {
+          console.log('Socket.IO Connected');
+          setIsConnected(true);
+          setConnectionAttempts(0);
+          resetCircuitBreaker();
+          startHeartbeat(socket);
+        });
+        
+        socket.on('heartbeat', (data) => {
+          console.log('Received heartbeat response:', data);
+          // Reset failure count on successful heartbeat
+          failureCountRef.current = 0;
+        });
+        
+        socket.on('message', (data) => {
+          console.log('Received message:', data);
+          
+          // Check if this is a message response for a message we sent
+          // Server should echo back the message with clientId to confirm delivery
+          if (data.clientId && data.senderId === user?.id) {
+            // This is a response to our sent message, update it to remove pending status
+            // and set the delivery status if provided
+            setAllConversations((prev) =>
+              updateMessageInConversation(prev, data.conversationId, data.clientId, {
+                ...data,
+                pending: false,
+                id: data.id || data.clientId, // Use server ID if available
+                deliveryStatus: data.deliveryStatus || 'delivered', // Mark as delivered
+                deliveredAt: data.deliveredAt || new Date().toISOString() // Timestamp delivery
+              })
+            );
+            return;
+          }
+          
+          handleWebSocketMessage(data);
+        });
+        
+        socket.on('typing', (data) => {
+          console.log('Received typing status:', data);
+          handleWebSocketMessage({...data, type: 'typing'});
+        });
+        
+        socket.on('read_receipt', (data) => {
+          console.log('Received read receipt:', data);
+          handleWebSocketMessage({...data, type: 'read_receipt'});
+        });
+        
+        socket.on('disconnect', (reason) => {
+          console.log('Socket.IO Disconnected:', reason);
+          setIsConnected(false);
+          
+          if (reason === 'io server disconnect' || reason === 'transport close') {
+            // The server has forcefully disconnected the socket or transport closed
+            const nextRetryDelay = getJitteredDelay(
+              Math.min(retryDelay * 1.5, MAX_DELAY)
+            );
+            
+            console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+            
+            reconnectTimeoutRef.current = setTimeout(() => {
+              attemptConnection(retryCount + 1, nextRetryDelay);
+            }, nextRetryDelay);
+          }
+        });
+        
+        socket.on('connect_error', (error) => {
+          console.error('Socket.IO Connection Error:', error);
+          setIsConnected(false);
+          checkCircuitBreaker();
+          
+          // Log detailed connection diagnostics
+          console.error('Connection diagnostics:', {
+            url: socketUrl,
+            transport: socket.io?.engine?.transport?.name,
+            protocol: socket.io?.engine?.transport?.protocol,
+            readyState: socket.io?.engine?.readyState,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              // Additional error properties on non-standard errors
+              ...Object.getOwnPropertyNames(error).reduce((acc, key) => {
+                if (!['name', 'message', 'stack'].includes(key)) {
+                  try { acc[key] = (error as any)[key]; } catch {}
+                }
+                return acc;
+              }, {} as Record<string, any>)
+            }
+          });
+          
+          // Schedule retry with exponential backoff if not handled by socket.io internal reconnection
+          if (!socket.io.reconnection) {
+            const nextRetryDelay = getJitteredDelay(
+              Math.min(retryDelay * 1.5, MAX_DELAY)
+            );
+            
+            console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+            
+            reconnectTimeoutRef.current = setTimeout(() => {
+              attemptConnection(retryCount + 1, nextRetryDelay);
+            }, nextRetryDelay);
+          }
+        });
+        
+        socketRef.current = socket;
+      } catch (error) {
+        console.error('Failed to create Socket.IO connection:', error);
+        
+        // Retry with backoff
+        const nextRetryDelay = getJitteredDelay(
+          Math.min(retryDelay * 1.5, MAX_DELAY)
+        );
+        
+        console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+        
+        reconnectTimeoutRef.current = setTimeout(() => {
+          attemptConnection(retryCount + 1, nextRetryDelay);
+        }, nextRetryDelay);
+      }
+    };
+    
+    // Start connection attempts with initial parameters
+    attemptConnection(0, INITIAL_DELAY);
+  };
+  
+  // Legacy connect function maintained for backwards compatibility
+  const connectSocket = () => {
+    connectWithBackoff();
   };
 
   // Initialize conversations and connect to Socket.IO when user data is available
@@ -394,16 +531,31 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (user) {
       setAllConversations(initialConversations);
       setIsAdmin(user.publicMetadata?.role === 'admin');
-      connectSocket();
+      connectWithBackoff();
     }
 
+    // Cleanup function to properly clear all resources
     return () => {
+      // Disconnect socket
       if (socketRef.current) {
         socketRef.current.disconnect();
+        socketRef.current = null;
       }
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-      }
+      
+      // Clear all timeouts
+      [
+        reconnectTimeoutRef.current,
+        heartbeatTimeoutRef.current,
+        circuitResetTimeoutRef.current
+      ].forEach(timeout => {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+      });
+      
+      // Reset circuit breaker state
+      failureCountRef.current = 0;
+      circuitOpenRef.current = false;
     };
   }, [user, initialConversations]);
 
@@ -530,10 +682,57 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, clientId);
     setAllConversations((prev) => addMessageToConversation(prev, selectedConversationId, optimisticMessage));
 
-    if (isConnected && socketRef.current) {
-      socketRef.current.emit('message', messageData);
+    // Check if circuit breaker is open or we're not connected
+    if (circuitOpenRef.current || !isConnected || !socketRef.current) {
+      console.log(`Using REST API fallback: ${circuitOpenRef.current ? 'Circuit open' : 'Socket unavailable'}`);
+      trySendViaRest();
     } else {
+      // Try socket.io with acknowledgment
       try {
+        console.log('Sending message via Socket.IO with acknowledgment');
+        const SOCKET_TIMEOUT = 5000; // 5 seconds timeout
+        
+        // Create a promise that resolves on acknowledgment or rejects on timeout
+        const sendPromise = new Promise<any>((resolve, reject) => {
+          // Set timeout for socket acknowledgment
+          const timeoutId = setTimeout(() => {
+            reject(new Error('Socket.IO acknowledgment timeout'));
+          }, SOCKET_TIMEOUT);
+          
+          // Send with acknowledgment callback
+          socketRef.current!.emit('message', messageData, (ack: any) => {
+            clearTimeout(timeoutId);
+            if (ack && ack.received) {
+              resolve(ack);
+            } else {
+              reject(new Error('Invalid acknowledgment received'));
+            }
+          });
+        });
+        
+        // Wait for acknowledgment or timeout
+        const ack = await sendPromise;
+        console.log('Message successfully delivered via Socket.IO:', ack);
+        
+        // Update message status on success
+        setAllConversations((prev) =>
+          updateMessageInConversation(prev, selectedConversationId, clientId, {
+            pending: false,
+            deliveryStatus: 'delivered',
+            deliveredAt: ack.timestamp || new Date().toISOString()
+          })
+        );
+      } catch (error) {
+        console.error('Socket.IO message delivery failed:', error);
+        checkCircuitBreaker(); // Increment failure count
+        trySendViaRest(); // Fall back to REST API
+      }
+    }
+    
+    // Helper function to try sending via REST API
+    async function trySendViaRest() {
+      try {
+        console.log('Attempting to send message via REST API');
         const newMessage = await sendMessageViaRest(messageData, createMessage);
         setAllConversations((prev) =>
           updateMessageInConversation(prev, selectedConversationId, clientId, {
@@ -543,7 +742,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
             deliveredAt: new Date().toISOString()
           })
         );
-      } catch {
+        console.log('Message successfully delivered via REST API');
+      } catch (error) {
+        console.error('REST API message delivery failed:', error);
         setAllConversations((prev) =>
           updateMessageInConversation(prev, selectedConversationId, clientId, { 
             failed: true, 

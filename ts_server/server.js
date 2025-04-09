@@ -15,7 +15,7 @@ console.log('Socket.IO Server Starting');
 console.log('Environment variables:');
 console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || '(not set, using default 8080)');
 console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
-console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_GO_SERVER || '(not set)');
+console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set)');
 
 // Create Express app and HTTP server
 const app = express();
@@ -35,6 +35,19 @@ const io = new Server(server, {
   connectTimeout: 20000,
   allowEIO3: true,
   maxHttpBufferSize: 1e8, // 100MB
+  // Enhanced stability settings
+  path: '/socket.io/', // Explicit path
+  serveClient: false, // Don't serve client files
+  perMessageDeflate: { // Compression settings
+    threshold: 1024, // Only compress messages > 1KB
+    zlibDeflateOptions: {
+      chunkSize: 16 * 1024 // 16KB
+    },
+    zlibInflateOptions: {
+      windowBits: 15,
+      chunkSize: 16 * 1024 // 16KB
+    }
+  }
 });
 
 // Map to store all connected clients
@@ -187,11 +200,12 @@ async function persistMessage(message) {
 /**
  * Handles direct messages between users
  * @param {object} message The message to process
+ * @returns {object} Delivery result information
  */
 async function handleDirectMessage(message) {
   if (!message.receiverId) {
     console.error('Missing receiverId in direct message');
-    return;
+    return { delivered: false, reason: 'missing_receiver_id' };
   }
 
   // Find all client connections for this receiver
@@ -207,66 +221,162 @@ async function handleDirectMessage(message) {
 
   // For regular messages (not typing or read receipts), persist to database first
   let savedMessage = null;
+  let persistError = null;
+  
+  // Track delivery metrics
+  const deliveryResult = {
+    messageId: message.id || message.clientId,
+    delivered: false,
+    persistSuccess: false,
+    deliveryAttempts: receiversConnections.length,
+    deliverySuccesses: 0,
+    timestamp: Date.now()
+  };
+  
   if (message.type === 'message') {
-    savedMessage = await persistMessage(message);
-    
-    // If successfully saved and message has a clientId, update with database ID and delivery status
-    if (savedMessage && message.clientId) {
-      message.id = savedMessage.id;
-      message.deliveryStatus = 'delivered';
-      
-      // Also send a delivery confirmation to the sender
-      const senderConnections = Array.from(clients.entries())
-        .filter(([_, client]) => client.userId === message.senderId)
-        .map(([id, client]) => ({ id, client }));
-      
-      for (const { id, client } of senderConnections) {
-        try {
-          // Create a delivery confirmation message that matches the original
-          // but with added database ID and updated delivery status
-          const deliveryConfirmation = {
-            ...message,
-            type: 'message',
-            deliveryStatus: 'delivered',
-            id: savedMessage.id,
-            clientId: message.clientId, // Keep clientId for matching
-          };
-          
-          console.log(`Sending delivery confirmation to sender ${id}:`, deliveryConfirmation);
-          sendToClient(id, deliveryConfirmation);
-        } catch (err) {
-          console.error(`Error sending delivery confirmation to sender ${id}:`, err);
-        }
-      }
-    }
-  }
-
-  // Send to all client connections of this user
-  let deliverySuccessful = false;
-  for (const { id, client } of receiversConnections) {
     try {
-      // Log the actual message being sent
-      console.log(`Sending message to client ${id} (userId: ${client.userId}):`, message);
+      savedMessage = await persistMessage(message);
       
-      // Send the message
-      const success = sendToClient(id, message);
-      deliverySuccessful = deliverySuccessful || success;
-      
-      console.log(`Message delivery to client ${id}: ${success ? 'SUCCESS' : 'FAILED'}`);
-    } catch (err) {
-      console.error(`Error delivering message to client ${id}:`, err);
+      if (savedMessage) {
+        deliveryResult.persistSuccess = true;
+        
+        // If successfully saved and message has a clientId, update with database ID and delivery status
+        if (message.clientId) {
+          message.id = savedMessage.id;
+          message.deliveryStatus = 'delivered';
+          
+          // Also send a delivery confirmation to the sender with retry logic
+          const senderConnections = Array.from(clients.entries())
+            .filter(([_, client]) => client.userId === message.senderId)
+            .map(([id, client]) => ({ id, client }));
+          
+          // Use Promise.allSettled to send to all sender connections in parallel
+          const senderDeliveryPromises = senderConnections.map(({ id, client }) => {
+            return new Promise(resolve => {
+              try {
+                // Create a delivery confirmation message that matches the original
+                // but with added database ID and updated delivery status
+                const deliveryConfirmation = {
+                  ...message,
+                  type: 'message',
+                  deliveryStatus: 'delivered',
+                  id: savedMessage.id,
+                  clientId: message.clientId, // Keep clientId for matching
+                  confirmedDeliveryAt: new Date().toISOString()
+                };
+                
+                console.log(`Sending delivery confirmation to sender ${id}:`, deliveryConfirmation);
+                const success = sendToClient(id, deliveryConfirmation);
+                resolve({ id, success });
+              } catch (err) {
+                console.error(`Error sending delivery confirmation to sender ${id}:`, err);
+                resolve({ id, success: false, error: err.message });
+              }
+            });
+          });
+          
+          // Wait for all sender confirmation attempts
+          const senderResults = await Promise.allSettled(senderDeliveryPromises);
+          deliveryResult.senderNotifications = senderResults.map(result => {
+            if (result.status === 'fulfilled') {
+              return result.value;
+            } else {
+              return { success: false, error: result.reason?.message || 'Unknown error' };
+            }
+          });
+        }
+      } else {
+        console.warn('Message persistence returned null but did not throw error');
+        deliveryResult.persistSuccess = false;
+        deliveryResult.persistError = 'null_result';
+      }
+    } catch (error) {
+      persistError = error;
+      console.error('Error persisting message:', error);
+      deliveryResult.persistSuccess = false;
+      deliveryResult.persistError = error.message;
     }
+  } else {
+    // Non-message types (typing, read receipts) don't need persistence
+    deliveryResult.persistSuccess = true;
+    deliveryResult.persistRequired = false;
   }
 
-  // Log delivery status
-  if (receiversConnections.length > 0) {
-    if (deliverySuccessful) {
-      console.log(`Message successfully delivered to at least one client for user ${message.receiverId}`);
+  // For ephemeral messages (typing, read receipts) or successfully persisted messages,
+  // attempt delivery to all receiver clients
+  if (message.type !== 'message' || persistError === null) {
+    // Send to all client connections of this user in parallel
+    const deliveryPromises = receiversConnections.map(({ id, client }) => {
+      return new Promise(resolve => {
+        try {
+          // Log the actual message being sent
+          console.log(`Sending message to client ${id} (userId: ${client.userId}):`, message);
+          
+          // Send the message with retry logic for important messages
+          let success = sendToClient(id, message);
+          
+          // For important messages (not typing), retry once on failure
+          if (!success && message.type !== 'typing') {
+            console.log(`Retrying delivery to client ${id}...`);
+            success = sendToClient(id, message);
+          }
+          
+          deliveryResult.deliverySuccesses += success ? 1 : 0;
+          console.log(`Message delivery to client ${id}: ${success ? 'SUCCESS' : 'FAILED'}`);
+          
+          resolve({ id, success });
+        } catch (err) {
+          console.error(`Error delivering message to client ${id}:`, err);
+          resolve({ id, success: false, error: err.message });
+        }
+      });
+    });
+    
+    // Wait for all delivery attempts to complete
+    const deliveryResults = await Promise.allSettled(deliveryPromises);
+    deliveryResult.clientResults = deliveryResults.map(result => {
+      if (result.status === 'fulfilled') {
+        return result.value;
+      } else {
+        return { success: false, error: result.reason?.message || 'Unknown error' };
+      }
+    });
+    
+    // Set overall delivery success flag
+    deliveryResult.delivered = deliveryResult.deliverySuccesses > 0;
+    
+    // Log detailed delivery status
+    if (receiversConnections.length > 0) {
+      if (deliveryResult.delivered) {
+        console.log(`Message successfully delivered to ${deliveryResult.deliverySuccesses}/${receiversConnections.length} clients for user ${message.receiverId}`);
+      } else {
+        console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+      }
     } else {
-      console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+      deliveryResult.noReceiversConnected = true;
     }
+  } else {
+    // Persistence failed for a regular message
+    deliveryResult.delivered = false;
+    deliveryResult.failureReason = 'persistence_failed';
   }
+  
+  return deliveryResult;
 }
+
+/**
+ * Handle heartbeat messages
+ */
+io.of('/').on('heartbeat', (socket, data, callback) => {
+  // Echo back heartbeat with timestamp for latency measurement
+  if (typeof callback === 'function') {
+    callback({
+      received: true,
+      originalTimestamp: data.timestamp,
+      serverTimestamp: Date.now()
+    });
+  }
+});
 
 /**
  * Handle Socket.IO connection
@@ -274,6 +384,29 @@ async function handleDirectMessage(message) {
 io.on('connection', (socket) => {
   console.log(`New Socket.IO connection: ${socket.id}`);
   console.log('Connection handshake:', socket.handshake.query);
+  console.log('Transport used:', socket.conn.transport.name);
+  
+  // Track connection quality metrics
+  const connectionMetrics = {
+    messagesReceived: 0,
+    messagesSuccessfullySent: 0,
+    errors: 0,
+    lastActivity: Date.now(),
+    connectedAt: Date.now(),
+    transportChanges: [{
+      time: Date.now(),
+      transport: socket.conn.transport.name
+    }]
+  };
+  
+  // Setup transport change monitoring
+  socket.conn.on('upgrade', (transport) => {
+    console.log(`Transport upgraded for ${socket.id}: ${transport.name}`);
+    connectionMetrics.transportChanges.push({
+      time: Date.now(),
+      transport: transport.name
+    });
+  });
   
   // Try to get userId from different possible locations
   // Handle the "Object: null prototype" issue that can happen with query params
@@ -337,25 +470,61 @@ io.on('connection', (socket) => {
 
   console.log(`New connection: Client ${clientId} for user ${userId}. Total clients: ${clients.size}`);
 
-  // Send connection confirmation
+  // Handle heartbeat messages for connection health monitoring
+  socket.on('heartbeat', (data, callback) => {
+    connectionMetrics.lastActivity = Date.now();
+    
+    // Echo back heartbeat with timestamp for latency measurement
+    if (typeof callback === 'function') {
+      callback({
+        received: true,
+        originalTimestamp: data.timestamp,
+        serverTimestamp: Date.now()
+      });
+    }
+  });
+  
+  // Send connection confirmation with server info and client ID
   const connectionMessage = {
     type: 'connection',
     status: 'connected',
-    clientId
+    clientId,
+    serverInfo: {
+      version: '1.1.0',
+      transport: socket.conn.transport.name,
+      timestamp: Date.now(),
+      supportedFeatures: ['message_ack', 'heartbeat', 'typing_indicator', 'read_receipts']
+    }
   };
   client.send(connectionMessage);
 
-  // Handle message events
-  socket.on('message', async (message) => {
+  // Handle message events with acknowledgments
+  socket.on('message', async (message, callback) => {
     messagesReceived++;
+    connectionMetrics.messagesReceived++;
+    connectionMetrics.lastActivity = Date.now();
     
     // Enhanced message reception logging
     console.log(`[MESSAGE RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
     console.log(`Message content:`, message);
     
+    // First, send immediate acknowledgment to reduce perceived latency
+    if (typeof callback === 'function') {
+      try {
+        callback({
+          received: true,
+          timestamp: Date.now(),
+          status: 'processing'
+        });
+      } catch (err) {
+        console.error(`Error sending acknowledgment to ${clientId}:`, err);
+      }
+    }
+    
     // Validate message structure
     if (!message) {
       console.error('Received empty message');
+      connectionMetrics.errors++;
       return;
     }
     
@@ -376,12 +545,29 @@ io.on('connection', (socket) => {
 
     console.log(`Processed message from user ${userId} (client ${clientId}):`, message);
 
-    // Handle direct messages between users
-    if (message.receiverId) {
-      console.log(`Routing message to ${message.receiverId}:`, message);
-      await handleDirectMessage(message);
-    } else {
-      console.warn(`Message missing receiverId - cannot route:`, message);
+    // Track message with a unique ID if not present
+    const messageId = message.id || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    message.id = messageId;
+    
+    try {
+      // Handle direct messages between users
+      if (message.receiverId) {
+        console.log(`Routing message to ${message.receiverId}:`, message);
+        const deliveryResult = await handleDirectMessage(message);
+        
+        // Update message delivery status
+        if (deliveryResult && deliveryResult.delivered) {
+          connectionMetrics.messagesSuccessfullySent++;
+        } else {
+          console.warn(`Message ${messageId} delivery failed or partial`);
+        }
+      } else {
+        console.warn(`Message missing receiverId - cannot route:`, message);
+        connectionMetrics.errors++;
+      }
+    } catch (error) {
+      console.error(`Error processing message ${messageId}:`, error);
+      connectionMetrics.errors++;
     }
   });
   
