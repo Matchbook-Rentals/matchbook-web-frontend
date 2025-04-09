@@ -703,6 +703,7 @@ model Purchase {
   type       String
   amount     Int?
   userId     String?
+  metadata   Json?
   user       User?    @relation(fields: [userId], references: [id])
 
   @@index([userId])

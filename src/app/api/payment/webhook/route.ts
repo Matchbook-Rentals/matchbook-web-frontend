@@ -21,6 +21,9 @@ const handleSuccessfulPurchase = async (session: any) => {
           amount: session.amount_total,
           userId: session.metadata?.userId || null,
           email: session.customer_details?.email || null,
+          metadata: {
+            sessionId: session.metadata?.sessionId || null
+          },
         },
       });
       break;

@@ -72,7 +72,7 @@ const VerificationCheckoutForm = ({ onSuccess }: { onSuccess: () => void }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/platform/verification/review?session_id=${sessionId}`,
+        return_url: `${window.location.origin}/platform/verification/success?session_id=${sessionId}`,
         receipt_email: email,
       },
     });

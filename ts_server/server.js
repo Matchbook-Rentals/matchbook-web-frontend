@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 // Environment variables with fallbacks
 const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) : 8080;
@@ -14,7 +15,7 @@ console.log('Socket.IO Server Starting');
 console.log('Environment variables:');
 console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || '(not set, using default 8080)');
 console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
-console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_SOCKET_IO_URL || '(not set)');
+console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_GO_SERVER || '(not set)');
 
 // Create Express app and HTTP server
 const app = express();
@@ -147,10 +148,47 @@ function closeClient(clientId, reason) {
 }
 
 /**
+ * Persists a message to the database via the API
+ * @param {object} message The message to save
+ * @returns {Promise<object|null>} The saved message or null if failed
+ */
+async function persistMessage(message) {
+  // Skip persisting typing events or read receipts
+  if (message.type === 'typing' || message.type === 'read_receipt') {
+    return null;
+  }
+
+  try {
+    // Make a POST request to the message save API
+    const apiUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+    const response = await fetch(`${apiUrl}/api/messages/save`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error(`Failed to persist message: ${response.status} ${response.statusText}`, errorData);
+      return null;
+    }
+
+    const data = await response.json();
+    console.log('Message successfully persisted:', data.savedMessage.id);
+    return data.savedMessage;
+  } catch (error) {
+    console.error('Error persisting message:', error);
+    return null;
+  }
+}
+
+/**
  * Handles direct messages between users
  * @param {object} message The message to process
  */
-function handleDirectMessage(message) {
+async function handleDirectMessage(message) {
   if (!message.receiverId) {
     console.error('Missing receiverId in direct message');
     return;
@@ -163,10 +201,45 @@ function handleDirectMessage(message) {
 
   if (receiversConnections.length === 0) {
     console.log(`No connected clients for receiverId ${message.receiverId}`);
-    return;
+  } else {
+    console.log(`Found ${receiversConnections.length} connections for receiverId ${message.receiverId}`);
   }
 
-  console.log(`Found ${receiversConnections.length} connections for receiverId ${message.receiverId}`);
+  // For regular messages (not typing or read receipts), persist to database first
+  let savedMessage = null;
+  if (message.type === 'message') {
+    savedMessage = await persistMessage(message);
+    
+    // If successfully saved and message has a clientId, update with database ID and delivery status
+    if (savedMessage && message.clientId) {
+      message.id = savedMessage.id;
+      message.deliveryStatus = 'delivered';
+      
+      // Also send a delivery confirmation to the sender
+      const senderConnections = Array.from(clients.entries())
+        .filter(([_, client]) => client.userId === message.senderId)
+        .map(([id, client]) => ({ id, client }));
+      
+      for (const { id, client } of senderConnections) {
+        try {
+          // Create a delivery confirmation message that matches the original
+          // but with added database ID and updated delivery status
+          const deliveryConfirmation = {
+            ...message,
+            type: 'message',
+            deliveryStatus: 'delivered',
+            id: savedMessage.id,
+            clientId: message.clientId, // Keep clientId for matching
+          };
+          
+          console.log(`Sending delivery confirmation to sender ${id}:`, deliveryConfirmation);
+          sendToClient(id, deliveryConfirmation);
+        } catch (err) {
+          console.error(`Error sending delivery confirmation to sender ${id}:`, err);
+        }
+      }
+    }
+  }
 
   // Send to all client connections of this user
   let deliverySuccessful = false;
@@ -186,10 +259,12 @@ function handleDirectMessage(message) {
   }
 
   // Log delivery status
-  if (deliverySuccessful) {
-    console.log(`Message successfully delivered to at least one client for user ${message.receiverId}`);
-  } else {
-    console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+  if (receiversConnections.length > 0) {
+    if (deliverySuccessful) {
+      console.log(`Message successfully delivered to at least one client for user ${message.receiverId}`);
+    } else {
+      console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
+    }
   }
 }
 
@@ -271,7 +346,7 @@ io.on('connection', (socket) => {
   client.send(connectionMessage);
 
   // Handle message events
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     messagesReceived++;
     
     // Enhanced message reception logging
@@ -304,7 +379,7 @@ io.on('connection', (socket) => {
     // Handle direct messages between users
     if (message.receiverId) {
       console.log(`Routing message to ${message.receiverId}:`, message);
-      handleDirectMessage(message);
+      await handleDirectMessage(message);
     } else {
       console.warn(`Message missing receiverId - cannot route:`, message);
     }

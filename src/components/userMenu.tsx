@@ -10,7 +10,6 @@ import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
 import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion"
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell, Circle } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
@@ -330,9 +329,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   Support
                 </button>
                 {userRole === 'admin' && (
-                  <Link href="/admin">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Admin Dashboard</button>
-                  </Link>
+                  <>
+                    <Link href="/platform/verification">
+                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Verification</button>
+                    </Link>
+                    <Link href="/admin">
+                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Admin Dashboard</button>
+                    </Link>
+                  </>
                 )}
               </div>
 

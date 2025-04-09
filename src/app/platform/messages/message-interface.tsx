@@ -28,6 +28,7 @@ interface MessageData {
   receiverId: string;
   senderId?: string;
   id?: string;
+  clientId?: string; // Added clientId for tracking pending messages
   type?: string;
   imgUrl?: string;
   fileName?: string;
@@ -38,6 +39,8 @@ interface MessageData {
   messageIds?: string[];
   createdAt?: string;
   updatedAt?: string;
+  deliveryStatus?: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
+  deliveredAt?: string;
 }
 
 /**
@@ -149,6 +152,7 @@ const createOptimisticMessage = (
   isRead: true,
   pending: true,
   clientId,
+  deliveryStatus: 'sending',
   ...(file?.url && {
     imgUrl: file.url,
     fileName: file.name,
@@ -221,10 +225,36 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (!user) return;
     
     if (message.type === 'message') {
+      // Get the active conversation
+      const activeConvo = allConversations.find(c => c.id === selectedConversationId);
+      
+      // Check if this is a message from the other participant in the active conversation
+      const isFromActiveConvoOtherParticipant = activeConvo && 
+        message.senderId === activeConvo.participants.find(p => p.userId !== user.id)?.userId;
+      
+      // If message is from the other participant in our active conversation, mark as read immediately
+      // and send a read receipt
+      if (isFromActiveConvoOtherParticipant) {
+        message.isRead = true;
+        
+        // Send read receipt via socket
+        if (isConnected && socketRef.current) {
+          const readReceiptMessage = {
+            conversationId: message.conversationId,
+            receiverId: message.senderId,
+            senderId: user.id,
+            timestamp: new Date(),
+            messageIds: [message.id]
+          };
+          socketRef.current.emit('read_receipt', readReceiptMessage);
+        }
+      }
+      
       setAllConversations((prev) =>
         addMessageToConversation(prev, message.conversationId, {
           ...message,
-          isRead: message.senderId === user.id || selectedConversationId === message.conversationId,
+          isRead: message.senderId === user.id || 
+                 (selectedConversationId === message.conversationId && isFromActiveConvoOtherParticipant),
         })
       );
       updateUnreadCounts(message);
@@ -288,6 +318,24 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       
       socket.on('message', (data) => {
         console.log('Received message:', data);
+        
+        // Check if this is a message response for a message we sent
+        // Server should echo back the message with clientId to confirm delivery
+        if (data.clientId && data.senderId === user?.id) {
+          // This is a response to our sent message, update it to remove pending status
+          // and set the delivery status if provided
+          setAllConversations((prev) =>
+            updateMessageInConversation(prev, data.conversationId, data.clientId, {
+              ...data,
+              pending: false,
+              id: data.id || data.clientId, // Use server ID if available
+              deliveryStatus: data.deliveryStatus || 'delivered', // Mark as delivered
+              deliveredAt: data.deliveredAt || new Date().toISOString() // Timestamp delivery
+            })
+          );
+          return;
+        }
+        
         handleWebSocketMessage(data);
       });
       
@@ -372,7 +420,12 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (!user) return;
     
     const conv = allConversations.find((c) => c.id === message.conversationId);
-    if (conv && selectedConversationId !== message.conversationId && message.senderId !== user.id) {
+    
+    // Only increment unread count if:
+    // 1. The message is not from the current user
+    // 2. It's not already marked as read
+    // 3. It's not from a conversation that's currently selected
+    if (conv && message.senderId !== user.id && !message.isRead && selectedConversationId !== message.conversationId) {
       const userRole = conv.participants.find((p) => p.userId === user.id)?.role;
       if (userRole === 'Host') setUnreadHostMessages((prev) => prev + 1);
       else if (userRole === 'Tenant') setUnreadTenantMessages((prev) => prev + 1);
@@ -423,22 +476,29 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (userRole === 'Host') setUnreadHostMessages(0);
     else if (userRole === 'Tenant') setUnreadTenantMessages(0);
 
-    const timestamp = new Date();
-    setAllConversations((prev) => markMessagesAsRead(prev, conversationId, user.id, timestamp));
-    const receiver = conv.participants.find((p) => p.userId !== user.id);
-    if (isConnected && socketRef.current && receiver) {
-      const message = {
-        conversationId,
-        receiverId: receiver.userId,
-        senderId: user.id,
-        timestamp: timestamp.toISOString(),
-        messageIds: conv.messages
-          .filter(m => m.senderId !== user.id && !m.isRead)
-          .map(m => m.id)
-      };
-      socketRef.current.emit('read_receipt', message);
+    // Find unread messages from the other participant
+    const unreadMessages = conv.messages.filter(m => 
+      m.senderId !== user.id && !m.isRead
+    );
+    
+    if (unreadMessages.length > 0) {
+      const timestamp = new Date();
+      setAllConversations((prev) => markMessagesAsRead(prev, conversationId, user.id, timestamp));
+      
+      // Get the other participant for sending read receipt
+      const receiver = conv.participants.find((p) => p.userId !== user.id);
+      if (isConnected && socketRef.current && receiver) {
+        const message = {
+          conversationId,
+          receiverId: receiver.userId,
+          senderId: user.id,
+          timestamp: timestamp.toISOString(),
+          messageIds: unreadMessages.map(m => m.id)
+        };
+        socketRef.current.emit('read_receipt', message);
+      }
+      await markMessagesAsReadByTimestamp(conversationId, timestamp);
     }
-    await markMessagesAsReadByTimestamp(conversationId, timestamp);
   };
 
   const handleSendMessage = async (
@@ -462,7 +522,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       senderId: user.id,
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
       id: clientId,
-      timestamp: new Date().toISOString(),
+      clientId: clientId, // Ensure clientId is explicitly sent to match up response
+      timestamp: new Date(),
       ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
     };
 
@@ -475,11 +536,20 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       try {
         const newMessage = await sendMessageViaRest(messageData, createMessage);
         setAllConversations((prev) =>
-          updateMessageInConversation(prev, selectedConversationId, clientId, newMessage)
+          updateMessageInConversation(prev, selectedConversationId, clientId, {
+            ...newMessage,
+            pending: false,
+            deliveryStatus: 'delivered',
+            deliveredAt: new Date().toISOString()
+          })
         );
       } catch {
         setAllConversations((prev) =>
-          updateMessageInConversation(prev, selectedConversationId, clientId, { failed: true })
+          updateMessageInConversation(prev, selectedConversationId, clientId, { 
+            failed: true, 
+            pending: false,
+            deliveryStatus: 'failed'
+          })
         );
       }
     }

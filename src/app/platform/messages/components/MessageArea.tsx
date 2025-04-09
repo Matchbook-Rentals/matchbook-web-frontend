@@ -290,10 +290,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
 
       const renderMessageStatus = () => {
+        // If the message is still pending (sending)
         if (message.pending) {
           return <span className="text-xs text-gray-400">Sending...</span>;
         }
 
+        // If the message failed to send
         if (message.failed) {
           return <span className="text-xs text-red-500">Failed to send</span>;
         }
@@ -303,10 +305,22 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           .slice(-1)[0];
 
         if (isLastUserMessage) {
-          const readStatus = message.isRead
-            ? `Read ${new Date(message.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
-            : "Delivered";
-          return <span className="text-xs text-gray-400">{readStatus}</span>;
+          // If the message has been read
+          if (message.isRead) {
+            const readTime = message.updatedAt ? 
+              new Date(message.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+            return <span className="text-xs text-gray-400">{`Read ${readTime}`}</span>;
+          }
+          
+          // If the message has a delivery status from the server
+          if (message.deliveryStatus === 'delivered') {
+            const deliveredTime = message.deliveredAt ? 
+              new Date(message.deliveredAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+            return <span className="text-xs text-gray-400">{deliveredTime ? `Delivered ${deliveredTime}` : "Delivered"}</span>;
+          }
+          
+          // Default status for sent messages
+          return <span className="text-xs text-gray-400">Sent</span>;
         }
 
         return null;

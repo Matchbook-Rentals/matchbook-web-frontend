@@ -16,7 +16,7 @@ export interface WebSocketMessage {
   isTyping?: boolean; // Flag for typing indicators
   isRead?: boolean; // Flag for read receipts
   messageIds?: string[]; // List of message IDs marked as read
-  timestamp?: string; // Timestamp for timestamp-based read receipts
+  timestamp?: Date; // Timestamp for timestamp-based read receipts
 }
 
 export interface WebSocketConnectionMessage {
@@ -29,14 +29,14 @@ export interface WebSocketDeliveryStatus {
   type: "delivery_status";
   status: "delivered";
   clientId?: string;
-  timestamp: string;
+  timestamp: Date;
 }
 
 export interface WebSocketPersistenceStatus {
   type: "persistence_status";
   status: "saved";
   clientId?: string;
-  timestamp: string;
+  timestamp: Date;
 }
 
 export interface WebSocketPersistenceError {
@@ -53,7 +53,7 @@ export interface WebSocketErrorMessage {
 
 export interface WebSocketPingResponse {
   type: "ping";
-  timestamp: string; // ms timestamp as string for consistency
+  timestamp: Date; // ms timestamp as string for consistency
   serverTime: string;
 }
 
