@@ -149,7 +149,7 @@ const createOptimisticMessage = (
   senderId,
   conversationId,
   createdAt: new Date().toISOString(),
-  isRead: true,
+  isRead: false,
   pending: true,
   clientId,
   deliveryStatus: 'sending',
@@ -253,8 +253,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       setAllConversations((prev) =>
         addMessageToConversation(prev, message.conversationId, {
           ...message,
-          isRead: message.senderId === user.id || 
-                 (selectedConversationId === message.conversationId && isFromActiveConvoOtherParticipant),
+          isRead: (selectedConversationId === message.conversationId && isFromActiveConvoOtherParticipant),
         })
       );
       updateUnreadCounts(message);
