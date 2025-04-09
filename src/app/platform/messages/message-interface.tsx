@@ -643,7 +643,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           conversationId,
           receiverId: receiver.userId,
           senderId: user.id,
-          timestamp: timestamp.toISOString(),
+          timestamp: timestamp,
           messageIds: unreadMessages.map(m => m.id)
         };
         socketRef.current.emit('read_receipt', message);

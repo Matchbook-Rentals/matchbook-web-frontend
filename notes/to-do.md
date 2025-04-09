@@ -7,19 +7,21 @@ Rewrite fxs and go server
 ----- [ ] City use our own lookup 
 ----- [ ] Move up higher by default so we don't cutoff the popover
 ----- [ ] Map Box Search box api for autocomplete
-
+----- [ ] Credit check first, then background
+----- [ ] Authenticate on application
 
 - [ ] Tickets 
 ----- [ ] rounded edit bar
 ----- [ ] Move up higher by default so we don't cutoff the popover
 
 - [ ] Notifications
------ [ ] 
+----- [ ] For message creation 
 ----- [ ] 
 
 - [ ] Trips 
 ----- [ ] rounded edit bar
 ----- [ ] Move up higher by default so we don't cutoff the popover
+----- [ ] Unapply becomes Retract Applications
 
 - [ ] Reviews - popup 
 ----- [ ] 
@@ -54,6 +56,7 @@ Rewrite fxs and go server
 ----- [ ]  REVERSE ORDER at server action level AFTER order by pull
 ----- [ ]  bg-gray-100 and zinc-800, mr-3 mb-2, rounded-2xl, shadow
 ----- [ ]  Message from server (2025/04/04 02:11:32.002528 main.go:464: Error parsing message from client user_2idK9C7KG6Hej6HiEfZQXetFD2x: json: cannot unmarshal number into Go struct field Message.timestamp of type string)
+----- [ ]  
 
 - [ ] Preferences
 ----- [ ] shorten
