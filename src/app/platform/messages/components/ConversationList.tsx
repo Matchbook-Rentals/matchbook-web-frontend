@@ -249,11 +249,30 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         </span>
                       </div>
                       <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">
-                        {lastMessage ? new Date(lastMessage.updatedAt).toLocaleString(undefined, {
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          hour12: true
-                        }) : ''}
+                        {lastMessage && lastMessage.updatedAt ? 
+                          (() => {
+                            try {
+                              const date = new Date(lastMessage.updatedAt);
+                              // Check if date is valid
+                              return !isNaN(date.getTime()) ? 
+                                date.toLocaleString(undefined, {
+                                  hour: 'numeric',
+                                  minute: 'numeric',
+                                  hour12: true
+                                }) : 
+                                // Fallback to createdAt if available
+                                (lastMessage.createdAt ? 
+                                  new Date(lastMessage.createdAt).toLocaleString(undefined, {
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                    hour12: true
+                                  }) : 
+                                  'Just now');
+                            } catch (e) {
+                              console.log('Date parsing error:', e, lastMessage);
+                              return 'Just now';
+                            }
+                          })() : ''}
                       </span>
                     </div>
                     <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
