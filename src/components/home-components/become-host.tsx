@@ -1,8 +1,11 @@
 
 import React from "react";
 import { Button } from "../../components/ui/button";
+import { useRouter } from "next/navigation";
 
 export const BecomeHostCopy = (): JSX.Element => {
+  const router = useRouter();
+
   return (
     <section className="flex flex-col max-w-[1260px] my-40 w-full mx-auto items-center gap-9 py-8">
       <h1 className="w-full font-['Poppins',Helvetica] font-medium text-[#271c1a] text-5xl text-center tracking-[-0.96px] leading-[68px]">
@@ -13,9 +16,13 @@ export const BecomeHostCopy = (): JSX.Element => {
         Check out what we have to offer
       </p>
 
-      <Button className="px-8 py-3.5 bg-[#c68087ad] hover:bg-[#c68087] rounded-2xl font-['Public_Sans',Helvetica] font-medium text-[#050000] text-xl tracking-[0] leading-6">
+      <Button 
+        onClick={() => router.push('/hosts')}
+        className="px-8 py-3.5 bg-[#c68087ad] hover:bg-[#c68087] rounded-2xl font-['Public_Sans',Helvetica] font-medium text-[#050000] text-xl tracking-[0] leading-6"
+      >
         Learn More
       </Button>
+        
     </section>
   );
 };

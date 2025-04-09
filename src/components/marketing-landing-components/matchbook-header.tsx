@@ -86,7 +86,7 @@ export default function MatchbookHeader({
                          border-[1px] font-normal border-charcoal"
               variant={"outline"}
             >
-              List your property
+              Become a host
             </Button>
           </Link>
           <UserMenu isSignedIn={isSignedIn} color="black" />
