@@ -7,8 +7,10 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import ProgressBar, { StepInfo } from "./progress-bar";
 
 export default function WebLandlord() {
-  // State to track current step
+  // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
+  const [animationKey, setAnimationKey] = useState<number>(0);
 
   // Define steps
   const steps: StepInfo[] = [
@@ -102,12 +104,16 @@ export default function WebLandlord() {
   // Navigation handlers
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
+      setSlideDirection('right'); // Slide from right to left (next)
+      setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
+      setSlideDirection('left'); // Slide from left to right (back)
+      setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
       setCurrentStep(currentStep - 1);
     }
   };
@@ -285,8 +291,8 @@ export default function WebLandlord() {
   };
 
   return (
-    <main className="bg-white flex flex-row justify-center w-full">
-      <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-12">
+    <main className="bg-white flex flex-row justify-center w-full min-h-screen">
+      <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
         {/* Progress bar component */}
         <ProgressBar 
           currentStep={currentStep} 
@@ -294,29 +300,55 @@ export default function WebLandlord() {
           onSaveExit={handleSaveExit}
         />
 
-        {/* Main content */}
-        <div className="mx-auto w-full max-w-[891px]">
-          {renderStepContent()}
+        {/* Main content with slide animation */}
+        <div className="mx-auto w-full max-w-[891px] overflow-hidden mb-24">
+          <div 
+            key={animationKey} // Adding key to force re-render on each step change
+            className="transition-transform duration-500 ease-in-out"
+            style={{
+              animation: `${slideDirection === 'right' ? 'slideInRight' : 'slideInLeft'} 0.5s forwards`,
+              minHeight: 'calc(100vh - 300px)' // Ensure enough space for content plus buttons
+            }}
+          >
+            {renderStepContent()}
+          </div>
         </div>
+        
+        {/* CSS Animations */}
+        <style jsx global>{`
+          @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          
+          @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+        `}</style>
 
-        {/* Footer with navigation buttons */}
-        <Separator className="w-full my-8" />
-        <div className="flex justify-between mx-auto w-full max-w-[891px] mt-8">
-          <Button 
-            className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-            onClick={handleBack}
-            disabled={currentStep === 0}
-          >
-            Back
-          </Button>
-          <Button 
-            className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-            onClick={handleNext}
-            disabled={currentStep === steps.length - 1}
-          >
-            {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </Button>
+        {/* Footer with navigation buttons - fixed to bottom */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+          <Separator className="w-full" />
+          <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
+            <Button 
+              className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+              onClick={handleBack}
+              disabled={currentStep === 0}
+            >
+              Back
+            </Button>
+            <Button 
+              className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+              onClick={handleNext}
+              disabled={currentStep === steps.length - 1}
+            >
+              {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </div>
         </div>
+        
+{/* Removed redundant padding div as we've added padding elsewhere */}
       </div>
     </main>
   );
