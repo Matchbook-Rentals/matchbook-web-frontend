@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import Paddle from "@/components/ui/paddle";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 
 export default function WebLandlord() {
@@ -137,26 +137,24 @@ export default function WebLandlord() {
               Type
             </h3>
             <div className="flex flex-wrap gap-8">
-              {propertyTypes.map((type) => (
-                <Card
-                  key={type.id}
-                  className={`w-[196px] h-[295px] rounded-[30px] relative cursor-pointer transition-all ${
-                    isSelected("type", type.name)
-                      ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                      : "border border-solid border-[#0000004c]"
-                  }`}
-                  onClick={() => setSelectedType(type.name)}
-                >
-                  <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
-                      {type.icon}
-                    </div>
-                    <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12">
-                      {type.name}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {propertyTypes.map((type) => {
+                const isTypeSelected = isSelected("type", type.name);
+                return (
+                  <Paddle
+                    key={type.id}
+                    icon={type.icon}
+                    label={type.name}
+                    className={`h-[295px] w-[196px] cursor-pointer box-border  ${
+                      isTypeSelected
+                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                        : "border border-solid border-[#0000004c]"
+                    }`}
+                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
+                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                    onClick={() => setSelectedType(type.name)}
+                  />
+                );
+              })}
             </div>
           </section>
 
@@ -166,26 +164,24 @@ export default function WebLandlord() {
               Furnishings
             </h3>
             <div className="flex gap-8">
-              {furnishingOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={`w-[197px] h-[297px] rounded-[30px] relative cursor-pointer transition-all ${
-                    isSelected("furnishing", option.name)
-                      ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                      : "border border-solid border-[#0000004c]"
-                  }`}
-                  onClick={() => setSelectedFurnishing(option.name)}
-                >
-                  <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
-                      {option.icon}
-                    </div>
-                    <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12">
-                      {option.name}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {furnishingOptions.map((option) => {
+                const isFurnishingSelected = isSelected("furnishing", option.name);
+                return (
+                  <Paddle
+                    key={option.id}
+                    icon={option.icon}
+                    label={option.name}
+                    className={`h-[297px] w-[197px] cursor-pointer box-border  ${
+                      isFurnishingSelected
+                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                        : "border border-solid border-[#0000004c]"
+                    }`}
+                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
+                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                    onClick={() => setSelectedFurnishing(option.name)}
+                  />
+                );
+              })}
             </div>
           </section>
 
@@ -195,26 +191,24 @@ export default function WebLandlord() {
               Utilities
             </h3>
             <div className="flex gap-8">
-              {utilitiesOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={`w-[197px] h-[296px] rounded-[30px] relative cursor-pointer transition-all ${
-                    isSelected("utilities", option.name)
-                      ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                      : "border border-solid border-[#0000004c]"
-                  }`}
-                  onClick={() => setSelectedUtilities(option.name)}
-                >
-                  <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-8">
-                      {option.icon}
-                    </div>
-                    <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12 px-4">
-                      {option.name}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {utilitiesOptions.map((option) => {
+                const isUtilitiesSelected = isSelected("utilities", option.name);
+                return (
+                  <Paddle
+                    key={option.id}
+                    icon={option.icon}
+                    label={option.name}
+                    className={`h-[296px] w-[197px] cursor-pointer box-border  ${
+                      isUtilitiesSelected
+                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                        : "border border-solid border-[#0000004c]"
+                    }`}
+                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
+                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                    onClick={() => setSelectedUtilities(option.name)}
+                  />
+                );
+              })}
             </div>
           </section>
 
@@ -224,26 +218,24 @@ export default function WebLandlord() {
               Pets
             </h3>
             <div className="flex gap-8">
-              {petsOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={`w-[197px] h-[296px] rounded-[30px] relative cursor-pointer transition-all ${
-                    isSelected("pets", option.name)
-                      ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                      : "border border-solid border-[#0000004c]"
-                  }`}
-                  onClick={() => setSelectedPets(option.name)}
-                >
-                  <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
-                      {option.icon}
-                    </div>
-                    <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12 px-4">
-                      {option.name}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+              {petsOptions.map((option) => {
+                const isPetsSelected = isSelected("pets", option.name);
+                return (
+                  <Paddle
+                    key={option.id}
+                    icon={option.icon}
+                    label={option.name}
+                    className={`h-[296px] w-[197px] cursor-pointer box-border  ${
+                      isPetsSelected
+                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                        : "border border-solid border-[#0000004c]"
+                    }`}
+                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
+                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                    onClick={() => setSelectedPets(option.name)}
+                  />
+                );
+              })}
             </div>
           </section>
         </div>
