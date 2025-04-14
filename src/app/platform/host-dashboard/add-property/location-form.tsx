@@ -143,9 +143,14 @@ export default function LocationForm() {
   return (
     <main className="relative w-full max-w-[883px] h-[601px]">
       <section className="w-full h-full">
+        <div className="w-full flex justify-between">
         <h1 className="font-medium text-2xl text-[#3f3f3f] font-['Poppins',Helvetica] mb-4">
           Where is your property located?
         </h1>
+        <h2 className="font-medium text-lg cursor-pointer hover:underline text-[#3f3f3f] font-['Poppins',Helvetica] mb-4">
+          Enter address manually
+        </h2>
+        </div>
 
         <div className="w-full h-[547px] relative bg-gray-100">
           {/* Map container replaces the background image */}
