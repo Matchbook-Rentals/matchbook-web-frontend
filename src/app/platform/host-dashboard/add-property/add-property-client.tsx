@@ -11,6 +11,8 @@ export default function WebLandlord() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
+  
+  // We can remove this ref since we're using window.scrollTo
 
   // Define steps
   const steps: StepInfo[] = [
@@ -107,6 +109,9 @@ export default function WebLandlord() {
       setSlideDirection('right'); // Slide from right to left (next)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
       setCurrentStep(currentStep + 1);
+      
+      // Scroll the whole page to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -115,6 +120,9 @@ export default function WebLandlord() {
       setSlideDirection('left'); // Slide from left to right (back)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
       setCurrentStep(currentStep - 1);
+      
+      // Scroll the whole page to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
