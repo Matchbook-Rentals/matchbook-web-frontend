@@ -5,6 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import Paddle from "@/components/ui/paddle";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import ProgressBar, { StepInfo } from "./progress-bar";
+import LocationForm from "./location-form";
+import { PropertyDetails } from "./types";
 
 export default function WebLandlord() {
   // State to track current step and animation direction
@@ -12,8 +14,15 @@ export default function WebLandlord() {
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
   
-  // We can remove this ref since we're using window.scrollTo
-
+  // Property details state
+  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails>({
+    propertyType: "Single Family",
+    furnishingType: "Furnished",
+    utilitiesIncluded: true,
+    petsAllowed: true,
+    country: "United States"
+  });
+  
   // Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
@@ -172,7 +181,13 @@ export default function WebLandlord() {
                       }`}
                       labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
                       iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => setSelectedType(type.name)}
+                      onClick={() => {
+                        setSelectedType(type.name);
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          propertyType: type.name
+                        });
+                      }}
                     />
                   );
                 })}
@@ -199,7 +214,13 @@ export default function WebLandlord() {
                       }`}
                       labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
                       iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => setSelectedFurnishing(option.name)}
+                      onClick={() => {
+                        setSelectedFurnishing(option.name);
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          furnishingType: option.name
+                        });
+                      }}
                     />
                   );
                 })}
@@ -226,7 +247,13 @@ export default function WebLandlord() {
                       }`}
                       labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
                       iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => setSelectedUtilities(option.name)}
+                      onClick={() => {
+                        setSelectedUtilities(option.name);
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          utilitiesIncluded: option.name === "Included in rent"
+                        });
+                      }}
                     />
                   );
                 })}
@@ -253,7 +280,13 @@ export default function WebLandlord() {
                       }`}
                       labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
                       iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => setSelectedPets(option.name)}
+                      onClick={() => {
+                        setSelectedPets(option.name);
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          petsAllowed: option.name === "Pets welcome"
+                        });
+                      }}
                     />
                   );
                 })}
@@ -263,10 +296,11 @@ export default function WebLandlord() {
         );
       case 1:
         return (
-          <div className="min-h-[600px] flex items-center justify-center">
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 2: Details
-            </h2>
+          <div className="min-h-[600px]">
+            <LocationForm
+              propertyDetails={propertyDetails}
+              setPropertyDetails={setPropertyDetails}
+            />
           </div>
         );
       case 2:
