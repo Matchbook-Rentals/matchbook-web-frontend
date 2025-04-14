@@ -4,9 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Paddle from "@/components/ui/paddle";
 import * as AmenitiesIcons from '@/components/icons/amenities';
-import ProgressBar from "./progress-bar";
+import ProgressBar, { StepInfo } from "./progress-bar";
 
 export default function WebLandlord() {
+  // State to track current step
+  const [currentStep, setCurrentStep] = useState<number>(0);
+
+  // Define steps
+  const steps: StepInfo[] = [
+    { name: "Highlights", position: 0 },
+    { name: "Details", position: 1 },
+    { name: "Photos", position: 2 },
+    { name: "Pricing", position: 3 },
+    { name: "Review", position: 4 },
+  ];
+
   // State to track selected options
   const [selectedType, setSelectedType] = useState<string>("Single Family");
   const [selectedFurnishing, setSelectedFurnishing] =
@@ -87,6 +99,19 @@ export default function WebLandlord() {
     // Implement save and exit functionality
   };
 
+  // Navigation handlers
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   // Helper function to determine if an option is selected
   const isSelected = (category: string, optionName: string) => {
     switch (category) {
@@ -103,138 +128,193 @@ export default function WebLandlord() {
     }
   };
 
+  // Render different content based on the current step
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 0:
+        return (
+          <>
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-2xl mb-6">
+              Listing Highlights
+            </h2>
+
+            {/* Property Type Section */}
+            <section className="mb-12">
+              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
+                Type
+              </h3>
+              <div className="flex flex-wrap gap-8">
+                {propertyTypes.map((type) => {
+                  const isTypeSelected = isSelected("type", type.name);
+                  return (
+                    <Paddle
+                      key={type.id}
+                      icon={type.icon}
+                      label={type.name}
+                      className={`h-[295px] w-[196px] cursor-pointer box-border  ${
+                        isTypeSelected
+                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                          : "border border-solid border-[#0000004c]"
+                      }`}
+                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
+                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                      onClick={() => setSelectedType(type.name)}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Furnishings Section */}
+            <section className="mb-12">
+              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
+                Furnishings
+              </h3>
+              <div className="flex gap-8">
+                {furnishingOptions.map((option) => {
+                  const isFurnishingSelected = isSelected("furnishing", option.name);
+                  return (
+                    <Paddle
+                      key={option.id}
+                      icon={option.icon}
+                      label={option.name}
+                      className={`h-[297px] w-[197px] cursor-pointer box-border  ${
+                        isFurnishingSelected
+                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                          : "border border-solid border-[#0000004c]"
+                      }`}
+                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
+                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                      onClick={() => setSelectedFurnishing(option.name)}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Utilities Section */}
+            <section className="mb-12">
+              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
+                Utilities
+              </h3>
+              <div className="flex gap-8">
+                {utilitiesOptions.map((option) => {
+                  const isUtilitiesSelected = isSelected("utilities", option.name);
+                  return (
+                    <Paddle
+                      key={option.id}
+                      icon={option.icon}
+                      label={option.name}
+                      className={`h-[296px] w-[197px] cursor-pointer box-border  ${
+                        isUtilitiesSelected
+                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                          : "border border-solid border-[#0000004c]"
+                      }`}
+                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
+                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                      onClick={() => setSelectedUtilities(option.name)}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Pets Section */}
+            <section className="mb-12">
+              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
+                Pets
+              </h3>
+              <div className="flex gap-8">
+                {petsOptions.map((option) => {
+                  const isPetsSelected = isSelected("pets", option.name);
+                  return (
+                    <Paddle
+                      key={option.id}
+                      icon={option.icon}
+                      label={option.name}
+                      className={`h-[296px] w-[197px] cursor-pointer box-border  ${
+                        isPetsSelected
+                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                          : "border border-solid border-[#0000004c]"
+                      }`}
+                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
+                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                      onClick={() => setSelectedPets(option.name)}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+          </>
+        );
+      case 1:
+        return (
+          <div className="min-h-[600px] flex items-center justify-center">
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
+              Step 2: Details
+            </h2>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="min-h-[600px] flex items-center justify-center">
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
+              Step 3: Photos
+            </h2>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="min-h-[600px] flex items-center justify-center">
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
+              Step 4: Pricing
+            </h2>
+          </div>
+        );
+      case 4:
+        return (
+          <div className="min-h-[600px] flex items-center justify-center">
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
+              Step 5: Review
+            </h2>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <main className="bg-white flex flex-row justify-center w-full">
       <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-12">
         {/* Progress bar component */}
         <ProgressBar 
-          currentStep="Highlights" 
+          currentStep={currentStep} 
+          steps={steps}
           onSaveExit={handleSaveExit}
         />
 
         {/* Main content */}
         <div className="mx-auto w-full max-w-[891px]">
-          <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-2xl mb-6">
-            Listing Highlights
-          </h2>
-
-          {/* Property Type Section */}
-          <section className="mb-12">
-            <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-              Type
-            </h3>
-            <div className="flex flex-wrap gap-8">
-              {propertyTypes.map((type) => {
-                const isTypeSelected = isSelected("type", type.name);
-                return (
-                  <Paddle
-                    key={type.id}
-                    icon={type.icon}
-                    label={type.name}
-                    className={`h-[295px] w-[196px] cursor-pointer box-border  ${
-                      isTypeSelected
-                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                        : "border border-solid border-[#0000004c]"
-                    }`}
-                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                    onClick={() => setSelectedType(type.name)}
-                  />
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Furnishings Section */}
-          <section className="mb-12">
-            <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-              Furnishings
-            </h3>
-            <div className="flex gap-8">
-              {furnishingOptions.map((option) => {
-                const isFurnishingSelected = isSelected("furnishing", option.name);
-                return (
-                  <Paddle
-                    key={option.id}
-                    icon={option.icon}
-                    label={option.name}
-                    className={`h-[297px] w-[197px] cursor-pointer box-border  ${
-                      isFurnishingSelected
-                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                        : "border border-solid border-[#0000004c]"
-                    }`}
-                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                    onClick={() => setSelectedFurnishing(option.name)}
-                  />
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Utilities Section */}
-          <section className="mb-12">
-            <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-              Utilities
-            </h3>
-            <div className="flex gap-8">
-              {utilitiesOptions.map((option) => {
-                const isUtilitiesSelected = isSelected("utilities", option.name);
-                return (
-                  <Paddle
-                    key={option.id}
-                    icon={option.icon}
-                    label={option.name}
-                    className={`h-[296px] w-[197px] cursor-pointer box-border  ${
-                      isUtilitiesSelected
-                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                        : "border border-solid border-[#0000004c]"
-                    }`}
-                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                    onClick={() => setSelectedUtilities(option.name)}
-                  />
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Pets Section */}
-          <section className="mb-12">
-            <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-              Pets
-            </h3>
-            <div className="flex gap-8">
-              {petsOptions.map((option) => {
-                const isPetsSelected = isSelected("pets", option.name);
-                return (
-                  <Paddle
-                    key={option.id}
-                    icon={option.icon}
-                    label={option.name}
-                    className={`h-[296px] w-[197px] cursor-pointer box-border  ${
-                      isPetsSelected
-                        ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                        : "border border-solid border-[#0000004c]"
-                    }`}
-                    labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                    iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                    onClick={() => setSelectedPets(option.name)}
-                  />
-                );
-              })}
-            </div>
-          </section>
+          {renderStepContent()}
         </div>
 
         {/* Footer with navigation buttons */}
         <Separator className="w-full my-8" />
         <div className="flex justify-between mx-auto w-full max-w-[891px] mt-8">
-          <Button className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base">
+          <Button 
+            className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+            onClick={handleBack}
+            disabled={currentStep === 0}
+          >
             Back
           </Button>
-          <Button className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base">
-            Next
+          <Button 
+            className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+            onClick={handleNext}
+            disabled={currentStep === steps.length - 1}
+          >
+            {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </div>
       </div>
