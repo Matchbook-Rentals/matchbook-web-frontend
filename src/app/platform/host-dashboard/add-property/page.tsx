@@ -1,7 +1,7 @@
 import React from "react";
 import prisma from "@/lib/prismadb";
 import ProgressBar from "./progress-bar";
-import AddPropertyClient from "./app-property-client";
+import AddPropertyClient from "./add-property-client";
 import { type Listing, type Bedroom } from "@prisma/client";
 import { currentUser } from "@clerk/nextjs/server";
 

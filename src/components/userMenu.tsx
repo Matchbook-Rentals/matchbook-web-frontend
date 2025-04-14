@@ -300,7 +300,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
               {/* Host switch */}
               <div className="border-t border-gray-200">
-                <Link href="/">
+                <Link href="/platform/host-dashboard">
                   <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">
                     Switch to Hosting
                   </button>

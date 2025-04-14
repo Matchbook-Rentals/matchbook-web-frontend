@@ -75,7 +75,7 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
       <div className="mt-6 text-center justify-evenly  flex w-full  items-center">
         <div className="flex justify-center items-center">
           <CurrencyInput
-            value={minValue}
+            value={minValue.toLocaleString()}
             id="min-value"
             label={`Shortest: ${values[0]} months`}
             onChange={setMinValue}
@@ -85,7 +85,7 @@ const DualThumbSlider = ({ setShortestLeaseTerms, setLongestLeaseTerms, property
           />
           <span className="mx-4 text-2xl text-gray-600">|</span>
           <CurrencyInput
-            value={maxValue}
+            value={maxValue.toLocaleString()}
             id="max-value"
             label={`Longest: ${values[1]} months`}
             onChange={setMaxValue}

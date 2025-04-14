@@ -66,7 +66,7 @@ export default function PropertiesYouLoveTab() {
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {
 
-    return [{ label: 'Unapply', action: () => handleUnapply(listing) }]
+    return [{ label: 'Retract Application', action: () => handleUnapply(listing) }]
   }
 
   if (likedListings.length === 0 && requestedListings.length === 0) {

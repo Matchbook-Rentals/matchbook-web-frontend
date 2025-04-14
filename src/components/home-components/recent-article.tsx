@@ -51,7 +51,7 @@ export default function RecentArticle() {
     <section className="relative w-full h-screen overflow-hidden">
       <div className="relative w-full h-full">
         {/* Main background image from latest article */}
-        {article.imageUrl ? (
+        {article.imageUrl && (
           <Image
             src={article.imageUrl}
             alt={article.title || "Featured article image"}
@@ -60,8 +60,6 @@ export default function RecentArticle() {
             sizes="100vw"
             priority
           />
-        ) : (
-        <div />
         )}
 
         {/* Featured article card */}
