@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import * as AmenitiesIcons from '@/components/icons/amenities';
 
 export default function WebLandlord() {
   // State to track selected options
@@ -18,158 +19,22 @@ export default function WebLandlord() {
     {
       id: "single-family",
       name: "Single Family",
-      icon: "/group-6.png",
-      additionalIcons: [
-        {
-          src: "/vector-29.svg",
-          className: "absolute w-[7px] h-5 top-6 left-[89px]",
-        },
-        {
-          src: "/vector-18.svg",
-          className: "absolute w-2.5 h-14 top-[34px] left-[55px]",
-        },
-        {
-          src: "/vector-18.svg",
-          className: "absolute w-2 h-[47px] top-11 left-[86px]",
-        },
-        {
-          src: "/vector-61.svg",
-          className: "absolute w-[7px] h-[3px] top-[43px] left-[93px]",
-        },
-        {
-          src: "/vector-11.svg",
-          className: "absolute w-[103px] h-[3px] top-[90px] left-0",
-        },
-        {
-          src: "/vector-9.svg",
-          className: "absolute w-[3px] h-[57px] top-9 left-[52px]",
-        },
-        {
-          src: "/vector-12.svg",
-          className: "absolute w-[35px] h-[3px] top-[18px] left-[57px]",
-        },
-        {
-          src: "/vector-10.svg",
-          className: "absolute w-[29px] h-[42px] top-[50px] left-[18px]",
-        },
-        {
-          src: "/vector-7.svg",
-          className: "absolute w-5 h-5 top-[26px] left-[22px]",
-        },
-        {
-          src: "/vector-19.svg",
-          className: "absolute w-[27px] h-[37px] top-0 left-[33px]",
-        },
-        {
-          src: "/vector-14.svg",
-          className: "absolute w-4 h-5 top-px left-[61px]",
-        },
-        {
-          src: "/vector-15.svg",
-          className: "absolute w-[9px] h-7 top-[19px] left-[90px]",
-        },
-        {
-          src: "/vector-25.svg",
-          className: "absolute w-[5px] h-2.5 top-9 left-[90px]",
-        },
-        {
-          src: "/vector-11.svg",
-          className: "absolute w-[30px] h-[3px] top-0 left-[34px]",
-        },
-        {
-          src: "/vector-31.svg",
-          className: "absolute w-[13px] h-[3px] top-[34px] left-[57px]",
-        },
-        {
-          src: "/vector-14.svg",
-          className: "absolute w-[13px] h-5 top-[17px] left-[57px]",
-        },
-        {
-          src: "/vector-45.svg",
-          className: "absolute w-1.5 h-[29px] top-[18px] left-[86px]",
-        },
-        {
-          src: "/vector-38.svg",
-          className: "absolute w-1.5 h-[11px] top-[35px] left-[61px]",
-        },
-        {
-          src: "/vector-12.svg",
-          className: "absolute w-7 h-[3px] top-[43px] left-[61px]",
-        },
-        {
-          src: "/vector-36.svg",
-          className: "absolute w-[3px] h-11 top-11 left-[65px]",
-        },
-        {
-          src: "/vector-36.svg",
-          className: "absolute w-[3px] h-[49px] top-11 left-[83px]",
-        },
-        {
-          src: "/vector-36.svg",
-          className: "absolute w-[3px] h-[50px] top-11 left-[93px]",
-        },
-        {
-          src: "/vector-11.svg",
-          className: "absolute w-[27px] h-[3px] top-[68px] left-[18px]",
-        },
-        {
-          src: "/vector-56.svg",
-          className: "absolute w-3 h-3.5 top-[51px] left-[69px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" />
     },
     {
       id: "apartment",
       name: "Apartment",
-      icon: "/group-7.png",
-      additionalIcons: [
-        {
-          src: "/vector-43.svg",
-          className: "absolute w-[124px] h-[3px] top-[121px] left-0",
-        },
-        {
-          src: "/vector-33.svg",
-          className: "absolute w-3.5 h-2.5 top-[73px] left-3.5",
-        },
-        {
-          src: "/vector-27.svg",
-          className: "absolute w-3.5 h-2.5 top-[73px] left-7",
-        },
-        {
-          src: "/vector-27.svg",
-          className: "absolute w-[15px] h-2.5 top-[73px] left-10",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-full h-full" />
     },
     {
       id: "townhouse",
       name: "Townhouse",
-      icon: "/group-8.png",
-      additionalIcons: [
-        {
-          src: "/group-9.png",
-          className: "absolute w-[91px] h-[93px] -top-0.5 -left-0.5",
-        },
-        {
-          src: "/vector-47.svg",
-          className: "absolute w-[90px] h-1 top-[88px] left-[7px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-full h-full" />
     },
     {
       id: "private-room",
       name: "Private Room",
-      icon: "/group-10.png",
-      additionalIcons: [
-        {
-          src: "/group-11.png",
-          className: "absolute w-[74px] h-[73px] top-0 left-0",
-        },
-        {
-          src: "/vector-34.svg",
-          className: "absolute w-[77px] h-[5px] top-[69px] left-px",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-full h-full" />
     },
   ];
 
@@ -178,120 +43,12 @@ export default function WebLandlord() {
     {
       id: "furnished",
       name: "Furnished",
-      icon: "/group.png",
-      additionalIcons: [
-        {
-          src: "/vector-1.svg",
-          className: "absolute w-36 h-[3px] top-[82px] left-3",
-        },
-        {
-          src: "/vector.svg",
-          className: "absolute w-[3px] h-[35px] top-[50px] left-[154px]",
-        },
-        {
-          src: "/vector.svg",
-          className: "absolute w-[3px] h-[31px] top-[33px] left-[139px]",
-        },
-        {
-          src: "/vector-49.svg",
-          className: "absolute w-[113px] h-[3px] top-[62px] left-[29px]",
-        },
-        {
-          src: "/vector-1.svg",
-          className: "absolute w-[114px] h-[3px] top-[45px] left-[27px]",
-        },
-        {
-          src: "/vector-4.svg",
-          className: "absolute w-[3px] h-2.5 top-3 left-[148px]",
-        },
-        {
-          src: "/vector-4.svg",
-          className: "absolute w-[3px] h-[11px] top-3 left-[19px]",
-        },
-        {
-          src: "/group-1.png",
-          className: "absolute w-[30px] h-[30px] top-5 left-[139px]",
-        },
-        {
-          src: "/vector-52.svg",
-          className: "absolute w-2.5 h-[17px] top-[82px] left-[133px]",
-        },
-        {
-          src: "/vector-52.svg",
-          className: "absolute w-2.5 h-[17px] top-[82px] left-[23px]",
-        },
-        {
-          src: "/group-2.png",
-          className: "absolute w-[93px] h-2 top-5 left-[38px]",
-        },
-        {
-          src: "/vector.svg",
-          className: "absolute w-[3px] h-[35px] top-[50px] left-3",
-        },
-        {
-          src: "/vector.svg",
-          className: "absolute w-[3px] h-[31px] top-[33px] left-[27px]",
-        },
-        {
-          src: "/group-3.png",
-          className: "absolute w-[30px] h-[30px] top-5 left-0",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-full h-full" />
     },
     {
       id: "unfurnished",
       name: "Unfurnished",
-      icon: "/vector-6.svg",
-      additionalIcons: [
-        {
-          src: "/vector-5.svg",
-          className: "absolute w-[3px] h-[72px] top-[11px] left-0",
-        },
-        {
-          src: "/group-4.png",
-          className: "absolute w-[106px] h-[15px] top-20 left-0",
-        },
-        {
-          src: "/vector-2.svg",
-          className: "absolute w-[49px] h-[15px] top-[3px] left-[23px]",
-        },
-        {
-          src: "/vector-2.svg",
-          className: "absolute w-[49px] h-[15px] top-[5px] left-8",
-        },
-        {
-          src: "/group-5.png",
-          className: "absolute w-[106px] h-[26px] top-0 left-0",
-        },
-        {
-          src: "/vector-26.svg",
-          className: "absolute w-1 h-[19px] top-4 left-[21px]",
-        },
-        {
-          src: "/vector-26.svg",
-          className: "absolute w-1 h-[18px] top-[21px] left-7",
-        },
-        {
-          src: "/vector-24.svg",
-          className: "absolute w-2.5 h-1.5 top-[34px] left-[21px]",
-        },
-        {
-          src: "/vector-21.svg",
-          className: "absolute w-3.5 h-[5px] top-[76px] left-[61px]",
-        },
-        {
-          src: "/vector-5.svg",
-          className: "absolute w-[3px] h-[73px] top-[22px] left-[51px]",
-        },
-        {
-          src: "/vector-5.svg",
-          className: "absolute w-[3px] h-[73px] top-3 left-[103px]",
-        },
-        {
-          src: "/vector-21.svg",
-          className: "absolute w-3.5 h-[5px] top-[70px] left-[59px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-full h-full" />
     },
   ];
 
@@ -300,100 +57,12 @@ export default function WebLandlord() {
     {
       id: "included",
       name: "Included in rent",
-      icon: "/vector-42.svg",
-      additionalIcons: [
-        {
-          src: "/vector-41.svg",
-          className: "absolute w-[30px] h-[30px] top-[19px] left-[17px]",
-        },
-        {
-          src: "/group-17.png",
-          className: "absolute w-[21px] h-[45px] top-12 left-[17px]",
-        },
-        {
-          src: "/group-18.png",
-          className: "absolute w-[21px] h-[45px] top-12 left-[57px]",
-        },
-        {
-          src: "/vector-51.svg",
-          className: "absolute w-[25px] h-[9px] top-[91px] left-[35px]",
-        },
-        {
-          src: "/vector-51.svg",
-          className: "absolute w-[25px] h-[9px] top-[97px] left-[35px]",
-        },
-        {
-          src: "/vector-16.svg",
-          className: "absolute w-[13px] h-2.5 top-[103px] left-[41px]",
-        },
-        {
-          src: "/group-19.png",
-          className: "absolute w-2 h-[23px] top-[70px] left-[50px]",
-        },
-        {
-          src: "/group-20.png",
-          className: "absolute w-2 h-[23px] top-[70px] left-[38px]",
-        },
-        {
-          src: "/group-21.png",
-          className: "absolute w-[95px] h-[65px] top-0 left-0",
-        },
-        {
-          src: "/group-16.png",
-          className: "absolute w-[17px] h-[39px] top-[27px] left-[38px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="w-full h-full" />
     },
     {
       id: "separate",
       name: "Paid separately",
-      icon: "/vector-42.svg",
-      additionalIcons: [
-        {
-          src: "/line-69.svg",
-          className: "absolute w-[92px] h-[87px] top-4 left-[13px]",
-        },
-        {
-          src: "/vector-41.svg",
-          className: "absolute w-[29px] h-[29px] top-[18px] left-4",
-        },
-        {
-          src: "/group-23.png",
-          className: "absolute w-5 h-[42px] top-[45px] left-4",
-        },
-        {
-          src: "/group-24.png",
-          className: "absolute w-5 h-[42px] top-[45px] left-[53px]",
-        },
-        {
-          src: "/vector-16.svg",
-          className: "absolute w-6 h-[9px] top-[85px] left-[33px]",
-        },
-        {
-          src: "/vector-16.svg",
-          className: "absolute w-6 h-[9px] top-[91px] left-[33px]",
-        },
-        {
-          src: "/vector-16.svg",
-          className: "absolute w-3 h-2.5 top-[97px] left-[39px]",
-        },
-        {
-          src: "/group-25.png",
-          className: "absolute w-2 h-[22px] top-[66px] left-[47px]",
-        },
-        {
-          src: "/group-26.png",
-          className: "absolute w-2 h-[22px] top-[66px] left-9",
-        },
-        {
-          src: "/group-27.png",
-          className: "absolute w-[90px] h-[61px] top-0 left-0",
-        },
-        {
-          src: "/group-22.png",
-          className: "absolute w-[17px] h-[37px] top-9 left-[54px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="w-full h-full" />
     },
   ];
 
@@ -402,28 +71,12 @@ export default function WebLandlord() {
     {
       id: "pets-welcome",
       name: "Pets welcome",
-      icon: "/group-12.png",
-      additionalIcons: [
-        {
-          src: "/group-13.png",
-          className: "absolute w-[72px] h-[73px] top-6 left-[57px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual pets icon when available
     },
     {
       id: "no-pets",
       name: "No pets",
-      icon: "/group-14.png",
-      additionalIcons: [
-        {
-          src: "/group-15.png",
-          className: "absolute w-[61px] h-16 top-7 left-[43px]",
-        },
-        {
-          src: "/line-68.svg",
-          className: "absolute w-[97px] h-[93px] top-[22px] left-[19px]",
-        },
-      ],
+      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual no pets icon when available
     },
   ];
 
@@ -495,20 +148,8 @@ export default function WebLandlord() {
                   onClick={() => setSelectedType(type.name)}
                 >
                   <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="relative w-[100px] h-[90px] mb-16">
-                      <img
-                        src={type.icon}
-                        alt={type.name}
-                        className="relative"
-                      />
-                      {type.additionalIcons.map((icon, index) => (
-                        <img
-                          key={index}
-                          src={icon.src}
-                          alt=""
-                          className={icon.className}
-                        />
-                      ))}
+                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
+                      {type.icon}
                     </div>
                     <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12">
                       {type.name}
@@ -536,20 +177,8 @@ export default function WebLandlord() {
                   onClick={() => setSelectedFurnishing(option.name)}
                 >
                   <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="relative w-[166px] h-24 mb-16">
-                      <img
-                        src={option.icon}
-                        alt={option.name}
-                        className="relative"
-                      />
-                      {option.additionalIcons.map((icon, index) => (
-                        <img
-                          key={index}
-                          src={icon.src}
-                          alt=""
-                          className={icon.className}
-                        />
-                      ))}
+                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
+                      {option.icon}
                     </div>
                     <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12">
                       {option.name}
@@ -577,20 +206,8 @@ export default function WebLandlord() {
                   onClick={() => setSelectedUtilities(option.name)}
                 >
                   <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="relative w-[92px] h-[110px] mb-8">
-                      <img
-                        src={option.icon}
-                        alt={option.name}
-                        className="relative"
-                      />
-                      {option.additionalIcons.map((icon, index) => (
-                        <img
-                          key={index}
-                          src={icon.src}
-                          alt=""
-                          className={icon.className}
-                        />
-                      ))}
+                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-8">
+                      {option.icon}
                     </div>
                     <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12 px-4">
                       {option.name}
@@ -618,20 +235,8 @@ export default function WebLandlord() {
                   onClick={() => setSelectedPets(option.name)}
                 >
                   <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                    <div className="relative w-32 h-[97px] mb-16">
-                      <img
-                        src={option.icon}
-                        alt={option.name}
-                        className="relative"
-                      />
-                      {option.additionalIcons.map((icon, index) => (
-                        <img
-                          key={index}
-                          src={icon.src}
-                          alt=""
-                          className={icon.className}
-                        />
-                      ))}
+                    <div className="w-[80px] h-[80px] flex items-center justify-center mb-16">
+                      {option.icon}
                     </div>
                     <div className="font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center absolute bottom-12 px-4">
                       {option.name}
