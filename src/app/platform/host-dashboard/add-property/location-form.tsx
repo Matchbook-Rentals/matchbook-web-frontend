@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
@@ -15,11 +15,11 @@ interface Suggestion {
 export default function LocationForm() {
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
   const [inputValue, setInputValue] = useState("");
-  const [displayValue, setDisplayValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [marker, setMarker] = useState<maplibregl.Marker | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Initialize map after component mounts
   React.useEffect(() => {
@@ -62,6 +62,14 @@ export default function LocationForm() {
     }
   }, [coordinates, map, marker]);
 
+  // Maintain focus on the input field
+  useEffect(() => {
+    // Don't auto-focus on initial render, only when the popover state changes
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
+
   const prefetchGeocode = async (description: string) => {
     try {
       const trimmedDescription = description.slice(0, -5);
@@ -87,17 +95,17 @@ export default function LocationForm() {
       }
     } else {
       setSuggestions([]);
+      setOpen(false);
     }
   };
 
   const handleSelect = async (description: string, place_id: string) => {
     const trimmedDescription = description.slice(0, -5); // Remove country code
-    setDisplayValue(trimmedDescription);
+    setInputValue(trimmedDescription);
 
     // Start timing
     const startTime = performance.now();
 
-    setInputValue("");
     setSuggestions([]);
     setOpen(false);
 
@@ -119,6 +127,13 @@ export default function LocationForm() {
           description: `${trimmedDescription} (processed in ${elapsedMs}ms)`,
           style: { backgroundColor: '#f5f5f5', border: 'black solid 1px' }
         });
+        
+        // Maintain focus after selection
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 0);
       }
     } catch (error) {
       console.error("Error fetching geocode:", error);
@@ -138,35 +153,29 @@ export default function LocationForm() {
           
           {/* Address input overlay positioned at top */}
           <div className="absolute top-[34px] left-0 right-0 px-[107px]">
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Card className="w-full max-w-[670px] mx-auto rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-white cursor-text">
-                  <CardContent className="p-0">
-                    <Input
-                      className="h-14 border-none shadow-none rounded-[30px] pl-10 font-['Poppins',Helvetica] font-normal text-xl text-[#3f3f3f]"
-                      placeholder="Enter property address"
-                      value={displayValue || inputValue}
-                      onChange={(e) => {
-                        setDisplayValue("");
-                        handleInput(e);
-                      }}
-                      onClick={() => setOpen(true)}
-                    />
-                  </CardContent>
-                </Card>
-              </PopoverTrigger>
-              <PopoverContent className="w-[670px] p-0 rounded-[15px] shadow-lg">
-                <div className="p-4 rounded-2xl">
-                  <input
+            <div className="w-full max-w-[670px] mx-auto relative">
+              <Card className="w-full rounded-[30px] shadow-[0px_4px_4px_#00000040] border-none bg-white cursor-text">
+                <CardContent className="p-0">
+                  <Input
+                    ref={inputRef}
+                    className="h-14 border-none shadow-none rounded-[30px] pl-10 font-['Poppins',Helvetica] font-normal text-xl text-[#3f3f3f]"
+                    placeholder="Enter property address"
                     value={inputValue}
                     onChange={handleInput}
-                    placeholder="Enter an address or city"
-                    type="text"
-                    className="w-full h-full text-xl focus:outline-none"
-                    autoFocus={true}
+                    onFocus={() => {
+                      if (inputValue.length > 0 && suggestions.length > 0) {
+                        setOpen(true);
+                      }
+                    }}
                   />
-                  {suggestions.length > 0 && (
-                    <ul className="mt-5 max-h-[300px] overflow-y-auto">
+                </CardContent>
+              </Card>
+              
+              {/* Suggestions dropdown */}
+              {open && suggestions.length > 0 && (
+                <div className="absolute z-50 w-full mt-2 bg-white rounded-[15px] shadow-lg">
+                  <div className="p-4 rounded-2xl">
+                    <ul className="max-h-[300px] overflow-y-auto">
                       {suggestions.map((suggestion) => (
                         <li
                           className="hover:bg-gray-100 p-2 cursor-pointer"
@@ -178,10 +187,10 @@ export default function LocationForm() {
                         </li>
                       ))}
                     </ul>
-                  )}
+                  </div>
                 </div>
-              </PopoverContent>
-            </Popover>
+              )}
+            </div>
           </div>
         </div>
       </section>
