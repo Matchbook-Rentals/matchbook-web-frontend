@@ -6,7 +6,19 @@ import { useToast } from "@/components/ui/use-toast";
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GeocodeResponse } from "@/app/api/geocode/route";
-import { PropertyDetails } from "./types";
+
+// Using the same interface as in add-property-client.tsx
+interface ListingLocation {
+  locationString: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  city: string | null;
+  state: string | null;
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  postalCode: string | null;
+  country: string | null;
+}
 
 interface Suggestion {
   place_id: string;
@@ -14,48 +26,48 @@ interface Suggestion {
 }
 
 interface LocationFormProps {
-  propertyDetails: PropertyDetails;
-  setPropertyDetails: (details: PropertyDetails) => void;
+  listingLocation: ListingLocation;
+  setListingLocation: (location: ListingLocation) => void;
 }
 
-export default function LocationForm({ propertyDetails, setPropertyDetails }: LocationFormProps) {
+export default function LocationForm({ listingLocation, setListingLocation }: LocationFormProps) {
   const observerRef = useRef<HTMLDivElement>(null);
   const {toast} = useToast();
   
   // Salt Lake City, Utah
   const INITIAL_COORDINATES = { lat: 40.7608, lng: -111.8910 };
   const [coordinates, setCoordinates] = useState({
-    lat: propertyDetails.latitude || INITIAL_COORDINATES.lat,
-    lng: propertyDetails.longitude || INITIAL_COORDINATES.lng
+    lat: listingLocation.latitude || INITIAL_COORDINATES.lat,
+    lng: listingLocation.longitude || INITIAL_COORDINATES.lng
   });
   
-  const [inputValue, setInputValue] = useState(propertyDetails.locationString || "");
+  const [inputValue, setInputValue] = useState(listingLocation.locationString || "");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [marker, setMarker] = useState<maplibregl.Marker | null>(null);
-  const [addressSelected, setAddressSelected] = useState(Boolean(propertyDetails.streetAddress));
+  const [addressSelected, setAddressSelected] = useState(Boolean(listingLocation.streetAddress1));
   
   const [address, setAddress] = useState({
-    street: propertyDetails.streetAddress || "",
-    street2: propertyDetails.streetAddress2 || "",
-    city: propertyDetails.city || "",
-    state: propertyDetails.state || "",
-    zip: propertyDetails.zipCode || "",
+    street: listingLocation.streetAddress1 || "",
+    street2: listingLocation.streetAddress2 || "",
+    city: listingLocation.city || "",
+    state: listingLocation.state || "",
+    zip: listingLocation.postalCode || "",
   });
   
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Update property details when address changes
+  // Update listing location when address changes
   useEffect(() => {
     if (addressSelected) {
-      setPropertyDetails({
-        ...propertyDetails,
-        streetAddress: address.street,
+      setListingLocation({
+        ...listingLocation,
+        streetAddress1: address.street,
         streetAddress2: address.street2,
         city: address.city,
         state: address.state,
-        zipCode: address.zip,
+        postalCode: address.zip,
         latitude: coordinates.lat,
         longitude: coordinates.lng,
         locationString: inputValue

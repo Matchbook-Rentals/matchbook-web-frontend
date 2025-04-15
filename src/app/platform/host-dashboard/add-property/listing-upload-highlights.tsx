@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Paddle from "@/components/ui/paddle";
 import * as AmenitiesIcons from '@/components/icons/amenities';
 
-interface ListingHighlightsState {
+// Using the same interface as in add-property-client.tsx
+interface ListingHighlights {
   category: string | null;
   petsAllowed: boolean | null;
   furnished: boolean | null;
@@ -10,19 +11,27 @@ interface ListingHighlightsState {
 }
 
 interface ListingUploadHighlightsProps {
-  propertyDetails: any;
-  setPropertyDetails: (details: any) => void;
+  listingHighlights: ListingHighlights;
+  setListingHighlights: (highlights: ListingHighlights) => void;
 }
 
 const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
-  propertyDetails,
-  setPropertyDetails,
+  listingHighlights,
+  setListingHighlights,
 }) => {
   // Local state for tracking selections
-  const [selectedType, setSelectedType] = useState<string>(propertyDetails.propertyType || "Single Family");
-  const [selectedFurnishing, setSelectedFurnishing] = useState<string>(propertyDetails.furnishingType || "Furnished");
-  const [selectedUtilities, setSelectedUtilities] = useState<string>(propertyDetails.utilitiesIncluded ? "Included in rent" : "Paid separately");
-  const [selectedPets, setSelectedPets] = useState<string>(propertyDetails.petsAllowed ? "Pets welcome" : "No pets");
+  const [selectedType, setSelectedType] = useState<string>(listingHighlights.category || "Single Family");
+  const [selectedFurnishing, setSelectedFurnishing] = useState<string>(listingHighlights.furnished ? "Furnished" : "Unfurnished");
+  const [selectedUtilities, setSelectedUtilities] = useState<string>(listingHighlights.utilitiesIncluded ? "Included in rent" : "Paid separately");
+  const [selectedPets, setSelectedPets] = useState<string>(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
+
+  // Update local state when props change
+  useEffect(() => {
+    setSelectedType(listingHighlights.category || "Single Family");
+    setSelectedFurnishing(listingHighlights.furnished ? "Furnished" : "Unfurnished");
+    setSelectedUtilities(listingHighlights.utilitiesIncluded ? "Included in rent" : "Paid separately");
+    setSelectedPets(listingHighlights.petsAllowed ? "Pets welcome" : "No pets");
+  }, [listingHighlights]);
 
   // Property type options data
   const propertyTypes = [
@@ -134,9 +143,9 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                 iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
                 onClick={() => {
                   setSelectedType(type.name);
-                  setPropertyDetails({
-                    ...propertyDetails,
-                    propertyType: type.name
+                  setListingHighlights({
+                    ...listingHighlights,
+                    category: type.name
                   });
                 }}
               />
@@ -167,9 +176,9 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                 iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
                 onClick={() => {
                   setSelectedFurnishing(option.name);
-                  setPropertyDetails({
-                    ...propertyDetails,
-                    furnishingType: option.name
+                  setListingHighlights({
+                    ...listingHighlights,
+                    furnished: option.name === "Furnished"
                   });
                 }}
               />
@@ -200,8 +209,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                 iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
                 onClick={() => {
                   setSelectedUtilities(option.name);
-                  setPropertyDetails({
-                    ...propertyDetails,
+                  setListingHighlights({
+                    ...listingHighlights,
                     utilitiesIncluded: option.name === "Included in rent"
                   });
                 }}
@@ -233,8 +242,8 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                 iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
                 onClick={() => {
                   setSelectedPets(option.name);
-                  setPropertyDetails({
-                    ...propertyDetails,
+                  setListingHighlights({
+                    ...listingHighlights,
                     petsAllowed: option.name === "Pets welcome"
                   });
                 }}

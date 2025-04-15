@@ -1,10 +1,9 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
-import { PropertyDetails } from "./types";
 import ListingUploadHighlights from "./listing-upload-highlights";
 
 // Nullable Listing type for building a new listing
@@ -131,14 +130,46 @@ export default function AddPropertyclient() {
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
   
-  // Property details state
-  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails>({
-    propertyType: "Single Family",
-    furnishingType: "Furnished",
-    utilitiesIncluded: true,
-    petsAllowed: true,
-    country: "United States"
-  });
+  // Listing highlights type - subset of NullableListing
+interface ListingHighlights {
+  category: string | null;
+  petsAllowed: boolean | null;
+  furnished: boolean | null;
+  utilitiesIncluded: boolean | null;
+}
+
+// Listing location type - subset of NullableListing
+interface ListingLocation {
+  locationString: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  city: string | null;
+  state: string | null;
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  postalCode: string | null;
+  country: string | null;
+}
+
+// Subset states for different sections
+const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
+  category: "Single Family",
+  petsAllowed: true,
+  furnished: true,
+  utilitiesIncluded: true
+});
+
+const [listingLocation, setListingLocation] = useState<ListingLocation>({
+  locationString: null,
+  latitude: null,
+  longitude: null,
+  city: null,
+  state: null,
+  streetAddress1: null,
+  streetAddress2: null,
+  postalCode: null,
+  country: "United States"
+});
   
   // Define steps
   const steps: StepInfo[] = [
@@ -178,6 +209,27 @@ export default function AddPropertyclient() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+  
+  // Effect to sync subset states back to main listing state
+  useEffect(() => {
+    setListing(prevListing => ({
+      ...prevListing,
+      // Sync highlights
+      category: listingHighlights.category,
+      petsAllowed: listingHighlights.petsAllowed,
+      furnished: listingHighlights.furnished,
+      utilitiesIncluded: listingHighlights.utilitiesIncluded,
+      // Sync location
+      locationString: listingLocation.locationString,
+      latitude: listingLocation.latitude,
+      longitude: listingLocation.longitude,
+      city: listingLocation.city,
+      state: listingLocation.state,
+      streetAddress1: listingLocation.streetAddress1,
+      streetAddress2: listingLocation.streetAddress2,
+      postalCode: listingLocation.postalCode
+    }));
+  }, [listingHighlights, listingLocation]);
 
 
   // Render different content based on the current step
@@ -186,15 +238,15 @@ export default function AddPropertyclient() {
       case 0:
         return (
           <ListingUploadHighlights
-            propertyDetails={propertyDetails}
-            setPropertyDetails={setPropertyDetails}
+            listingHighlights={listingHighlights}
+            setListingHighlights={setListingHighlights}
           />
         );
       case 1:
         return (
           <LocationForm
-            propertyDetails={propertyDetails}
-            setPropertyDetails={setPropertyDetails}
+            listingLocation={listingLocation}
+            setListingLocation={setListingLocation}
           />
         );
       case 2:
