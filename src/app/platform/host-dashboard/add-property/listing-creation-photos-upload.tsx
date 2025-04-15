@@ -57,19 +57,27 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
         </Card>
         {/* Thumbnails of uploaded photos */}
         {listingPhotos.length > 0 && (
-          <div className="mt-4 flex flex-row gap-2 flex-wrap">
-            {listingPhotos.map((photo, idx) => (
-              photo.url ? (
-                <div key={photo.id || idx} className="w-20 h-20 rounded overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
-                  <img
-                    src={photo.url}
-                    alt={`Listing photo ${idx + 1}`}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              ) : null
-            ))}
-          </div>
+          <>
+            <div className="mt-4 flex flex-row gap-2 flex-wrap">
+              {listingPhotos.map((photo, idx) => (
+                photo.url ? (
+                  <div key={photo.id || idx} className="w-20 h-20 rounded overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+                    <img
+                      src={photo.url}
+                      alt={`Listing photo ${idx + 1}`}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                ) : null
+              ))}
+            </div>
+            {listingPhotos.length < 4 && (
+              <div className="mt-2 text-red-600 font-semibold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                Each listing must have at least 4 photos, please upload more.
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
