@@ -601,6 +601,15 @@ const [listingBasics, setListingBasics] = useState({
             url: photo.url,
             rank: index // Use the order of selectedPhotos for ranking
           })),
+          // Listing location fields
+          locationString: listingLocation.locationString,
+          latitude: listingLocation.latitude,
+          longitude: listingLocation.longitude,
+          city: listingLocation.city,
+          state: listingLocation.state,
+          streetAddress1: listingLocation.streetAddress1,
+          streetAddress2: listingLocation.streetAddress2,
+          postalCode: listingLocation.postalCode,
           // Required fields with defaults if needed
           roomCount: listingRooms.bedrooms || 1,
           bathroomCount: listingRooms.bathrooms || 1,
@@ -613,6 +622,7 @@ const [listingBasics, setListingBasics] = useState({
           longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : 0,
           requireBackgroundCheck: true,
         };
+
         
         // Process amenities from the array to set the proper boolean values
         if (listingAmenities && listingAmenities.length > 0) {

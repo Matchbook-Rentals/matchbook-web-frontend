@@ -1,7 +1,7 @@
 'use server'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
-import { currentUser } from '@clerk/nextjs/server'
+import { currentUser, auth } from '@clerk/nextjs/server'
 
 export async function createUser() {
 
@@ -91,5 +91,37 @@ export async function updateUserLogin(timestamp: Date) {
     console.error('Error updating user login timestamp:', error)
     return { success: false, error: 'Failed to update login timestamp' }
   }
+}
+
+export async function agreeToTerms() {
+  const { userId } = auth();
+  const user = await currentUser();
+
+  if (!userId || !user) {
+    throw new Error("Not authenticated");
+  }
+
+  // Update the user's agreedToTerms field with the current timestamp
+  await prisma.user.update({
+    where: { id: userId },
+    data: { agreedToTerms: new Date() }
+  });
+
+  return { success: true };
+}
+
+export async function getAgreedToTerms() {
+  const { userId } = auth();
+  
+  if (!userId) {
+    throw new Error("Not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { agreedToTerms: true }
+  });
+
+  return user?.agreedToTerms;
 }
 
