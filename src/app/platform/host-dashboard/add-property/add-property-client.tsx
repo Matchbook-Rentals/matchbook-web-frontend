@@ -6,6 +6,8 @@ import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-upload-highlights";
 import { Rooms } from "./rooms";
+import { ListingBasics } from "./listing-basics";
+import { ListingPhotos } from "./listing-photos";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -154,12 +156,7 @@ interface ListingLocation {
 
 // Subset states for different sections
 
-// Step 3: Rooms state
-const [listingRooms, setListingRooms] = useState({
-  bedrooms: 1,
-  bathrooms: 1,
-  squareFeet: ""
-});
+// Step 0: Highlights
 const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
   category: "Single Family",
   petsAllowed: true,
@@ -167,6 +164,7 @@ const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
   utilitiesIncluded: true
 });
 
+// Step 1: Details (Location)
 const [listingLocation, setListingLocation] = useState<ListingLocation>({
   locationString: null,
   latitude: null,
@@ -178,14 +176,29 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
   postalCode: null,
   country: "United States"
 });
+
+// Step 2: Rooms
+const [listingRooms, setListingRooms] = useState({
+  bedrooms: 1,
+  bathrooms: 1,
+  squareFeet: ""
+});
+
+// Step 3: Basics
+const [listingBasics, setListingBasics] = useState({
+  title: "",
+  description: ""
+});
   
   // Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
     { name: "Details", position: 1 },
-    { name: "Size", position: 2 },
-    { name: "Pricing", position: 3 },
-    { name: "Review", position: 4 },
+    { name: "Rooms", position: 2 },
+    { name: "Basics", position: 3 },
+    { name: "Photos", position: 4 },
+    { name: "Pricing", position: 5 },
+    { name: "Review", position: 6 },
   ];
 
 
@@ -274,19 +287,16 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
         );
       case 3:
         return (
-          <div className="min-h-[600px] flex items-center justify-center">
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 4: Photos
-            </h2>
-          </div>
+          <ListingBasics
+            title={listingBasics.title}
+            setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
+            description={listingBasics.description}
+            setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
+          />
         );
       case 4:
         return (
-          <div className="min-h-[600px] flex items-center justify-center">
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 5: Pricing
-            </h2>
-          </div>
+          <ListingPhotos />
         );
       case 5:
         return (
