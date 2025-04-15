@@ -65,7 +65,7 @@ interface NullableListing {
 }
 
 // Nullable ListingImage type for photo support
-interface NullableListingImage {
+export interface NullableListingImage {
   id: string | null;
   url: string | null;
   listingId: string | null;
@@ -130,7 +130,11 @@ export default function AddPropertyclient() {
     smokingAllowed: null,
     eventsAllowed: null,
   });
-  const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
+  // State to hold the current set of photos for the listing
+// This will be used to manage photo uploads, ordering, and removal before saving to the listing
+const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>([]);
+
+const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
   
   // Listing highlights type - subset of NullableListing
@@ -296,7 +300,7 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 4:
         return (
-          <ListingPhotos />
+          <ListingPhotos listingPhotos={listingPhotos} setListingPhotos={setListingPhotos} />
         );
       case 5:
         return (
