@@ -47,7 +47,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
                     url: file.url || null,
                     listingId: null, // can be set later
                     category: null,
-                    rank: listingPhotos.length + idx, // append to end
+                    rank: null, // append to end
                   }));
                   setListingPhotos(prev => [...prev, ...newPhotos]);
                 }
