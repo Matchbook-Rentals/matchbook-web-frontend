@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-creation-highlights";
@@ -82,7 +84,10 @@ export default function AddPropertyclient() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   // Track if user came from review page
   const [cameFromReview, setCameFromReview] = useState<boolean>(false);
-
+  
+  // Track validation errors
+  const [validationErrors, setValidationErrors] = useState<Record<number, string[]>>({});
+  
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
     listingPhotos: [],
@@ -238,9 +243,183 @@ const [listingBasics, setListingBasics] = useState({
     // Implement save and exit functionality
   };
 
+  // Validation functions for each step
+  const validateHighlights = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingHighlights.category) {
+      errors.push("You must select a property type");
+    }
+    
+    if (listingHighlights.furnished === null) {
+      errors.push("You must select a furnishing option");
+    }
+    
+    if (listingHighlights.utilitiesIncluded === null) {
+      errors.push("You must specify if utilities are included");
+    }
+    
+    if (listingHighlights.petsAllowed === null) {
+      errors.push("You must specify if pets are allowed");
+    }
+    
+    return errors;
+  };
+  
+  const validateLocation = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingLocation.streetAddress1) {
+      errors.push("Street address is required");
+    }
+    
+    if (!listingLocation.city) {
+      errors.push("City is required");
+    }
+    
+    if (!listingLocation.state) {
+      errors.push("State is required");
+    }
+    
+    if (!listingLocation.postalCode) {
+      errors.push("Postal code is required");
+    }
+    
+    return errors;
+  };
+  
+  const validateRooms = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingRooms.bedrooms || listingRooms.bedrooms < 1) {
+      errors.push("Number of bedrooms is required");
+    }
+    
+    if (!listingRooms.bathrooms || listingRooms.bathrooms < 1) {
+      errors.push("Number of bathrooms is required");
+    }
+    
+    if (!listingRooms.squareFeet) {
+      errors.push("Square footage is required");
+    }
+    
+    return errors;
+  };
+  
+  const validateBasics = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingBasics.title) {
+      errors.push("Title is required");
+    } else if (listingBasics.title.length < 5) {
+      errors.push("Title must be at least 5 characters");
+    }
+    
+    if (!listingBasics.description) {
+      errors.push("Description is required");
+    } else if (listingBasics.description.length < 20) {
+      errors.push("Description must be at least 20 characters");
+    }
+    
+    return errors;
+  };
+  
+  const validatePhotos = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingPhotos || listingPhotos.length === 0) {
+      errors.push("You must upload at least one photo");
+    }
+    
+    return errors;
+  };
+  
+  const validateFeaturedPhotos = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!selectedPhotos || selectedPhotos.length === 0) {
+      errors.push("You must select at least one featured photo");
+    }
+    
+    return errors;
+  };
+  
+  const validateAmenities = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingAmenities || listingAmenities.length === 0) {
+      errors.push("You must select at least one amenity");
+    }
+    
+    return errors;
+  };
+  
+  const validatePricing = (): string[] => {
+    const errors: string[] = [];
+    
+    if (!listingPricing.shortTermRent) {
+      errors.push("Short term rent price is required");
+    }
+    
+    if (!listingPricing.longTermRent) {
+      errors.push("Long term rent price is required");
+    }
+    
+    if (!listingPricing.deposit) {
+      errors.push("Deposit amount is required");
+    }
+    
+    return errors;
+  };
+  
+  // Validate the current step
+  const validateCurrentStep = (): string[] => {
+    switch (currentStep) {
+      case 0:
+        return validateHighlights();
+      case 1:
+        return validateLocation();
+      case 2:
+        return validateRooms();
+      case 3:
+        return validateBasics();
+      case 4:
+        return validatePhotos();
+      case 5:
+        return validateFeaturedPhotos();
+      case 6:
+        return validateAmenities();
+      case 7:
+        return validatePricing();
+      default:
+        return [];
+    }
+  };
+
   // Navigation handlers
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
+      // Validate the current step
+      const errors = validateCurrentStep();
+      
+      if (errors.length > 0) {
+        // Update errors state and show error message
+        setValidationErrors({
+          ...validationErrors,
+          [currentStep]: errors
+        });
+        
+        // We'll display the errors in the UI, so just return here
+        return; // Don't proceed if there are errors
+      }
+      
+      // Clear any existing validation errors for this step
+      if (validationErrors[currentStep]) {
+        const newValidationErrors = { ...validationErrors };
+        delete newValidationErrors[currentStep];
+        setValidationErrors(newValidationErrors);
+      }
+      
       // If coming from review, go directly back to review
       if (cameFromReview) {
         setSlideDirection('right'); // Slide from right to left (next)
@@ -282,6 +461,83 @@ const [listingBasics, setListingBasics] = useState({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
+  // Component to display validation errors
+  const ValidationErrors = ({ errors }: { errors: string[] }) => {
+    if (!errors || errors.length === 0) return null;
+    
+    return (
+      <Alert variant="destructive" className="mb-6">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          <ul className="list-disc pl-5 mt-2">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </AlertDescription>
+      </Alert>
+    );
+  };
+  
+  // Validate all steps before submission
+  const validateAllSteps = () => {
+    const allErrors: Record<number, string[]> = {};
+    
+    // Validate each step
+    const highlightErrors = validateHighlights();
+    if (highlightErrors.length > 0) allErrors[0] = highlightErrors;
+    
+    const locationErrors = validateLocation();
+    if (locationErrors.length > 0) allErrors[1] = locationErrors;
+    
+    const roomsErrors = validateRooms();
+    if (roomsErrors.length > 0) allErrors[2] = roomsErrors;
+    
+    const basicsErrors = validateBasics();
+    if (basicsErrors.length > 0) allErrors[3] = basicsErrors;
+    
+    const photosErrors = validatePhotos();
+    if (photosErrors.length > 0) allErrors[4] = photosErrors;
+    
+    const featuredPhotosErrors = validateFeaturedPhotos();
+    if (featuredPhotosErrors.length > 0) allErrors[5] = featuredPhotosErrors;
+    
+    const amenitiesErrors = validateAmenities();
+    if (amenitiesErrors.length > 0) allErrors[6] = amenitiesErrors;
+    
+    const pricingErrors = validatePricing();
+    if (pricingErrors.length > 0) allErrors[7] = pricingErrors;
+    
+    setValidationErrors(allErrors);
+    
+    // Return true if there are no errors
+    return Object.keys(allErrors).length === 0;
+  };
+  
+  // Handle form submission
+  const handleSubmitListing = () => {
+    if (validateAllSteps()) {
+      // All steps are valid, can proceed with submission
+      console.log("All steps are valid, submitting listing:", listing);
+      
+      // Here you would typically call an API to save the listing
+      alert("Listing submitted successfully!");
+    } else {
+      // There are validation errors
+      alert("Please fix all validation errors before submitting.");
+      
+      // Find the first step with errors and navigate to it
+      const firstErrorStep = Object.keys(validationErrors)
+        .map(Number)
+        .sort((a, b) => a - b)[0];
+      
+      if (firstErrorStep !== undefined) {
+        setCurrentStep(firstErrorStep);
+      }
+    }
+  };
+
   // Effect to sync subset states back to main listing state
   useEffect(() => {
     setListing(prevListing => ({
@@ -321,78 +577,100 @@ const [listingBasics, setListingBasics] = useState({
     switch (currentStep) {
       case 0:
         return (
-          <ListingUploadHighlights
-            listingHighlights={listingHighlights}
-            setListingHighlights={setListingHighlights}
-          />
+          <>
+            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} />}
+            <ListingUploadHighlights
+              listingHighlights={listingHighlights}
+              setListingHighlights={setListingHighlights}
+            />
+          </>
         );
       case 1:
         return (
           <LocationForm
             listingLocation={listingLocation}
             setListingLocation={setListingLocation}
+            validationErrors={validationErrors[1]}
           />
         );
       case 2:
         return (
-          <Rooms
-            bedrooms={listingRooms.bedrooms}
-            bathrooms={listingRooms.bathrooms}
-            squareFeet={listingRooms.squareFeet}
-            onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
-            onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
-            onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
-          />
+          <>
+            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} />}
+            <Rooms
+              bedrooms={listingRooms.bedrooms}
+              bathrooms={listingRooms.bathrooms}
+              squareFeet={listingRooms.squareFeet}
+              onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
+              onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
+              onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
+            />
+          </>
         );
       case 3:
         return (
-          <ListingBasics
-            title={listingBasics.title}
-            setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
-            description={listingBasics.description}
-            setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
-          />
+          <>
+            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} />}
+            <ListingBasics
+              title={listingBasics.title}
+              setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
+              description={listingBasics.description}
+              setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
+            />
+          </>
         );
       case 4:
         return (
-          <ListingPhotos listingPhotos={listingPhotos} setListingPhotos={setListingPhotos} />
+          <>
+            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} />}
+            <ListingPhotos listingPhotos={listingPhotos} setListingPhotos={setListingPhotos} />
+          </>
         );
       case 5:
         return (
-          <ListingPhotoSelection
-            listingPhotos={listingPhotos}
-            selectedPhotos={selectedPhotos}
-            setSelectedPhotos={setSelectedPhotos}
-          />
+          <>
+            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} />}
+            <ListingPhotoSelection
+              listingPhotos={listingPhotos}
+              selectedPhotos={selectedPhotos}
+              setSelectedPhotos={setSelectedPhotos}
+            />
+          </>
         );
       case 6:
         return (
-          <ListingAmenities
-            value={listingAmenities}
-            onChange={setListingAmenities}
-          />
+          <>
+            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} />}
+            <ListingAmenities
+              value={listingAmenities}
+              onChange={setListingAmenities}
+            />
+          </>
         );
       case 7:
         return (
-          <ListingCreationPricing
-            shortestStay={listingPricing.shortestStay}
-            longestStay={listingPricing.longestStay}
-            shortTermRent={listingPricing.shortTermRent}
-            longTermRent={listingPricing.longTermRent}
-            deposit={listingPricing.deposit}
-            petDeposit={listingPricing.petDeposit}
-            petRent={listingPricing.petRent}
-            tailoredPricing={listingPricing.tailoredPricing}
-            onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
-            onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-            onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
-            onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
-            onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-            onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
-            onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
-            onTailoredPricingChange={(value) => setListingPricing(prev => ({ ...prev, tailoredPricing: value }))}
-            onContinue={handleNext}
-          />
+          <>
+            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} />}
+            <ListingCreationPricing
+              shortestStay={listingPricing.shortestStay}
+              longestStay={listingPricing.longestStay}
+              shortTermRent={listingPricing.shortTermRent}
+              longTermRent={listingPricing.longTermRent}
+              deposit={listingPricing.deposit}
+              petDeposit={listingPricing.petDeposit}
+              petRent={listingPricing.petRent}
+              tailoredPricing={listingPricing.tailoredPricing}
+              onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+              onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+              onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
+              onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
+              onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
+              onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
+              onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+              onTailoredPricingChange={(value) => setListingPricing(prev => ({ ...prev, tailoredPricing: value }))}
+              onContinue={handleNext}
+            />
+          </>
         );
       case 8:
         return (
@@ -466,7 +744,7 @@ const [listingBasics, setListingBasics] = useState({
             </Button>
             <Button 
               className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={handleNext}
+              onClick={currentStep === steps.length - 1 ? handleSubmitListing : handleNext}
               disabled={currentStep === steps.length - 1 && false} // Disabled set to false for final step to submit the listing
             >
               {currentStep === steps.length - 1 ? 'Submit Listing' : 

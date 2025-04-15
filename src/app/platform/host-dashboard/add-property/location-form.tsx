@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AddressConfirmationForm } from "./address-confirmation-form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { GeocodeResponse } from "@/app/api/geocode/route";
@@ -28,9 +30,10 @@ interface Suggestion {
 interface LocationFormProps {
   listingLocation: ListingLocation;
   setListingLocation: (location: ListingLocation) => void;
+  validationErrors?: string[];
 }
 
-export default function LocationForm({ listingLocation, setListingLocation }: LocationFormProps) {
+export default function LocationForm({ listingLocation, setListingLocation, validationErrors }: LocationFormProps) {
   const observerRef = useRef<HTMLDivElement>(null);
   const {toast} = useToast();
   
@@ -311,6 +314,23 @@ export default function LocationForm({ listingLocation, setListingLocation }: Lo
           </h1>
         </div>
 
+        {/* Validation Errors at the top */}
+        {validationErrors && validationErrors.length > 0 && (
+          <div className="w-full mb-4">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                <ul className="list-disc pl-5 mt-2">
+                  {validationErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
+
         <div className="w-full h-[547px] relative bg-gray-100">
           {/* Map container replaces the background image */}
           <div id="property-location-map" className="w-full h-full absolute inset-0"></div>
@@ -357,6 +377,7 @@ export default function LocationForm({ listingLocation, setListingLocation }: Lo
             </div>
           </div>
         </div>
+
 
         {/* Address form appears below the map if an address is selected */}
         {addressSelected && (
