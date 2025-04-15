@@ -378,6 +378,24 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
           </div>
         </div>
 
+        {/* Validation Errors below the map */}
+        {validationErrors && validationErrors.length > 0 && (
+          <div className="w-full flex justify-center mt-6">
+            <div className="w-full max-w-[670px] mx-auto">
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  <ul className="list-disc pl-5 mt-2">
+                    {validationErrors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                </AlertDescription>
+              </Alert>
+            </div>
+          </div>
+        )}
 
         {/* Address form appears below the map if an address is selected */}
         {addressSelected && (

@@ -454,31 +454,31 @@ export const Box = ({
           <div className="space-y-2 mb-4">
             <div className="flex">
               <div className="w-[312px] text-xl font-light text-black">
-                Min Lease: {listingPricing.shortestStay} Month{listingPricing.shortestStay > 1 ? 's' : ''}
+                Min Lease: {listingPricing.shortestStay || 1} Month{listingPricing.shortestStay > 1 ? 's' : ''}
               </div>
               <div className="text-xl font-light text-black">
-                Rent Price: ${listingPricing.shortTermRent}
+                Rent Price: ${listingPricing.shortTermRent || 0}
               </div>
             </div>
             <div className="flex">
               <div className="w-[312px] text-xl font-light text-black">
-                Max Lease: {listingPricing.longestStay} Month{listingPricing.longestStay > 1 ? 's' : ''}
+                Max Lease: {listingPricing.longestStay || 0} Month{listingPricing.longestStay > 1 ? 's' : ''}
               </div>
               <div className="text-xl font-light text-black">
-                Rent Price: ${listingPricing.longTermRent}
+                Rent Price: ${listingPricing.longTermRent || 0}
               </div>
             </div>
           </div>
 
           <div className="space-y-4 mt-6">
             <div className="text-xl font-light text-black">
-              Deposit: ${listingPricing.deposit}
+              Deposit: ${listingPricing.deposit || 0}
             </div>
             <div className="text-xl font-light text-black">
-              Pet Rent: ${listingPricing.petRent} / month
+              Pet Rent: ${listingPricing.petRent || 0} / month
             </div>
             <div className="text-xl font-light text-black">
-              Pet Deposit: ${listingPricing.petDeposit} / pet
+              Pet Deposit: ${listingPricing.petDeposit || 0} / pet
             </div>
           </div>
         </div>

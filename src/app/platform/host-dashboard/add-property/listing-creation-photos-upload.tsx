@@ -32,6 +32,9 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
             <UploadDropzone
               endpoint="listingUploadPhotos"
               className="w-full"
+              config={{
+                mode: "auto"
+              }}
               appearance={{
                 uploadIcon: "hidden", // Hide default upload icon
                 button: "bg-charcoalBrand data-[state='uploading']:after:hidden", // Hide default button, use our own styling
@@ -74,7 +77,19 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
             {listingPhotos.length < 4 && (
               <div className="mt-2 text-red-600 font-semibold flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
-                Each listing must have at least 4 photos, please upload more.
+                <span>
+                  {listingPhotos.length === 0 
+                    ? "You must upload at least 4 photos" 
+                    : `You need to upload ${4 - listingPhotos.length} more photo${listingPhotos.length === 3 ? '' : 's'} (minimum 4 required)`}
+                </span>
+              </div>
+            )}
+            {listingPhotos.length >= 4 && (
+              <div className="mt-2 text-green-600 font-semibold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                {listingPhotos.length === 4 
+                  ? "Great! You've met the minimum 4 photos requirement." 
+                  : `Great! You've uploaded ${listingPhotos.length} photos (minimum 4 required).`}
               </div>
             )}
           </>

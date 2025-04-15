@@ -328,7 +328,9 @@ const [listingBasics, setListingBasics] = useState({
     const errors: string[] = [];
     
     if (!listingPhotos || listingPhotos.length === 0) {
-      errors.push("You must upload at least one photo");
+      errors.push("You must upload at least 4 photos");
+    } else if (listingPhotos.length < 4) {
+      errors.push(`You need to upload ${4 - listingPhotos.length} more photo${listingPhotos.length === 3 ? '' : 's'} (minimum 4 required)`);
     }
     
     return errors;
@@ -336,21 +338,20 @@ const [listingBasics, setListingBasics] = useState({
   
   const validateFeaturedPhotos = (): string[] => {
     const errors: string[] = [];
-    
-    if (!selectedPhotos || selectedPhotos.length === 0) {
-      errors.push("You must select at least one featured photo");
+    if (!selectedPhotos || selectedPhotos.length !== 4) {
+      errors.push("You must select exactly four featured photos.");
     }
-    
     return errors;
   };
   
   const validateAmenities = (): string[] => {
     const errors: string[] = [];
-    
-    if (!listingAmenities || listingAmenities.length === 0) {
-      errors.push("You must select at least one amenity");
+    // Laundry options required
+    const laundryOptions = ['washerInUnit', 'washerInComplex', 'washerUnavailable'];
+    const selectedLaundry = listingAmenities?.filter(a => laundryOptions.includes(a)) || [];
+    if (selectedLaundry.length !== 1) {
+      errors.push("You must select one laundry option (In Unit, In Complex, or No Laundry)");
     }
-    
     return errors;
   };
   
@@ -462,11 +463,11 @@ const [listingBasics, setListingBasics] = useState({
   };
   
   // Component to display validation errors
-  const ValidationErrors = ({ errors }: { errors: string[] }) => {
+  const ValidationErrors = ({ errors, className }: { errors: string[], className?: string }) => {
     if (!errors || errors.length === 0) return null;
     
     return (
-      <Alert variant="destructive" className="mb-6">
+      <Alert variant="destructive" className={className || "mb-6"}>
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
@@ -578,11 +579,12 @@ const [listingBasics, setListingBasics] = useState({
       case 0:
         return (
           <>
-            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} />}
+            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} className="mb-6" />}
             <ListingUploadHighlights
               listingHighlights={listingHighlights}
               setListingHighlights={setListingHighlights}
             />
+            {validationErrors[0] && <ValidationErrors errors={validationErrors[0]} className="mt-6" />}
           </>
         );
       case 1:
@@ -596,7 +598,7 @@ const [listingBasics, setListingBasics] = useState({
       case 2:
         return (
           <>
-            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} />}
+            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} className="mb-6" />}
             <Rooms
               bedrooms={listingRooms.bedrooms}
               bathrooms={listingRooms.bathrooms}
@@ -605,52 +607,79 @@ const [listingBasics, setListingBasics] = useState({
               onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
               onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
             />
+            {validationErrors[2] && <ValidationErrors errors={validationErrors[2]} className="mt-6" />}
           </>
         );
       case 3:
         return (
           <>
-            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} />}
+            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mb-6" />}
             <ListingBasics
               title={listingBasics.title}
               setTitle={value => setListingBasics(prev => ({ ...prev, title: value }))}
               description={listingBasics.description}
               setDescription={value => setListingBasics(prev => ({ ...prev, description: value }))}
             />
+            {validationErrors[3] && <ValidationErrors errors={validationErrors[3]} className="mt-6" />}
           </>
         );
       case 4:
+        // Custom photo handler to update validation in real-time
+        const handlePhotosUpdate = (newPhotos: NullableListingImage[]) => {
+          setListingPhotos(newPhotos);
+          
+          // Check validation on photos change
+          const photoErrors = validatePhotos();
+          if (photoErrors.length > 0) {
+            setValidationErrors({
+              ...validationErrors,
+              [4]: photoErrors
+            });
+          } else if (validationErrors[4]) {
+            // Clear errors if validation passes
+            const newValidationErrors = { ...validationErrors };
+            delete newValidationErrors[4];
+            setValidationErrors(newValidationErrors);
+          }
+        };
+        
         return (
           <>
-            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} />}
-            <ListingPhotos listingPhotos={listingPhotos} setListingPhotos={setListingPhotos} />
+            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mb-6" />}
+            <ListingPhotos 
+              listingPhotos={listingPhotos} 
+              setListingPhotos={handlePhotosUpdate} 
+            />
+            {validationErrors[4] && <ValidationErrors errors={validationErrors[4]} className="mt-6" />}
           </>
         );
       case 5:
         return (
           <>
-            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} />}
+            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mb-6" />}
             <ListingPhotoSelection
               listingPhotos={listingPhotos}
               selectedPhotos={selectedPhotos}
               setSelectedPhotos={setSelectedPhotos}
             />
+            {validationErrors[5] && <ValidationErrors errors={validationErrors[5]} className="mt-6" />}
           </>
         );
       case 6:
         return (
           <>
-            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} />}
+            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mb-6" />}
             <ListingAmenities
               value={listingAmenities}
               onChange={setListingAmenities}
             />
+            {validationErrors[6] && <ValidationErrors errors={validationErrors[6]} className="mt-6" />}
           </>
         );
       case 7:
         return (
           <>
-            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} />}
+            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mb-6" />}
             <ListingCreationPricing
               shortestStay={listingPricing.shortestStay}
               longestStay={listingPricing.longestStay}
@@ -670,24 +699,48 @@ const [listingBasics, setListingBasics] = useState({
               onTailoredPricingChange={(value) => setListingPricing(prev => ({ ...prev, tailoredPricing: value }))}
               onContinue={handleNext}
             />
+            {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
           </>
         );
       case 8:
+        // Combine all errors for the review page
+        const allValidationErrors = Object.values(validationErrors).flat();
+        
         return (
-          <ListingCreationReview 
-            listingHighlights={listingHighlights}
-            listingLocation={listingLocation}
-            listingRooms={listingRooms}
-            listingBasics={listingBasics}
-            listingAmenities={listingAmenities}
-            listingPricing={listingPricing}
-            onEditHighlights={() => handleEditFromReview(0)}
-            onEditLocation={() => handleEditFromReview(1)}
-            onEditRooms={() => handleEditFromReview(2)}
-            onEditBasics={() => handleEditFromReview(3)}
-            onEditAmenities={() => handleEditFromReview(6)}
-            onEditPricing={() => handleEditFromReview(7)}
-          />
+          <>
+            {allValidationErrors.length > 0 && (
+              <ValidationErrors 
+                errors={[
+                  "Please fix the following errors before submitting your listing:",
+                  ...allValidationErrors
+                ]} 
+                className="mb-6" 
+              />
+            )}
+            <ListingCreationReview 
+              listingHighlights={listingHighlights}
+              listingLocation={listingLocation}
+              listingRooms={listingRooms}
+              listingBasics={listingBasics}
+              listingAmenities={listingAmenities}
+              listingPricing={listingPricing}
+              onEditHighlights={() => handleEditFromReview(0)}
+              onEditLocation={() => handleEditFromReview(1)}
+              onEditRooms={() => handleEditFromReview(2)}
+              onEditBasics={() => handleEditFromReview(3)}
+              onEditAmenities={() => handleEditFromReview(6)}
+              onEditPricing={() => handleEditFromReview(7)}
+            />
+            {allValidationErrors.length > 0 && (
+              <ValidationErrors 
+                errors={[
+                  "Please fix the following errors before submitting your listing:",
+                  ...allValidationErrors
+                ]} 
+                className="mt-6" 
+              />
+            )}
+          </>
         );
       default:
         return null;
