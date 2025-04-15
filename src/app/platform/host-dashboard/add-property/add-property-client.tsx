@@ -2,15 +2,132 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Paddle from "@/components/ui/paddle";
-import * as AmenitiesIcons from '@/components/icons/amenities';
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import { PropertyDetails } from "./types";
+import ListingUploadHighlights from "./listing-upload-highlights";
+
+// Nullable Listing type for building a new listing
+interface NullableListing {
+  listingPhotos: NullableListingImage[];
+
+  id: string | null;
+  isApproved: boolean | null;
+  createdAt: Date | null;
+  lastModified: Date | null;
+  lastApprovalDecision: Date | null;
+  lastDecisionComment: string | null;
+  status: string | null;
+  title: string | null;
+  description: string | null;
+  imageSrc: string | null;
+  category: string | null;
+  roomCount: number | null;
+  bathroomCount: number | null;
+  guestCount: number | null;
+  latitude: number | null;
+  longitude: number | null;
+  locationString: string | null;
+  city: string | null;
+  state: string | null;
+  streetAddress1: string | null;
+  streetAddress2: string | null;
+  postalCode: string | null;
+  userId: string | null;
+  squareFootage: number | null;
+  depositSize: number | null;
+  requireBackgroundCheck: boolean | null;
+  shortestLeaseLength: number | null;
+  longestLeaseLength: number | null;
+  shortestLeasePrice: number | null;
+  longestLeasePrice: number | null;
+  furnished: boolean | null;
+  utilitiesIncluded: boolean | null;
+  petsAllowed: boolean | null;
+  airConditioner: boolean | null;
+  laundryFacilities: boolean | null;
+  fitnessCenter: boolean | null;
+  elevator: boolean | null;
+  wheelchairAccess: boolean | null;
+  doorman: boolean | null;
+  parking: boolean | null;
+  wifi: boolean | null;
+  kitchen: boolean | null;
+  dedicatedWorkspace: boolean | null;
+  hairDryer: boolean | null;
+  iron: boolean | null;
+  heater: boolean | null;
+  hotTub: boolean | null;
+  smokingAllowed: boolean | null;
+  eventsAllowed: boolean | null;
+}
+
+// Nullable ListingImage type for photo support
+interface NullableListingImage {
+  id: string | null;
+  url: string | null;
+  listingId: string | null;
+  category: string | null;
+  rank: number | null;
+}
 
 export default function AddPropertyclient() {
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
+
+  // Listing state with all fields initialized to null
+  const [listing, setListing] = useState<NullableListing>({
+    listingPhotos: [],
+    id: null,
+    isApproved: null,
+    createdAt: null,
+    lastModified: null,
+    lastApprovalDecision: null,
+    lastDecisionComment: null,
+    status: null,
+    title: null,
+    description: null,
+    imageSrc: null,
+    category: null,
+    roomCount: null,
+    bathroomCount: null,
+    guestCount: null,
+    latitude: null,
+    longitude: null,
+    locationString: null,
+    city: null,
+    state: null,
+    streetAddress1: null,
+    streetAddress2: null,
+    postalCode: null,
+    userId: null,
+    squareFootage: null,
+    depositSize: null,
+    requireBackgroundCheck: null,
+    shortestLeaseLength: null,
+    longestLeaseLength: null,
+    shortestLeasePrice: null,
+    longestLeasePrice: null,
+    furnished: null,
+    utilitiesIncluded: null,
+    petsAllowed: null,
+    airConditioner: null,
+    laundryFacilities: null,
+    fitnessCenter: null,
+    elevator: null,
+    wheelchairAccess: null,
+    doorman: null,
+    parking: null,
+    wifi: null,
+    kitchen: null,
+    dedicatedWorkspace: null,
+    hairDryer: null,
+    iron: null,
+    heater: null,
+    hotTub: null,
+    smokingAllowed: null,
+    eventsAllowed: null,
+  });
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
   
@@ -32,79 +149,6 @@ export default function AddPropertyclient() {
     { name: "Review", position: 4 },
   ];
 
-  // State to track selected options
-  const [selectedType, setSelectedType] = useState<string>("Single Family");
-  const [selectedFurnishing, setSelectedFurnishing] =
-    useState<string>("Furnished");
-  const [selectedUtilities, setSelectedUtilities] =
-    useState<string>("Included in rent");
-  const [selectedPets, setSelectedPets] = useState<string>("Pets welcome");
-
-  // Property type options data
-  const propertyTypes = [
-    {
-      id: "single-family",
-      name: "Single Family",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" />
-    },
-    {
-      id: "apartment",
-      name: "Apartment",
-      icon: <AmenitiesIcons.UpdatedApartmentIcon className="w-full h-full" />
-    },
-    {
-      id: "townhouse",
-      name: "Townhouse",
-      icon: <AmenitiesIcons.UpdatedTownhouseIcon className="w-full h-full" />
-    },
-    {
-      id: "private-room",
-      name: "Private Room",
-      icon: <AmenitiesIcons.UpdatedSingleRoomIcon className="w-full h-full" />
-    },
-  ];
-
-  // Furnishing options data
-  const furnishingOptions = [
-    {
-      id: "furnished",
-      name: "Furnished",
-      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-full h-full" />
-    },
-    {
-      id: "unfurnished",
-      name: "Unfurnished",
-      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-full h-full" />
-    },
-  ];
-
-  // Utilities options data
-  const utilitiesOptions = [
-    {
-      id: "included",
-      name: "Included in rent",
-      icon: <AmenitiesIcons.UpdatedUtilitiesIncludedIcon className="w-full h-full" />
-    },
-    {
-      id: "separate",
-      name: "Paid separately",
-      icon: <AmenitiesIcons.UpdatedUtilitiesNotIncludedIcon className="w-full h-full" />
-    },
-  ];
-
-  // Pets options data
-  const petsOptions = [
-    {
-      id: "pets-welcome",
-      name: "Pets welcome",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual pets icon when available
-    },
-    {
-      id: "no-pets",
-      name: "No pets",
-      icon: <AmenitiesIcons.UpdatedSingleFamilyIcon className="w-full h-full" /> // Replace with actual no pets icon when available
-    },
-  ];
 
   // Handler for Save & Exit button
   const handleSaveExit = () => {
@@ -135,164 +179,16 @@ export default function AddPropertyclient() {
     }
   };
 
-  // Helper function to determine if an option is selected
-  const isSelected = (category: string, optionName: string) => {
-    switch (category) {
-      case "type":
-        return selectedType === optionName;
-      case "furnishing":
-        return selectedFurnishing === optionName;
-      case "utilities":
-        return selectedUtilities === optionName;
-      case "pets":
-        return selectedPets === optionName;
-      default:
-        return false;
-    }
-  };
 
   // Render different content based on the current step
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
         return (
-          <>
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-2xl mb-6">
-              Listing Highlights
-            </h2>
-
-            {/* Property Type Section */}
-            <section className="mb-12">
-              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-                Type
-              </h3>
-              <div className="flex flex-wrap gap-8">
-                {propertyTypes.map((type) => {
-                  const isTypeSelected = isSelected("type", type.name);
-                  return (
-                    <Paddle
-                      key={type.id}
-                      icon={type.icon}
-                      label={type.name}
-                      className={`h-[295px] w-[196px] cursor-pointer box-border  ${
-                        isTypeSelected
-                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                          : "border border-solid border-[#0000004c]"
-                      }`}
-                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => {
-                        setSelectedType(type.name);
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          propertyType: type.name
-                        });
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Furnishings Section */}
-            <section className="mb-12">
-              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-                Furnishings
-              </h3>
-              <div className="flex gap-8">
-                {furnishingOptions.map((option) => {
-                  const isFurnishingSelected = isSelected("furnishing", option.name);
-                  return (
-                    <Paddle
-                      key={option.id}
-                      icon={option.icon}
-                      label={option.name}
-                      className={`h-[297px] w-[197px] cursor-pointer box-border  ${
-                        isFurnishingSelected
-                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                          : "border border-solid border-[#0000004c]"
-                      }`}
-                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}
-                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => {
-                        setSelectedFurnishing(option.name);
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          furnishingType: option.name
-                        });
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Utilities Section */}
-            <section className="mb-12">
-              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-                Utilities
-              </h3>
-              <div className="flex gap-8">
-                {utilitiesOptions.map((option) => {
-                  const isUtilitiesSelected = isSelected("utilities", option.name);
-                  return (
-                    <Paddle
-                      key={option.id}
-                      icon={option.icon}
-                      label={option.name}
-                      className={`h-[296px] w-[197px] cursor-pointer box-border  ${
-                        isUtilitiesSelected
-                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                          : "border border-solid border-[#0000004c]"
-                      }`}
-                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => {
-                        setSelectedUtilities(option.name);
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          utilitiesIncluded: option.name === "Included in rent"
-                        });
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Pets Section */}
-            <section className="mb-12">
-              <h3 className="font-['Poppins',Helvetica] font-normal text-[#3f3f3f] text-2xl mb-6">
-                Pets
-              </h3>
-              <div className="flex gap-8">
-                {petsOptions.map((option) => {
-                  const isPetsSelected = isSelected("pets", option.name);
-                  return (
-                    <Paddle
-                      key={option.id}
-                      icon={option.icon}
-                      label={option.name}
-                      className={`h-[296px] w-[197px] cursor-pointer box-border  ${
-                        isPetsSelected
-                          ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
-                          : "border border-solid border-[#0000004c]"
-                      }`}
-                      labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center px-4`}
-                      iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
-                      onClick={() => {
-                        setSelectedPets(option.name);
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          petsAllowed: option.name === "Pets welcome"
-                        });
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-          </>
+          <ListingUploadHighlights
+            propertyDetails={propertyDetails}
+            setPropertyDetails={setPropertyDetails}
+          />
         );
       case 1:
         return (
