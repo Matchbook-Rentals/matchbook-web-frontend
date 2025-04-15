@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-upload-highlights";
+import { Rooms } from "./rooms";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -152,6 +153,13 @@ interface ListingLocation {
 }
 
 // Subset states for different sections
+
+// Step 3: Rooms state
+const [listingRooms, setListingRooms] = useState({
+  bedrooms: 1,
+  bathrooms: 1,
+  squareFeet: ""
+});
 const [listingHighlights, setListingHighlights] = useState<ListingHighlights>({
   category: "Single Family",
   petsAllowed: true,
@@ -175,7 +183,7 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
     { name: "Details", position: 1 },
-    { name: "Photos", position: 2 },
+    { name: "Size", position: 2 },
     { name: "Pricing", position: 3 },
     { name: "Review", position: 4 },
   ];
@@ -227,9 +235,13 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
       state: listingLocation.state,
       streetAddress1: listingLocation.streetAddress1,
       streetAddress2: listingLocation.streetAddress2,
-      postalCode: listingLocation.postalCode
+      postalCode: listingLocation.postalCode,
+      // Sync rooms
+      roomCount: listingRooms.bedrooms,
+      bathroomCount: listingRooms.bathrooms,
+      squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null
     }));
-  }, [listingHighlights, listingLocation]);
+  }, [listingHighlights, listingLocation, listingRooms]);
 
 
   // Render different content based on the current step
@@ -251,17 +263,20 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
         );
       case 2:
         return (
-          <div className="min-h-[600px] flex items-center justify-center">
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 3: Photos
-            </h2>
-          </div>
+          <Rooms
+            bedrooms={listingRooms.bedrooms}
+            bathrooms={listingRooms.bathrooms}
+            squareFeet={listingRooms.squareFeet}
+            onBedroomsChange={value => setListingRooms(prev => ({ ...prev, bedrooms: value }))}
+            onBathroomsChange={value => setListingRooms(prev => ({ ...prev, bathrooms: value }))}
+            onSquareFeetChange={value => setListingRooms(prev => ({ ...prev, squareFeet: value }))}
+          />
         );
       case 3:
         return (
           <div className="min-h-[600px] flex items-center justify-center">
             <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 4: Pricing
+              Step 4: Photos
             </h2>
           </div>
         );
@@ -269,7 +284,15 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
         return (
           <div className="min-h-[600px] flex items-center justify-center">
             <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 5: Review
+              Step 5: Pricing
+            </h2>
+          </div>
+        );
+      case 5:
+        return (
+          <div className="min-h-[600px] flex items-center justify-center">
+            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
+              Step 6: Review
             </h2>
           </div>
         );
