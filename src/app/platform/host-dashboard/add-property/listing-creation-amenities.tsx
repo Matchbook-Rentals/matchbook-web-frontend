@@ -91,7 +91,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
     onChange(updated);
   };
 
-  // Laundry options (modeled after filter-options-dialog.tsx)
+  // Laundry options (aligned with Prisma schema)
   const laundryOptions = [
     {
       value: 'washerInUnit',
@@ -104,7 +104,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       id: 'inComplex',
     },
     {
-      value: 'washerUnavailable',
+      value: 'washerNotAvailable',
       label: 'Unavailable',
       id: 'unavailable',
     },
@@ -120,8 +120,8 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
       case 'washerInComplex':
         updated = ['washerInComplex'];
         break;
-      case 'washerUnavailable':
-        updated = ['washerUnavailable'];
+      case 'washerNotAvailable':
+        updated = ['washerNotAvailable'];
         break;
       default:
         updated = [];
@@ -134,7 +134,7 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
   const getLaundrySelection = () => {
     if (selected.length === 1 && selected[0] === 'washerInUnit') return 'washerInUnit';
     if (selected.length === 1 && selected[0] === 'washerInComplex') return 'washerInComplex';
-    if (selected.length === 1 && selected[0] === 'washerUnavailable') return 'washerUnavailable';
+    if (selected.length === 1 && selected[0] === 'washerNotAvailable') return 'washerNotAvailable';
     return '';
   };
 

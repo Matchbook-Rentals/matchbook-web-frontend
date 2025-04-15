@@ -185,3 +185,30 @@ export const addUnavailability = async (listingId: string, startDate: Date, endD
   }
 }
 
+// Fetch a single listing by ID, including images, bedrooms, and unavailablePeriods
+export const getListingById = async (listingId: string): Promise<ListingAndImages | null> => {
+  const userId = await checkAuth();
+  try {
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      include: {
+        listingImages: true,
+        bedrooms: true,
+        unavailablePeriods: true,
+        user: true,
+      },
+    });
+    if (!listing) return null;
+    return {
+      ...listing,
+      distance: undefined, // Not relevant for single fetch
+      listingImages: listing.listingImages,
+      bedrooms: listing.bedrooms,
+      unavailablePeriods: listing.unavailablePeriods,
+    };
+  } catch (error) {
+    console.error('Error in getListingById:', error);
+    throw error;
+  }
+}
+

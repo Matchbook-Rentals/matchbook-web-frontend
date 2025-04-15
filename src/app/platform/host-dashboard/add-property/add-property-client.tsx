@@ -355,7 +355,7 @@ const [listingBasics, setListingBasics] = useState({
   const validateAmenities = (): string[] => {
     const errors: string[] = [];
     // Laundry options required
-    const laundryOptions = ['washerInUnit', 'washerInComplex', 'washerUnavailable'];
+    const laundryOptions = ['washerInUnit', 'washerInComplex', 'washerNotAvailable'];
     const selectedLaundry = listingAmenities?.filter(a => laundryOptions.includes(a)) || [];
     if (selectedLaundry.length !== 1) {
       errors.push("You must select one laundry option (In Unit, In Complex, or No Laundry)");

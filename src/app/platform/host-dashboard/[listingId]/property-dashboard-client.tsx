@@ -56,11 +56,12 @@ const starRatings = [
 
 import { ListingAddress } from "./listing-address";
 
-import { useHostProperties } from '@/contexts/host-properties-provider';
+interface PropertyDashboardClientProps {
+  listing: any; // Replace 'any' with 'ListingAndImages' if available
+}
 
-export default function PropertyDashboardClient() {
+export default function PropertyDashboardClient({ listing }: PropertyDashboardClientProps) {
   const [selectedTab, setSelectedTab] = useState("Reviews");
-  const { currListing } = useHostProperties();
 
   return (
     <div className="w-full max-w-7xl mx-auto rounded-lg shadow-sm relative py-6 px-4 sm:px-8 md:px-10 bg-white min-h-screen flex flex-col items-center">
@@ -88,15 +89,7 @@ export default function PropertyDashboardClient() {
           })}
         </div>
         <div className="flex-shrink-0">
-          {currListing && (
-            <ListingAddress
-              propertyName={currListing.name || "Property Name"}
-              street={currListing.street || "Street Address"}
-              city={currListing.city || "City"}
-              state={currListing.state || "State"}
-              zip={currListing.zip || "Zip"}
-            />
-          )}
+          <ListingAddress propertyName={listing.title} street={listing.streetAddress1} city={listing.city} state={listing.state} zip={listing.zipCode} />
         </div>
       </div>
       <Separator className="w-full h-0.5 my-6" />
@@ -185,8 +178,6 @@ export default function PropertyDashboardClient() {
         <Switch className="bg-[#a3b899] data-[state=checked]:bg-[#a3b899]" />
         <span className="font-medium text-xl text-[#2d2f2e99] mt-1">Active</span>
       </div>
-      {/* Save Button */}
-      <Button className="w-full sm:w-[246px] h-16 sm:h-[79px] mt-8 bg-rgb134-154-125 rounded-lg border border-solid border-[#707070] shadow font-normal text-white text-xl sm:text-3xl">Save</Button>
     </div>
   );
 }

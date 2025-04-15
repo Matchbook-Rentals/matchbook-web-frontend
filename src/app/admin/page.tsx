@@ -67,6 +67,21 @@ export default async function AdminDashboard() {
               </CardContent>
             </Card>
             
+            <Card className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <BookText className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-semibold">Listing Approval</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Review and approve pending listings
+                </p>
+                <Link href="/admin/listing-approval">
+                  <Button>View Listings</Button>
+                </Link>
+              </CardContent>
+            </Card>
+            
           {/*
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
