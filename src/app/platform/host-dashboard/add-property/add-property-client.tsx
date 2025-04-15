@@ -9,6 +9,7 @@ import { Rooms } from "./listing-creation-rooms";
 import { ListingBasics } from "./listing-creation-basics";
 import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
+import ListingAmenities from "./listing-creation-amenities";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -185,6 +186,9 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
   country: "United States"
 });
 
+// Step 4.5: Amenities
+const [listingAmenities, setListingAmenities] = useState<string[]>([]);
+
 // Step 2: Rooms
 const [listingRooms, setListingRooms] = useState({
   bedrooms: 1,
@@ -197,17 +201,18 @@ const [listingBasics, setListingBasics] = useState({
   title: "",
   description: ""
 });
-  
-  // Define steps
+
+// Define steps
   const steps: StepInfo[] = [
     { name: "Highlights", position: 0 },
     { name: "Details", position: 1 },
     { name: "Rooms", position: 2 },
     { name: "Basics", position: 3 },
     { name: "Photos", position: 4 },
-    { name: "Featured Photos", position: 5 },
-    { name: "Pricing", position: 6 },
-    { name: "Review", position: 7 },
+    { name: "Amenities", position: 5 },
+    { name: "Featured Photos", position: 6 },
+    { name: "Pricing", position: 7 },
+    { name: "Review", position: 8 },
   ];
 
 
@@ -261,9 +266,11 @@ const [listingBasics, setListingBasics] = useState({
       // Sync rooms
       roomCount: listingRooms.bedrooms,
       bathroomCount: listingRooms.bathrooms,
-      squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null
+      squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
+      // Sync amenities
+      amenities: listingAmenities,
     }));
-  }, [listingHighlights, listingLocation, listingRooms]);
+  }, [listingHighlights, listingLocation, listingRooms, listingAmenities]);
 
 
   // Render different content based on the current step
@@ -309,17 +316,25 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 5:
         return (
+          <ListingAmenities
+            value={listingAmenities}
+            onChange={setListingAmenities}
+            onContinue={handleNext}
+          />
+        );
+      case 6:
+        return (
           <ListingPhotoSelection
             listingPhotos={listingPhotos}
             selectedPhotos={selectedPhotos}
             setSelectedPhotos={setSelectedPhotos}
           />
         );
-      case 6:
+      case 7:
         return (
           <div className="min-h-[600px] flex items-center justify-center">
             <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 7: Review
+              Step 8: Review
             </h2>
           </div>
         );
