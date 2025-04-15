@@ -11,6 +11,7 @@ import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
 import ListingCreationPricing from "./listing-creation-pricing";
+import { Box as ListingCreationReview } from "./listing-creation-review";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -79,6 +80,8 @@ export interface NullableListingImage {
 export default function AddPropertyclient() {
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
+  // Track if user came from review page
+  const [cameFromReview, setCameFromReview] = useState<boolean>(false);
 
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
@@ -238,9 +241,18 @@ const [listingBasics, setListingBasics] = useState({
   // Navigation handlers
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      setSlideDirection('right'); // Slide from right to left (next)
-      setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-      setCurrentStep(currentStep + 1);
+      // If coming from review, go directly back to review
+      if (cameFromReview) {
+        setSlideDirection('right'); // Slide from right to left (next)
+        setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
+        setCurrentStep(8); // Go to review step
+        setCameFromReview(false); // Reset the flag
+      } else {
+        // Normal flow
+        setSlideDirection('right'); // Slide from right to left (next)
+        setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
+        setCurrentStep(currentStep + 1);
+      }
       
       // Scroll the whole page to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -252,10 +264,22 @@ const [listingBasics, setListingBasics] = useState({
       setSlideDirection('left'); // Slide from left to right (back)
       setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
       setCurrentStep(currentStep - 1);
+      setCameFromReview(false); // Reset the flag since we're going backward
       
       // Scroll the whole page to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+  
+  // Handler for edit actions from review page
+  const handleEditFromReview = (stepIndex: number) => {
+    setSlideDirection('left'); // Slide from left to right (back)
+    setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
+    setCurrentStep(stepIndex);
+    setCameFromReview(true); // Set the flag to indicate we came from review
+    
+    // Scroll the whole page to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   // Effect to sync subset states back to main listing state
@@ -372,11 +396,20 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 8:
         return (
-          <div className="min-h-[600px] flex items-center justify-center">
-            <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 9: Review
-            </h2>
-          </div>
+          <ListingCreationReview 
+            listingHighlights={listingHighlights}
+            listingLocation={listingLocation}
+            listingRooms={listingRooms}
+            listingBasics={listingBasics}
+            listingAmenities={listingAmenities}
+            listingPricing={listingPricing}
+            onEditHighlights={() => handleEditFromReview(0)}
+            onEditLocation={() => handleEditFromReview(1)}
+            onEditRooms={() => handleEditFromReview(2)}
+            onEditBasics={() => handleEditFromReview(3)}
+            onEditAmenities={() => handleEditFromReview(6)}
+            onEditPricing={() => handleEditFromReview(7)}
+          />
         );
       default:
         return null;
@@ -434,9 +467,10 @@ const [listingBasics, setListingBasics] = useState({
             <Button 
               className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
               onClick={handleNext}
-              disabled={currentStep === steps.length - 1}
+              disabled={currentStep === steps.length - 1 && false} // Disabled set to false for final step to submit the listing
             >
-              {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {currentStep === steps.length - 1 ? 'Submit Listing' : 
+               cameFromReview ? 'Review' : 'Next'}
             </Button>
           </div>
         </div>
