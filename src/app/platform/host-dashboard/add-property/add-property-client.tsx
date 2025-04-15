@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
-import ListingUploadHighlights from "./listing-upload-highlights";
-import { Rooms } from "./rooms";
-import { ListingBasics } from "./listing-basics";
-import { ListingPhotos } from "./listing-photos";
+import ListingUploadHighlights from "./listing-creation-highlights";
+import { Rooms } from "./listing-creation-rooms";
+import { ListingBasics } from "./listing-creation-basics";
+import { ListingPhotos } from "./listing-creation-photos-upload";
+import ListingPhotoSelection from "./listing-creation-photo-selection";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -134,6 +135,9 @@ export default function AddPropertyclient() {
 // This will be used to manage photo uploads, ordering, and removal before saving to the listing
 const [listingPhotos, setListingPhotos] = useState<NullableListingImage[]>([]);
 
+// State for selected featured photos
+const [selectedPhotos, setSelectedPhotos] = useState<NullableListingImage[]>([]);
+
 const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [animationKey, setAnimationKey] = useState<number>(0);
   
@@ -201,8 +205,9 @@ const [listingBasics, setListingBasics] = useState({
     { name: "Rooms", position: 2 },
     { name: "Basics", position: 3 },
     { name: "Photos", position: 4 },
-    { name: "Pricing", position: 5 },
-    { name: "Review", position: 6 },
+    { name: "Featured Photos", position: 5 },
+    { name: "Pricing", position: 6 },
+    { name: "Review", position: 7 },
   ];
 
 
@@ -304,9 +309,17 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 5:
         return (
+          <ListingPhotoSelection
+            listingPhotos={listingPhotos}
+            selectedPhotos={selectedPhotos}
+            setSelectedPhotos={setSelectedPhotos}
+          />
+        );
+      case 6:
+        return (
           <div className="min-h-[600px] flex items-center justify-center">
             <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 6: Review
+              Step 7: Review
             </h2>
           </div>
         );
