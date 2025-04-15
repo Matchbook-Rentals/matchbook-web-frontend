@@ -5,7 +5,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { UserButton, useUser, useClerk, SignOutButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import NotificationItem from './platform-components/notification-item';
 import { getNotifications, updateNotification, deleteNotification } from '@/app/actions/notifications';
 import { updateUserImage, updateUserLogin } from '@/app/actions/user';
@@ -21,6 +21,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const { user } = useUser();
   const { openUserProfile } = useClerk();
   const router = useRouter();
+  const pathname = usePathname();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
@@ -270,22 +271,22 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               {/* Core navigation options */}
               <div className="flex flex-col">
                 <Link href="/">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Home</button>
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Home</button>
                 </Link>
 
                 {/* Role-specific links */}
                 {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
                   <Link href="/platform/trips">
-                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Searches</button>
+                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Searches</button>
                   </Link>
                 )}
 
                 <Link href="/platform/application">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Application</button>
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Application</button>
                 </Link>
 
                 <Link href="/platform/bookings">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full">Bookings</button>
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Bookings</button>
                 </Link>
               </div>
 
@@ -293,18 +294,26 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               <div className="border-t border-gray-200">
                 {userRole === 'admin' && (
                   <Link href="/platform/messages">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Inbox</button>
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Inbox</button>
                   </Link>
                 )}
               </div>
 
               {/* Host switch */}
               <div className="border-t border-gray-200">
-                <Link href="/platform/host-dashboard">
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">
-                    Switch to Hosting
-                  </button>
-                </Link>
+                {pathname && pathname.startsWith('/platform/host-dashboard') ? (
+                  <Link href="/platform/bookings">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                      Switch to Renting
+                    </button>
+                  </Link>
+                ) : (
+                  <Link href="/platform/host-dashboard">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                      Switch to Hosting
+                    </button>
+                  </Link>
+                )}
               </div>
 
               {/* Beta access notice */}
@@ -317,13 +326,13 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               {/* Settings, support, and admin section */}
               <div className="border-t border-gray-200">
                 <button
-                  onClick={() => handleSettings()}
+                  onClick={() => { handleSettings(); setIsMenuOpen(false); }}
                   className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
                 >
                   Settings
                 </button>
                 <button
-                  onClick={() => setIsSupportOpen(true)}
+                  onClick={() => { setIsSupportOpen(true); setIsMenuOpen(false); }}
                   className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
                 >
                   Support
