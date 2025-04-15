@@ -57,7 +57,6 @@ export async function GET(request: Request) {
   try {
     const response = await fetch(url);
     const data = await response.json() as GeocodeResponse;
-    console.log("Geocode response:", data.results[0].address_components);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json({ error: 'Error fetching geocode' }, { status: 500 });

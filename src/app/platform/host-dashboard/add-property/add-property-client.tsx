@@ -8,7 +8,7 @@ import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import { PropertyDetails } from "./types";
 
-export default function WebLandlord() {
+export default function AddPropertyclient() {
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
