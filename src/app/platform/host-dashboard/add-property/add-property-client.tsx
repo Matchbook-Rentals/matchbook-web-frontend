@@ -343,7 +343,7 @@ export default function WebLandlord() {
         />
 
         {/* Main content with slide animation */}
-        <div className="mx-auto w-full max-w-[891px] overflow-hidden mb-24">
+        <div className="mx-auto w-full max-w-[891px] mb-24">
           <div 
             key={animationKey} // Adding key to force re-render on each step change
             className="transition-transform duration-500 ease-in-out"
