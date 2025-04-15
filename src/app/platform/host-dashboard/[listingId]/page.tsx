@@ -1,4 +1,6 @@
 import { HelpCircleIcon } from "lucide-react";
+import { ApplicationsIcon, BookingsIcon, ListingsIcon } from "@/components/icons/dashboard";
+import { StarIcon } from "@/components/icons/marketing";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +16,11 @@ import {
 
 import { APP_PAGE_MARGIN } from "@/constants/styles";
 
+import PropertyDashboardClient from "./property-dashboard-client";
+
 const PropertyDashboardPage = () => {
+  return <PropertyDashboardClient />;
+
   // Navigation menu items
   const navItems = [
     { name: "Applications", icon: "/group-4.png", iconExtra: "/group-5.png" },
@@ -72,77 +78,47 @@ const PropertyDashboardPage = () => {
   ];
 
   return (
-    <div className={`bg-white flex flex-row justify-center ${APP_PAGE_MARGIN}`}>
-      <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-6">
+    <div className={`bg-white min-h-screen w-full flex flex-col items-center ${APP_PAGE_MARGIN}`}>
+      <div className="bg-white w-full max-w-7xl mx-auto rounded-lg shadow-sm relative py-6 px-4 sm:px-8 md:px-10 overflow-hidden">
         {/* Property Dashboard Title */}
-        <h1 className="text-center text-[50px] font-medium text-[#3f3f3f]  mb-8">
+        <h1 className="text-center text-3xl sm:text-4xl md:text-5xl font-medium text-[#3f3f3f] mb-8">
           Property Dashboard
         </h1>
 
         {/* Navigation Menu */}
-        <div className="flex items-end gap-12 px-10 mb-4">
+        <div className="flex flex-wrap items-end gap-6 sm:gap-10 md:gap-12 px-2 sm:px-6 md:px-10 mb-4 w-full justify-center">
           <div className="flex flex-col items-center">
-            <div className="relative w-[50px] h-[74px] mb-4">
-              <img
-                className="w-[38px] h-[74px]"
-                alt="Applications icon"
-                src="/group-4.png"
-              />
-              <img
-                className="absolute w-[17px] h-[18px] top-14 left-[33px]"
-                alt="Applications icon extra"
-                src="/group-5.png"
-              />
-            </div>
-            <span className="font-medium text-3xl text-[#2d2f2e99]">
+            <div className="flex items-center justify-center w-12 h-16 sm:w-[50px] sm:h-[74px] mb-4">
+  <ApplicationsIcon  />
+</div>
+            <span className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99]">
               Applications
             </span>
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="relative w-[85px] h-[85px] mb-4">
-              <img
-                className="w-[83px] h-3.5 top-[9px] left-px absolute"
-                alt="Bookings icon"
-                src="/group-1.png"
-              />
-              <img
-                className="absolute w-[85px] h-[78px] top-[7px]"
-                alt="Bookings vector"
-                src="/vector-2.svg"
-              />
-              <img
-                className="absolute w-[63px] h-3.5 top-9 left-[11px]"
-                alt="Bookings detail"
-                src="/group-2.png"
-              />
-              <img
-                className="absolute w-[63px] h-3.5 top-[58px] left-[11px]"
-                alt="Bookings detail"
-                src="/group-3.png"
-              />
-            </div>
-            <span className="font-medium text-3xl text-[#2d2f2e99]">
+            <div className="flex items-center justify-center w-16 h-16 sm:w-[85px] sm:h-[85px] mb-4">
+  <BookingsIcon className="w-16 h-16 sm:w-[83px] sm:h-[78px]" />
+</div>
+            <span className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99]">
               Bookings
             </span>
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="relative w-[72px] h-[82px] mb-4">
-              <img
-                className="absolute w-11 h-8 top-[21px] left-[21px]"
-                alt="Listing icon"
-                src="/vector-6.svg"
-              />
+            <div className="relative w-16 h-16 sm:w-[72px] sm:h-[82px] mb-4">
+              <ListingsIcon className="w-16 h-16 sm:w-[72px] sm:h-[82px]" />
             </div>
-            <span className="font-medium text-3xl text-[#2d2f2e99]">
+            <span className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99]">
               Listing
             </span>
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="w-[73px] h-[69px] mb-4 bg-[url(/group-76-4.png)] bg-[100%_100%]" />
-            <span className="font-medium text-3xl text-[#2d2f2e99]">
+            <div className="flex items-center justify-center w-16 h-16 sm:w-[73px] sm:h-[69px] mb-4">
+  <StarIcon className="w-11 h-8"  />
+</div>
+            <span className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99]">
               Reviews
             </span>
           </div>
@@ -151,46 +127,46 @@ const PropertyDashboardPage = () => {
         <Separator className="w-full h-0.5 my-6" />
 
         {/* Property Info */}
-        <div className="flex justify-between px-10">
+        <div className="flex flex-col md:flex-row justify-between gap-4 px-2 sm:px-6 md:px-10 w-full">
           <div className="flex-1">{/* Left side content */}</div>
           <div className="flex flex-col items-end">
-            <h2 className="font-normal text-4xl text-[#3f3f3f]">
+            <h2 className="font-normal text-2xl sm:text-3xl md:text-4xl text-[#3f3f3f]">
               Ogden Mountain Home
             </h2>
-            <p className="font-medium text-[26px] text-[#2d2f2e99] mt-4">
+            <p className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99] mt-2 md:mt-4">
               2155 Quincy Ave, Ogden UT 84401
             </p>
           </div>
         </div>
 
         {/* Reviews Section */}
-        <div className="px-10 mt-8">
-          <div className="flex justify-between mb-8">
+        <div className="px-2 sm:px-6 md:px-10 mt-8 w-full">
+          <div className="flex flex-col md:flex-row justify-between mb-8 gap-4">
             <h2 className="font-light text-[46px] text-[#3f3f3f]">Reviews</h2>
             <h2 className="font-light text-[46px] text-[#3f3f3f]">
               Overall Rating
             </h2>
           </div>
 
-          <div className="flex gap-16">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
             {/* Reviews Table */}
             <div className="flex-1">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="font-medium text-[22px] text-[#2d2f2e99]">
+                    <TableHead className="font-medium text-base sm:text-lg md:text-xl text-[#2d2f2e99]">
                       Guest Name
                     </TableHead>
-                    <TableHead className="font-medium text-[22px] text-[#2d2f2e99]">
+                    <TableHead className="font-medium text-base sm:text-lg md:text-xl text-[#2d2f2e99]">
                       Rating
                     </TableHead>
-                    <TableHead className="font-medium text-[22px] text-[#2d2f2e99]">
+                    <TableHead className="font-medium text-base sm:text-lg md:text-xl text-[#2d2f2e99]">
                       Responsiveness
                     </TableHead>
-                    <TableHead className="font-medium text-[22px] text-[#2d2f2e99]">
+                    <TableHead className="font-medium text-base sm:text-lg md:text-xl text-[#2d2f2e99]">
                       Condition
                     </TableHead>
-                    <TableHead className="font-medium text-[22px] text-[#2d2f2e99]">
+                    <TableHead className="font-medium text-base sm:text-lg md:text-xl text-[#2d2f2e99]">
                       Listing Accuracy
                       <HelpCircleIcon
                         className="inline-block ml-2 w-5 h-5 bg-black rounded-full text-white"
@@ -203,21 +179,21 @@ const PropertyDashboardPage = () => {
                   {reviews.map((review, index) => (
                     <TableRow key={index}>
                       <TableCell>
-                        <span className="font-medium text-[28px]">
+                        <span className="font-medium text-lg sm:text-xl md:text-2xl">
                           <span className="text-black">Daniel </span>
                           <span className="text-[#3f3f3f]">Resner</span>
                         </span>
                       </TableCell>
-                      <TableCell className="font-medium text-3xl text-[#3f3f3f]">
+                      <TableCell className="font-medium text-lg sm:text-xl md:text-2xl text-[#3f3f3f]">
                         {review.rating}
                       </TableCell>
-                      <TableCell className="font-medium text-[22px] text-[#3f3f3f] text-center">
+                      <TableCell className="font-medium text-base sm:text-lg md:text-xl text-[#3f3f3f] text-center">
                         {review.responsiveness}
                       </TableCell>
-                      <TableCell className="font-medium text-[22px] text-[#3f3f3f] text-center">
+                      <TableCell className="font-medium text-base sm:text-lg md:text-xl text-[#3f3f3f] text-center">
                         {review.condition}
                       </TableCell>
-                      <TableCell className="font-medium text-[22px] text-[#3f3f3f] text-center">
+                      <TableCell className="font-medium text-base sm:text-lg md:text-xl text-[#3f3f3f] text-center">
                         {review.accuracy}
                       </TableCell>
                     </TableRow>
@@ -227,20 +203,20 @@ const PropertyDashboardPage = () => {
             </div>
 
             {/* Overall Rating */}
-            <div className="w-[350px]">
+            <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:w-[350px]">
               <div className="flex items-center mb-4">
-                <span className="font-normal text-[55px] text-black">2.5</span>
-                <span className="font-medium text-4xl text-[#2d2f2e99] ml-2">
+                <span className="font-normal text-3xl sm:text-4xl md:text-5xl lg:text-[55px] text-black">2.5</span>
+                <span className="font-medium text-lg sm:text-xl md:text-2xl text-[#2d2f2e99] ml-2">
                   5 reviews
                 </span>
               </div>
 
               {/* Star Rating Display */}
-              <div className="flex mb-4">
+              <div className="flex mb-4 flex-wrap gap-2">
                 {[1, 2, 3, 4, 5].map((star, index) => (
                   <div
                     key={index}
-                    className="w-[58px] h-[55px] bg-[url(/group-76.png)] bg-[100%_100%]"
+                    className="w-10 h-10 sm:w-[58px] sm:h-[55px] bg-[url(/group-76.png)] bg-[100%_100%]"
                   />
                 ))}
               </div>
@@ -249,14 +225,14 @@ const PropertyDashboardPage = () => {
               <div className="space-y-2">
                 {starRatings.map((item, index) => (
                   <div key={index} className="flex items-center">
-                    <span className="font-medium text-xl text-[#2d2f2e99] w-[104px]">
+                    <span className="font-medium text-base sm:text-lg text-[#2d2f2e99] w-20 sm:w-[104px]">
                       {item.stars}
                     </span>
-                    <div className="relative w-[220px] h-[18px]">
+                    <div className="relative w-full max-w-[220px] h-4">
                       <div className="absolute w-full h-full bg-[#dfdedeab] rounded-[30px]"></div>
                       <div
                         className="absolute h-full bg-[#ffd700] rounded-[30px]"
-                        style={{ width: `${item.percentage}px` }}
+                        style={{ width: `${item.percentage}%` }}
                       ></div>
                     </div>
                   </div>
@@ -267,7 +243,7 @@ const PropertyDashboardPage = () => {
         </div>
 
         {/* Listing Status */}
-        <div className="absolute bottom-16 right-10 flex flex-col items-end">
+        <div className="mt-8 flex flex-col items-end w-full pr-0 sm:pr-10">
           <span className="font-medium text-xl text-[#2d2f2e99] mb-1">
             Listing Status
           </span>
@@ -278,7 +254,7 @@ const PropertyDashboardPage = () => {
         </div>
 
         {/* Save Button (positioned according to design) */}
-        <Button className="absolute w-[246px] h-[79px] top-[5549px] left-[824px] bg-rgb134-154-125 rounded-[16.85px] border-[1.12px] border-solid border-[#707070] shadow-[0px_3.37px_3.37px_#00000029] font-normal text-white text-[39.3px]">
+        <Button className="w-full sm:w-[246px] h-16 sm:h-[79px] mt-8 bg-rgb134-154-125 rounded-lg border border-solid border-[#707070] shadow font-normal text-white text-xl sm:text-3xl">
           Save
         </Button>
       </div>

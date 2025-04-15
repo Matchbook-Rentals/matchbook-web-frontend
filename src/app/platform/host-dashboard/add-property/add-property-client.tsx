@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-creation-highlights";
@@ -68,6 +69,11 @@ interface NullableListing {
   hotTub: boolean | null;
   smokingAllowed: boolean | null;
   eventsAllowed: boolean | null;
+  approvalStatus?: string;
+  amenities?: string[];
+  washerInUnit?: boolean;
+  cityView?: boolean;
+  dishwasher?: boolean;
 }
 
 // Nullable ListingImage type for photo support
@@ -80,6 +86,8 @@ export interface NullableListingImage {
 }
 
 export default function AddPropertyclient() {
+  const router = useRouter();
+  
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
   // Track if user came from review page
@@ -421,8 +429,25 @@ const [listingBasics, setListingBasics] = useState({
         setValidationErrors(newValidationErrors);
       }
       
-      // If coming from review, go directly back to review
+      // If coming from review, validate all steps again before returning to review
       if (cameFromReview) {
+        // Run current step validation first
+        const currStepValidation = validateCurrentStep();
+        if (currStepValidation.length > 0) {
+          setValidationErrors({
+            ...validationErrors,
+            [currentStep]: currStepValidation
+          });
+          return;
+        }
+        
+        // Now check all steps to make sure everything is valid before returning to review
+        const allValid = validateAllSteps();
+        if (!allValid) {
+          // The validateAllSteps function will handle navigation to the first step with errors
+          return;
+        }
+        
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
         setCurrentStep(8); // Go to review step
@@ -453,6 +478,10 @@ const [listingBasics, setListingBasics] = useState({
   
   // Handler for edit actions from review page
   const handleEditFromReview = (stepIndex: number) => {
+    // Store the current validation state before navigating away from review
+    // This ensures we remember errors from other sections
+    const currentErrors = { ...validationErrors };
+    
     setSlideDirection('left'); // Slide from left to right (back)
     setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
     setCurrentStep(stepIndex);
@@ -512,21 +541,114 @@ const [listingBasics, setListingBasics] = useState({
     
     setValidationErrors(allErrors);
     
+    // If there are errors, navigate to the first step with errors
+    if (Object.keys(allErrors).length > 0) {
+      const firstErrorStep = Object.keys(allErrors)
+        .map(Number)
+        .sort((a, b) => a - b)[0];
+      
+      if (firstErrorStep !== undefined && firstErrorStep !== currentStep) {
+        setCurrentStep(firstErrorStep);
+        setSlideDirection('left'); // Slide from left to right (back)
+        setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      
+      return false;
+    }
+    
     // Return true if there are no errors
-    return Object.keys(allErrors).length === 0;
+    return true;
   };
   
   // Handle form submission
-  const handleSubmitListing = () => {
+  const handleSubmitListing = async () => {
     if (validateAllSteps()) {
-      // All steps are valid, can proceed with submission
-      console.log("All steps are valid, submitting listing:", listing);
-      
-      // Here you would typically call an API to save the listing
-      alert("Listing submitted successfully!");
+
+      // Create final array of photos and sort them by rank
+      let listingImagesFinal = [...listingPhotos].map(photo => ({
+        ...photo,
+        rank: null // Initialize all ranks to null
+      }));
+
+      // Update ranks for selected photos
+      for (let i = 0; i < selectedPhotos.length; i++) {
+        const selectedPhoto = selectedPhotos[i];
+        const photoToUpdate = listingImagesFinal.find(p => p.url === selectedPhoto.url);
+        if (photoToUpdate) {
+          photoToUpdate.rank = i + 1; // Assign ranks 1, 2, 3, 4
+        }
+      }
+
+      // Sort photos: ranked photos first (in ascending order), then unranked photos
+      listingImagesFinal.sort((a, b) => {
+        if (a.rank === null && b.rank === null) return 0;
+        if (a.rank === null) return 1;
+        if (b.rank === null) return -1;
+        return a.rank - b.rank;
+      });
+
+      let listingImagesSorted = listingImagesFinal.sort()
+
+      try {
+        // Prepare listing data with selected photos
+        const finalListing = {
+          title: listingBasics.title,
+          description: listingBasics.description,
+          status: "available", // Default status for new listings
+          // Use the correct property name that matches the Prisma schema
+          listingImages: listingImagesSorted.map((photo, index) => ({
+            url: photo.url,
+            rank: index // Use the order of selectedPhotos for ranking
+          })),
+          // Required fields with defaults if needed
+          roomCount: listingRooms.bedrooms || 1,
+          bathroomCount: listingRooms.bathrooms || 1,
+          guestCount: listingRooms.bedrooms || 1,
+          squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
+          depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
+          shortestLeaseLength: listingPricing.shortestStay || 1,
+          longestLeaseLength: listingPricing.longestStay || 12,
+          shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : 0,
+          longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : 0,
+          requireBackgroundCheck: true,
+        };
+        
+        // Process amenities from the array to set the proper boolean values
+        if (listingAmenities && listingAmenities.length > 0) {
+          listingAmenities.forEach(amenity => {
+            // @ts-ignore - Dynamic property assignment
+            finalListing[amenity] = true;
+          });
+        }
+        
+        // Send data to the server
+        const response = await fetch('/api/listings/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(finalListing),
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to create listing');
+        }
+        
+        // Redirect to host dashboard on success
+        router.push('/platform/host-dashboard');
+      } catch (error) {
+        console.error('Error creating listing:', error);
+        
+        // Show error at the bottom of the review page
+        setValidationErrors({
+          ...validationErrors,
+          [8]: [(error as Error).message || 'An error occurred while creating the listing. Please try again.']
+        });
+      }
     } else {
       // There are validation errors
-      alert("Please fix all validation errors before submitting.");
       
       // Find the first step with errors and navigate to it
       const firstErrorStep = Object.keys(validationErrors)
@@ -626,10 +748,19 @@ const [listingBasics, setListingBasics] = useState({
       case 4:
         // Custom photo handler to update validation in real-time
         const handlePhotosUpdate = (newPhotos: NullableListingImage[]) => {
+          // Update photos state first
           setListingPhotos(newPhotos);
           
-          // Check validation on photos change
-          const photoErrors = validatePhotos();
+          // Use the new photos array directly for validation instead of calling validatePhotos()
+          // which would use the not-yet-updated state value
+          let photoErrors: string[] = [];
+          
+          if (!newPhotos || newPhotos.length === 0) {
+            photoErrors.push("You must upload at least 4 photos");
+          } else if (newPhotos.length < 4) {
+            photoErrors.push(`You need to upload ${4 - newPhotos.length} more photo${newPhotos.length === 3 ? '' : 's'} (minimum 4 required)`);
+          }
+          
           if (photoErrors.length > 0) {
             setValidationErrors({
               ...validationErrors,
@@ -696,7 +827,22 @@ const [listingBasics, setListingBasics] = useState({
               onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
               onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
               onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
-              onTailoredPricingChange={(value) => setListingPricing(prev => ({ ...prev, tailoredPricing: value }))}
+              onTailoredPricingChange={(value) => {
+  if (!value) {
+    // Going from ON to OFF: flatten both rents to the highest
+    const shortRent = parseFloat(listingPricing.shortTermRent) || 0;
+    const longRent = parseFloat(listingPricing.longTermRent) || 0;
+    const maxRent = Math.max(shortRent, longRent).toString();
+    setListingPricing(prev => ({
+      ...prev,
+      tailoredPricing: value,
+      shortTermRent: maxRent,
+      longTermRent: maxRent
+    }));
+  } else {
+    setListingPricing(prev => ({ ...prev, tailoredPricing: value }));
+  }
+}}
               onContinue={handleNext}
             />
             {validationErrors[7] && <ValidationErrors errors={validationErrors[7]} className="mt-6" />}
