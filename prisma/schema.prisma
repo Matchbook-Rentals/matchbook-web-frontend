@@ -27,6 +27,12 @@ enum CreditBucket {
   Exceptional
 }
 
+enum ApprovalStatus {
+  approved
+  rejected
+  pendingReview
+}
+
 model User {
   id              String    @id @default(uuid())
   stripeAccountId String?
@@ -43,6 +49,7 @@ model User {
   verifiedAt      DateTime? // Timestamp of when user was verified
   hallmarkHostAt  DateTime? // Timestamp of when user became hallmark host
   trailblazerAt   DateTime? // Timestamp of when user became trailblazer
+  agreedToTerms   DateTime? // Timestamp of when user last agreed to terms
 
   // Relationships trips          Trip[]
   accounts           Account[]
@@ -118,13 +125,15 @@ model Account {
 }
 
 model Listing {
-  id                     String    @id @default(uuid())
-  isApproved             Boolean   @default(false)
-  createdAt              DateTime  @default(now())
-  lastModified           DateTime  @default(now())
+  id                     String         @id @default(uuid())
+  isApproved             Boolean        @default(false)
+  approvalStatus         ApprovalStatus @default(pendingReview)
+  isTestListing          Boolean        @default(false)
+  createdAt              DateTime       @default(now())
+  lastModified           DateTime       @default(now())
   lastApprovalDecision   DateTime?
-  lastDecisionComment    String?   @db.Text
-  status                 String    @default("available")
+  lastDecisionComment    String?        @db.Text
+  status                 String         @default("available")
   title                  String
   description            String
   imageSrc               String?
@@ -914,4 +923,129 @@ model ResidentialHistory {
 
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId String
+}
+
+model ListingInCreation {
+  id                     String         @id @default(uuid())
+  isApproved             Boolean?
+  approvalStatus         ApprovalStatus @default(pendingReview)
+  isTestListing          Boolean?
+  createdAt              DateTime?      @default(now())
+  lastModified           DateTime?      @default(now())
+  lastApprovalDecision   DateTime?
+  lastDecisionComment    String?        @db.Text
+  status                 String?
+  title                  String?
+  description            String?
+  imageSrc               String?
+  category               String?
+  roomCount              Int?
+  bathroomCount          Int?
+  guestCount             Int?
+  latitude               Float?
+  longitude              Float?
+  locationString         String?
+  city                   String?
+  state                  String?
+  streetAddress1         String?
+  streetAddress2         String?
+  postalCode             String?
+  userId                 String?
+  squareFootage          Int?
+  depositSize            Int?
+  requireBackgroundCheck Boolean?
+  shortestLeaseLength    Int?
+  longestLeaseLength     Int?
+  shortestLeasePrice     Int?
+  longestLeasePrice      Int?
+  furnished              Boolean?
+  utilitiesIncluded      Boolean?
+  petsAllowed            Boolean?
+
+  // General Amenities
+  airConditioner     Boolean?
+  laundryFacilities  Boolean?
+  fitnessCenter      Boolean?
+  elevator           Boolean?
+  wheelchairAccess   Boolean?
+  doorman            Boolean?
+  parking            Boolean?
+  wifi               Boolean?
+  kitchen            Boolean?
+  dedicatedWorkspace Boolean?
+  hairDryer          Boolean?
+  iron               Boolean?
+  heater             Boolean?
+  hotTub             Boolean?
+  smokingAllowed     Boolean?
+  eventsAllowed      Boolean?
+  privateEntrance    Boolean?
+  security           Boolean?
+  waterfront         Boolean?
+  beachfront         Boolean?
+  mountainView       Boolean?
+  cityView           Boolean?
+  waterView          Boolean?
+
+  // Washer and Dryer Options
+  washerInUnit       Boolean?
+  washerHookup       Boolean?
+  washerNotAvailable Boolean?
+  washerInComplex    Boolean?
+  dryerInUnit        Boolean?
+  dryerHookup        Boolean?
+  dryerNotAvailable  Boolean?
+  dryerInComplex     Boolean?
+
+  // Parking Options
+  offStreetParking     Boolean?
+  streetParking        Boolean?
+  streetParkingFree    Boolean?
+  coveredParking       Boolean?
+  coveredParkingFree   Boolean?
+  uncoveredParking     Boolean?
+  uncoveredParkingFree Boolean?
+  garageParking        Boolean?
+  garageParkingFree    Boolean?
+  evCharging           Boolean?
+
+  // Pet Policies
+  allowDogs Boolean?
+  allowCats Boolean?
+
+  // Structural Amenities
+  gym             Boolean?
+  balcony         Boolean?
+  patio           Boolean?
+  sunroom         Boolean?
+  fireplace       Boolean?
+  firepit         Boolean?
+  pool            Boolean?
+  sauna           Boolean?
+  jacuzzi         Boolean?
+  grill           Boolean?
+  oven            Boolean?
+  stove           Boolean?
+  wheelAccessible Boolean?
+  fencedInYard    Boolean?
+  secureLobby     Boolean?
+  keylessEntry    Boolean?
+  alarmSystem     Boolean?
+  storageShed     Boolean?
+  gatedEntry      Boolean?
+  smokeDetector   Boolean?
+  carbonMonoxide  Boolean?
+
+  // Kitchen
+  garbageDisposal Boolean?
+  dishwasher      Boolean?
+  fridge          Boolean?
+
+  //Furnished
+  tv                Boolean?
+  workstation       Boolean?
+  microwave         Boolean?
+  kitchenEssentials Boolean?
+  linens            Boolean?
+  privateBathroom   Boolean?
 }
