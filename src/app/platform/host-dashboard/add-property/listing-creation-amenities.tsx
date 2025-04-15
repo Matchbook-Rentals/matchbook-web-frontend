@@ -114,11 +114,6 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
           ))}
         </div>
       </ScrollArea>
-      {onContinue && (
-        <Button className="mt-4 self-end" onClick={onContinue} disabled={isLoading}>
-          Continue
-        </Button>
-      )}
     </div>
   );
 };

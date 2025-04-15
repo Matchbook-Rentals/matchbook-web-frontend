@@ -316,18 +316,17 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 5:
         return (
-          <ListingAmenities
-            value={listingAmenities}
-            onChange={setListingAmenities}
-            onContinue={handleNext}
-          />
-        );
-      case 6:
-        return (
           <ListingPhotoSelection
             listingPhotos={listingPhotos}
             selectedPhotos={selectedPhotos}
             setSelectedPhotos={setSelectedPhotos}
+          />
+        );
+      case 6:
+        return (
+          <ListingAmenities
+            value={listingAmenities}
+            onChange={setListingAmenities}
           />
         );
       case 7:

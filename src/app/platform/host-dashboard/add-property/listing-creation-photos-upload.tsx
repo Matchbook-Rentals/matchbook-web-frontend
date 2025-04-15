@@ -34,7 +34,7 @@ export const ListingPhotos = ({ listingPhotos, setListingPhotos }: ListingPhotos
               className="w-full"
               appearance={{
                 uploadIcon: "hidden", // Hide default upload icon
-                button: "bg-charcoalBrand", // Hide default button, use our own styling
+                button: "bg-charcoalBrand data-[state='uploading']:after:hidden", // Hide default button, use our own styling
                 label: "text-2xl font-medium text-black underline font-['Poppins',Helvetica] cursor-pointer",
                 container: "w-full flex flex-col items-center justify-center h-[232px] border border-dashed border-black rounded-none",
               }}

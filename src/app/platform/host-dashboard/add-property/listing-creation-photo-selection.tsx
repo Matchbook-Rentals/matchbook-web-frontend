@@ -87,7 +87,7 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
           )}
         </div>
         {/* 4 small featured slots */}
-        <div className="col-span-6 grid grid-cols-2 gap-4">
+        <div className="col-span-6 grid grid-cols-2 gap-2">
           {[0, 1, 2, 3].map((idx) => (
             <div
               key={idx}
@@ -115,7 +115,7 @@ export const ListingPhotoSelection: React.FC<ListingPhotoSelectionProps> = ({
       </div>
 
       {/* Photo gallery for selection */}
-      <div className="grid grid-cols-4 gap-8 mt-20 mb-5">
+      <div className="grid grid-cols-4 gap-4 mt-20 mb-5">
         {listingPhotos.map((photo) => {
           const isSelected = selectedPhotos.some((p) => p.id === photo.id);
           return (
