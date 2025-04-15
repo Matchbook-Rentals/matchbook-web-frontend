@@ -1,50 +1,74 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AddressConfirmationForm } from "./address-confirmation-form";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { SuggestedLocation } from "@/types";
 import { GeocodeResponse } from "@/app/api/geocode/route";
+import { PropertyDetails } from "./types";
 
 interface Suggestion {
   place_id: string;
   description: string;
 }
 
-export default function LocationForm() {
-  // ...existing code...
+interface LocationFormProps {
+  propertyDetails: PropertyDetails;
+  setPropertyDetails: (details: PropertyDetails) => void;
+}
+
+export default function LocationForm({ propertyDetails, setPropertyDetails }: LocationFormProps) {
   const observerRef = useRef<HTMLDivElement>(null);
   const {toast} = useToast();
+  
   // Salt Lake City, Utah
   const INITIAL_COORDINATES = { lat: 40.7608, lng: -111.8910 };
-  const [coordinates, setCoordinates] = useState(INITIAL_COORDINATES);
-  const [inputValue, setInputValue] = useState("");
+  const [coordinates, setCoordinates] = useState({
+    lat: propertyDetails.latitude || INITIAL_COORDINATES.lat,
+    lng: propertyDetails.longitude || INITIAL_COORDINATES.lng
+  });
+  
+  const [inputValue, setInputValue] = useState(propertyDetails.locationString || "");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [marker, setMarker] = useState<maplibregl.Marker | null>(null);
-  const [addressSelected, setAddressSelected] = useState(false);
+  const [addressSelected, setAddressSelected] = useState(Boolean(propertyDetails.streetAddress));
+  
   const [address, setAddress] = useState({
-    street: "",
-    street2: "",
-    city: "",
-    state: "",
-    zip: "",
+    street: propertyDetails.streetAddress || "",
+    street2: propertyDetails.streetAddress2 || "",
+    city: propertyDetails.city || "",
+    state: propertyDetails.state || "",
+    zip: propertyDetails.zipCode || "",
   });
+  
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Update property details when address changes
+  useEffect(() => {
+    if (addressSelected) {
+      setPropertyDetails({
+        ...propertyDetails,
+        streetAddress: address.street,
+        streetAddress2: address.street2,
+        city: address.city,
+        state: address.state,
+        zipCode: address.zip,
+        latitude: coordinates.lat,
+        longitude: coordinates.lng,
+        locationString: inputValue
+      });
+    }
+  }, [address, coordinates, inputValue, addressSelected]);
+
   // Initialize map only on first render
-  React.useEffect(() => {
+  useEffect(() => {
     // Wait for next frame to ensure DOM is ready
     requestAnimationFrame(() => {
       const mapContainer = document.getElementById('property-location-map');
       if (!mapContainer) return;
-      
-      console.log('Creating new map instance');
       
       // Create new map
       const newMap = new maplibregl.Map({
@@ -64,6 +88,7 @@ export default function LocationForm() {
           .setLngLat([coordinates.lng, coordinates.lat])
           .addTo(newMap);
       }
+      
       // Update state with new map and marker
       setMap(newMap);
       setMarker(newMarker);
@@ -96,9 +121,8 @@ export default function LocationForm() {
   }, []);  // Empty dependency array - only run on first render
   
 
-  
   // Update marker position when coordinates change (if map exists)
-  React.useEffect(() => {
+  useEffect(() => {
     if (map) {
       try {
         // If we're at the initial coordinates, remove the marker if it exists
@@ -138,7 +162,6 @@ export default function LocationForm() {
   }, [open]);
 
   const prefetchGeocode = async (description: string) => {
-    console.log("Prefetching geocode for:", description)
     try {
       const trimmedDescription = description.slice(0, -5);
       await fetch(`/api/geocode?address=${encodeURIComponent(trimmedDescription)}`);
@@ -167,59 +190,32 @@ export default function LocationForm() {
     }
   };
 
-  // Utility to format address from Google address_components
-function formatAddress(components: any[]) {
-  const get = (type: string) =>
-    components.find(comp => comp.types.includes(type))?.long_name || "";
-
-  const streetNumber = get("street_number");
-  const route = get("route");
-  const subpremise = get("subpremise");
-  const city = get("locality");
-  const state = get("administrative_area_level_1");
-  const postalCode = get("postal_code");
-  const country = get("country");
-
-  // e.g. 4433 Northeast Crestmoor Lane, Apt 2, Ankeny, IA 50021, United States
-  let street = [streetNumber, route].filter(Boolean).join(" ");
-  if (subpremise) {
-    street += `, Apt ${subpremise}`;
+  // Custom smooth scroll function
+  function smoothScrollToElement(element: HTMLElement, duration: number) {
+    const rect = element.getBoundingClientRect();
+    const targetY = rect.top + window.pageYOffset - window.innerHeight / 2 + rect.height / 2;
+    const startY = window.pageYOffset;
+    const diff = targetY - startY;
+    let start: number | null = null;
+    function step(timestamp: number) {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      window.scrollTo(0, startY + diff * progress);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    }
+    window.requestAnimationFrame(step);
   }
-  return [
-    street,
-    [city, state].filter(Boolean).join(", "),
-    [postalCode, country].filter(Boolean).join(" "),
-  ]
-    .filter(Boolean)
-    .join(", ");
-}
 
-const handleSelect = async (description: string, place_id: string) => {
-    // ...existing code...
-    // After all other logic, scroll observer into view after 500ms
+  const handleSelect = async (description: string, place_id: string) => {
+    // After all other logic, scroll observer into view
     setTimeout(() => {
       if (observerRef.current) {
         smoothScrollToElement(observerRef.current, 1000);
       }
     }, 1000);
 
-    // Custom smooth scroll function
-    function smoothScrollToElement(element: HTMLElement, duration: number) {
-      const rect = element.getBoundingClientRect();
-      const targetY = rect.top + window.pageYOffset - window.innerHeight / 2 + rect.height / 2;
-      const startY = window.pageYOffset;
-      const diff = targetY - startY;
-      let start: number | null = null;
-      function step(timestamp: number) {
-        if (!start) start = timestamp;
-        const progress = Math.min((timestamp - start) / duration, 1);
-        window.scrollTo(0, startY + diff * progress);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      }
-      window.requestAnimationFrame(step);
-    }
     const trimmedDescription = description.slice(0, -5); // Remove country code
     setInputValue(trimmedDescription);
     setAddressSelected(true);
@@ -245,12 +241,7 @@ const handleSelect = async (description: string, place_id: string) => {
         }
       }
 
-      //console log
-      console.log("Geocode response:", data.results[0].address_components);
-
-
       const components = data.results[0].address_components;
-      console.log("Components:", components);
 
       let streetNumber = components.find((component) => component.types.includes('street_number'))?.short_name || '';
       let streetName = components.find((component) => component.types.includes('route'))?.short_name || '';
@@ -266,18 +257,13 @@ const handleSelect = async (description: string, place_id: string) => {
         state: state,
         zip: zip,
       }
-      console.log("New address:", newAddress);
+      
       setAddress(newAddress);
-
       
       // Only continue if we have valid coordinates
       if (lat && lng && lat !== 0 && lng !== 0) {
         // Update coordinates for the map
         setCoordinates({ lat: Number(lat), lng: Number(lng) });
-
-        // Calculate elapsed time
-        const endTime = performance.now();
-        const elapsedMs = Math.round(endTime - startTime);
 
         // Maintain focus after selection
         setTimeout(() => {
@@ -297,17 +283,13 @@ const handleSelect = async (description: string, place_id: string) => {
     }
   };
 
-
-
   const handleAddressChange = (field: string, value: string) => {
-  setAddress((prev: typeof address) => ({
-    ...prev,
-    [field]: value
-  }));
-};
+    setAddress((prev: typeof address) => ({
+      ...prev,
+      [field]: value
+    }));
+  };
   
-
-
   return (
     <main className="relative w-full max-w-[883px] min-h-[601px]">
       <section className="w-full h-full">

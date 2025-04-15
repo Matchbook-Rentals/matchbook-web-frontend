@@ -192,12 +192,10 @@ export default function AddPropertyclient() {
         );
       case 1:
         return (
-          <div className="min-h-[600px]">
-            <LocationForm
-              propertyDetails={propertyDetails}
-              setPropertyDetails={setPropertyDetails}
-            />
-          </div>
+          <LocationForm
+            propertyDetails={propertyDetails}
+            setPropertyDetails={setPropertyDetails}
+          />
         );
       case 2:
         return (
