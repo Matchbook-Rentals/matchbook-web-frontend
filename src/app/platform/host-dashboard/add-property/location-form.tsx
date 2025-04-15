@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { AddressEntryBox } from "@/components/AddressEntryBox";
+import { AddressConfirmationForm } from "./address-confirmation-form";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
@@ -368,7 +368,7 @@ const handleSelect = async (description: string, place_id: string) => {
         {addressSelected && (
           <div className="w-full flex justify-center mt-12 relative z-70 pointer-events-auto">
             <div className="w-full max-w-[670px] mx-auto bg-background">
-              <AddressEntryBox 
+              <AddressConfirmationForm 
                 initialAddress={address} 
                 onAddressChange={(updatedAddress) => {
                   // Map between the two address format structures
@@ -379,6 +379,67 @@ const handleSelect = async (description: string, place_id: string) => {
                     state: updatedAddress.state,
                     zip: updatedAddress.zip
                   });
+                }}
+                onUpdatePin={() => {
+                  // Create a full address string for geocoding
+                  const addressString = `${address.street}, ${address.city}, ${address.state} ${address.zip}`;
+                  
+                  // Clear the input value
+                  setInputValue("");
+                  
+                  // Use our existing geocode logic to update the coordinates
+                  (async () => {
+                    try {
+                      const response = await fetch(`/api/geocode?address=${encodeURIComponent(addressString)}`);
+                      const data = await response.json() as GeocodeResponse;
+                      
+                      let lat = 0, lng = 0;
+                      
+                      // Check for different possible formats of the geocode response
+                      if (data.results && data.results.length > 0) {
+                        if (data.results[0].geometry && data.results[0].geometry.location) {
+                          // Google Maps API format
+                          lat = data.results[0].geometry.location.lat;
+                          lng = data.results[0].geometry.location.lng;
+                        }
+                        
+                        // Format the address from the geocode results
+                        const formattedAddress = data.results[0].formatted_address.split(',')[0];
+                        // Update the input value with the new formatted address
+                        setInputValue(formattedAddress);
+                      }
+                      
+                      // Only continue if we have valid coordinates
+                      if (lat && lng && lat !== 0 && lng !== 0) {
+                        // Update coordinates for the map
+                        setCoordinates({ lat: Number(lat), lng: Number(lng) });
+                        
+                        // Scroll to map to show the new pin location
+                        const mapElement = document.getElementById('property-location-map');
+                        if (mapElement) {
+                          mapElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        
+                        toast({
+                          title: "Pin Updated",
+                          description: "Map location has been updated based on your address.",
+                        });
+                      } else {
+                        toast({
+                          title: "Warning",
+                          description: "Could not find a valid location for this address.",
+                          variant: "destructive"
+                        });
+                      }
+                    } catch (error) {
+                      console.error("Error updating pin:", error);
+                      toast({
+                        title: "Error",
+                        description: "There was a problem updating the map location.",
+                        variant: "destructive"
+                      });
+                    }
+                  })();
                 }}
               />
               {/* Observer div for scroll target */}
