@@ -56,48 +56,64 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
   const generateChartData = () => {
     if (!shortTermRent || !longTermRent) {
       // Return placeholder data if prices aren't set
-      return Array.from({ length: 12 }, (_, i) => ({
-        month: `${i + 1} Month${i !== 0 ? 's' : ''}`,
-        price: 0,
-      }));
+      return Array.from({ length: 12 }, (_, i) => {
+        const num = i + 1;
+        const monthLabel = num === 1 ? `${num} Month` : `${num} Months`;
+        return {
+          month: monthLabel,
+          price: 0,
+        };
+      });
     }
 
     const shortRent = parseFloat(shortTermRent);
     const longRent = parseFloat(longTermRent);
     
     if (isNaN(shortRent) || isNaN(longRent)) {
-      return Array.from({ length: 12 }, (_, i) => ({
-        month: `${i + 1} Month${i !== 0 ? 's' : ''}`,
-        price: 0,
-      }));
+      return Array.from({ length: 12 }, (_, i) => {
+        const num = i + 1;
+        const monthLabel = num === 1 ? `${num} Month` : `${num} Months`;
+        return {
+          month: monthLabel,
+          price: 0,
+        };
+      });
     }
 
     const data = [];
-    const stepValue = (longRent - shortRent) / (longestStay - shortestStay);
     
-    for (let i = 1; i <= 12; i++) {
-      if (i < shortestStay) {
-        // Stays shorter than minimum
+    // If tailored pricing is off, use the same price for all months
+    if (!tailoredPricing) {
+      for (let i = 1; i <= 12; i++) {
+        // Consistent padding for single and double digit month labels
+        const monthLabel = i === 1 ? `${i} Month` : `${i} Months`;
+        
         data.push({
-          month: `${i} Month${i !== 1 ? 's' : ''}`,
-          price: null, // Will not display on chart
-        });
-      } else if (i > longestStay) {
-        // Stays longer than maximum
-        data.push({
-          month: `${i} Month${i !== 1 ? 's' : ''}`,
-          price: null, // Will not display on chart
-        });
-      } else {
-        // Interpolate the price for stays between min and max length
-        const value = shortRent + stepValue * (i - shortestStay);
-        const roundedValue = roundToNearestFive(value);
-        data.push({
-          month: `${i} Month${i !== 1 ? 's' : ''}`,
-          price: parseFloat(roundedValue.toFixed(2)),
+          month: monthLabel,
+          price: shortRent,
           isHighlighted: i === 6, // Highlight 6-month stay
         });
       }
+      return data;
+    }
+    
+    // For tailored pricing, calculate the interpolated values
+    const stepValue = (longRent - shortRent) / (longestStay - shortestStay);
+    
+    // Only include months within the selected range
+    for (let i = shortestStay; i <= longestStay; i++) {
+      // Interpolate the price for stays between min and max length
+      const value = shortRent + stepValue * (i - shortestStay);
+      const roundedValue = roundToNearestFive(value);
+      
+      // Consistent padding for single and double digit month labels
+      const monthLabel = i === 1 ? `${i} Month` : `${i} Months`;
+      
+      data.push({
+        month: monthLabel,
+        price: parseFloat(roundedValue.toFixed(2)),
+        isHighlighted: i === 6, // Highlight 6-month stay
+      });
     }
     
     return data;
@@ -177,108 +193,149 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
           </div>
         </div>
 
-        {/* Instructions */}
-        <p className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-8">
-          Choose your shortest and longest allowable stay lengths.
-        </p>
+        {/* Instructions and Stay Length Settings - only shown when tailored pricing is enabled */}
+        {tailoredPricing && (
+          <>
+            <p className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-8">
+              Choose your shortest and longest allowable stay lengths.
+            </p>
 
-        {/* Stay Length Settings */}
-        <div className="space-y-6 mb-8">
-          <div className="flex items-center justify-between">
-            <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              Shortest stay length
-            </h3>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={decreaseShortestStay}
-                disabled={shortestStay <= 1}
-              >
-                <MinusIcon className="h-4 w-4" />
-              </Button>
-              <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
-                {shortestStay} month{shortestStay !== 1 && "s"}
-              </span>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={increaseShortestStay}
-                disabled={shortestStay >= longestStay}
-              >
-                <PlusIcon className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+            {/* Stay Length Settings */}
+            <div className="space-y-6 mb-8">
+              <div className="flex items-center justify-between">
+                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                  Shortest stay length
+                </h3>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full h-9 w-9"
+                    onClick={decreaseShortestStay}
+                    disabled={shortestStay <= 1}
+                  >
+                    <MinusIcon className="h-4 w-4" />
+                  </Button>
+                  <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
+                    {shortestStay} month{shortestStay !== 1 && "s"}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full h-9 w-9"
+                    onClick={increaseShortestStay}
+                    disabled={shortestStay >= longestStay}
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
 
-          <div className="flex items-center justify-between">
-            <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              Longest stay length
-            </h3>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={decreaseLongestStay}
-                disabled={longestStay <= shortestStay}
-              >
-                <MinusIcon className="h-4 w-4" />
-              </Button>
-              <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
-                {longestStay} month{longestStay !== 1 && "s"}
-              </span>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full h-9 w-9"
-                onClick={increaseLongestStay}
-                disabled={longestStay >= 12}
-              >
-                <PlusIcon className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center justify-between">
+                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                  Longest stay length
+                </h3>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full h-9 w-9"
+                    onClick={decreaseLongestStay}
+                    disabled={longestStay <= shortestStay}
+                  >
+                    <MinusIcon className="h-4 w-4" />
+                  </Button>
+                  <span className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica] whitespace-nowrap">
+                    {longestStay} month{longestStay !== 1 && "s"}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-full h-9 w-9"
+                    onClick={increaseLongestStay}
+                    disabled={longestStay >= 12}
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
+        
+        {/* Alternative instruction for non-tailored pricing */}
+        {!tailoredPricing && (
+          <p className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-8">
+            Enter your standard monthly rent amount.
+          </p>
+        )}
 
         {/* Pricing Inputs */}
         <div className="space-y-6 mb-12">
-          <div className="flex items-center justify-between">
-            <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              Rent price for stay of {shortestStay} month{shortestStay !== 1 && "s"}
-            </h3>
-            <div className="relative w-[234px]">
-              <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
-              <Input 
-                className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7" 
-                value={shortTermRent}
-                onChange={(e) => {
-                  // Only allow numbers and decimal points
-                  const value = e.target.value.replace(/[^0-9.]/g, '');
-                  onShortTermRentChange(value);
-                }}
-                placeholder="0.00"
-                type="text"
-                inputMode="decimal"
-              />
-            </div>
-          </div>
+          {tailoredPricing ? (
+            <>
+              <div className="flex items-center justify-between">
+                <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                  Rent price for stay of {shortestStay} month{shortestStay !== 1 && "s"}
+                </h3>
+                <div className="relative w-[234px]">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
+                  <Input 
+                    className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
+                    value={shortTermRent}
+                    onChange={(e) => {
+                      // Only allow numbers and decimal points
+                      const value = e.target.value.replace(/[^0-9.]/g, '');
+                      onShortTermRentChange(value);
+                    }}
+                    placeholder="0.00"
+                    type="text"
+                    inputMode="decimal"
+                  />
+                </div>
+              </div>
 
-          <div className="space-y-2">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                    Rent price for stay of {longestStay} month{longestStay !== 1 && "s"}
+                  </h3>
+                  <div className="relative w-[234px]">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
+                    <Input 
+                      className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
+                      value={longTermRent}
+                      onChange={(e) => {
+                        // Only allow numbers and decimal points
+                        const value = e.target.value.replace(/[^0-9.]/g, '');
+                        onLongTermRentChange(value);
+                      }}
+                      placeholder="0.00"
+                      type="text"
+                      inputMode="decimal"
+                    />
+                  </div>
+                </div>
+                <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
+                  Hosts often discount rates for extended stays
+                </p>
+              </div>
+            </>
+          ) : (
             <div className="flex items-center justify-between">
               <h3 className="font-normal text-2xl text-[#222222] [font-family:'Poppins',Helvetica]">
-                Rent price for stay of {longestStay} month{longestStay !== 1 && "s"}
+                Monthly Rent
               </h3>
               <div className="relative w-[234px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
-                  className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7" 
-                  value={longTermRent}
+                  className="w-full h-9 rounded-[5px] border-2 border-[#0000004c] pl-7 text-lg" 
+                  value={shortTermRent}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
                     const value = e.target.value.replace(/[^0-9.]/g, '');
+                    // Update both short term and long term rent with the same value
+                    onShortTermRentChange(value);
                     onLongTermRentChange(value);
                   }}
                   placeholder="0.00"
@@ -287,20 +344,22 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 />
               </div>
             </div>
-            <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica]">
-              Hosts often discount rates for extended stays
-            </p>
-          </div>
+          )}
         </div>
 
         {/* Chart Section */}
         <div className="mb-12">
           <h3 className="font-medium text-2xl text-[#222222] [font-family:'Poppins',Helvetica] mb-2">
-            Monthly rent price by total lease length
+            {tailoredPricing 
+              ? "Monthly rent price by total lease length" 
+              : "Monthly rent price"
+            }
           </h3>
           <p className="font-light text-xl text-[#222222] [font-family:'Poppins',Helvetica] mb-6">
-            This chart displays what guests pay per month, depending on the
-            length of their stay
+            {tailoredPricing
+              ? "This chart displays what guests pay per month, depending on the length of their stay"
+              : "This chart displays the fixed monthly rent for all stay durations"
+            }
           </p>
 
           <div className="w-full h-96">
@@ -341,9 +400,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 Deposit
               </label>
               <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7" 
+                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
                   value={deposit}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
@@ -362,9 +421,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 Pet Deposit
               </label>
               <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7" 
+                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
                   value={petDeposit}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
@@ -383,9 +442,9 @@ const ListingCreationPricing: React.FC<ListingCreationPricingProps> = ({
                 Pet Rent
               </label>
               <div className="relative w-[173px]">
-                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">$</span>
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input 
-                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7" 
+                  className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg" 
                   value={petRent}
                   onChange={(e) => {
                     // Only allow numbers and decimal points
