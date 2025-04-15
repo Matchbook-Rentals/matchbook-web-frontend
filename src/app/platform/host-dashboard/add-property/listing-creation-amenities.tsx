@@ -91,9 +91,86 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
     onChange(updated);
   };
 
+  // Laundry options (modeled after filter-options-dialog.tsx)
+  const laundryOptions = [
+    {
+      value: 'washerInUnit',
+      label: 'In Unit',
+      id: 'inUnit',
+    },
+    {
+      value: 'washerInComplex',
+      label: 'In Complex',
+      id: 'inComplex',
+    },
+    {
+      value: 'washerUnavailable',
+      label: 'Unavailable',
+      id: 'unavailable',
+    },
+  ];
+
+  // Helper for laundry radio selection
+  const handleLaundryChange = (value: string) => {
+    let updated: string[] = [];
+    switch (value) {
+      case 'washerInUnit':
+        updated = ['washerInUnit'];
+        break;
+      case 'washerInComplex':
+        updated = ['washerInComplex'];
+        break;
+      case 'washerUnavailable':
+        updated = ['washerUnavailable'];
+        break;
+      default:
+        updated = [];
+    }
+    setSelected(updated);
+    onChange(updated);
+  };
+
+  // Helper to check which radio is selected
+  const getLaundrySelection = () => {
+    if (selected.length === 1 && selected[0] === 'washerInUnit') return 'washerInUnit';
+    if (selected.length === 1 && selected[0] === 'washerInComplex') return 'washerInComplex';
+    if (selected.length === 1 && selected[0] === 'washerUnavailable') return 'washerUnavailable';
+    return '';
+  };
+
+
   return (
     <div className="flex flex-col gap-6">
       <h2 className="text-2xl font-semibold mb-2">What amenities does your property offer?</h2>
+
+      {/* Laundry Section */}
+      <div className="space-y-4 border-b-2 py-6">
+        <h3 className="text-[18px] font-medium text-[#404040]">Laundry</h3>
+        <div className="flex items-center gap-4">
+          <div className="flex-col border-black space-y-[3px]">
+            <AmenitiesIcons.DryerIcon className="w-[70px] h-[70px]" />
+            <AmenitiesIcons.WasherIcon className="w-[70px] h-[70px]" />
+          </div>
+          <div className="flex flex-col justify-between space-y-3">
+            {laundryOptions.map((option) => (
+              <div key={option.id} className='flex items-center gap-x-2'>
+                <input
+                  type="radio"
+                  id={option.id}
+                  name="laundry"
+                  checked={getLaundrySelection() === option.value}
+                  className='appearance-none w-[35px] h-[35px] border-[#70707045] border rounded-full cursor-pointer
+                    relative flex items-center justify-center before:content-[""] before:w-[15px] before:h-[15px] before:rounded-full
+                    checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] hover:border-[#4F4F4F] transition-colors'
+                  onChange={() => handleLaundryChange(option.value)}
+                />
+                <label htmlFor={option.id} className="text-base cursor-pointer select-none">{option.label}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <ScrollArea className="min-h-[400px]">
         <div className="flex flex-col gap-8">
           {AMENITY_GROUPS.map((group) => (

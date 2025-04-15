@@ -10,6 +10,7 @@ import { ListingBasics } from "./listing-creation-basics";
 import { ListingPhotos } from "./listing-creation-photos-upload";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
+import ListingCreationPricing from "./listing-creation-pricing";
 
 // Nullable Listing type for building a new listing
 interface NullableListing {
@@ -189,6 +190,18 @@ const [listingLocation, setListingLocation] = useState<ListingLocation>({
 // Step 4.5: Amenities
 const [listingAmenities, setListingAmenities] = useState<string[]>([]);
 
+// Step 7: Pricing
+const [listingPricing, setListingPricing] = useState({
+  shortestStay: 1,
+  longestStay: 12,
+  shortTermRent: "",
+  longTermRent: "",
+  deposit: "",
+  petDeposit: "",
+  petRent: "",
+  tailoredPricing: true
+});
+
 // Step 2: Rooms
 const [listingRooms, setListingRooms] = useState({
   bedrooms: 1,
@@ -209,8 +222,8 @@ const [listingBasics, setListingBasics] = useState({
     { name: "Rooms", position: 2 },
     { name: "Basics", position: 3 },
     { name: "Photos", position: 4 },
-    { name: "Amenities", position: 5 },
-    { name: "Featured Photos", position: 6 },
+    { name: "Featured Photos", position: 5 },
+    { name: "Amenities", position: 6 },
     { name: "Pricing", position: 7 },
     { name: "Review", position: 8 },
   ];
@@ -269,8 +282,14 @@ const [listingBasics, setListingBasics] = useState({
       squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : null,
       // Sync amenities
       amenities: listingAmenities,
+      // Sync pricing
+      shortestLeaseLength: listingPricing.shortestStay,
+      longestLeaseLength: listingPricing.longestStay,
+      shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : null,
+      longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : null,
+      depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : null,
     }));
-  }, [listingHighlights, listingLocation, listingRooms, listingAmenities]);
+  }, [listingHighlights, listingLocation, listingRooms, listingAmenities, listingPricing]);
 
 
   // Render different content based on the current step
@@ -331,9 +350,31 @@ const [listingBasics, setListingBasics] = useState({
         );
       case 7:
         return (
+          <ListingCreationPricing
+            shortestStay={listingPricing.shortestStay}
+            longestStay={listingPricing.longestStay}
+            shortTermRent={listingPricing.shortTermRent}
+            longTermRent={listingPricing.longTermRent}
+            deposit={listingPricing.deposit}
+            petDeposit={listingPricing.petDeposit}
+            petRent={listingPricing.petRent}
+            tailoredPricing={listingPricing.tailoredPricing}
+            onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
+            onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+            onShortTermRentChange={(value) => setListingPricing(prev => ({ ...prev, shortTermRent: value }))}
+            onLongTermRentChange={(value) => setListingPricing(prev => ({ ...prev, longTermRent: value }))}
+            onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
+            onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
+            onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+            onTailoredPricingChange={(value) => setListingPricing(prev => ({ ...prev, tailoredPricing: value }))}
+            onContinue={handleNext}
+          />
+        );
+      case 8:
+        return (
           <div className="min-h-[600px] flex items-center justify-center">
             <h2 className="font-['Poppins',Helvetica] font-medium text-[#3f3f3f] text-3xl">
-              Step 8: Review
+              Step 9: Review
             </h2>
           </div>
         );
