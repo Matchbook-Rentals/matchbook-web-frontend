@@ -8,6 +8,11 @@ import SocialLinks from '@/components/SocialLinks';
 import Image from 'next/image';
 import Link from 'next/link';
 
+const poppins = Poppins({ 
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  subsets: ["latin"]
+});
+
 async function getBlogArticles(): Promise<BlogArticle[]> {
   const articles = await prisma.blogArticle.findMany({
     orderBy: {
@@ -21,7 +26,7 @@ export default async function Home() {
   const articles = await getBlogArticles();
 
   return (
-    <main className={`${PAGE_MARGIN} mx-auto px-4 py-8`}>
+    <main className={`${PAGE_MARGIN} ${poppins.className} mx-auto px-4 py-8`}>
       <h1 className="text-[32px] font-medium text-left mb-4 md:mb-8 ">Articles</h1>
       {articles.map((article) => (
         <React.Fragment key={article.id}>

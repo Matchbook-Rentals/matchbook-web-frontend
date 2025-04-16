@@ -4,12 +4,16 @@ import Image from 'next/image';
 import { PAGE_MARGIN } from '@/constants/styles';
 import SubscribeDialog from '@/components/marketing-landing-components/subscribe-dialog';
 import SocialLinks from '@/components/SocialLinks';
-import { Montserrat } from 'next/font/google';
+import { Montserrat, Poppins } from 'next/font/google';
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
+const poppins = Poppins({ 
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  subsets: ["latin"]
+});
 
 const BlogArticle = () => {
   return (
-    <div className={`${PAGE_MARGIN} mx-auto py-8`}>
+    <div className={`${PAGE_MARGIN} ${poppins.className} mx-auto py-8`}>
       <h1 className="text-[32px] md:text-[48px] text-left mb-4 md:mb-8 font-normal">
 
         <Link href="/articles" className="hover:underline">Articles</Link> &gt; Introduction

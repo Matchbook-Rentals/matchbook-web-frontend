@@ -2,6 +2,14 @@
 
 Rewrite fxs and go server
 
+
+----- [ ] Clerk inactivity applicaiton error
+----- [ ] Clerk inactivity applicaiton error
+----- [ ] Pet Logos
+----- [ ] Washington D.C
+----- [ ] Tile color
+----- [ ] Prompt for Id after listing puload success
+
 - [ ] APIS 
 ----- [ ] batching for geocodes and autocmplete after half of per second rate limits PositionStack
 ----- [ ] City use our own lookup 

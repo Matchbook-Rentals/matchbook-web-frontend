@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ProgressBar, { StepInfo } from "./progress-bar";
 import { revalidateHostDashboard } from "../_actions";
+import { getListingById } from "@/app/actions/listings";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-creation-highlights";
 import { Rooms } from "./listing-creation-rooms";
@@ -86,8 +87,12 @@ export interface NullableListingImage {
   rank: number | null;
 }
 
-export default function AddPropertyclient() {
+import { DraftListingProps } from './page';
+
+export default function AddPropertyclient({ initialDraftListing }: DraftListingProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const draftId = searchParams.get('draftId');
   
   // State to track current step and animation direction
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -96,6 +101,9 @@ export default function AddPropertyclient() {
   
   // Track validation errors
   const [validationErrors, setValidationErrors] = useState<Record<number, string[]>>({});
+  
+  // State to track if we're loading a draft
+  const [isLoadingDraft, setIsLoadingDraft] = useState<boolean>(!!draftId);
   
   // Listing state with all fields initialized to null
   const [listing, setListing] = useState<NullableListing>({
@@ -248,9 +256,99 @@ const [listingBasics, setListingBasics] = useState({
 
 
   // Handler for Save & Exit button
-  const handleSaveExit = () => {
-    console.log("Save and Exit clicked");
-    // Implement save and exit functionality
+  const handleSaveExit = async () => {
+    try {
+      // Create final array of photos
+      let listingImagesFinal = [...listingPhotos].map(photo => ({
+        ...photo,
+        rank: null
+      }));
+
+      // Update ranks for selected photos if any
+      if (selectedPhotos.length > 0) {
+        for (let i = 0; i < selectedPhotos.length; i++) {
+          const selectedPhoto = selectedPhotos[i];
+          const photoToUpdate = listingImagesFinal.find(p => p.url === selectedPhoto.url);
+          if (photoToUpdate) {
+            photoToUpdate.rank = i + 1;
+          }
+        }
+      }
+
+      // Prepare listing data with selected photos
+      const draftListing = {
+        title: listingBasics.title || "",
+        description: listingBasics.description || "",
+        status: "draft", // Mark as draft
+        listingImages: listingImagesFinal.map((photo, index) => ({
+          url: photo.url,
+          rank: photo.rank || index
+        })),
+        // Listing location fields
+        locationString: listingLocation.locationString || "",
+        latitude: listingLocation.latitude || 0,
+        longitude: listingLocation.longitude || 0,
+        city: listingLocation.city || "",
+        state: listingLocation.state || "",
+        streetAddress1: listingLocation.streetAddress1 || "",
+        streetAddress2: listingLocation.streetAddress2 || "",
+        postalCode: listingLocation.postalCode || "",
+        // Required fields with defaults if needed
+        roomCount: listingRooms.bedrooms || 1,
+        bathroomCount: listingRooms.bathrooms || 1,
+        guestCount: listingRooms.bedrooms || 1,
+        squareFootage: listingRooms.squareFeet ? Number(listingRooms.squareFeet) : 0,
+        depositSize: listingPricing.deposit ? Number(listingPricing.deposit) : 0,
+        shortestLeaseLength: listingPricing.shortestStay || 1,
+        longestLeaseLength: listingPricing.longestStay || 12,
+        shortestLeasePrice: listingPricing.shortTermRent ? Number(listingPricing.shortTermRent) : 0,
+        longestLeasePrice: listingPricing.longTermRent ? Number(listingPricing.longTermRent) : 0,
+        requireBackgroundCheck: true,
+        category: listingHighlights.category || "Single Family",
+        petsAllowed: listingHighlights.petsAllowed || false,
+        furnished: listingHighlights.furnished || false,
+        utilitiesIncluded: listingHighlights.utilitiesIncluded || false,
+      };
+      
+      // Process amenities from the array to set the proper boolean values
+      if (listingAmenities && listingAmenities.length > 0) {
+        listingAmenities.forEach(amenity => {
+          // @ts-ignore - Dynamic property assignment
+          draftListing[amenity] = true;
+        });
+      }
+      
+      // Update the listing status in the local state
+      setListing(prev => ({
+        ...prev,
+        status: "draft"
+      }));
+      
+      // Send data to the server
+      const response = await fetch('/api/listings/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(draftListing),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save listing draft');
+      }
+      
+      // Revalidate the host dashboard to refresh listing data
+      await revalidateHostDashboard();
+      
+      // Show success state instead of immediate redirect, similar to submit flow
+      setCurrentStep(9); // Move to success step
+      setSlideDirection('right');
+      setAnimationKey(prevKey => prevKey + 1);
+    } catch (error) {
+      console.error('Error saving listing draft:', error);
+      alert(`Error saving your listing: ${(error as Error).message}`);
+    }
   };
 
   // Validation functions for each step
@@ -678,6 +776,114 @@ const [listingBasics, setListingBasics] = useState({
     }
   };
 
+  // Effect to load draft if draftId is provided
+  useEffect(() => {
+    const loadDraft = async () => {
+      if (draftId) {
+        try {
+          setIsLoadingDraft(true);
+          const draftListing = await getListingById(draftId);
+          
+          if (draftListing) {
+            // Update the main listing state
+            setListing(draftListing);
+            
+            // Update all the component states with the loaded data
+            if (draftListing.category) {
+              setListingHighlights({
+                category: draftListing.category,
+                petsAllowed: draftListing.petsAllowed || false,
+                furnished: draftListing.furnished || false,
+                utilitiesIncluded: draftListing.utilitiesIncluded || false
+              });
+            }
+            
+            setListingLocation({
+              locationString: draftListing.locationString || null,
+              latitude: draftListing.latitude || null,
+              longitude: draftListing.longitude || null,
+              city: draftListing.city || null,
+              state: draftListing.state || null,
+              streetAddress1: draftListing.streetAddress1 || null,
+              streetAddress2: draftListing.streetAddress2 || null,
+              postalCode: draftListing.postalCode || null,
+              country: "United States"
+            });
+            
+            setListingRooms({
+              bedrooms: draftListing.roomCount || 1,
+              bathrooms: draftListing.bathroomCount || 1,
+              squareFeet: draftListing.squareFootage ? draftListing.squareFootage.toString() : ""
+            });
+            
+            setListingBasics({
+              title: draftListing.title || "",
+              description: draftListing.description || ""
+            });
+            
+            // Set listing photos
+            if (draftListing.listingImages && draftListing.listingImages.length > 0) {
+              const photos = draftListing.listingImages.map(img => ({
+                id: img.id || null,
+                url: img.url || null,
+                listingId: img.listingId || null,
+                category: img.category || null,
+                rank: img.rank || null
+              }));
+              
+              setListingPhotos(photos);
+              
+              // Set featured photos (those with rank 1-4)
+              const featuredPhotos = photos
+                .filter(p => p.rank && p.rank >= 1 && p.rank <= 4)
+                .sort((a, b) => (a.rank || 0) - (b.rank || 0));
+                
+              if (featuredPhotos.length > 0) {
+                setSelectedPhotos(featuredPhotos);
+              }
+            }
+            
+            // Set amenities (all properties that are true)
+            const amenities: string[] = [];
+            Object.entries(draftListing).forEach(([key, value]) => {
+              if (value === true && 
+                  key !== 'furnished' && 
+                  key !== 'utilitiesIncluded' && 
+                  key !== 'petsAllowed' && 
+                  key !== 'isApproved') {
+                amenities.push(key);
+              }
+            });
+            
+            if (amenities.length > 0) {
+              setListingAmenities(amenities);
+            }
+            
+            // Set pricing
+            setListingPricing({
+              shortestStay: draftListing.shortestLeaseLength || 1,
+              longestStay: draftListing.longestLeaseLength || 12,
+              shortTermRent: draftListing.shortestLeasePrice ? draftListing.shortestLeasePrice.toString() : "",
+              longTermRent: draftListing.longestLeasePrice ? draftListing.longestLeasePrice.toString() : "",
+              deposit: draftListing.depositSize ? draftListing.depositSize.toString() : "",
+              petDeposit: "",
+              petRent: "",
+              tailoredPricing: draftListing.shortestLeasePrice !== draftListing.longestLeasePrice
+            });
+          }
+        } catch (error) {
+          console.error("Error loading draft listing:", error);
+        } finally {
+          setIsLoadingDraft(false);
+        }
+      }
+    };
+    
+    if (draftId) {
+      loadDraft();
+    }
+  }, [draftId]);
+
   // Effect to sync subset states back to main listing state
   useEffect(() => {
     setListing(prevListing => ({
@@ -906,7 +1112,9 @@ const [listingBasics, setListingBasics] = useState({
           </>
         );
       case 9:
-        // Success page
+        // Success page - determine if from Save & Exit or final submission
+        const isSaveAndExit = currentStep === 9 && listing.status === "draft";
+        
         return (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
@@ -914,10 +1122,14 @@ const [listingBasics, setListingBasics] = useState({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold mb-6">Listing Created Successfully!</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              {isSaveAndExit ? "Listing Saved Successfully!" : "Listing Created Successfully!"}
+            </h2>
             <p className="text-lg mb-8 max-w-lg">
-              Our team will review your listing for approval in the next 24 hours. 
-              You'll receive a notification once your listing is approved.
+              {isSaveAndExit 
+                ? "Your listing has been saved as a draft. You can come back later to finish and submit it for approval."
+                : "Our team will review your listing for approval in the next 24 hours. You'll receive a notification once your listing is approved."
+              }
             </p>
             <Button 
               className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
@@ -931,6 +1143,18 @@ const [listingBasics, setListingBasics] = useState({
         return null;
     }
   };
+
+  // Loading state for draft
+  if (isLoadingDraft) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl">Loading your draft listing...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="bg-white flex flex-row justify-center w-full min-h-screen">

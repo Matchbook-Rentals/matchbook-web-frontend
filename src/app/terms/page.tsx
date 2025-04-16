@@ -33,10 +33,10 @@ export default async function TermsPage() {
         
         <h2 className="text-xl font-semibold mb-4">Executive Summary</h2>
         <p className="mb-6">
-          These Terms of Use govern the access and use of the MatchBook LLC website and mobile application (the "Service"). 
-          By using the Service, users agree to a legally binding agreement with MatchBook LLC ("The Platform"). Key provisions 
+          These Terms of Use govern the access and use of the MatchBook LLC website and mobile application (the &quot;Service&quot;). 
+          By using the Service, users agree to a legally binding agreement with MatchBook LLC (&quot;The Platform&quot;). Key provisions 
           outline user responsibilities, including compliance with all applicable laws and maintenance of account security. 
-          MatchBook LLC operates as a platform connecting landlords/property managers ("Hosts") with potential renters ("Renters"), 
+          MatchBook LLC operates as a platform connecting landlords/property managers (&quot;Hosts&quot;) with potential renters (&quot;Renters&quot;), 
           but is not a party to any rental agreements made through the platform. The Terms of Use include limitations of liability, 
           data use policies, acceptable content guidelines, and dispute resolution procedures. Users are responsible for ensuring 
           the accuracy of their listings and compliance with fair housing laws. The Platform reserves the right to modify the 
@@ -44,17 +44,17 @@ export default async function TermsPage() {
         </p>
 
         <p className="mb-6">
-          MatchBook LLC and its affiliates ("we," "us," "our," or "The Platform") operate this website and the MatchBook mobile 
-          application (the "Service" or "Website").
+          MatchBook LLC and its affiliates (&quot;we,&quot; &quot;us,&quot; &quot;our,&quot; or &quot;The Platform&quot;) operate this website and the MatchBook mobile 
+          application (the &quot;Service&quot; or &quot;Website&quot;).
         </p>
 
         <p className="mb-6">
           By using or accessing this Site, including any subdomain, mobile application, or other website operated by us where 
-          these Terms of Use are posted (collectively, the "Site"), you agree to be bound by these Terms of Use, as well as our 
-          Privacy Policy (collectively, the "Terms"). If you do not agree to these Terms, you are not authorized to access or 
-          use the Site. "Use" or "access" of the Site includes any direct or indirect access or use of the Site or any cached 
+          these Terms of Use are posted (collectively, the &quot;Site&quot;), you agree to be bound by these Terms of Use, as well as our 
+          Privacy Policy (collectively, the &quot;Terms&quot;). If you do not agree to these Terms, you are not authorized to access or 
+          use the Site. &quot;Use&quot; or &quot;access&quot; of the Site includes any direct or indirect access or use of the Site or any cached 
           version of the Site, and any direct or indirect access or use of any information or content on the Site, regardless 
-          of how obtained. The term "Site" includes, without limitation, any cached version.
+          of how obtained. The term &quot;Site&quot; includes, without limitation, any cached version.
         </p>
 
         <p className="mb-6">
@@ -70,8 +70,8 @@ export default async function TermsPage() {
         <h2 className="text-xl font-semibold mb-4">1. The Site is a Platform and We are Not a Party to any Rental Agreement or other Transaction Between Users of the Site.</h2>
         <p className="mb-6">
           We do not own, manage, or have the authority to contract for any rental property listed on the Site. The Site provides 
-          a platform where landlords, property managers, and property owners (each, a "Host") can offer rental properties to 
-          potential renters ("Renters," and collectively with Hosts, "Users") in various pricing formats. This includes users 
+          a platform where landlords, property managers, and property owners (each, a &quot;Host&quot;) can offer rental properties to 
+          potential renters (&quot;Renters,&quot; and collectively with Hosts, &quot;Users&quot;) in various pricing formats. This includes users 
           who originally advertised their properties elsewhere and whose listings have been redistributed on the Site. We may 
           also offer tools for online Leasing or other services that allow Users to communicate, send maintenance requests, notices, 
           and payments, and enter into rental agreements or other transactions. Users use these tools at their own discretion and 
@@ -135,7 +135,7 @@ export default async function TermsPage() {
           the property and disclose any material defects or information, and will regularly review the listing to ensure it is accurate 
           and not misleading; (iv) they will not wrongfully deny access to the property; and (v) they will provide refunds when due 
           according to the cancellation policy or rental agreement. Upon our request, each Host agrees to promptly provide proof of 
-          personal identification, that the property's condition, location, and amenities are accurately described, property ownership, 
+          personal identification, that the property&apos;s condition, location, and amenities are accurately described, property ownership, 
           and authority to list the property. If you are listing a home, condominium, or apartment, please check your rental contract 
           or lease, or contact your landlord, to determine if there are restrictions that would limit your ability to list the property. 
           Listing your home may violate your lease or contract and could result in legal action, including eviction.
@@ -161,12 +161,12 @@ export default async function TermsPage() {
         <p className="mb-6">
           You shall not:
           <ul className="list-disc pl-8 mt-2 space-y-1">
-            <li>upload, post, transmit, share or otherwise make available any unsolicited or unauthorized advertising, solicitations, promotional materials, "junk mail," "spam," "chain letters," "pyramid schemes," or any other form of solicitation;</li>
+            <li>upload, post, transmit, share or otherwise make available any unsolicited or unauthorized advertising, solicitations, promotional materials, &quot;junk mail,&quot; &quot;spam,&quot; &quot;chain letters,&quot; &quot;pyramid schemes,&quot; or any other form of solicitation;</li>
             <li>solicit personal information from anyone under the age of eighteen (18) or solicit passwords or personally identifying information for commercial or unlawful purposes;</li>
             <li>upload, post, transmit, share or otherwise make available any material that contains software viruses or any other computer code, files or programs designed to interrupt, destroy or limit the functionality of any computer software or hardware or telecommunications equipment;</li>
             <li>intimidate or harass another individual, including your Renter(s) or landlord whether on-site or offline;</li>
             <li>upload, post, transmit, share, store or otherwise make available content that would constitute, encourage or provide instructions for a criminal offense, violate the rights of any party, or that would otherwise create liability or violate any local, state, national or international law;</li>
-            <li>use or attempt to use another's account, service or system without authorization from Us, or create a false identity on the Sites;</li>
+            <li>use or attempt to use another&apos;s account, service or system without authorization from Us, or create a false identity on the Sites;</li>
             <li>upload, post, transmit, share, store or otherwise make available content that, in our sole judgment, is objectionable or which restricts or inhibits any other person from using or enjoying the Sites, or which may expose us or our users to any harm or liability of any type;</li>
             <li>circumvent or modify, attempt to circumvent or modify, or encourage or assist any other person in circumventing or modifying any security technology or software that is part of the Sites;</li>
             <li>cover or obscure the advertisements on any Sites page via HTML/CSS or any other means;</li>
@@ -214,7 +214,7 @@ export default async function TermsPage() {
         </p>
 
         <p className="mb-6">
-          THE SERVICE IS PROVIDED "AS-IS" WITHOUT PROMISES OF ANY KIND. NEITHER WE NOR OUR SUPPLIERS/THIRD PARTY VENDORS WARRANT OR 
+          THE SERVICE IS PROVIDED &quot;AS-IS&quot; WITHOUT PROMISES OF ANY KIND. NEITHER WE NOR OUR SUPPLIERS/THIRD PARTY VENDORS WARRANT OR 
           GUARANTEE UPTIME OR AVAILABILITY OF THE SERVICE, THAT THE SERVICE WILL MEET OR CONTINUE IN THE FUTURE TO MEET YOUR NEEDS, 
           OR THAT WE WILL CONTINUE TO PROVIDE THE SERVICE OR ANY ASPECT OF THE SERVICE IN THE FUTURE. TO THE MAXIMUM EXTENT PERMITTED 
           BY LAW, WE DISCLAIM ALL WARRANTIES FOR THE SERVICE, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF MERCHANTABILITY, 
@@ -238,7 +238,7 @@ export default async function TermsPage() {
 
         <h2 className="text-xl font-semibold mb-4">4. User Warranties.</h2>
         <p className="mb-6">
-          You represent, warrant, and covenant that all content you provide ("User-Contributed Content"), including, but not limited to, 
+          You represent, warrant, and covenant that all content you provide (&quot;User-Contributed Content&quot;), including, but not limited to, 
           information about your rental property(ies), is true and accurate to the best of your knowledge. You may not post, transmit, 
           or share User-Contributed Content that you did not create or do not have permission to post. You assume full responsibility 
           for, and agree to indemnify us against any liability arising from User-Contributed Content that you post on the Services or 
@@ -248,10 +248,10 @@ export default async function TermsPage() {
 
         <h2 className="text-xl font-semibold mb-4">5. Data Collected by You from the Services and Sites.</h2>
         <p className="mb-6">
-          If you obtain another user's personal information directly or indirectly through the Services or Site, you agree that the 
+          If you obtain another user&apos;s personal information directly or indirectly through the Services or Site, you agree that the 
           limited license we grant you allows you to use such information only for: (a) using services offered through the Site, and 
-          (b) inquiring about or facilitating a financial transaction with that user related to the Site's purpose (such as inquiring 
-          about or Leasing an online Leasing or processing a payment). Any other use or disclosure requires the user's express permission. 
+          (b) inquiring about or facilitating a financial transaction with that user related to the Site&apos;s purpose (such as inquiring 
+          about or Leasing an online Leasing or processing a payment). Any other use or disclosure requires the user&apos;s express permission. 
           You may not use the information for any unlawful purpose or with any unlawful intent.
         </p>
 
@@ -261,7 +261,7 @@ export default async function TermsPage() {
           any reason, including if it fails to meet our Content Guidelines, any other guidelines posted on the Site, or violates these 
           Terms, as determined in our sole discretion. We will exercise this right reasonably and in good faith. Reasons for removing 
           content may include, but are not limited to, content that is unlawful, infringing, harmful, or violates these Terms. We reserve 
-          the right, but do not assume the obligation, to edit a Host's content or User-Contributed Content in a non-substantive manner 
+          the right, but do not assume the obligation, to edit a Host&apos;s content or User-Contributed Content in a non-substantive manner 
           to ensure compliance with our content guidelines or formatting requirements or to provide services to Hosts to create or improve 
           listings (such as translation services), based on information we have about the property listed. Users are responsible for 
           reviewing their User-Contributed Content to ensure it is accurate and not misleading.
@@ -270,7 +270,7 @@ export default async function TermsPage() {
         <h2 className="text-xl font-semibold mb-4">7. Notification of Infringement; DMCA Policy.</h2>
         <p className="mb-6">
           We respect the intellectual property rights of others. The Platform does not permit, condone, or tolerate the posting of any 
-          content on the Site that infringes any person's copyright. In appropriate circumstances, The Platform will terminate any Host 
+          content on the Site that infringes any person&apos;s copyright. In appropriate circumstances, The Platform will terminate any Host 
           or Renter who repeatedly infringes copyright. If you become aware of or suspect any copyright infringement on this Site, please 
           notify us at Support@MatchBookRentals.com
         </p>
@@ -280,7 +280,7 @@ export default async function TermsPage() {
           Users may submit unsolicited ideas or suggestions related to the platform, such as ideas for new or improved products or 
           technologies, website or tool enhancements, processes, materials, marketing plans, or new product names. We are under no 
           obligation to review or consider them, nor are we required to treat them as confidential. If you choose to submit any ideas, 
-          original creative artwork, suggestions, or other works ("Feedback") to us, the following terms apply: By providing Feedback 
+          original creative artwork, suggestions, or other works (&quot;Feedback&quot;) to us, the following terms apply: By providing Feedback 
           to us, you agree that: (1) the Feedback and its contents automatically become our property, without any compensation to you; 
           and (2) we may use or redistribute any Feedback and its contents for any purpose and in any way.
         </p>
@@ -290,7 +290,7 @@ export default async function TermsPage() {
           The Site is subject to United States export controls. No Software available on the Site or software available any other site 
           operated by us may be downloaded or otherwise exported or re-exported (a) into (or to a resident of) Cuba, Iraq, Russia, Belarus, 
           Libya, North Korea, Iran, Syria or any other country to which the United States has embargoed goods, or (b) anyone on the United 
-          States Treasury Department's list of Specially Designated Nationals or the United States Commerce Department's Table of Deny Orders. 
+          States Treasury Department&apos;s list of Specially Designated Nationals or the United States Commerce Department&apos;s Table of Deny Orders. 
           By using the Site, you represent and warrant that you are not located in, under the control of, or a national or resident of any 
           such country or on any such list.
         </p>
@@ -328,8 +328,8 @@ export default async function TermsPage() {
           We do not provide liability insurance protection for owners, property managers, or Renters, regardless of whether a user obtains 
           insurance coverage through one of our third-party providers. Users are solely responsible for obtaining sufficient insurance 
           coverage to protect their properties and themselves, as applicable. Hosts agree that they have or will obtain appropriate insurance 
-          coverage to cover the rental of properties managed on the Site before a Renter's arrival and will maintain adequate coverage through 
-          the Renter's departure. Upon request, Hosts will provide us with copies of relevant proof of coverage.
+          coverage to cover the rental of properties managed on the Site before a Renter&apos;s arrival and will maintain adequate coverage through 
+          the Renter&apos;s departure. Upon request, Hosts will provide us with copies of relevant proof of coverage.
         </p>
 
         <h2 className="text-xl font-semibold mb-4">14. General</h2>
@@ -357,7 +357,7 @@ export default async function TermsPage() {
         </p>
 
         <p className="mb-6">
-          <strong>d. Termination for Cause:</strong> We may immediately terminate any user's access to or use of the Site if the user breaches 
+          <strong>d. Termination for Cause:</strong> We may immediately terminate any user&apos;s access to or use of the Site if the user breaches 
           these Terms or engages in any unauthorized use of the Site. However, we do not guarantee that we will take action against all breaches 
           of these Terms.
         </p>
@@ -378,14 +378,14 @@ export default async function TermsPage() {
 
         <p className="mb-6">
           <strong>g. Marks:</strong> You may only use our trademarks or logos with our specific prior written authorization. You may refer to 
-          The Platform or the name of one of our affiliate websites in a descriptive manner, such as "Check out my rental on The Website," or 
-          "I list properties on The Website." However, you may not refer to The Platform or any of our affiliates in any way that suggests your 
+          The Platform or the name of one of our affiliate websites in a descriptive manner, such as &quot;Check out my rental on The Website,&quot; or 
+          &quot;I list properties on The Website.&quot; However, you may not refer to The Platform or any of our affiliates in any way that suggests your 
           company or site is sponsored by, affiliated with, or endorsed by us.
         </p>
 
         <p className="mb-6">
           <strong>h. Payments:</strong> When you book a Listing, you agree to pay all charges for your booking, including the Listing price, 
-          applicable fees like MatchBook's service fee, taxes, and any other items identified during checkout. We will process payments, deduct 
+          applicable fees like MatchBook&apos;s service fee, taxes, and any other items identified during checkout. We will process payments, deduct 
           applicable fees, and transfer the remaining funds to the designated bank account(s).
         </p>
 
@@ -404,7 +404,7 @@ export default async function TermsPage() {
 
         <p className="mb-6">
           <strong>k. Booking Modification:</strong> Renters and Hosts are responsible for any booking modifications they agree to make via the 
-          MatchBook Platform or through MatchBook customer service ("Booking Modifications") and agree to pay any additional amounts, fees, or 
+          MatchBook Platform or through MatchBook customer service (&quot;Booking Modifications&quot;) and agree to pay any additional amounts, fees, or 
           taxes associated with those Booking Modifications.
         </p>
 
@@ -416,8 +416,8 @@ export default async function TermsPage() {
         <p className="mb-6">
           <strong>m. Refunds:</strong> Renters are eligible for a full refund via MatchBook only if they cancel within 24 hours of booking. If 
           a Renter cancels after that 24-hour period but before the first day of the reservation, they will forfeit their deposit and the 
-          MatchBook service fee but will receive a refund for the first month's rent. Cancellation requests after the reservation has begun must 
-          be submitted to the Host and are subject to the Host's discretion and the terms of the rental agreement. If a Host cancels a reservation 
+          MatchBook service fee but will receive a refund for the first month&apos;s rent. Cancellation requests after the reservation has begun must 
+          be submitted to the Host and are subject to the Host&apos;s discretion and the terms of the rental agreement. If a Host cancels a reservation 
           prior to move-in, the Renter will automatically receive a full refund.
         </p>
 
@@ -447,7 +447,7 @@ export default async function TermsPage() {
         <p className="mb-6">
           <strong>r. Account Errors:</strong> Contact us immediately if you believe that: (a) your account has been accessed without your 
           authorization; (b) a transaction you did not authorize has occurred; (c) a transaction has been processed incorrectly to or from 
-          your account; or (d) your account statement contains an error regarding your transaction history (each, an "Error").
+          your account; or (d) your account statement contains an error regarding your transaction history (each, an &quot;Error&quot;).
         </p>
 
         <p className="mb-6">
@@ -465,8 +465,8 @@ export default async function TermsPage() {
 
         <p className="mb-6">
           <strong>u. Purchases of Third-Party Products and Services:</strong> Users may utilize products such as template legal notices, 
-          agreements, rental agreements, lease contracts, and other legal documents. These products are offered "AS IS," and only the original 
-          service provider or manufacturer's warranty may apply.
+          agreements, rental agreements, lease contracts, and other legal documents. These products are offered &quot;AS IS,&quot; and only the original 
+          service provider or manufacturer&apos;s warranty may apply.
         </p>
 
         <p className="mb-6">
