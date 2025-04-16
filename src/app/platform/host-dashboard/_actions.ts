@@ -1,0 +1,34 @@
+'use server';
+
+import { revalidatePath } from "next/cache";
+import prisma from "@/lib/prismadb";
+import { currentUser } from "@clerk/nextjs/server";
+
+export const fetchListingsFromDb = async () => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const listings = await prisma.listing.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        bedrooms: true,
+        listingImages: true,
+      },
+    });
+    return listings;
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    throw error; // Re-throw the error for further handling
+  }
+  return [];
+};
+
+export const revalidateHostDashboard = async () => {
+  revalidatePath("/platform/host-dashboard");
+  return { revalidated: true };
+};

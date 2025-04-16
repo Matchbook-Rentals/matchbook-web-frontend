@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProgressBar, { StepInfo } from "./progress-bar";
+import { revalidateHostDashboard } from "../_actions";
 import LocationForm from "./location-form";
 import ListingUploadHighlights from "./listing-creation-highlights";
 import { Rooms } from "./listing-creation-rooms";
@@ -646,6 +647,9 @@ const [listingBasics, setListingBasics] = useState({
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to create listing');
         }
+        
+        // Revalidate the host dashboard to refresh listing data
+        await revalidateHostDashboard();
         
         // Show success state instead of immediate redirect
         setCurrentStep(9); // Move to a new success step

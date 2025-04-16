@@ -114,7 +114,7 @@ export default function SearchFavoritesTab() {
   }
 
   const generateRequestedCardActions = (listing: ListingAndImages) => {
-    return [{ label: 'Retract Application', action: () => handleUnapply(listing) }]
+    return [{ label: 'Retract Application', action: () => handleUnapply(listing), variant: 'destructive' }]
   }
 
   useEffect(() => {

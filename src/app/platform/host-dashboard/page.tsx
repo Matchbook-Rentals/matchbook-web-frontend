@@ -1,35 +1,8 @@
 import React from "react";
-import prisma from "@/lib/prismadb";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
 import HostDashboardClient from "./host-dashboard-client";
-
-const fetchListingsFromDb = async () => {
-  "use server";
-
-  try {
-    const user = await currentUser();
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
-
-    const listings = await prisma.listing.findMany({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        bedrooms: true,
-        listingImages: true,
-      },
-    });
-    return listings;
-  } catch (error) {
-    console.error("Error fetching listings:", error);
-    throw error; // Re-throw the error for further handling
-  }
-  return [];
-};
+import { fetchListingsFromDb } from "./_actions";
 
 export default async function HostDashboard() {
   const userDbProperties = await fetchListingsFromDb();
