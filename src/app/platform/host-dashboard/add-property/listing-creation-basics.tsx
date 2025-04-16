@@ -44,6 +44,7 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
                 value={title}
                 onChange={handleTitleChange}
                 maxLength={35}
+                minLength={6}
               />
             </CardContent>
           </Card>
@@ -72,6 +73,7 @@ export const ListingBasics = ({ title, setTitle, description, setDescription }: 
                 value={description}
                 onChange={handleDescriptionChange}
                 maxLength={1000}
+                minLength={6}
               />
             </CardContent>
           </Card>

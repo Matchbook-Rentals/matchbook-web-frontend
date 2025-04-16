@@ -87,3 +87,34 @@ export async function approveRejectListing(listingId: string, action: 'approve' 
   
   return listing
 }
+
+export async function deleteListing(listingId: string) {
+  if (!checkRole('admin')) {
+    throw new Error('Unauthorized')
+  }
+
+  // Delete bedrooms related to this listing
+  await prisma.bedroom.deleteMany({
+    where: {
+      listingId
+    }
+  })
+  
+  // Delete images related to this listing
+  await prisma.listingImage.deleteMany({
+    where: {
+      listingId
+    }
+  })
+  
+  // Delete the listing itself
+  await prisma.listing.delete({
+    where: {
+      id: listingId
+    }
+  })
+
+  revalidatePath('/admin/listing-approval')
+  
+  return { success: true }
+}

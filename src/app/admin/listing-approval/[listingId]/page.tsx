@@ -128,20 +128,24 @@ export default async function ListingApprovalDetail({
 
           {listing.approvalStatus === 'pendingReview' && (
             <div className="mt-8">
-              <ApprovalActions listingId={listing.id} />
+              <ApprovalActions listingId={listing.id} listingTitle={listing.title} />
             </div>
           )}
 
           {listing.approvalStatus !== 'pendingReview' && (
-            <div className="mt-8 p-4 bg-muted rounded-md">
-              <h3 className="font-semibold">Decision Details</h3>
-              <p><span className="font-medium">Decision Date:</span> {listing.lastApprovalDecision ? formatDate(listing.lastApprovalDecision) : 'N/A'}</p>
-              {listing.lastDecisionComment && (
-                <div className="mt-2">
-                  <p className="font-medium">Comment:</p>
-                  <p className="mt-1">{listing.lastDecisionComment}</p>
-                </div>
-              )}
+            <div className="mt-8">
+              <div className="p-4 bg-muted rounded-md mb-4">
+                <h3 className="font-semibold">Decision Details</h3>
+                <p><span className="font-medium">Decision Date:</span> {listing.lastApprovalDecision ? formatDate(listing.lastApprovalDecision) : 'N/A'}</p>
+                {listing.lastDecisionComment && (
+                  <div className="mt-2">
+                    <p className="font-medium">Comment:</p>
+                    <p className="mt-1">{listing.lastDecisionComment}</p>
+                  </div>
+                )}
+              </div>
+              
+              <ApprovalActions listingId={listing.id} listingTitle={listing.title} />
             </div>
           )}
         </CardContent>
