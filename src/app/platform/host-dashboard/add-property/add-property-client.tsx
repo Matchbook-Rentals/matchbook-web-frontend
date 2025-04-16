@@ -242,6 +242,7 @@ const [listingBasics, setListingBasics] = useState({
     { name: "Amenities", position: 6 },
     { name: "Pricing", position: 7 },
     { name: "Review", position: 8 },
+    { name: "Success", position: 9 },
   ];
 
 
@@ -646,8 +647,10 @@ const [listingBasics, setListingBasics] = useState({
           throw new Error(errorData.error || 'Failed to create listing');
         }
         
-        // Redirect to host dashboard on success
-        router.push('/platform/host-dashboard');
+        // Show success state instead of immediate redirect
+        setCurrentStep(9); // Move to a new success step
+        setSlideDirection('right');
+        setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
         console.error('Error creating listing:', error);
         
@@ -898,6 +901,28 @@ const [listingBasics, setListingBasics] = useState({
             )}
           </>
         );
+      case 9:
+        // Success page
+        return (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold mb-6">Listing Created Successfully!</h2>
+            <p className="text-lg mb-8 max-w-lg">
+              Our team will review your listing for approval in the next 24 hours. 
+              You'll receive a notification once your listing is approved.
+            </p>
+            <Button 
+              className="w-[200px] h-[48px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+              onClick={() => router.push('/platform/host-dashboard')}
+            >
+              Go to Host Dashboard
+            </Button>
+          </div>
+        );
       default:
         return null;
     }
@@ -906,12 +931,14 @@ const [listingBasics, setListingBasics] = useState({
   return (
     <main className="bg-white flex flex-row justify-center w-full min-h-screen">
       <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
-        {/* Progress bar component */}
-        <ProgressBar 
-          currentStep={currentStep} 
-          steps={steps}
-          onSaveExit={handleSaveExit}
-        />
+        {/* Progress bar component - hidden on success page */}
+        {currentStep !== 9 && (
+          <ProgressBar 
+            currentStep={currentStep} 
+            steps={steps}
+            onSaveExit={handleSaveExit}
+          />
+        )}
 
         {/* Main content with slide animation */}
         <div className="mx-auto w-full max-w-[891px] mb-24">
@@ -941,26 +968,28 @@ const [listingBasics, setListingBasics] = useState({
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
-          <Separator className="w-full" />
-          <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
-            <Button 
-              className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={handleBack}
-              disabled={currentStep === 0}
-            >
-              Back
-            </Button>
-            <Button 
-              className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
-              onClick={currentStep === steps.length - 1 ? handleSubmitListing : handleNext}
-              disabled={currentStep === steps.length - 1 && false} // Disabled set to false for final step to submit the listing
-            >
-              {currentStep === steps.length - 1 ? 'Submit Listing' : 
-               cameFromReview ? 'Review' : 'Next'}
-            </Button>
+        {currentStep !== 9 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+            <Separator className="w-full" />
+            <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
+              <Button 
+                className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+                onClick={handleBack}
+                disabled={currentStep === 0}
+              >
+                Back
+              </Button>
+              <Button 
+                className="w-[119px] h-[42px] bg-[#4f4f4f] rounded-[5px] shadow-[0px_4px_4px_#00000040] font-['Montserrat',Helvetica] font-semibold text-white text-base"
+                onClick={currentStep === 8 ? handleSubmitListing : handleNext}
+                disabled={currentStep === 8 && false} // Disabled set to false for review step to submit the listing
+              >
+                {currentStep === 8 ? 'Submit Listing' : 
+                 cameFromReview ? 'Review' : 'Next'}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
         
 {/* Removed redundant padding div as we've added padding elsewhere */}
       </div>
