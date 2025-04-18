@@ -79,16 +79,11 @@ export default function RecentArticle() {
             <h2 className="font-['Lora',Helvetica] font-bold text-[24px] md:text-[32px] tracking-[-0.64px] leading-8 md:leading-10">
               {article.title}
             </h2>
-            {article.excerpt && (
-              <p className="mt-2 font-['Poppins',Helvetica] text-sm line-clamp-3">
-                {article.excerpt}
-              </p>
-            )}
           </CardContent>
           <CardFooter>
             <Link
               href={`/articles/${article.slug}`}
-              className="font-['Poppins',Helvetica] font-normal text-lg md:text-xl tracking-[-0.40px] underline"
+              className="font-['Poppins',Helvetica] font-normal text-lg md:text-xl tracking-[-0.40px] hover:underline"
             >
               Read More
             </Link>
