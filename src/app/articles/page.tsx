@@ -48,7 +48,15 @@ export default async function Home() {
             <div className='flex justify-between mt-5'>
               <h2 className='text-[30px] font-semibold'>{article.title}</h2>
             </div>
-            <p className='mt-2'>{article.excerpt}</p>
+            <div className='mt-2'>
+              <ReactMarkdown
+                components={{
+                  strong: ({node, ...props}) => <strong className="font-semibold" {...props} />
+                }}
+              >
+                {article.excerpt}
+              </ReactMarkdown>
+            </div>
             <Link
               href={`/articles/${article.slug}`}
               className="inline-block text-blue-500 hover:text-blue-700 mt-4"
