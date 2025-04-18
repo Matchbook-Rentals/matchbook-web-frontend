@@ -28,7 +28,7 @@ const defaultComparisons: ComparisonItem[] = [
     competitorSupports: false
   },
   {
-    title: "Matchbook Renter Verification",
+    title: "MatchBook Renter Verification",
     matchbookCopy: "You can access your own renter screening and share it with anyone you choose.",
     competitorSupports: false
   },
@@ -74,7 +74,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
           <div className="mt-4">
             <img
               src={imageUrl}
-              alt="Matchbook Marketing"
+              alt="MatchBook Marketing"
               className="w-full h-auto rounded-lg shadow-md"
             />
           </div>
@@ -86,7 +86,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
           <div className="p-4 flex flex-col items-center justify-center border-r border-b">
           </div>
           <div className="py-4 px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center border-r border-b border-l">
-            <img src="/navbar-logo-full.png" alt="Matchbook Logo" className="object-cover" />
+            <img src="/navbar-logo-full.png" alt="MatchBook Logo" className="object-cover" />
           </div>
           <div className="p-4 flex flex-col items-center justify-center border-b border-l">
             <span className={textStyles.competitorText}>{competitorName}</span>

@@ -31,7 +31,7 @@ export const RentersLoveMatchbook = (): JSX.Element => {
       id: 4,
       title: "Get MatchBook Verified and Stay in Control",
       description:
-        "Pay $25 once for your credit, criminal, and eviction check. Share it with any Matchbook listing — no extra fees. Can't find the right place? We'll send your screening to any landlord.",
+        "Pay $25 once for your credit, criminal, and eviction check. Share it with any MatchBook listing — no extra fees. Can't find the right place? We'll send your screening to any landlord.",
       image: "/marketing-images/verified-avatar.png",
       imageAlt: "MatchBook verification icon",
     },
@@ -39,7 +39,7 @@ export const RentersLoveMatchbook = (): JSX.Element => {
       id: 5,
       title: "Sign and Book in One Place",
       description:
-        "Found the right fit? Sign your rental agreement and send your deposit right on Matchbook. No emails, no PDFs, no back-and-forth.",
+        "Found the right fit? Sign your rental agreement and send your deposit right on MatchBook. No emails, no PDFs, no back-and-forth.",
       image: "/marketing-images/in-one-place-avatar.png",
       imageAlt: "Sign and book illustration",
     },
