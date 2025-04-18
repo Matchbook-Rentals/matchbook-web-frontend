@@ -22,7 +22,6 @@ export default function RecentArticle() {
     const fetchArticle = async () => {
       try {
         const latestArticle = await getLatestBlogArticle();
-        console.log('ARTICLE:', latestArticle)
         setArticle(latestArticle);
       } catch (error) {
         console.error("Error fetching latest article:", error);
@@ -37,9 +36,7 @@ export default function RecentArticle() {
   if (isLoading) {
     return (
       <section className="relative w-full h-screen overflow-hidden">
-        <div className="relative w-full h-full bg-gray-200 animate-pulse">
-          {/* Loading state */}
-        </div>
+        <div className="relative w-full h-full bg-gray-200 animate-pulse"></div>
       </section>
     );
   }
@@ -49,27 +46,33 @@ export default function RecentArticle() {
   }
 
   return (
-    <section className={`relative w-full ${PAGE_MARGIN} h-[50vh] mt-[250px]`}>
-      <div className="relative w-full h-full">
+    <section
+      className={`relative w-full ${PAGE_MARGIN} mt-[250px] md:h-[50vh]`}
+    >
+      <div className="relative w-full h-full flex flex-col md:items-end">
         {/* Main background image from latest article */}
         {article.imageUrl && (
-          <Image
-            src={article.imageUrl}
-            alt={article.title || "Featured article image"}
-            fill
-            className="w-full h-full object-cover"
-          />
+          <div className="relative w-full h-[30vh] md:h-full aspect-square md:aspect-auto">
+            <Image
+              src={article.imageUrl}
+              alt={article.title || "Featured article image"}
+              fill
+              className="w-full h-full object-cover"
+            />
+          </div>
         )}
 
         {/* Featured article card */}
-        <Card className="absolute bottom-[-40px] right-0 w-[403px] bg-[#1f1f1f] text-white rounded-none border-none">
+        <Card
+          className="w-full md:w-[403px] md:absolute md:bottom-[-40px] md:right-0 bg-[#1f1f1f] text-white rounded-none border-none"
+        >
           <CardHeader className="pb-0">
             <CardTitle className="font-['Poppins',Helvetica] font-semibold text-xl tracking-[-0.40px]">
               Featured Article
             </CardTitle>
           </CardHeader>
           <CardContent className="py-4">
-            <h2 className="font-['Lora',Helvetica] font-bold text-[32px] tracking-[-0.64px] leading-10">
+            <h2 className="font-['Lora',Helvetica] font-bold text-[24px] md:text-[32px] tracking-[-0.64px] leading-8 md:leading-10">
               {article.title}
             </h2>
             {article.excerpt && (
@@ -81,7 +84,7 @@ export default function RecentArticle() {
           <CardFooter>
             <Link
               href={`/articles/${article.slug}`}
-              className="font-['Poppins',Helvetica] font-normal text-xl tracking-[-0.40px] underline"
+              className="font-['Poppins',Helvetica] font-normal text-lg md:text-xl tracking-[-0.40px] underline"
             >
               Read More
             </Link>
