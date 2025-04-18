@@ -104,17 +104,35 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
   };
 
   const isDateDisabled = (day: number) => {
-    if (!dateRange.start || dateRange.end) return false;
-
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize today's date to midnight
     const currentDate = new Date(currentYear, currentMonth, day);
-    const startDate = dateRange.start;
+    currentDate.setHours(0, 0, 0, 0); // Normalize the current calendar day
 
-    // Don't disable the start date itself
-    if (currentDate.getTime() === startDate.getTime()) return false;
+    // Disable past dates
+    if (currentDate < today) {
+      return true;
+    }
 
-    const daysDifference = Math.abs((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    // Existing logic: Disable dates within 30 days *before* the start date if only start is selected
+    if (dateRange.start && !dateRange.end) {
+      const startDate = new Date(dateRange.start);
+      startDate.setHours(0, 0, 0, 0); // Normalize start date
 
-    return daysDifference <= 30;
+      // Don't disable the start date itself
+      if (currentDate.getTime() === startDate.getTime()) return false;
+
+      // Disable if the current date is before the start date
+      if (currentDate < startDate) {
+        const daysDifference = (startDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+        // Only disable if within 30 days *before* the start date
+        return daysDifference <= 30;
+      }
+    }
+
+    // If start and end are selected, or only end is selected, or neither is selected,
+    // don't disable based on the 30-day rule. Only the past date check applies.
+    return false;
   };
 
   return (
