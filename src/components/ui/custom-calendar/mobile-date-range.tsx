@@ -242,7 +242,7 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
       <span className={`
         z-10
         ${isSelected ? 'rounded-full bg-[#4f4f4f] text-white w-9 h-9 flex items-center justify-center' : ''}
-        ${isDisabled && !isSelected ? 'line-through text-gray-300' : ''}
+        ${isDisabled && !isSelected ? 'text-gray-300' : ''}
       `}>
         {day}
       </span>
