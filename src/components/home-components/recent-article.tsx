@@ -68,7 +68,7 @@ export default function RecentArticle() {
         {/* Featured article card */}
         {/* Full width below image on small screens, absolute positioning restored on md+ */}
         <Card
-          className="w-full mt-0 md:w-[403px] md:absolute md:bottom-[-40px] md:right-0 bg-[#1f1f1f] text-white rounded-none border-none"
+          className="w-full mt-0 md:w-[403px] md:absolute md:bottom-[-40px] md:right-12 bg-[#1f1f1f] text-white rounded-none border-none"
         >
           <CardHeader className="pb-0">
             <CardTitle className="font-['Poppins',Helvetica] font-semibold text-xl tracking-[-0.40px]">
