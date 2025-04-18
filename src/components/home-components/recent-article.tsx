@@ -47,12 +47,15 @@ export default function RecentArticle() {
 
   return (
     <section
-      className={`relative w-full ${PAGE_MARGIN} mt-[250px] md:h-[50vh]`}
+      // Reduced top margin for small screens, kept md height
+      className={`relative w-full ${PAGE_MARGIN} mt-20 md:mt-[250px] md:h-[50vh]`}
     >
-      <div className="relative w-full h-full flex flex-col md:items-end">
+      {/* Use flex-col by default, md:items-end for medium+ screens */}
+      <div className="relative w-full h-full flex flex-col md:flex-row md:items-end">
         {/* Main background image from latest article */}
         {article.imageUrl && (
-          <div className="relative w-full h-[30vh] md:h-full aspect-square md:aspect-auto">
+          // Adjusted height for small screens, kept md styles
+          <div className="relative w-full h-[40vh] md:h-full aspect-video md:aspect-auto">
             <Image
               src={article.imageUrl}
               alt={article.title || "Featured article image"}
@@ -63,8 +66,9 @@ export default function RecentArticle() {
         )}
 
         {/* Featured article card */}
+        {/* Full width below image on small screens, absolute positioning restored on md+ */}
         <Card
-          className="w-full md:w-[403px] md:absolute md:bottom-[-40px] md:right-0 bg-[#1f1f1f] text-white rounded-none border-none"
+          className="w-full mt-0 md:w-[403px] md:absolute md:bottom-[-40px] md:right-0 bg-[#1f1f1f] text-white rounded-none border-none"
         >
           <CardHeader className="pb-0">
             <CardTitle className="font-['Poppins',Helvetica] font-semibold text-xl tracking-[-0.40px]">
