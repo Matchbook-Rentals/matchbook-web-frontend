@@ -45,7 +45,7 @@ const defaultComparisons: ComparisonItem[] = [
 ];
 
 export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
-  title = "Matchbook Makes Renting Easy",
+  title = "MatchBook Makes Renting Easy",
   imageUrl = "/img/home-page/marketing-1.png",
   competitorName = "Furnished Finders",
   comparisons = defaultComparisons
