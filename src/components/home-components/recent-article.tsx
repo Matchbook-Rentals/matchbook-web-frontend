@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -13,6 +12,7 @@ import {
 } from "../../components/ui/card";
 import { BlogArticle } from "@prisma/client";
 import { getLatestBlogArticle } from "@/app/actions/blog-articles";
+import { PAGE_MARGIN } from "@/constants/styles";
 
 export default function RecentArticle() {
   const [article, setArticle] = useState<BlogArticle | null>(null);
@@ -22,6 +22,7 @@ export default function RecentArticle() {
     const fetchArticle = async () => {
       try {
         const latestArticle = await getLatestBlogArticle();
+        console.log('ARTICLE:', latestArticle)
         setArticle(latestArticle);
       } catch (error) {
         console.error("Error fetching latest article:", error);
@@ -48,7 +49,7 @@ export default function RecentArticle() {
   }
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className={`relative w-full ${PAGE_MARGIN} h-[50vh] mt-[250px]`}>
       <div className="relative w-full h-full">
         {/* Main background image from latest article */}
         {article.imageUrl && (
@@ -57,13 +58,11 @@ export default function RecentArticle() {
             alt={article.title || "Featured article image"}
             fill
             className="w-full h-full object-cover"
-            sizes="100vw"
-            priority
           />
         )}
 
         {/* Featured article card */}
-        <Card className="absolute bottom-0 right-0 w-[403px] bg-[#1f1f1f] text-white rounded-none border-none">
+        <Card className="absolute bottom-[-40px] right-0 w-[403px] bg-[#1f1f1f] text-white rounded-none border-none">
           <CardHeader className="pb-0">
             <CardTitle className="font-['Poppins',Helvetica] font-semibold text-xl tracking-[-0.40px]">
               Featured Article

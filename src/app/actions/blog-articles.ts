@@ -4,18 +4,24 @@ import prisma from "@/lib/prismadb";
 import { BlogArticle } from "@prisma/client";
 
 export async function getLatestBlogArticle(): Promise<BlogArticle | null> {
+  console.log('HIT ARTICLE ACTION')
   try {
     const article = await prisma.blogArticle.findFirst({
-      where: {
-        published: true
-      },
+      // add this clause back in when setting articles as preview status first 
+      //where: {
+      //  published: true
+      //},
       orderBy: {
         createdAt: 'desc'
       }
     });
+
+
+    console.log('ACTION RESULT',article)
     
     return article;
   } catch (error) {
+    console.log('ARTICLE ERROR:', error)
     console.error('Error fetching latest blog article:', error);
     return null;
   }
