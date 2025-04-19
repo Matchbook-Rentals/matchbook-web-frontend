@@ -72,9 +72,10 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                     className="z-100 md:w-full px-0"
                     containerStyles='bg-background rounded-[15px]  drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                     inputStyles='bg-background'
-                    searchButtonClassNames='bg-background hover:bg-gray-200'
+                    searchButtonClassNames='bg-green-900 hover:bg-green800 md:bg-background md:hover:bg-gray-200'
                     searchIconColor='text-[#404040]'
                     popoverMaxWidth='900px'
+                    headerText='Find your next home'
                   />
                 </div>
               </motion.div>

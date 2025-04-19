@@ -23,6 +23,7 @@ interface SearchInputsMobileProps {
   inputClassName?: string;
   searchButtonClassNames?: string;
   searchIconColor?: string;
+  headerText?: string;
 }
 
 const PRESET_CITIES = [
@@ -38,7 +39,8 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   className,
   inputClassName,
   searchButtonClassNames,
-  searchIconColor = 'text-white'
+  searchIconColor = 'text-white',
+  headerText
 }) => {
   const [activeInput, setActiveInput] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -315,7 +317,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         ease: "easeInOut"
       }}
     >
-      <h3 className="text-xl font-semibold mb-3 text-green-800">Find your next home</h3>
+      {headerText && <h3 className="text-xl font-semibold mb-3 text-green-800 block sm:hidden">{headerText}</h3>}
       <div
         className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(0)}
@@ -356,7 +358,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         className={`w-full py-2 px-6 ${hasAccess && selectedLocation.lat && selectedLocation.lng
           ? 'cursor-pointer'
           : 'cursor-not-allowed opacity-30'
-          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-2xl text-xl font-semibold transition-all duration-300 shadow-sm`}
+          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-2xl text-lg font-medium transition-all duration-300 shadow-sm`}
       >
         Search
       </button>

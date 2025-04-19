@@ -11,6 +11,7 @@ interface SearchContainerProps {
   searchButtonClassNames?: string;
   searchIconColor?: string;
   popoverMaxWidth?: string;
+  headerText?: string;
 }
 
 const SearchContainer: React.FC<SearchContainerProps> = ({
@@ -19,7 +20,8 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
   inputStyles,
   searchButtonClassNames,
   searchIconColor,
-  popoverMaxWidth
+  popoverMaxWidth,
+  headerText
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -49,6 +51,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
             searchButtonClassNames={searchButtonClassNames}
             searchIconColor={searchIconColor}
             popoverMaxWidth={popoverMaxWidth}
+            headerText={headerText}
           />
         </div>
       </div>
@@ -60,6 +63,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
             className={containerStyles} 
             searchButtonClassNames={searchButtonClassNames}
             searchIconColor={searchIconColor}
+            headerText={headerText}
           />
         </div>
       </div>
