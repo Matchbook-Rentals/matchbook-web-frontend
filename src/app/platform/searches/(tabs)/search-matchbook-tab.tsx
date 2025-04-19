@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingCard from '../(components)/search-listing-card';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // Added imports
+import { Button } from '@/components/ui/button'; // Added import
 
 enum Status {
   Favorite = 'favorite',
@@ -12,6 +14,17 @@ enum Status {
 export function SearchMatchbookTab() {
   const { state } = useTripContext();
   const { matchedListings, trip, lookup } = state;
+  const router = useRouter(); // Added hook
+  const pathname = usePathname(); // Added hook
+  const searchParams = useSearchParams(); // Added hook
+
+  // Added helper function from favorites tab
+  const handleTabChange = (action: 'push' | 'prefetch' = 'push') => {
+    const params = new URLSearchParams(searchParams);
+    params.set('tab', 'recommended');
+    const url = `${pathname}?${params.toString()}`;
+    router[action](url);
+  };
 
   const getListingStatus = (listingId: string): Status => {
     const status = lookup.matchIds.has(listingId) ? Status.Favorite : Status.None;
@@ -86,9 +99,23 @@ export function SearchMatchbookTab() {
       )}
 
       {matchedListings.length === 0 && (
-        <p>No matched listings found.</p>
+        // Replaced with structure from favorites tab
+        <div className='flex flex-col items-center justify-center h-[50vh]'>
+          {(() => {
+            handleTabChange('prefetch'); // Prefetch recommended tab
+            return null;
+          })()}
+          <p className='font-montserrat-regular text-2xl mb-5'>You haven&apos;t matched with any listings yet!</p>
+          <p className='mt-3'> Let&apos;s find you some options! </p>
+          <div className='flex justify-center gap-x-2 mt-2'>
+            <Button
+              onClick={() => handleTabChange()}
+            >
+              Show Recommended
+            </Button>
+          </div>
+        </div>
       )}
-
     </>
   );
 }
