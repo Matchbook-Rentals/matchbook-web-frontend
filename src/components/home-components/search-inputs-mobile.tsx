@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaSearch } from "react-icons/fa";
+import { MapPin, Calendar, Users } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisabledMobileInputs } from "./disabled-inputs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,7 +8,6 @@ import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
-import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 import GuestTypeCounter from "./GuestTypeCounter";
@@ -82,8 +81,8 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     setTotalGuests(total);
   }, [guests]);
 
-  const inputClasses = `w-full px-4 py-3 font-normal text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none sm:border-r border-gray-300 ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
-    } bg-transparent ${inputClassName || ''}`;
+  const inputClasses = `w-full px-4 py-3 font-normal text-gray-700 placeholder-gray-400 cursor-pointer focus:outline-none border border-gray-200 rounded-full bg-white mb-3 transition-all duration-300 hover:shadow-sm ${hasAccess ? '' : 'cursor-not-allowed opacity-50'
+    } ${inputClassName || ''}`;
 
   const prefetchGeocode = async (description: string) => {
     try {
@@ -306,7 +305,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   return (
     <motion.div
       ref={componentRef}
-      className={`flex flex-col p-3 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw] ${className || ''}`}
+      className={`flex flex-col p-4 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[60vw] ${className || ''}`}
       animate={{
         width: activeInput !== null ? '85vw' : '60vw',
         height: activeInput !== null ? 'auto' : 'auto'
@@ -316,18 +315,21 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         ease: "easeInOut"
       }}
     >
+      <h3 className="text-xl font-semibold mb-3 text-green-800">Find your next home</h3>
       <div
         className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(0)}
       >
+        <MapPin size={24} className="text-gray-500 mr-3" />
         {selectedLocation.description || "Where to"}
       </div>
       {renderLocationSuggestions()}
 
       <div
-        className={inputClasses}
+        className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(3)}
       >
+        <Calendar size={24} className="text-gray-500 mr-3" />
         {dateRange.start && dateRange.end 
           ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
           : dateRange.start
@@ -337,12 +339,13 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
       {renderSlidingComponent(3)}
 
       <div
-        className={`${inputClasses} sm:border-r-0`}
+        className={`${inputClasses} sm:border-r-0 flex items-center`}
         onClick={() => {
           setHasBeenSelected(true);
           handleInputClick(4);
         }}
       >
+        <Users size={24} className="text-gray-500 mr-3" />
         {hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : 'Who'}
       </div>
       {renderSlidingComponent(4)}
@@ -350,12 +353,12 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
       <button
         disabled={!hasAccess || !selectedLocation.lat || !selectedLocation.lng}
         onClick={handleSubmit}
-        className={`w-full mt-3 p-3 ${hasAccess && selectedLocation.lat && selectedLocation.lng
+        className={`w-full py-2 px-6 ${hasAccess && selectedLocation.lat && selectedLocation.lng
           ? 'cursor-pointer'
-          : 'cursor-not-allowed opacity-50'
-          } ${searchButtonClassNames || 'bg-primaryBrand'} rounded-full`}
+          : 'cursor-not-allowed opacity-30'
+          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-full text-xl font-semibold transition-all duration-300 shadow-sm`}
       >
-        <FaSearch className={`${searchIconColor} mx-auto`} size={20} />
+        Search
       </button>
     </motion.div>
   );

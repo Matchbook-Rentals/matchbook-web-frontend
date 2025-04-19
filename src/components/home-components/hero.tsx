@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
                     className="z-100 sm:w-[90%] lg:w-[80%] pt-[6%]"
                     containerStyles='bg-background rounded-[15px] drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                     inputStyles='bg-background'
-                    searchButtonClassNames='border border-[#404040] md:border-none bg-background hover:bg-gray-200'
+                    searchButtonClassNames='border border-[#404040] md:border-none bg-green-900 hover:bg-green-800'
                     searchIconColor='text-[#404040]'
                     popoverMaxWidth='900px'
                   />
