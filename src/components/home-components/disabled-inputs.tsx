@@ -19,6 +19,7 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
   inputClassName,
   searchButtonClassNames,
   searchIconColor = 'text-white', // Default to white like the active component
+  headerText, // Destructure headerText
 }) => {
   // Match the active component's input classes structure
   const inputClasses = cn(
@@ -28,6 +29,8 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
 
   return (
     <div className="relative">
+      {/* Add optional header text */}
+      {headerText && <h3 className="text-xl font-semibold mb-3 text-green-800 hidden sm:block text-center">{headerText}</h3>}
       {/* Match the active component's container style */}
       <div
         className={cn('flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden', className)}

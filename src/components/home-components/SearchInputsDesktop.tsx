@@ -13,12 +13,14 @@ import { useRouter } from "next/navigation";
 interface SearchInputsDesktopProps {
   dateRangeContent?: React.ReactNode;
   guestsContent?: React.ReactNode;
+  headerText?: string; // Add headerText prop
 }
 
 // Add this type definition
 type ActiveContentType = 'location' | 'date' | 'guests' | null;
 
 const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
+  headerText // Destructure headerText
 }) => {
   const [hasAccess, setHasAccess] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -155,7 +157,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   // Render different versions based on hasAccess
   if (!hasAccess) {
-    return (<DisabledDesktopInputs />);
+    // Pass headerText to DisabledDesktopInputs
+    return (<DisabledDesktopInputs headerText={headerText} />);
   }
 
   return (
