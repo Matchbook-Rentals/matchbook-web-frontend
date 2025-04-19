@@ -27,7 +27,7 @@ export const PlaceYouLove = (): JSX.Element => {
             </div>
             {/* Right half with image */}
             {/* Responsive width and padding */}
-            <div className="w-full md:w-1/2 px-4 py-8 md:px-12 md:py-12 flex items-center justify-center order-2">
+            <div className="w-full md:w-1/2 px-[20%] py-8 md:px-12 md:py-12 flex items-center justify-center order-2">
               <img
                 alt="Find a place you love banner photo"
                 src="/marketing-images/place-you-love-banner.png"
