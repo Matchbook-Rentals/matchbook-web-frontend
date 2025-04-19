@@ -11,7 +11,11 @@
     "ws:dev": "node ts_server/server.js",
     "ws:start": "node ts_server/server.js",
     "ws:start:js": "node ts_server/server.js",
-    "ws:deploy": "npm install && npm run ws:start:js"
+    "ws:deploy": "npm install && npm run ws:start:js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:server": "vitest run test/server",
+    "test:ui": "vitest run test/components"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.3",
@@ -97,19 +101,24 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/ws": "^8.5.10",
+    "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "jsdom": "^26.1.0",
     "postcss": "^8",
     "prisma": "^5.9.1",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.3.2"
   }
 }
