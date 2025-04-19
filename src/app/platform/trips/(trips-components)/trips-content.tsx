@@ -16,14 +16,37 @@ interface TripsContentProps {
 
 const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
   const [showSearch, setShowSearch] = useState(trips.length === 0);
+  const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
 
   return (
     <LayoutGroup>
       <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
         <div className='flex items-end pb-2'>
-          <div className='flex flex-col w-1/2'>
+          <div className='flex flex-col w-full sm:w-1/2'> {/* Adjust width for mobile buttons */}
             <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
-            <Button onClick={() => setShowSearch(prev => !prev)} className='w-fit rounded-full text-[16px]'> New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} /> </Button>
+            <div className="flex flex-wrap gap-2"> {/* Wrapper for buttons */}
+              {/* Original Button - Hidden on mobile */}
+              <Button
+                onClick={() => setShowSearch(prev => !prev)}
+                className='hidden sm:flex w-fit rounded-full text-[16px]' // Use sm:flex to show on desktop
+              >
+                New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
+              </Button>
+              {/* New Pop-up Button - Visible only on mobile */}
+              <Button
+                onClick={() => setShowSearchPopup(true)}
+                className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
+              >
+                New Search Pop-up
+              </Button>
+               {/* Keep original button visible on mobile for A/B test */}
+               <Button
+                onClick={() => setShowSearch(prev => !prev)}
+                className='block sm:hidden w-fit rounded-full text-[16px] bg-blue-500 hover:bg-blue-600' // Added different bg for distinction
+              >
+                New Search (Inline) <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
+              </Button>
+            </div>
           </div>
           <div className="hidden sm:block w-full md:w-1/2 mx-auto">
             <Image
@@ -98,6 +121,41 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
           </motion.div>
         )}
+
+        {/* Mobile Pop-up Search */}
+        <AnimatePresence>
+          {showSearchPopup && (
+            <>
+              {/* Overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowSearchPopup(false)} // Close on overlay click
+                className="fixed inset-0 bg-black bg-opacity-50 z-40 sm:hidden" // Only show overlay on mobile
+              />
+              {/* Pop-up Search Container */}
+              <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="fixed top-[25vh] left-4 right-4 z-50 flex justify-center sm:hidden" // Position and show only on mobile
+              >
+                <SearchContainer
+                  className="z-100 w-full max-w-lg" // Adjust width as needed
+                  containerStyles='bg-background rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
+                  inputStyles='bg-background'
+                  searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
+                  searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
+                  popoverMaxWidth='90vw' // Adjust popover width for mobile
+                  headerText='Find your next home'
+                  // Add a close button or mechanism inside SearchContainer if needed, or rely on overlay click
+                />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </LayoutGroup>
   );
