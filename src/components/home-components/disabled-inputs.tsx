@@ -59,7 +59,7 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
           <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
           <input
             type="text"
-            placeholder="Add guests"
+            placeholder="Add renters"
             value={""}
             className={inputClasses}
             readOnly
@@ -95,7 +95,7 @@ export const DisabledMobileInputs: React.FC<DisabledInputsProps> = ({
         Dates
       </div>
       <div className={`${inputClasses} sm:border-r-0`}>
-        Who
+        Renters
       </div>
       <button
         disabled
