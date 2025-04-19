@@ -302,7 +302,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
     }
   };
 
-  if (!hasAccess) return <DisabledMobileInputs />;
+  if (!hasAccess) return <DisabledMobileInputs headerText={headerText} />;
 
   return (
     <motion.div

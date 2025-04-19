@@ -379,8 +379,8 @@ const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, tripId }) => {
             <input
               ref={guestsInputRef}
               type="text"
-              placeholder="Who?"
-              value={totalGuests ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
+              placeholder="Renters"
+              value={totalGuests ? `${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}` : ''}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
             />
