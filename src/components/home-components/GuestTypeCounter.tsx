@@ -32,7 +32,7 @@ const GuestTypeCounter: React.FC<GuestTypeCounterProps> = ({ guests, setGuests }
             <span className="font-medium">{label}</span>
             <span className="text-sm text-gray-500">
               {type === 'adults' ? 'Ages 13 or above' :
-               type === 'children' ? 'Ages 2-12' :
+               type === 'children' ? '17 and under' :
                'Well behaved pets'}
             </span>
           </div>
