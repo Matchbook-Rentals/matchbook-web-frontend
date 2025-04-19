@@ -236,7 +236,18 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           listingImages={showListings[0]?.listingImages || []}
         />
         <div className='flex justify-between gap-x-8 relative'>
+          <div>
           <ListingDescription listing={showListings[0]} />
+
+          <h3 className="text-[24px] text-[#404040] font-medium py-3">Location</h3>
+
+          <div className=" pb-3 text-[#404040] text-[20px] font-normal">
+            {showListings[0].distance >= 10
+              ? <p>{showListings[0].distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+              : <p>{showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+          </div>
+          </div>
+
           <div
             className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
           >
@@ -251,14 +262,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         </div>
 
         {/* Location section */}
-        <div className="pb-20 mt-3" ref={locationSectionRef}>
-          <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
-
-          <div className=" pb-3 text-[#404040] text-[20px] font-normal">
-            {showListings[0].distance >= 10
-              ? <p>{showListings[0].distance?.toFixed(0)} miles from {state.trip.locationString} </p>
-              : <p>{showListings[0].distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
-          </div>
+        <div className="pb-20 md:pb-0 mt-0" ref={locationSectionRef}>
 
           <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
             {/* Map container */}
