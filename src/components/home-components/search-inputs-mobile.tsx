@@ -356,7 +356,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         className={`w-full py-2 px-6 ${hasAccess && selectedLocation.lat && selectedLocation.lng
           ? 'cursor-pointer'
           : 'cursor-not-allowed opacity-30'
-          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-full text-xl font-semibold transition-all duration-300 shadow-sm`}
+          } ${searchButtonClassNames || 'bg-green-800'} text-white rounded-2xl text-xl font-semibold transition-all duration-300 shadow-sm`}
       >
         Search
       </button>
