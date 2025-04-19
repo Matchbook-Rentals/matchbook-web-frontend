@@ -203,7 +203,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                         <Pencil className="h-4 w-4" /> Edit Search
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl bg-gray-300 p-8" xOnRight={true}>
+                    <DialogContent className="max-w-4xl bg-gray-300 p-8 top-[15vh]" xOnRight={true}>
                       <div className="mb-6 bg-gray-300 test">
                         <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                       </div>
