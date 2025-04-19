@@ -249,21 +249,23 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [filteredListings, currentPage, listingsPerPage, infiniteScrollMode]);
 
   return (
-    <div className="relative h-[80vh] md:max-h-[200vh] md:min-h-[640px] md:h-[${height || '640px'}]">
+    // Add flex flex-col and ensure full height is used
+    <div className="relative flex flex-col h-full">
       {listings.length === 0 ? (
-        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings to display
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="md:h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings in that area, Try changing your filters or zooming out to see more listings
         </div>
       ) : (
         <>
+          {/* Make ScrollArea grow */}
           <ScrollArea
             ref={scrollAreaRef}
-            className={`w-[103%] sm:w-full mx-auto rounded-md md:pb-12 pr-3`}
-            style={{ height: 'calc(100% - 80px)' }}
+            className={`flex-grow w-[103%] sm:w-full mx-auto rounded-md md:pb-12 pr-3`}
+            // Remove explicit height style, let flexbox handle it
           >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
               {displayedListings.map((listing) => {
@@ -285,8 +287,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               <div ref={sentinelRef} style={{ height: '20px' }} />
             )}
           </ScrollArea>
+          {/* Pagination container - remove absolute positioning and fixed height */}
           {!infiniteScrollMode && (
-            <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
+            <div className="flex-shrink-0 bg-background border-t flex items-center justify-center gap-1 py-2"> {/* Added py-2 for padding */}
               <Button
                 variant="ghost"
                 size="icon"
