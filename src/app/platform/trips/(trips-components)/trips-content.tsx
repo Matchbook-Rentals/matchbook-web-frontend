@@ -140,7 +140,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="fixed top-[25vh] left-4 right-4 z-50 flex justify-center sm:hidden" // Position and show only on mobile
+                className="fixed top-[15vh] left-4 right-4 z-50 flex justify-center sm:hidden" // Position and show only on mobile
               >
                 <SearchContainer
                   className="z-100 w-full max-w-lg" // Adjust width as needed
