@@ -157,7 +157,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {!isFullscreen && (
           <div className="w-full md:w-3/5 md:pr-4">
             {displayListings.length > 0 ? (
-              <SearchListingsGrid listings={[...showListings]} height={calculatedHeight} />
+              // Pass calculatedHeight to the height prop
+              <SearchListingsGrid listings={[...showListings]} height={calculatedHeight.toString()} />
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
                 <p className="text-gray-600 text-center">

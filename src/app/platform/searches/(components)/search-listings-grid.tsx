@@ -249,8 +249,11 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [filteredListings, currentPage, listingsPerPage, infiniteScrollMode]);
 
   return (
-    // Add flex flex-col and ensure full height is used
-    <div className="relative flex flex-col h-full">
+    // Use the height prop for minHeight, keep flex structure
+    <div
+      className="relative flex flex-col h-full"
+      style={{ minHeight: height ? `${height}px` : '640px' }} // Use height prop, provide fallback
+    >
       {listings.length === 0 ? (
         <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings to display
