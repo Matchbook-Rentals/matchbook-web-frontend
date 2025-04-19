@@ -264,7 +264,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           <input
             ref={guestsInputRef}
             type="text"
-            placeholder="Add guests"
+            placeholder="Add renters"
             value={hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : ''}
             className={`${inputClasses}`}
             readOnly={!hasAccess}
