@@ -20,11 +20,11 @@ export default function SearchFavoritesTab() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [startY, setStartY] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
-  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null); // Keep this ref
+  const [startY, setStartY] = useState(0); // Keep state
+  const [viewportHeight, setViewportHeight] = useState(0); // Keep state
+  const [calculatedHeight, setCalculatedHeight] = useState(0); // Keep state
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0); // Keep state
 
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
@@ -152,9 +152,10 @@ export default function SearchFavoritesTab() {
     return () => {
       window.removeEventListener('resize', setHeight);
     };
-  }, []);
+  }, []); // Keep this useEffect
 
   if (likedListings.length === 0 && requestedListings.length === 0) {
+    // Apply height calculation even for the "no listings" view
     return (
       <div className='flex flex-col items-center justify-center h-[50vh]'>
         {(() => {
@@ -175,7 +176,12 @@ export default function SearchFavoritesTab() {
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full">
+    // Apply ref and minHeight style
+    <div
+      ref={containerRef}
+      className="flex flex-col md:flex-row justify-center mx-auto w-full"
+      style={{ minHeight: calculatedHeight ? `${calculatedHeight}px` : 'auto' }} // Apply calculated minHeight
+    >
       <div className="w-full ">
         <SearchFavoriteGrid
           listings={[...likedListings].sort((a, b) => {
