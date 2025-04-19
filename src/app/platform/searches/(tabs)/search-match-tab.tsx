@@ -251,7 +251,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         </div>
 
         {/* Location section */}
-        <div className="pb-20 md:pb-0 mt-3" ref={locationSectionRef}>
+        <div className="pb-20 mt-3" ref={locationSectionRef}>
           <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
 
           <div className=" pb-3 text-[#404040] text-[20px] font-normal">
