@@ -161,10 +161,6 @@ const LoadingTabs: React.FC = () => {
 
   return (
     <div className={`flex flex-col items-center ${PAGE_MARGIN} ${publicSans.variable}`}>
-      {/* Breadcrumb Navigation with Loading State */}
-      <div className='flex justify-between items-center sm:justify-start w-full'>
-        <LoadingBreadcrumbs />
-      </div>
 
       {/* Desktop TabSelector - Hidden on small screens, visible on md and up */}
       <div className="hidden md:flex w-full">
