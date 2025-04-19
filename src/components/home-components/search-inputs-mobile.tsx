@@ -348,7 +348,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         }}
       >
         <Users size={24} className="text-gray-500 mr-3" />
-        {hasBeenSelected ? `${totalGuests} Guest${totalGuests !== 1 ? 's' : ''}` : 'Renters'}
+        {hasBeenSelected ? `${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}` : 'Renters'}
       </div>
       {renderSlidingComponent(4)}
 
