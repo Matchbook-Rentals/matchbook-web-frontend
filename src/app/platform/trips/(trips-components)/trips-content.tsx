@@ -44,7 +44,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 onClick={() => setShowSearch(prev => !prev)}
                 className='block sm:hidden w-fit rounded-full text-[16px] bg-blue-500 hover:bg-blue-600' // Added different bg for distinction
               >
-                New Search (Inline) <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
+                New Search Slide in <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
               </Button>
             </div>
           </div>
@@ -132,7 +132,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setShowSearchPopup(false)} // Close on overlay click
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 sm:hidden" // Only show overlay on mobile
+                className="fixed inset-0 bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
               />
               {/* Pop-up Search Container */}
               <motion.div
@@ -140,11 +140,11 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="fixed top-[15vh] left-4 right-4 z-50 flex justify-center sm:hidden" // Position and show only on mobile
+                className="fixed top-[5vh] left-4 right-4  z-50 flex justify-center sm:hidden" // Position and show only on mobile
               >
                 <SearchContainer
-                  className="z-100 w-full max-w-lg" // Adjust width as needed
-                  containerStyles='bg-background rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
+                  className="z-100  max-w-lg" // Adjust width as needed
+                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
                   inputStyles='bg-background'
                   searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
                   searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
