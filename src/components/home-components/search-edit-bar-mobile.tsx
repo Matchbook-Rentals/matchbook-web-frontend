@@ -378,7 +378,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
   return (
     <motion.div
       ref={componentRef}
-      className={`flex flex-col p-4 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden ${className || ''}`}
+      className={`flex flex-col mx-auto p-4 z-50 items-center bg-background rounded-3xl border border-black overflow-hidden ${className || ''}`}
       animate={{ width: activeInput !== null ? '85vw' : '80vw' }} // Adjust width based on active state
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >

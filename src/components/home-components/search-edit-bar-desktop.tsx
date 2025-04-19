@@ -339,13 +339,13 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
-      <div className="flex flex-row no-wrap items-center bg-background rounded-full shadow-md overflow-hidden">
+      <div className="flex flex-row no-wrap items-center bg-background rounded-lg border border-black overflow-hidden">
         <div
           className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
           onClick={(e) => handleInputClick(e, 'location', locationInputRef)}
         >
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-3">Location</span>
+            <span className="text-xs text-gray-500 px-3">Where</span>
             <input
               ref={locationInputRef}
               type="text"
@@ -393,7 +393,7 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
           onClick={(e) => handleInputClick(e, 'guests', guestsInputRef)}
         >
           <div className="flex flex-col space-y-1">
-            <span className="text-xs text-gray-500 px-3">Guests</span>
+            <span className="text-xs text-gray-500 px-3">Who</span>
             <input
               ref={guestsInputRef}
               type="text"
