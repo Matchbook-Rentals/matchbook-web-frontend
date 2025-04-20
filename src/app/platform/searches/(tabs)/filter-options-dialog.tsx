@@ -785,7 +785,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 {/* WiFi Tile */}
                 <Tile
                   key="wifi"
-                  icon={<AmenitiesIcons.UpdatedWifiIcon className="p-1 mt-0" />} // Ensure UpdatedWifiIcon exists
+                  icon={<Wifi className="p-1 mt-0" />} // Use lucide-react Wifi icon
                   label="WiFi"
                   className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${localFilters.wifi?.includes('wifi')
                     ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
