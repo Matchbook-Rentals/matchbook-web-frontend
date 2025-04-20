@@ -93,7 +93,7 @@ export default function AboutHostingPage(): React.ReactNode {
                   </div>
 
                   {/* Desktop only: alternating layout */}
-                  {index % 2 === 1 ? ( // Odd index, text left, image right
+                  {index % 2 === 0 ? ( // Changed condition to flip layout
                     <>
                       <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-8"> {/* Adjusted spacing */}
                         <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
