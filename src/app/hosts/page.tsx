@@ -72,7 +72,7 @@ export default function AboutHostingPage(): React.ReactNode {
           {features.map((feature, index) => (
             <Card key={index} className="w-full border-none shadow-none">
               <CardContent className="flex flex-col py-0">
-                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0 md:max-h-[250px]">
+                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0"> {/* Removed md:max-h-[250px] */}
                   {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
                   <div className="flex flex-col w-full md:hidden space-y-6">
                     <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px] text-left">
@@ -84,7 +84,7 @@ export default function AboutHostingPage(): React.ReactNode {
                     {feature.image && (
                       <div className="flex justify-center w-full">
                         <img
-                          className="w-[200px] h-[200px] object-contain" // Use contain to prevent cropping
+                          className="" // Removed size and object-fit classes
                           alt={feature.imageAlt}
                           src={feature.image}
                         />
@@ -106,7 +106,7 @@ export default function AboutHostingPage(): React.ReactNode {
                       {feature.image && (
                         <div className="hidden md:flex w-1/2 justify-end items-center h-full">
                           <img
-                            className="w-[250px] h-[250px] object-contain ml-auto" // Use contain to prevent cropping
+                            className="ml-auto" // Removed size and object-fit classes
                             alt={feature.imageAlt}
                             src={feature.image}
                           />
@@ -118,7 +118,7 @@ export default function AboutHostingPage(): React.ReactNode {
                       {feature.image && (
                         <div className="hidden md:flex w-1/2 justify-start items-center h-full">
                           <img
-                            className="w-[250px] h-[250px] object-contain" // Use contain to prevent cropping
+                            className="" // Removed size and object-fit classes
                             alt={feature.imageAlt}
                             src={feature.image}
                           />
