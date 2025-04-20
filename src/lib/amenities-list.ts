@@ -73,7 +73,7 @@ const amenities = [
   // Other
   { code: 'elevator', label: 'Elevator', icon: Dumbbell, category: 'other' },
   { code: 'doorman', label: 'Doorman', icon: Dumbbell, category: 'other' },
-  { code: 'wifi', label: 'WiFi', icon: Dumbbell, category: 'other' },
+  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'other' },
   { code: 'hairDryer', label: 'Hair Dryer', icon: Dumbbell, category: 'other' },
   { code: 'iron', label: 'Iron', icon: Dumbbell, category: 'other' },
   { code: 'petsAllowed', label: 'Pets Allowed', icon: AmenitiesIcons.UpdatedPetFriendlyIcon, category: 'other' },
