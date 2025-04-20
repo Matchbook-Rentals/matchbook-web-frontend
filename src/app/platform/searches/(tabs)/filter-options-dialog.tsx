@@ -31,6 +31,7 @@ interface FilterOptions {
   climateControl: string[];
   luxury: string[];
   laundry: string[];
+  wifi: string[]; // Add wifi filter state
 }
 
 interface FilterOptionsDialogProps {
@@ -358,6 +359,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesLaundry = localFilters.laundry?.length === 0 || localFilters.laundry?.length === 3 ||
         localFilters.laundry?.some(option => listing[option]);
 
+      // WiFi filter - check if listing has wifi if the filter is active
+      const matchesWifi = localFilters.wifi?.length === 0 || listing.wifi;
+
       return matchesPropertyType &&
         matchesPrice &&
         matchesRadius &&
@@ -372,7 +376,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         matchesKitchen &&
         matchesClimateControl &&
         matchesLuxury &&
-        matchesLaundry;
+        matchesLaundry &&
+        matchesWifi; // Add wifi check
     }).length;
   }, [listings, localFilters]);
 
@@ -439,7 +444,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       kitchen: [],
       climateControl: [],
       luxury: [],
-      laundry: []
+      laundry: [],
+      wifi: [] // Add wifi to default filters
     };
 
     setLocalFilters(defaultFilters);
@@ -776,6 +782,25 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     />
                   );
                 })}
+                {/* WiFi Tile */}
+                <Tile
+                  key="wifi"
+                  icon={<AmenitiesIcons.UpdatedWifiIcon className="p-1 mt-0" />} // Ensure UpdatedWifiIcon exists
+                  label="WiFi"
+                  className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${localFilters.wifi?.includes('wifi')
+                    ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                    : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                    }`}
+                  labelClassNames={`text-[14px] font-normal leading-tight ${localFilters.wifi?.includes('wifi') ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                    }`}
+                  onClick={() => {
+                    const isSelected = localFilters.wifi?.includes('wifi');
+                    const updatedWifi = isSelected
+                      ? [] // Deselect: empty array
+                      : ['wifi']; // Select: array with 'wifi'
+                    handleLocalFilterChange('wifi', updatedWifi);
+                  }}
+                />
               </div>
             </div>
           </div>

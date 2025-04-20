@@ -36,6 +36,7 @@ interface FilterOptions {
   climateControl: string[];
   luxury: string[];
   laundry: string[];
+  wifi: string[]; // Add wifi filter state
 }
 
 interface TripContextType {
@@ -161,6 +162,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       ...getFiltersByCategory(CategoryType.LAUNDRY)
         .filter(amen => tripData[amen.name])
         .map(amen => amen.name)
+    ],
+    // Initialize wifi filter based on tripData
+    wifi: [
+      ...(tripData.wifi ? ['wifi'] : [])
     ],
   });
 
@@ -336,6 +341,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
         filters.laundry?.some(option => listing[option]);
 
+      // WiFi filter - check if listing has wifi if the filter is active
+      const matchesWifi = filters.wifi?.length === 0 || listing.wifi;
+
       // Return true if the listing meets all criteria
       return isNotFavorited &&
         isNotDisliked &&
@@ -355,7 +363,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesKitchen &&
         matchesClimateControl &&
         matchesLuxury &&
-        matchesLaundry;
+        matchesLaundry &&
+        matchesWifi; // Add wifi check
     }),
     [listings, lookup, trip, filters]
   );
