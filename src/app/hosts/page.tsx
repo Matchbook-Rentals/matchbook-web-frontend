@@ -13,7 +13,7 @@ export default function AboutHostingPage(): React.ReactNode {
       title: "Application Management, Simplified",
       description:
         "Receive, review, and approve applications effortlessly on our platform.",
-      image: "/marketing-images/laptop-application.png",
+      image: "/marketing-images/App-management.png",
       imageAlt: "Application management illustration",
       align: "left",
     },
@@ -22,12 +22,14 @@ export default function AboutHostingPage(): React.ReactNode {
       description:
         "Rent is automatically collected and securely transferred to you every month.",
       align: "right",
+      image: "/marketing-images/auto-collect.png",
+      imageAlt: "Application management illustration",
     },
     {
       title: "Connect with Matchbook Verified Renters",
       description:
         "Pre-screened and ready to book. Renters pay upfront for their background, credit, and eviction check, giving you instant access to verified details. Choose to accept only MatchBook Verified Renters for a worry-free experience.",
-      image: "/marketing-images/id-application.png",
+      image: "/marketing-images/verified-renters.png",
       imageAlt: "Application management illustration",
       align: "left",
     },
@@ -35,13 +37,15 @@ export default function AboutHostingPage(): React.ReactNode {
       title: "Real Reviews, Reliable Renters, Worry-Free Renting",
       description:
         "Choose renters you can trust. Our review system gives you insight into their past rentals, making worry-free renting a reality.",
+      image: "/marketing-images/worry-free.png",
+      imageAlt: "Application management illustration",
       align: "right",
     },
     {
       title: "Ditch the paperwork",
       description:
         "Bookings generate automatic rental agreements, streamlining the leasing process—no paperwork, no waiting. Your business, modernized.",
-      image: "/marketing-images/SHREDZ.png",
+      image: "/marketing-images/ditch-paperwork.png",
       imageAlt: "Reviews illustration",
       align: "left",
     },
