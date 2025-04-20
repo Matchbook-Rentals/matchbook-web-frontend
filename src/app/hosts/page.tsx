@@ -95,7 +95,7 @@ export default function AboutHostingPage(): React.ReactNode {
                   {/* Desktop only: alternating layout */}
                   {index % 2 === 1 ? ( // Odd index, text left, image right
                     <>
-                      <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-12">
+                      <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-8"> {/* Adjusted spacing */}
                         <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                           {feature.title}
                         </h2>
@@ -124,7 +124,7 @@ export default function AboutHostingPage(): React.ReactNode {
                           />
                         </div>
                       )}
-                      <div className="hidden md:flex flex-col items-end pl-2 w-full space-y-12">
+                      <div className="hidden md:flex flex-col items-end pl-2 w-full space-y-8"> {/* Adjusted spacing */}
                         <h2 className="font-normal text-right text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
                           {feature.title}
                         </h2>
