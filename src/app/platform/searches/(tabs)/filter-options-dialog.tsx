@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
-import { ScreenShareIcon, Share2Icon, ShareIcon } from 'lucide-react';
+import { ScreenShareIcon, Share2Icon, ShareIcon, Wifi } from 'lucide-react'; // Import Wifi icon
 import { Share1Icon } from '@radix-ui/react-icons';
 
 interface FilterOptions {
