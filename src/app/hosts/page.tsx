@@ -84,7 +84,7 @@ export default function AboutHostingPage(): React.ReactNode {
                     {feature.image && (
                       <div className="flex justify-center w-full">
                         <img
-                          className="w-auto h-auto object-cover max-h-[200px]"
+                          className="w-[200px] h-[200px] object-cover" // Fixed size for mobile
                           alt={feature.imageAlt}
                           src={feature.image}
                         />
@@ -106,7 +106,7 @@ export default function AboutHostingPage(): React.ReactNode {
                       {feature.image && (
                         <div className="hidden md:flex w-1/2 justify-end items-center h-full">
                           <img
-                            className="w-auto h-auto object-cover max-h-[250px] ml-auto"
+                            className="w-[250px] h-[250px] object-cover ml-auto" // Fixed size for desktop
                             alt={feature.imageAlt}
                             src={feature.image}
                           />
@@ -118,7 +118,7 @@ export default function AboutHostingPage(): React.ReactNode {
                       {feature.image && (
                         <div className="hidden md:flex w-1/2 justify-start items-center h-full">
                           <img
-                            className="w-auto h-auto object-cover max-h-[250px]"
+                            className="w-[250px] h-[250px] object-cover" // Fixed size for desktop
                             alt={feature.imageAlt}
                             src={feature.image}
                           />
