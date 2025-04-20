@@ -67,33 +67,74 @@ export default function AboutHostingPage(): React.ReactNode {
       </section>
 
       {/* Features Section */}
-      <section className="w-full max-w-[1344px] px-8 lg:px-16 mb-8 lg:mb-12">
-        <div className="flex flex-col gap-8">
+      <section className="relative w-full max-w-[990px] mx-auto px-4 md:px-0">
+        <div className="flex flex-col items-center gap-16 py-12">
           {features.map((feature, index) => (
-            <Card key={index} className="border-none shadow-none">
-              <CardContent
-                className={`flex ${feature.align === "right" ? "flex-row-reverse" : "flex-row"} items-center gap-8 lg:gap-16 p-0`}
-              >
-                <div
-                  className={`flex-1 ${feature.align === "right" ? "text-right" : "text-left"}`}
-                >
-                  <h3 className="font-['Cutive',Helvetica] font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 font-['Poppins',Helvetica] font-medium text-[#1d221b] text-2xl tracking-[0] leading-[30px]">
-                    {feature.description}
-                  </p>
-                </div>
-
-                {feature.image && (
-                  <div className="flex-1 flex justify-center">
-                    <img
-                      src={feature.image}
-                      alt={feature.imageAlt}
-                      className="w-[434px] h-[434px] object-cover"
-                    />
+            <Card key={index} className="w-full border-none shadow-none">
+              <CardContent className="flex flex-col py-0">
+                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0 md:max-h-[250px]">
+                  {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
+                  <div className="flex flex-col w-full md:hidden space-y-6">
+                    <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px] text-left">
+                      {feature.title}
+                    </h2>
+                    <p className="font-poppins font-normal text-[#1d221b] text-xl tracking-[0] leading-[30px] text-left">
+                      {feature.description}
+                    </p>
+                    {feature.image && (
+                      <div className="flex justify-center w-full">
+                        <img
+                          className="w-auto h-auto object-cover max-h-[200px]"
+                          alt={feature.imageAlt}
+                          src={feature.image}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  {/* Desktop only: alternating layout */}
+                  {index % 2 === 1 ? ( // Odd index, text left, image right
+                    <>
+                      <div className="hidden md:flex flex-col items-start pr-2 w-full space-y-12">
+                        <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
+                          {feature.title}
+                        </h2>
+                        <p className="font-poppins font-normal text-[#1d221b] text-xl tracking-[0] leading-[30px]">
+                          {feature.description}
+                        </p>
+                      </div>
+                      {feature.image && (
+                        <div className="hidden md:flex w-1/2 justify-end items-center h-full">
+                          <img
+                            className="w-auto h-auto object-cover max-h-[250px] ml-auto"
+                            alt={feature.imageAlt}
+                            src={feature.image}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ) : ( // Even index, image left, text right
+                    <>
+                      {feature.image && (
+                        <div className="hidden md:flex w-1/2 justify-start items-center h-full">
+                          <img
+                            className="w-auto h-auto object-cover max-h-[250px]"
+                            alt={feature.imageAlt}
+                            src={feature.image}
+                          />
+                        </div>
+                      )}
+                      <div className="hidden md:flex flex-col items-end pl-2 w-full space-y-12">
+                        <h2 className="font-normal text-right text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px]">
+                          {feature.title}
+                        </h2>
+                        <p className="font-poppins font-normal text-right text-[#1d221b] text-xl tracking-[0] leading-[30px]">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -101,8 +142,8 @@ export default function AboutHostingPage(): React.ReactNode {
       </section>
 
       {/* CTA Section */}
-      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 mt-16 lg:py-20 xl:py-28 flex flex-col items-center gap-8 lg:gap-12">
-        <h2 className="font-['Poppins',Helvetica] font-normal text-6xl text-[#1d221b] text-center leading-6 tracking-[0]">
+      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 lg:py-20 xl:py-28 flex flex-col items-center gap-8 lg:gap-12">
+        <h2 className="font-['Poppins',Helvetica] font-normal text-5xl md:text-6xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
           Best part? It&apos;s completely free.
         </h2>
 
