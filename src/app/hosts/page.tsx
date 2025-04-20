@@ -54,7 +54,7 @@ export default function AboutHostingPage(): React.ReactNode {
   return (
     <>
     <MatchbookHeader />
-    <div className="flex flex-col items-center bg-white overflow-hidden">
+    <div className="flex flex-col items-center bg-background overflow-hidden">
       {/* Hero Section */}
       <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 lg:py-20 xl:py-24 flex flex-col items-center">
         <h1 className="font-['Cutive',Helvetica] text-[120px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
@@ -70,7 +70,7 @@ export default function AboutHostingPage(): React.ReactNode {
       <section className="relative w-full max-w-[990px] mx-auto px-4 md:px-0">
         <div className="flex flex-col items-center gap-16 py-12">
           {features.map((feature, index) => (
-            <Card key={index} className="w-full border-none shadow-none">
+            <Card key={index} className="w-full border-none bg-background test shadow-none">
               <CardContent className="flex flex-col py-0">
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0"> {/* Removed md:max-h-[250px] */}
                   {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
