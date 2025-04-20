@@ -73,28 +73,59 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   }, [showListings]);
 
   useEffect(() => {
-    if (!mapContainerRef.current || !mapCenter) return;
+    // Ensure container exists and map instance doesn't already exist
+    if (!mapContainerRef.current || mapRef.current) return;
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      center: mapCenter,
-      zoom: 14,
-      scrollZoom: false,
-    });
+    // Validate mapCenter coordinates
+    if (
+      !mapCenter ||
+      !Array.isArray(mapCenter) ||
+      mapCenter.length !== 2 ||
+      !Number.isFinite(mapCenter[0]) ||
+      !Number.isFinite(mapCenter[1])
+    ) {
+      console.error("Invalid mapCenter coordinates:", mapCenter);
+      return; // Do not proceed if coordinates are invalid
+    }
 
-    mapRef.current = map;
+    let map: maplibregl.Map | null = null; // Define map variable
 
-    new maplibregl.Marker()
-      .setLngLat(mapCenter)
-      .addTo(map);
+    try {
+      map = new maplibregl.Map({
+        container: mapContainerRef.current, // Should be a valid HTMLElement
+        style: 'https://tiles.openfreemap.org/styles/bright', // Ensure this style URL is correct and accessible
+        center: mapCenter, // Validated coordinates
+        zoom: 14,
+        scrollZoom: false,
+      });
 
+      mapRef.current = map; // Assign to ref only after successful creation
+
+      // Add marker only if map creation was successful
+      new maplibregl.Marker()
+        .setLngLat(mapCenter)
+        .addTo(map);
+
+    } catch (error) {
+      console.error("Failed to initialize map:", error);
+      // Optionally cleanup map instance if creation failed partially
+      if (map) {
+        map.remove();
+      }
+      mapRef.current = null; // Ensure ref is null if initialization failed
+    }
+
+    // Cleanup function
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
       }
     };
+    // Dependency array includes mapCenter to re-run effect if center changes
+    // Note: This effect structure assumes map should be recreated if center changes.
+    // If you only want to update the center of an existing map, the logic inside
+    // the effect and the dependency array would need adjustment.
   }, [mapCenter]);
 
   // Add this helper function near other function declarations
