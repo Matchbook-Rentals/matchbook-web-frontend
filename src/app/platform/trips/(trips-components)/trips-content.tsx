@@ -132,7 +132,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setShowSearchPopup(false)} // Close on overlay click
-                className="fixed inset-0 bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
+                className="fixed inset-0 flex items-end bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
               />
               {/* Pop-up Search Container */}
               <motion.div
@@ -140,7 +140,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="fixed top-[5vh] w-fit mx-auto z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
+                className="fixed top-[5vh] test w-fit mx-auto z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
               >
                 <SearchContainer
                   className="z-100 max-w-lg" // Adjust width as needed
