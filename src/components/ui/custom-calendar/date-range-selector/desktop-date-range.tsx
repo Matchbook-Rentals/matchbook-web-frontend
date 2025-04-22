@@ -468,7 +468,10 @@ export function DesktopDateRange({
               onDateSelect={handleDateSelect}
               onPrevMonth={handleRightPrevMonth}
               onNextMonth={handleRightNextMonth}
-              isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
+              // Disable prev if the month before the right calendar is the same as or before the left calendar
+              isPrevDisabled={
+                new Date(rightYear, rightMonth - 1) <= new Date(leftYear, leftMonth)
+              }
               minimumDateRange={minimumDateRange}
               maximumDateRange={maximumDateRange} // Pass prop down
             />
