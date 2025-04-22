@@ -49,6 +49,12 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   const moveOutInputRef = React.useRef<HTMLInputElement>(null);
   const guestsInputRef = React.useRef<HTMLInputElement>(null);
 
+  // Effect to focus the container on mount to prevent text selection in input
+  React.useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.focus({ preventScroll: true }); // Focus container, prevent scrolling
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   React.useEffect(() => {
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
@@ -276,10 +282,8 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
       setArrowPosition(position);
     }
   };
-
-
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`} tabIndex={-1} style={{ outline: 'none' }}> {/* Add tabIndex and remove focus outline */}
       <div className="flex flex-row no-wrap items-center bg-background rounded-lg border border-black overflow-hidden">
         <div
           className="flex-1 relative hover:bg-gray-100 transition-colors p-2 border-r border-gray-300 cursor-pointer"
