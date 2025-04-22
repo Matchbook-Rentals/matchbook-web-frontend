@@ -14,13 +14,7 @@ interface SearchEditBarDesktopProps {
 }
 
 const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, trip }) => {
-  // const params = useParams(); // Removed
   const { toast } = useToast();
-  // const effectiveTripId = tripId || (params?.tripId as string); // Removed
-
-  // const [trip, setTrip] = React.useState<Trip | null>(null); // Removed - use prop directly
-  // const [loading, setLoading] = React.useState(true); // Removed
-
   // Initialize state directly from the trip prop
   const [activeContent, setActiveContent] = React.useState<'location' | 'date' | 'guests' | null>(null);
   const [totalGuests, setTotalGuests] = React.useState<number>(
@@ -55,7 +49,6 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   const moveOutInputRef = React.useRef<HTMLInputElement>(null);
   const guestsInputRef = React.useRef<HTMLInputElement>(null);
 
-  // Removed fetchTripData useEffect
 
   React.useEffect(() => {
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
@@ -284,7 +277,6 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
     }
   };
 
-  // Removed loading state rendering
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
@@ -302,6 +294,7 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
               value={locationDisplayValue}
               className="w-full px-3 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent cursor-pointer"
               readOnly
+              autoComplete="off"
             />
           </div>
         </div>
