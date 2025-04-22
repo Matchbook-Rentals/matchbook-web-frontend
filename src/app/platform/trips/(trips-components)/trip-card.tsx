@@ -203,10 +203,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                         <Pencil className="h-4 w-4" /> Edit Search
                       </Button>
                     </DialogTrigger>
-                    {/* Apply w-fit, bg-transparent, border-none */}
-                    <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
-                      {/* Removed padding and background styles from inner div as well */}
-                      <div className="mb-6"> 
+                    {/* Apply mobile styles by default, revert for md+ */}
+                    <DialogContent 
+                      className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                      xOnRight={true}
+                    >
+                      {/* Restore padding for md+ */}
+                      <div className="mb-6 md:p-0"> 
                         <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                       </div>
                       <SearchEditBar tripId={trip.id} />
@@ -247,10 +250,13 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   <Pencil className="h-4 w-4 mr-1" /> Edit
                 </Button>
               </DialogTrigger>
-              {/* Apply w-fit, bg-transparent, border-none */}
-              <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
-                {/* Removed padding and positioning styles */}
-                <div className="mb-6"> 
+              {/* Apply mobile styles by default, revert for md+ */}
+              <DialogContent 
+                className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                xOnRight={true}
+              >
+                {/* Restore padding for md+ */}
+                <div className="mb-6 md:p-0"> 
                   <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                 </div>
                 <SearchEditBar tripId={trip.id} />
@@ -314,10 +320,14 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                           <Pencil className="h-4 w-4" /> Edit Search
                         </Button>
                       </DialogTrigger>
-                      {/* Apply w-fit, bg-transparent, border-none */}
-                      <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
-                        {/* Removed padding and background styles from inner div as well */}
-                        <SearchEditBar tripId={trip.id} className='border-4 test' />
+                      {/* Apply mobile styles by default, revert for md+ */}
+                      <DialogContent 
+                        className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                        xOnRight={true}
+                      >
+                        {/* Restore padding for md+ */}
+                        {/* Removed the inner div wrapper as SearchEditBar likely handles its own layout */}
+                        <SearchEditBar tripId={trip.id} /> 
                       </DialogContent>
                     </Dialog>
                     <hr className="my-1" />
