@@ -82,7 +82,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
           loadMoreItems(); // Call the loading function
         }
       });
-    }, { root: scrollAreaRef.current, threshold: 0.1 });
+    }, { root: scrollAreaRef.current, threshold: 0.1, rootMargin: "0px 0px 900px 0px" });
 
     observer.observe(sentinel);
     return () => {
