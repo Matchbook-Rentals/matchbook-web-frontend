@@ -69,10 +69,10 @@ const Hero: React.FC = () => {
           <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
             <DialogTrigger asChild disabled={!hasAccess}>
               <Button
-                className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md disabled:opacity-80 disabled:cursor-not-allowed"
                 disabled={!hasAccess} // Disable button if no access
               >
-                {hasAccess ? 'Start Search' : 'Access Restricted'} {/* Change text based on access */}
+                {hasAccess ? 'Start Search' : 'Start Search'} {/* Change text based on access */}
               </Button>
             </DialogTrigger>
             {/* Dialog Content will be rendered below */}
