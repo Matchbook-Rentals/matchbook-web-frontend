@@ -56,7 +56,7 @@ const Hero: React.FC = () => {
       <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
         {/* Content container with custom styling */}
         <DialogContent
-          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-top-[4%] data-[state=open]:slide-in-from-top-[4%] duration-500"
+          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
         >
           {/* Use SearchContainer within the popup */}
           <SearchContainer

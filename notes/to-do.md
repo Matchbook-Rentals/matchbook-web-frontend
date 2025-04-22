@@ -1,5 +1,8 @@
 # TO DOs
 
+
+rent easy copy auto text size
+
 Rewrite fxs and go server
 
 
