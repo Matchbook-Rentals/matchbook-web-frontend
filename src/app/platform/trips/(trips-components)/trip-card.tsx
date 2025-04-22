@@ -205,7 +205,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                     </DialogTrigger>
                     {/* Apply mobile styles by default, revert for md+ */}
                     <DialogContent 
-                      className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                      className={cn(
+                        "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
+                        "top-[10vh] md:top-[25vh]" // Adjust vertical position
+                      )} 
                       xOnRight={true}
                     >
                       {/* Restore padding for md+ & hide header on mobile */}
@@ -252,7 +255,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
               </DialogTrigger>
               {/* Apply mobile styles by default, revert for md+ */}
               <DialogContent 
-                className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                className={cn(
+                  "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
+                  "top-[10vh] md:top-[25vh]" // Adjust vertical position
+                )} 
                 xOnRight={true}
               >
                 {/* Restore padding for md+ & hide header on mobile */}
