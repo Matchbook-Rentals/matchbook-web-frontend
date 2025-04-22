@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 import Image from 'next/image';
 import TripGrid from './trip-grid';
 import { PAGE_MARGIN } from '@/constants/styles';
