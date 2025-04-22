@@ -404,26 +404,28 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
         <button
           onClick={handleReset}
           disabled={!hasChanges()}
-          className={`flex-1 py-2 px-4 rounded-full transition-colors border
+          className={`flex-1 py-2 px-4 rounded-full transition-colors border flex items-center justify-center gap-2
               ${hasChanges()
               ? 'border-red-500 text-red-500 hover:bg-red-50'
               : 'border-gray-300 text-gray-300 cursor-not-allowed'
             }`}
-          aria-label="Reset changes"
+          aria-label="Cancel changes"
         >
-          <X className="h-5 w-5 mx-auto" />
+          <X className="h-5 w-5" />
+          <span>Cancel</span>
         </button>
         <button
           onClick={handleSave}
           disabled={!hasChanges()}
-          className={`flex-1 py-2 px-4 rounded-full transition-colors border
+          className={`flex-1 py-2 px-4 rounded-full transition-colors border flex items-center justify-center gap-2
               ${hasChanges()
               ? 'border-green-500 text-green-500 hover:bg-green-50'
               : 'border-gray-300 text-gray-300 cursor-not-allowed'
             }`}
-          aria-label="Save changes"
+          aria-label="Save trip"
         >
-          <Check className="h-5 w-5 mx-auto" />
+          <Check className="h-5 w-5" />
+          <span>Save</span>
         </button>
       </div>
     </motion.div>
