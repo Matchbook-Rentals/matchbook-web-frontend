@@ -25,6 +25,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import SearchEditBar from '@/components/home-components/search-edit-bar';
+import { cn } from '@/lib/utils';
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -327,8 +328,11 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                         </Button>
                       </DialogTrigger>
                       {/* Apply mobile styles by default, revert for md+ */}
-                      <DialogContent 
-                        className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
+                      <DialogContent
+                        className={cn(
+                          "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
+                          "top-[10vh] md:top-[25vh]" // Adjust vertical position
+                        )}
                         xOnRight={true}
                       >
                         {/* Restore padding for md+ & hide header on mobile */}
