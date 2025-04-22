@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { format, add, Duration } from "date-fns"; // Import add and Duration
+import { format, add, Duration } from "date-fns";
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DateRange {
   start: Date | null;
@@ -39,6 +45,7 @@ interface CalendarDayProps {
   isEndDate?: boolean;
   onClick: () => void;
   isDisabled?: boolean;
+  disabledReason?: string | null; // Add reason for being disabled
 }
 
 interface FlexibleSelectorProps {
@@ -53,7 +60,7 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
   const showEndBackground = hasCompleteRange && isEndDate && !isStartDate;
 
-  return (
+  const DayButton = (
     <button
       className={`
         aspect-square w-full flex items-center justify-center text-base relative
@@ -61,6 +68,8 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
       `}
       onClick={onClick}
       disabled={isDisabled}
+      // Prevent focus ring when disabled and using tooltip
+      tabIndex={isDisabled ? -1 : undefined}
     >
       <span className={`
         z-10
@@ -80,6 +89,23 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
       )}
     </button>
   );
+
+  // Wrap with TooltipProvider and Tooltip only if disabled with a reason
+  if (isDisabled && disabledReason) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger asChild>{DayButton}</TooltipTrigger>
+          <TooltipContent>
+            <p>{disabledReason}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  // Return the button directly if not disabled or no reason provided
+  return DayButton;
 }
 
 function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNextMonth, isPrevDisabled, minimumDateRange, maximumDateRange }: CalendarMonthProps) { // Add maximumDateRange prop
@@ -115,57 +141,55 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
     return currentDate.getTime() === dateRange.end.getTime();
   };
 
-  const isDateDisabled = (day: number) => {
+  // Returns a reason string if disabled, otherwise null
+  const getDisabledReason = (day: number): string | null => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for accurate comparison
+    today.setHours(0, 0, 0, 0); // Normalize today's date
     const currentDate = new Date(year, month, day);
     currentDate.setHours(0, 0, 0, 0); // Normalize the current calendar day
 
     // Disable past dates
     if (currentDate < today) {
-      return true;
+      return "Trips cannot begin in the past.";
     }
 
-    // Existing logic: Disable dates within 30 days *before* the start date if only start is selected
+    // Logic when only a start date is selected
     if (dateRange.start && !dateRange.end) {
       const startDate = new Date(dateRange.start);
       startDate.setHours(0, 0, 0, 0); // Normalize start date
 
       // Don't disable the start date itself
-      if (currentDate.getTime() === startDate.getTime()) return false;
+      if (currentDate.getTime() === startDate.getTime()) return null;
 
       // Disable dates strictly *before* the start date
       if (currentDate < startDate) {
-         return true;
+         // This case should technically be covered by the past date check,
+         // but kept for clarity if start date could be in the future.
+         // Consider if a specific message is needed here.
+         return "End date cannot be before start date.";
       }
 
-      // NEW: Check minimum date range requirement
+      // Check minimum date range requirement
       if (minimumDateRange) {
-        // Calculate the minimum allowed end date
         const minEndDate = add(startDate, minimumDateRange);
         minEndDate.setHours(0, 0, 0, 0); // Normalize min end date
-
-        // Disable dates *before* the minimum required end date
         if (currentDate < minEndDate) {
-          return true;
+          return `Trips must be at least ${formatDuration(minimumDateRange)} long.`;
         }
       }
 
-      // NEW: Check maximum date range requirement
+      // Check maximum date range requirement
       if (maximumDateRange) {
-        // Calculate the maximum allowed end date
         const maxEndDate = add(startDate, maximumDateRange);
         maxEndDate.setHours(0, 0, 0, 0); // Normalize max end date
-
-        // Disable dates *after* the maximum allowed end date
         if (currentDate > maxEndDate) {
-          return true;
+          return `Trips cannot be longer than ${formatDuration(maximumDateRange)}.`;
         }
       }
     }
 
     // If no specific disabling condition met, the date is enabled
-    return false;
+    return null;
   };
 
 
@@ -213,6 +237,8 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
         {/* Calendar days */}
         {Array.from({ length: daysInMonth }).map((_, index) => {
           const day = index + 1;
+          const disabledReason = getDisabledReason(day);
+          const isDisabled = !!disabledReason;
           return (
             <CalendarDay
               key={day}
@@ -221,8 +247,9 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
               isInRange={isDateInRange(day)}
               isStartDate={isStartDate(day)}
               isEndDate={isEndDate(day)}
-              isDisabled={isDateDisabled(day)}
-              onClick={() => onDateSelect(day, month, year)}
+              isDisabled={isDisabled}
+              disabledReason={disabledReason}
+              onClick={() => !isDisabled && onDateSelect(day, month, year)} // Prevent click if disabled
             />
           );
         })}
