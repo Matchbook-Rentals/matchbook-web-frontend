@@ -9,8 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import CurrencyInput from '@/components/ui/currency-input';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
-import { ScreenShareIcon, Share2Icon, ShareIcon, Wifi } from 'lucide-react'; // Import Wifi icon
-import { Share1Icon } from '@radix-ui/react-icons';
+import { Wifi } from 'lucide-react'; // Import Wifi icon
 
 interface FilterOptions {
   propertyTypes: string[];
@@ -785,7 +784,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                 {/* WiFi Tile */}
                 <Tile
                   key="wifi"
-                  icon={<Wifi className="p-1 mt-0" />} // Use lucide-react Wifi icon
+                  icon={<Wifi className="h-[65px] w-[65px]" />} // Use lucide-react Wifi icon
                   label="WiFi"
                   className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${localFilters.wifi?.includes('wifi')
                     ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
