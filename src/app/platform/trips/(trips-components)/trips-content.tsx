@@ -151,7 +151,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 className="z-100 max-w-lg" // z-index relative to parent motion.div now
                 containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
                 inputStyles='bg-background'
-                searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
+                searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/80 transition-none' // Mobile specific styles if needed
                 searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
                 popoverMaxWidth='90vw' // Adjust popover width for mobile
                 headerText='Find your next home'

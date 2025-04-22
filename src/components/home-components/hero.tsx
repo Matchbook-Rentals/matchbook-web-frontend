@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
                   className="z-100" // Removed width constraints
                   containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
                   inputStyles='bg-background'
-                  searchButtonClassNames='bg-green-900 hover:bg-green-800' // Mobile specific styles
+                  searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/90 transition-none' // Mobile specific styles
                   searchIconColor='text-white md:text-[#404040]' // Match trips-content icon color
                   popoverMaxWidth='90vw' // Adjust popover width for mobile
                   headerText='Find your next home'
