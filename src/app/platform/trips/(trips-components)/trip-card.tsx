@@ -177,32 +177,12 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   <Button
                     variant="ghost"
                     className="w-full text-left flex items-center justify-start gap-2"
-                    onClick={() => router.push(`/platform/trips/${trip.id}/verification`)}
-                  >
-                    <MatchbookVerified className="h-4 w-4" /> Verification
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-left flex items-center justify-start gap-2"
-                    onClick={() => router.push(`/platform/application`)}
-                  >
-                    <ApplicationIcon className="h-4 w-4" /> Application
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-left flex items-center justify-start gap-2"
                     onClick={() => router.push(`/platform/searches/set-preferences/${trip.id}`)}
                   >
                     <Settings className="h-4 w-4" /> Preferences
                   </Button>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="w-full text-left flex items-center justify-start gap-2"
-                      >
-                        <Pencil className="h-4 w-4" /> Edit Search
-                      </Button>
                     </DialogTrigger>
                     {/* Apply mobile styles by default, revert for md+ */}
                     <DialogContent
