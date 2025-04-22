@@ -23,6 +23,7 @@ interface MobileTabSelectorProps {
   tabsListClassName?: string;
   useUrlParams?: boolean;
   defaultTab?: string;
+  onTabClick?: (value: string) => void; // Add the new prop
 }
 
 export default function MobileTabSelector({
@@ -32,6 +33,7 @@ export default function MobileTabSelector({
   tabsClassName,
   useUrlParams = false,
   defaultTab,
+  onTabClick, // Destructure the new prop
 }: MobileTabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -61,9 +63,24 @@ export default function MobileTabSelector({
 
   const handleTabChange = (value: string) => {
     // Reset scroll position to top when switching tabs
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    setActiveTab(value)
-  }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveTab(value); // Set local state first
+
+    // Update URL if needed (deferred)
+    if (useUrlParams) {
+      const currentTab = searchParams.get('tab');
+      if (currentTab !== value) {
+        setTimeout(() => {
+          router.replace(`?tab=${value}`, { scroll: false });
+        }, 0);
+      }
+    }
+
+    // Call the callback if provided
+    if (onTabClick) {
+      onTabClick(value);
+    }
+  };
 
   return (
     <Tabs

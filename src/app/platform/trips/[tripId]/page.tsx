@@ -18,6 +18,7 @@ import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, Ma
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { useState } from 'react'; // Import useState
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
@@ -34,12 +35,13 @@ interface Tab {
 }
 
 const TripsPage: React.FC = () => {
-  const { state, actions } = useTripContext();
+  const { state } = useTripContext();
   const searchParams = useSearchParams();
-  const currentTab = searchParams.get('tab') || 'recommended';
+  const initialTab = searchParams.get('tab') || 'recommended';
+  const [activeTab, setActiveTab] = useState(initialTab); // State to track active tab
 
-  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
-  const [filters, setFilters] = React.useState<FilterOptions>({
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
     moveInDate: state.trip?.startDate || new Date(),
     moveOutDate: state.trip?.endDate || new Date(),
@@ -58,6 +60,13 @@ const TripsPage: React.FC = () => {
       ...prevFilters,
       [key]: value,
     }));
+  };
+
+  // Handler for tab changes, update local state (and eventually Zustand store)
+  const handleTabSelect = (tabValue: string) => {
+    setActiveTab(tabValue);
+    // TODO: Update Zustand store here
+    console.log("Selected tab:", tabValue);
   };
 
   const tabTriggerTextStyles = 'text-[9px] px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
@@ -128,11 +137,11 @@ const TripsPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>
+      {/* Conditionally render based on local activeTab state */}
       <div className='flex justify-between items-center sm:justify-start'>
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
-
-            {['recommended', 'allListings'].includes(currentTab) && (
+            {['recommended', 'allListings'].includes(activeTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -147,14 +156,16 @@ const TripsPage: React.FC = () => {
 
       {!isMobile ? (
         <TabSelector
-          useUrlParams
+          useUrlParams // Keep URL sync if desired, but logic below uses local state
           tabs={tabs}
-          defaultTab={currentTab || 'recommended'}
+          defaultTab={activeTab} // Use local state for default
+          onTabClick={handleTabSelect} // Pass the handler
           className='mx-auto w-full pb-0 mb-0 border-none'
           tabsClassName='w-full mx-auto  '
           tabsListClassName='flex py-0  justify-start w-full space-x-2  md:gap-x-2 '
           secondaryButton={
-            ['recommended', 'allListings'].includes(currentTab) ? (
+            // Conditionally render based on local activeTab state
+            ['recommended', 'allListings'].includes(activeTab) ? (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
                 onOpenChange={setIsFilterOpen}
@@ -167,8 +178,10 @@ const TripsPage: React.FC = () => {
         />
       ) : (
         <MobileTabSelector
+          useUrlParams // Keep URL sync if desired
           tabs={tabs}
-          defaultTab={currentTab || 'recommended'}
+          defaultTab={activeTab} // Use local state for default
+          onTabClick={handleTabSelect} // Pass the handler
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
         />

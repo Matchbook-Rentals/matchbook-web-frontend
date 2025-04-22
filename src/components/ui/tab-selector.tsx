@@ -24,6 +24,7 @@ interface TabSelectorProps {
   defaultTab?: string;
   secondaryButton?: React.ReactNode;
   useIcons?: boolean;
+  onTabClick?: (value: string) => void; // Add the new prop
 }
 
 export default function TabSelector({
@@ -35,6 +36,7 @@ export default function TabSelector({
   defaultTab,
   secondaryButton,
   useIcons = false,
+  onTabClick, // Destructure the new prop
 }: TabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -73,11 +75,14 @@ export default function TabSelector({
   }, [activeTab])
 
   const handleTabChange = (value: string) => {
+    setActiveTab(value); // Set local state first
     if (useUrlParams) {
-      router.replace(`?tab=${value}`, { scroll: false })
+      router.replace(`?tab=${value}`, { scroll: false });
     }
-    setActiveTab(value)
-  }
+    if (onTabClick) {
+      onTabClick(value); // Call the callback if provided
+    }
+  };
 
   return (
     <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
