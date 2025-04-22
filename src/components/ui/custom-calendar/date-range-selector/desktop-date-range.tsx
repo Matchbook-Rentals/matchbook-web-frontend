@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format, add, Duration } from "date-fns";
+import { format, add, Duration, endOfMonth } from "date-fns"; // Import endOfMonth
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Tooltip,
@@ -200,9 +200,26 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
 
       // Check maximum date range requirement
       if (maximumDateRange) {
-        const maxEndDate = add(startDate, maximumDateRange);
+        let maxEndDate: Date;
+        // If days are null/undefined, calculate to the end of the month
+        if (maximumDateRange.days === null || maximumDateRange.days === undefined) {
+          // Add years, months, weeks first
+          const intermediateDate = add(startDate, {
+            years: maximumDateRange.years,
+            months: maximumDateRange.months,
+            weeks: maximumDateRange.weeks,
+          });
+          // Get the end of that month
+          maxEndDate = endOfMonth(intermediateDate);
+        } else {
+          // Otherwise, add the full duration including days (even if 0)
+          maxEndDate = add(startDate, maximumDateRange);
+        }
+
         maxEndDate.setHours(0, 0, 0, 0); // Normalize max end date
+
         if (currentDate > maxEndDate) {
+          // Use the original maximumDateRange for the message for clarity
           return `Trips cannot be longer than ${formatDuration(maximumDateRange)}.`;
         }
       }
