@@ -89,6 +89,12 @@ const amenities = [
 ]
 
 export const iconAmenities = [
+  // Basics
+  { code: 'airConditioner', label: 'Air Conditioner', icon: AmenitiesIcons.UpdatedAirConditioningIcon, category: 'basics' },
+  { code: 'heater', label: 'Heater', icon: AmenitiesIcons.UpdatedHeaterIcon, category: 'basics' },
+  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'basics' },
+  { code: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: AmenitiesIcons.UpdatedDedicatedWorkspaceIcon, category: 'basics' },
+
   // Accessibility
   { code: 'wheelchairAccess', label: 'Wheelchair Accessible', icon: AmenitiesIcons.UpdatedWheelchairAccessibleIcon, category: 'accessibility' },
   { code: 'alarmSystem', label: 'Alarm System', icon: AmenitiesIcons.UpdatedAlarmSystemIcon, category: 'accessibility' },
@@ -120,6 +126,7 @@ export const iconAmenities = [
   { code: 'sauna', label: 'Sauna', icon: AmenitiesIcons.UpdatedSaunaIcon, category: 'luxury' },
   { code: 'hotTub', label: 'Hot Tub', icon: AmenitiesIcons.UpdatedHotTubIcon, category: 'luxury' },
   { code: 'grill', label: 'Grill', icon: AmenitiesIcons.UpdatedGrillIcon, category: 'luxury' },
+  { code: 'fireplace', label: 'Fireplace', icon: AmenitiesIcons.UpdatedFireplaceIcon, category: 'luxury' },
 
   // Other
   { code: 'fencedInYard', label: 'Fenced Yard', icon: AmenitiesIcons.UpdatedFencedYardIcon, category: 'other' },

@@ -19,6 +19,9 @@ import { Star } from 'lucide-react';
 import ShareButton from '@/components/ui/share-button';
 import { usePathname, useParams } from 'next/navigation';
 
+// Define the desired order for amenity categories
+const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
+
 // Define your base URL; for example, using an environment variable.
 const baseUrl = process.env.NEXT_PUBLIC_URL || "";
 
@@ -170,10 +173,19 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                 acc[category].push(amenity);
                 return acc;
               }, {} as Record<string, typeof displayAmenities>)
-            ).map(([category, amenities]) => (
+            )
+            .sort(([catA], [catB]) => {
+              const indexA = categoryOrder.indexOf(catA);
+              const indexB = categoryOrder.indexOf(catB);
+              // Handle categories not in the predefined order (put them at the end)
+              if (indexA === -1) return 1;
+              if (indexB === -1) return -1;
+              return indexA - indexB;
+            })
+            .map(([category, amenities]) => (
               <div key={category} className="mb-4">
-                <h3 className="text-[17px] font-medium text-[#404040] mb-2">
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                <h3 className="text-[17px] font-medium text-[#404040] mb-2 capitalize">
+                  {category}
                 </h3>
                 <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-8 space-y-2 md:space-y-0">
                   {amenities.map((amenity) => (
@@ -224,10 +236,18 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                           acc[category].push(amenity);
                           return acc;
                         }, {} as Record<string, typeof displayAmenities>)
-                      ).map(([category, amenities]) => (
+                      )
+                      .sort(([catA], [catB]) => {
+                        const indexA = categoryOrder.indexOf(catA);
+                        const indexB = categoryOrder.indexOf(catB);
+                        if (indexA === -1) return 1;
+                        if (indexB === -1) return -1;
+                        return indexA - indexB;
+                      })
+                      .map(([category, amenities]) => (
                         <div key={category} className="mb-6">
-                          <h3 className="text-[17px] font-medium text-[#404040] mb-2">
-                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                          <h3 className="text-[17px] font-medium text-[#404040] mb-2 capitalize">
+                            {category}
                           </h3>
                           {amenities.map((amenity) => (
                             <AmenityListItem
