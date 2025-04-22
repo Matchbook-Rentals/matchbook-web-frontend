@@ -46,7 +46,7 @@ interface FlexibleSelectorProps {
   onSelect: (type: 'start' | 'end', option: 'exact' | number | null) => void;
 }
 
-function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDateSelect, isMobile }: CalendarMonthProps) {
+function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDateSelect, isMobile, minimumDateRange }: CalendarMonthProps) { // Add minimumDateRange prop
   const [currentMonth, setCurrentMonth] = useState(initialMonth);
   const [currentYear, setCurrentYear] = useState(initialYear);
   const [direction, setDirection] = useState(0);
