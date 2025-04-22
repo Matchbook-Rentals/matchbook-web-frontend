@@ -71,31 +71,45 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     }
   }, [displayedListings.length, filteredListings]); // Dependencies for loadMoreItems
 
-  // Observer for the sentinel to trigger loading more listings
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          loadMoreItems(); // Call the loading function
+ // Observer to trigger loading more listings based on dynamic element
+ useEffect(() => {
+   // Define the observer callback
+   const observerCallback = (entries: IntersectionObserverEntry[]) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting) {
+         loadMoreItems(); // Call the loading function
        }
      });
-   }, {
-     root: scrollAreaRef.current,
-     threshold: 0.1,
-     rootMargin: "0px 0px 900px 0px" // Trigger when ~2 rows (900px) are below viewport
-   });
+   };
 
-   observer.observe(sentinel);
-    return () => {
-      observer.disconnect();
-    };
-  }, [loadMoreItems]); // Dependency: loadMoreItems function
+   // Define the observer options (no rootMargin needed)
+   const observerOptions = {
+     root: scrollAreaRef.current, // Observe within the scroll area
+     threshold: 0.1 // Trigger when 10% is visible
+   };
 
-  const updateMaxDetailsHeight = useCallback(() => {
-    if (gridRef.current) {
+   // Create the observer instance
+   const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+   // Calculate the index of the first item in the second-to-last row
+   // Ensure index is not negative and considers grid columns
+   const triggerIndex = Math.max(0, displayedListings.length - (gridColumns * 2));
+   const triggerElement = gridRef.current?.children[triggerIndex] as HTMLElement;
+
+   // Only observe if the trigger element exists and there are more items to load
+   if (triggerElement && displayedListings.length < filteredListings.length) {
+     observer.observe(triggerElement);
+   }
+
+   // Cleanup function to disconnect the observer
+   return () => {
+     observer.disconnect();
+   };
+   // Dependencies: Re-run when items load, grid changes, or filter changes total count
+ }, [loadMoreItems, displayedListings, gridColumns, filteredListings.length]);
+
+ const updateMaxDetailsHeight = useCallback(() => {
+   if (gridRef.current) {
       setMaxDetailsHeight(0);
 
       setTimeout(() => {
