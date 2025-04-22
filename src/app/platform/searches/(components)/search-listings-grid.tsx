@@ -80,11 +80,15 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           loadMoreItems(); // Call the loading function
-        }
-      });
-    }, { root: scrollAreaRef.current, threshold: 0.1, rootMargin: "0px 0px 900px 0px" });
+       }
+     });
+   }, {
+     root: scrollAreaRef.current,
+     threshold: 0.1,
+     rootMargin: "0px 0px 900px 0px" // Trigger when ~2 rows (900px) are below viewport
+   });
 
-    observer.observe(sentinel);
+   observer.observe(sentinel);
     return () => {
       observer.disconnect();
     };
