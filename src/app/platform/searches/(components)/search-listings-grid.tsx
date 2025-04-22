@@ -3,8 +3,6 @@ import { ListingAndImages } from '@/types';
 import SearchListingCard from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
 import { useMapSelectionStore } from '@/store/map-selection-store';
@@ -21,6 +19,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   withCallToAction = false,
   height
 }) => {
+  const ITEMS_PER_LOAD = 9; // Number of items to load initially and per scroll
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -28,55 +27,68 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const sentinelRef = useRef<HTMLDivElement>(null);
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [gridColumns, setGridColumns] = useState(1);
-  const listingsPerPage = gridColumns * 3;
-  const infiniteScrollMode = gridColumns === 1;
+  // const [currentPage, setCurrentPage] = useState(1); // Removed pagination state
+  const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
+  // const listingsPerPage = gridColumns * 3; // Removed pagination calculation
+  // const infiniteScrollMode = gridColumns === 1; // Removed mode flag
 
   // Subscribe to the selected marker from the map selection store
-  const selectedMarker = useMapSelectionStore((state) => state.selectedMarker);
+  // const selectedMarker = useMapSelectionStore((state) => state.selectedMarker); // Removed - no pagination to update
 
   // *** New: subscribe to visible listings from the map ***
   const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
   const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
 
-  // Reset visible listings filter when in mobile view (infiniteScrollMode)
-  useEffect(() => {
-    if (infiniteScrollMode && visibleListingIds !== null) {
-      // On small screens, we should show all listings instead of filtering by map visibility
-      setVisibleListingIds(null);
-    }
-  }, [infiniteScrollMode, visibleListingIds, setVisibleListingIds]);
+  // Reset visible listings filter when in mobile view (infiniteScrollMode) - Removed, filter applies always unless null
+  // useEffect(() => {
+  //   if (infiniteScrollMode && visibleListingIds !== null) {
+  //     // On small screens, we should show all listings instead of filtering by map visibility
+  //     setVisibleListingIds(null);
+  //   }
+  // }, [infiniteScrollMode, visibleListingIds, setVisibleListingIds]);
 
   const filteredListings = useMemo(() => {
+    // If visibleListingIds is null (meaning no map filter applied or explicitly cleared), show all listings.
+    // Otherwise, filter by the IDs visible on the map.
     if (visibleListingIds === null) return listings;
     return listings.filter(listing => visibleListingIds.includes(listing.id));
   }, [listings, visibleListingIds]);
 
-  // Update displayed listings based on filtered listings
+  // Initialize or reset displayed listings when filteredListings change
   useEffect(() => {
-    if (infiniteScrollMode) {
-      setDisplayedListings(filteredListings.slice(0, listingsPerPage));
-      setCurrentPage(1);
-    } else {
-      const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(filteredListings.slice(startIndex, startIndex + listingsPerPage));
-    }
-  }, [filteredListings, infiniteScrollMode, listingsPerPage]);
+    // Start with the first batch of items
+    setDisplayedListings(filteredListings.slice(0, ITEMS_PER_LOAD));
+  }, [filteredListings]); // Dependency: only filteredListings
 
-  useEffect(() => {
-    if (infiniteScrollMode && currentPage > 1) {
-      const newItems = filteredListings.slice((currentPage - 1) * listingsPerPage, currentPage * listingsPerPage);
-      setDisplayedListings(prev => [...prev, ...newItems]);
-    }
-  }, [currentPage, infiniteScrollMode, filteredListings, listingsPerPage]);
+  // Load more items when sentinel becomes visible
+  const loadMoreItems = useCallback(() => {
+    const currentLength = displayedListings.length;
+    const moreItemsAvailable = currentLength < filteredListings.length;
 
-  useEffect(() => {
-    if (!infiniteScrollMode) {
-      const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(filteredListings.slice(startIndex, startIndex + listingsPerPage));
+    if (moreItemsAvailable) {
+      const nextItems = filteredListings.slice(currentLength, currentLength + ITEMS_PER_LOAD);
+      setDisplayedListings(prev => [...prev, ...nextItems]);
     }
-  }, [currentPage, filteredListings, listingsPerPage, infiniteScrollMode]);
+  }, [displayedListings.length, filteredListings]); // Dependencies for loadMoreItems
+
+  // Observer for the sentinel to trigger loading more listings
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadMoreItems(); // Call the loading function
+        }
+      });
+    }, { root: scrollAreaRef.current, threshold: 0.1 });
+
+    observer.observe(sentinel);
+    return () => {
+      observer.disconnect();
+    };
+  }, [loadMoreItems]); // Dependency: loadMoreItems function
 
   const updateMaxDetailsHeight = useCallback(() => {
     if (gridRef.current) {
@@ -147,32 +159,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       };
   };
 
-  const totalPages = Math.ceil(filteredListings.length / listingsPerPage);
+  // const totalPages = Math.ceil(filteredListings.length / listingsPerPage); // Removed pagination calculation
 
-  const renderPageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 7;
-    let startPage = Math.max(1, currentPage - 3);
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage < maxVisiblePages - 1) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <Button
-          key={i}
-          variant={currentPage === i ? "default" : "ghost"}
-          className={`w-8 h-8 p-0 rounded-full ${currentPage === i ? 'bg-black text-white hover:bg-black/90' : ''}`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </Button>
-      );
-    }
-    return pages;
-  };
+  // const renderPageNumbers = () => { ... }; // Removed pagination rendering function
 
   useEffect(() => {
     const updateGridColumns = () => {
@@ -286,52 +275,13 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                 );
               })}
             </div>
-            {infiniteScrollMode && displayedListings.length < filteredListings.length && (
+            {/* Sentinel for infinite scroll */}
+            {displayedListings.length < filteredListings.length && (
               <div ref={sentinelRef} style={{ height: '20px' }} />
             )}
           </ScrollArea>
-          {/* Pagination container - remove absolute positioning and fixed height */}
-          {!infiniteScrollMode && (
-            <div className="flex-shrink-0 bg-background border-t flex items-center justify-center gap-1 py-2"> {/* Added py-2 for padding */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-              >
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              {renderPageNumbers()}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-              >
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+          {/* Removed Pagination container */}
+          {/* {!infiniteScrollMode && ( ... )} */}
         </>
       )}
     </div>
