@@ -556,7 +556,7 @@ export function DesktopDateRange({
       </div>
 
       {/* Add buttons at the bottom */}
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="mt-6 flex flex-col items-center gap-3"> {/* Changed to flex-col and items-center */}
         <button
           onClick={onProceed}
           disabled={!(start && end)}
@@ -566,6 +566,13 @@ export function DesktopDateRange({
             } text-white`}
         >
           Proceed
+        </button>
+        {/* Add Clear button */}
+        <button
+          onClick={onClear}
+          className="px-4 py-2 w-full rounded-lg bg-background border border-black text-black hover:bg-gray-100" // Outline styles
+        >
+          Clear
         </button>
       </div>
     </div>
