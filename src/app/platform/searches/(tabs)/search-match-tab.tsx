@@ -12,6 +12,7 @@ import ListingDetailsBox from '../(components)/search-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 // Add prop interface
@@ -40,6 +41,34 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [startY, setStartY] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+
+  useEffect(() => {
+    const setHeight = () => {
+      if (containerRef.current) {
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newStartY = containerRect.top;
+        const newViewportHeight = window.innerHeight;
+        const newCalculatedHeight = newViewportHeight - newStartY;
+        setStartY(newStartY);
+        setViewportHeight(newViewportHeight);
+        setCalculatedHeight(newCalculatedHeight);
+        setCurrentComponentHeight(containerRef.current.offsetHeight);
+        containerRef.current.style.minHeight = `${newCalculatedHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -258,7 +287,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    <>
+    <ScrollArea ref={containerRef} style={{height: calculatedHeight || '1200px'}}>
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
@@ -382,7 +411,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
         </div>
       </div>
-    </>
+    </ScrollArea>
   );
 };
 
