@@ -570,7 +570,12 @@ export function DesktopDateRange({
         {/* Add Clear button */}
         <button
           onClick={onClear}
-          className="px-4 py-2 w-full rounded-lg bg-background border border-black text-black hover:bg-gray-100" // Outline styles
+          disabled={!start && !end} // Disable if no dates are selected
+          className={`px-4 py-2 w-full rounded-lg bg-background border text-black ${
+            !start && !end
+              ? 'border-gray-300 text-gray-400 cursor-not-allowed' // Disabled styles
+              : 'border-black hover:bg-gray-100' // Enabled styles
+          }`}
         >
           Clear
         </button>
