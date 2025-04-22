@@ -38,7 +38,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 onClick={() => setShowSearchPopup(true)}
                 className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
               >
-                New Search Pop-up
+                New Search
               </Button>
             </div>
           </div>

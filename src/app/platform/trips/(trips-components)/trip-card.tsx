@@ -181,24 +181,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   >
                     <Settings className="h-4 w-4" /> Preferences
                   </Button>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                    </DialogTrigger>
-                    {/* Apply mobile styles by default, revert for md+ */}
-                    <DialogContent
-                      className={cn(
-                        "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                        "md:top-[25vh]" // Default center on mobile, 25vh top on md+
-                      )}
-                      xOnRight={true}
-                    >
-                      {/* Restore padding for md+ & hide header on mobile */}
-                      <div className="mb-6 md:p-0 hidden md:block"> 
-                        <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
-                      </div>
-                      <SearchEditBar trip={trip} />
-                    </DialogContent>
-                  </Dialog>
                   <hr className="my-1" />
                   <Button
                     variant="ghost"
@@ -280,49 +262,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                     <Button
                       variant="ghost"
                       className="w-full text-left flex items-center justify-start gap-2"
-                      onClick={() => router.push(`/platform/trips/${trip.id}/verification`)}
-                    >
-                      <MatchbookVerified className="h-4 w-4" /> Verification
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="w-full text-left flex items-center justify-start gap-2"
-                      onClick={() => router.push(`/platform/application`)}
-                    >
-                      <ApplicationIcon className="h-4 w-4" /> Application
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="w-full text-left flex items-center justify-start gap-2"
                       onClick={() => router.push(`/platform/searches/set-preferences/${trip.id}`)}
                     >
                       <Settings className="h-4 w-4" /> Preferences
                     </Button>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className="w-full text-left flex items-center justify-start gap-2"
-                        >
-                          <Pencil className="h-4 w-4" /> Edit Search
-                        </Button>
-                      </DialogTrigger>
-                      {/* Apply mobile styles by default, revert for md+ */}
-                      <DialogContent
-                        className={cn(
-                          "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                          "md:top-[25vh]" // Default center on mobile, 25vh top on md+
-                        )}
-                        xOnRight={true}
-                      >
-                        {/* Restore padding for md+ & hide header on mobile */}
-                        <div className="mb-6 md:p-0 hidden md:block"> 
-                          <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
-                        </div>
-                        {/* Removed the inner div wrapper as SearchEditBar likely handles its own layout */}
-                        <SearchEditBar trip={trip} />
-                      </DialogContent>
-                    </Dialog>
                     <hr className="my-1" />
                     <Button
                       variant="ghost"
