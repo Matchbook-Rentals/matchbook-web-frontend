@@ -39,6 +39,14 @@ const TripsPage: React.FC = () => {
   const initialTab = searchParams.get('tab') || 'recommended';
   const [activeTab, setActiveTab] = useState(initialTab); // State to track active tab
 
+  // Effect to update activeTab when URL search parameter changes
+  useEffect(() => {
+    const currentTab = searchParams.get('tab') || 'recommended';
+    if (currentTab !== activeTab) {
+      setActiveTab(currentTab);
+    }
+  }, [searchParams, activeTab]); // Depend on searchParams and activeTab
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
     ...DEFAULT_FILTER_OPTIONS,
