@@ -1,5 +1,4 @@
 import React from "react";
-import React from "react";
 import SearchInputsDesktop from "./search-inputs-desktop";
 import SearchInputsMobile from "./search-inputs-mobile";
 import { cn } from "@/lib/utils";
