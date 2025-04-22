@@ -27,10 +27,9 @@ interface FilterOptions {
   location: string[];
   parking: string[];
   kitchen: string[];
-  climateControl: string[];
+  basics: string[]; // Renamed from climateControl
   luxury: string[];
   laundry: string[];
-  wifi: string[]; // Add wifi filter state
 }
 
 interface FilterOptionsDialogProps {
@@ -192,11 +191,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     }
   ];
 
-  const climateControlOptions = [
+  const basicsOptions = [
     {
-      value: 'fireplace',
-      label: 'Fireplace',
-      icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" />
+      value: 'airConditioner',
+      label: 'Air Conditioning',
+      icon: <AmenitiesIcons.UpdatedAirConditioningIcon className="p-1 mt-0" />
     },
     {
       value: 'heater',
@@ -204,15 +203,15 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       icon: <AmenitiesIcons.UpdatedHeaterIcon className="p-1 mt-0" />
     },
     {
+      value: 'wifi',
+      label: 'WiFi',
+      icon: <AmenitiesIcons.UpdatedWifiIcon className="p-1 mt-0" /> // Use correct icon if available
+    },
+    {
       value: 'dedicatedWorkspace',
       label: 'Dedicated Workspace',
       icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" />
     },
-    {
-      value: 'airConditioner',
-      label: 'Air Conditioning',
-      icon: <AmenitiesIcons.UpdatedAirConditioningIcon className="p-1 mt-0" />
-    }
   ];
 
   const laundryOptions = [
@@ -234,6 +233,11 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   ];
 
   const luxuryOptions = [
+    {
+      value: 'fireplace',
+      label: 'Fireplace',
+      icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" />
+    },
     {
       value: 'gym',
       label: 'Gym',
@@ -346,8 +350,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       const matchesKitchen = localFilters.kitchen?.length === 0 ||
         localFilters.kitchen?.every(option => listing[option]);
 
-      const matchesClimateControl = localFilters.climateControl?.length === 0 ||
-        localFilters.climateControl?.every(option => listing[option]);
+      const matchesBasics = localFilters.basics?.length === 0 ||
+        localFilters.basics?.every(option => listing[option]);
 
       const matchesLuxury = localFilters.luxury?.length === 0 ||
         localFilters.luxury?.every(option => listing[option]);
@@ -357,9 +361,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       // another category this must change
       const matchesLaundry = localFilters.laundry?.length === 0 || localFilters.laundry?.length === 3 ||
         localFilters.laundry?.some(option => listing[option]);
-
-      // WiFi filter - check if listing has wifi if the filter is active
-      const matchesWifi = localFilters.wifi?.length === 0 || listing.wifi;
 
       return matchesPropertyType &&
         matchesPrice &&
@@ -373,10 +374,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         matchesLocation &&
         matchesParking &&
         matchesKitchen &&
-        matchesClimateControl &&
+        matchesBasics && // Renamed from matchesClimateControl
         matchesLuxury &&
-        matchesLaundry &&
-        matchesWifi; // Add wifi check
+        matchesLaundry;
     }).length;
   }, [listings, localFilters]);
 
@@ -441,10 +441,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
       location: [],
       parking: [],
       kitchen: [],
-      climateControl: [],
+      basics: [], // Renamed from climateControl
       luxury: [],
       laundry: [],
-      wifi: [] // Add wifi to default filters
     };
 
     setLocalFilters(defaultFilters);
@@ -754,8 +753,40 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
           </div>
 
           {/* Tiles Section */}
+          {/* Basics Section - Moved Up */}
           <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Accessiblity and Safety</h3>
+            <h3 className="text-[18px] font-medium text-[#404040]">Basics</h3>
+            <div className='flex flex-wrap'>
+              <div className="flex flex-wrap justify-start gap-4">
+                {basicsOptions.map(({ value, label, icon }) => {
+                  const isSelected = localFilters.basics?.includes(value);
+                  return (
+                    <Tile
+                      key={value}
+                      icon={icon}
+                      label={label}
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
+                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
+                        }`}
+                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
+                        }`}
+                      onClick={() => {
+                        const updatedAmenities = isSelected
+                          ? (localFilters.basics || []).filter(item => item !== value)
+                          : [...(localFilters.basics || []), value];
+                        handleLocalFilterChange('basics', updatedAmenities);
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Accessibility and Safety Section */}
+          <div className="space-y-4 border-b-2 py-6">
+            <h3 className="text-[18px] font-medium text-[#404040]">Accessibility and Safety</h3>
             <div className='flex flex-wrap'>
               <div className="flex flex-wrap justify-start gap-4">
                 {accessibilityOptions.map(({ value, label, icon }) => {
@@ -781,25 +812,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     />
                   );
                 })}
-                {/* WiFi Tile */}
-                <Tile
-                  key="wifi"
-                  icon={<Wifi className="h-[65px] w-[65px]" />} // Use lucide-react Wifi icon
-                  label="WiFi"
-                  className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${localFilters.wifi?.includes('wifi')
-                    ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                    : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                    }`}
-                  labelClassNames={`text-[14px] font-normal leading-tight ${localFilters.wifi?.includes('wifi') ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                    }`}
-                  onClick={() => {
-                    const isSelected = localFilters.wifi?.includes('wifi');
-                    const updatedWifi = isSelected
-                      ? [] // Deselect: empty array
-                      : ['wifi']; // Select: array with 'wifi'
-                    handleLocalFilterChange('wifi', updatedWifi);
-                  }}
-                />
               </div>
             </div>
           </div>
@@ -894,35 +906,8 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
             </div>
           </div>
 
-          <div className="space-y-4 border-b-2 py-6">
-            <h3 className="text-[18px] font-medium text-[#404040]">Climate Control</h3>
-            <div className='flex flex-wrap'>
-              <div className="flex flex-wrap justify-start gap-4">
-                {climateControlOptions.map(({ value, label, icon }) => {
-                  const isSelected = localFilters.climateControl?.includes(value);
-                  return (
-                    <Tile
-                      key={value}
-                      icon={icon}
-                      label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
-                        ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
-                        : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
-                        }`}
-                      labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
-                        }`}
-                      onClick={() => {
-                        const updatedAmenities = isSelected
-                          ? (localFilters.climateControl || []).filter(item => item !== value)
-                          : [...(localFilters.climateControl || []), value];
-                        handleLocalFilterChange('climateControl', updatedAmenities);
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          {/* Climate Control Section - Removed/Replaced by Basics */}
+          {/* <div className="space-y-4 border-b-2 py-6"> ... </div> */}
 
           <div className="space-y-4 border-b-2 py-6">
             <h3 className="text-[18px] font-medium text-[#404040]">Luxury</h3>
@@ -933,6 +918,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                   return (
                     <Tile
                       key={value}
+                      icon={icon}
                       icon={icon}
                       label={label}
                       className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
