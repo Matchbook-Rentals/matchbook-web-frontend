@@ -95,9 +95,11 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
       case 'date':
         return (
           <HeroDateRange
-            start={dateRange.start || new Date()}
-            end={dateRange.end || new Date()}
+            start={dateRange.start} // Pass null if not set
+            end={dateRange.end}     // Pass null if not set
             handleChange={(start, end) => setDateRange({ start, end })}
+            minimumDateRange={{ months: 1 }} // Add minimum date range
+            maximumDateRange={{ months: 12 }} // Add maximum date range
           />
         );
       case 'guests':
