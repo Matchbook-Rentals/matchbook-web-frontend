@@ -128,17 +128,6 @@ const TripsPage: React.FC = () => {
 
   const marginClass = PAGE_MARGIN;
 
-  const breadcrumbLinks = [
-    {
-      label: 'Searches',
-      url: '/platform/trips'
-    },
-    {
-      label: state.trip?.locationString || 'Location',
-      url: undefined // or remove the url property entirely
-    }
-  ];
-
   const { width } = useWindowSize();
   const isMobile = width ? width < 640 : false; // 640px is the 'sm' breakpoint in Tailwind
 
