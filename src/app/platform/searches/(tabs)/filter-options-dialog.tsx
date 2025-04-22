@@ -919,7 +919,6 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                     <Tile
                       key={value}
                       icon={icon}
-                      icon={icon}
                       label={label}
                       className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
