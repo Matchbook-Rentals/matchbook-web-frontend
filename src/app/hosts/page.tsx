@@ -16,6 +16,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/App-management.png",
       imageAlt: "Application management illustration",
       align: "left",
+      verticalSpace: 12, // Added vertical space
     },
     {
       title: "Collect Rent Automatically",
@@ -24,6 +25,7 @@ export default function AboutHostingPage(): React.ReactNode {
       align: "right",
       image: "/marketing-images/auto-collect.png",
       imageAlt: "Application management illustration",
+      verticalSpace: 12, // Added vertical space
     },
     {
       title: "Connect with Matchbook Verified Renters",
@@ -32,6 +34,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/verified-renters.png",
       imageAlt: "Application management illustration",
       align: "left",
+      verticalSpace: 12, // Added vertical space
     },
     {
       title: "Real Reviews, Reliable Renters, Worry-Free Renting",
@@ -40,6 +43,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/worry-free.png",
       imageAlt: "Application management illustration",
       align: "right",
+      verticalSpace: 12, // Added vertical space
     },
     {
       title: "Ditch the paperwork",
@@ -48,6 +52,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/ditch-paperwork.png",
       imageAlt: "Reviews illustration",
       align: "left",
+      verticalSpace: 12, // Added vertical space
     },
   ];
 
@@ -68,11 +73,11 @@ export default function AboutHostingPage(): React.ReactNode {
 
       {/* Features Section */}
       <section className="relative w-full max-w-[990px] mx-auto px-4 md:px-0">
-        <div className="flex flex-col items-center gap-16 py-12">
+        <div className="flex flex-col items-center gap-16"> {/* Removed py-12 from here */}
           {features.map((feature, index) => (
-            <Card key={index} className="w-full border-none bg-background test shadow-none">
+            <Card key={index} className={`w-full border-none bg-background shadow-none py-${feature.verticalSpace}`}> {/* Applied dynamic padding */}
               <CardContent className="flex flex-col py-0">
-                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0"> {/* Removed md:max-h-[250px] */}
+                <div className="flex flex-col md:flex-row space-y-4 md:space-y-2 items-center gap-0">
                   {/* Mobile: always stack title, description, image. Desktop: alternate layout */}
                   <div className="flex flex-col w-full md:hidden space-y-6">
                     <h2 className="font-normal text-[#1d221b] text-4xl tracking-[-0.36px] leading-[45px] text-left">
