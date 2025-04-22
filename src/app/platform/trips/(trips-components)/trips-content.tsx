@@ -40,13 +40,6 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               >
                 New Search Pop-up
               </Button>
-              {/* Keep original button visible on mobile for A/B test */}
-              <Button
-                onClick={() => setShowSearch(prev => !prev)}
-                className='block sm:hidden w-fit rounded-full text-[16px] bg-blue-500 hover:bg-blue-600' // Added different bg for distinction
-              >
-                New Search Slide in <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
-              </Button>
             </div>
           </div>
           <div className="hidden sm:block w-full md:w-1/2 mx-auto">
