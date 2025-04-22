@@ -19,56 +19,81 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
   inputClassName,
   searchButtonClassNames,
   searchIconColor = 'text-white', // Default to white like the active component
-  headerText, // Destructure headerText
+  headerText,
 }) => {
-  // Match the active component's input classes structure
+  // Base input classes matching SearchInputsDesktop, adding disabled styles
   const inputClasses = cn(
-    'w-full px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none sm:border-r border-gray-300 cursor-not-allowed opacity-50 bg-transparent',
+    'w-full px-4 py-0 text-gray-700 placeholder-gray-400 focus:outline-none cursor-not-allowed opacity-50 bg-background',
     inputClassName
   );
 
   return (
     <div className="relative">
-      {/* Add optional header text */}
-      {headerText && <h3 className="text-xl font-semibold mb-3 text-green-800 hidden sm:block text-center">{headerText}</h3>}
-      {/* Match the active component's container style */}
+      {/* Optional header text */}
+      {headerText && <h3 className="hidden text-xl font-semibold mb-3 text-green-800 text-center sm:block">{headerText}</h3>}
+      {/* Container matching SearchInputsDesktop, adding disabled styles */}
       <div
-        className={cn('flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-lg shadow-md overflow-hidden', className)}
+        className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-full shadow-md overflow-hidden cursor-not-allowed opacity-60', className)}
       >
-        <input
-          type="text"
-          placeholder="Where to?"
-          value=""
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Move in"
-          value=""
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Move on out:"
-          value=""
-          className={inputClasses}
-          readOnly
-        />
-        <input
-          type="text"
-          placeholder="Who?"
-          value=""
-          className={cn(inputClasses, 'sm:border-r-0')} // Remove border on the last input
-          readOnly
-        />
-        <div className="flex-shrink-0">
-          {/* Match the active component's button style */}
+        {/* Location Input */}
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Where</label>
+          <input
+            type="text"
+            placeholder="Choose Location"
+            value=""
+            className={inputClasses}
+            readOnly
+            disabled
+          />
+        </div>
+
+        {/* Move In Input */}
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move In</label>
+          <input
+            type="text"
+            placeholder="Select dates"
+            value=""
+            className={inputClasses}
+            readOnly
+            disabled
+          />
+        </div>
+
+        {/* Move Out Input */}
+        <div className="flex-1 flex flex-col sm:border-r border-gray-300">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Move Out</label>
+          <input
+            type="text"
+            placeholder="Select dates"
+            value=""
+            className={inputClasses}
+            readOnly
+            disabled
+          />
+        </div>
+
+        {/* Guests Input */}
+        <div className="flex-1 flex flex-col">
+          <label className="text-xs font-medium pl-4 pt-0.5 text-gray-600">Who</label>
+          <input
+            type="text"
+            placeholder="Add renters"
+            value=""
+            className={inputClasses} // No border-r needed here as per active component
+            readOnly
+            disabled
+          />
+        </div>
+
+        {/* Search Button */}
+        <div className="flex-shrink-0 self-end">
           <button
             disabled
             className={cn(
-              'w-auto p-3 cursor-not-allowed opacity-50 bg-primaryBrand rounded-full',
+              'w-auto p-3 cursor-not-allowed opacity-50 rounded-full',
+              searchButtonClassNames || 'bg-primaryBrand' // Match default background
               searchButtonClassNames
             )}
           >
