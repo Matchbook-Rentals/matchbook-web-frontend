@@ -56,12 +56,12 @@ export default function AboutHostingPage(): React.ReactNode {
     <MatchbookHeader />
     <div className="flex flex-col items-center bg-background overflow-hidden">
       {/* Hero Section */}
-      <section className="w-full max-w-[1344px] px-8 lg:px-16 py-16 lg:py-20 xl:py-24 flex flex-col items-center">
-        <h1 className="font-['Cutive',Helvetica] text-[120px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
+      <section className="w-full max-w-[1344px] pt-8 lg:pt-16 pt-16 lg:pt-20 xl:pt-24 flex flex-col items-center">
+        <h1 className="font-['Cutive',Helvetica] text-[80px] text-[#1d221b] text-center tracking-[-2.40px] leading-[120px]">
           Earn More, Keep More
         </h1>
 
-        <h2 className="mt-16 lg:mt-20 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
+        <h2 className="mt-16 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
           Why Hosts Love MatchBook
         </h2>
       </section>
