@@ -136,7 +136,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               >
                 {/* Pop-up Search Container */}
                 <motion.div
-                  onClick={() => (null)}
+                  onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
                   initial={{ opacity: 0, y: -50 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -50 }}
