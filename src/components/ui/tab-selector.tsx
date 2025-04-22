@@ -24,7 +24,8 @@ interface TabSelectorProps {
   defaultTab?: string;
   secondaryButton?: React.ReactNode;
   useIcons?: boolean;
-  onTabClick?: (value: string) => void; // Add the new prop
+  activeTabValue?: string; // New prop for controlled state
+  onTabChange?: (value: string) => void; // Renamed from onTabClick
 }
 
 export default function TabSelector({
@@ -36,24 +37,49 @@ export default function TabSelector({
   defaultTab,
   secondaryButton,
   useIcons = false,
-  onTabClick, // Destructure the new prop
+  activeTabValue, // Destructure new prop
+  onTabChange, // Destructure renamed prop
 }: TabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.value)
+  // Internal state is only used if activeTabValue is not provided
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.value)
   const tabsListRef = useRef<HTMLDivElement>(null)
 
+  // Determine the effective active tab: controlled or internal
+  const currentActiveTab = activeTabValue !== undefined ? activeTabValue : internalActiveTab;
+
+  // Effect to sync internal state if defaultTab changes and it's not controlled
   useEffect(() => {
+    if (activeTabValue === undefined && defaultTab) {
+      setInternalActiveTab(defaultTab);
+    }
+  }, [defaultTab, activeTabValue]);
+
+  // Effect for URL param handling (reads from URL and writes if needed)
+  useEffect(() => {
+    // This effect should probably only run if the component is NOT controlled externally
+    // or if it needs to initialize based on URL regardless.
     if (useUrlParams) {
-      const tabFromUrl = searchParams.get('tab')
-      if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
-        setActiveTab(tabFromUrl)
-      } else if (activeTab) {
-        router.replace(`?tab=${activeTab}`, { scroll: false })
+      const tabFromUrl = searchParams.get('tab');
+      if (activeTabValue === undefined) { // Only read from URL if not controlled
+        if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
+          setInternalActiveTab(tabFromUrl);
+        } else if (internalActiveTab && tabFromUrl !== internalActiveTab) {
+          // If not controlled and URL doesn't match internal, update URL
+          router.replace(`?tab=${internalActiveTab}`, { scroll: false });
+        }
+      } else { // If controlled, ensure URL matches the controlled value
+        if (tabFromUrl !== activeTabValue) {
+          router.replace(`?tab=${activeTabValue}`, { scroll: false });
+        }
       }
     }
-  }, [useUrlParams, searchParams, tabs, router])
+    // Ensure dependency array includes relevant state/props
+  }, [useUrlParams, searchParams, tabs, router, activeTabValue, internalActiveTab]);
 
+
+  // Effect for scrolling the active tab into view
   useEffect(() => {
     if (tabsListRef.current) {
       const tabsList = tabsListRef.current
@@ -72,24 +98,29 @@ export default function TabSelector({
         })
       }
     }
-  }, [activeTab])
+    // Depend on the actual active tab value being used
+  }, [currentActiveTab]);
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value); // Set local state first
-    if (useUrlParams) {
-      router.replace(`?tab=${value}`, { scroll: false });
+    // Call the external callback if provided
+    if (onTabChange) {
+      onTabChange(value);
     }
-    if (onTabClick) {
-      onTabClick(value); // Call the callback if provided
+
+    // Only update internal state if the component is not controlled
+    if (activeTabValue === undefined) {
+      setInternalActiveTab(value);
     }
+
+    // URL update logic is now handled by the useEffect hook
   };
 
   return (
     <div className={cn("flex justify-start space-x-2 py-4 border-b", className)}>
       <Tabs
         className="w-full"
-        value={activeTab}
-        onValueChange={handleTabChange}
+        value={currentActiveTab} // Use the determined active tab
+        onValueChange={handleTabChange} // This triggers our handler
       >
         <div className="flex items-start p-0 justify-between space-x-4 border-gray-300">
           <TabsList
@@ -110,8 +141,10 @@ export default function TabSelector({
                   </div>
                 )}
                 <div className="flex flex-col">
-                  <span className={cn("text-sm", tab.textSize, activeTab === tab.value ? "text-[#3396FF]" : "")}>{tab.label}</span>
-                  {activeTab === tab.value && <motion.div className="h-[1px] w-full bg-[#3396FF] rounded-full" layout layoutId="underline"></motion.div>}
+                  {/* Use currentActiveTab for styling */}
+                  <span className={cn("text-sm", tab.textSize, currentActiveTab === tab.value ? "text-[#3396FF]" : "")}>{tab.label}</span>
+                  {/* Use currentActiveTab for animation condition */}
+                  {currentActiveTab === tab.value && <motion.div className="h-[1px] w-full bg-[#3396FF] rounded-full" layout layoutId="underline"></motion.div>}
                 </div>
               </TabsTrigger>
             ))}

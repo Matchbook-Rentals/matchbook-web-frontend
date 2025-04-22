@@ -69,9 +69,14 @@ const TripsPage: React.FC = () => {
     }));
   };
 
-  // Handler for tab changes, update local state (and eventually Zustand store)
+  // Handler for tab changes, update local state and URL
   const handleTabSelect = (tabValue: string) => {
     setActiveTab(tabValue);
+    // Update URL search parameter to reflect the new tab
+    // Use window.history.pushState for client-side update without page reload
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('tab', tabValue);
+    window.history.pushState({}, '', currentUrl.toString());
   };
 
   const tabTriggerTextStyles = 'text-[9px] px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
@@ -151,8 +156,9 @@ const TripsPage: React.FC = () => {
       {!isMobile ? (
         <TabSelector
           tabs={tabs}
-          defaultTab={activeTab} // Use local state for default
-          onTabClick={handleTabSelect} // Pass the handler
+          activeTabValue={activeTab} // Control the active tab
+          onTabChange={handleTabSelect} // Handle tab changes initiated by the component
+          useUrlParams={false} // Disable internal URL handling as parent manages it
           className='mx-auto w-full pb-0 mb-0 border-none'
           tabsClassName='w-full mx-auto  '
           tabsListClassName='flex py-0  justify-start w-full space-x-2  md:gap-x-2 '
@@ -172,8 +178,9 @@ const TripsPage: React.FC = () => {
       ) : (
         <MobileTabSelector
           tabs={tabs}
-          defaultTab={activeTab} // Use local state for default
-          onTabClick={handleTabSelect} // Pass the handler
+          activeTabValue={activeTab} // Control the active tab
+          onTabChange={handleTabSelect} // Handle tab changes initiated by the component
+          useUrlParams={false} // Disable internal URL handling as parent manages it
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
         />

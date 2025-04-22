@@ -22,8 +22,9 @@ interface MobileTabSelectorProps {
   tabsClassName?: string;
   tabsListClassName?: string;
   useUrlParams?: boolean;
-  defaultTab?: string;
-  onTabClick?: (value: string) => void; // Add the new prop
+  defaultTab?: string; // Kept for backward compatibility if activeTabValue is not provided
+  activeTabValue?: string; // New prop for controlled state
+  onTabChange?: (value: string) => void; // Renamed from onTabClick
 }
 
 export default function MobileTabSelector({
@@ -33,60 +34,78 @@ export default function MobileTabSelector({
   tabsClassName,
   useUrlParams = false,
   defaultTab,
-  onTabClick, // Destructure the new prop
+  activeTabValue, // Destructure new prop
+  onTabChange, // Destructure renamed prop
 }: MobileTabSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.value)
+  // Internal state is only used if activeTabValue is not provided
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.value)
 
+  // Determine the effective active tab: controlled or internal
+  const currentActiveTab = activeTabValue !== undefined ? activeTabValue : internalActiveTab;
+
+  // Effect to sync internal state if defaultTab changes and it's not controlled
   useEffect(() => {
-    if (useUrlParams) {
-      const tabFromUrl = searchParams.get('tab')
+    if (activeTabValue === undefined && defaultTab) {
+      setInternalActiveTab(defaultTab);
+    }
+  }, [defaultTab, activeTabValue]);
+
+
+  // Effect for URL param handling (reads from URL)
+  useEffect(() => {
+    // This effect should probably only run if the component is NOT controlled externally
+    // or if it needs to initialize based on URL regardless. Let's keep it for now.
+    if (useUrlParams && activeTabValue === undefined) { // Only read from URL if not controlled
+      const tabFromUrl = searchParams.get('tab');
       if (tabFromUrl && tabs.some(tab => tab.value === tabFromUrl)) {
-        setActiveTab(tabFromUrl)
-
+        // Only set internal state if not controlled
+        setInternalActiveTab(tabFromUrl);
       }
     }
-  }, [useUrlParams, searchParams, tabs])
+    // Ensure dependency array includes activeTabValue to re-evaluate if control changes
+  }, [useUrlParams, searchParams, tabs, activeTabValue]);
 
+  // Effect for URL param handling (writes to URL)
   useEffect(() => {
-    if (useUrlParams && activeTab) {
-      const currentTab = searchParams.get('tab')
-      if (currentTab !== activeTab) {
-        // Use setTimeout to defer URL update until after the tab change animation
+    // This effect should run based on the currentActiveTab (controlled or internal)
+    if (useUrlParams && currentActiveTab) {
+      const currentUrlTab = searchParams.get('tab');
+      if (currentUrlTab !== currentActiveTab) {
+        // Use setTimeout to defer URL update
         setTimeout(() => {
-          router.replace(`?tab=${activeTab}`, { scroll: false })
-        }, 0)
+          router.replace(`?tab=${currentActiveTab}`, { scroll: false });
+        }, 0);
       }
     }
-  }, [activeTab, useUrlParams, router, searchParams])
+    // Ensure dependency array includes currentActiveTab
+  }, [currentActiveTab, useUrlParams, router, searchParams]);
+
 
   const handleTabChange = (value: string) => {
     // Reset scroll position to top when switching tabs
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setActiveTab(value); // Set local state first
 
-    // Update URL if needed (deferred)
-    if (useUrlParams) {
-      const currentTab = searchParams.get('tab');
-      if (currentTab !== value) {
-        setTimeout(() => {
-          router.replace(`?tab=${value}`, { scroll: false });
-        }, 0);
-      }
+    // Call the external callback if provided
+    if (onTabChange) {
+      onTabChange(value);
     }
 
-    // Call the callback if provided
-    if (onTabClick) {
-      onTabClick(value);
+    // Only update internal state if the component is not controlled
+    if (activeTabValue === undefined) {
+      setInternalActiveTab(value);
     }
+
+    // URL update logic is now handled by the useEffect hook based on currentActiveTab
   };
+
 
   return (
     <Tabs
       className={cn("w-full relative", className)}
-      value={activeTab}
-      onValueChange={handleTabChange}
+      value={currentActiveTab} // Use the determined active tab
+      onValueChange={handleTabChange} // This triggers our handler
     >
       {tabs.map((tab) => (
         <TabsContent
@@ -129,13 +148,13 @@ export default function MobileTabSelector({
             <div className="flex flex-col items-center pb-1 justify-center gap-0 space-0">
               <span className={cn(
                 "text-xs text-gray-500 font-normal",
-                tab.value === activeTab ? "text-[#404040] font-medium"
+                tab.value === currentActiveTab ? "text-[#404040] font-medium" // Use currentActiveTab for styling
                   : "", tab.textSize)} style={{ lineHeight: '1' }}>
                 {tab.label}
-                {tab.value === activeTab && (
+                {tab.value === currentActiveTab && ( // Use currentActiveTab for animation condition
                   <motion.div
                     className=" h-[2px] bg-primary"
-                    layoutId="activeTab"
+                    layoutId="activeTabMobile" // Ensure unique layoutId if used elsewhere
                     transition={{
                       duration: 0.4,
                       ease: "easeInOut"
