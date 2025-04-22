@@ -17,7 +17,7 @@ import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
 import { useWindowSize } from '@/hooks/useWindowSize';
-import { useState } from 'react'; // Import useState
+import { useState, useEffect } from 'react'; // Import useState and useEffect
 
 const montserrat = Montserrat({ subsets: ["latin"], variable: '--font-montserrat' });
 const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
