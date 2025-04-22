@@ -1,10 +1,11 @@
 import React from "react";
+import React from "react";
 import SearchInputsDesktop from "./search-inputs-desktop";
 import SearchInputsMobile from "./search-inputs-mobile";
-import { useAuth, useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
 interface SearchContainerProps {
+  hasAccess: boolean; // Add hasAccess prop
   className?: string;
   containerStyles?: string;
   inputStyles?: string;
@@ -21,25 +22,9 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
   searchButtonClassNames,
   searchIconColor,
   popoverMaxWidth,
-  headerText
+  headerText,
+  hasAccess // Destructure hasAccess prop
 }) => {
-  const [hasAccess, setHasAccess] = React.useState(false);
-  const { isSignedIn } = useAuth();
-  const { user } = useUser();
-
-  React.useEffect(() => {
-    const checkAccess = async () => {
-      if (isSignedIn && user) {
-        const userRole = user.publicMetadata.role as string;
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
-      } else {
-        setHasAccess(false);
-      }
-    };
-
-    checkAccess();
-  }, [isSignedIn, user]);
-
   return (
     <>
       <div className={cn("mx-auto hidden sm:block", className)}>
