@@ -19,9 +19,10 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
 
   return (
-    <LayoutGroup>
-      <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
-        <div className='flex items-end pb-2'>
+    <> {/* Add opening Fragment tag */}
+      <LayoutGroup>
+        <div className={`bg-background ${PAGE_MARGIN} mx-auto min-h-[105vh]`}>
+          <div className='flex items-end pb-2'>
           <div className='flex flex-col w-full sm:w-1/2'> {/* Adjust width for mobile buttons */}
             <h1 className='text-[32px] font-medium mb-4'>Your Searches </h1>
             <div className="flex flex-wrap gap-2"> {/* Wrapper for buttons */}
@@ -161,6 +162,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         </>
       )}
     </AnimatePresence>
+    </> // Add closing Fragment tag
   );
 };
 
