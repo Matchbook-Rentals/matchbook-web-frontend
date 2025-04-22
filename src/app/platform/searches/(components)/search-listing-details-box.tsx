@@ -58,7 +58,7 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
   return (
     <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }} ref={detailsBoxRef}>
       {/* Action Buttons Section - Reject, Return, Like */}
-      <div className="flex justify-center items-center gap-4 my-4">
+      <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
         <button
           onClick={onReject}
           className={`${bigButtonControl} bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF]`}

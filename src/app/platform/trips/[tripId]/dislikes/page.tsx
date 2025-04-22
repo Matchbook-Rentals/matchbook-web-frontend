@@ -15,7 +15,7 @@ export default function DislikesPage() {
   const { state: { trip, dislikedListings } } = useTripContext();
 
   const handleGoToSearch = () => {
-    router.push(`/platform/trips/${tripId}/search`);
+    router.push(`/platform/trips/${tripId}`);
   };
 
   return (
