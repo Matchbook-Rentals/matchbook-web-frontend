@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowSearchPopup(false)} // Close on overlay click
-              className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
+              className="fixed inset-0 flex justify-center bg-red-500 bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
             >
               {/* Pop-up Search Container (Now a child of overlay) */}
               <motion.div
@@ -65,7 +65,7 @@ const Hero: React.FC = () => {
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
                 // Removed fixed positioning, using flex centering from parent overlay
                 // Added top margin instead of fixed top
-                className="w-fit mt-[5vh] z-50 flex justify-center sm:hidden"
+                className="w-fit mt-[5vh] h-fit z-50 flex justify-center sm:hidden"
               >
                 {/* Use SearchContainer within the popup */}
                 <SearchContainer
