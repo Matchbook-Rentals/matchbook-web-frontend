@@ -3,8 +3,7 @@ import { ListingAndImages } from '@/types';
 import SearchListingCard from './search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+// Removed Button and Icon imports as pagination is removed
 import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
 
@@ -21,41 +20,69 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
   height,
   cardActions
 }) => {
+  const ITEMS_PER_LOAD = 12; // Load 3 rows for 4 columns, or 4 rows for 3 columns etc.
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [gridColumns, setGridColumns] = useState(1);
-  const listingsPerPage = gridColumns * 3;
-  const infiniteScrollMode = gridColumns === 1;
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  // Removed pagination state: currentPage, listingsPerPage, infiniteScrollMode, sentinelRef
+  const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
 
+  // Initialize or reset displayed listings when listings change
   useEffect(() => {
-    if (infiniteScrollMode) {
-      setDisplayedListings(listings.slice(0, listingsPerPage));
-      setCurrentPage(1);
-    } else {
-      const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
-    }
-  }, [listings, infiniteScrollMode, listingsPerPage]);
+    // Start with the first batch of items
+    setDisplayedListings(listings.slice(0, ITEMS_PER_LOAD));
+  }, [listings]); // Dependency: only listings
 
-  useEffect(() => {
-    if (infiniteScrollMode && currentPage > 1) {
-      const newItems = listings.slice((currentPage - 1) * listingsPerPage, currentPage * listingsPerPage);
-      setDisplayedListings(prev => [...prev, ...newItems]);
-    }
-  }, [currentPage, infiniteScrollMode, listings, listingsPerPage]);
+  // Load more items when triggered
+  const loadMoreItems = useCallback(() => {
+    const currentLength = displayedListings.length;
+    const moreItemsAvailable = currentLength < listings.length;
 
-  useEffect(() => {
-    if (!infiniteScrollMode) {
-      const startIndex = (currentPage - 1) * listingsPerPage;
-      setDisplayedListings(listings.slice(startIndex, startIndex + listingsPerPage));
+    if (moreItemsAvailable) {
+      const nextItems = listings.slice(currentLength, currentLength + ITEMS_PER_LOAD);
+      setDisplayedListings(prev => [...prev, ...nextItems]);
     }
-  }, [currentPage, listings, listingsPerPage, infiniteScrollMode]);
+  }, [displayedListings.length, listings]); // Dependencies for loadMoreItems
+
+  // Observer to trigger loading more listings based on dynamic element
+  useEffect(() => {
+    // Define the observer callback
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadMoreItems(); // Call the loading function
+        }
+      });
+    };
+
+    // Define the observer options
+    const observerOptions = {
+      root: scrollAreaRef.current, // Observe within the scroll area
+      threshold: 0.1 // Trigger when 10% is visible
+    };
+
+    // Create the observer instance
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Calculate the index of the first item in the second-to-last row
+    // Ensure index is not negative and considers grid columns
+    const triggerIndex = Math.max(0, displayedListings.length - (gridColumns * 2));
+    const triggerElement = gridRef.current?.children[triggerIndex] as HTMLElement;
+
+    // Only observe if the trigger element exists and there are more items to load
+    if (triggerElement && displayedListings.length < listings.length) {
+      observer.observe(triggerElement);
+    }
+
+    // Cleanup function to disconnect the observer
+    return () => {
+      observer.disconnect();
+    };
+    // Dependencies: Re-run when items load, grid changes, or total count changes
+  }, [loadMoreItems, displayedListings, gridColumns, listings.length]);
 
   const updateMaxDetailsHeight = useCallback(() => {
     if (gridRef.current) {
@@ -130,32 +157,8 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
       };
   };
 
-  const totalPages = Math.ceil(listings.length / listingsPerPage);
-
-  const renderPageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 7;
-    let startPage = Math.max(1, currentPage - 3);
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage < maxVisiblePages - 1) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <Button
-          key={i}
-          variant={currentPage === i ? "default" : "ghost"}
-          className={`w-8 h-8 p-0 rounded-full ${currentPage === i ? 'bg-black text-white hover:bg-black/90' : ''}`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </Button>
-      );
-    }
-    return pages;
-  };
+  // Removed pagination calculation: totalPages
+  // Removed pagination rendering function: renderPageNumbers
 
   useEffect(() => {
     const updateGridColumns = () => {
@@ -172,45 +175,32 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
     updateGridColumns();
     window.addEventListener('resize', updateGridColumns);
     return () => window.removeEventListener('resize', updateGridColumns);
-  }, []);
+  }, []); // Keep grid column update logic
 
-  useEffect(() => {
-    if (!infiniteScrollMode) return;
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && displayedListings.length < listings.length) {
-          setCurrentPage(prev => prev + 1);
-        }
-      });
-    }, { root: scrollAreaRef.current, threshold: 0.1 });
-
-    observer.observe(sentinel);
-    return () => {
-      observer.disconnect();
-    };
-  }, [infiniteScrollMode, displayedListings, listings]);
+  // Removed old IntersectionObserver effect for sentinelRef
 
   return (
-    <div className="relative  md:max-h-[200vh] md:min-h-[640px]"
+    // Use the height prop for minHeight, keep flex structure
+    <div
+      className="relative flex flex-col h-full" // Use flex-col and h-full
       style={{ height: height ? `${height}px` : '640px' }} // Use height prop, provide fallback
     >
       {listings.length === 0 ? (
-        <div className=" md:h-[640px] w-full flex items-center justify-center text-gray-500">
+        <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings to display
         </div>
       ) : (
         <>
+          {/* Make ScrollArea grow */}
           <ScrollArea
             ref={scrollAreaRef}
-            className="w-[104%] sm:w-full mx-auto rounded-md  md:pb-12 pr-4"
-            style={{ height: 'calc(100% - 0px)' }}
+            className={`flex-grow w-[103%] sm:w-full mx-auto rounded-md md:pb-12 pr-3`} // Match styling from SearchListingsGrid
+            // Remove explicit height style, let flexbox handle it
           >
             <div
               ref={gridRef}
-              className="grid grid-cols-1  justify-items-center sm:justify-items-start sm:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-8 pb-12"
+              // Match grid classes from SearchListingsGrid for consistency if desired, or keep specific ones
+              className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-8 pb-12"
             >
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
@@ -227,51 +217,9 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
                 );
               })}
             </div>
-            {infiniteScrollMode && displayedListings.length < listings.length && (
-              <div ref={sentinelRef} style={{ height: '20px' }} />
-            )}
+            {/* Sentinel div removed, infinite scroll handled by observer */}
           </ScrollArea>
-          {!infiniteScrollMode && (
-            <div className="absolute bottom-0 left-0 right-0 h-[60px] bg-background border-t flex items-center justify-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-              >
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              {renderPageNumbers()}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setCurrentPage(totalPages)}
-                disabled={currentPage === totalPages}
-              >
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+          {/* Removed Pagination container */}
         </>
       )}
     </div>
