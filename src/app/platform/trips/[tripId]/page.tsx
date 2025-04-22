@@ -72,8 +72,6 @@ const TripsPage: React.FC = () => {
   // Handler for tab changes, update local state (and eventually Zustand store)
   const handleTabSelect = (tabValue: string) => {
     setActiveTab(tabValue);
-    // TODO: Update Zustand store here
-    console.log("Selected tab:", tabValue);
   };
 
   const tabTriggerTextStyles = 'text-[9px] px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
