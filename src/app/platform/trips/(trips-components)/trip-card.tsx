@@ -317,9 +317,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       {/* Apply w-fit, bg-transparent, border-none */}
                       <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
                         {/* Removed padding and background styles from inner div as well */}
-                        <div className="mb-6">
-                          <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
-                        </div>
                         <SearchEditBar tripId={trip.id} className='border-4 test' />
                       </DialogContent>
                     </Dialog>
