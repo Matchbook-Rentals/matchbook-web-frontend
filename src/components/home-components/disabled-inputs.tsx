@@ -94,7 +94,6 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
             className={cn(
               'w-auto p-3 cursor-not-allowed opacity-50 rounded-full',
               searchButtonClassNames || 'bg-primaryBrand' // Match default background
-              searchButtonClassNames
             )}
           >
             <FaSearch className={cn(searchIconColor, "mx-auto")} size={20} />
