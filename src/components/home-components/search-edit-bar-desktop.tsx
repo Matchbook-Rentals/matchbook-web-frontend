@@ -131,6 +131,8 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
             onClear={() => setDateRange({ start: null, end: null })}
             onFlexibilityChange={(newFlexibility) => setFlexibility(newFlexibility)}
             initialFlexibility={flexibility}
+            minimumDateRange={{months: 1}}
+            maximumDateRange={{months: 12}}
           />
         );
       case 'guests':

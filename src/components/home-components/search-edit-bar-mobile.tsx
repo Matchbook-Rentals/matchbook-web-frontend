@@ -138,8 +138,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
           const { lat: fetchedLat, lng: fetchedLng } = data.results[0].geometry.location;
           setSelectedLocation((prev) => ({ ...prev, lat: fetchedLat, lng: fetchedLng }));
         } else {
-           toast({ variant: "destructive", description: "Could not find coordinates for location." });
-           setSelectedLocation((prev) => ({ ...prev, lat: null, lng: null })); // Clear coords if fetch fails
+          toast({ variant: "destructive", description: "Could not find coordinates for location." });
+          setSelectedLocation((prev) => ({ ...prev, lat: null, lng: null })); // Clear coords if fetch fails
         }
       } catch (error) {
         console.error("Error fetching geocode:", error);
@@ -147,8 +147,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
         setSelectedLocation((prev) => ({ ...prev, lat: null, lng: null })); // Clear coords on error
       }
     } else if (lat && lng) {
-        // If lat/lng were provided (e.g., preset city), update state directly
-        setSelectedLocation({ description: trimmedDescription, lat: lat, lng: lng });
+      // If lat/lng were provided (e.g., preset city), update state directly
+      setSelectedLocation({ description: trimmedDescription, lat: lat, lng: lng });
     }
   };
 
@@ -161,8 +161,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
   const hasChanges = () => {
     // Trip prop is guaranteed to exist here based on parent component logic
     const locationChanged = selectedLocation.description !== trip.locationString ||
-                            selectedLocation.lat !== trip.latitude ||
-                            selectedLocation.lng !== trip.longitude;
+      selectedLocation.lat !== trip.latitude ||
+      selectedLocation.lng !== trip.longitude;
 
     // Compare dates by converting to ISO strings or null
     const currentStartDateStr = dateRange.start ? dateRange.start.toISOString().split('T')[0] : null;
@@ -174,8 +174,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     const endDateChanged = currentEndDateStr !== tripEndDateStr;
 
     const guestsChanged = guests.adults !== trip.numAdults ||
-                          guests.children !== trip.numChildren ||
-                          guests.pets !== trip.numPets;
+      guests.children !== trip.numChildren ||
+      guests.pets !== trip.numPets;
 
     // Compare flexibility
     const normalizedFlexibleStart = flexibility.start === 0 ? 'exact' : flexibility.start;
@@ -208,8 +208,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       pets: trip.numPets || 0
     });
     setFlexibility({ // Reset flexibility
-        start: trip.flexibleStart === 0 ? "exact" : trip.flexibleStart,
-        end: trip.flexibleEnd === 0 ? "exact" : trip.flexibleEnd,
+      start: trip.flexibleStart === 0 ? "exact" : trip.flexibleStart,
+      end: trip.flexibleEnd === 0 ? "exact" : trip.flexibleEnd,
     });
     setActiveInput(null); // Close any open sections
   };
@@ -222,9 +222,9 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       return;
     }
     if (!selectedLocation.lat || !selectedLocation.lng) {
-       toast({ variant: "destructive", description: "Please select a valid location with coordinates." });
-       setActiveInput(0); // Open location input
-       return;
+      toast({ variant: "destructive", description: "Please select a valid location with coordinates." });
+      setActiveInput(0); // Open location input
+      return;
     }
 
     const response = await editTrip(trip.id, { // Use trip.id
@@ -271,9 +271,11 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
                   onDateRangeChange={setDateRange}
                   onClose={() => setActiveInput(null)}
                   onProceed={() => setActiveInput(4)} // Proceed to guests
-                  // Pass flexibility props if MobileDateRange supports them
-                  // onFlexibilityChange={setFlexibility}
-                  // initialFlexibility={flexibility}
+                  minimumDateRange={{ months: 1 }}
+                  maximumDateRange={{ months: 12 }}
+                // Pass flexibility props if MobileDateRange supports them
+                // onFlexibilityChange={setFlexibility}
+                // initialFlexibility={flexibility}
                 />
               )}
               {index === 4 && (
@@ -347,7 +349,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       ref={componentRef}
       // Control width directly with className based on activeInput state
       className={`flex flex-col mx-auto p-4 z-50 items-center bg-background rounded-3xl border border-black overflow-hidden ${activeInput !== null ? 'w-[85vw]' : 'w-[80vw]'} ${className || ''}`}
-      // Removed animate and transition props for width
+    // Removed animate and transition props for width
     >
       {/* Added Mobile Header */}
       <div className="w-full text-center mb-4">
@@ -372,15 +374,15 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
         className={`${inputClasses} flex items-center justify-between`}
         onClick={() => handleInputClick(3)}
       >
-         <div className="flex items-center">
-            <Calendar size={20} className="text-gray-500 mr-3" />
-            {dateRange.start && dateRange.end
-              ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
-              : dateRange.start
+        <div className="flex items-center">
+          <Calendar size={20} className="text-gray-500 mr-3" />
+          {dateRange.start && dateRange.end
+            ? `${format(dateRange.start, 'MMM d')} - ${format(dateRange.end, 'MMM d')}`
+            : dateRange.start
               ? `${format(dateRange.start, 'MMM d')} - Select`
               : 'Dates'}
-         </div>
-         <span className="text-xs text-gray-400 ml-2">Edit</span>
+        </div>
+        <span className="text-xs text-gray-400 ml-2">Edit</span>
       </div>
       {renderSlidingComponent(3)}
 
@@ -389,40 +391,40 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
         className={`${inputClasses} sm:border-r-0 flex items-center justify-between`}
         onClick={() => handleInputClick(4)}
       >
-         <div className="flex items-center">
-            <Users size={20} className="text-gray-500 mr-3" />
-            {`${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}`}
-         </div>
-         <span className="text-xs text-gray-400 ml-2">Edit</span>
+        <div className="flex items-center">
+          <Users size={20} className="text-gray-500 mr-3" />
+          {`${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}`}
+        </div>
+        <span className="text-xs text-gray-400 ml-2">Edit</span>
       </div>
       {renderSlidingComponent(4)}
 
       {/* Action Buttons */}
       <div className="flex gap-4 w-full mt-2">
-         <button
-            onClick={handleReset}
-            disabled={!hasChanges()}
-            className={`flex-1 py-2 px-4 rounded-full transition-colors border
+        <button
+          onClick={handleReset}
+          disabled={!hasChanges()}
+          className={`flex-1 py-2 px-4 rounded-full transition-colors border
               ${hasChanges()
-                ? 'border-red-500 text-red-500 hover:bg-red-50'
-                : 'border-gray-300 text-gray-300 cursor-not-allowed'
-              }`}
-            aria-label="Reset changes"
-          >
-            <X className="h-5 w-5 mx-auto" />
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={!hasChanges()}
-            className={`flex-1 py-2 px-4 rounded-full transition-colors border
+              ? 'border-red-500 text-red-500 hover:bg-red-50'
+              : 'border-gray-300 text-gray-300 cursor-not-allowed'
+            }`}
+          aria-label="Reset changes"
+        >
+          <X className="h-5 w-5 mx-auto" />
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={!hasChanges()}
+          className={`flex-1 py-2 px-4 rounded-full transition-colors border
               ${hasChanges()
-                ? 'border-green-500 text-green-500 hover:bg-green-50'
-                : 'border-gray-300 text-gray-300 cursor-not-allowed'
-              }`}
-            aria-label="Save changes"
-          >
-            <Check className="h-5 w-5 mx-auto" />
-          </button>
+              ? 'border-green-500 text-green-500 hover:bg-green-50'
+              : 'border-gray-300 text-gray-300 cursor-not-allowed'
+            }`}
+          aria-label="Save changes"
+        >
+          <Check className="h-5 w-5 mx-auto" />
+        </button>
       </div>
     </motion.div>
   );
