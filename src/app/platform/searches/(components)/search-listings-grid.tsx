@@ -250,14 +250,11 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                     detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
                   />
                 );
-              })}
-            </div>
-            {/* Sentinel for infinite scroll */}
-            {displayedListings.length < filteredListings.length && (
-              <div ref={sentinelRef} style={{ height: '20px' }} />
-            )}
-          </ScrollArea>
-          {/* Removed Pagination container */}
+             })}
+           </div>
+           {/* Sentinel div removed */}
+         </ScrollArea>
+         {/* Removed Pagination container */}
           {/* {!infiniteScrollMode && ( ... )} */}
         </>
       )}
