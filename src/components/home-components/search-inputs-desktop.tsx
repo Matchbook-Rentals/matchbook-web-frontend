@@ -227,7 +227,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
           <input
             ref={locationInputRef}
             type="text"
-            placeholder="Chooose Location"
+            placeholder="Choose Location"
             value={locationDisplayValue}
             className={inputClasses}
             readOnly
