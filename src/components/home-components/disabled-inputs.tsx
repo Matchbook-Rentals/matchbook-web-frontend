@@ -33,7 +33,7 @@ export const DisabledDesktopInputs: React.FC<DisabledInputsProps> = ({
       {headerText && <h3 className="text-xl font-semibold mb-3 text-green-800 hidden sm:block text-center">{headerText}</h3>}
       {/* Match the active component's container style */}
       <div
-        className={cn('flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-full shadow-md overflow-hidden', className)}
+        className={cn('flex flex-row no-wrap p-3 items-center bg-gray-100 rounded-lg shadow-md overflow-hidden', className)}
       >
         <input
           type="text"
