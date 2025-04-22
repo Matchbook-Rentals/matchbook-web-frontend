@@ -39,7 +39,11 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Mobile Button wrapped in DialogTrigger */}
-      <div className="block sm:hidden my-auto pt-20 z-10"> {/* Position button lower */}
+      <div className="block sm:hidden my-auto pt-20 z-10 text-center"> {/* Position button lower and center text */}
+        {/* Header Text for Mobile */}
+        <h1 className="text-2xl font-bold text-white mb-4">
+          Find your next home
+        </h1>
         <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
           <DialogTrigger asChild>
             <Button
