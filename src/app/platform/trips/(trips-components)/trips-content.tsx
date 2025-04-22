@@ -121,46 +121,46 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
           </motion.div>
         )}
-
-        {/* Mobile Pop-up Search */}
-        <AnimatePresence>
-          {showSearchPopup && (
-            <>
-              {/* Overlay */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setShowSearchPopup(false)} // Close on overlay click
-                className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
-              >
-                {/* Pop-up Search Container */}
-                <motion.div
-                  onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
-                  initial={{ opacity: 0, y: -50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -50 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  // Removed fixed positioning and z-50, rely on parent overlay flex centering + margin
-                  className="w-fit mt-[5vh] h-fit flex justify-center sm:hidden"
-                >
-                  <SearchContainer
-                    className="z-100 max-w-lg" // z-index relative to parent motion.div now
-                    containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
-                    inputStyles='bg-background'
-                    searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
-                    searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
-                    popoverMaxWidth='90vw' // Adjust popover width for mobile
-                    headerText='Find your next home'
-                  // Add a close button or mechanism inside SearchContainer if needed, or rely on overlay click
-                  />
-                </motion.div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </div>
     </LayoutGroup>
+
+    {/* Mobile Pop-up Search - Moved outside LayoutGroup */}
+    <AnimatePresence>
+      {showSearchPopup && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowSearchPopup(false)} // Close on overlay click
+            className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
+          >
+            {/* Pop-up Search Container */}
+            <motion.div
+              onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              // Removed fixed positioning and z-50, rely on parent overlay flex centering + margin
+              className="w-fit mt-[5vh] h-fit flex justify-center sm:hidden"
+            >
+              <SearchContainer
+                className="z-100 max-w-lg" // z-index relative to parent motion.div now
+                containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
+                inputStyles='bg-background'
+                searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
+                searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
+                popoverMaxWidth='90vw' // Adjust popover width for mobile
+                headerText='Find your next home'
+              // Add a close button or mechanism inside SearchContainer if needed, or rely on overlay click
+              />
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 };
 
