@@ -2,11 +2,17 @@ import React from "react";
 // import { useParams } from "next/navigation"; // Removed
 import { Trip } from "@prisma/client";
 import { editTrip } from "@/app/actions/trips";
-import { useToast } from "@/components/ui/use-toast"; // Keep for potential errors during save
+import { useToast } from "@/components/ui/use-toast";
 import { Check, X } from "lucide-react";
 import { DesktopDateRange } from "@/components/ui/custom-calendar/date-range-selector/desktop-date-range";
 import HeroLocationSuggest from "@/components/home-components/HeroLocationSuggest";
 import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SearchEditBarDesktopProps {
   className?: string;
@@ -352,32 +358,79 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
             />
           </div>
         </div>
-        <div className="flex-shrink-0 p-2 flex gap-2">
-          <button
-            onClick={handleReset}
-            disabled={!hasChanges()}
-            className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+        <TooltipProvider delayDuration={100}>
+          <div className="flex-shrink-0 p-2 flex gap-2">
+            {hasChanges() ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={handleReset}
+                    disabled={!hasChanges()}
+                    className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
               ${hasChanges()
                 ? 'text-red-500 hover:bg-red-50'
                 : 'text-gray-300'
               }`}
-            aria-label="Reset changes"
-          >
-            <X className="h-5 w-5" />
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={!hasChanges()}
-            className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+                    aria-label="Reset changes"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Cancel changes</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <button
+                onClick={handleReset}
+                disabled={!hasChanges()}
+                className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+              ${hasChanges()
+                ? 'text-red-500 hover:bg-red-50'
+                : 'text-gray-300'
+              }`}
+                aria-label="Reset changes"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            )}
+
+            {hasChanges() ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={handleSave}
+                    disabled={!hasChanges()}
+                    className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
               ${hasChanges()
                 ? 'text-green-500 hover:bg-green-50'
                 : 'text-gray-300'
               }`}
-            aria-label="Save changes"
-          >
-            <Check className="h-5 w-5" />
-          </button>
-        </div>
+                    aria-label="Save changes"
+                  >
+                    <Check className="h-5 w-5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Save trip</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <button
+                onClick={handleSave}
+                disabled={!hasChanges()}
+                className={`p-2 rounded-full transition-colors disabled:cursor-not-allowed
+              ${hasChanges()
+                ? 'text-red-500 hover:bg-red-50'
+                : 'text-gray-300'
+              }`}
+                aria-label="Save changes"
+              >
+                <Check className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+        </TooltipProvider>
       </div>
 
       {isOpen && (
