@@ -133,7 +133,7 @@ export default function TabSelector({
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className={cn("flex flex-col items-center hover:bg-gray-300", tab.className)}
+                className={cn("flex flex-col items-center hover:text-[#3396FF] transition-none", tab.className)}
               >
                 {useIcons && tab.Icon && (
                   <div className={cn("flex items-center justify-center h-8 w-8")}>
