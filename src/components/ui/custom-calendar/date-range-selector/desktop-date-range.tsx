@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format } from "date-fns";
+import { format, add, Duration } from "date-fns"; // Import add and Duration
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DateRange {
@@ -15,6 +15,7 @@ interface DesktopDateRangeProps {
   onProceed?: () => void;
   onClear?: () => void;
   initialFlexibility?: { start: 'exact' | number | null, end: 'exact' | number | null };
+  minimumDateRange?: Duration | null; // Add minimumDateRange prop
 }
 
 interface CalendarMonthProps {
@@ -25,6 +26,7 @@ interface CalendarMonthProps {
   onPrevMonth?: () => void;
   onNextMonth?: () => void;
   isPrevDisabled?: boolean;
+  minimumDateRange?: Duration | null; // Add minimumDateRange prop
 }
 
 interface CalendarDayProps {
@@ -78,7 +80,7 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
   );
 }
 
-function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNextMonth, isPrevDisabled }: CalendarMonthProps) {
+function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNextMonth, isPrevDisabled, minimumDateRange }: CalendarMonthProps) { // Add minimumDateRange prop
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -130,17 +132,25 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
       // Don't disable the start date itself
       if (currentDate.getTime() === startDate.getTime()) return false;
 
-      // Disable if the current date is before the start date
+      // Disable dates strictly *before* the start date
       if (currentDate < startDate) {
-        const daysDifference = (startDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-        // Only disable if within 30 days *before* the start date
-        return daysDifference <= 30;
+         return true;
+      }
+
+      // NEW: Check minimum date range requirement
+      if (minimumDateRange) {
+        // Calculate the minimum allowed end date
+        const minEndDate = add(startDate, minimumDateRange);
+        minEndDate.setHours(0, 0, 0, 0); // Normalize min end date
+
+        // Disable dates *before* the minimum required end date
+        if (currentDate < minEndDate) {
+          return true;
+        }
       }
     }
 
-    // If start and end are selected, or only end is selected (which shouldn't happen with current logic),
-    // or neither is selected, don't disable based on the 30-day rule.
-    // Only the past date check applies in those cases.
+    // If no specific disabling condition met, the date is enabled
     return false;
   };
 
@@ -249,7 +259,8 @@ export function DesktopDateRange({
   onFlexibilityChange,
   onProceed,
   onClear,
-  initialFlexibility
+  initialFlexibility,
+  minimumDateRange // Destructure the new prop
 }: DesktopDateRangeProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -416,6 +427,7 @@ export function DesktopDateRange({
               onPrevMonth={handleLeftPrevMonth}
               onNextMonth={handleLeftNextMonth}
               isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
+              minimumDateRange={minimumDateRange} // Pass prop down
             />
           </div>
           <div className="mt-4">
@@ -441,6 +453,7 @@ export function DesktopDateRange({
               onPrevMonth={handleRightPrevMonth}
               onNextMonth={handleRightNextMonth}
               isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
+              minimumDateRange={minimumDateRange} // Pass prop down
             />
           </div>
           <div className="mt-4">

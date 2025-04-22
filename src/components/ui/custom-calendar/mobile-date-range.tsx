@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format } from "date-fns";
+import { format, add, Duration } from "date-fns"; // Import add and Duration
 import { motion, AnimatePresence } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,6 +17,7 @@ interface MobileDateRangeProps {
   flexibleStart?: 'exact' | number | null;
   flexibleEnd?: 'exact' | number | null;
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null; end: 'exact' | number | null }) => void;
+  minimumDateRange?: Duration | null; // Add minimumDateRange prop
 }
 
 interface CalendarMonthProps {
@@ -25,6 +26,7 @@ interface CalendarMonthProps {
   dateRange: DateRange;
   onDateSelect: (day: number, month: number, year: number) => void;
   isMobile?: boolean;
+  minimumDateRange?: Duration | null; // Add minimumDateRange prop
 }
 
 interface CalendarDayProps {
@@ -122,16 +124,25 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
       // Don't disable the start date itself
       if (currentDate.getTime() === startDate.getTime()) return false;
 
-      // Disable if the current date is before the start date
+      // Disable dates strictly *before* the start date
       if (currentDate < startDate) {
-        const daysDifference = (startDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-        // Only disable if within 30 days *before* the start date
-        return daysDifference <= 30;
+         return true;
+      }
+
+      // NEW: Check minimum date range requirement
+      if (minimumDateRange) {
+        // Calculate the minimum allowed end date
+        const minEndDate = add(startDate, minimumDateRange);
+        minEndDate.setHours(0, 0, 0, 0); // Normalize min end date
+
+        // Disable dates *before* the minimum required end date
+        if (currentDate < minEndDate) {
+          return true;
+        }
       }
     }
 
-    // If start and end are selected, or only end is selected, or neither is selected,
-    // don't disable based on the 30-day rule. Only the past date check applies.
+    // If no specific disabling condition met, the date is enabled
     return false;
   };
 
@@ -315,7 +326,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   );
 }
 
-export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange }: MobileDateRangeProps) {
+export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange, minimumDateRange }: MobileDateRangeProps) { // Destructure minimumDateRange
   // If a start date is provided, open the calendar at that month/year, otherwise use today's date.
   const initialDate = dateRange.start ? new Date(dateRange.start) : new Date();
   const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
@@ -421,6 +432,7 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
             dateRange={dateRange}
             onDateSelect={handleDateSelect}
             isMobile={true}
+            minimumDateRange={minimumDateRange} // Pass prop down
           />
         </div>
 
