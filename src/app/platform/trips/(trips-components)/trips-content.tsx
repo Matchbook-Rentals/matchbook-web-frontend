@@ -141,10 +141,11 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -50 }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  className="fixed top-[5vh] w-fit z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
+                  // Removed fixed positioning and z-50, rely on parent overlay flex centering + margin
+                  className="w-fit mt-[5vh] h-fit flex justify-center sm:hidden"
                 >
                   <SearchContainer
-                    className="z-100 max-w-lg" // Adjust width as needed
+                    className="z-100 max-w-lg" // z-index relative to parent motion.div now
                     containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
                     inputStyles='bg-background'
                     searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
