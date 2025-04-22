@@ -37,6 +37,26 @@ interface CalendarMonthProps {
   maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
+// Helper function to format Duration object into a readable string
+function formatDuration(duration: Duration): string {
+  const parts: string[] = [];
+  if (duration.years && duration.years > 0) {
+    parts.push(`${duration.years} year${duration.years > 1 ? 's' : ''}`);
+  }
+  if (duration.months && duration.months > 0) {
+    parts.push(`${duration.months} month${duration.months > 1 ? 's' : ''}`);
+  }
+  if (duration.weeks && duration.weeks > 0) {
+    parts.push(`${duration.weeks} week${duration.weeks > 1 ? 's' : ''}`);
+  }
+  if (duration.days && duration.days > 0) {
+    parts.push(`${duration.days} day${duration.days > 1 ? 's' : ''}`);
+  }
+  // Add other units like hours, minutes, seconds if needed
+  return parts.join(', ');
+}
+
+
 interface CalendarDayProps {
   day: number;
   isSelected: boolean;
