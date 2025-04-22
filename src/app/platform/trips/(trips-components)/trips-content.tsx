@@ -39,8 +39,8 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               >
                 New Search Pop-up
               </Button>
-               {/* Keep original button visible on mobile for A/B test */}
-               <Button
+              {/* Keep original button visible on mobile for A/B test */}
+              <Button
                 onClick={() => setShowSearch(prev => !prev)}
                 className='block sm:hidden w-fit rounded-full text-[16px] bg-blue-500 hover:bg-blue-600' // Added different bg for distinction
               >
@@ -109,7 +109,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
         {trips.length > 0 ? (
           <motion.div
             layout
-            transition={{duration: .3}}
+            transition={{ duration: .3 }}
           >
             <TripGrid initialTrips={trips} />
           </motion.div>
@@ -132,26 +132,28 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setShowSearchPopup(false)} // Close on overlay click
-                className="fixed inset-0 flex items-end bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
-              />
-              {/* Pop-up Search Container */}
-              <motion.div
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="fixed top-[5vh] test w-fit mx-auto z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
+                className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
               >
-                <SearchContainer
-                  className="z-100 max-w-lg" // Adjust width as needed
-                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
-                  inputStyles='bg-background'
-                  searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
-                  searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
-                  popoverMaxWidth='90vw' // Adjust popover width for mobile
-                  headerText='Find your next home'
+                {/* Pop-up Search Container */}
+                <motion.div
+                  onClick={() => (null)}
+                  initial={{ opacity: 0, y: -50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -50 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  className="fixed top-[5vh] w-fit z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
+                >
+                  <SearchContainer
+                    className="z-100 max-w-lg" // Adjust width as needed
+                    containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
+                    inputStyles='bg-background'
+                    searchButtonClassNames='bg-green-900 hover:bg-green800' // Mobile specific styles if needed
+                    searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
+                    popoverMaxWidth='90vw' // Adjust popover width for mobile
+                    headerText='Find your next home'
                   // Add a close button or mechanism inside SearchContainer if needed, or rely on overlay click
-                />
+                  />
+                </motion.div>
               </motion.div>
             </>
           )}
