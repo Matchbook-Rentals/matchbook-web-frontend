@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import SearchContainer from "./searchContainer";
 import Countdown from "../marketing-landing-components/countdown";
 import { Button } from "@/components/ui/button"; // Import Button
-import { AnimatePresence, motion } from "framer-motion"; // Import motion components
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog"; // Import Dialog components
 
 const Hero: React.FC = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
@@ -34,55 +38,38 @@ const Hero: React.FC = () => {
         />
       </div>
 
-      {/* Mobile Button */}
+      {/* Mobile Button wrapped in DialogTrigger */}
       <div className="block sm:hidden my-auto pt-20 z-10"> {/* Position button lower */}
-        <Button
-          onClick={() => setShowSearchPopup(true)}
-          className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md"
-        >
-          Start Search
-        </Button>
+        <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+          <DialogTrigger asChild>
+            <Button
+              className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md"
+            >
+              Start Search
+            </Button>
+          </DialogTrigger>
+          {/* Dialog Content will be rendered below */}
+        </Dialog>
       </div>
 
-      {/* Mobile Pop-up Search */}
-      <AnimatePresence>
-        {showSearchPopup && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowSearchPopup(false)} // Close on overlay click
-              className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
-            >
-              {/* Pop-up Search Container (Now a child of overlay) */}
-              <motion.div
-                onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                // Removed fixed positioning, using flex centering from parent overlay
-                // Added top margin instead of fixed top
-                className="w-fit mt-[5vh] h-fit z-50 flex justify-center sm:hidden"
-              >
-                {/* Use SearchContainer within the popup */}
-                <SearchContainer
-                  className="z-100" // Removed width constraints
-                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
-                  inputStyles='bg-background'
-                  searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/90 transition-none' // Mobile specific styles
-                  searchIconColor='text-white md:text-[#404040]' // Match trips-content icon color
-                  popoverMaxWidth='90vw' // Adjust popover width for mobile
-                  headerText='Find your next home'
-                  // No need for onClose prop if overlay click closes it
-                />
-              </motion.div> {/* Closing tag for the pop-up container */}
-            </motion.div> {/* Closing tag for the overlay */}
-          </>
-        )}
-      </AnimatePresence>
+      {/* Mobile Search Dialog Content */}
+      <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+        {/* Content container with custom styling */}
+        <DialogContent
+          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-top-[4%] data-[state=open]:slide-in-from-top-[4%] duration-500"
+        >
+          {/* Use SearchContainer within the popup */}
+          <SearchContainer
+            className="z-100" // Removed width constraints
+            containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
+            inputStyles='bg-background'
+            searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/90 transition-none' // Mobile specific styles
+            searchIconColor='text-white' // Mobile specific icon color
+            popoverMaxWidth='90vw' // Adjust popover width for mobile
+            headerText='Find your next home'
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
