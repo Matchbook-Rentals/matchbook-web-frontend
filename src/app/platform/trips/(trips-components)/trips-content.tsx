@@ -1,14 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import TripGrid from './trip-grid';
 import { PAGE_MARGIN } from '@/constants/styles';
 import { Trip } from '@prisma/client';
 import SearchContainer from '@/components/home-components/searchContainer';
-import { AnimatePresence, motion, LayoutGroup, delay } from 'framer-motion';
+import { LayoutGroup } from 'framer-motion'; // Keep LayoutGroup if needed elsewhere
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+} from "@/components/ui/dialog"; // Import Dialog components
 
 interface TripsContentProps {
   trips: Trip[];
@@ -33,13 +40,18 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
               >
                 New Search <ChevronDown className={`pl-1 ml-1 transition-transform duration-300 ${showSearch ? 'rotate-180' : ''}`} />
               </Button>
-              {/* New Pop-up Button - Visible only on mobile */}
-              <Button
-                onClick={() => setShowSearchPopup(true)}
-                className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
-              >
-                New Search
-              </Button>
+
+              {/* Mobile Search Button wrapped in DialogTrigger */}
+              <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+                <DialogTrigger asChild>
+                  <Button
+                    className='block sm:hidden w-fit rounded-full text-[16px]' // block sm:hidden
+                  >
+                    New Search
+                  </Button>
+                </DialogTrigger>
+                {/* Dialog Content will be rendered at the end of the component */}
+              </Dialog>
             </div>
           </div>
           <div className="hidden sm:block w-full md:w-1/2 mx-auto">
@@ -61,52 +73,31 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             marginBottom: showSearch ? '0px' : '20px',
           }}
           className="transition-all duration-700">
-          {/* Search container with Framer Motion animation */}
-          <AnimatePresence>
-            {showSearch && (
-              <motion.div
-                initial={{ opacity: 0, y: -60 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.3,
-                    ease: 'easeInOut'
-                  }
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -40,
-                  transition: {
-                    duration: 0.3,
-                    ease: 'easeInOut'
-                  }
-                }}
-                className="flex justify-center mt-4 mb-4 md:mb-0 "
-              >
-                <div className="flex w-full justify-center">
-                  <SearchContainer
-                    className="z-100 md:w-full px-0"
-                    containerStyles='bg-background rounded-[15px]  drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
-                    inputStyles='bg-background'
-                    searchButtonClassNames='bg-green-900 hover:bg-green800 md:bg-background md:hover:bg-gray-200'
-                    searchIconColor='text-[#404040]'
-                    popoverMaxWidth='900px'
-                    headerText='Find your next home'
-                  />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Desktop Search container - Conditionally rendered */}
+          {showSearch && (
+            <div className="flex justify-center mt-4 mb-4 md:mb-0 ">
+              <div className="flex w-full justify-center">
+                <SearchContainer
+                  className="z-100 md:w-full px-0"
+                  containerStyles='bg-background rounded-[15px]  drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
+                  inputStyles='bg-background'
+                  searchButtonClassNames='bg-green-900 hover:bg-green800 md:bg-background md:hover:bg-gray-200'
+                  searchIconColor='text-[#404040]'
+                  popoverMaxWidth='900px'
+                  headerText='Find your next home'
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {trips.length > 0 ? (
-          <motion.div
-            layout
-            transition={{ duration: .3 }}
+          <div // Use div instead of motion.div if layout animation isn't strictly needed here
+          // layout // Remove layout prop if motion.div is removed
+          // transition={{ duration: .3 }} // Remove transition if motion.div is removed
           >
             <TripGrid initialTrips={trips} />
-          </motion.div>
+          </div>
         ) : (
           <motion.div
             layout
