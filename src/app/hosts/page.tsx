@@ -25,7 +25,7 @@ export default function AboutHostingPage(): React.ReactNode {
       align: "right",
       image: "/marketing-images/auto-collect.png",
       imageAlt: "Application management illustration",
-      verticalSpace: 12, // Added vertical space
+      verticalSpace: 0, // Added vertical space
     },
     {
       title: "Connect with Matchbook Verified Renters",
@@ -34,7 +34,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/verified-renters.png",
       imageAlt: "Application management illustration",
       align: "left",
-      verticalSpace: 12, // Added vertical space
+      verticalSpace: 0, // Added vertical space
     },
     {
       title: "Real Reviews, Reliable Renters, Worry-Free Renting",
@@ -43,7 +43,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/worry-free.png",
       imageAlt: "Application management illustration",
       align: "right",
-      verticalSpace: 12, // Added vertical space
+      verticalSpace: 2, // Added vertical space
     },
     {
       title: "Ditch the paperwork",
@@ -52,7 +52,7 @@ export default function AboutHostingPage(): React.ReactNode {
       image: "/marketing-images/ditch-paperwork.png",
       imageAlt: "Reviews illustration",
       align: "left",
-      verticalSpace: 12, // Added vertical space
+      verticalSpace: 16, // Added vertical space
     },
   ];
 
@@ -66,7 +66,7 @@ export default function AboutHostingPage(): React.ReactNode {
           Earn More, Keep More
         </h1>
 
-        <h2 className="mt-16 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
+        <h2 className="mt-16 mb-6 font-['Cutive',Helvetica] text-5xl text-[#1d221b] text-center tracking-[-0.48px] leading-[52px]">
           Why Hosts Love MatchBook
         </h2>
       </section>
