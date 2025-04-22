@@ -69,18 +69,6 @@ const WebHomePage = () => {
       <ProsConsGrid />
       <PlaceYouLove />
       <RecentArticle />
-      
-
-      <div className="scale-75 mb-12">
-        <CountdownDialog autoOpen isOpen={isOpen} setIsOpen={setIsOpen} />
-        <div className="flex w-full justify-center"> <img className="h-20 mb-36 mt-36" src="/heart-logo.png" /> </div>
-        <div className="justify-center flex border-b-0 mx-auto w-1/2 p-6">
-          <Button
-            className={`bg-blueBrand/90 hover:bg-blueBrand px-16 mt-2 py-2 text-background
-                      text-xl rounded-sm ${montserrat.className}`}
-            onClick={() => setIsOpen(true)}> Get Notified </Button>
-        </div>
-      </div>
       <Footer />
     </>
   );
