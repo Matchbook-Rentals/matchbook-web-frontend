@@ -15,7 +15,8 @@ interface DesktopDateRangeProps {
   onProceed?: () => void;
   onClear?: () => void;
   initialFlexibility?: { start: 'exact' | number | null, end: 'exact' | number | null };
-  minimumDateRange?: Duration | null; // Add minimumDateRange prop
+  minimumDateRange?: Duration | null;
+  maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
 interface CalendarMonthProps {
@@ -26,7 +27,8 @@ interface CalendarMonthProps {
   onPrevMonth?: () => void;
   onNextMonth?: () => void;
   isPrevDisabled?: boolean;
-  minimumDateRange?: Duration | null; // Add minimumDateRange prop
+  minimumDateRange?: Duration | null;
+  maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
 interface CalendarDayProps {
@@ -80,7 +82,7 @@ function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onCli
   );
 }
 
-function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNextMonth, isPrevDisabled, minimumDateRange }: CalendarMonthProps) { // Add minimumDateRange prop
+function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNextMonth, isPrevDisabled, minimumDateRange, maximumDateRange }: CalendarMonthProps) { // Add maximumDateRange prop
   // Calculate calendar grid parameters
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -145,6 +147,18 @@ function CalendarMonth({ year, month, dateRange, onDateSelect, onPrevMonth, onNe
 
         // Disable dates *before* the minimum required end date
         if (currentDate < minEndDate) {
+          return true;
+        }
+      }
+
+      // NEW: Check maximum date range requirement
+      if (maximumDateRange) {
+        // Calculate the maximum allowed end date
+        const maxEndDate = add(startDate, maximumDateRange);
+        maxEndDate.setHours(0, 0, 0, 0); // Normalize max end date
+
+        // Disable dates *after* the maximum allowed end date
+        if (currentDate > maxEndDate) {
           return true;
         }
       }
@@ -260,7 +274,8 @@ export function DesktopDateRange({
   onProceed,
   onClear,
   initialFlexibility,
-  minimumDateRange // Destructure the new prop
+  minimumDateRange,
+  maximumDateRange // Destructure the new prop
 }: DesktopDateRangeProps) {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -427,7 +442,8 @@ export function DesktopDateRange({
               onPrevMonth={handleLeftPrevMonth}
               onNextMonth={handleLeftNextMonth}
               isPrevDisabled={isCurrentMonth(leftMonth, leftYear)}
-              minimumDateRange={minimumDateRange} // Pass prop down
+              minimumDateRange={minimumDateRange}
+              maximumDateRange={maximumDateRange} // Pass prop down
             />
           </div>
           <div className="mt-4">
@@ -453,7 +469,8 @@ export function DesktopDateRange({
               onPrevMonth={handleRightPrevMonth}
               onNextMonth={handleRightNextMonth}
               isPrevDisabled={isCurrentMonth(leftMonth, leftYear) && rightMonth === currentMonth + 1}
-              minimumDateRange={minimumDateRange} // Pass prop down
+              minimumDateRange={minimumDateRange}
+              maximumDateRange={maximumDateRange} // Pass prop down
             />
           </div>
           <div className="mt-4">

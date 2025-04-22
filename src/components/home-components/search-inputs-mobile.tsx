@@ -174,7 +174,8 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
                   onDateRangeChange={setDateRange}
                   onClose={() => setActiveInput(null)}
                   onProceed={() => setActiveInput(4)}
-                  minimumDateRange={{ months: 1 }} // Add minimum date range
+                  minimumDateRange={{ months: 1 }}
+                  maximumDateRange={{ months: 12 }} // Add maximum date range
                 />
               )}
               {index === 4 && (

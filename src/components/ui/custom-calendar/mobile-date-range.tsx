@@ -17,7 +17,8 @@ interface MobileDateRangeProps {
   flexibleStart?: 'exact' | number | null;
   flexibleEnd?: 'exact' | number | null;
   onFlexibilityChange?: (flexibility: { start: 'exact' | number | null; end: 'exact' | number | null }) => void;
-  minimumDateRange?: Duration | null; // Add minimumDateRange prop
+  minimumDateRange?: Duration | null;
+  maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
 interface CalendarMonthProps {
@@ -26,7 +27,8 @@ interface CalendarMonthProps {
   dateRange: DateRange;
   onDateSelect: (day: number, month: number, year: number) => void;
   isMobile?: boolean;
-  minimumDateRange?: Duration | null; // Add minimumDateRange prop
+  minimumDateRange?: Duration | null;
+  maximumDateRange?: Duration | null; // Add maximumDateRange prop
 }
 
 interface CalendarDayProps {
@@ -137,6 +139,18 @@ function CalendarMonth({ year: initialYear, month: initialMonth, dateRange, onDa
 
         // Disable dates *before* the minimum required end date
         if (currentDate < minEndDate) {
+          return true;
+        }
+      }
+
+      // NEW: Check maximum date range requirement
+      if (maximumDateRange) {
+        // Calculate the maximum allowed end date
+        const maxEndDate = add(startDate, maximumDateRange);
+        maxEndDate.setHours(0, 0, 0, 0); // Normalize max end date
+
+        // Disable dates *after* the maximum allowed end date
+        if (currentDate > maxEndDate) {
           return true;
         }
       }
@@ -326,7 +340,7 @@ function FlexibleDateSelector({ type, selectedOption, onSelect }: FlexibleSelect
   );
 }
 
-export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange, minimumDateRange }: MobileDateRangeProps) { // Destructure minimumDateRange
+export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProceed, flexibleStart = null, flexibleEnd = null, onFlexibilityChange, minimumDateRange, maximumDateRange }: MobileDateRangeProps) { // Destructure maximumDateRange
   // If a start date is provided, open the calendar at that month/year, otherwise use today's date.
   const initialDate = dateRange.start ? new Date(dateRange.start) : new Date();
   const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
@@ -432,7 +446,8 @@ export function MobileDateRange({ dateRange, onDateRangeChange, onClose, onProce
             dateRange={dateRange}
             onDateSelect={handleDateSelect}
             isMobile={true}
-            minimumDateRange={minimumDateRange} // Pass prop down
+            minimumDateRange={minimumDateRange}
+            maximumDateRange={maximumDateRange} // Pass prop down
           />
         </div>
 
