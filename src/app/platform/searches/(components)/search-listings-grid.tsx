@@ -19,7 +19,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   withCallToAction = false,
   height
 }) => {
-  const ITEMS_PER_LOAD = 9; // Number of items to load initially and per scroll
+  const ITEMS_PER_LOAD = 18; // Increased items per load
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
