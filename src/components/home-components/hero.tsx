@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Mobile Button */}
-      <div className="block sm:hidden mt-auto mb-[10vh] z-10"> {/* Position button lower */}
+      <div className="block sm:hidden my-auto pt-20 z-10"> {/* Position button lower */}
         <Button
           onClick={() => setShowSearchPopup(true)}
           className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md"
@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowSearchPopup(false)} // Close on overlay click
-              className="fixed inset-0 flex justify-center bg-red-500 bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
+              className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
             >
               {/* Pop-up Search Container (Now a child of overlay) */}
               <motion.div
