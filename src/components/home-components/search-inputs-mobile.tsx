@@ -219,7 +219,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
                   PRESET_CITIES.map((city) => (
                     <div
                       key={city.description}
-                      className="py-2 border-y font-light text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="py-2  font-light text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                       onClick={() => {
                         setSelectedLocation({
                           description: city.description,

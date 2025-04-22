@@ -15,7 +15,7 @@ const Hero: React.FC = () => {
 
   return (
     <div
-      className="relative min-h-[60vh] rounded-lg shadow-md w-[100vw] mx-auto flex flex-col items-center px-4 sm:px-8 md:px-12 bg-cover justify-start"
+      className="relative min-h-[60vh] rounded-lg shadow-md w-[100vw] mx-auto flex flex-col items-center px-0 sm:px-8 md:px-12 bg-cover justify-start"
       style={{
         backgroundImage: "url('/treelined-street-with-beautifully-restored-victorian-home.jpg')",
         backgroundSize: "cover", // Ensures the image covers the container
@@ -39,23 +39,23 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Mobile Button wrapped in DialogTrigger */}
-      <div className="block sm:hidden my-auto pt-20 z-10 text-center"> {/* Position button lower and center text */}
+      <div className="block sm:hidden my-auto pt-10 w-full z-10 text-center"> {/* Position button lower and center text */}
         {/* Header Text for Mobile with Background */}
-        <div className="inline-block bg-black/50 px-4 py-2 rounded-md mb-4"> {/* Added background div */}
-          <h1 className="text-2xl font-bold text-white"> {/* Removed text shadow and margin-bottom */}
+        <div className="inline-block bg-black/30 p-4 w-full rounded-none mb-4"> {/* Added background div */}
+          <h1 className="text-4xl font-medium text-white mb-8 "> {/* Removed text shadow and margin-bottom */}
             Find your next home
           </h1>
+          <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+            <DialogTrigger asChild>
+              <Button
+                className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md"
+              >
+                Start Search
+              </Button>
+            </DialogTrigger>
+            {/* Dialog Content will be rendered below */}
+          </Dialog>
         </div>
-        <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
-          <DialogTrigger asChild>
-            <Button
-              className="bg-white text-black hover:bg-gray-200 px-8 py-3 text-lg rounded-full shadow-md"
-            >
-              Start Search
-            </Button>
-          </DialogTrigger>
-          {/* Dialog Content will be rendered below */}
-        </Dialog>
       </div>
 
       {/* Mobile Search Dialog Content */}
