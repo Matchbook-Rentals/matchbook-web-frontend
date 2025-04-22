@@ -109,17 +109,9 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
 
       {/* Mobile Search Dialog Content */}
       <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
-        {/* Overlay with custom styling */}
-        <DialogOverlay className="bg-black/80 sm:hidden" />
         {/* Content container with custom styling */}
         <DialogContent
-          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
-          // Custom classes:
-          // - bg-transparent, border-none, shadow-none, p-0: Remove default styling
-          // - w-fit, max-w-[95vw]: Control width
-          // - top-[5vh], translate-y-0: Position near the top (adjust as needed)
-          // - data-[state=...]:animate-none: Disable default ShadCN animations if desired
-          // - sm:hidden: Ensure it only appears on mobile
+          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
         >
           <SearchContainer
             className="z-100 max-w-lg" // z-index relative to DialogContent
