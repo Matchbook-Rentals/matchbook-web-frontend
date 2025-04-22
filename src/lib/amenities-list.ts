@@ -2,6 +2,12 @@ import { Dumbbell } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 
 const amenities = [
+  // Basics
+  { code: 'airConditioner', label: 'Air Conditioner', icon: AmenitiesIcons.UpdatedAirConditioningIcon, category: 'basics' },
+  { code: 'heater', label: 'Heater', icon: AmenitiesIcons.UpdatedHeaterIcon, category: 'basics' },
+  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'basics' },
+  { code: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: AmenitiesIcons.UpdatedDedicatedWorkspaceIcon, category: 'basics' },
+
   // Accessibility and Safety
   { code: 'wheelchairAccess', label: 'Wheelchair Access', icon: AmenitiesIcons.UpdatedWheelchairAccessibleIcon, category: 'accessibility' },
   { code: 'security', label: 'Security', icon: AmenitiesIcons.UpdatedSecurityIcon, category: 'accessibility' },
@@ -40,13 +46,8 @@ const amenities = [
   { code: 'stove', label: 'Stove', icon: Dumbbell, category: 'kitchen' },
   { code: 'kitchenEssentials', label: 'Kitchen Essentials', icon: AmenitiesIcons.UpdatedKitchenEssentialsIcon, category: 'kitchen' },
 
-  // Climate Control
-  { code: 'airConditioner', label: 'Air Conditioner', icon: AmenitiesIcons.UpdatedAirConditioningIcon, category: 'climateControl' },
-  { code: 'heater', label: 'Heater', icon: AmenitiesIcons.UpdatedHeaterIcon, category: 'climateControl' },
-  { code: 'fireplace', label: 'Fireplace', icon: AmenitiesIcons.UpdatedFireplaceIcon, category: 'climateControl' },
-  { code: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: AmenitiesIcons.UpdatedDedicatedWorkspaceIcon, category: 'climateControl' },
-
   // Luxury
+  { code: 'fireplace', label: 'Fireplace', icon: AmenitiesIcons.UpdatedFireplaceIcon, category: 'luxury' },
   { code: 'fitnessCenter', label: 'Fitness Center', icon: AmenitiesIcons.UpdatedGymIcon, category: 'luxury' },
   { code: 'gym', label: 'Gym', icon: AmenitiesIcons.UpdatedGymIcon, category: 'luxury' },
   { code: 'balcony', label: 'Balcony', icon: AmenitiesIcons.UpdatedBalconyIcon, category: 'luxury' },
@@ -73,7 +74,6 @@ const amenities = [
   // Other
   { code: 'elevator', label: 'Elevator', icon: Dumbbell, category: 'other' },
   { code: 'doorman', label: 'Doorman', icon: Dumbbell, category: 'other' },
-  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'other' },
   { code: 'hairDryer', label: 'Hair Dryer', icon: Dumbbell, category: 'other' },
   { code: 'iron', label: 'Iron', icon: Dumbbell, category: 'other' },
   { code: 'petsAllowed', label: 'Pets Allowed', icon: AmenitiesIcons.UpdatedPetFriendlyIcon, category: 'other' },
