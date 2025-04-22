@@ -287,11 +287,11 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    <ScrollArea ref={containerRef} style={{height: calculatedHeight || '1200px'}}>
+    <ScrollArea ref={containerRef} className='pr-3.5 w-[103%] md:pr-4 w-[102%] lg:pr-4 lg:w-[101%]' style={{height: calculatedHeight || '1200px'}}>
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
-      <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6`}>
+      <div className={`w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-[0px]`}>
         <ListingImageCarousel
           listingImages={showListings[0]?.listingImages || []}
         />
@@ -309,7 +309,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
           </div>
 
           <div
-            className="w-1/2 h-fit lg:w-2/5 sticky top-[10%] hidden lg:block"
+            className="w-1/2 h-fit lg:w-[500px] max-w-[500px] sticky top-[10%] hidden lg:block"
           >
             <ListingDetailsBox
               listing={showListings[0]}

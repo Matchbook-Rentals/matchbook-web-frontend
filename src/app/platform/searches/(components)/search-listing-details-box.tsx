@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ListingAndImages } from '@/types';
 import { BrandHeart, ReturnIcon, RejectIcon, VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge, StarIcon } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 
 
 interface ListingDetailsBoxProps {
@@ -58,7 +59,7 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
   return (
     <div className='p-4 rounded-md font-poppin' style={{ fontFamily: 'Poppins' }} ref={detailsBoxRef}>
       {/* Action Buttons Section - Reject, Return, Like */}
-      <div className="flex justify-center items-center gap-y-4 gap-x-6 my-4">
+      <div className="flex justify-center items-center gap-y-4 gap-x-8 my-4">
         <button
           onClick={onReject}
           className={`${bigButtonControl} bg-gradient-to-br from-[#C68087BF] to-[#7D383FBF]`}
@@ -95,11 +96,9 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
       <div className='mb-4 space-y-2'>
         <div className='flex items-center justify-between'>
           <p className={mediumText}>Hosted by {host?.firstName}</p>
-          <p className={normalText}>{listing?.numberOfStays || 23} stays</p>
-        </div>
-        <div className='flex items-center justify-between'>
-          <p className={normalText}>{calculateTimeOnMatchbook()}</p>
-          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}</p>
+          <p className={`${normalText} flex gap-x-2 items-center`}><StarIcon /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
+            <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
+          </p>
         </div>
       </div>
 
@@ -109,6 +108,9 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
         <span className={badgeSpans}><TrailBlazerBadge />Trail Blazer</span>
         <span className={badgeSpans}><HallmarkHostBadge />Hallmark Host</span>
       </div>
+          <Button variant='outline' className='w-full border-black mt-4'>
+            Message Host
+          </Button>
     </div>
   );
 };

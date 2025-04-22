@@ -48,17 +48,11 @@ const ListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, calculat
           <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">
             Hosted by {host?.firstName || 'Unknown'}
           </p>
-          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal">
-            23 stays
+          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center">
+            <StarIcon className="w-4 h-4" /> {listing.uScore ? listing.uScore.toFixed(1) : 'N/A'} <span className=''> (23) </span>
           </p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal">
-            {calculateTimeOnMatchbook()}
-          </p>
-          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center">
-            <StarIcon className="w-4 h-4" /> {listing.uScore ? listing.uScore.toFixed(1) : 'N/A'}
-          </p>
         </div>
       </div>
 
