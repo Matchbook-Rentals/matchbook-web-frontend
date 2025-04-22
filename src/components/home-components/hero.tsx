@@ -40,10 +40,12 @@ const Hero: React.FC = () => {
 
       {/* Mobile Button wrapped in DialogTrigger */}
       <div className="block sm:hidden my-auto pt-20 z-10 text-center"> {/* Position button lower and center text */}
-        {/* Header Text for Mobile */}
-        <h1 className="text-2xl font-bold text-white mb-4 [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]"> {/* Added text shadow */}
-          Find your next home
-        </h1>
+        {/* Header Text for Mobile with Background */}
+        <div className="inline-block bg-black/50 px-4 py-2 rounded-md mb-4"> {/* Added background div */}
+          <h1 className="text-2xl font-bold text-white"> {/* Removed text shadow and margin-bottom */}
+            Find your next home
+          </h1>
+        </div>
         <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
           <DialogTrigger asChild>
             <Button
