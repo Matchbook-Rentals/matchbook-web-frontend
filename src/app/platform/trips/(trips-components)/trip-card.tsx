@@ -208,8 +208,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
                       xOnRight={true}
                     >
-                      {/* Restore padding for md+ */}
-                      <div className="mb-6 md:p-0"> 
+                      {/* Restore padding for md+ & hide header on mobile */}
+                      <div className="mb-6 md:p-0 hidden md:block"> 
                         <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                       </div>
                       <SearchEditBar tripId={trip.id} />
@@ -255,8 +255,8 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                 className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
                 xOnRight={true}
               >
-                {/* Restore padding for md+ */}
-                <div className="mb-6 md:p-0"> 
+                {/* Restore padding for md+ & hide header on mobile */}
+                <div className="mb-6 md:p-0 hidden md:block"> 
                   <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                 </div>
                 <SearchEditBar tripId={trip.id} />
@@ -325,7 +325,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                         className="w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8" 
                         xOnRight={true}
                       >
-                        {/* Restore padding for md+ */}
+                        {/* Restore padding for md+ & hide header on mobile */}
+                        <div className="mb-6 md:p-0 hidden md:block"> 
+                          <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
+                        </div>
                         {/* Removed the inner div wrapper as SearchEditBar likely handles its own layout */}
                         <SearchEditBar tripId={trip.id} /> 
                       </DialogContent>

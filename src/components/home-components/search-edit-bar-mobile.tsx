@@ -382,6 +382,11 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       animate={{ width: activeInput !== null ? '85vw' : '80vw' }} // Adjust width based on active state
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
+      {/* Added Mobile Header */}
+      <div className="w-full text-center mb-4">
+        <h2 className="text-xl font-semibold">Edit Trip Details</h2>
+      </div>
+
       {/* Location Input */}
       <div
         className={`${inputClasses} flex items-center justify-between`}
