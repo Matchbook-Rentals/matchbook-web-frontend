@@ -203,8 +203,10 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                         <Pencil className="h-4 w-4" /> Edit Search
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl bg-gray-300 p-8 md:top-[25vh]" xOnRight={true}>
-                      <div className="mb-6 bg-gray-300 test">
+                    {/* Apply w-fit, bg-transparent, border-none */}
+                    <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
+                      {/* Removed padding and background styles from inner div as well */}
+                      <div className="mb-6"> 
                         <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                       </div>
                       <SearchEditBar tripId={trip.id} />
@@ -310,7 +312,9 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                           <Pencil className="h-4 w-4" /> Edit Search
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-4xl top-[15vh]" xOnRight={true}>
+                      {/* Apply w-fit, bg-transparent, border-none */}
+                      <DialogContent className="w-fit bg-transparent border-none p-0" xOnRight={true}>
+                        {/* Removed padding and background styles from inner div as well */}
                         <div className="mb-6">
                           <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                         </div>
