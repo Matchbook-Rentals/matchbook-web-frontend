@@ -205,11 +205,11 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       </Button>
                     </DialogTrigger>
                     {/* Apply mobile styles by default, revert for md+ */}
-                    <DialogContent 
+                    <DialogContent
                       className={cn(
                         "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                        "top-[10vh] md:top-[25vh]" // Adjust vertical position
-                      )} 
+                        "top-[25vh]" // Consistent vertical position
+                      )}
                       xOnRight={true}
                     >
                       {/* Restore padding for md+ & hide header on mobile */}
@@ -255,11 +255,11 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                 </Button>
               </DialogTrigger>
               {/* Apply mobile styles by default, revert for md+ */}
-              <DialogContent 
+              <DialogContent
                 className={cn(
                   "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                  "top-[10vh] md:top-[25vh]" // Adjust vertical position
-                )} 
+                  "top-[25vh]" // Consistent vertical position
+                )}
                 xOnRight={true}
               >
                 {/* Restore padding for md+ & hide header on mobile */}
@@ -331,7 +331,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       <DialogContent
                         className={cn(
                           "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                          "top-[10vh] md:top-[25vh]" // Adjust vertical position
+                          "top-[25vh]" // Consistent vertical position
                         )}
                         xOnRight={true}
                       >
