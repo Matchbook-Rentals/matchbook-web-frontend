@@ -99,54 +99,42 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             <TripGrid initialTrips={trips} />
           </div>
         ) : (
-          <motion.div
-            layout
+          <div // Use div instead of motion.div if layout animation isn't strictly needed here
+            // layout // Remove layout prop if motion.div is removed
             className="text-center py-10 border mt-4 md:mt-32 border-dashed border-gray-300 rounded-lg bg-gray-50"
           >
             <p className="text-lg text-gray-600">You currently don&apos;t have any searches. Fill out your search details and get started!</p>
-          </motion.div>
+          </div>
         )}
       </div>
-    </LayoutGroup>
 
-    {/* Mobile Pop-up Search - Moved outside LayoutGroup */}
-    <AnimatePresence>
-      {showSearchPopup && (
-        <>
-          {/* Overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowSearchPopup(false)} // Close on overlay click
-            className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
-          >
-            {/* Pop-up Search Container */}
-            <motion.div
-              onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              // Removed fixed positioning and z-50, rely on parent overlay flex centering + margin
-              className="w-fit mt-[5vh] h-fit flex justify-center sm:hidden"
-            >
-              <SearchContainer
-                className="z-100 max-w-lg" // z-index relative to parent motion.div now
-                containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
-                inputStyles='bg-background'
-                searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/80 transition-none' // Mobile specific styles if needed
-                searchIconColor='text-white md:text-[#404040]' // Adjust icon color if needed for mobile
-                popoverMaxWidth='90vw' // Adjust popover width for mobile
-                headerText='Find your next home'
-              // Add a close button or mechanism inside SearchContainer if needed, or rely on overlay click
-              />
-            </motion.div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-    </> // Add closing Fragment tag
+      {/* Mobile Search Dialog Content */}
+      <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
+        {/* Overlay with custom styling */}
+        <DialogOverlay className="bg-black/80 sm:hidden" />
+        {/* Content container with custom styling */}
+        <DialogContent
+          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
+          // Custom classes:
+          // - bg-transparent, border-none, shadow-none, p-0: Remove default styling
+          // - w-fit, max-w-[95vw]: Control width
+          // - top-[5vh], translate-y-0: Position near the top (adjust as needed)
+          // - data-[state=...]:animate-none: Disable default ShadCN animations if desired
+          // - sm:hidden: Ensure it only appears on mobile
+        >
+          <SearchContainer
+            className="z-100 max-w-lg" // z-index relative to DialogContent
+            containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]'
+            inputStyles='bg-background'
+            searchButtonClassNames='bg-blueBrand hover:bg-blueBrand/80 transition-none' // Mobile specific styles
+            searchIconColor='text-white' // Mobile specific icon color
+            popoverMaxWidth='90vw' // Adjust popover width for mobile
+            headerText='Find your next home'
+          />
+        </DialogContent>
+      </Dialog>
+    </LayoutGroup>
+    </> // Closing Fragment tag
   );
 };
 
