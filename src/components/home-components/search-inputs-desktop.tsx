@@ -146,6 +146,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             handleChange={(start, end) => setDateRange({ start, end })}
             onProceed={handleProceed}
             onClear={() => setDateRange({ start: null, end: null })}
+            minimumDateRange={{ months: 1 }} // Add minimum date range
           />
         );
       case 'guests':

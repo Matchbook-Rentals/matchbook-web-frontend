@@ -118,6 +118,7 @@ const EditSearchInputsDesktop: React.FC = () => {
             onClear={() => setDateRange({ start: null, end: null })}
             onFlexibilityChange={(newFlexibility) => setFlexibility(newFlexibility)}
             initialFlexibility={flexibility}
+            minimumDateRange={{ months: 1 }} // Add minimum date range
           />
         );
       case 'guests':

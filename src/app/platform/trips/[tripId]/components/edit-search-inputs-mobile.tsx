@@ -254,6 +254,7 @@ const EditSearchInputsMobile: React.FC = () => {
                   flexibleStart={flexibleDates.start}
                   flexibleEnd={flexibleDates.end}
                   onFlexibilityChange={setFlexibleDates}
+                  minimumDateRange={{ months: 1 }} // Add minimum date range
                 />
               )}
               {index === 4 && (
