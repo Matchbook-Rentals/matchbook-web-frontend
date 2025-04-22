@@ -173,6 +173,9 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       } else {
         setGridColumns(1);
         // Reset visible listings filter when in mobile view
+        // Note: This reset logic might need reconsideration. If the map filter
+        // should *always* apply regardless of screen size, this 'if' block
+        // should be removed entirely. For now, keeping the original behavior.
         if (visibleListingIds !== null) {
           setVisibleListingIds(null);
         }
@@ -182,60 +185,16 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     updateGridColumns();
     window.addEventListener('resize', updateGridColumns);
     return () => window.removeEventListener('resize', updateGridColumns);
-  }, [visibleListingIds, setVisibleListingIds]);
+  }, [visibleListingIds, setVisibleListingIds]); // Keep dependencies for now as reset logic is tied to them
 
-  // Observer for the sentinel to trigger loading more listings
-  useEffect(() => {
-    if (!infiniteScrollMode) return;
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
+  // Removed Observer for the sentinel (now handled by the main infinite scroll observer)
+  // useEffect(() => { ... });
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && displayedListings.length < filteredListings.length) {
-          setCurrentPage(prev => prev + 1);
-        }
-      });
-    }, { root: scrollAreaRef.current, threshold: 0.1 });
+  // Removed effect: update pagination when the selected marker changes
+  // useEffect(() => { ... });
 
-    observer.observe(sentinel);
-    return () => {
-      observer.disconnect();
-    };
-  }, [infiniteScrollMode, displayedListings, filteredListings]);
-
-  // New effect: update pagination when the selected marker changes
-  useEffect(() => {
-    // Only update if a marker is selected and if we are in multi-column (pagination) mode.
-    if (!selectedMarker || infiniteScrollMode) return;
-    const markerListingId = selectedMarker.listing.id;
-    const listingIndex = filteredListings.findIndex(listing => listing.id === markerListingId);
-    if (listingIndex !== -1) {
-      const newPage = Math.floor(listingIndex / listingsPerPage) + 1;
-      if (newPage !== currentPage) {
-        setCurrentPage(newPage);
-      }
-    }
-  }, [selectedMarker, infiniteScrollMode, filteredListings, listingsPerPage, currentPage]);
-
-  // Check if current page is still valid when listings change
-  useEffect(() => {
-    if (infiniteScrollMode) return; // Only needed for pagination mode
-
-    // If there are no listings at all, set to page 1
-    if (filteredListings.length === 0) {
-      setCurrentPage(1);
-      return;
-    }
-
-    // Calculate the new total pages
-    const newTotalPages = Math.ceil(filteredListings.length / listingsPerPage);
-
-    // If current page is greater than the new total pages, adjust to the last valid page
-    if (currentPage > newTotalPages) {
-      setCurrentPage(newTotalPages);
-    }
-  }, [filteredListings, currentPage, listingsPerPage, infiniteScrollMode]);
+  // Removed effect: Check if current page is still valid when listings change
+  // useEffect(() => { ... });
 
   return (
     // Use the height prop for minHeight, keep flex structure
