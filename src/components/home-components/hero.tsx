@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="fixed top-[5vh] left-4 right-4 z-50 flex justify-center sm:hidden" // Position and show only on mobile
+              className="fixed top-[5vh] w-fit mx-auto z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
             >
               {/* Use SearchContainer within the popup */}
               <SearchContainer
