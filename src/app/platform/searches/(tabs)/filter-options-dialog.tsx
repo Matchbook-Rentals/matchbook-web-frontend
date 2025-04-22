@@ -205,7 +205,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
     {
       value: 'wifi',
       label: 'WiFi',
-      icon: <AmenitiesIcons.UpdatedWifiIcon className="p-1 mt-0" /> // Use correct icon if available
+      icon: <Wifi className="h-[65px] w-[65px]" /> // Use correct icon if available
     },
     {
       value: 'dedicatedWorkspace',

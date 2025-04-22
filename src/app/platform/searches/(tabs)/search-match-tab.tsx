@@ -287,7 +287,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
 
   // Main component render
   return (
-    <ScrollArea ref={containerRef} className='pr-3.5 w-[103%] md:pr-4 w-[102%] lg:pr-4 lg:w-[101%]' style={{height: calculatedHeight || '1200px'}}>
+    <ScrollArea ref={containerRef} className='pr-3.5 w-[103%] md:pr-4 w-[102%] lg:pr-4 lg:w-[101%]' style={{height: calculatedHeight || '1000px'}}>
       {/* Below paddings are to accomdate control buttons */}
       {/* first for buttons with mobile navigation selector */}
       {/* second is for 'tablet' view with larger button controls */}
