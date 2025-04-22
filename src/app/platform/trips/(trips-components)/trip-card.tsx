@@ -212,7 +212,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       <div className="mb-6 md:p-0 hidden md:block"> 
                         <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                       </div>
-                      <SearchEditBar tripId={trip.id} />
+                      <SearchEditBar trip={trip} />
                     </DialogContent>
                   </Dialog>
                   <hr className="my-1" />
@@ -259,7 +259,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                 <div className="mb-6 md:p-0 hidden md:block"> 
                   <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                 </div>
-                <SearchEditBar tripId={trip.id} />
+                <SearchEditBar trip={trip} />
               </DialogContent>
             </Dialog>
             <div className="hidden md:block">
@@ -330,7 +330,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                           <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
                         </div>
                         {/* Removed the inner div wrapper as SearchEditBar likely handles its own layout */}
-                        <SearchEditBar tripId={trip.id} /> 
+                        <SearchEditBar trip={trip} />
                       </DialogContent>
                     </Dialog>
                     <hr className="my-1" />

@@ -29,21 +29,25 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
-const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, tripId }) => {
-  const params = useParams();
-  // Use provided tripId or get it from the URL params
-  const effectiveTripId = tripId || (params?.tripId as string);
-
+const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, trip }) => {
   // Use md breakpoint (768px) to switch between mobile and desktop
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // If trip is not provided (e.g., used outside TripCard context), handle appropriately
+  // For now, we assume trip is always provided when this component is rendered via TripCard
+  if (!trip) {
+    // Optional: Render a loading state or null, or throw an error
+    console.error("SearchEditBar requires a 'trip' prop.");
+    return null;
+  }
 
   // Render the appropriate component based on screen size
   return (
     <div className={className}>
       {isMobile ? (
-        <SearchEditBarMobile tripId={effectiveTripId} />
+        <SearchEditBarMobile trip={trip} />
       ) : (
-        <SearchEditBarDesktop tripId={effectiveTripId} />
+        <SearchEditBarDesktop trip={trip} />
       )}
     </div>
   );

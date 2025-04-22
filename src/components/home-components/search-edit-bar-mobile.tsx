@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation"; // Removed
 import { Trip } from "@prisma/client";
 import { editTrip } from "@/app/actions/trips";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast"; // Keep for potential errors during save
 import { MapPin, Calendar, Users, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 import GuestTypeCounter from "./GuestTypeCounter";
-import { Skeleton } from "@/components/ui/skeleton"; // For loading state
+// import { Skeleton } from "@/components/ui/skeleton"; // Removed
 
 interface Suggestion {
   place_id: string;
@@ -18,7 +18,7 @@ interface Suggestion {
 
 interface SearchEditBarMobileProps {
   className?: string;
-  tripId?: string;
+  trip: Trip; // Receive the full trip object
 }
 
 const PRESET_CITIES = [
@@ -31,71 +31,49 @@ const PRESET_CITIES = [
 
 const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
   className,
-  tripId,
+  trip, // Use the passed trip prop
 }) => {
-  const params = useParams();
+  // const params = useParams(); // Removed
   const { toast } = useToast();
-  const effectiveTripId = tripId || (params?.tripId as string);
+  // const effectiveTripId = tripId || (params?.tripId as string); // Removed
 
-  const [trip, setTrip] = useState<Trip | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [trip, setTrip] = useState<Trip | null>(null); // Removed - use prop directly
+  // const [loading, setLoading] = useState(true); // Removed
 
   const [activeInput, setActiveInput] = useState<number | null>(null); // 0: Location, 3: Date, 4: Guests
   const [inputValue, setInputValue] = useState(""); // For location search input
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+
+  // Initialize state directly from the trip prop
   const [selectedLocation, setSelectedLocation] = useState<{
     description: string;
     lat: number | null;
     lng: number | null;
-  }>({ description: '', lat: null, lng: null });
-  const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({ start: null, end: null });
-  const [guests, setGuests] = useState({ adults: 0, children: 0, pets: 0 });
-  const [totalGuests, setTotalGuests] = useState(0);
-  const [flexibility, setFlexibility] = useState<{ start: "exact" | number | null; end: "exact" | number | null }>({ start: "exact", end: "exact" }); // Added flexibility state
+  }>({
+    description: trip.locationString || '',
+    lat: trip.latitude || null,
+    lng: trip.longitude || null
+  });
+  const [dateRange, setDateRange] = useState<{ start: Date | null; end: Date | null }>({
+    start: trip.startDate ? new Date(trip.startDate) : null,
+    end: trip.endDate ? new Date(trip.endDate) : null,
+  });
+  const [guests, setGuests] = useState({
+    adults: trip.numAdults || 0,
+    children: trip.numChildren || 0,
+    pets: trip.numPets || 0
+  });
+  const [totalGuests, setTotalGuests] = useState(
+    (trip.numAdults || 0) + (trip.numChildren || 0) + (trip.numPets || 0)
+  );
+  const [flexibility, setFlexibility] = useState<{ start: "exact" | number | null; end: "exact" | number | null }>({
+    start: trip.flexibleStart === 0 ? "exact" : trip.flexibleStart,
+    end: trip.flexibleEnd === 0 ? "exact" : trip.flexibleEnd,
+  });
 
   const componentRef = useRef<HTMLDivElement>(null);
 
-  // Fetch trip data
-  useEffect(() => {
-    const fetchTripData = async () => {
-      if (!effectiveTripId) {
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/trips/${effectiveTripId}`);
-        if (!response.ok) throw new Error('Failed to fetch trip data');
-        const tripData = await response.json();
-
-        setTrip(tripData);
-        setSelectedLocation({
-          description: tripData.locationString || '',
-          lat: tripData.latitude || null,
-          lng: tripData.longitude || null
-        });
-        setDateRange({
-          start: tripData.startDate ? new Date(tripData.startDate) : null,
-          end: tripData.endDate ? new Date(tripData.endDate) : null,
-        });
-        setGuests({
-          adults: tripData.numAdults || 0,
-          children: tripData.numChildren || 0,
-          pets: tripData.numPets || 0
-        });
-        setFlexibility({ // Populate flexibility
-            start: tripData.flexibleStart === 0 ? "exact" : tripData.flexibleStart,
-            end: tripData.flexibleEnd === 0 ? "exact" : tripData.flexibleEnd,
-        });
-      } catch (error) {
-        console.error('Error fetching trip data:', error);
-        toast({ variant: "destructive", description: "Failed to load trip data." });
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTripData();
-  }, [effectiveTripId, toast]);
+  // Removed fetchTripData useEffect
 
   // Click outside handler
   useEffect(() => {
@@ -179,10 +157,9 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     setActiveInput(activeInput === index ? null : index);
   };
 
-  // Check if form has changes compared to the original trip data
+  // Check if form has changes compared to the original trip data (passed as prop)
   const hasChanges = () => {
-    if (!trip) return false;
-
+    // Trip prop is guaranteed to exist here based on parent component logic
     const locationChanged = selectedLocation.description !== trip.locationString ||
                             selectedLocation.lat !== trip.latitude ||
                             selectedLocation.lng !== trip.longitude;
@@ -213,9 +190,9 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     return locationChanged || startDateChanged || endDateChanged || guestsChanged || flexibleStartChanged || flexibleEndChanged;
   };
 
-  // Reset form to original trip data
+  // Reset form to original trip data (passed as prop)
   const handleReset = () => {
-    if (!trip) return;
+    // Trip prop is guaranteed to exist
     setSelectedLocation({
       description: trip.locationString || '',
       lat: trip.latitude || null,
@@ -239,8 +216,9 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
 
   // Save changes
   const handleSave = async () => {
-    if (!effectiveTripId) {
-      toast({ variant: "destructive", description: "No trip ID found" });
+    // Use trip.id directly
+    if (!trip.id) {
+      toast({ variant: "destructive", description: "Trip ID is missing" });
       return;
     }
     if (!selectedLocation.lat || !selectedLocation.lng) {
@@ -249,7 +227,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
        return;
     }
 
-    const response = await editTrip(effectiveTripId, {
+    const response = await editTrip(trip.id, { // Use trip.id
       locationString: selectedLocation.description,
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
@@ -271,6 +249,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     }
   };
 
+  // Removed loading state rendering
 
   const renderSlidingComponent = (index: number) => {
     if (index !== 3 && index !== 4) return null; // Only for Date (3) and Guests (4)
@@ -361,19 +340,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     );
   };
 
-  if (loading) {
-     return (
-        <div className={`flex flex-col p-4 z-50 items-center bg-background rounded-3xl shadow-md overflow-hidden w-[85vw] ${className || ''}`}>
-            <Skeleton className="h-12 w-full mb-3 rounded-full" />
-            <Skeleton className="h-12 w-full mb-3 rounded-full" />
-            <Skeleton className="h-12 w-full mb-3 rounded-full" />
-            <div className="flex gap-4 w-full mt-2">
-                <Skeleton className="h-10 flex-1 rounded-full" />
-                <Skeleton className="h-10 flex-1 rounded-full" />
-            </div>
-        </div>
-     )
-  }
+  // Removed loading state rendering
 
   return (
     <motion.div

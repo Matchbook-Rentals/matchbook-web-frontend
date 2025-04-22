@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation"; // Removed
 import { Trip } from "@prisma/client";
 import { editTrip } from "@/app/actions/trips";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast"; // Keep for potential errors during save
 import { Check, X } from "lucide-react";
 import { DesktopDateRange } from "@/components/ui/custom-calendar/date-range-selector/desktop-date-range";
 import HeroLocationSuggest from "@/components/home-components/HeroLocationSuggest";
@@ -10,42 +10,43 @@ import GuestTypeCounter from "@/components/home-components/GuestTypeCounter";
 
 interface SearchEditBarDesktopProps {
   className?: string;
-  tripId?: string;
+  trip: Trip; // Receive the full trip object
 }
 
-const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, tripId }) => {
-  const params = useParams();
+const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, trip }) => {
+  // const params = useParams(); // Removed
   const { toast } = useToast();
-  // Use provided tripId or get it from the URL params
-  const effectiveTripId = tripId || (params?.tripId as string);
+  // const effectiveTripId = tripId || (params?.tripId as string); // Removed
 
-  const [trip, setTrip] = React.useState<Trip | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  // const [trip, setTrip] = React.useState<Trip | null>(null); // Removed - use prop directly
+  // const [loading, setLoading] = React.useState(true); // Removed
 
-  // States for the edit form
+  // Initialize state directly from the trip prop
   const [activeContent, setActiveContent] = React.useState<'location' | 'date' | 'guests' | null>(null);
-  const [totalGuests, setTotalGuests] = React.useState<number>(0);
+  const [totalGuests, setTotalGuests] = React.useState<number>(
+    (trip.numAdults || 0) + (trip.numChildren || 0) + (trip.numPets || 0)
+  );
   const [dateRange, setDateRange] = React.useState<{ start: Date | null; end: Date | null }>({
-    start: null,
-    end: null,
+    start: trip.startDate ? new Date(trip.startDate) : null,
+    end: trip.endDate ? new Date(trip.endDate) : null,
   });
   const [guests, setGuests] = React.useState({
-    adults: 0,
-    children: 0,
-    pets: 0
+    adults: trip.numAdults || 0,
+    children: trip.numChildren || 0,
+    pets: trip.numPets || 0
   });
   const [flexibility, setFlexibility] = React.useState<{ start: "exact" | number | null; end: "exact" | number | null }>({
-    start: "exact",
-    end: "exact",
+    start: trip.flexibleStart === 0 ? "exact" : trip.flexibleStart,
+    end: trip.flexibleEnd === 0 ? "exact" : trip.flexibleEnd,
   });
   const [selectedLocation, setSelectedLocation] = React.useState({
-    destination: '',
-    description: '',
-    lat: null,
-    lng: null
+    destination: trip.locationString || '', // Use destination for consistency if needed, or just description
+    description: trip.locationString || '',
+    lat: trip.latitude || null,
+    lng: trip.longitude || null
   });
   const [isOpen, setIsOpen] = React.useState(false);
-  const [locationDisplayValue, setLocationDisplayValue] = React.useState('');
+  const [locationDisplayValue, setLocationDisplayValue] = React.useState(trip.locationString || '');
   const [arrowPosition, setArrowPosition] = React.useState(5);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -54,63 +55,7 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   const moveOutInputRef = React.useRef<HTMLInputElement>(null);
   const guestsInputRef = React.useRef<HTMLInputElement>(null);
 
-  // Fetch trip data when component mounts
-  React.useEffect(() => {
-    const fetchTripData = async () => {
-      if (!effectiveTripId) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        // Directly use fetch API to avoid TripContext dependency
-        const response = await fetch(`/api/trips/${effectiveTripId}`);
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch trip data');
-        }
-
-        const tripData = await response.json();
-
-        // Populate form with trip data
-        setTrip(tripData);
-        setLocationDisplayValue(tripData.locationString || '');
-        setSelectedLocation({
-          destination: tripData.locationString || '',
-          description: tripData.locationString || '',
-          lat: tripData.latitude || null,
-          lng: tripData.longitude || null
-        });
-
-        setDateRange({
-          start: tripData.startDate ? new Date(tripData.startDate) : null,
-          end: tripData.endDate ? new Date(tripData.endDate) : null,
-        });
-
-        setGuests({
-          adults: tripData.numAdults || 0,
-          children: tripData.numChildren || 0,
-          pets: tripData.numPets || 0
-        });
-
-        setFlexibility({
-          start: tripData.flexibleStart === 0 ? "exact" : tripData.flexibleStart,
-          end: tripData.flexibleEnd === 0 ? "exact" : tripData.flexibleEnd,
-        });
-
-      } catch (error) {
-        console.error('Error fetching trip data:', error);
-        toast({
-          variant: "destructive",
-          description: "Failed to load trip data. Using default values.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTripData();
-  }, [effectiveTripId, toast]);
+  // Removed fetchTripData useEffect
 
   React.useEffect(() => {
     const total = Object.values(guests).reduce((sum, count) => sum + count, 0);
@@ -197,13 +142,17 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   };
 
   const hasChanges = () => {
-    if (!trip) return false;
-
+    // Trip prop is guaranteed to exist
     const locationChanged = locationDisplayValue !== trip.locationString;
-    const startDateChanged = dateRange.start?.toISOString() !==
-      (trip.startDate ? new Date(trip.startDate).toISOString() : null);
-    const endDateChanged = dateRange.end?.toISOString() !==
-      (trip.endDate ? new Date(trip.endDate).toISOString() : null);
+
+    // Compare dates carefully, handling nulls and potential time zone differences if necessary
+    const currentStartDateStr = dateRange.start ? dateRange.start.toISOString().split('T')[0] : null;
+    const tripStartDateStr = trip.startDate ? new Date(trip.startDate).toISOString().split('T')[0] : null;
+    const currentEndDateStr = dateRange.end ? dateRange.end.toISOString().split('T')[0] : null;
+    const tripEndDateStr = trip.endDate ? new Date(trip.endDate).toISOString().split('T')[0] : null;
+
+    const startDateChanged = currentStartDateStr !== tripStartDateStr;
+    const endDateChanged = currentEndDateStr !== tripEndDateStr;
 
     const guestsChanged =
       guests.adults !== trip.numAdults ||
@@ -227,11 +176,10 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   };
 
   const handleReset = () => {
-    if (!trip) return;
-
+    // Trip prop is guaranteed to exist
     setLocationDisplayValue(trip.locationString || '');
     setSelectedLocation({
-      destination: trip.locationString || '',
+      destination: trip.locationString || '', // Reset destination as well if used
       description: trip.locationString || '',
       lat: trip.latitude || null,
       lng: trip.longitude || null
@@ -255,10 +203,11 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
   };
 
   const handleSave = async () => {
-    if (!effectiveTripId) {
+    // Use trip.id directly
+    if (!trip.id) {
       toast({
         variant: "destructive",
-        description: "No trip ID found",
+        description: "Trip ID is missing",
       });
       return;
     }
@@ -274,8 +223,9 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
        return;
     }
 
-    const response = await editTrip(effectiveTripId, {
+    const response = await editTrip(trip.id, { // Use trip.id
       locationString: locationDisplayValue,
+      // Ensure lat/lng are passed correctly, potentially using selectedLocation state
       latitude: selectedLocation.lat || undefined,
       longitude: selectedLocation.lng || undefined,
       startDate: dateRange.start || undefined,
@@ -321,6 +271,8 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
     };
   }, []);
 
+  // Removed loading state rendering
+
   const handleProceed = () => {
     setActiveContent('guests');
     if (containerRef.current && guestsInputRef.current) {
@@ -332,10 +284,7 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
     }
   };
 
-  if (loading) {
-    // Optional: Add a skeleton loader here
-    return <div className="h-[60px] bg-gray-200 rounded-full animate-pulse"></div>;
-  }
+  // Removed loading state rendering
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
