@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import SearchEditBarDesktop from "./search-edit-bar-desktop"; // Import the new desktop component
 import SearchEditBarMobile from "./search-edit-bar-mobile"; // Import the new mobile component
+import { Trip } from "@prisma/client"; // Add Trip type import
 
 interface SearchEditBarProps {
   className?: string;
-  tripId?: string;
+  trip: Trip; // Receive the full trip object
 }
 
 // Simple hook to check screen size (adjust breakpoint as needed)
