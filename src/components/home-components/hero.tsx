@@ -74,11 +74,12 @@ const Hero: React.FC = () => {
                   inputStyles='bg-background'
                   searchButtonClassNames='bg-green-900 hover:bg-green-800' // Mobile specific styles
                   searchIconColor='text-white md:text-[#404040]' // Match trips-content icon color
-                popoverMaxWidth='90vw' // Adjust popover width for mobile
-                headerText='Find your next home'
-                // No need for onClose prop if overlay click closes it
-              />
-            </motion.div>
+                  popoverMaxWidth='90vw' // Adjust popover width for mobile
+                  headerText='Find your next home'
+                  // No need for onClose prop if overlay click closes it
+                />
+              </motion.div> {/* Closing tag for the pop-up container */}
+            </motion.div> {/* Closing tag for the overlay */}
           </>
         )}
       </AnimatePresence>
