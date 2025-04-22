@@ -138,7 +138,7 @@ const TripsPage: React.FC = () => {
   return (
     <div className={`flex flex-col scrollbar-none ${marginClass} mx-auto ${publicSans.variable}`}>
       {/* Conditionally render based on local activeTab state */}
-      <div className='flex justify-between items-center sm:justify-start'>
+      <div className='flex justify-end items-center sm:justify-start'>
         {isMobile && (
           <div className='flex gap-x-4 items-center'>
             {['recommended', 'allListings'].includes(activeTab) && (
@@ -156,7 +156,6 @@ const TripsPage: React.FC = () => {
 
       {!isMobile ? (
         <TabSelector
-          useUrlParams // Keep URL sync if desired, but logic below uses local state
           tabs={tabs}
           defaultTab={activeTab} // Use local state for default
           onTabClick={handleTabSelect} // Pass the handler
@@ -178,7 +177,6 @@ const TripsPage: React.FC = () => {
         />
       ) : (
         <MobileTabSelector
-          useUrlParams // Keep URL sync if desired
           tabs={tabs}
           defaultTab={activeTab} // Use local state for default
           onTabClick={handleTabSelect} // Pass the handler
