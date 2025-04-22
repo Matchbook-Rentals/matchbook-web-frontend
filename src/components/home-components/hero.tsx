@@ -54,24 +54,26 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowSearchPopup(false)} // Close on overlay click
-              className="fixed inset-0 bg-black bg-opacity-80 z-40 sm:hidden" // Only show overlay on mobile
-            />
-            {/* Pop-up Search Container */}
-            <motion.div
-              onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="fixed top-[5vh] w-fit mx-auto z-50 flex justify-center sm:hidden" // Position and show only on mobile, fit content width, center horizontally
+              className="fixed inset-0 flex justify-center bg-black bg-opacity-80 z-40 sm:hidden" // Added flex justify-center
             >
-              {/* Use SearchContainer within the popup */}
-              <SearchContainer
-                className="z-100 w-full max-w-lg" // Adjust width as needed
-                containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)] p-4' // Added padding
-                inputStyles='bg-background'
-                searchButtonClassNames='bg-green-900 hover:bg-green-800' // Mobile specific styles
-                searchIconColor='text-white' // Adjust icon color for mobile button
+              {/* Pop-up Search Container (Now a child of overlay) */}
+              <motion.div
+                onClick={(e) => e.stopPropagation()} // Stop click propagation to overlay
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                // Removed fixed positioning, using flex centering from parent overlay
+                // Added top margin instead of fixed top
+                className="w-fit mt-[5vh] z-50 flex justify-center sm:hidden"
+              >
+                {/* Use SearchContainer within the popup */}
+                <SearchContainer
+                  className="z-100" // Removed width constraints
+                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
+                  inputStyles='bg-background'
+                  searchButtonClassNames='bg-green-900 hover:bg-green-800' // Mobile specific styles
+                  searchIconColor='text-white md:text-[#404040]' // Match trips-content icon color
                 popoverMaxWidth='90vw' // Adjust popover width for mobile
                 headerText='Find your next home'
                 // No need for onClose prop if overlay click closes it
