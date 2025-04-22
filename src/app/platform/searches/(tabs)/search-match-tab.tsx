@@ -251,7 +251,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
       <div className='flex flex-col items-center justify-center pb-6 h-[50vh]'>
         <p className=' text-2xl mb-5'>You&apos;re out of listings!</p>
         <p className='mb-3'>You can
-          {numFavorites > 0 ? 'look at your favorites' : ''}
+          {numFavorites > 0 ? ' look at your favorites' : ''}
           {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
           {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
         {(numFavorites > 0 || numFilteredOut > 0) && (
