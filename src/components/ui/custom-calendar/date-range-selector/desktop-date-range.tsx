@@ -74,7 +74,7 @@ interface FlexibleSelectorProps {
   onSelect: (type: 'start' | 'end', option: 'exact' | number | null) => void;
 }
 
-function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isDisabled }: CalendarDayProps) {
+function CalendarDay({ day, isSelected, isInRange, isStartDate, isEndDate, onClick, isDisabled, disabledReason }: CalendarDayProps) {
   const hasCompleteRange = isInRange || isEndDate;
   const showRangeBackground = hasCompleteRange && isInRange && !isSelected;
   const showStartBackground = hasCompleteRange && isStartDate && !isEndDate;
