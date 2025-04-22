@@ -208,7 +208,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                     <DialogContent
                       className={cn(
                         "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                        "top-[25vh]" // Consistent vertical position
+                        "md:top-[25vh]" // Default center on mobile, 25vh top on md+
                       )}
                       xOnRight={true}
                     >
@@ -258,7 +258,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
               <DialogContent
                 className={cn(
                   "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                  "top-[25vh]" // Consistent vertical position
+                  "md:top-[25vh]" // Default center on mobile, 25vh top on md+
                 )}
                 xOnRight={true}
               >
@@ -331,7 +331,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       <DialogContent
                         className={cn(
                           "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                          "top-[25vh]" // Consistent vertical position
+                          "md:top-[25vh]" // Default center on mobile, 25vh top on md+
                         )}
                         xOnRight={true}
                       >
