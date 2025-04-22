@@ -15,7 +15,6 @@ import {
   RecommendedIcon,
   SettingsIcon
 } from '@/components/icons';
-import Breadcrumbs from '@/components/ui/breadcrumbs';
 import Link from 'next/link';
 import { Public_Sans } from 'next/font/google';
 
@@ -44,20 +43,6 @@ interface MobileTab {
   iconClassName?: string;
 }
 
-// Custom Breadcrumb component with loading state
-const LoadingBreadcrumbs: React.FC = () => {
-  return (
-    <nav className="text-[#404040] text-[14px] leading-normal flex items-center">
-      <Link href="/platform/trips" className="cursor-pointer hover:underline">
-        Searches
-      </Link>
-      <span className="mx-2">&gt;</span>
-      <span className="inline-block">
-        <div className="h-4 w-20 bg-gray-200 rounded  animate-pulse"></div>
-      </span>
-    </nav>
-  );
-};
 
 const LoadingTabs: React.FC = () => {
   const tabTriggerTextStyles = 'text-[9px] font-medium sm:text-[15px] md:text-[16px] sm:font-normal font-public-sans';

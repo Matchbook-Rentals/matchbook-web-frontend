@@ -16,7 +16,6 @@ import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { Montserrat, Public_Sans } from 'next/font/google';
 import { ALlListingsIcon, BrandHeartOutline, FavoritesIcon, ManageSearchIcon, MapViewIcon, MatchesIcon, RecommendedIcon } from '@/components/icons';
 import MobileTabSelector from '@/components/ui/mobile-tab-selector';
-import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useState } from 'react'; // Import useState
 

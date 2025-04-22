@@ -1,8 +1,6 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import Breadcrumbs from '@/components/ui/breadcrumbs';
-import { getTripLocationString } from '@/utils/trip-helpers';
 import { useTripContext } from '@/contexts/trip-context-provider';
 
 export default function DeclinedPage() {
@@ -12,14 +10,6 @@ export default function DeclinedPage() {
 
   return (
     <div>
-      <Breadcrumbs
-        links={[
-          { label: 'Trips', url: '/platform/trips' },
-          { label: getTripLocationString(trip), url: `/platform/trips/${tripId}` },
-          { label: 'Declined Applications' }
-        ]}
-        className="mb-4"
-      />
       <div className="p-4">
         <div className="text-sm text-gray-500">
           /trips/[tripId]/declined

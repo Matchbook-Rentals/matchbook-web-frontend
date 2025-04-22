@@ -2,8 +2,6 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useCallback, useEffect } from 'react';
-import Breadcrumbs from '@/components/ui/breadcrumbs';
-import { getTripLocationString } from '@/utils/trip-helpers';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -409,11 +407,6 @@ export default function ApplicationPage() {
 
   return (
     <div className={PAGE_MARGIN}>
-      <Breadcrumbs className="mb-4"
-        links={[
-          { label: getTripLocationString(trip), url: `/platform/trips/${tripId}` },
-          { label: 'Application' }
-        ]} />
 
 
       {isMobile ? (

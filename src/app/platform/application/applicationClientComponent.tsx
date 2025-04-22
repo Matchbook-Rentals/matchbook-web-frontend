@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useState, useCallback, useEffect, Suspense } from 'react';
-import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -366,11 +365,6 @@ export default function ApplicationClientComponent({ application }: { applicatio
 
   return (
     <div className={PAGE_MARGIN}>
-      <Breadcrumbs className="mb-4"
-        links={[
-          { label: 'Dashboard', url: '/platform/dashboard' },
-          { label: 'Application' }
-        ]} />
 
       {isMobile ? (
         <MobileApplicationEdit />
