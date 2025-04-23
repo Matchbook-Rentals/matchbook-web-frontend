@@ -84,7 +84,7 @@ const Hero: React.FC = () => {
       <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
         {/* Content container with custom styling */}
         <DialogContent
-          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
+          className="sm:hidden h-fit max-h-[90vh] overflow-y-auto bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
         >
           {/* Use SearchContainer within the popup */}
           <SearchContainer

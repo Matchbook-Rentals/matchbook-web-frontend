@@ -111,7 +111,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
       <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
         {/* Content container with custom styling */}
         <DialogContent
-          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
+          className="sm:hidden bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] h-fit max-h-[90vh] overflow-y-auto top-[5vh] translate-y-0"
         >
           <SearchContainer
             className="z-100 max-w-lg" // z-index relative to DialogContent
@@ -121,6 +121,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             searchIconColor='text-white' // Mobile specific icon color
             popoverMaxWidth='90vw' // Adjust popover width for mobile
             headerText='Find your next home'
+            hasAccess
           />
         </DialogContent>
       </Dialog>
