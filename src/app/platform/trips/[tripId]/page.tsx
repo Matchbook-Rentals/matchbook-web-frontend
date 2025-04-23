@@ -183,7 +183,7 @@ const TripsPage: React.FC = () => {
           useUrlParams={false} // Disable internal URL handling as parent manages it
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
-          tabsListClassName='w-full  max-w-[100vw] '
+          tabsListClassName='w-full p-0  max-w-[100vw] '
 
         />
       )}
