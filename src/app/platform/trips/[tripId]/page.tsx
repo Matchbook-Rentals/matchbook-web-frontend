@@ -79,7 +79,7 @@ const TripsPage: React.FC = () => {
     window.history.pushState({}, '', currentUrl.toString());
   };
 
-  const tabTriggerTextStyles = 'text-[9px] px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
+  const tabTriggerTextStyles = 'text-[9px] px-0 md:px-4 pb-1 font-medium sm:text-[15px] md:text-[15px] sm:font-normal font-public-sans'
   const tabTriggerStyles = 'pt-1 sm:p-0 '
   const tabs: Tab[] = [
     //{
@@ -183,6 +183,8 @@ const TripsPage: React.FC = () => {
           useUrlParams={false} // Disable internal URL handling as parent manages it
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
+          tabsListClassName='w-full  max-w-[100vw] '
+
         />
       )}
     </div>
