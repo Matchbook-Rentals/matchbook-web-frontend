@@ -237,7 +237,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       className="w-11 h-11 rounded-full mr-3"
                       alt={displayName}
                     />
-                    {hasUnreadMessages(conv) && (
+                    {/* Use the isUnread prop for the indicator */}
+                    {conv.isUnread && (
                       <div className="absolute top-0 right-2 w-3 h-3 bg-blue-500 rounded-full"></div>
                     )}
                   </div>

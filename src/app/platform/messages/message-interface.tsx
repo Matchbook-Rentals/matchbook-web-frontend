@@ -838,8 +838,16 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   // Early return if user is not available
   if (!user) return null;
+ 
+  // Filter conversations first by role
+  const roleFilteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
+  
+  // Augment conversations with isUnread status before passing down
+  const conversationsWithUnreadStatus = roleFilteredConversations.map(conv => ({
+    ...conv,
+    isUnread: conversationHasUnreadMessages(conv, user.id)
+  }));
 
-  const filteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
   const selectedConversation = allConversations.find((c) => c.id === selectedConversationId) || null;
   const messages = selectedConversation ? [...selectedConversation.messages] : [];
   const isOtherUserTyping =
@@ -853,7 +861,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           className={`md:block h-[calc(100vh-65px)] bg-background ${isMobile ? 'absolute inset-0 transition-transform duration-300' : 'static'} ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
-            conversations={filteredConversations}
+            conversations={conversationsWithUnreadStatus} // Pass augmented conversations
             onSelectConversation={handleSelectConversation}
             onCreateConversation={handleCreateConversation}
             user={user}
