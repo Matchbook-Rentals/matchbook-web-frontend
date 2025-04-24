@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, ArrowLeftIcon, X } from 'lucide-react';
+import { PaperclipIcon, ArrowLeftIcon, X, Download } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
@@ -418,13 +418,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             priority
           />
           <Button
-            variant="outline"
+            variant=""
             size="sm"
             className="mt-4" // Add margin top for spacing
             onClick={() => downloadFile(selectedFile.fileUrl, selectedFile.fileName || 'image')}
           >
             <Download size={14} className="mr-2" />
-            Download Image
+            Download
           </Button>
         </div>
       );
@@ -440,6 +440,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
     );
+
   };
 
   const messageContainerClassName = `flex flex-col  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
@@ -448,16 +449,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className={messageContainerClassName}>
       <div className='h-[72px] border-b-2 flex items-center'>
         {selectedConversation ? (
-          <div className="w-full relative flex justify-between test items-center pr-4">
+          <div className="w-full relative flex justify-between items-center pr-4">
             {onBack && (
               <button
                 onClick={handleBackClick}
-                className="md:disabled opacity-0  rounded-full bg-transparent"
+                className="md:hidden  rounded-full bg-transparent"
               >
                 <ArrowLeftIcon size={20} />
               </button>
             )}
-            <div className="flex items-center justify-center w-fit test-green md:justify-start md:pl-[calc(2.5vw+7px)]">
+            <div className="flex items-center justify-center w-fit md:justify-start md:pl-[calc(2.5vw+7px)]">
               <img
                 src={participantInfo.imageUrl}
                 alt={participantInfo.displayName}
