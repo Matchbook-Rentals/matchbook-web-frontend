@@ -271,12 +271,12 @@ export function FilePreview({
         )}
 
         {/* File Info (Icon, Name, Size) - Vertical Stack */}
-        <div className="flex items-center space-x-2 mb-1"> {/* Added mb-1 */}
+        <div className="flex items-center  space-x-2 mb-1"> {/* Added mb-1 */}
           <div className="flex-shrink-0"> {/* Removed pt-1 */}
             <FileIconComponent />
           </div>
           <div className="flex-grow min-w-0">
-            <p className="text-sm font-medium truncate" title={file.fileName}>
+            <p className="text-sm font-medium truncate max-w-[300px]" title={file.fileName}>
               {file.fileName}
             </p>
             {file.fileSize && (
@@ -286,13 +286,13 @@ export function FilePreview({
         </div>
 
         {/* Actions & Error */}
-        <div className="flex flex-col items-start"> {/* Stack actions vertically */}
-          <div className="flex items-center space-x-1">
+        <div className="flex flex-col items-center"> {/* Stack actions vertically */}
+          <div className="flex justify-center items-center ">
             {allowDownload && (
               <Button
-                variant="link" // Use link variant for less visual weight
+                variant="outline" // Use link variant for less visual weight
                 size="sm"
-                className="h-auto p-0 text-xs text-blue-600 hover:underline" // Minimal styling
+                className="  text-xs bg-transparent border-gray-500 hover:bg-transparent hover:text-inherit border  hover:underline" // Minimal styling
                 onClick={handleDownload}
                 disabled={isLoading}
               >
