@@ -470,20 +470,24 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
             </div>
 
-              <Dialog>
-                <DialogTrigger>
-                  <Button>
-                    Show Review
-                  </Button>
+            <Dialog>
+              <DialogTrigger>
+                <Button>
+                  Show Review
+                </Button>
 
-                </DialogTrigger>
-                <DialogContent className='' >
-                  <DialogHeader className='flex justify-center w-full text-center'> <p className='flex justify-center text-lg font-medium'> Reviews for {participantInfo.displayName} </p> </DialogHeader>
-                  <UserRating avatarImgUrl={participantInfo.imageUrl} />
+              </DialogTrigger>
+              <DialogContent  className='' >
+                <DialogHeader className=' pl-[5%] w-full  mx-auto '>
+                  <p className='text-center font-medium text-lg'>
+                  Reviews for {participantInfo.displayName}
+                  </p>
+                </DialogHeader>
+                <UserRating avatarImgUrl={participantInfo.imageUrl} />
 
-                </DialogContent>
+              </DialogContent>
 
-              </Dialog>
+            </Dialog>
           </div>
         ) : (
           <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">

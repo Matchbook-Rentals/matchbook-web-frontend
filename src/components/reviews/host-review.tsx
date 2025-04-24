@@ -151,19 +151,6 @@ export const UserRating = ({ avatarImgUrl }: UserRatingProps): JSX.Element => {
               </div>
             ))}
           </div>
-
-          {/* Additional Review Section (Empty in the screenshot) */}
-          <Separator className="w-full border-t-[1.5px] border-[#b5a39033]" />
-          <div className="flex flex-col items-start gap-3 px-0 py-[18px] relative self-stretch w-full">
-            <div className="relative self-stretch w-full h-9" />
-            <div className="inline-flex items-center gap-2 relative">
-              {Array(5)
-                .fill(0)
-                .map((_, index) => (
-                  <RatingStar key={index} rating={1} size={24} />
-                ))}
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
