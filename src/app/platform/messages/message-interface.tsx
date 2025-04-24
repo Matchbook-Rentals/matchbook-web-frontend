@@ -695,6 +695,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       id: clientId,
       clientId: clientId, // Ensure clientId is explicitly sent to match up response
       timestamp: new Date().toISOString(),
+      type: file?.url ? 'file' : 'message', // Explicitly set type based on file presence
       ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
     };
 
