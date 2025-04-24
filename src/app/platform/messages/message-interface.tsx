@@ -855,7 +855,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const roleFilteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
   
   // Augment conversations with isUnread status before passing down
-  const conversationsWithUnreadStatus = roleFilteredConversations.map(conv => ({
+  const augmentedConversations = roleFilteredConversations.map(conv => ({
     ...conv,
     isUnread: conversationHasUnreadMessages(conv, user.id)
   }));
@@ -873,7 +873,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           className={`md:block h-[calc(100vh-65px)] bg-background ${isMobile ? 'absolute inset-0 transition-transform duration-300' : 'static'} ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
-            conversations={conversationsWithUnreadStatus} // Pass augmented conversations
+            conversations={augmentedConversations} // Pass augmented conversations
             onSelectConversation={handleSelectConversation}
             onCreateConversation={handleCreateConversation}
             user={user}
