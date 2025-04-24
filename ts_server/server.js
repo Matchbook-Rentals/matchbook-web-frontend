@@ -389,10 +389,10 @@ io.on('connection', (socket) => {
   let instanceUserConnections = 0;
   for (const [_, client] of clients.entries()) {
     if (client.userId === userId) {
-      userConnections++;
+      instanceUserConnections++; // Corrected variable name
     }
   }
-  console.log(`User ${userId} already has ${userConnections} active connections`);
+  console.log(`User ${userId} already has ${instanceUserConnections} active connections on this instance.`); // Corrected variable name and log message
   
   // Limit connections per user *on this instance* (prevent instance overload)
   const MAX_INSTANCE_CONNECTIONS_PER_USER = 3; // Adjust as needed
