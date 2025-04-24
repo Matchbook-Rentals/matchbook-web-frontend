@@ -807,7 +807,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       } catch (error) {
         console.error('REST API message delivery failed:', error);
         setAllConversations((prev) =>
-          updateMessageInConversation(prev, selectedConversationId, clientId, { 
+          updateMessageInConversation(prev, selectedConversationId, messageId, { // Use messageId
             failed: true, 
             pending: false,
             deliveryStatus: 'failed'
