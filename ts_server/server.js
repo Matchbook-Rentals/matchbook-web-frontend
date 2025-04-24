@@ -4,16 +4,26 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { createAdapter } = require('@socket.io/redis-adapter');
+const { Redis } = require('ioredis');
 
 // Environment variables with fallbacks
 const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) : 8080;
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD || undefined;
+const REDIS_MESSAGE_TTL_SECONDS = process.env.REDIS_MESSAGE_TTL_SECONDS ? parseInt(process.env.REDIS_MESSAGE_TTL_SECONDS) : (24 * 60 * 60); // 24 hours default TTL for queued messages
 const CLIENT_TIMEOUT_MS = 60000; // 60 seconds
 const PING_INTERVAL_MS = 25000; // 25 seconds
 
 // Log all environment variables at startup for debugging
 console.log('Socket.IO Server Starting');
 console.log('Environment variables:');
-console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || '(not set, using default 8080)');
+console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || `(not set, using default ${PORT})`);
+console.log('REDIS_HOST:', process.env.REDIS_HOST || `(not set, using default ${REDIS_HOST})`);
+console.log('REDIS_PORT:', process.env.REDIS_PORT || `(not set, using default ${REDIS_PORT})`);
+console.log('REDIS_PASSWORD:', process.env.REDIS_PASSWORD ? '(set)' : '(not set)');
+console.log('REDIS_MESSAGE_TTL_SECONDS:', process.env.REDIS_MESSAGE_TTL_SECONDS || `(not set, using default ${REDIS_MESSAGE_TTL_SECONDS})`);
 console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
 console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set)');
 
@@ -50,7 +60,31 @@ const io = new Server(server, {
   }
 });
 
-// Map to store all connected clients
+// Setup Redis clients for adapter and general use
+const redisOptions = {
+  host: REDIS_HOST,
+  port: REDIS_PORT,
+  password: REDIS_PASSWORD,
+  // Add retry strategy for robustness
+  retryStrategy: times => Math.min(times * 50, 2000) // Exponential backoff up to 2s
+};
+
+const pubClient = new Redis(redisOptions);
+const subClient = pubClient.duplicate(); // Duplicate connection for pub/sub
+const redisClient = pubClient.duplicate(); // Duplicate connection for general commands (queuing)
+
+// Handle Redis connection errors
+pubClient.on('error', (err) => console.error('Redis Pub Client Error:', err));
+subClient.on('error', (err) => console.error('Redis Sub Client Error:', err));
+redisClient.on('error', (err) => console.error('Redis General Client Error:', err));
+
+// Create Redis adapter
+const redisAdapter = createAdapter(pubClient, subClient);
+
+// Attach Redis adapter to Socket.IO server
+io.adapter(redisAdapter);
+
+// Map to store connected clients *on this instance*
 const clients = new Map();
 
 // Statistics for monitoring
@@ -60,45 +94,6 @@ let messagesReceived = 0;
 
 /**
  * Sends a message to a specific client
- * @param {string} clientId The ID of the client to send to
- * @param {object} message The message to send
- * @returns {boolean} true if message was sent, false otherwise
- */
-function sendToClient(clientId, message) {
-  const client = clients.get(clientId);
-  if (!client || client.closed) {
-    console.log(`Cannot send to client ${clientId} - not connected or closed`);
-    return false;
-  }
-
-  try {
-    client.send(JSON.stringify(message));
-    messagesSent++;
-    return true;
-  } catch (err) {
-    console.error(`Error sending message to client ${clientId}:`, err);
-    return false;
-  }
-}
-
-/**
- * Sends a message to all clients except the sender
- * @param {object} message The message to broadcast
- * @param {string} senderId The ID of the sender to exclude
- */
-function broadcast(message, senderId) {
-  clients.forEach((client, id) => {
-    if (id !== senderId && !client.closed) {
-      try {
-        client.send(JSON.stringify(message));
-        messagesSent++;
-      } catch (err) {
-        console.error(`Error broadcasting to client ${id}:`, err);
-      }
-    }
-  });
-}
-
 /**
  * Creates a new client instance
  * @param {string} id Client ID
@@ -130,10 +125,12 @@ function createClient(id, userId, socket) {
         }
         
         console.log(`Socket.IO emitting message to client ${id}:`, messageObj);
+        // Use io.to for user-specific emits if targeting all sockets of a user
+        // Use socket.emit for instance-specific emits
         socket.emit('message', messageObj);
         messagesSent++;
       } catch (err) {
-        console.error(`Error sending to client ${id}:`, err);
+        console.error(`Error sending to client ${id} via socket.emit:`, err);
       }
     }
   };
@@ -198,37 +195,31 @@ async function persistMessage(message) {
 
 /**
  * Handles direct messages between users
- * @param {object} message The message to process
+ * @param {object} message The message to process (includes senderId, receiverId, etc.)
  * @returns {object} Delivery result information
  */
 async function handleDirectMessage(message) {
   if (!message.receiverId) {
-    console.error('Missing receiverId in direct message');
+    console.error('Missing receiverId in direct message:', message);
     return { delivered: false, reason: 'missing_receiver_id' };
   }
-
-  // Find all client connections for this receiver
-  const receiversConnections = Array.from(clients.entries())
-    .filter(([_, client]) => client.userId === message.receiverId)
-    .map(([id, client]) => ({ id, client }));
-
-  if (receiversConnections.length === 0) {
-    console.log(`No connected clients for receiverId ${message.receiverId}`);
-  } else {
-    console.log(`Found ${receiversConnections.length} connections for receiverId ${message.receiverId}`);
+  if (!message.senderId) {
+    console.error('Missing senderId in direct message:', message);
+    return { delivered: false, reason: 'missing_sender_id' };
   }
 
-  // For regular messages (not typing or read receipts), persist to database first
+  // Persist message first (for message/file types)
   let savedMessage = null;
   let persistError = null;
   
   // Track delivery metrics
   const deliveryResult = {
-    messageId: message.id, // Use the client-provided ID
-    delivered: false,
+    messageId: message.id, // Use the client-provided ID or generated one
+    delivered: false, // Indicates if sent to *any* socket or queued
+    queued: false, // Indicates if message was queued for offline delivery
     persistSuccess: false,
-    deliveryAttempts: receiversConnections.length,
-    deliverySuccesses: 0,
+    deliveryAttempts: 0, // Will be based on adapter info or 1 (for queueing)
+    deliverySuccesses: 0, // Based on adapter info if online
     timestamp: Date.now()
   };
   
@@ -240,47 +231,20 @@ async function handleDirectMessage(message) {
       if (savedMessage) {
         deliveryResult.persistSuccess = true;
         
-        // If successfully saved, send a delivery confirmation back to the sender
+        // If successfully saved, send a delivery confirmation back to *all* sender's connected sockets
         // Use the original message ID provided by the client
         if (message.id && savedMessage && message.id === savedMessage.id) {
-          message.deliveryStatus = 'delivered'; // Update status for receiver delivery
-          
-          // Send a delivery confirmation to the sender
-          const senderConnections = Array.from(clients.entries())
-            .filter(([_, client]) => client.userId === message.senderId)
-            .map(([id, client]) => ({ id, client }));
-          
-          // Use Promise.allSettled to send to all sender connections in parallel
-          const senderDeliveryPromises = senderConnections.map(({ id, client }) => {
-            return new Promise(resolve => {
-              try {
-                // Create a delivery confirmation message using the original ID
-                const deliveryConfirmation = {
-                  ...message, // Include original message data
-                  type: 'message', // Ensure type is set
-                  deliveryStatus: 'delivered', // Confirm delivery
-                  id: message.id, // Use the original client-provided ID
-                  confirmedDeliveryAt: new Date().toISOString() // Add confirmation timestamp
-                };
-                
-                const success = sendToClient(id, deliveryConfirmation);
-                resolve({ id, success });
-              } catch (err) {
-                console.error(`Error sending delivery confirmation to sender ${id}:`, err);
-                resolve({ id, success: false, error: err.message });
-              }
-            });
-          });
-          
-          // Wait for all sender confirmation attempts
-          const senderResults = await Promise.allSettled(senderDeliveryPromises);
-          deliveryResult.senderNotifications = senderResults.map(result => {
-            if (result.status === 'fulfilled') {
-              return result.value;
-            } else {
-              return { success: false, error: result.reason?.message || 'Unknown error' };
-            }
-          });
+          // Create a delivery confirmation message using the original ID
+          const deliveryConfirmation = {
+            ...message, // Include original message data
+            type: 'message', // Ensure type is set
+            deliveryStatus: 'delivered', // Confirm delivery (server received and persisted)
+            id: message.id, // Use the original client-provided ID
+            confirmedDeliveryAt: new Date().toISOString() // Add confirmation timestamp
+          };
+          // Emit to the room identified by the sender's userId
+          io.to(message.senderId).emit('message', deliveryConfirmation);
+          console.log(`Sent delivery confirmation for message ${message.id} to sender ${message.senderId}`);
         }
       } else {
         // Persistence might have failed or returned null
@@ -297,63 +261,56 @@ async function handleDirectMessage(message) {
   } else {
     // Non-message types (typing, read receipts) don't need persistence
     deliveryResult.persistSuccess = true;
-    deliveryResult.persistRequired = false;
+    deliveryResult.persistRequired = false; // Indicate persistence wasn't needed for this type
   }
 
-  // For ephemeral messages (typing, read receipts) or successfully persisted messages,
-  // attempt delivery to all receiver clients
-  if (message.type !== 'message' || persistError === null) {
-    // Send to all client connections of this user in parallel
-    const deliveryPromises = receiversConnections.map(({ id, client }) => {
-      return new Promise(resolve => {
-        try {
-          // Log the actual message being sent
-          console.log(`Sending message to client ${id} (userId: ${client.userId}):`, message);
-          
-          // Send the message with retry logic for important messages
-          let success = sendToClient(id, message);
-          
-          // For important messages (not typing), retry once on failure
-          if (!success && message.type !== 'typing') {
-            console.log(`Retrying delivery to client ${id}...`);
-            success = sendToClient(id, message);
-          }
-          
-          deliveryResult.deliverySuccesses += success ? 1 : 0;
-          if (!success) {
-            console.log(`Message delivery to client ${id}: FAILED`);
-          }
-          
-          resolve({ id, success });
-        } catch (err) {
-          console.error(`Error delivering message to client ${id}:`, err);
-          resolve({ id, success: false, error: err.message });
-        }
-      });
-    });
-    
-    // Wait for all delivery attempts to complete
-    const deliveryResults = await Promise.allSettled(deliveryPromises);
-    deliveryResult.clientResults = deliveryResults.map(result => {
-      if (result.status === 'fulfilled') {
-        return result.value;
-      } else {
-        return { success: false, error: result.reason?.message || 'Unknown error' };
-      }
-    });
-    
-    // Set overall delivery success flag
-    deliveryResult.delivered = deliveryResult.deliverySuccesses > 0;
-    // Log detailed delivery status only on failure
-    if (receiversConnections.length > 0 && !deliveryResult.delivered) {
-      console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
-    } else {
-      deliveryResult.noReceiversConnected = true;
-    }
-  } else {
-    // Persistence failed for a regular message
+  // If persistence failed for a message/file type, stop here
+  if ((message.type === 'message' || message.type === 'file') && !deliveryResult.persistSuccess) {
+    console.error(`Cannot deliver message ${message.id} due to persistence failure.`);
     deliveryResult.delivered = false;
     deliveryResult.failureReason = 'persistence_failed';
+    return deliveryResult;
+  }
+
+  // Check if receiver is online using Redis adapter
+  const receiverSockets = await io.in(message.receiverId).allSockets();
+  const isReceiverOnline = receiverSockets.size > 0;
+
+  deliveryResult.deliveryAttempts = isReceiverOnline ? receiverSockets.size : 1; // 1 attempt if queuing
+
+  if (isReceiverOnline) {
+    // Receiver is online, emit message to their room (adapter handles distribution)
+    console.log(`Receiver ${message.receiverId} is online (${receiverSockets.size} sockets). Emitting message ${message.id} via adapter.`);
+    io.to(message.receiverId).emit(message.type, message); // Emit using the message type as event name
+    deliveryResult.delivered = true;
+    deliveryResult.deliverySuccesses = receiverSockets.size; // Assume adapter delivers to all
+  } else {
+    // Receiver is offline, queue the message in Redis (only for message/file types)
+    if (message.type === 'message' || message.type === 'file') {
+      const queueKey = `user:${message.receiverId}:messages`;
+      try {
+        console.log(`Receiver ${message.receiverId} is offline. Queuing message ${message.id} in Redis.`);
+        // LPUSH the message and set TTL on the list
+        const multi = redisClient.multi();
+        multi.lpush(queueKey, JSON.stringify(message));
+        multi.expire(queueKey, REDIS_MESSAGE_TTL_SECONDS);
+        await multi.exec();
+
+        deliveryResult.delivered = true; // Considered delivered because it's queued
+        deliveryResult.queued = true;
+        deliveryResult.deliverySuccesses = 1; // Represents successful queuing
+      } catch (err) {
+        console.error(`Failed to queue message ${message.id} for user ${message.receiverId} in Redis:`, err);
+        deliveryResult.delivered = false;
+        deliveryResult.failureReason = 'redis_queue_failed';
+        deliveryResult.error = err.message;
+      }
+    } else {
+      // Don't queue ephemeral messages like typing or read receipts if user is offline
+      console.log(`Receiver ${message.receiverId} is offline. Discarding ephemeral message type: ${message.type}`);
+      deliveryResult.delivered = false;
+      deliveryResult.failureReason = 'recipient_offline_ephemeral';
+    }
   }
   
   return deliveryResult;
@@ -424,9 +381,12 @@ io.on('connection', (socket) => {
   }
   
   console.log(`Parsed userId from connection: ${userId}`);
+
+  // Join the user-specific room for targeted emits
+  socket.join(userId);
   
-  // Check if user already has connections
-  let userConnections = 0;
+  // Check if user already has connections *on this instance*
+  let instanceUserConnections = 0;
   for (const [_, client] of clients.entries()) {
     if (client.userId === userId) {
       userConnections++;
@@ -434,10 +394,10 @@ io.on('connection', (socket) => {
   }
   console.log(`User ${userId} already has ${userConnections} active connections`);
   
-  // Limit connections per user (prevent connection leaks)
-  const MAX_CONNECTIONS_PER_USER = 3;
-  if (userConnections >= MAX_CONNECTIONS_PER_USER) {
-    console.warn(`Too many connections for user ${userId} (${userConnections}). Closing oldest connections.`);
+  // Limit connections per user *on this instance* (prevent instance overload)
+  const MAX_INSTANCE_CONNECTIONS_PER_USER = 3; // Adjust as needed
+  if (instanceUserConnections >= MAX_INSTANCE_CONNECTIONS_PER_USER) {
+    console.warn(`Too many connections for user ${userId} (${instanceUserConnections}) on this instance. Closing oldest connections on this instance.`);
     
     // Find connections for this user and sort by creation time
     const userConnectionList = [...clients.entries()]
@@ -448,10 +408,10 @@ io.on('connection', (socket) => {
         return Number(idA) - Number(idB); // Sort ascending (oldest first)
       });
     
-    // Close all but the most recent connections
-    const connectionsToClose = userConnectionList.slice(0, userConnectionList.length - (MAX_CONNECTIONS_PER_USER - 1));
+    // Close all but the most recent connections *on this instance*
+    const connectionsToClose = userConnectionList.slice(0, userConnectionList.length - (MAX_INSTANCE_CONNECTIONS_PER_USER - 1));
     connectionsToClose.forEach(([clientId]) => {
-      closeClient(clientId, 'Too many connections for this user');
+      closeClient(clientId, 'Too many connections for this user on this instance');
     });
   }
 
@@ -491,7 +451,36 @@ io.on('connection', (socket) => {
       supportedFeatures: ['message_ack', 'heartbeat', 'typing_indicator', 'read_receipts']
     }
   };
-  client.send(connectionMessage);
+  client.send(connectionMessage); // Send connection confirmation to this specific socket
+
+  // --- Check for and send queued messages ---
+  const queueKey = `user:${userId}:messages`;
+  try {
+    // Retrieve all messages from the list
+    const queuedMessages = await redisClient.lrange(queueKey, 0, -1);
+
+    if (queuedMessages && queuedMessages.length > 0) {
+      console.log(`Found ${queuedMessages.length} queued messages for user ${userId}. Sending...`);
+      // Send messages one by one to the specific socket
+      for (const msgString of queuedMessages) {
+        try {
+          const parsedMessage = JSON.parse(msgString);
+          // Emit using the original message type
+          socket.emit(parsedMessage.type || 'message', parsedMessage);
+          messagesSent++; // Increment stats
+        } catch (parseError) {
+          console.error(`Error parsing queued message for user ${userId}:`, parseError, msgString);
+        }
+      }
+      // Clear the queue after attempting to send all messages
+      await redisClient.del(queueKey);
+      console.log(`Cleared message queue ${queueKey}`);
+    }
+  } catch (redisError) {
+    console.error(`Error retrieving queued messages for user ${userId} from Redis:`, redisError);
+  }
+  // --- End queued message handling ---
+
 
   // Handle message events with acknowledgments
   socket.on('message', async (message, callback) => {
@@ -549,15 +538,14 @@ io.on('connection', (socket) => {
     // Track message with a unique ID if not present
     const messageId = message.id || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     message.id = messageId;
-    
     try {
-      // Handle direct messages between users
+      // Handle direct messages (includes queuing logic if offline)
       if (message.receiverId) {
-        console.log(`Routing message to ${message.receiverId}:`, message);
+        console.log(`Processing direct message from ${userId} to ${message.receiverId}:`, message);
         const deliveryResult = await handleDirectMessage(message);
-        
-        // Update message delivery status
-        if (deliveryResult && deliveryResult.delivered) {
+
+        // Update metrics based on delivery result
+        if (deliveryResult && (deliveryResult.delivered || deliveryResult.queued)) {
           connectionMetrics.messagesSuccessfullySent++;
         } else {
           console.warn(`Message ${messageId} delivery failed or partial`);
@@ -572,79 +560,58 @@ io.on('connection', (socket) => {
     }
   });
   
-  // Handle typing events
+  // Handle typing events (emit via adapter, no queuing)
   socket.on('typing', (message) => {
     messagesReceived++;
-    
-    // Enhanced typing event logging
+    connectionMetrics.messagesReceived++;
+    connectionMetrics.lastActivity = Date.now();
+
     console.log(`[TYPING RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
     console.log(`Typing event details:`, message);
-    
-    // Ensure message is properly structured
-    if (!message) {
-      console.error('Received empty typing event');
+
+    if (!message || !message.receiverId) {
+      console.warn('Invalid typing event received (missing data or receiverId):', message);
       return;
     }
-    
+
+    // Add sender/type if missing and normalize timestamp
     message.type = 'typing';
     message.senderId = message.senderId || userId;
-    
-    // Ensure timestamp is ISO string format
-    if (!message.timestamp) {
-      message.timestamp = new Date().toISOString();
-    } else if (message.timestamp instanceof Date) {
-      message.timestamp = message.timestamp.toISOString();
-    } else if (typeof message.timestamp === 'number') {
-      message.timestamp = new Date(message.timestamp).toISOString();
-    }
-    
-    console.log(`Received typing from user ${userId} (client ${clientId}) to ${message.receiverId}`);
-    
-    if (message.receiverId) {
-      handleDirectMessage(message);
-    } else {
-      console.warn(`Typing event missing receiverId - cannot route`);
-    }
-  });
-  
-  // Handle read receipt events
-  socket.on('read_receipt', (message) => {
-    messagesReceived++;
-    
-    // Enhanced read receipt logging
-    console.log(`[READ_RECEIPT RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
-    console.log(`Read receipt details:`, message);
-    
-    // Ensure message is properly structured
-    if (!message) {
-      console.error('Received empty read receipt event');
-      return;
-    }
-    
-    message.type = 'read_receipt';
-    message.senderId = message.senderId || userId;
-    
-    // Ensure timestamp is ISO string format
-    if (!message.timestamp) {
-      message.timestamp = new Date().toISOString();
-    } else if (message.timestamp instanceof Date) {
-      message.timestamp = message.timestamp.toISOString();
-    } else if (typeof message.timestamp === 'number') {
-      message.timestamp = new Date(message.timestamp).toISOString();
-    }
-    
-    console.log(`Received read receipt from user ${userId} (client ${clientId}) for recipient ${message.receiverId}`);
-    
-    if (message.receiverId) {
-      handleDirectMessage(message);
-    } else {
-      console.warn(`Read receipt missing receiverId - cannot route`);
-    }
+    message.timestamp = message.timestamp ? new Date(message.timestamp).toISOString() : new Date().toISOString();
+
+    // Emit directly to the recipient's room via adapter
+    io.to(message.receiverId).emit('typing', message);
+    console.log(`Emitted typing event from ${userId} to ${message.receiverId}`);
   });
 
-  // Handle disconnection
+  // Handle read receipt events (emit via adapter, no queuing)
+  socket.on('read_receipt', (message) => {
+    messagesReceived++;
+    connectionMetrics.messagesReceived++;
+    connectionMetrics.lastActivity = Date.now();
+
+    console.log(`[READ_RECEIPT RECEIVED] Socket ID: ${socket.id}, User: ${userId}, Client: ${clientId}, Time: ${new Date().toISOString()}`);
+    console.log(`Read receipt details:`, message);
+
+    if (!message || !message.receiverId || !message.messageIds || !message.timestamp) {
+       console.warn('Invalid read receipt received (missing data):', message);
+       return;
+    }
+
+    // Add sender/type if missing and normalize timestamp
+    message.type = 'read_receipt';
+    message.senderId = message.senderId || userId;
+    message.timestamp = new Date(message.timestamp).toISOString(); // Ensure ISO string
+
+    // Emit directly to the recipient's room via adapter
+    io.to(message.receiverId).emit('read_receipt', message);
+    console.log(`Emitted read receipt from ${userId} to ${message.receiverId}`);
+  });
+
+  // Handle disconnection - leave the user room
   socket.on('disconnect', (reason) => {
     console.log(`Client ${clientId} disconnected: ${reason}. Removing from clients list.`);
+    // socket.leave(userId); // Socket.IO automatically handles room cleanup on disconnect
     closeClient(clientId, `Socket disconnected: ${reason}`);
   });
 
@@ -720,32 +687,52 @@ server.listen(PORT, () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-function shutdown() {
+async function shutdown() { // Make shutdown async
   console.log('Shutting down WebSocket server...');
-  
-  // Notify all clients
-  io.emit('disconnect', { reason: 'server_shutdown' });
-  
-  clients.forEach((client) => {
+
+  // Notify all clients via adapter
+  io.emit('server_shutdown', { message: 'Server is shutting down' });
+
+  // Close client connections managed by this instance
+  clients.forEach((client, clientId) => {
     try {
-      client.send({
+      // Send a final message if possible
+      client.socket.emit('connection', {
         type: 'connection',
-        status: 'server_shutdown'
+        status: 'server_shutdown',
+        reason: 'Server is shutting down gracefully.'
       });
+      // Disconnect the socket
+      client.socket.disconnect(true);
     } catch (err) {
-      console.error(`Error sending shutdown notice to client ${client.id}:`, err);
+      console.error(`Error during shutdown for client ${clientId}:`, err);
     }
   });
-  
-  // Close server
-  server.close(() => {
-    console.log('WebSocket server closed');
-    process.exit(0);
+
+  // Close Redis connections
+  try {
+    await redisClient.quit();
+    await pubClient.quit();
+    await subClient.quit();
+    console.log('Redis connections closed.');
+  } catch (err) {
+    console.error('Error closing Redis connections:', err);
+  }
+
+  // Close the HTTP server
+  server.close((err) => {
+    if (err) {
+      console.error('Error closing HTTP server:', err);
+      process.exit(1); // Exit with error code
+    } else {
+      console.log('WebSocket server closed gracefully.');
+      process.exit(0); // Exit successfully
+    }
   });
-  
-  // Force close after timeout
+
+  // Force close after a timeout if graceful shutdown fails
   setTimeout(() => {
-    console.error('Forced shutdown after timeout');
+    console.error('Graceful shutdown timed out. Forcing exit.');
     process.exit(1);
-  }, 5000);
+  }, 10000); // Increased timeout to 10 seconds
 }
