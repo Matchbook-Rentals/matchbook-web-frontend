@@ -333,7 +333,7 @@ io.of('/').on('heartbeat', (socket, data, callback) => {
 /**
  * Handle Socket.IO connection
  */
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => { // Add async keyword here
   console.log(`New Socket.IO connection: ${socket.id}`);
   console.log('Connection handshake:', socket.handshake.query);
   console.log('Transport used:', socket.conn.transport.name);
