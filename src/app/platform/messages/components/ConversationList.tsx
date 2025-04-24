@@ -280,7 +280,21 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       </span>
                     </div>
                     <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
-                      {lastMessage ? (lastMessage.content?.length > 50 ? `${lastMessage.content.substring(0, 20)}...` : lastMessage.content) : 'Start a conversation'}
+                      {lastMessage ? (
+                        lastMessage.content ? (
+                          // Display content if available
+                          lastMessage.content
+                        ) : lastMessage.fileName ? (
+                          // Display filename in italics if content is empty but filename exists
+                          <i>{lastMessage.fileName}</i>
+                        ) : (
+                          // Fallback if content and filename are missing
+                          'Attachment'
+                        )
+                      ) : (
+                        // No last message
+                        'Start a conversation'
+                      )}
                     </span>
                     <span className="text-xs text-gray-600 truncate">
                       {conv.listingId ? (`${conv.listing?.title || "Cozy Downtown Apartment"}`) : "Property Discussion"}
