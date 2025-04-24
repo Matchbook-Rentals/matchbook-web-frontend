@@ -312,18 +312,18 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         if (isLastUserMessage) {
           // If the message has been read
           if (message.isRead) {
-            const readTime = message.updatedAt ? 
+            const readTime = message.updatedAt ?
               new Date(message.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
             return <span className="text-xs text-gray-400">{`Read ${readTime}`}</span>;
           }
-          
+
           // If the message has a delivery status from the server
           if (message.deliveryStatus === 'delivered') {
-            const deliveredTime = message.deliveredAt ? 
+            const deliveredTime = message.deliveredAt ?
               new Date(message.deliveredAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
             return <span className="text-xs text-gray-400">{deliveredTime ? `Delivered ${deliveredTime}` : "Delivered"}</span>;
           }
-          
+
           // Default status for sent messages
           return <span className="text-xs text-gray-400">Sent</span>;
         }
@@ -437,16 +437,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     <div className={messageContainerClassName}>
       <div className='h-[72px] border-b-2 flex items-center'>
         {selectedConversation ? (
-          <div className="w-full relative flex items-center pr-4">
+          <div className="w-full relative flex justify-between test items-center pr-4">
             {onBack && (
               <button
                 onClick={handleBackClick}
-                className="absolute left-4 md:hidden flex items-center justify-center rounded-full bg-transparent"
+                className="md:disabled opacity-0  rounded-full bg-transparent"
               >
                 <ArrowLeftIcon size={20} />
               </button>
             )}
-            <div className="flex items-center justify-center w-full md:justify-start md:pl-[calc(2.5vw+7px)]">
+            <div className="flex items-center justify-center w-fit test-green md:justify-start md:pl-[calc(2.5vw+7px)]">
               <img
                 src={participantInfo.imageUrl}
                 alt={participantInfo.displayName}
@@ -454,22 +454,24 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               />
               <div className="flex justify-between w-full gap-4">
                 <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>
-                <Dialog>
-                  <DialogTrigger>
-                    <Button>
-                      Show Review
-                    </Button>
-
-                  </DialogTrigger>
-                  <DialogContent className='' >
-                    <DialogHeader className='flex justify-center w-full text-center'> <p className='flex justify-center text-lg font-medium'> Reviews for {participantInfo.displayName} </p> </DialogHeader>
-                    <UserRating avatarImgUrl={participantInfo.imageUrl} />
-
-                  </DialogContent>
-
-                </Dialog>
               </div>
+
             </div>
+
+              <Dialog>
+                <DialogTrigger>
+                  <Button>
+                    Show Review
+                  </Button>
+
+                </DialogTrigger>
+                <DialogContent className='' >
+                  <DialogHeader className='flex justify-center w-full text-center'> <p className='flex justify-center text-lg font-medium'> Reviews for {participantInfo.displayName} </p> </DialogHeader>
+                  <UserRating avatarImgUrl={participantInfo.imageUrl} />
+
+                </DialogContent>
+
+              </Dialog>
           </div>
         ) : (
           <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
