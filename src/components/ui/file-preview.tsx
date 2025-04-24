@@ -183,31 +183,30 @@ export function FilePreview({
     }
   };
 
-  return (
-    <Card
-      className={`relative overflow-hidden ${cardSizeClasses[previewSize]} ${className} ${onClick ? 'cursor-pointer' : ''}`}
-      onClick={onClick}
-    >
-      {/* X icon to delete attachment */}
-      {showRemove && onRemove && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent card click when removing
-            onRemove();
-          }}
-        >
-          <X size={14} />
-        </Button>
-      )}
 
-      {/* Conditional layout based on file type */}
-      {isImage ? (
-        // Layout for Image Files
+  if (isImage) {
+    // Render Card-based layout for Image Files
+    return (
+      <Card
+        className={`relative overflow-hidden ${cardSizeClasses[previewSize]} ${className} ${onClick ? 'cursor-pointer' : ''}`}
+        onClick={onClick}
+      >
+        {/* X icon for images */}
+        {showRemove && onRemove && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent card click when removing
+              onRemove();
+            }}
+          >
+            <X size={14} />
+          </Button>
+        )}
+        {/* Image Content */}
         <div className="flex flex-row-reverse items-center justify-between h-full p-2">
-          {/* Image Preview */}
           <div className="relative w-2/3 h-full flex items-center justify-center">
             <Image
               src={fileUrl}
@@ -246,48 +245,69 @@ export function FilePreview({
             )}
           </div>
         </div>
-      ) : (
-        // Layout for Non-Image Files
-        <div className={`flex flex-col justify-between h-fit  ${nonImageContainerPadding}`}>
-          {/* File Info (Icon, Name, Size) */}
-          <div className="flex items-center space-x-2">
-            <div className="flex-shrink-0 pt-1">
-              <FileIconComponent />
-            </div>
-            <div className="flex-grow min-w-0"> {/* Ensure text truncates */}
-              <p className="text-sm font-medium truncate" title={file.fileName}>
-                {file.fileName}
-              </p>
-              {file.fileSize && (
-                <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
-              )}
-            </div>
-          </div>
+      </Card>
+    );
+  } else {
+    // Render Div-based layout for Non-Image Files
+    return (
+      <div
+        className={`relative flex flex-col w-fit ${className} ${onClick ? 'cursor-pointer' : ''}`} // Use w-fit, remove bg/border/shadow from Card
+        onClick={onClick}
+      >
+        {/* X icon for non-images */}
+        {showRemove && onRemove && (
+          <Button
+            variant="ghost"
+            size="icon"
+            // Adjust positioning if needed for non-card layout
+            className="absolute top-0 right-0 z-10 w-5 h-5 text-muted-foreground hover:text-destructive"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent div click when removing
+              onRemove();
+            }}
+          >
+            <X size={14} />
+          </Button>
+        )}
 
-          {/* Actions & Error */}
-          <div className="mt-2">
-            <div className="flex items-center space-x-1">
-              {allowDownload && (
-                <Button
-                  variant="outline" // Changed variant for better visibility
-                  size="sm"        // Adjusted size
-                  className="h-8"   // Consistent height
-                  onClick={handleDownload}
-                  disabled={isLoading}
-                >
-                  <Download size={14} className="mr-1" /> Download
-                </Button>
-              )}
-              {/* Add Preview button for non-images if needed */}
-            </div>
-            {error && (
-              <p className="text-xs text-red-500 mt-1">{error}</p>
+        {/* File Info (Icon, Name, Size) - Vertical Stack */}
+        <div className="flex items-center space-x-2 mb-1"> {/* Added mb-1 */}
+          <div className="flex-shrink-0"> {/* Removed pt-1 */}
+            <FileIconComponent />
+          </div>
+          <div className="flex-grow min-w-0">
+            <p className="text-sm font-medium truncate" title={file.fileName}>
+              {file.fileName}
+            </p>
+            {file.fileSize && (
+              <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
             )}
           </div>
         </div>
-      )}
-    </Card>
-  );
+
+        {/* Actions & Error */}
+        <div className="flex flex-col items-start"> {/* Stack actions vertically */}
+          <div className="flex items-center space-x-1">
+            {allowDownload && (
+              <Button
+                variant="link" // Use link variant for less visual weight
+                size="sm"
+                className="h-auto p-0 text-xs text-blue-600 hover:underline" // Minimal styling
+                onClick={handleDownload}
+                disabled={isLoading}
+              >
+                <Download size={12} className="mr-1" /> Download
+              </Button>
+            )}
+            {/* Add Preview button if needed, styled similarly */}
+          </div>
+          {error && (
+            <p className="text-xs text-red-500 mt-1">{error}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
 }
 
 interface FileListProps {
