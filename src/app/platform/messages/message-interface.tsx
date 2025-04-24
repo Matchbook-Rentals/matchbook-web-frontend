@@ -224,7 +224,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
     
-    if (message.type === 'message') {
+    // Handle both regular messages and file messages
+    if (message.type === 'message' || message.type === 'file') { 
       // Get the active conversation
       const activeConvo = allConversations.find(c => c.id === selectedConversationId);
       
