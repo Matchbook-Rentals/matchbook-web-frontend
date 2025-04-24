@@ -233,7 +233,8 @@ async function handleDirectMessage(message) {
     timestamp: Date.now()
   };
   
-  if (message.type === 'message') {
+  // Persist both regular messages and file messages
+  if (message.type === 'message' || message.type === 'file') { 
     try {
       savedMessage = await persistMessage(message);
       
