@@ -273,6 +273,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       if (isFromActiveConvoOtherParticipant) {
         // Update message status and timestamp directly
         message.deliveryStatus = 'read';
+        message.isRead = true;
         message.updatedAt = new Date().toISOString();
         
         // Send read receipt via socket

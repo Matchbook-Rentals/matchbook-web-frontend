@@ -30,6 +30,7 @@ interface ConversationParticipant {
 interface ExtendedConversation extends Conversation {
   messages: any[];
   participants: ConversationParticipant[];
+  isUnread: boolean;
   listing?: {
     id: string;
     title: string;
