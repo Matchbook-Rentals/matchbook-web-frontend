@@ -104,6 +104,30 @@ Use the `-f` flag to specify the path to the `docker-compose.yml` file.
 
 *If neither `docker compose` nor `docker-compose` works, you may need to install Docker Compose V2 (plugin) or the standalone `docker-compose`. See the [Docker Compose installation guide](https://docs.docker.com/compose/install/).*
 
-## Connecting from your Application
+## Connecting from your Application (Local Development)
 
-Your WebSocket server (or any other application) should connect to Redis using the host `localhost` (or `127.0.0.1`) and the exposed port (default `6379`, or the value of `REDIS_PORT` if set). If you set a password, ensure your application provides it during connection.
+When running locally using this Docker Compose setup, your WebSocket server (or any other application) should connect to Redis using:
+-   **Host:** `localhost` (or `127.0.0.1`)
+-   **Port:** The exposed port (default `6379`, or the value of `REDIS_PORT` if set in your environment before running `docker compose up`).
+-   **Password:** Leave empty unless you have uncommented and configured the `REDIS_PASSWORD` environment variable in `docker-compose.yml` (e.g., via a `.env` file).
+
+Set these values in your application's environment variables (e.g., in a root `.env` file):
+```dotenv
+# Example for local .env
+REDIS_HOST=localhost
+REDIS_PORT=6379
+# REDIS_PASSWORD=your_password (only if you set one in docker-compose.yml)
+```
+
+## Deployment (e.g., on Render)
+
+This Docker Compose setup is intended for **local development**. For deploying to production platforms like Render, Vercel, Fly.io, etc., it is **highly recommended** to use their **managed Redis services**.
+
+**Example using Render:**
+
+1.  **Create a Managed Redis Instance:** In your Render dashboard, create a new "Redis" service. Configure the plan, region, and version.
+2.  **Get Connection Details:** Render will provide connection details (Host, Port, Password) for your managed Redis instance.
+3.  **Configure Application Environment:** In your WebSocket server's service settings on Render, go to the "Environment" section and set the `REDIS_HOST`, `REDIS_PORT`, and `REDIS_PASSWORD` environment variables using the values provided by Render for your managed Redis instance.
+4.  **Deploy:** Redeploy your WebSocket server application on Render. It will automatically connect to the managed Redis instance using the environment variables.
+
+Using a managed service simplifies deployment, maintenance, scaling, and backups compared to managing your own Redis container in production.
