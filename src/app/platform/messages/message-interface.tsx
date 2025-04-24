@@ -671,9 +671,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (userRole === 'Host') setUnreadHostMessages(0);
     else if (userRole === 'Tenant') setUnreadTenantMessages(0);
 
-    // Find unread messages from the other participant
+    // Find unread messages from the other participant based on deliveryStatus
     const unreadMessages = conv.messages.filter(m => 
-      m.senderId !== user.id && !m.isRead
+      m.senderId !== user.id && m.deliveryStatus !== 'read' 
     );
      
     if (unreadMessages.length > 0) {
