@@ -101,10 +101,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
     // If showUnreadOnly is true, filter for conversations with unread messages
     if (showUnreadOnly) {
-      // Use the hasUnreadMessages helper function we already defined
-      return matchesSearch && hasUnreadMessages(conv);
+      // Use the isUnread prop passed down from the parent
+      return matchesSearch && conv.isUnread === true;
     }
-
+ 
     return matchesSearch;
   });
 
