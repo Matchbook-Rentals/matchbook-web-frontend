@@ -255,63 +255,85 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useMobileDetect();
-  
-  // Handle WebSocket messages
+  const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
+      
+  // Handle WebSocket messages using functional updates and ref for selected ID
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
     
-    // Handle both regular messages and file messages
-    if (message.type === 'message' || message.type === 'file') { 
-      // Get the active conversation
-      const activeConvo = allConversations.find(c => c.id === selectedConversationId);
-
-      console.log('ACTIVE CONVO:', activeConvo)
-      console.log('ALL CONVO:', allConversations)
-      
-      // Check if this is a message from the other participant in the active conversation
-      const isFromActiveConvoOtherParticipant = activeConvo && 
-        message.senderId === activeConvo.participants.find(p => p.userId !== user.id)?.userId;
-
-      
-      // If message is from the other participant in our active conversation, mark as read immediately
-      // and send a read receipt
-      if (isFromActiveConvoOtherParticipant) {
-        // Update message status and timestamp directly
-        alert('this convo');
-        message.deliveryStatus = 'read';
-        message.isRead = true;
-        message.updatedAt = new Date().toISOString();
-        
-        // Send read receipt via socket
-        if (isConnected && socketRef.current) {
-          const readReceiptMessage = {
-            conversationId: message.conversationId,
-            receiverId: message.senderId,
-            senderId: user.id,
-            timestamp: new Date().toISOString(),
-            messageIds: [message.id]
-          };
-          socketRef.current.emit('read_receipt', readReceiptMessage);
+    // Get the *current* selected ID from the ref *outside* the functional update
+    const currentSelectedId = selectedConversationIdRef.current;
+    
+    setAllConversations((prevConversations) => {
+      // --- Logic using prevConversations (latest state) and currentSelectedId ---
+    
+      if (message.type === 'message' || message.type === 'file') {
+        // Use currentSelectedId here to check if the incoming message is for the *active* conversation
+        const isActiveConversation = message.conversationId === currentSelectedId;
+        const activeConvo = isActiveConversation ? prevConversations.find(c => c.id === currentSelectedId) : null;
+    
+        const isFromActiveConvoOtherParticipant = activeConvo &&
+          message.senderId === activeConvo.participants.find(p => p.userId !== user.id)?.userId;
+    
+        let messageToProcess = { ...message }; // Clone message to modify
+    
+        // If message is from the other participant in our *currently active* conversation, mark as read immediately
+        if (isFromActiveConvoOtherParticipant) {
+          console.log(`Message ${message.id} is from other participant in active convo ${currentSelectedId}, marking read.`);
+          messageToProcess.deliveryStatus = 'read';
+          messageToProcess.isRead = true;
+          messageToProcess.updatedAt = new Date().toISOString();
+    
+          // Send read receipt via socket
+          if (isConnected && socketRef.current) {
+            const readReceiptMessage = {
+              conversationId: messageToProcess.conversationId,
+              receiverId: messageToProcess.senderId,
+              senderId: user.id,
+              timestamp: messageToProcess.updatedAt,
+              messageIds: [messageToProcess.id]
+            };
+            console.log('Sending immediate read receipt:', readReceiptMessage);
+            socketRef.current.emit('read_receipt', readReceiptMessage);
+          }
         }
+    
+        // Add the (potentially modified) message to the conversation state
+        const newState = addMessageToConversation(prevConversations, messageToProcess.conversationId, messageToProcess);
+    
+        // Update unread counts based on the *new* state and *original* message status
+        // Only increment if:
+        // 1. Message is from another user
+        // 2. Message wasn't *already* marked read (e.g., by the immediate read logic above)
+        // 3. The conversation the message belongs to is NOT the currently active one
+        if (message.senderId !== user.id && !messageToProcess.isRead && !isActiveConversation) {
+           // Find the conversation in the *previous* state to check roles
+           const convForRoleCheck = prevConversations.find(c => c.id === message.conversationId);
+           if (convForRoleCheck) {
+             const userRole = convForRoleCheck.participants.find(p => p.userId === user.id)?.role;
+             console.log(`Incrementing unread for role ${userRole} (convo ${message.conversationId}, active: ${currentSelectedId})`);
+             if (userRole === 'Host') setUnreadHostMessages(prev => prev + 1);
+             else if (userRole === 'Tenant') setUnreadTenantMessages(prev => prev + 1);
+           }
+        }
+    
+        return newState; // Return the updated state
+    
+      } else if (message.type === 'typing' && message.senderId !== user.id) {
+        // Typing status doesn't modify conversations, handle separately
+        handleTypingMessage(message); // This updates typingUsers state, not allConversations
+        return prevConversations; // No change to conversations state
+    
+      } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
+        // Update the specific messages' updatedAt timestamp based on the receipt
+        console.log(`Processing read receipt for convo ${message.conversationId} from ${message.senderId}`);
+        return updateMessagesReadTimestamp(prevConversations, message.conversationId, message.messageIds, message.timestamp);
+    
+      } else {
+        // No relevant message type, return current state
+        return prevConversations;
       }
-      
-      // Add the (potentially modified) message to the conversation state
-      setAllConversations((prev) =>
-        addMessageToConversation(prev, message.conversationId, message)
-      );
-      // Update unread counts only if the message wasn't immediately marked as read
-      if (!isFromActiveConvoOtherParticipant) {
-        alert('FUCK')
-        updateUnreadCounts(message);
-      }
-    } else if (message.type === 'typing' && message.senderId !== user.id) {
-      handleTypingMessage(message);
-    } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
-      // Update the specific messages' updatedAt timestamp based on the receipt
-      setAllConversations((prev) => 
-        updateMessagesReadTimestamp(prev, message.conversationId, message.messageIds, message.timestamp)
-      ); 
-    }
+    });
   };
 
   // Socket.io management
@@ -599,21 +621,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     }
   }, [isMobile, sidebarVisible]);
 
-  const updateUnreadCounts = (message: any) => {
-    if (!user) return;
-    
-    const conv = allConversations.find((c) => c.id === message.conversationId);
-    
-    // Only increment unread count if:
-    // 1. The message is not from the current user
-    // 2. It's not already marked as read
-    // 3. It's not from a conversation that's currently selected
-    if (conv && message.senderId !== user.id && !message.isRead && selectedConversationId !== message.conversationId) {
-      const userRole = conv.participants.find((p) => p.userId === user.id)?.role;
-      if (userRole === 'Host') setUnreadHostMessages((prev) => prev + 1);
-      else if (userRole === 'Tenant') setUnreadTenantMessages((prev) => prev + 1);
-    }
-  };
+  // Note: updateUnreadCounts logic is now integrated into handleWebSocketMessage's functional update
 
   const handleTypingMessage = (message: any) => {
     const key = `${message.conversationId}:${message.senderId}`;
@@ -668,8 +676,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   const handleSelectConversation = async (conversationId: string) => {
     if (!user) return;
-    
+        
     setSelectedConversationId(conversationId);
+    selectedConversationIdRef.current = conversationId; // Update ref
     setSidebarVisible(!isMobile);
     const conv = allConversations.find((c) => c.id === conversationId);
     if (!conv) return;
@@ -839,6 +848,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     await Promise.all(allConversations.map((c) => deleteConversation(c.id)));
     setAllConversations([]);
     setSelectedConversationId(null);
+    selectedConversationIdRef.current = null; // Update ref
   };
 
   const toggleSidebar = () => setSidebarVisible((prev) => !prev);
