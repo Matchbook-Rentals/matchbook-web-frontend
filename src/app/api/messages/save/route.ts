@@ -6,7 +6,6 @@ import prisma from '@/lib/prismadb';
 export const dynamic = 'force-dynamic'; // This ensures the route is always dynamically rendered
 
 export async function POST(request: NextRequest) {
-  console.log(`[${new Date().toISOString()}] Received request to /api/messages/save`);
   try {
     // Parse the incoming message
     const messageData = await request.json();
@@ -78,16 +77,6 @@ export async function POST(request: NextRequest) {
         data: { 
           updatedAt: createdAt ? new Date(createdAt) : new Date() 
         },
-      });
-
-      // Log successful message persistence 
-      console.log('Message persisted in database:', { 
-        id: savedMessage.id, 
-        clientId: clientId || 'none',
-        hasContent: !!savedMessage.content,
-        hasAttachment: !!savedMessage.imgUrl,
-        usedProvidedTimestamp: !!createdAt,
-        timestamp: savedMessage.createdAt
       });
 
       return NextResponse.json({

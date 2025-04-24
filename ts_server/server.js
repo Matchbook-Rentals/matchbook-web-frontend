@@ -189,7 +189,6 @@ async function persistMessage(message) {
     }
 
     const data = await response.json();
-    console.log('Message successfully persisted:', data.savedMessage.id);
     return data.savedMessage;
   } catch (error) {
     console.error('Error persisting message:', error);
@@ -235,12 +234,10 @@ async function handleDirectMessage(message) {
   
   // Persist both regular messages and file messages
   if (message.type === 'message' || message.type === 'file') {
-    console.log(`Attempting to persist message (clientId: ${message.clientId}, type: ${message.type})`);
     try {
       savedMessage = await persistMessage(message);
       
       if (savedMessage) {
-        console.log(`Persistence successful for message (clientId: ${message.clientId}), DB ID: ${savedMessage.id}`);
         deliveryResult.persistSuccess = true;
         
         // If successfully saved and message has a clientId, update with database ID and delivery status
@@ -268,7 +265,6 @@ async function handleDirectMessage(message) {
                   confirmedDeliveryAt: new Date().toISOString()
                 };
                 
-                console.log(`Sending delivery confirmation to sender ${id}:`, deliveryConfirmation);
                 const success = sendToClient(id, deliveryConfirmation);
                 resolve({ id, success });
               } catch (err) {
@@ -326,7 +322,9 @@ async function handleDirectMessage(message) {
           }
           
           deliveryResult.deliverySuccesses += success ? 1 : 0;
-          console.log(`Message delivery to client ${id}: ${success ? 'SUCCESS' : 'FAILED'}`);
+          if (!success) {
+            console.log(`Message delivery to client ${id}: FAILED`);
+          }
           
           resolve({ id, success });
         } catch (err) {
@@ -348,14 +346,9 @@ async function handleDirectMessage(message) {
     
     // Set overall delivery success flag
     deliveryResult.delivered = deliveryResult.deliverySuccesses > 0;
-    
-    // Log detailed delivery status
-    if (receiversConnections.length > 0) {
-      if (deliveryResult.delivered) {
-        console.log(`Message successfully delivered to ${deliveryResult.deliverySuccesses}/${receiversConnections.length} clients for user ${message.receiverId}`);
-      } else {
-        console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
-      }
+    // Log detailed delivery status only on failure
+    if (receiversConnections.length > 0 && !deliveryResult.delivered) {
+      console.error(`Failed to deliver message to any clients for user ${message.receiverId}`);
     } else {
       deliveryResult.noReceiversConnected = true;
     }
