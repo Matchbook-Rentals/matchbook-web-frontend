@@ -119,6 +119,28 @@ const markMessagesAsRead = (
   );
 };
 
+/** Utility function to update the read timestamp (updatedAt) for specific messages */
+const updateMessagesReadTimestamp = (
+  allConversations: ExtendedConversation[],
+  conversationId: string,
+  messageIds: string[],
+  timestamp: string
+) => {
+  return allConversations.map((conv) =>
+    conv.id === conversationId
+      ? {
+          ...conv,
+          messages: conv.messages.map((msg) =>
+            msg.id && messageIds.includes(msg.id)
+              ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read' }
+              : msg
+          ),
+        }
+      : conv
+  );
+};
+
+
 /**
  * Utility function to filter conversations by role
  */
