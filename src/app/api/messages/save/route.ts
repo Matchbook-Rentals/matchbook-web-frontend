@@ -6,6 +6,7 @@ import prisma from '@/lib/prismadb';
 export const dynamic = 'force-dynamic'; // This ensures the route is always dynamically rendered
 
 export async function POST(request: NextRequest) {
+  console.log(`[${new Date().toISOString()}] Received request to /api/messages/save`);
   try {
     // Parse the incoming message
     const messageData = await request.json();
