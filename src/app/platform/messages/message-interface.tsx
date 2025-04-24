@@ -279,7 +279,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     
         // If message is from the other participant in our *currently active* conversation, mark as read immediately
         if (isFromActiveConvoOtherParticipant) {
-          console.log(`Message ${message.id} is from other participant in active convo ${currentSelectedId}, marking read.`);
           messageToProcess.deliveryStatus = 'read';
           messageToProcess.isRead = true;
           messageToProcess.updatedAt = new Date().toISOString();
@@ -293,10 +292,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
               timestamp: messageToProcess.updatedAt,
               messageIds: [messageToProcess.id]
             };
-            console.log('Sending immediate read receipt:', readReceiptMessage);
             socketRef.current.emit('read_receipt', readReceiptMessage);
           }
-        }
+        } 
     
         // Add the (potentially modified) message to the conversation state
         const newState = addMessageToConversation(prevConversations, messageToProcess.conversationId, messageToProcess);
@@ -311,7 +309,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
            const convForRoleCheck = prevConversations.find(c => c.id === message.conversationId);
            if (convForRoleCheck) {
              const userRole = convForRoleCheck.participants.find(p => p.userId === user.id)?.role;
-             console.log(`Incrementing unread for role ${userRole} (convo ${message.conversationId}, active: ${currentSelectedId})`);
              if (userRole === 'Host') setUnreadHostMessages(prev => prev + 1);
              else if (userRole === 'Tenant') setUnreadTenantMessages(prev => prev + 1);
            }
@@ -326,7 +323,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     
       } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
         // Update the specific messages' updatedAt timestamp based on the receipt
-        console.log(`Processing read receipt for convo ${message.conversationId} from ${message.senderId}`);
         return updateMessagesReadTimestamp(prevConversations, message.conversationId, message.messageIds, message.timestamp);
     
       } else {
@@ -453,7 +449,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         
         
         socket.on('connect', () => {
-          console.log('Socket.IO Connected');
           setIsConnected(true);
           setConnectionAttempts(0);
           resetCircuitBreaker();
@@ -461,13 +456,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         });
         
         socket.on('heartbeat', (data) => {
-          console.log('Received heartbeat response:', data);
           // Reset failure count on successful heartbeat
           failureCountRef.current = 0;
         });
         
         socket.on('message', (data) => {
-          console.log('Received message:', data);
           
           // Check if this is a delivery confirmation for a message we sent
           // Server should echo back the message with the original ID
@@ -487,12 +480,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         });
         
         socket.on('typing', (data) => {
-          console.log('Received typing status:', data);
           handleWebSocketMessage({...data, type: 'typing'});
         });
         
         socket.on('read_receipt', (data) => {
-          console.log('Received read receipt:', data);
           handleWebSocketMessage({...data, type: 'read_receipt'});
         });
         
