@@ -234,11 +234,13 @@ async function handleDirectMessage(message) {
   };
   
   // Persist both regular messages and file messages
-  if (message.type === 'message' || message.type === 'file') { 
+  if (message.type === 'message' || message.type === 'file') {
+    console.log(`Attempting to persist message (clientId: ${message.clientId}, type: ${message.type})`);
     try {
       savedMessage = await persistMessage(message);
       
       if (savedMessage) {
+        console.log(`Persistence successful for message (clientId: ${message.clientId}), DB ID: ${savedMessage.id}`);
         deliveryResult.persistSuccess = true;
         
         // If successfully saved and message has a clientId, update with database ID and delivery status
@@ -287,13 +289,14 @@ async function handleDirectMessage(message) {
           });
         }
       } else {
-        console.warn('Message persistence returned null but did not throw error');
+        // This case might happen if persistMessage returns null without throwing an error
+        console.warn(`Persistence returned null for message (clientId: ${message.clientId})`);
         deliveryResult.persistSuccess = false;
         deliveryResult.persistError = 'null_result';
       }
     } catch (error) {
       persistError = error;
-      console.error('Error persisting message:', error);
+      console.error(`Persistence failed for message (clientId: ${message.clientId}):`, error);
       deliveryResult.persistSuccess = false;
       deliveryResult.persistError = error.message;
     }
