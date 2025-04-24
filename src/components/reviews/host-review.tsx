@@ -141,13 +141,17 @@ export const UserRating = ({ avatarImgUrl }: UserRatingProps): JSX.Element => {
             {userReview.categoryRatings.map((category, index) => (
               <div
                 key={index}
-                className="self-stretch [font-family:'Poppins',Helvetica] font-medium text-[#3f3f3f] text-[15px] leading-5"
+                className="self-stretch flex justify-between [font-family:'Poppins',Helvetica] font-medium text-[#3f3f3f] text-[15px] leading-5"
               >
+                <div>
                 {category.category}
+                </div>
                 {Array(40 - category.category.length)
                   .fill("\u00A0")
                   .join("")}
+                <div>
                 {category.rating} / 5.0
+                </div>
               </div>
             ))}
           </div>
