@@ -62,23 +62,18 @@ export function FilePreview({
   const [error, setError] = useState<string | null>(null);
 
   // Define sizes based on previewSize
-  const sizes = {
-    small: {
-      card: 'w-36 h-36',
-      image: 'w-32 h-32',
-      icon: 'w-12 h-12',
-    },
-    medium: {
-      card: 'w-48 h-48',
-      image: 'w-44 h-44',
-      icon: 'w-16 h-16',
-    },
-    large: {
-      card: 'w-64 h-64',
-      image: 'w-60 h-60',
-      icon: 'w-24 h-24',
-    },
+  const cardSizeClasses = {
+    small: 'w-36 h-36',
+    medium: 'w-48 h-48',
+    large: 'w-64 h-64',
   };
+  const imageSizeClasses = {
+    small: 'w-32 h-32',
+    medium: 'w-44 h-44',
+    large: 'w-60 h-60',
+  };
+  const nonImageContainerPadding = 'p-3'; // Consistent padding for non-images
+  const nonImageIconSize = 'w-8 h-8'; // Fixed small icon size for non-images
 
   // Get file URL
   const fileUrl = file.fileUrl || getFileUrl(file.fileKey);
@@ -86,11 +81,12 @@ export function FilePreview({
   const extension = getFileExtension(file.fileName).toLowerCase();
 
   // Function to get the appropriate icon component based on file type
-  const FileIconComponent = () => {
+  const FileIconComponent = ({ size }: { size?: string }) => {
     const iconType = getFileIcon(file.fileName);
+    const iconSizeClass = size || nonImageIconSize; // Default to small fixed size
 
     const iconProps = {
-      className: `text-gray-400 ${sizes[previewSize].icon}`,
+      className: `text-gray-400 ${iconSizeClass}`,
     };
 
     switch (iconType) {
@@ -189,7 +185,7 @@ export function FilePreview({
 
   return (
     <Card
-      className={`relativte test overflow-hidden ${sizes[previewSize].card} ${className} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`relative overflow-hidden ${cardSizeClasses[previewSize]} ${className} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {/* X icon to delete attachment */}
@@ -207,56 +203,89 @@ export function FilePreview({
         </Button>
       )}
 
-      {/* File preview/icon */}
-      <div className="flex flex-row-reverse items-center justify-between h-full p-2">
-        {isImage ? (
+      {/* Conditional layout based on file type */}
+      {isImage ? (
+        // Layout for Image Files
+        <div className="flex flex-row-reverse items-center justify-between h-full p-2">
+          {/* Image Preview */}
           <div className="relative w-2/3 h-full flex items-center justify-center">
             <Image
               src={fileUrl}
               alt={file.fileName}
               width={1000}
               height={1000}
-              className={`object-contain ${sizes[previewSize].image}`}
+              className={`object-contain ${imageSizeClasses[previewSize]}`}
             />
           </div>
-        ) : (
-          <div className="flex items-center justify-center h-3/4 w-2/3">
-            <FileIconComponent />
-          </div>
-        )}
-
-        <div className="flex flex-col w-1/3">
-          {/* File name */}
-          <div className="px-1">
-            <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
-              {file.fileName}
-            </p>
-            {file.fileSize && (
-              <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+          {/* File Details & Actions (for images) */}
+          <div className="flex flex-col w-1/3">
+            <div className="px-1">
+              <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
+                {file.fileName}
+              </p>
+              {file.fileSize && (
+                <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+              )}
+            </div>
+            <div className="flex items-center mt-1 space-x-1">
+              {allowDownload && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={handleDownload}
+                  disabled={isLoading}
+                >
+                  <Download size={14} />
+                </Button>
+              )}
+              {/* Add Preview button for images if needed */}
+            </div>
+            {error && (
+              <p className="text-xs text-red-500 mt-1 px-1">{error}</p>
             )}
           </div>
-
-          {/* Action buttons */}
-          <div className="flex items-center mt-1 space-x-1">
-            {allowDownload && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={handleDownload}
-                disabled={isLoading}
-              >
-                <Download size={14} />
-              </Button>
-            )}
-          </div>
-
-          {/* Error message */}
-          {error && (
-            <p className="text-xs text-red-500 mt-1">{error}</p>
-          )}
         </div>
-      </div>
+      ) : (
+        // Layout for Non-Image Files
+        <div className={`flex flex-col justify-between h-full ${nonImageContainerPadding}`}>
+          {/* File Info (Icon, Name, Size) */}
+          <div className="flex items-start space-x-2">
+            <div className="flex-shrink-0 pt-1">
+              <FileIconComponent />
+            </div>
+            <div className="flex-grow min-w-0"> {/* Ensure text truncates */}
+              <p className="text-sm font-medium truncate" title={file.fileName}>
+                {file.fileName}
+              </p>
+              {file.fileSize && (
+                <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Actions & Error */}
+          <div className="mt-2">
+            <div className="flex items-center space-x-1">
+              {allowDownload && (
+                <Button
+                  variant="outline" // Changed variant for better visibility
+                  size="sm"        // Adjusted size
+                  className="h-8"   // Consistent height
+                  onClick={handleDownload}
+                  disabled={isLoading}
+                >
+                  <Download size={14} className="mr-1" /> Download
+                </Button>
+              )}
+              {/* Add Preview button for non-images if needed */}
+            </div>
+            {error && (
+              <p className="text-xs text-red-500 mt-1">{error}</p>
+            )}
+          </div>
+        </div>
+      )}
     </Card>
   );
 }
