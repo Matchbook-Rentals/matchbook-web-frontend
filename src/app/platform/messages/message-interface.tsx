@@ -143,6 +143,7 @@ const updateMessagesReadTimestamp = (
     conv.id === conversationId
       ? {
           ...conv,
+          isUnread: false,
           messages: conv.messages.map((msg) =>
             msg.id && messageIds.includes(msg.id)
               ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read', isRead: true }
@@ -263,15 +264,20 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (message.type === 'message' || message.type === 'file') { 
       // Get the active conversation
       const activeConvo = allConversations.find(c => c.id === selectedConversationId);
+
+      console.log('ACTIVE CONVO:', activeConvo)
+      console.log('ALL CONVO:', allConversations)
       
       // Check if this is a message from the other participant in the active conversation
       const isFromActiveConvoOtherParticipant = activeConvo && 
         message.senderId === activeConvo.participants.find(p => p.userId !== user.id)?.userId;
+
       
       // If message is from the other participant in our active conversation, mark as read immediately
       // and send a read receipt
       if (isFromActiveConvoOtherParticipant) {
         // Update message status and timestamp directly
+        alert('this convo');
         message.deliveryStatus = 'read';
         message.isRead = true;
         message.updatedAt = new Date().toISOString();
@@ -295,6 +301,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       );
       // Update unread counts only if the message wasn't immediately marked as read
       if (!isFromActiveConvoOtherParticipant) {
+        alert('FUCK')
         updateUnreadCounts(message);
       }
     } else if (message.type === 'typing' && message.senderId !== user.id) {
@@ -320,12 +327,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   // Use existing environment variable for Socket.IO server URL
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
   
-  // Log environment variables to help with debugging
-  useEffect(() => {
-    console.log('Socket.IO Environment Variables:');
-    console.log('NEXT_PUBLIC_GO_SERVER_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set, using default)');
-  }, []);
-
   // Monitor socket health with heartbeats
   const startHeartbeat = (socket: Socket) => {
     if (heartbeatTimeoutRef.current) {
@@ -428,13 +429,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           autoConnect: true,
         });
         
-        // Monitor all socket lifecycle events for debugging
-        ['connect', 'connect_error', 'disconnect', 'reconnect', 
-         'reconnect_attempt', 'reconnect_error', 'reconnect_failed'].forEach(event => {
-          socket.on(event, (...args) => {
-            console.log(`Socket.IO ${event} event:`, ...args);
-          });
-        });
         
         socket.on('connect', () => {
           console.log('Socket.IO Connected');
@@ -686,7 +680,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
     // Find unread messages from the other participant based on deliveryStatus
     const unreadMessages = conv.messages.filter(m => 
-      m.senderId !== user.id && m.deliveryStatus !== 'read' 
+      m.senderId !== user.id && !m.isRead 
     );
      
     if (unreadMessages.length > 0) {
