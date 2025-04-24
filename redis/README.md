@@ -19,47 +19,90 @@ This directory contains the configuration to run a Redis instance using Docker C
 
 ## Usage
 
-1.  **Navigate to this directory:**
+You can run these commands either from the project root directory (`matchbook-web-frontend/`) or after changing into the `redis/` directory.
+
+**Option 1: Running from the Project Root Directory (Recommended)**
+
+Use the `-f` flag to specify the path to the `docker-compose.yml` file.
+
+1.  **Start the Redis service:**
+    Use `docker compose` (with a space) if available:
+    ```bash
+    docker compose -f redis/docker-compose.yml up -d
+    ```
+    Or `docker-compose` (with a hyphen) for older installations:
+    ```bash
+    docker-compose -f redis/docker-compose.yml up -d
+    ```
+    The `-d` flag runs the container in detached mode.
+
+2.  **Check logs (optional):**
+    Use the same command format (space or hyphen) that worked for `up`:
+    ```bash
+    docker compose -f redis/docker-compose.yml logs -f redis
+    # or
+    # docker-compose -f redis/docker-compose.yml logs -f redis
+    ```
+
+3.  **Stop the Redis service:**
+    Use the same command format (space or hyphen) that worked for `up`:
+    ```bash
+    docker compose -f redis/docker-compose.yml down
+    # or
+    # docker-compose -f redis/docker-compose.yml down
+    ```
+    This stops and removes the container but preserves the data in the `redis_data` volume.
+
+4.  **Stop and remove data (use with caution):**
+    Use the same command format (space or hyphen) that worked for `up`:
+    ```bash
+    docker compose -f redis/docker-compose.yml down -v
+    # or
+    # docker-compose -f redis/docker-compose.yml down -v
+    ```
+    This stops and removes the container *and* the `redis_data` volume.
+
+**Option 2: Running from the `redis/` Directory**
+
+1.  **Navigate to the `redis` directory:**
     ```bash
     cd redis
     ```
 
 2.  **Start the Redis service:**
-    Use `docker compose` (with a space) if it's available (common in newer Docker versions):
     ```bash
-    docker compose up -d
+    docker compose up -d 
+    # or
+    # docker-compose up -d
     ```
-    If `docker compose` doesn't work, try `docker-compose` (with a hyphen) for older installations:
-    ```bash
-    docker-compose up -d
-    ```
-    The `-d` flag runs the container in detached mode (in the background). If neither command works, you may need to install Docker Compose V2 (plugin) or the standalone `docker-compose`. See the [Docker Compose installation guide](https://docs.docker.com/compose/install/).
 
 3.  **Check logs (optional):**
-    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
-    docker compose logs -f redis 
+    docker compose logs -f redis
     # or
     # docker-compose logs -f redis
     ```
 
 4.  **Stop the Redis service:**
-    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
     docker compose down
     # or
     # docker-compose down
     ```
-    This stops and removes the container but preserves the data in the `redis_data` volume.
 
 5.  **Stop and remove data (use with caution):**
-    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
     docker compose down -v
     # or
     # docker-compose down -v
     ```
-    This stops and removes the container *and* the `redis_data` volume, deleting all persisted data.
+
+6.  **Return to the project root when finished:**
+    ```bash
+    cd .. 
+    ```
+
+*If neither `docker compose` nor `docker-compose` works, you may need to install Docker Compose V2 (plugin) or the standalone `docker-compose`. See the [Docker Compose installation guide](https://docs.docker.com/compose/install/).*
 
 ## Connecting from your Application
 
