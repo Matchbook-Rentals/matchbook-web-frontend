@@ -251,7 +251,7 @@ export function FilePreview({
     // Render Div-based layout for Non-Image Files
     return (
       <div
-        className={`relative flex flex-col w-fit ${className} ${onClick ? 'cursor-pointer' : ''}`} // Use w-fit, remove bg/border/shadow from Card
+        className={`relative flex flex-col w-fit ${className} ${onClick ? '' : ''}`} // Use w-fit, remove bg/border/shadow from Card
         onClick={onClick}
       >
         {/* X icon for non-images */}
