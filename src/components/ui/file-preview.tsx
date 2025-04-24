@@ -248,9 +248,9 @@ export function FilePreview({
         </div>
       ) : (
         // Layout for Non-Image Files
-        <div className={`flex flex-col justify-between h-full ${nonImageContainerPadding}`}>
+        <div className={`flex flex-col justify-between h-fit  ${nonImageContainerPadding}`}>
           {/* File Info (Icon, Name, Size) */}
-          <div className="flex items-start space-x-2">
+          <div className="flex items-center space-x-2">
             <div className="flex-shrink-0 pt-1">
               <FileIconComponent />
             </div>
