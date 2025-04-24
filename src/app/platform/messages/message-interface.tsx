@@ -594,11 +594,30 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     }
   };
 
+  const ensureConnected = () => {
+    if (!isConnected && !circuitOpenRef.current) {
+      console.log('Connection lost, attempting to reconnect due to user action...');
+      connectWithBackoff();
+      // Return false to indicate connection was not ready immediately
+      return false;
+    }
+    // Return true if already connected or circuit breaker is open (don't retry)
+    return isConnected;
+  };
+
   const sendTypingStatus = (isTyping: boolean) => {
     if (!user || !selectedConversationId) return;
+
+    // Ensure connection before sending typing status
+    if (!ensureConnected()) {
+      console.warn('Cannot send typing status: Socket not connected. Reconnection initiated.');
+      // Optionally, you could queue this or just skip sending for now
+      return;
+    }
     
     const conv = allConversations.find((c) => c.id === selectedConversationId);
-    if (!conv || !isConnected || !socketRef.current) return;
+    // Re-check socketRef.current as ensureConnected might have re-established it asynchronously
+    if (!conv || !socketRef.current) return; 
     
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (receiver) {
@@ -638,7 +657,8 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       
       // Get the other participant for sending read receipt
       const receiver = conv.participants.find((p) => p.userId !== user.id);
-      if (isConnected && socketRef.current && receiver) {
+      // Ensure connection before sending read receipt
+      if (ensureConnected() && socketRef.current && receiver) {
         const message = {
           conversationId,
           receiverId: receiver.userId,
@@ -681,11 +701,20 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, clientId);
     setAllConversations((prev) => addMessageToConversation(prev, selectedConversationId, optimisticMessage));
 
-    // Check if circuit breaker is open or we're not connected
-    if (circuitOpenRef.current || !isConnected || !socketRef.current) {
-      console.log(`Using REST API fallback: ${circuitOpenRef.current ? 'Circuit open' : 'Socket unavailable'}`);
+    // Ensure connection before attempting to send via WebSocket
+    if (!ensureConnected()) {
+       console.warn('Socket not connected when trying to send message. Reconnection initiated. Will attempt REST fallback.');
+       // Proceed directly to REST fallback since socket isn't ready
+       trySendViaRest();
+       return; // Stop here, don't try socket path
+    }
+
+    // If ensureConnected returned true, we are connected (or circuit is open, handled below)
+    // Check circuit breaker specifically *after* ensuring connection attempt if needed
+    if (circuitOpenRef.current) {
+      console.log(`Using REST API fallback: Circuit breaker is open.`);
       trySendViaRest();
-    } else {
+    } else if (socketRef.current) { // Check socketRef again as ensureConnected might be async
       // Try socket.io with acknowledgment
       try {
         console.log('Sending message via Socket.IO with acknowledgment');
