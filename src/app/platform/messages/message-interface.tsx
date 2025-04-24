@@ -259,7 +259,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       // If message is from the other participant in our active conversation, mark as read immediately
       // and send a read receipt
       if (isFromActiveConvoOtherParticipant) {
-        message.isRead = true;
+        // Update message status and timestamp directly
+        message.deliveryStatus = 'read';
+        message.updatedAt = new Date().toISOString();
         
         // Send read receipt via socket
         if (isConnected && socketRef.current) {
@@ -274,13 +276,14 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         }
       }
       
+      // Add the (potentially modified) message to the conversation state
       setAllConversations((prev) =>
-        addMessageToConversation(prev, message.conversationId, {
-          ...message,
-          isRead: (selectedConversationId === message.conversationId && isFromActiveConvoOtherParticipant),
-        })
+        addMessageToConversation(prev, message.conversationId, message)
       );
-      updateUnreadCounts(message);
+      // Update unread counts only if the message wasn't immediately marked as read
+      if (!isFromActiveConvoOtherParticipant) {
+        updateUnreadCounts(message);
+      }
     } else if (message.type === 'typing' && message.senderId !== user.id) {
       handleTypingMessage(message);
     } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
