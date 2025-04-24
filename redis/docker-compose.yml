@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine # Use a specific, stable version like Redis 7 on Alpine Linux
+    container_name: matchbook-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379" # Expose Redis port, default to 6379 if REDIS_PORT env var isn't set
+    volumes:
+      - redis_data:/data # Persist Redis data using a named volume
+      # - ./redis.conf:/usr/local/etc/redis/redis.conf # Uncomment to mount a custom config file
+    # command: redis-server /usr/local/etc/redis/redis.conf # Uncomment if using a custom config file
+    # environment:
+    #   - REDIS_PASSWORD=${REDIS_PASSWORD} # Uncomment and set REDIS_PASSWORD in .env if needed
+    restart: unless-stopped # Restart the container unless it was manually stopped
+    networks:
+      - redis_network # Use a dedicated network
+
+volumes:
+  redis_data: # Define the named volume for data persistence
+
+networks:
+  redis_network: # Define the dedicated network
+    driver: bridge

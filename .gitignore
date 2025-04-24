@@ -29,6 +29,7 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+redis/.env # Ignore .env file specifically in the redis directory
 .gpg
 signal-desktop-keyring.gpg
 llm.md
