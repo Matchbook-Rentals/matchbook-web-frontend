@@ -260,10 +260,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       updateUnreadCounts(message);
     } else if (message.type === 'typing' && message.senderId !== user.id) {
       handleTypingMessage(message);
-    } else if (message.type === 'read_receipt' && message.senderId !== user.id) {
-      setAllConversations((prev) =>
-        markMessagesAsRead(prev, message.conversationId, user.id, message.timestamp)
-      );
+    } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
+      // Update the specific messages' updatedAt timestamp based on the receipt
+      setAllConversations((prev) => 
+        updateMessagesReadTimestamp(prev, message.conversationId, message.messageIds, message.timestamp)
+      ); 
     }
   };
 
@@ -651,11 +652,16 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const unreadMessages = conv.messages.filter(m => 
       m.senderId !== user.id && !m.isRead
     );
-    
+     
     if (unreadMessages.length > 0) {
       const timestamp = new Date().toISOString();
-      setAllConversations((prev) => markMessagesAsRead(prev, conversationId, user.id, timestamp));
-      
+      const messageIdsToMarkRead = unreadMessages.map(m => m.id).filter(id => !!id); // Ensure IDs are valid
+       
+      // Update client state immediately using the new function
+      setAllConversations((prev) => 
+        updateMessagesReadTimestamp(prev, conversationId, messageIdsToMarkRead, timestamp)
+      );
+       
       // Get the other participant for sending read receipt
       const receiver = conv.participants.find((p) => p.userId !== user.id);
       // Ensure connection before sending read receipt
