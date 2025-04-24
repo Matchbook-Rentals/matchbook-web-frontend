@@ -133,7 +133,7 @@ const updateMessagesReadTimestamp = (
           ...conv,
           messages: conv.messages.map((msg) =>
             msg.id && messageIds.includes(msg.id)
-              ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read' }
+              ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read', isRead: true }
               : msg
           ),
         }
