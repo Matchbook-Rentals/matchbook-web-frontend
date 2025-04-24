@@ -224,7 +224,7 @@ async function handleDirectMessage(message) {
   
   // Track delivery metrics
   const deliveryResult = {
-    messageId: message.id || message.clientId,
+    messageId: message.id, // Use the client-provided ID
     delivered: false,
     persistSuccess: false,
     deliveryAttempts: receiversConnections.length,
@@ -240,12 +240,12 @@ async function handleDirectMessage(message) {
       if (savedMessage) {
         deliveryResult.persistSuccess = true;
         
-        // If successfully saved and message has a clientId, update with database ID and delivery status
-        if (message.clientId) {
-          message.id = savedMessage.id;
-          message.deliveryStatus = 'delivered';
+        // If successfully saved, send a delivery confirmation back to the sender
+        // Use the original message ID provided by the client
+        if (message.id && savedMessage && message.id === savedMessage.id) {
+          message.deliveryStatus = 'delivered'; // Update status for receiver delivery
           
-          // Also send a delivery confirmation to the sender with retry logic
+          // Send a delivery confirmation to the sender
           const senderConnections = Array.from(clients.entries())
             .filter(([_, client]) => client.userId === message.senderId)
             .map(([id, client]) => ({ id, client }));
@@ -254,15 +254,13 @@ async function handleDirectMessage(message) {
           const senderDeliveryPromises = senderConnections.map(({ id, client }) => {
             return new Promise(resolve => {
               try {
-                // Create a delivery confirmation message that matches the original
-                // but with added database ID and updated delivery status
+                // Create a delivery confirmation message using the original ID
                 const deliveryConfirmation = {
-                  ...message,
-                  type: 'message',
-                  deliveryStatus: 'delivered',
-                  id: savedMessage.id,
-                  clientId: message.clientId, // Keep clientId for matching
-                  confirmedDeliveryAt: new Date().toISOString()
+                  ...message, // Include original message data
+                  type: 'message', // Ensure type is set
+                  deliveryStatus: 'delivered', // Confirm delivery
+                  id: message.id, // Use the original client-provided ID
+                  confirmedDeliveryAt: new Date().toISOString() // Add confirmation timestamp
                 };
                 
                 const success = sendToClient(id, deliveryConfirmation);
@@ -285,14 +283,14 @@ async function handleDirectMessage(message) {
           });
         }
       } else {
-        // This case might happen if persistMessage returns null without throwing an error
-        console.warn(`Persistence returned null for message (clientId: ${message.clientId})`);
+        // Persistence might have failed or returned null
+        console.warn(`Persistence returned null or failed for message (id: ${message.id})`);
         deliveryResult.persistSuccess = false;
-        deliveryResult.persistError = 'null_result';
+        deliveryResult.persistError = 'null_result_or_failed'; // Indicate potential failure
       }
     } catch (error) {
       persistError = error;
-      console.error(`Persistence failed for message (clientId: ${message.clientId}):`, error);
+      console.error(`Persistence failed for message (id: ${message.id}):`, error);
       deliveryResult.persistSuccess = false;
       deliveryResult.persistError = error.message;
     }

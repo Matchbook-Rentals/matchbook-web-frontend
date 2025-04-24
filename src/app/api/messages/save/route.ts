@@ -38,17 +38,24 @@ export async function POST(request: NextRequest) {
       fileName,
       fileKey,
       fileType,
-      createdAt, // Timestamp from the Go server
-      updatedAt,
-      clientId
+      createdAt, // Timestamp from the server
+      updatedAt
+      // clientId // We no longer use clientId
     } = messageData;
 
-    // Create the message in the database
+    // Validate that an ID is provided (it should be the client-generated UUID)
+    if (!id || !id.startsWith('message_')) {
+       return NextResponse.json(
+        { error: 'Valid message ID (prefixed UUID) is required' },
+        { status: 400 }
+      );     
+    }
+
+    // Create the message in the database using the provided ID
     try {
       const savedMessage = await prisma.message.create({
         data: {
-          // Only include id if it was provided
-          ...(id && { id }),
+          id: id, // Use the client-generated ID directly
           conversationId,
           senderId,
           content: content || '', // Ensure content is at least an empty string
@@ -59,13 +66,10 @@ export async function POST(request: NextRequest) {
           // Use provided timestamps if available, otherwise use current time
           ...(createdAt && { createdAt: new Date(createdAt) }),
           ...(updatedAt && { updatedAt: new Date(updatedAt) }),
-          // Store clientId in metadata for tracking and deduplication
-          ...(clientId && { 
-            metadata: JSON.stringify({
-              clientId,
-              source: 'websocket',
-              receivedAt: new Date().toISOString()
-            })
+          // No longer storing clientId in metadata
+          metadata: JSON.stringify({
+            source: 'websocket',
+            receivedAt: new Date().toISOString()
           })
         },
       });

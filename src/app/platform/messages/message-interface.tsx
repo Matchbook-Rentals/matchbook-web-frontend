@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid
 import ConversationList from './components/ConversationList';
 import MessageArea from './components/MessageArea';
 import {
@@ -81,7 +82,7 @@ const addMessageToConversation = (
 const updateMessageInConversation = (
   allConversations: ExtendedConversation[],
   conversationId: string,
-  clientId: string,
+  messageId: string, // Match by the persistent messageId
   updatedMessage: any
 ) => {
   return allConversations.map((conv) =>
@@ -89,7 +90,7 @@ const updateMessageInConversation = (
       ? {
           ...conv,
           messages: conv.messages.map((msg) =>
-            msg.clientId === clientId ? { ...msg, ...updatedMessage, pending: false } : msg
+            msg.id === messageId ? { ...msg, ...updatedMessage, pending: false } : msg // Match by id
           ),
         }
       : conv
@@ -164,16 +165,16 @@ const createOptimisticMessage = (
   file: { url?: string; name?: string; key?: string; type?: string } | undefined,
   conversationId: string,
   senderId: string,
-  clientId: string
+  messageId: string // Use the generated messageId
 ) => ({
-  id: `temp-${clientId}`,
+  id: messageId, // Use the generated messageId directly
   content,
   senderId,
   conversationId,
   createdAt: new Date().toISOString(),
   isRead: false,
   pending: true,
-  clientId,
+  // clientId, // Remove clientId
   deliveryStatus: 'sending',
   ...(file?.url && {
     imgUrl: file.url,
@@ -436,16 +437,13 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         socket.on('message', (data) => {
           console.log('Received message:', data);
           
-          // Check if this is a message response for a message we sent
-          // Server should echo back the message with clientId to confirm delivery
-          if (data.clientId && data.senderId === user?.id) {
-            // This is a response to our sent message, update it to remove pending status
-            // and set the delivery status if provided
+          // Check if this is a delivery confirmation for a message we sent
+          // Server should echo back the message with the original ID
+          if (data.id && data.senderId === user?.id && data.confirmedDeliveryAt) {
+            // This is a confirmation for our sent message, update its status
             setAllConversations((prev) =>
-              updateMessageInConversation(prev, data.conversationId, data.clientId, {
-                ...data,
+              updateMessageInConversation(prev, data.conversationId, data.id, { // Match using data.id
                 pending: false,
-                id: data.id || data.clientId, // Use server ID if available
                 deliveryStatus: data.deliveryStatus || 'delivered', // Mark as delivered
                 deliveredAt: data.deliveredAt || new Date().toISOString() // Timestamp delivery
               })
@@ -714,21 +712,21 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (!receiver) return;
 
     sendTypingStatus(false);
-    const clientId = `client-${Date.now()}-${Math.random().toString(36).substr(2, 15)}`;
+    const messageId = `message_${uuidv4()}`; // Generate prefixed UUID
     const messageData: MessageData = {
+      id: messageId, // Use the generated UUID as the primary ID
       content,
       conversationId: selectedConversationId,
       receiverId: receiver.userId,
       senderId: user.id,
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
-      id: clientId,
-      clientId: clientId, // Ensure clientId is explicitly sent to match up response
+      // clientId: clientId, // Remove clientId
       timestamp: new Date().toISOString(),
       type: file?.url ? 'file' : 'message', // Explicitly set type based on file presence
       ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
     };
 
-    const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, clientId);
+    const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, messageId); // Pass messageId
     setAllConversations((prev) => addMessageToConversation(prev, selectedConversationId, optimisticMessage));
 
     // Ensure connection before attempting to send via WebSocket
@@ -772,12 +770,15 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         const ack = await sendPromise;
         console.log('Message successfully delivered via Socket.IO:', ack);
         
-        // Update message status on success
+        // Update message status on successful acknowledgment from server
+        // The server confirmation might include the final DB ID if different, but we use the original messageId
         setAllConversations((prev) =>
-          updateMessageInConversation(prev, selectedConversationId, clientId, {
+          updateMessageInConversation(prev, selectedConversationId, messageId, { // Use messageId
             pending: false,
-            deliveryStatus: 'delivered',
-            deliveredAt: ack.timestamp || new Date().toISOString()
+            deliveryStatus: 'delivered', // Marked as delivered by server ack
+            deliveredAt: ack.timestamp || new Date().toISOString(),
+            // Optionally update with server-confirmed ID if needed, but keep matching by original messageId
+            // id: ack.id || messageId
           })
         );
       } catch (error) {
@@ -791,12 +792,14 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     async function trySendViaRest() {
       try {
         console.log('Attempting to send message via REST API');
-        const newMessage = await sendMessageViaRest(messageData, createMessage);
+        // Note: sendMessageViaRest might need adjustment if it relies on clientId
+        // Assuming createMessage action handles the provided messageData.id correctly
+        const savedMessage = await sendMessageViaRest(messageData, createMessage);
         setAllConversations((prev) =>
-          updateMessageInConversation(prev, selectedConversationId, clientId, {
-            ...newMessage,
+          updateMessageInConversation(prev, selectedConversationId, messageId, { // Use messageId
+            ...savedMessage, // Use the response from the save action
             pending: false,
-            deliveryStatus: 'delivered',
+            deliveryStatus: 'delivered', // Assuming REST success means delivered
             deliveredAt: new Date().toISOString()
           })
         );
