@@ -25,25 +25,39 @@ This directory contains the configuration to run a Redis instance using Docker C
     ```
 
 2.  **Start the Redis service:**
+    Use `docker compose` (with a space) if it's available (common in newer Docker versions):
+    ```bash
+    docker compose up -d
+    ```
+    If `docker compose` doesn't work, try `docker-compose` (with a hyphen) for older installations:
     ```bash
     docker-compose up -d
     ```
-    The `-d` flag runs the container in detached mode (in the background).
+    The `-d` flag runs the container in detached mode (in the background). If neither command works, you may need to install Docker Compose V2 (plugin) or the standalone `docker-compose`. See the [Docker Compose installation guide](https://docs.docker.com/compose/install/).
 
 3.  **Check logs (optional):**
+    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
-    docker-compose logs -f redis
+    docker compose logs -f redis 
+    # or
+    # docker-compose logs -f redis
     ```
 
 4.  **Stop the Redis service:**
+    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
-    docker-compose down
+    docker compose down
+    # or
+    # docker-compose down
     ```
     This stops and removes the container but preserves the data in the `redis_data` volume.
 
 5.  **Stop and remove data (use with caution):**
+    Use the same command format (space or hyphen) that worked for `up`:
     ```bash
-    docker-compose down -v
+    docker compose down -v
+    # or
+    # docker-compose down -v
     ```
     This stops and removes the container *and* the `redis_data` volume, deleting all persisted data.
 
