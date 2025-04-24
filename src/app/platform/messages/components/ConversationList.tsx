@@ -62,15 +62,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const toggleUnreadOnly = () => {
     setShowUnreadOnly(!showUnreadOnly);
   };
-
-  // Helper function to check if a conversation has unread messages
-  // Works with messages in any order since it uses 'some'
-  const hasUnreadMessages = (conv: ExtendedConversation) => {
-    return conv.messages?.some(message =>
-      message.senderId !== user.id && !message.isRead
-    ) || false;
-  };
-
+ 
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
