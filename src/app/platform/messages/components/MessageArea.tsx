@@ -408,14 +408,25 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     if (isImageFile(selectedFile.fileName || '')) {
       return (
-        <Image
-          src={selectedFile.fileUrl}
-          alt="Enlarged Image"
-          width={800}
-          height={800}
-          className="max-h-[70vh] w-auto object-contain"
-          priority
-        />
+        <div className="flex flex-col items-center">
+          <Image
+            src={selectedFile.fileUrl}
+            alt="Enlarged Image"
+            width={800}
+            height={800}
+            className="max-h-[70vh] w-auto object-contain"
+            priority
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4" // Add margin top for spacing
+            onClick={() => downloadFile(selectedFile.fileUrl, selectedFile.fileName || 'image')}
+          >
+            <Download size={14} className="mr-2" />
+            Download Image
+          </Button>
+        </div>
       );
     }
 
