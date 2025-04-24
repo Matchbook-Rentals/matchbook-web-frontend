@@ -62,6 +62,18 @@ const useMobileDetect = () => {
 };
 
 /**
+ * Helper function to determine if a conversation has unread messages for the current user.
+ */
+const conversationHasUnreadMessages = (conv: ExtendedConversation, userId: string): boolean => {
+  if (!conv || !conv.messages || !userId) {
+    return false;
+  }
+  return conv.messages.some(message =>
+    message.senderId !== userId && !message.isRead
+  );
+};
+
+/**
  * Utility function to add a message to a conversation
  */
 const addMessageToConversation = (
