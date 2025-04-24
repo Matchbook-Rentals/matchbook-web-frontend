@@ -176,7 +176,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   const handleFileClick = (file: MessageFile) => {
-    setSelectedFile(file);
+    // Only open the dialog if the file is an image
+    if (file.fileName && isImageFile(file.fileName)) {
+      setSelectedFile(file);
+    }
+    // For non-image files, clicking does nothing in terms of opening the dialog.
+    // Download functionality is handled separately by the FilePreview component itself if needed.
   };
 
   const renderFileAttachment = (fileUrl: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
