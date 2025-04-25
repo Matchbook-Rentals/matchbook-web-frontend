@@ -135,7 +135,7 @@ model Listing {
   lastDecisionComment    String?        @db.Text
   status                 String         @default("available")
   title                  String
-  description            String
+description String @db.VarChar(1500)
   imageSrc               String?
   category               String?
   roomCount              Int
