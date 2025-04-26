@@ -1,6 +1,7 @@
-import axios from 'axios';
-import fs from 'fs';
-import path from 'path';
+// Use require for CommonJS compatibility with ts-node in this project setup
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 // Define the structure for an address object
 interface Address {
@@ -79,7 +80,9 @@ async function fetchAddresses(cityName: string): Promise<Address[]> {
 
   } catch (error: any) {
     console.error('Error fetching addresses from Overpass API:');
-    if (axios.isAxiosError(error)) {
+    // Check if it's an Axios error (note: axios.isAxiosError might not work directly with require)
+    // A more robust check might be needed depending on the error structure
+    if (error.isAxiosError) {
       console.error('Status:', error.response?.status);
       console.error('Data:', error.response?.data);
     } else {
