@@ -263,6 +263,9 @@ description String @db.VarChar(1500)
   boldSignTemplateId String?
   unavailablePeriods ListingUnavailability[]
   Maybe              Maybe[]
+
+
+  @@index([state])
 }
 
 model ListingUnavailability {
@@ -272,6 +275,7 @@ model ListingUnavailability {
   reason    String? // Optional: could track why it's blocked (repairs, personal reasons, etc.)
   listingId String
   listing   Listing  @relation(fields: [listingId], references: [id])
+  @@index([listingId])
 }
 
 model ListingImage {
@@ -281,6 +285,7 @@ model ListingImage {
   listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   category  String?
   rank      Int?
+  @@index([listingId])
 }
 
 model Bedroom {
