@@ -54,7 +54,7 @@ export default function SampleListingsPage() {
     <div className="container mx-auto py-10">
       <h1 className="text-2xl font-bold mb-4">Input Sample Addresses</h1>
       <p className="mb-4 text-sm text-gray-600">
-        Paste a JSON array string representing a list of addresses below. Example: `[{"street": "123 Main St", "city": "Anytown", "zip": "12345"}, ...]`
+        Paste a JSON array string representing a list of addresses below. Example: 
       </p>
       <div className="space-y-4">
         <div>
