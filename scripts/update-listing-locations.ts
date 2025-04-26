@@ -15,7 +15,7 @@ interface AddressData {
 }
 
 const prisma = new PrismaClient();
-const addressesFilePath = path.join(__dirname, '..', 'Austin_addresses.JSON'); // Assumes JSON is in the root
+const addressesFilePath = path.join(__dirname, './addresses/', 'austin_addresses.JSON'); // Assumes JSON is in the root
 const BATCH_SIZE = 1000; // Max listings to fetch
 
 async function updateListings() {
@@ -78,15 +78,16 @@ async function updateListings() {
     if (addressData.lon !== undefined) updateData.longitude = addressData.lon;
     if (addressData.street !== undefined) {
         // Combine housenumber and street if they are separate in JSON
-        updateData.street = addressData.housenumber
+        updateData.streetAddress1 = addressData.housenumber
             ? `${addressData.housenumber} ${addressData.street}`
             : addressData.street;
     }
     if (addressData.city !== undefined) updateData.city = addressData.city;
     // Assuming 'zip' is the field in your Prisma schema for postal code
-    if (addressData.postcode !== undefined) updateData.zip = addressData.postcode;
+    if (addressData.postcode !== undefined) updateData.postalCode = addressData.postcode;
     // Add state if available in your JSON and schema
-    // if (addressData.state !== undefined) updateData.state = addressData.state;
+    updateData.state = 'TX';
+    updateData.locationString= `${addressData.housenumber} ${addressData.street}, ${addressData.city}, ${updateData.state}, ${addressData.postcode} `
 
     // Skip update if no valid lat/lon found
     if (updateData.latitude === undefined || updateData.longitude === undefined) {
