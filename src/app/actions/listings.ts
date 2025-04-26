@@ -13,7 +13,7 @@ const checkAuth = async () => {
   return userId;
 }
 
-export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number): Promise<ListingAndImages[]> => {
+export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number, state: string): Promise<ListingAndImages[]> => {
   const userId = await checkAuth();
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
@@ -29,8 +29,11 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     if (typeof radiusMiles !== 'number' || isNaN(radiusMiles) || radiusMiles <= 0) {
       throw new Error(`Invalid radius. Must be a positive number. received ${radiusMiles}`);
     }
+    if (typeof state !== 'string' || state.trim().length === 0) {
+      throw new Error(`Invalid state. Must be a non-empty string. received ${state}`);
+    }
 
-    // First, get just the listing IDs and distances within the radius
+    // First, filter by state (indexed) and then get listing IDs and distances within the radius
     const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
       SELECT l.id,
       (${earthRadiusMiles} * acos(
@@ -39,7 +42,8 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
         sin(radians(${lat})) * sin(radians(l.latitude))
       )) AS distance
       FROM Listing l
-      HAVING distance <= ${radiusMiles}
+      WHERE l.state = ${state} -- Filter by state first
+      HAVING distance <= ${radiusMiles} -- Then filter by distance
       ORDER BY distance
     `;
 
