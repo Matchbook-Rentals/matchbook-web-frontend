@@ -17,6 +17,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
   const userId = await checkAuth();
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
+  console.log('STATE', state)
 
   try {
     // Input validation
@@ -34,18 +35,27 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     }
 
     // First, filter by state (indexed) and then get listing IDs and distances within the radius
-    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
-      SELECT l.id,
-      (${earthRadiusMiles} * acos(
-        cos(radians(${lat})) * cos(radians(l.latitude)) *
-        cos(radians(l.longitude) - radians(${lng})) +
-        sin(radians(${lat})) * sin(radians(l.latitude))
-      )) AS distance
-      FROM Listing l
-      WHERE l.state = ${state} -- Filter by state first
-      HAVING distance <= ${radiusMiles} -- Then filter by distance
-      ORDER BY distance
-    `;
+    //const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+    //  SELECT l.id,
+    //  (${earthRadiusMiles} * acos(
+    //    cos(radians(${lat})) * cos(radians(l.latitude)) *
+    //    cos(radians(l.longitude) - radians(${lng})) +
+    //    sin(radians(${lat})) * sin(radians(l.latitude))
+    //  )) AS distance
+    //  FROM Listing l
+    //  WHERE l.state = ${state} -- Filter by state first
+    //  HAVING distance <= ${radiusMiles} -- Then filter by distance
+    //  ORDER BY distance
+    //`;
+    //
+    //
+    const listingsWithDistance = await prisma.listing.findMany({
+      where: {
+        state: state,
+      }
+    })
+
+    console.log('IN STATE', listingsWithDistance);
 
     if (listingsWithDistance.length === 0) {
       console.log('No listings found within the specified radius.');
