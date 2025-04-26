@@ -1,6 +1,8 @@
-import { PrismaClient, Listing } from '@prisma/client';
-import fs from 'fs';
-import path from 'path';
+// Use require for CommonJS compatibility with ts-node in this context
+const { PrismaClient } = require('@prisma/client');
+const fs = require('fs');
+const path = require('path');
+import type { Listing } from '@prisma/client'; // Keep type import
 
 // Define the structure of an address in the JSON file
 // Adjust this interface based on the actual structure of Austin_addresses.JSON
