@@ -39,34 +39,30 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     console.log(`Filtering listings for state: "'${trimmedState}'" (Length: ${trimmedState.length})`);
 
     // First, filter by state (indexed) and then get listing IDs and distances within the radius
-    //const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
-    //  SELECT l.id,
-    //  (${earthRadiusMiles} * acos(
-    //    cos(radians(${lat})) * cos(radians(l.latitude)) *
-    //    cos(radians(l.longitude) - radians(${lng})) +
-    //    sin(radians(${lat})) * sin(radians(l.latitude))
-    //  )) AS distance
-    //  FROM Listing l
-    //  WHERE l.state = ${state} -- Filter by state first
-    //  HAVING distance <= ${radiusMiles} -- Then filter by distance
-    //  ORDER BY distance
-    //`;
-    //
-    //
-    const listingsWithDistance = await prisma.listing.findMany({
-      where: {
-        // Use the trimmed state and case-insensitive matching
-        state: {
-          equals: trimmedState,
-          mode: 'insensitive' // Add this for case-insensitivity
-        }
-      }
-    })
+    // Use the raw query for combined state, distance filtering.
+    // Note: Case sensitivity depends on DB collation. Use LOWER() if needed:
+    // WHERE LOWER(l.state) = LOWER(${trimmedState})
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+      SELECT l.id,
+      (${earthRadiusMiles} * acos(
+        cos(radians(${lat})) * cos(radians(l.latitude)) *
+        cos(radians(l.longitude) - radians(${lng})) +
+        sin(radians(${lat})) * sin(radians(l.latitude))
+      )) AS distance
+      FROM Listing l
+      WHERE l.state = ${trimmedState} -- Filter by state first (using trimmed value)
+      HAVING distance <= ${radiusMiles} -- Then filter by distance
+      ORDER BY distance
+    `;
 
-    console.log('IN STATE', listingsWithDistance);
 
-    if (listingsWithDistance.length === 0) {
-      console.log('No listings found within the specified radius.');
+    // Removed the problematic findMany call
+    // const listingsWithDistance = await prisma.listing.findMany({ ... })
+
+    console.log('Listings found by state and within radius:', listingsWithDistance);
+
+    if (!listingsWithDistance || listingsWithDistance.length === 0) {
+      console.log('No listings found matching state and radius criteria.');
       return [];
     }
 
@@ -87,11 +83,13 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     });
 
     // Combine the distance information with the full listing details
+    const listingsWithDistanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
+
     const listingsWithFullDetails = listings.map(listing => {
-      const distance = listingsWithDistance.find(l => l.id === listing.id)?.distance || 0;
+      const distance = listingsWithDistanceMap.get(listing.id) ?? Infinity; // Use Infinity if somehow not found
       return {
         ...listing,
-        distance,
+        distance, // Add the distance calculated by the raw query
         listingImages: listing.listingImages,
         bedrooms: listing.bedrooms,
         unavailablePeriods: listing.unavailablePeriods
