@@ -33,6 +33,10 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     if (typeof state !== 'string' || state.trim().length === 0) {
       throw new Error(`Invalid state. Must be a non-empty string. received ${state}`);
     }
+    const trimmedState = state.trim(); // Trim whitespace
+
+    // Log the exact value being used for filtering
+    console.log(`Filtering listings for state: "'${trimmedState}'" (Length: ${trimmedState.length})`);
 
     // First, filter by state (indexed) and then get listing IDs and distances within the radius
     //const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
@@ -51,7 +55,11 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     //
     const listingsWithDistance = await prisma.listing.findMany({
       where: {
-        state: state,
+        // Use the trimmed state and case-insensitive matching
+        state: {
+          equals: trimmedState,
+          mode: 'insensitive' // Add this for case-insensitivity
+        }
       }
     })
 
