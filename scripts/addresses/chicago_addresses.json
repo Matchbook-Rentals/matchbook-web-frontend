@@ -1,0 +1,7902 @@
+[
+  {
+    "street": "South Upper Wacker Drive",
+    "housenumber": "200",
+    "city": "Chicago",
+    "lat": 41.8790618,
+    "lon": -87.6377402
+  },
+  {
+    "street": "West Morse Avenue",
+    "housenumber": "1358",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0080864,
+    "lon": -87.6659686
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "3940",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9538893,
+    "lon": -87.6552485
+  },
+  {
+    "street": "West Addison Street",
+    "housenumber": "940",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9475198,
+    "lon": -87.6536271
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "945",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9397786,
+    "lon": -87.653334
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "944",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9182415,
+    "lon": -87.6526308
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8754875,
+    "lon": -87.6496998
+  },
+  {
+    "street": "South Racine Avenue",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8758947,
+    "lon": -87.6593253
+  },
+  {
+    "street": "South Damen Avenue",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8756639,
+    "lon": -87.673256
+  },
+  {
+    "street": "South Clinton Street",
+    "housenumber": "426",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8755722,
+    "lon": -87.6409992
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "502",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.8913772,
+    "lon": -87.6478613
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "3355",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9391306,
+    "lon": -87.7124596
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "2620",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9301967,
+    "lon": -87.7092087
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "608",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8731127,
+    "lon": -87.6275552
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "230",
+    "city": "Chicago",
+    "postcode": "60604",
+    "lat": 41.878227,
+    "lon": -87.627698
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "26",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8807789,
+    "lon": -87.6277387
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "100",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8824096,
+    "lon": -87.6338517
+  },
+  {
+    "street": "South Wells Street",
+    "housenumber": "220",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8787419,
+    "lon": -87.6337584
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "121",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8768826,
+    "lon": -87.6313905
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8769158,
+    "lon": -87.6289437
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "100-124",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8857521,
+    "lon": -87.6313842
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "540",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8857204,
+    "lon": -87.6413079
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1601",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8853413,
+    "lon": -87.6662819
+  },
+  {
+    "street": "East 35th Street",
+    "housenumber": "16",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8320387,
+    "lon": -87.6258861
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "6450",
+    "city": "Chicago",
+    "postcode": "60646",
+    "lat": 41.9988654,
+    "lon": -87.7634036
+  },
+  {
+    "street": "North Cumberland Avenue",
+    "housenumber": "5320",
+    "city": "Chicago",
+    "postcode": "60656",
+    "lat": 41.9763227,
+    "lon": -87.8373006
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2400",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9255742,
+    "lon": -87.6492116
+  },
+  {
+    "street": "North Sheffield Avenue",
+    "housenumber": "2405",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9256657,
+    "lon": -87.6534292
+  },
+  {
+    "street": "North Dearborn Street",
+    "housenumber": "19",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8832522,
+    "lon": -87.6294604
+  },
+  {
+    "street": "South Dearborn Street",
+    "housenumber": "114",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8807318,
+    "lon": -87.6293863
+  },
+  {
+    "street": "South Dearborn Street",
+    "housenumber": "328",
+    "city": "Chicago",
+    "postcode": "60604",
+    "lat": 41.8781861,
+    "lon": -87.6293041
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "120",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8801353,
+    "lon": -87.6279448
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "116",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8802396,
+    "lon": -87.6246715
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8914114,
+    "lon": -87.6096584
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8817505,
+    "lon": -87.6275016
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "111",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8834107,
+    "lon": -87.6259067
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "119",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8839093,
+    "lon": -87.6259628
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "700",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8918968,
+    "lon": -87.6092419
+  },
+  {
+    "street": "West Polk Street",
+    "housenumber": "1725",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8713984,
+    "lon": -87.669906
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "61",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8819751,
+    "lon": -87.6256688
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "6",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8822267,
+    "lon": -87.6272156
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3030",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9374643,
+    "lon": -87.648996
+  },
+  {
+    "street": "West Wrightwood Avenue",
+    "housenumber": "958",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9291497,
+    "lon": -87.6535647
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1900",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9616382,
+    "lon": -87.6761596
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1914",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9616342,
+    "lon": -87.6766491
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "210",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9113009,
+    "lon": -87.6348879
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1655",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9127223,
+    "lon": -87.638378
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4015",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9547023,
+    "lon": -87.6789343
+  },
+  {
+    "street": "West Wrightwood Avenue",
+    "housenumber": "1157",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9288055,
+    "lon": -87.6584501
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4653",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9668568,
+    "lon": -87.6581342
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "1588",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9103567,
+    "lon": -87.6776669
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "1443",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.903121,
+    "lon": -87.6642304
+  },
+  {
+    "street": "South Mobile Avenue",
+    "housenumber": "5625",
+    "city": "Chicago",
+    "postcode": "60638",
+    "lat": 41.7895478,
+    "lon": -87.7788976
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "5058",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8772929,
+    "lon": -87.7515541
+  },
+  {
+    "street": "South Stewart Avenue",
+    "housenumber": "6547",
+    "city": "Chicago",
+    "postcode": "60621",
+    "lat": 41.7750338,
+    "lon": -87.6339386
+  },
+  {
+    "street": "South Whipple Street",
+    "housenumber": "2228",
+    "city": "Chicago",
+    "postcode": "60623",
+    "lat": 41.8508276,
+    "lon": -87.7019283
+  },
+  {
+    "street": "West Washington Boulevard",
+    "housenumber": "5608",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8824222,
+    "lon": -87.7657521
+  },
+  {
+    "street": "East 133rd Place",
+    "housenumber": "902",
+    "city": "Chicago",
+    "postcode": "60827",
+    "lat": 41.6540091,
+    "lon": -87.6014558
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2212",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9222569,
+    "lon": -87.6490493
+  },
+  {
+    "street": "West 79th Street",
+    "housenumber": "1107",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7503116,
+    "lon": -87.6517164
+  },
+  {
+    "street": "South Lake Park Avenue",
+    "housenumber": "3701",
+    "city": "Chicago",
+    "postcode": "60653",
+    "lat": 41.828586,
+    "lon": -87.605993
+  },
+  {
+    "street": "South Cottage Grove Avenue",
+    "housenumber": "7614",
+    "city": "Chicago",
+    "postcode": "60619",
+    "lat": 41.7562623,
+    "lon": -87.6055458
+  },
+  {
+    "street": "West Superior Street",
+    "housenumber": "1401",
+    "city": "Chicago",
+    "lat": 41.8950099,
+    "lon": -87.6625865
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "565",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8788616,
+    "lon": -87.6420986
+  },
+  {
+    "street": "South Normal Avenue",
+    "housenumber": "3039",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8388551,
+    "lon": -87.6387627
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "4750",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9686431,
+    "lon": -87.6553335
+  },
+  {
+    "street": "East 51st Street",
+    "housenumber": "555",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.801143,
+    "lon": -87.6122775
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "4720",
+    "city": "Chicago",
+    "lat": 41.9679641,
+    "lon": -87.6552425
+  },
+  {
+    "street": "South Wentworth Avenue",
+    "housenumber": "2301",
+    "city": "Chicago",
+    "lat": 41.8506382,
+    "lon": -87.6316998
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9549325,
+    "lon": -87.6467217
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "640",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9549261,
+    "lon": -87.6457926
+  },
+  {
+    "street": "South Dearborn Street",
+    "housenumber": "637",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.873459,
+    "lon": -87.6288838
+  },
+  {
+    "street": "South Racine Avenue",
+    "housenumber": "8210",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7446885,
+    "lon": -87.653827
+  },
+  {
+    "street": "West 56th Street",
+    "housenumber": "6325",
+    "city": "Chicago",
+    "postcode": "60638",
+    "lat": 41.790149,
+    "lon": -87.7802405
+  },
+  {
+    "street": "West Forest Preserve Drive",
+    "housenumber": "6737",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9585268,
+    "lon": -87.7956852
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "246",
+    "city": "Chicago",
+    "lat": 41.8856639,
+    "lon": -87.6966353
+  },
+  {
+    "street": "South Paulina Street",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8736438,
+    "lon": -87.6694981
+  },
+  {
+    "street": "West Douglas Boulevard",
+    "housenumber": "3151",
+    "city": "Chicago",
+    "postcode": "60623",
+    "lat": 41.8623234,
+    "lon": -87.705399
+  },
+  {
+    "street": "West Douglas Boulevard",
+    "housenumber": "3151",
+    "city": "Chicago",
+    "postcode": "60623",
+    "lat": 41.86207,
+    "lon": -87.7053007
+  },
+  {
+    "street": "West 17th Street",
+    "housenumber": "1650",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8588695,
+    "lon": -87.6682037
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "11407",
+    "city": "Chicago",
+    "postcode": "60628",
+    "lat": 41.6867432,
+    "lon": -87.6206672
+  },
+  {
+    "street": "East Pearson Street",
+    "housenumber": "25",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8971495,
+    "lon": -87.6271627
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "909",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9180116,
+    "lon": -87.65142
+  },
+  {
+    "street": "South May Street",
+    "housenumber": "8053",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7471868,
+    "lon": -87.6520275
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "3535",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9754561,
+    "lon": -87.7174883
+  },
+  {
+    "street": "West Ohio Street",
+    "housenumber": "5035",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8911618,
+    "lon": -87.7520666
+  },
+  {
+    "street": "West Touhy Avenue",
+    "housenumber": "2706",
+    "city": "Chicago",
+    "postcode": "60645",
+    "lat": 42.0122411,
+    "lon": -87.6977805
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "30",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8830959,
+    "lon": -87.6247316
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8902532,
+    "lon": -87.624789
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "410",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8898126,
+    "lon": -87.6247078
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1112",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8686597,
+    "lon": -87.6260919
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "17",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8793454,
+    "lon": -87.6284801
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "1914",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9034063,
+    "lon": -87.6755121
+  },
+  {
+    "street": "East 59th Street",
+    "housenumber": "1212",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.7883006,
+    "lon": -87.595584
+  },
+  {
+    "street": "West 71st Street",
+    "housenumber": "2525",
+    "city": "Chicago",
+    "postcode": "60629",
+    "lat": 41.7644926,
+    "lon": -87.6867486
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "50",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8839576,
+    "lon": -87.6304433
+  },
+  {
+    "street": "North Lake Shore Drive",
+    "housenumber": "750",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8965181,
+    "lon": -87.6173152
+  },
+  {
+    "street": "South Cottage Grove Avenue",
+    "housenumber": "11057",
+    "city": "Chicago",
+    "postcode": "60628",
+    "lat": 41.6942725,
+    "lon": -87.6086568
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3730",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9497837,
+    "lon": -87.6590034
+  },
+  {
+    "street": "North LaSalle Drive",
+    "housenumber": "820",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.897255,
+    "lon": -87.6331086
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4816",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9694501,
+    "lon": -87.6605129
+  },
+  {
+    "street": "West Loyola Avenue",
+    "housenumber": "1125",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0012525,
+    "lon": -87.6595822
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "6562",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0019761,
+    "lon": -87.6611679
+  },
+  {
+    "street": "North Francisco Avenue",
+    "housenumber": "4833",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9695415,
+    "lon": -87.700118
+  },
+  {
+    "street": "South Pulaski Road",
+    "housenumber": "6500",
+    "city": "Chicago",
+    "postcode": "60629",
+    "lat": 41.7747419,
+    "lon": -87.7229309
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "4",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8822271,
+    "lon": -87.6274208
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3740",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9501029,
+    "lon": -87.6590892
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3025",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9371493,
+    "lon": -87.6481922
+  },
+  {
+    "street": "North Paulina Street",
+    "housenumber": "7553",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0189983,
+    "lon": -87.6731795
+  },
+  {
+    "street": "North Paulina Street",
+    "housenumber": "7551",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0189495,
+    "lon": -87.6731232
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4753",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9685756,
+    "lon": -87.6591154
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "943",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9251961,
+    "lon": -87.6528026
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4075",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9565248,
+    "lon": -87.6516349
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "3140",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9387842,
+    "lon": -87.6980674
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "2900",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.939509,
+    "lon": -87.7004397
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1245",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9251064,
+    "lon": -87.6603561
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1800",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9132988,
+    "lon": -87.6542733
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "420",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9403568,
+    "lon": -87.6403725
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "924",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.940052,
+    "lon": -87.6525095
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "933",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9397689,
+    "lon": -87.6528805
+  },
+  {
+    "street": "North Paulina Street",
+    "housenumber": "7559",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0191919,
+    "lon": -87.6734304
+  },
+  {
+    "street": "West Howard Street",
+    "housenumber": "2349",
+    "city": "Chicago",
+    "postcode": "60645",
+    "lat": 42.0192018,
+    "lon": -87.6897822
+  },
+  {
+    "street": "West Howard Street",
+    "housenumber": "2349",
+    "city": "Chicago",
+    "postcode": "60645",
+    "lat": 42.0192038,
+    "lon": -87.6896363
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "1224",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9217489,
+    "lon": -87.6593672
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "1200",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9217713,
+    "lon": -87.658493
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "1102",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9218128,
+    "lon": -87.6561701
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "2200",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9217238,
+    "lon": -87.6647779
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "2170",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9208759,
+    "lon": -87.6636559
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "1471",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9213576,
+    "lon": -87.6652615
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1349",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9248909,
+    "lon": -87.6623499
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1331",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9250889,
+    "lon": -87.6615001
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1341",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9248973,
+    "lon": -87.6618606
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1223",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9250953,
+    "lon": -87.6595432
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1229",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9251017,
+    "lon": -87.6597063
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2274",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9233904,
+    "lon": -87.6460993
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "950",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9182758,
+    "lon": -87.6529267
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "949",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9216452,
+    "lon": -87.6529693
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "935",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9216551,
+    "lon": -87.6525244
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2158",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9216973,
+    "lon": -87.6488467
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "140",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8840784,
+    "lon": -87.6475875
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "737",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8841895,
+    "lon": -87.6472956
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "800",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8846406,
+    "lon": -87.6476069
+  },
+  {
+    "street": "West Washington Boulevard",
+    "housenumber": "901",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8829393,
+    "lon": -87.6499491
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2971",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9359674,
+    "lon": -87.6632892
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "2940",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9354299,
+    "lon": -87.6699525
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "3024",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9365722,
+    "lon": -87.670456
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "2825",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9331908,
+    "lon": -87.6678523
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3001",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9363919,
+    "lon": -87.6638867
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3033",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9369726,
+    "lon": -87.6646324
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3041",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9371592,
+    "lon": -87.6649154
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3045",
+    "city": "Chicago",
+    "lat": 41.9372739,
+    "lon": -87.665079
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3100",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9380405,
+    "lon": -87.6666557
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "1150",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9399619,
+    "lon": -87.658528
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "1040",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.940004,
+    "lon": -87.6556831
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "1025",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9397759,
+    "lon": -87.6551458
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1510",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.795669,
+    "lon": -87.5886586
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1550",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7953826,
+    "lon": -87.5882935
+  },
+  {
+    "street": "West Devon Avenue",
+    "housenumber": "2032",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9980101,
+    "lon": -87.6815509
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "2001",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9170269,
+    "lon": -87.6681783
+  },
+  {
+    "street": "North Ravenswood Avenue",
+    "housenumber": "7000",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.009574,
+    "lon": -87.6755503
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3042",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9377792,
+    "lon": -87.6444705
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3415",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9437924,
+    "lon": -87.6449641
+  },
+  {
+    "street": "N Broadway",
+    "housenumber": "3010",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9367975,
+    "lon": -87.6444222
+  },
+  {
+    "street": "North Austin Avenue",
+    "housenumber": "5500",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9796031,
+    "lon": -87.7777196
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "2149",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8528159,
+    "lon": -87.6462733
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "1733",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.858146,
+    "lon": -87.6464453
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "6321",
+    "city": "Chicago",
+    "postcode": "60621",
+    "lat": 41.7790375,
+    "lon": -87.6445259
+  },
+  {
+    "street": "East 51st Street",
+    "housenumber": "319",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.8019141,
+    "lon": -87.6185232
+  },
+  {
+    "street": "East 47th Street",
+    "housenumber": "314",
+    "city": "Chicago",
+    "postcode": "60653",
+    "lat": 41.8093747,
+    "lon": -87.6188643
+  },
+  {
+    "street": "South Indiana Avenue",
+    "housenumber": "4003",
+    "city": "Chicago",
+    "postcode": "60653",
+    "lat": 41.8217983,
+    "lon": -87.621299
+  },
+  {
+    "street": "West 87th Street",
+    "housenumber": "820",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7366279,
+    "lon": -87.6446465
+  },
+  {
+    "street": "South Loomis Street",
+    "housenumber": "8901",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7321231,
+    "lon": -87.65896
+  },
+  {
+    "street": "South Prospect Street",
+    "housenumber": "9105",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.727968,
+    "lon": -87.6671729
+  },
+  {
+    "street": "West 95th Street",
+    "housenumber": "1766",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.7214304,
+    "lon": -87.6675082
+  },
+  {
+    "street": "South Hale Avenue",
+    "housenumber": "11046",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.6925678,
+    "lon": -87.6705457
+  },
+  {
+    "street": "West 115th Street",
+    "housenumber": "1982",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.6853976,
+    "lon": -87.6714035
+  },
+  {
+    "street": "South Walden Parkway",
+    "housenumber": "9901",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.7136695,
+    "lon": -87.6673158
+  },
+  {
+    "street": "South Walden Parkway",
+    "housenumber": "10301",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.7061682,
+    "lon": -87.6688917
+  },
+  {
+    "street": "West 107th Street",
+    "housenumber": "1901",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.6988629,
+    "lon": -87.6697797
+  },
+  {
+    "street": "South Brainard Avenue",
+    "housenumber": "13730",
+    "city": "Chicago",
+    "postcode": "60633",
+    "lat": 41.6464743,
+    "lon": -87.5439369
+  },
+  {
+    "street": "North Cicero Avenue",
+    "housenumber": "1833",
+    "city": "Chicago",
+    "postcode": "60639",
+    "lat": 41.9144353,
+    "lon": -87.7459818
+  },
+  {
+    "street": "West Wilson Avenue",
+    "housenumber": "1109",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9647782,
+    "lon": -87.6579209
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "1117",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9693456,
+    "lon": -87.6584581
+  },
+  {
+    "street": "North Kilbourn Avenue",
+    "housenumber": "3729",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9467973,
+    "lon": -87.7392852
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "800",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.8962116,
+    "lon": -87.6553278
+  },
+  {
+    "street": "South Central Avenue",
+    "housenumber": "720",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8701771,
+    "lon": -87.7657424
+  },
+  {
+    "street": "South Cicero Avenue",
+    "housenumber": "720",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.871599,
+    "lon": -87.7469459
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "5621",
+    "city": "Chicago",
+    "postcode": "60639",
+    "lat": 41.9166766,
+    "lon": -87.7669163
+  },
+  {
+    "street": "North Narragansett Avenue",
+    "housenumber": "2031",
+    "city": "Chicago",
+    "postcode": "60707",
+    "lat": 41.9165374,
+    "lon": -87.7864547
+  },
+  {
+    "street": "West Shakespeare Avenue",
+    "housenumber": "6801",
+    "city": "Chicago",
+    "postcode": "60707",
+    "lat": 41.9192039,
+    "lon": -87.7943324
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "5247",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9775729,
+    "lon": -87.688747
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "3232",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9758519,
+    "lon": -87.7100792
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "3258",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9758657,
+    "lon": -87.7109515
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "5316",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9772518,
+    "lon": -87.7697838
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "610",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.932947,
+    "lon": -87.6442203
+  },
+  {
+    "street": "North Leavitt Street",
+    "housenumber": "957",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8993137,
+    "lon": -87.6818666
+  },
+  {
+    "street": "West Ida B. Wells Drive",
+    "housenumber": "150",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8756138,
+    "lon": -87.6312497
+  },
+  {
+    "street": "East Superior Street",
+    "housenumber": "41",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8955398,
+    "lon": -87.6263496
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3640",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9483162,
+    "lon": -87.6498096
+  },
+  {
+    "street": "North Lake Shore Drive",
+    "housenumber": "3550",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9483322,
+    "lon": -87.6435225
+  },
+  {
+    "street": "West Waveland Avenue",
+    "housenumber": "693",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9496248,
+    "lon": -87.6463764
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3700",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9492876,
+    "lon": -87.6497575
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3531",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9468184,
+    "lon": -87.6464054
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3561",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9471033,
+    "lon": -87.6469665
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3656",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9488651,
+    "lon": -87.6498854
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3463",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9450605,
+    "lon": -87.645679
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3233",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9409507,
+    "lon": -87.6441233
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3300",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.942036,
+    "lon": -87.6446812
+  },
+  {
+    "street": "North Glenwood Avenue",
+    "housenumber": "6920",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0073549,
+    "lon": -87.6662451
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3726",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9499295,
+    "lon": -87.6490719
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3700",
+    "city": "Chicago",
+    "postcode": "60613-4105",
+    "lat": 41.9492901,
+    "lon": -87.6487138
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3523",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.946246,
+    "lon": -87.649292
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3458",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9453312,
+    "lon": -87.6495882
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3356",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9435055,
+    "lon": -87.6495093
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3334",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9428145,
+    "lon": -87.6494997
+  },
+  {
+    "street": "South Western Avenue",
+    "housenumber": "939",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8691031,
+    "lon": -87.6858588
+  },
+  {
+    "street": "North Northwest Highway",
+    "housenumber": "5943",
+    "city": "Chicago",
+    "postcode": "60631",
+    "lat": 41.9890455,
+    "lon": -87.7928965
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "6359",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9598449,
+    "lon": -87.786475
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "5973",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9904402,
+    "lon": -87.6697339
+  },
+  {
+    "street": "West Elmdale Avenue",
+    "housenumber": "1547",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9906854,
+    "lon": -87.6694842
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "5413",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9385067,
+    "lon": -87.7623423
+  },
+  {
+    "street": "West Iowa Street",
+    "housenumber": "1858",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8980584,
+    "lon": -87.6745111
+  },
+  {
+    "street": "North Wolcott Avenue",
+    "housenumber": "1059",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9012796,
+    "lon": -87.6745795
+  },
+  {
+    "street": "West Thomas Street",
+    "housenumber": "1935",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9012696,
+    "lon": -87.6761271
+  },
+  {
+    "street": "West Addison Street",
+    "housenumber": "936",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9473695,
+    "lon": -87.6534087
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2230",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.922644,
+    "lon": -87.697483
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2218",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9223178,
+    "lon": -87.6975766
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2211",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.92202,
+    "lon": -87.6969123
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2300",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9228562,
+    "lon": -87.6974973
+  },
+  {
+    "street": "West Medill Avenue",
+    "housenumber": "7007",
+    "city": "Chicago",
+    "postcode": "60707",
+    "lat": 41.9218485,
+    "lon": -87.8016081
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "725",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8723006,
+    "lon": -87.6273456
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "725",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8724716,
+    "lon": -87.6273498
+  },
+  {
+    "street": "West 35th Street",
+    "housenumber": "106",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8312362,
+    "lon": -87.6294041
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3733",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9501152,
+    "lon": -87.649398
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3729",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9499795,
+    "lon": -87.6494034
+  },
+  {
+    "street": "North Rogers Avenue",
+    "housenumber": "7305",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0138318,
+    "lon": -87.6793331
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "410",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8834414,
+    "lon": -87.6386671
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2338",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9236445,
+    "lon": -87.6988013
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2340",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9236884,
+    "lon": -87.698871
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2410",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.924953,
+    "lon": -87.700966
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "1845",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.915234,
+    "lon": -87.687128
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2210",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9221011,
+    "lon": -87.6975093
+  },
+  {
+    "street": "West Morse Avenue",
+    "housenumber": "1501",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.007714,
+    "lon": -87.6680451
+  },
+  {
+    "street": "East Randolph Street",
+    "housenumber": "53",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8843548,
+    "lon": -87.625863
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1820",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9616363,
+    "lon": -87.6753928
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "2010",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9616108,
+    "lon": -87.6796436
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1835",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9613575,
+    "lon": -87.675741
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1919",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9613426,
+    "lon": -87.67683
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4300",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.959724,
+    "lon": -87.6828837
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4553-4557",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9647919,
+    "lon": -87.6858529
+  },
+  {
+    "street": "South Dauphin Avenue",
+    "housenumber": "10301",
+    "city": "Chicago",
+    "postcode": "60628",
+    "lat": 41.7068051,
+    "lon": -87.6072928
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2368",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9254356,
+    "lon": -87.6405478
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2447",
+    "city": "Chicago",
+    "lat": 41.9267484,
+    "lon": -87.6409859
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4802",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9691831,
+    "lon": -87.6598913
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "5148",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9758188,
+    "lon": -87.6685536
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "10",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8816067,
+    "lon": -87.6281389
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "24",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8828614,
+    "lon": -87.6282788
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8823984,
+    "lon": -87.6267731
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4257",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9591945,
+    "lon": -87.6820201
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4600",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9650343,
+    "lon": -87.6864001
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1818",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9616351,
+    "lon": -87.6753006
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4019",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9548739,
+    "lon": -87.6789956
+  },
+  {
+    "street": "West Devon Avenue",
+    "housenumber": "3000",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9976399,
+    "lon": -87.7049649
+  },
+  {
+    "street": "West Touhy Avenue",
+    "housenumber": "2915",
+    "city": "Chicago",
+    "postcode": "60645",
+    "lat": 42.0118471,
+    "lon": -87.7028091
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "2201",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9612699,
+    "lon": -87.6839876
+  },
+  {
+    "street": "West Granville Avenue",
+    "housenumber": "1039",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.994444,
+    "lon": -87.6572866
+  },
+  {
+    "street": "North Greenview Avenue",
+    "housenumber": "6415",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 41.9986735,
+    "lon": -87.6677446
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "5550",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9832846,
+    "lon": -87.6603147
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4601",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9650425,
+    "lon": -87.6860231
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4264",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.959466,
+    "lon": -87.6826489
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4729",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9674616,
+    "lon": -87.687611
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4500",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9633493,
+    "lon": -87.6853445
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "2205",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9612731,
+    "lon": -87.6840759
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4801",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9688054,
+    "lon": -87.6884053
+  },
+  {
+    "street": "East Benton Place",
+    "housenumber": "333",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8854048,
+    "lon": -87.6189659
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "2559",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9027801,
+    "lon": -87.691589
+  },
+  {
+    "street": "West Homer Street",
+    "housenumber": "2403",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9165513,
+    "lon": -87.6876454
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "1912",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9162779,
+    "lon": -87.6876159
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "2459",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9028324,
+    "lon": -87.6893216
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2639",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.929799,
+    "lon": -87.708339
+  },
+  {
+    "street": "West Webster Avenue",
+    "housenumber": "1809",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9211995,
+    "lon": -87.6730944
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "2222",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9220517,
+    "lon": -87.6734351
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "2158",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9212295,
+    "lon": -87.6779251
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "2401",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9250199,
+    "lon": -87.6874251
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "1240",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9050015,
+    "lon": -87.667756
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "164",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8849548,
+    "lon": -87.6281697
+  },
+  {
+    "street": "South Clinton Street",
+    "housenumber": "131",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8795638,
+    "lon": -87.6409175
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "111",
+    "city": "Chicago",
+    "lat": 41.8793184,
+    "lon": -87.631192
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "111",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8793175,
+    "lon": -87.6313222
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "235",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8767318,
+    "lon": -87.6347531
+  },
+  {
+    "street": "West Roosevelt Road",
+    "housenumber": "570",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8674807,
+    "lon": -87.6419936
+  },
+  {
+    "street": "West Roosevelt Road",
+    "housenumber": "555",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8669773,
+    "lon": -87.6414266
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1234",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8661821,
+    "lon": -87.6402059
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1242",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.865975,
+    "lon": -87.6401881
+  },
+  {
+    "street": "South Green Street",
+    "housenumber": "843",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8765297,
+    "lon": -87.6487377
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "812",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8767706,
+    "lon": -87.6478927
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1232",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8662918,
+    "lon": -87.6402107
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "833",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8765215,
+    "lon": -87.6485639
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "550",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8794284,
+    "lon": -87.6414853
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "525",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8803651,
+    "lon": -87.6408924
+  },
+  {
+    "street": "South Sangamon Street",
+    "housenumber": "203",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.878888,
+    "lon": -87.6506481
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "914",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8767285,
+    "lon": -87.6501796
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "916",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8767279,
+    "lon": -87.6502403
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "565",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8791013,
+    "lon": -87.6421093
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "2011",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9613267,
+    "lon": -87.6793866
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1810",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9616405,
+    "lon": -87.6749182
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "4700",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9670666,
+    "lon": -87.679341
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "102",
+    "city": "Chicago",
+    "lat": 41.8795201,
+    "lon": -87.6310351
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "112",
+    "city": "Chicago",
+    "lat": 41.8795172,
+    "lon": -87.631208
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "186",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8795079,
+    "lon": -87.6336
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "120",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.879512,
+    "lon": -87.6315592
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "27",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.885585,
+    "lon": -87.6289403
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "29",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8855883,
+    "lon": -87.6290716
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "151",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8848484,
+    "lon": -87.6276109
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "318",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8794787,
+    "lon": -87.6361117
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4356",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9603553,
+    "lon": -87.7674275
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6408",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.953869,
+    "lon": -87.7870197
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6408",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9538231,
+    "lon": -87.787006
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6430",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9539684,
+    "lon": -87.787687
+  },
+  {
+    "street": "North Narragansett Avenue",
+    "housenumber": "4036",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9539075,
+    "lon": -87.7870188
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6358",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9530925,
+    "lon": -87.7863654
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6430",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9539704,
+    "lon": -87.7874683
+  },
+  {
+    "street": "North Narragansett Avenue",
+    "housenumber": "4044",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9541282,
+    "lon": -87.7870233
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6545",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9526669,
+    "lon": -87.7906167
+  },
+  {
+    "street": "North Oak Park Avenue",
+    "housenumber": "4015",
+    "city": "Chicago",
+    "lat": 41.9536907,
+    "lon": -87.7931136
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "5849",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9602679,
+    "lon": -87.7740303
+  },
+  {
+    "street": "North Columbus Drive",
+    "housenumber": "205",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.885957,
+    "lon": -87.6203315
+  },
+  {
+    "street": "East Erie Street",
+    "housenumber": "643",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8932361,
+    "lon": -87.6199288
+  },
+  {
+    "street": "East Ontario Street",
+    "housenumber": "291",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8932428,
+    "lon": -87.6205733
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8915774,
+    "lon": -87.6087562
+  },
+  {
+    "street": "East Huron Street",
+    "housenumber": "201",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8945771,
+    "lon": -87.6221092
+  },
+  {
+    "street": "North Fairbanks Court",
+    "housenumber": "622",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8932428,
+    "lon": -87.6204681
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "2461",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9265674,
+    "lon": -87.6710443
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1307",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7993244,
+    "lon": -87.594647
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1226",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.8000239,
+    "lon": -87.595493
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1236",
+    "city": "Chicago",
+    "lat": 41.8000422,
+    "lon": -87.59524
+  },
+  {
+    "street": "West Polk Street",
+    "housenumber": "47",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8716001,
+    "lon": -87.6291711
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "659",
+    "city": "Chicago",
+    "lat": 41.8829912,
+    "lon": -87.6448274
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "911",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8840971,
+    "lon": -87.6503297
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "913",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8840893,
+    "lon": -87.6504348
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "740",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9329964,
+    "lon": -87.6480961
+  },
+  {
+    "street": "East Pearson Street",
+    "housenumber": "160",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8978228,
+    "lon": -87.6222827
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "2057",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9103339,
+    "lon": -87.6797489
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "505",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8911493,
+    "lon": -87.6278016
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "601",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.892586,
+    "lon": -87.6279351
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3123",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9382563,
+    "lon": -87.6441813
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8682107,
+    "lon": -87.6387819
+  },
+  {
+    "street": "North Hoyne Avenue",
+    "housenumber": "2076",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9198795,
+    "lon": -87.6804824
+  },
+  {
+    "street": "West Devon Avenue",
+    "housenumber": "2944",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9976152,
+    "lon": -87.7039187
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "4800",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9689037,
+    "lon": -87.6794567
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "3201",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8356926,
+    "lon": -87.6257877
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "3506",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8308138,
+    "lon": -87.6270885
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "3506",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8308336,
+    "lon": -87.6268125
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "3201",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8352026,
+    "lon": -87.626095
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "3201",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8360538,
+    "lon": -87.6258309
+  },
+  {
+    "street": "North Jefferson Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.885892,
+    "lon": -87.6431545
+  },
+  {
+    "street": "South Dearborn Street",
+    "housenumber": "701",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8731754,
+    "lon": -87.6289521
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1544",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7956034,
+    "lon": -87.5879879
+  },
+  {
+    "street": "South Wacker Drive",
+    "housenumber": "311",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.877514,
+    "lon": -87.6354221
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "211",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8792669,
+    "lon": -87.6340899
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "509",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8909535,
+    "lon": -87.6338839
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "1958",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9175667,
+    "lon": -87.677763
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "1920",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9033721,
+    "lon": -87.6757581
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "2101",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9175758,
+    "lon": -87.6802739
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2714",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.930398,
+    "lon": -87.7098277
+  },
+  {
+    "street": "North Oakley Avenue",
+    "housenumber": "1944",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9174886,
+    "lon": -87.6851722
+  },
+  {
+    "street": "North Kedzie Boulevard",
+    "housenumber": "2537",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9276815,
+    "lon": -87.7068011
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2557",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9279155,
+    "lon": -87.7051197
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2535",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9274808,
+    "lon": -87.7044772
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "2956",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9355781,
+    "lon": -87.7053238
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "3425",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9244801,
+    "lon": -87.713164
+  },
+  {
+    "street": "West Buena Avenue",
+    "housenumber": "910",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.958567,
+    "lon": -87.6534433
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "800",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9111678,
+    "lon": -87.6486073
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1532",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9617401,
+    "lon": -87.6690255
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1601",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9614679,
+    "lon": -87.6694841
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "4656",
+    "city": "Chicago",
+    "lat": 41.9669268,
+    "lon": -87.6672606
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "4559",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9651346,
+    "lon": -87.6665283
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "731",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8957528,
+    "lon": -87.6339655
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "547",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8778986,
+    "lon": -87.6414685
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "4744",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8752591,
+    "lon": -87.7444631
+  },
+  {
+    "street": "West Gladys Avenue",
+    "housenumber": "4727",
+    "city": "Chicago",
+    "lat": 41.875718,
+    "lon": -87.7438259
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "4523",
+    "city": "Chicago",
+    "lat": 41.8767224,
+    "lon": -87.7387915
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "4529",
+    "city": "Chicago",
+    "lat": 41.8767162,
+    "lon": -87.7389703
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "4136",
+    "city": "Chicago",
+    "lat": 41.877266,
+    "lon": -87.7294698
+  },
+  {
+    "street": "South Kilpatrick Avenue",
+    "housenumber": "218",
+    "city": "Chicago",
+    "lat": 41.8775355,
+    "lon": -87.7429364
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4223",
+    "city": "Chicago",
+    "lat": 41.8776902,
+    "lon": -87.73147
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4037",
+    "city": "Chicago",
+    "lat": 41.8777116,
+    "lon": -87.7270227
+  },
+  {
+    "street": "South Kilpatrick Avenue",
+    "housenumber": "212-216",
+    "city": "Chicago",
+    "lat": 41.8776129,
+    "lon": -87.742941
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4031",
+    "city": "Chicago",
+    "lat": 41.8777026,
+    "lon": -87.7268394
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4529",
+    "city": "Chicago",
+    "lat": 41.8776416,
+    "lon": -87.7390019
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4222",
+    "city": "Chicago",
+    "lat": 41.8781006,
+    "lon": -87.7314639
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4220",
+    "city": "Chicago",
+    "lat": 41.878101,
+    "lon": -87.7313557
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4218",
+    "city": "Chicago",
+    "lat": 41.8781012,
+    "lon": -87.7312779
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4212",
+    "city": "Chicago",
+    "lat": 41.8781016,
+    "lon": -87.7311176
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4216",
+    "city": "Chicago",
+    "lat": 41.8781014,
+    "lon": -87.731204
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4248",
+    "city": "Chicago",
+    "lat": 41.8780869,
+    "lon": -87.7324024
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "4030",
+    "city": "Chicago",
+    "lat": 41.8781805,
+    "lon": -87.7268525
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4231",
+    "city": "Chicago",
+    "lat": 41.8785734,
+    "lon": -87.7317816
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4131",
+    "city": "Chicago",
+    "lat": 41.8786041,
+    "lon": -87.7293227
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4229",
+    "city": "Chicago",
+    "lat": 41.8785759,
+    "lon": -87.731686
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4230",
+    "city": "Chicago",
+    "lat": 41.8790045,
+    "lon": -87.7317942
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4210",
+    "city": "Chicago",
+    "lat": 41.8790008,
+    "lon": -87.7310469
+  },
+  {
+    "street": "West Wilcox Street",
+    "housenumber": "4152",
+    "city": "Chicago",
+    "lat": 41.8790198,
+    "lon": -87.7301862
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "4207",
+    "city": "Chicago",
+    "lat": 41.8794614,
+    "lon": -87.7308786
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "4738",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8795387,
+    "lon": -87.7443465
+  },
+  {
+    "street": "North Keystone Avenue",
+    "housenumber": "4310 1/2",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9595734,
+    "lon": -87.7298463
+  },
+  {
+    "street": "North Keystone Avenue",
+    "housenumber": "4314 1/2",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9596411,
+    "lon": -87.7298467
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "3836",
+    "city": "Chicago",
+    "lat": 41.8773698,
+    "lon": -87.7221778
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "3818",
+    "city": "Chicago",
+    "lat": 41.8773875,
+    "lon": -87.7214949
+  },
+  {
+    "street": "West Wilson Avenue",
+    "housenumber": "1148",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9655116,
+    "lon": -87.6594465
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "958",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8855988,
+    "lon": -87.6514744
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8926297,
+    "lon": -87.6283717
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1927",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9102937,
+    "lon": -87.6760621
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2630",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9294676,
+    "lon": -87.7083201
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2624",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9293758,
+    "lon": -87.7081859
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "3601",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9171521,
+    "lon": -87.7169142
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2643",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9298866,
+    "lon": -87.7084811
+  },
+  {
+    "street": "W Fullerton Avenue",
+    "housenumber": "3835",
+    "city": "Chicago",
+    "lat": 41.9243673,
+    "lon": -87.7232268
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "3847",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9243121,
+    "lon": -87.723735
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "1001",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8994033,
+    "lon": -87.6965093
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "1002",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8994722,
+    "lon": -87.6969571
+  },
+  {
+    "street": "West Chicago Avenue",
+    "housenumber": "2524",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8958438,
+    "lon": -87.6904051
+  },
+  {
+    "street": "West Iowa Street",
+    "housenumber": "2600",
+    "city": "Chicago",
+    "postcode": "60622-4580",
+    "lat": 41.897642,
+    "lon": -87.6919568
+  },
+  {
+    "street": "West 18th Street",
+    "housenumber": "1439",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8577238,
+    "lon": -87.6628124
+  },
+  {
+    "street": "130",
+    "housenumber": "East Randolph Street",
+    "city": "Chicago",
+    "lat": 41.8846784,
+    "lon": -87.6228175
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "4800",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9687718,
+    "lon": -87.6892891
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "2800",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9759646,
+    "lon": -87.6991354
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "875",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8986955,
+    "lon": -87.6236895
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1512",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7997068,
+    "lon": -87.5884495
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1456",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7996698,
+    "lon": -87.5894527
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1172",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7951985,
+    "lon": -87.5968523
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1174",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7952167,
+    "lon": -87.5967215
+  },
+  {
+    "street": "North Southport Avenue",
+    "housenumber": "3415",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9439341,
+    "lon": -87.6637313
+  },
+  {
+    "street": "North Southport Avenue",
+    "housenumber": "3413",
+    "city": "Chicago",
+    "lat": 41.9440493,
+    "lon": -87.6636329
+  },
+  {
+    "street": "North Southport Avenue",
+    "housenumber": "3423",
+    "city": "Chicago",
+    "lat": 41.9442005,
+    "lon": -87.6637677
+  },
+  {
+    "street": "North Southport Avenue",
+    "housenumber": "3337",
+    "city": "Chicago",
+    "lat": 41.9444486,
+    "lon": -87.6637827
+  },
+  {
+    "street": "East Illinois Street",
+    "housenumber": "322",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8914092,
+    "lon": -87.6187573
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "188",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8845265,
+    "lon": -87.6278971
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "800",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8966529,
+    "lon": -87.6281533
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "1200",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9039037,
+    "lon": -87.6321872
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "400",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8892942,
+    "lon": -87.6341972
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "4335",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9612944,
+    "lon": -87.6534799
+  },
+  {
+    "street": "North LaSalle Drive",
+    "housenumber": "350",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8888273,
+    "lon": -87.6328104
+  },
+  {
+    "street": "North LaSalle Boulevard",
+    "housenumber": "300",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8881786,
+    "lon": -87.6333711
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3037",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9374071,
+    "lon": -87.6484086
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3021",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9371323,
+    "lon": -87.6480032
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "229",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8780009,
+    "lon": -87.6348386
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "223",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8779989,
+    "lon": -87.6347343
+  },
+  {
+    "street": "West Grand Avenue",
+    "housenumber": "59",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.891439,
+    "lon": -87.630394
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "216",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.878215,
+    "lon": -87.6346046
+  },
+  {
+    "street": "West Morse Avenue",
+    "housenumber": "1430",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0080973,
+    "lon": -87.6670593
+  },
+  {
+    "street": "North Manor Avenue",
+    "housenumber": "4664",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9662621,
+    "lon": -87.7013037
+  },
+  {
+    "street": "West 34th Street",
+    "housenumber": "2000",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8324359,
+    "lon": -87.6755413
+  },
+  {
+    "street": "South Archer Avenue",
+    "housenumber": "3435",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.831001,
+    "lon": -87.6761045
+  },
+  {
+    "street": "South Morgan Street",
+    "housenumber": "3101",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8378637,
+    "lon": -87.6509776
+  },
+  {
+    "street": "West Granville Avenue",
+    "housenumber": "1119",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9943851,
+    "lon": -87.6591827
+  },
+  {
+    "street": "West Thorndale Avenue",
+    "housenumber": "1118",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9901837,
+    "lon": -87.6590539
+  },
+  {
+    "street": "West Bryn Mawr Avenue",
+    "housenumber": "1119",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9827953,
+    "lon": -87.6587893
+  },
+  {
+    "street": "West Berwyn Avenue",
+    "housenumber": "1121",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9782026,
+    "lon": -87.6586826
+  },
+  {
+    "street": "West Argyle Street",
+    "housenumber": "1118",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9757961,
+    "lon": -87.6585711
+  },
+  {
+    "street": "West 79th Street",
+    "housenumber": "15",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7506879,
+    "lon": -87.6252037
+  },
+  {
+    "street": "West 87th Street",
+    "housenumber": "15",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7360865,
+    "lon": -87.6247647
+  },
+  {
+    "street": "West 63rd Street",
+    "housenumber": "220",
+    "city": "Chicago",
+    "postcode": "60621",
+    "lat": 41.7808889,
+    "lon": -87.6310219
+  },
+  {
+    "street": "West 69th Street",
+    "housenumber": "15",
+    "city": "Chicago",
+    "postcode": "60621",
+    "lat": 41.768939,
+    "lon": -87.625824
+  },
+  {
+    "street": "West Cermak Road",
+    "housenumber": "138",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8538308,
+    "lon": -87.6311761
+  },
+  {
+    "street": "West Granville Avenue",
+    "housenumber": "1147",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9944428,
+    "lon": -87.6601292
+  },
+  {
+    "street": "West Granville Avenue",
+    "housenumber": "1139",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9943869,
+    "lon": -87.659912
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "3200",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8842876,
+    "lon": -87.7062325
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "3631",
+    "city": "Chicago",
+    "postcode": "60624",
+    "lat": 41.8849779,
+    "lon": -87.7168892
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "4000",
+    "city": "Chicago",
+    "postcode": "60624",
+    "lat": 41.8854937,
+    "lon": -87.7261097
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "4800",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.8865719,
+    "lon": -87.7451325
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "5148",
+    "city": "Chicago",
+    "postcode": "60644",
+    "lat": 41.887196,
+    "lon": -87.7553478
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2646",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9298021,
+    "lon": -87.7088574
+  },
+  {
+    "street": "West 18th Street",
+    "housenumber": "1710",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8578877,
+    "lon": -87.6691951
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "710",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8952165,
+    "lon": -87.6344593
+  },
+  {
+    "street": "North Cumberland Avenue",
+    "housenumber": "5800",
+    "city": "Chicago",
+    "postcode": "60631",
+    "lat": 41.9843119,
+    "lon": -87.8378516
+  },
+  {
+    "street": "North Harlem Avenue",
+    "housenumber": "5550",
+    "city": "Chicago",
+    "postcode": "60656",
+    "lat": 41.9823273,
+    "lon": -87.8088359
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "4917",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9706399,
+    "lon": -87.760826
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "4600",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9614126,
+    "lon": -87.7435493
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "1588",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9098403,
+    "lon": -87.6776068
+  },
+  {
+    "street": "South Kedzie Avenue",
+    "housenumber": "530",
+    "city": "Chicago",
+    "postcode": "60624",
+    "lat": 41.8741351,
+    "lon": -87.7084286
+  },
+  {
+    "street": "South Pulaski Road",
+    "housenumber": "530",
+    "city": "Chicago",
+    "postcode": "60624",
+    "lat": 41.873879,
+    "lon": -87.7278948
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2001",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9183759,
+    "lon": -87.6482353
+  },
+  {
+    "street": "West 31st Street",
+    "housenumber": "753",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.837736,
+    "lon": -87.6457294
+  },
+  {
+    "street": "West 31st Street",
+    "housenumber": "753",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8377336,
+    "lon": -87.6460538
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1628",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9116127,
+    "lon": -87.6348918
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3864",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9521262,
+    "lon": -87.6775776
+  },
+  {
+    "street": "North Racine Avenue",
+    "housenumber": "3030",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9372356,
+    "lon": -87.6590804
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "4636",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.965757,
+    "lon": -87.708734
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "541",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8920269,
+    "lon": -87.6339103
+  },
+  {
+    "street": "West Jarvis Avenue",
+    "housenumber": "1523",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0160012,
+    "lon": -87.669268
+  },
+  {
+    "street": "North Southport Avenue",
+    "housenumber": "2524",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9278273,
+    "lon": -87.6636143
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "550",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8921706,
+    "lon": -87.6285729
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "2077",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9190655,
+    "lon": -87.6601906
+  },
+  {
+    "street": "North North Park Avenue",
+    "housenumber": "1622",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9117895,
+    "lon": -87.6368244
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "5628",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9842875,
+    "lon": -87.6691213
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "5200",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9760343,
+    "lon": -87.6927611
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "4923",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9724359,
+    "lon": -87.6677551
+  },
+  {
+    "street": "West Schreiber Avenue",
+    "housenumber": "1508-1510",
+    "city": "Chicago",
+    "lat": 41.9991067,
+    "lon": -87.6684926
+  },
+  {
+    "street": "North Jefferson Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "lat": 41.8860499,
+    "lon": -87.642914
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8789853,
+    "lon": -87.6475092
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2473",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9275472,
+    "lon": -87.6414714
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3140",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9388826,
+    "lon": -87.644646
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "5324",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.978984,
+    "lon": -87.660341
+  },
+  {
+    "street": "North La Salle Drive",
+    "housenumber": "1565",
+    "city": "Chicago",
+    "lat": 41.9110532,
+    "lon": -87.6329312
+  },
+  {
+    "street": "North Lincoln Park West",
+    "housenumber": "2348",
+    "city": "Chicago",
+    "lat": 41.9253025,
+    "lon": -87.6367657
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "3169",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9386662,
+    "lon": -87.6970303
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2650",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9308007,
+    "lon": -87.6442086
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2640",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.930563,
+    "lon": -87.6440084
+  },
+  {
+    "street": "West Wolf Point Plaza",
+    "housenumber": "350",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8881356,
+    "lon": -87.6378473
+  },
+  {
+    "street": "South Marshfield Avenue",
+    "housenumber": "11730",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.6802481,
+    "lon": -87.664606
+  },
+  {
+    "street": "North Hamlin Avenue",
+    "housenumber": "2158",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9207455,
+    "lon": -87.7220043
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "875",
+    "city": "Chicago",
+    "lat": 41.8989798,
+    "lon": -87.6231763
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "176",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8853746,
+    "lon": -87.6355874
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "3914",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.968419,
+    "lon": -87.7249501
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "230",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9113354,
+    "lon": -87.6356269
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2519",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9277431,
+    "lon": -87.6486926
+  },
+  {
+    "street": "East Illinois Street",
+    "housenumber": "322",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8912185,
+    "lon": -87.619059
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "4365",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9533541,
+    "lon": -87.7378643
+  },
+  {
+    "street": "East 95th Street",
+    "housenumber": "1655",
+    "city": "Chicago",
+    "postcode": "60617",
+    "lat": 41.7202751,
+    "lon": -87.5827723
+  },
+  {
+    "street": "West Merchandise Mart Plaza",
+    "housenumber": "222",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8884976,
+    "lon": -87.6344561
+  },
+  {
+    "street": "North Rockwell Street",
+    "housenumber": "4749",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9682002,
+    "lon": -87.6936095
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "4929",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9531743,
+    "lon": -87.7510333
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "4914",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9535459,
+    "lon": -87.7504558
+  },
+  {
+    "street": "North Cicero Avenue",
+    "housenumber": "3924",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9523262,
+    "lon": -87.7476877
+  },
+  {
+    "street": "South Kedzie Avenue",
+    "housenumber": "4934",
+    "city": "Chicago",
+    "postcode": "60632",
+    "lat": 41.8033885,
+    "lon": -87.7057244
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "4738",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9678192,
+    "lon": -87.7086592
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "4558",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9645511,
+    "lon": -87.7088137
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "4632",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9657014,
+    "lon": -87.7087511
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "4027",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9550083,
+    "lon": -87.7077284
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3311",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9423948,
+    "lon": -87.6442641
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "5917",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9892171,
+    "lon": -87.6596351
+  },
+  {
+    "street": "West Merchandise Mart Plaza",
+    "housenumber": "222",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8885815,
+    "lon": -87.6344597
+  },
+  {
+    "street": "North LaSalle Drive",
+    "housenumber": "501",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8909385,
+    "lon": -87.632327
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "304",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8900973,
+    "lon": -87.6363899
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "1970",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9616119,
+    "lon": -87.6787867
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8845993,
+    "lon": -87.6341852
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1578",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9102437,
+    "lon": -87.6488384
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3184",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9398402,
+    "lon": -87.6507796
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3257",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9426831,
+    "lon": -87.6443288
+  },
+  {
+    "street": "North Sheffield Avenue",
+    "housenumber": "2833",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9337677,
+    "lon": -87.6536605
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3181",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9399318,
+    "lon": -87.6442336
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3000",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9367784,
+    "lon": -87.6484542
+  },
+  {
+    "street": "West Balmoral Avenue",
+    "housenumber": "10000",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9763381,
+    "lon": -87.905461
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "2901",
+    "city": "Chicago",
+    "lat": 41.9339805,
+    "lon": -87.7072158
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "3030",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.936156,
+    "lon": -87.7193663
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1311",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.906099,
+    "lon": -87.6343264
+  },
+  {
+    "street": "East Benton Place",
+    "housenumber": "333",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8854088,
+    "lon": -87.6188393
+  },
+  {
+    "street": "North Ravenswood Avenue",
+    "housenumber": "4557",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.965037,
+    "lon": -87.6738629
+  },
+  {
+    "street": "North Columbus Drive",
+    "housenumber": "222",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8865997,
+    "lon": -87.6217728
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3046",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.937878,
+    "lon": -87.6499025
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "3046",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9376345,
+    "lon": -87.6499079
+  },
+  {
+    "street": "East Ontario Street",
+    "housenumber": "44",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8934915,
+    "lon": -87.6262699
+  },
+  {
+    "street": "East Ontario Street",
+    "housenumber": "38",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8935124,
+    "lon": -87.6265885
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "624",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8735823,
+    "lon": -87.6245054
+  },
+  {
+    "street": "West Grand Avenue",
+    "housenumber": "1402",
+    "city": "Chicago",
+    "lat": 41.8911786,
+    "lon": -87.6625356
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "4624",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9681805,
+    "lon": -87.7439556
+  },
+  {
+    "street": "North Rogers Avenue",
+    "housenumber": "7340",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.017061,
+    "lon": -87.676771
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "5233",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9770576,
+    "lon": -87.6792537
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "134",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8798242,
+    "lon": -87.62636
+  },
+  {
+    "street": "South Wacker Drive",
+    "housenumber": "150",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.879485,
+    "lon": -87.6376432
+  },
+  {
+    "street": "South Wacker Drive",
+    "housenumber": "233",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8790458,
+    "lon": -87.6364978
+  },
+  {
+    "street": "CONC",
+    "housenumber": "3",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9771432,
+    "lon": -87.8984834
+  },
+  {
+    "street": "West O'Hare Avenue",
+    "housenumber": "10000",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9773548,
+    "lon": -87.8987928
+  },
+  {
+    "street": "West Balmoral Avenue",
+    "housenumber": "10000",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9758171,
+    "lon": -87.9024141
+  },
+  {
+    "street": "CONC",
+    "housenumber": "3",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9740141,
+    "lon": -87.9005386
+  },
+  {
+    "street": "CONC",
+    "housenumber": "3",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.974859,
+    "lon": -87.8985677
+  },
+  {
+    "street": "CONC H/K Food Court",
+    "housenumber": "3",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9749999,
+    "lon": -87.9001275
+  },
+  {
+    "street": "West Balmoral Avenue",
+    "housenumber": "10000",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.974589,
+    "lon": -87.9003307
+  },
+  {
+    "street": "West Balmoral Avenue",
+    "housenumber": "10000",
+    "city": "Chicago",
+    "postcode": "60666",
+    "lat": 41.9752491,
+    "lon": -87.9000178
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "1512",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9762948,
+    "lon": -87.668909
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "1509",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9760684,
+    "lon": -87.6688893
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "5201",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9763065,
+    "lon": -87.6682585
+  },
+  {
+    "street": "North Ravenswood Avenue",
+    "housenumber": "4437",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9625013,
+    "lon": -87.6736826
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "1948",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9175731,
+    "lon": -87.6674863
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "1935",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9176669,
+    "lon": -87.6765361
+  },
+  {
+    "street": "North Damen Avenue",
+    "housenumber": "1924",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9166729,
+    "lon": -87.6777511
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1953",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9103729,
+    "lon": -87.6764344
+  },
+  {
+    "street": "West Wabansia Avenue",
+    "housenumber": "2014",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9123956,
+    "lon": -87.6781186
+  },
+  {
+    "street": "West Wabansia Avenue",
+    "housenumber": "1858",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9124475,
+    "lon": -87.6749268
+  },
+  {
+    "street": "West Wabansia Avenue",
+    "housenumber": "1824",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9124814,
+    "lon": -87.6737117
+  },
+  {
+    "street": "West Wabansia Avenue",
+    "housenumber": "1758",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9124994,
+    "lon": -87.6724672
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1825",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9104118,
+    "lon": -87.6736316
+  },
+  {
+    "street": "North Paulina Street",
+    "housenumber": "1341",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9065353,
+    "lon": -87.6694606
+  },
+  {
+    "street": "North Ravenswood Avenue",
+    "housenumber": "4401",
+    "city": "Chicago",
+    "lat": 41.961704,
+    "lon": -87.6733552
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "8",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8824156,
+    "lon": -87.6247097
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8818982,
+    "lon": -87.6275053
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "77",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8819857,
+    "lon": -87.6249638
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "550",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.893123,
+    "lon": -87.6128059
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "550 East",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8930319,
+    "lon": -87.6136282
+  },
+  {
+    "street": "West Montrose Harbor Drive",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9648705,
+    "lon": -87.635953
+  },
+  {
+    "street": "East 34th Street",
+    "housenumber": "443",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8327674,
+    "lon": -87.614658
+  },
+  {
+    "street": "South Pulaski Road",
+    "housenumber": "5320",
+    "city": "Chicago",
+    "postcode": "60632",
+    "lat": 41.795988,
+    "lon": -87.7250281
+  },
+  {
+    "street": "North Clinton Street",
+    "housenumber": "226",
+    "city": "Chicago",
+    "lat": 41.886251,
+    "lon": -87.6415213
+  },
+  {
+    "street": "North Clinton Street",
+    "housenumber": "215",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8862099,
+    "lon": -87.641136
+  },
+  {
+    "street": "South Kedzie Avenue",
+    "housenumber": "4700",
+    "city": "Chicago",
+    "postcode": "60632",
+    "lat": 41.807559,
+    "lon": -87.7053678
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1150",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8677461,
+    "lon": -87.626052
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1146",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.867837,
+    "lon": -87.626052
+  },
+  {
+    "street": "East 57th Street",
+    "housenumber": "1301",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.7913169,
+    "lon": -87.5946337
+  },
+  {
+    "street": "South Ellis Avenue",
+    "housenumber": "5525",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.794402,
+    "lon": -87.6001286
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1231",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8666131,
+    "lon": -87.6255854
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1233",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8665552,
+    "lon": -87.6255855
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1235",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8664813,
+    "lon": -87.6255882
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1231",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8666204,
+    "lon": -87.6254512
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "805",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8715532,
+    "lon": -87.6273394
+  },
+  {
+    "street": "East Roosevelt Road",
+    "housenumber": "22",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8676126,
+    "lon": -87.6265421
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1152",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8676519,
+    "lon": -87.6260638
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "1212",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.867162,
+    "lon": -87.6243837
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1147",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8678438,
+    "lon": -87.6256386
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "1120",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8688255,
+    "lon": -87.6245382
+  },
+  {
+    "street": "East Roosevelt Road",
+    "housenumber": "2",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8675999,
+    "lon": -87.6272442
+  },
+  {
+    "street": "East 57th Street",
+    "housenumber": "1323",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.7913357,
+    "lon": -87.5938479
+  },
+  {
+    "street": "East 57th Street",
+    "housenumber": "1333",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.791333,
+    "lon": -87.5934223
+  },
+  {
+    "street": "East 57th Street",
+    "housenumber": "1331",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.7913288,
+    "lon": -87.5936295
+  },
+  {
+    "street": "East Roosevelt Road",
+    "housenumber": "22",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.867644,
+    "lon": -87.6265557
+  },
+  {
+    "street": "East Delaware Place",
+    "housenumber": "201",
+    "city": "Chicago",
+    "lat": 41.8991079,
+    "lon": -87.621583
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "1335",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8643963,
+    "lon": -87.6466498
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "3859",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9520045,
+    "lon": -87.707771
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "2919",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9353779,
+    "lon": -87.6440766
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "2933",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9359579,
+    "lon": -87.644101
+  },
+  {
+    "street": "South Wells Street",
+    "housenumber": "2707",
+    "city": "Chicago",
+    "postcode": "60616",
+    "lat": 41.8439368,
+    "lon": -87.6327227
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "5961",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9897465,
+    "lon": -87.7054586
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "111",
+    "city": "Chicago",
+    "postcode": "60604",
+    "lat": 41.877995,
+    "lon": -87.6316719
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "3020",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8389807,
+    "lon": -87.6467948
+  },
+  {
+    "street": "West Wacker Drive",
+    "housenumber": "333",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8863143,
+    "lon": -87.635621
+  },
+  {
+    "street": "West Wacker Drive",
+    "housenumber": "333",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8858838,
+    "lon": -87.6360264
+  },
+  {
+    "street": "South Archer Avenue",
+    "housenumber": "6216",
+    "city": "Chicago",
+    "postcode": "60638",
+    "lat": 41.7941278,
+    "lon": -87.7752549
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "1564",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9098468,
+    "lon": -87.6768908
+  },
+  {
+    "street": "West Harrison Street",
+    "housenumber": "1611",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8737791,
+    "lon": -87.6670544
+  },
+  {
+    "street": "East 47th Street",
+    "housenumber": "225",
+    "city": "Chicago",
+    "postcode": "60653",
+    "lat": 41.8091967,
+    "lon": -87.6200842
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2616",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9300231,
+    "lon": -87.643667
+  },
+  {
+    "street": "South Kedzie Avenue",
+    "housenumber": "4701",
+    "city": "Chicago",
+    "postcode": "60632",
+    "lat": 41.8079823,
+    "lon": -87.7032891
+  },
+  {
+    "street": "North Harlem Avenue",
+    "housenumber": "7156",
+    "city": "Chicago",
+    "postcode": "60631",
+    "lat": 42.011539,
+    "lon": -87.8070631
+  },
+  {
+    "street": "West 87th Street",
+    "housenumber": "112",
+    "city": "Chicago",
+    "postcode": "60620",
+    "lat": 41.7375511,
+    "lon": -87.6282472
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "5901",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9675611,
+    "lon": -87.7749828
+  },
+  {
+    "street": "East 47th Street",
+    "housenumber": "1306",
+    "city": "Chicago",
+    "postcode": "60653",
+    "lat": 41.8103479,
+    "lon": -87.5951306
+  },
+  {
+    "street": "West 103rd Street",
+    "housenumber": "3128",
+    "city": "Chicago",
+    "postcode": "60655",
+    "lat": 41.7068679,
+    "lon": -87.6999977
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "6560",
+    "city": "Chicago",
+    "postcode": "60707",
+    "lat": 41.9243884,
+    "lon": -87.7896029
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2679",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9307707,
+    "lon": -87.655881
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.879262,
+    "lon": -87.624641
+  },
+  {
+    "street": "South Western Avenue",
+    "housenumber": "7828",
+    "city": "Chicago",
+    "postcode": "60652",
+    "lat": 41.7510168,
+    "lon": -87.6832746
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "7137",
+    "city": "Chicago",
+    "postcode": "60619",
+    "lat": 41.7644262,
+    "lon": -87.6246375
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "1513",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9250475,
+    "lon": -87.66639
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "3601",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9469558,
+    "lon": -87.6878272
+  },
+  {
+    "street": "North Northwest Highway",
+    "housenumber": "6699",
+    "city": "Chicago",
+    "postcode": "60631",
+    "lat": 42.0028169,
+    "lon": -87.8158735
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1151",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8678943,
+    "lon": -87.6272476
+  },
+  {
+    "street": "West Chicago Avenue",
+    "housenumber": "1618 1/2",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8962266,
+    "lon": -87.6681081
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2651",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9299757,
+    "lon": -87.7086379
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2959",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9356951,
+    "lon": -87.6628628
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "1342",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9060858,
+    "lon": -87.6710198
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "3044",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9370564,
+    "lon": -87.665248
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1103",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.868621,
+    "lon": -87.627268
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1103",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8687029,
+    "lon": -87.6272613
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "635",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8937764,
+    "lon": -87.627916
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "1465",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8621654,
+    "lon": -87.6238284
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1103",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8691326,
+    "lon": -87.6272575
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "801",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8717113,
+    "lon": -87.6273414
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "819",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.871243,
+    "lon": -87.627325
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1000",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9110306,
+    "lon": -87.6537514
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1000",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9124807,
+    "lon": -87.6544869
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "1200",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9038081,
+    "lon": -87.6676962
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1419",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9083605,
+    "lon": -87.6344407
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1660",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9127531,
+    "lon": -87.6349564
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1649",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9125606,
+    "lon": -87.6345806
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1563",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9110184,
+    "lon": -87.6345458
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1514",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9096394,
+    "lon": -87.6348401
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "711",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8161097,
+    "lon": -87.6438351
+  },
+  {
+    "street": "South Wallace Street",
+    "housenumber": "4403",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8142426,
+    "lon": -87.6406833
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "617",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8160833,
+    "lon": -87.6415862
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "601",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8161461,
+    "lon": -87.6409794
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "643",
+    "city": "Chicago",
+    "postcode": "60609",
+    "lat": 41.8161269,
+    "lon": -87.6425955
+  },
+  {
+    "street": "North Knox Avenue",
+    "housenumber": "4626",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9650696,
+    "lon": -87.7444297
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2465",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9272981,
+    "lon": -87.6413164
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2300",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9238787,
+    "lon": -87.6395865
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2452",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9270011,
+    "lon": -87.6411338
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2450",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9268031,
+    "lon": -87.6415082
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "1925",
+    "city": "Chicago",
+    "lat": 41.9172647,
+    "lon": -87.6370796
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2634",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9305211,
+    "lon": -87.6439651
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3103",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9381829,
+    "lon": -87.6490377
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "3031",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.917305,
+    "lon": -87.703584
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "53",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8856398,
+    "lon": -87.6258796
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "58",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8858839,
+    "lon": -87.6258283
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "816",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.8972571,
+    "lon": -87.6283787
+  },
+  {
+    "street": "West Maple Street",
+    "housenumber": "24",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9019848,
+    "lon": -87.6293228
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2300",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9229167,
+    "lon": -87.6976011
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2385",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.924632,
+    "lon": -87.699928
+  },
+  {
+    "street": "South Damen Avenue",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8756179,
+    "lon": -87.6763416
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "1147",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9026772,
+    "lon": -87.6893228
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "2558",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.903156,
+    "lon": -87.689628
+  },
+  {
+    "street": "South Hoyne Avenue",
+    "housenumber": "2009",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8544782,
+    "lon": -87.6782263
+  },
+  {
+    "street": "North Sacramento Avenue",
+    "housenumber": "2234",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9225887,
+    "lon": -87.7023904
+  },
+  {
+    "street": "West Devon Avenue",
+    "housenumber": "5438",
+    "city": "Chicago",
+    "postcode": "60646",
+    "lat": 41.998269,
+    "lon": -87.7659761
+  },
+  {
+    "street": "North Forest Glen Avenue",
+    "housenumber": "5310",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9783314,
+    "lon": -87.7556004
+  },
+  {
+    "street": "North Kingsbury Street",
+    "housenumber": "1574",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9100457,
+    "lon": -87.6536727
+  },
+  {
+    "street": "North Kingsbury Street",
+    "housenumber": "1574",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9098571,
+    "lon": -87.654057
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1333",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.91049,
+    "lon": -87.661714
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "1657",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.912107,
+    "lon": -87.66299
+  },
+  {
+    "street": "North Avondale Avenue",
+    "housenumber": "3931",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9528048,
+    "lon": -87.7304356
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8691722,
+    "lon": -87.6386858
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8683746,
+    "lon": -87.6387767
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8685265,
+    "lon": -87.6387821
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8685245,
+    "lon": -87.6385273
+  },
+  {
+    "street": "South Canal Street",
+    "housenumber": "1101",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8686902,
+    "lon": -87.6385139
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2543",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.92796,
+    "lon": -87.697351
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2295",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.922961,
+    "lon": -87.697161
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "3144",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9389697,
+    "lon": -87.6979732
+  },
+  {
+    "street": "North Carpenter Street",
+    "housenumber": "700",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.8945599,
+    "lon": -87.6537179
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "4357",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9611893,
+    "lon": -87.688453
+  },
+  {
+    "street": "South Clark Street",
+    "housenumber": "47",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8810741,
+    "lon": -87.6305135
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "2118",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8535316,
+    "lon": -87.6467139
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "151",
+    "city": "Chicago",
+    "postcode": "60601-7506",
+    "lat": 41.8844499,
+    "lon": -87.6240714
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "151",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8844733,
+    "lon": -87.6238606
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1244",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9051881,
+    "lon": -87.6347146
+  },
+  {
+    "street": "West Goethe Street",
+    "housenumber": "205",
+    "city": "Chicago",
+    "lat": 41.9056707,
+    "lon": -87.6347944
+  },
+  {
+    "street": "East Randolph Street",
+    "housenumber": "151",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8843964,
+    "lon": -87.6240504
+  },
+  {
+    "street": "West Roosevelt Road",
+    "housenumber": "150",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8684363,
+    "lon": -87.6322365
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3155",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9393077,
+    "lon": -87.644226
+  },
+  {
+    "street": "West Chicago Avenue",
+    "housenumber": "54",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.8968661,
+    "lon": -87.6303833
+  },
+  {
+    "street": "East Roosevelt Road",
+    "housenumber": "30",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8676082,
+    "lon": -87.6262721
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "4840",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9700956,
+    "lon": -87.6599579
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2214",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9223074,
+    "lon": -87.6386625
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "2226",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.922552,
+    "lon": -87.697519
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2401",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.92497,
+    "lon": -87.700436
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "39",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9037941,
+    "lon": -87.6301786
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "6314",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9964795,
+    "lon": -87.6900675
+  },
+  {
+    "street": "North Orleans Street",
+    "housenumber": "440",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8902382,
+    "lon": -87.637207
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "178",
+    "city": "Chicago",
+    "lat": 41.885424,
+    "lon": -87.6355896
+  },
+  {
+    "street": "North Orleans Street",
+    "housenumber": "440",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8903537,
+    "lon": -87.63724
+  },
+  {
+    "street": "North Orleans Street",
+    "housenumber": "414",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8897866,
+    "lon": -87.6371788
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "180",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8856,
+    "lon": -87.6356995
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "333",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9109558,
+    "lon": -87.6380544
+  },
+  {
+    "street": "North North Park Avenue",
+    "housenumber": "1650",
+    "city": "Chicago",
+    "lat": 41.9125965,
+    "lon": -87.6368373
+  },
+  {
+    "street": "West Eugenie Street",
+    "housenumber": "301",
+    "city": "Chicago",
+    "lat": 41.9127671,
+    "lon": -87.6369019
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "400",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9040115,
+    "lon": -87.6388257
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "230",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9039684,
+    "lon": -87.6357062
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "400",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9040211,
+    "lon": -87.63861
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1201",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9040036,
+    "lon": -87.6342888
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "424",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9048924,
+    "lon": -87.6390534
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1338",
+    "city": "Chicago",
+    "lat": 41.9067311,
+    "lon": -87.6385794
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "1202",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9040444,
+    "lon": -87.6346483
+  },
+  {
+    "street": "South Wells Street",
+    "housenumber": "717",
+    "city": "Chicago",
+    "lat": 41.8725675,
+    "lon": -87.6335124
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "230",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8811784,
+    "lon": -87.635101
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8822523,
+    "lon": -87.6341347
+  },
+  {
+    "street": "West Superior Street",
+    "housenumber": "301",
+    "city": "Chicago",
+    "lat": 41.8954724,
+    "lon": -87.6360036
+  },
+  {
+    "street": "West Superior Street",
+    "housenumber": "311",
+    "city": "Chicago",
+    "lat": 41.8954684,
+    "lon": -87.636556
+  },
+  {
+    "street": "West Superior Street",
+    "housenumber": "313",
+    "city": "Chicago",
+    "lat": 41.8954657,
+    "lon": -87.6368146
+  },
+  {
+    "street": "West Superior Street",
+    "housenumber": "309",
+    "city": "Chicago",
+    "lat": 41.8954714,
+    "lon": -87.6362767
+  },
+  {
+    "street": "North Wacker Drive",
+    "housenumber": "150",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8846116,
+    "lon": -87.6373395
+  },
+  {
+    "street": "South Wacker Drive",
+    "housenumber": "100",
+    "city": "Chicago",
+    "lat": 41.880497,
+    "lon": -87.6378185
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1404",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9078078,
+    "lon": -87.6386093
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1346",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9068336,
+    "lon": -87.6385829
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1350",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9069435,
+    "lon": -87.6385867
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1360",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9072683,
+    "lon": -87.6385953
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1364",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9073693,
+    "lon": -87.6385994
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1402",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9076916,
+    "lon": -87.6386048
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1408",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.907924,
+    "lon": -87.6386151
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1418",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9081338,
+    "lon": -87.6387475
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1426",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9082323,
+    "lon": -87.6386236
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1435",
+    "city": "Chicago",
+    "lat": 41.9086788,
+    "lon": -87.6387734
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1450",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9089605,
+    "lon": -87.6386531
+  },
+  {
+    "street": "North Sedgwick Street",
+    "housenumber": "1452",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9090035,
+    "lon": -87.6386546
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1212",
+    "city": "Chicago",
+    "lat": 41.9044119,
+    "lon": -87.6376615
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1215",
+    "city": "Chicago",
+    "lat": 41.9042642,
+    "lon": -87.6374042
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1222",
+    "city": "Chicago",
+    "lat": 41.9045677,
+    "lon": -87.6376719
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1225",
+    "city": "Chicago",
+    "lat": 41.904471,
+    "lon": -87.6374132
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1235",
+    "city": "Chicago",
+    "lat": 41.9046855,
+    "lon": -87.6374288
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1245",
+    "city": "Chicago",
+    "lat": 41.9049014,
+    "lon": -87.6374242
+  },
+  {
+    "street": "West Old Town Court",
+    "housenumber": "334",
+    "city": "Chicago",
+    "lat": 41.9043281,
+    "lon": -87.6377136
+  },
+  {
+    "street": "West Scott Street",
+    "housenumber": "335",
+    "city": "Chicago",
+    "lat": 41.9047727,
+    "lon": -87.6377456
+  },
+  {
+    "street": "West Old Town Court",
+    "housenumber": "336",
+    "city": "Chicago",
+    "lat": 41.9043079,
+    "lon": -87.6378755
+  },
+  {
+    "street": "West Scott Street",
+    "housenumber": "337",
+    "city": "Chicago",
+    "lat": 41.9047839,
+    "lon": -87.6378703
+  },
+  {
+    "street": "West Old Town Court",
+    "housenumber": "338",
+    "city": "Chicago",
+    "lat": 41.9043073,
+    "lon": -87.6379381
+  },
+  {
+    "street": "West Scott Street",
+    "housenumber": "339",
+    "city": "Chicago",
+    "lat": 41.9047834,
+    "lon": -87.6379328
+  },
+  {
+    "street": "West Old Town Court",
+    "housenumber": "340",
+    "city": "Chicago",
+    "lat": 41.9043067,
+    "lon": -87.6380054
+  },
+  {
+    "street": "West Scott Street",
+    "housenumber": "341",
+    "city": "Chicago",
+    "lat": 41.9047828,
+    "lon": -87.6380051
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1226",
+    "city": "Chicago",
+    "lat": 41.9046867,
+    "lon": -87.6376701
+  },
+  {
+    "street": "West Wisconsin Street",
+    "housenumber": "1117",
+    "city": "Chicago",
+    "lat": 41.9146555,
+    "lon": -87.6556606
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1001",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.9106777,
+    "lon": -87.6537148
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1836",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9145414,
+    "lon": -87.6549472
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1840",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9147578,
+    "lon": -87.6552682
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1840",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9146551,
+    "lon": -87.6551388
+  },
+  {
+    "street": "East 71st Street",
+    "housenumber": "2221",
+    "city": "Chicago",
+    "postcode": "60649",
+    "lat": 41.7660344,
+    "lon": -87.5707035
+  },
+  {
+    "street": "South Blackstone Avenue",
+    "housenumber": "6100",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.784035,
+    "lon": -87.5904521
+  },
+  {
+    "street": "South Halsted Street",
+    "housenumber": "3201",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.836121,
+    "lon": -87.6460814
+  },
+  {
+    "street": "North Orleans Court",
+    "housenumber": "1218",
+    "city": "Chicago",
+    "lat": 41.9045372,
+    "lon": -87.6376715
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "523",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9108949,
+    "lon": -87.6419596
+  },
+  {
+    "street": "North Ashland Avenue",
+    "housenumber": "811",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.896336,
+    "lon": -87.6670987
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "1405",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.954235,
+    "lon": -87.664503
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "2875",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.933757,
+    "lon": -87.689877
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "539",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8920577,
+    "lon": -87.6278696
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "3046",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.937096,
+    "lon": -87.69797
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6032",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9531703,
+    "lon": -87.7782559
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "3000",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.932207,
+    "lon": -87.702698
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2833",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9327273,
+    "lon": -87.7131403
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2864",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.933352,
+    "lon": -87.714656
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "3302",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.939595,
+    "lon": -87.711398
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "3320",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.93985,
+    "lon": -87.711497
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "3262",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.940134,
+    "lon": -87.711505
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "129",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.911036,
+    "lon": -87.6327641
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "401 1/2",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8894615,
+    "lon": -87.6353902
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1162",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7951799,
+    "lon": -87.5971262
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2523",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9284735,
+    "lon": -87.6420308
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2472",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9274788,
+    "lon": -87.6419022
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2468",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9273681,
+    "lon": -87.6417412
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2521",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9284496,
+    "lon": -87.6420093
+  },
+  {
+    "street": "West Greenleaf Avenue",
+    "housenumber": "1775",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.010048,
+    "lon": -87.6752026
+  },
+  {
+    "street": "North Wolcott Avenue",
+    "housenumber": "412",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8891947,
+    "lon": -87.6748468
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "5056",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9680985,
+    "lon": -87.7548174
+  },
+  {
+    "street": "North Cicero Avenue",
+    "housenumber": "5050",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.9734418,
+    "lon": -87.7482435
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "7011",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0095917,
+    "lon": -87.6619916
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "1812",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8898877,
+    "lon": -87.6731032
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "1828",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8898853,
+    "lon": -87.6732603
+  },
+  {
+    "street": "North Ravenswood Avenue",
+    "housenumber": "7015",
+    "city": "Chicago",
+    "lat": 42.0094578,
+    "lon": -87.6752378
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "1747",
+    "city": "Chicago",
+    "postcode": "60612",
+    "lat": 41.8896605,
+    "lon": -87.6717696
+  },
+  {
+    "street": "West Grand Avenue",
+    "housenumber": "1758",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8910659,
+    "lon": -87.6718335
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "1812-1820",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.889883,
+    "lon": -87.6734101
+  },
+  {
+    "street": "North Sheridan Road",
+    "housenumber": "7001",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.009333,
+    "lon": -87.6619017
+  },
+  {
+    "street": "North Cicero Avenue",
+    "housenumber": "5050",
+    "city": "Chicago",
+    "postcode": "60630",
+    "lat": 41.973359,
+    "lon": -87.7483444
+  },
+  {
+    "street": "North Green Street",
+    "housenumber": "700",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.8952764,
+    "lon": -87.6491138
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "205",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8842754,
+    "lon": -87.6342596
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "8",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8819299,
+    "lon": -87.6247089
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "914",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8979505,
+    "lon": -87.6969476
+  },
+  {
+    "street": "North Clinton Street",
+    "housenumber": "201",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8858431,
+    "lon": -87.6411361
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8859048,
+    "lon": -87.6430854
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "3346",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9420176,
+    "lon": -87.689681
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "3326",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9413563,
+    "lon": -87.6893452
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "3312",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.941369,
+    "lon": -87.6887411
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1599",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.910787,
+    "lon": -87.6490879
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "42",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8809597,
+    "lon": -87.6279664
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "2",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8818969,
+    "lon": -87.6281768
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "22",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8827331,
+    "lon": -87.6282665
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "122",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.882248,
+    "lon": -87.6247084
+  },
+  {
+    "street": "North Dearborn Street",
+    "housenumber": "150",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8846009,
+    "lon": -87.6296591
+  },
+  {
+    "street": "North Dearborn Street",
+    "housenumber": "333-335",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8887361,
+    "lon": -87.629404
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "435",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8904282,
+    "lon": -87.6305941
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "515",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8914217,
+    "lon": -87.6294449
+  },
+  {
+    "street": "West Erie Street",
+    "housenumber": "30",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8942218,
+    "lon": -87.6294975
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "1201",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9041348,
+    "lon": -87.6312547
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "1038",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9016746,
+    "lon": -87.6316367
+  },
+  {
+    "street": "West Cermak Road",
+    "housenumber": "2504",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8523186,
+    "lon": -87.688774
+  },
+  {
+    "street": "West Hawthorne Place",
+    "housenumber": "525",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9443981,
+    "lon": -87.6422319
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "3281",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.917247,
+    "lon": -87.7101436
+  },
+  {
+    "street": "West Roscoe Street",
+    "housenumber": "1847",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9431284,
+    "lon": -87.6758683
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "3340",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9421788,
+    "lon": -87.7082946
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2240",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.922689,
+    "lon": -87.645207
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2245",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9229445,
+    "lon": -87.6449862
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2270",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9232808,
+    "lon": -87.6459883
+  },
+  {
+    "street": "North Clybourn Avenue",
+    "housenumber": "1800",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9139145,
+    "lon": -87.6543441
+  },
+  {
+    "street": "East Grand Avenue",
+    "housenumber": "60",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8918646,
+    "lon": -87.6256252
+  },
+  {
+    "street": "West Touhy Avenue",
+    "housenumber": "2817",
+    "city": "Chicago",
+    "postcode": "60645",
+    "lat": 42.0118674,
+    "lon": -87.7004073
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "2901",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9319208,
+    "lon": -87.7002647
+  },
+  {
+    "street": "North Kedzie Avenue",
+    "housenumber": "2853",
+    "city": "Chicago",
+    "lat": 41.9335938,
+    "lon": -87.7073464
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "626",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8934348,
+    "lon": -87.6283059
+  },
+  {
+    "street": "West Randolph Street",
+    "housenumber": "205",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8840475,
+    "lon": -87.634266
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2001",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9183076,
+    "lon": -87.6486944
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1970",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9180501,
+    "lon": -87.6486596
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1969",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9179369,
+    "lon": -87.6483425
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1967",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.917875,
+    "lon": -87.648321
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1966",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9179319,
+    "lon": -87.6486675
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1973",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9180677,
+    "lon": -87.6483402
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "1962",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9177852,
+    "lon": -87.6486715
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "732",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9180886,
+    "lon": -87.6471654
+  },
+  {
+    "street": "South Lake Park Avenue",
+    "housenumber": "5506",
+    "city": "Chicago",
+    "postcode": "60637",
+    "lat": 41.7949324,
+    "lon": -87.5878505
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1635",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7951104,
+    "lon": -87.5851227
+  },
+  {
+    "street": "East 53rd Street",
+    "housenumber": "1530",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7998148,
+    "lon": -87.5876046
+  },
+  {
+    "street": "West Morse Avenue",
+    "housenumber": "1328",
+    "city": "Chicago",
+    "postcode": "60626",
+    "lat": 42.0080948,
+    "lon": -87.6650332
+  },
+  {
+    "street": "South Michigan Avenue",
+    "housenumber": "1250",
+    "city": "Chicago",
+    "lat": 41.8670718,
+    "lon": -87.6243199
+  },
+  {
+    "street": "West Montrose Avenue",
+    "housenumber": "3400",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9612562,
+    "lon": -87.713315
+  },
+  {
+    "street": "West 24th Boulevard",
+    "housenumber": "2832",
+    "city": "Chicago",
+    "postcode": "60623",
+    "lat": 41.8489757,
+    "lon": -87.6965642
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "200",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8820621,
+    "lon": -87.6345023
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "5014",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9731713,
+    "lon": -87.6600794
+  },
+  {
+    "street": "West Hubbard Street",
+    "housenumber": "344",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8900854,
+    "lon": -87.637203
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "31",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8827482,
+    "lon": -87.6307159
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "545",
+    "city": "Chicago",
+    "lat": 41.8817104,
+    "lon": -87.6414064
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8825612,
+    "lon": -87.6399905
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "lat": 41.8823865,
+    "lon": -87.6406478
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "185",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8855834,
+    "lon": -87.6260854
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4762",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9682755,
+    "lon": -87.6884753
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4770",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9683849,
+    "lon": -87.6882137
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4763",
+    "city": "Chicago",
+    "lat": 41.9682983,
+    "lon": -87.68819
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4759",
+    "city": "Chicago",
+    "lat": 41.9682268,
+    "lon": -87.6881423
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4757",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9681856,
+    "lon": -87.688082
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4755",
+    "city": "Chicago",
+    "postcode": "60625",
+    "lat": 41.9681483,
+    "lon": -87.6880575
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "4749",
+    "city": "Chicago",
+    "lat": 41.9679883,
+    "lon": -87.6879574
+  },
+  {
+    "street": "North Lincoln Park West",
+    "housenumber": "2350",
+    "city": "Chicago",
+    "lat": 41.9254363,
+    "lon": -87.6367516
+  },
+  {
+    "street": "West Fullerton Avenue",
+    "housenumber": "305",
+    "city": "Chicago",
+    "lat": 41.9255417,
+    "lon": -87.6370579
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "1950",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9168013,
+    "lon": -87.6876692
+  },
+  {
+    "street": "West Jackson Boulevard",
+    "housenumber": "811",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.877817,
+    "lon": -87.6477689
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2417",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9260038,
+    "lon": -87.6405346
+  },
+  {
+    "street": "South Ashland Avenue",
+    "housenumber": "3145",
+    "city": "Chicago",
+    "postcode": "60608",
+    "lat": 41.8368602,
+    "lon": -87.6638909
+  },
+  {
+    "street": "West Lyndale Street",
+    "housenumber": "3000",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9224705,
+    "lon": -87.7024093
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "1924",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9106363,
+    "lon": -87.6760533
+  },
+  {
+    "street": "East Ohio Street",
+    "housenumber": "355",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8921642,
+    "lon": -87.6180984
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "757",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8964947,
+    "lon": -87.6239568
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "730",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8959579,
+    "lon": -87.624661
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8926601,
+    "lon": -87.6252293
+  },
+  {
+    "street": "East Ohio Street",
+    "housenumber": "52",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8926488,
+    "lon": -87.6264363
+  },
+  {
+    "street": "North Elston Avenue",
+    "housenumber": "3471",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.944524,
+    "lon": -87.7055174
+  },
+  {
+    "street": "West Illinois Street",
+    "housenumber": "161",
+    "city": "Chicago",
+    "lat": 41.8906902,
+    "lon": -87.6335945
+  },
+  {
+    "street": "North Wells Street",
+    "housenumber": "449",
+    "city": "Chicago",
+    "lat": 41.8906539,
+    "lon": -87.6339026
+  },
+  {
+    "street": "East Hubbard Street",
+    "housenumber": "30",
+    "city": "Chicago",
+    "postcode": "60611",
+    "lat": 41.8902477,
+    "lon": -87.62768
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "2156",
+    "city": "Chicago",
+    "postcode": "60618",
+    "lat": 41.9396533,
+    "lon": -87.6829845
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2313",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9233284,
+    "lon": -87.6978085
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "6221",
+    "city": "Chicago",
+    "postcode": "60660",
+    "lat": 41.9949958,
+    "lon": -87.6601775
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2421",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9253484,
+    "lon": -87.7010478
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2333",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9237455,
+    "lon": -87.6983641
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "3800",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9511963,
+    "lon": -87.659943
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "2551",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.929389,
+    "lon": -87.6422403
+  },
+  {
+    "street": "East Adams Street",
+    "housenumber": "33",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8794045,
+    "lon": -87.6263526
+  },
+  {
+    "street": "West Division Street",
+    "housenumber": "1736",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9034471,
+    "lon": -87.6714416
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "646",
+    "city": "Chicago",
+    "lat": 41.8936239,
+    "lon": -87.6358462
+  },
+  {
+    "street": "West Grand Avenue",
+    "housenumber": "1120",
+    "city": "Chicago",
+    "postcode": "60642",
+    "lat": 41.8912636,
+    "lon": -87.6555349
+  },
+  {
+    "street": "West Grand Avenue",
+    "housenumber": "1124",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.8912464,
+    "lon": -87.6556514
+  },
+  {
+    "street": "North California Avenue",
+    "housenumber": "1123",
+    "city": "Chicago",
+    "postcode": "60622",
+    "lat": 41.9018656,
+    "lon": -87.6966658
+  },
+  {
+    "street": "West Armitage Avenue",
+    "housenumber": "2829",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.9173555,
+    "lon": -87.6984206
+  },
+  {
+    "street": "South Exchange Avenue",
+    "housenumber": "7201",
+    "city": "Chicago",
+    "postcode": "60649",
+    "lat": 41.7644416,
+    "lon": -87.5646581
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "121",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9110585,
+    "lon": -87.6326001
+  },
+  {
+    "street": "North Clark Street",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8901616,
+    "lon": -87.6312859
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "205",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8859661,
+    "lon": -87.6238488
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "225",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8865465,
+    "lon": -87.6238717
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "343",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8880404,
+    "lon": -87.624253
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "332",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8876718,
+    "lon": -87.6248299
+  },
+  {
+    "street": "East Wacker Drive",
+    "housenumber": "35",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8866987,
+    "lon": -87.626541
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "216",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8863702,
+    "lon": -87.6265173
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "60",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8858851,
+    "lon": -87.6257578
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "27",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8856269,
+    "lon": -87.6268078
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "166",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.885053,
+    "lon": -87.6264867
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8872665,
+    "lon": -87.6247985
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.887332,
+    "lon": -87.6248078
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8872871,
+    "lon": -87.6249063
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8872854,
+    "lon": -87.6249763
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8872871,
+    "lon": -87.6250487
+  },
+  {
+    "street": "North Michigan Avenue",
+    "housenumber": "316",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8872854,
+    "lon": -87.6251188
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "115",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8837574,
+    "lon": -87.6259612
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "50",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8833909,
+    "lon": -87.6255337
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "75",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8831013,
+    "lon": -87.6252041
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "55",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8830968,
+    "lon": -87.6255717
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "21",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8826872,
+    "lon": -87.6259327
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "25",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8830112,
+    "lon": -87.6264632
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "214",
+    "city": "Chicago",
+    "postcode": "60604",
+    "lat": 41.8791599,
+    "lon": -87.6263446
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "36",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.882676,
+    "lon": -87.6265215
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "12",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8825265,
+    "lon": -87.6264729
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "11",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8823951,
+    "lon": -87.6271142
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "11",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8825325,
+    "lon": -87.6260001
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "9",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8824156,
+    "lon": -87.6259908
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.882259,
+    "lon": -87.6259865
+  },
+  {
+    "street": "South Wabash Avenue",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8819596,
+    "lon": -87.6259565
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "29",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8819343,
+    "lon": -87.6263964
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "6",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8823365,
+    "lon": -87.6264727
+  },
+  {
+    "street": "North Wabash Avenue",
+    "housenumber": "17",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8826276,
+    "lon": -87.625993
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "29",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8819527,
+    "lon": -87.62698
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "26",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8822256,
+    "lon": -87.6266824
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "8",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8822307,
+    "lon": -87.6270628
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "1",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8830549,
+    "lon": -87.6281296
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "108",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8841675,
+    "lon": -87.6281965
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "177",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8856203,
+    "lon": -87.6276976
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "201",
+    "city": "Chicago",
+    "postcode": "60601",
+    "lat": 41.8862145,
+    "lon": -87.6277289
+  },
+  {
+    "street": "South Plymouth Court",
+    "housenumber": "899",
+    "city": "Chicago",
+    "postcode": "60605",
+    "lat": 41.8707557,
+    "lon": -87.6283739
+  },
+  {
+    "street": "North Cumberland Avenue",
+    "housenumber": "4734",
+    "city": "Chicago",
+    "postcode": "60656",
+    "lat": 41.9656283,
+    "lon": -87.8379362
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "6601",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9524416,
+    "lon": -87.7913948
+  },
+  {
+    "street": "West Irving Park Road",
+    "housenumber": "4303",
+    "city": "Chicago",
+    "postcode": "60641",
+    "lat": 41.9531582,
+    "lon": -87.7357797
+  },
+  {
+    "street": "West Forest Preserve Drive",
+    "housenumber": "7309",
+    "city": "Chicago",
+    "postcode": "60634",
+    "lat": 41.9524287,
+    "lon": -87.8107516
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3121",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9382062,
+    "lon": -87.6442045
+  },
+  {
+    "street": "West Lawrence Avenue",
+    "housenumber": "1800",
+    "city": "Chicago",
+    "postcode": "60640",
+    "lat": 41.9690349,
+    "lon": -87.6748936
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "750",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8962844,
+    "lon": -87.6358489
+  },
+  {
+    "street": "South Morgan Street",
+    "housenumber": "430",
+    "city": "Chicago",
+    "postcode": "60607",
+    "lat": 41.8754848,
+    "lon": -87.6517386
+  },
+  {
+    "street": "North Clarendon Avenue",
+    "housenumber": "4181",
+    "city": "Chicago",
+    "postcode": "60613",
+    "lat": 41.9579418,
+    "lon": -87.6496329
+  },
+  {
+    "street": "West Chicago Avenue",
+    "housenumber": "600",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8970504,
+    "lon": -87.6433416
+  },
+  {
+    "street": "North Harlem Avenue",
+    "housenumber": "5435",
+    "city": "Chicago",
+    "postcode": "60656",
+    "lat": 41.9801712,
+    "lon": -87.8066814
+  },
+  {
+    "street": "North Harlem Avenue",
+    "housenumber": "5509",
+    "city": "Chicago",
+    "postcode": "60656",
+    "lat": 41.9812402,
+    "lon": -87.806711
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "400",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.8820436,
+    "lon": -87.638789
+  },
+  {
+    "street": "North Riverside Plaza",
+    "housenumber": "2",
+    "city": "Chicago",
+    "postcode": "60606",
+    "lat": 41.882126,
+    "lon": -87.6392678
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8821339,
+    "lon": -87.6409831
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8822896,
+    "lon": -87.6401675
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "lat": 41.8824415,
+    "lon": -87.6403071
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8822777,
+    "lon": -87.6406411
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8825203,
+    "lon": -87.6400818
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "500",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8821649,
+    "lon": -87.6401663
+  },
+  {
+    "street": "South Clark Street",
+    "housenumber": "23",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8809091,
+    "lon": -87.630548
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "530",
+    "city": "Chicago",
+    "postcode": "60654",
+    "lat": 41.8918397,
+    "lon": -87.6283409
+  },
+  {
+    "street": "North Milwaukee Avenue",
+    "housenumber": "2607",
+    "city": "Chicago",
+    "postcode": "60647",
+    "lat": 41.929118,
+    "lon": -87.707174
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "227",
+    "city": "Chicago",
+    "postcode": "60610",
+    "lat": 41.9109832,
+    "lon": -87.6358185
+  },
+  {
+    "street": "West North Avenue",
+    "housenumber": "230",
+    "city": "Chicago",
+    "lat": 41.9113275,
+    "lon": -87.6358522
+  },
+  {
+    "street": "North Belmont Harbor Drive",
+    "housenumber": "400",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.94631,
+    "lon": -87.6386712
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "1248",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.940121,
+    "lon": -87.6609195
+  },
+  {
+    "street": "West Belmont Avenue",
+    "housenumber": "1258",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9399693,
+    "lon": -87.6611959
+  },
+  {
+    "street": "South Western Avenue",
+    "housenumber": "11064",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.6920635,
+    "lon": -87.6814651
+  },
+  {
+    "street": "West 111th Street",
+    "housenumber": "2410",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.691957,
+    "lon": -87.6818417
+  },
+  {
+    "street": "West 111th Street",
+    "housenumber": "2343",
+    "city": "Chicago",
+    "postcode": "60643",
+    "lat": 41.691487,
+    "lon": -87.6803032
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "742",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9329205,
+    "lon": -87.6483674
+  },
+  {
+    "street": "West Diversey Parkway",
+    "housenumber": "730",
+    "city": "Chicago",
+    "postcode": "60657",
+    "lat": 41.9328768,
+    "lon": -87.647886
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2566",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9284346,
+    "lon": -87.653186
+  },
+  {
+    "street": "North McCormick Boulevard",
+    "housenumber": "6257A",
+    "city": "Chicago",
+    "postcode": "60659",
+    "lat": 41.9955887,
+    "lon": -87.7124878
+  },
+  {
+    "street": "West Madison Street",
+    "housenumber": "103",
+    "city": "Chicago",
+    "postcode": "60603",
+    "lat": 41.8818581,
+    "lon": -87.6313731
+  },
+  {
+    "street": "North Lasalle Street",
+    "housenumber": "100",
+    "city": "Chicago",
+    "postcode": "60602",
+    "lat": 41.8833481,
+    "lon": -87.6326498
+  },
+  {
+    "street": "East 75th Street",
+    "housenumber": "2632",
+    "city": "Chicago",
+    "postcode": "60649",
+    "lat": 41.7591882,
+    "lon": -87.5605825
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1649",
+    "city": "Chicago",
+    "postcode": "60615",
+    "lat": 41.7951291,
+    "lon": -87.584784
+  },
+  {
+    "street": "North Clinton Street",
+    "housenumber": "131",
+    "city": "Chicago",
+    "postcode": "60661",
+    "lat": 41.8838083,
+    "lon": -87.6406749
+  },
+  {
+    "street": "North Lincoln Avenue",
+    "housenumber": "2519",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9277243,
+    "lon": -87.6516908
+  },
+  {
+    "street": "North Halsted Street",
+    "housenumber": "2024",
+    "city": "Chicago",
+    "postcode": "60614",
+    "lat": 41.9189763,
+    "lon": -87.6487203
+  }
+]

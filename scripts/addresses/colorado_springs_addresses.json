@@ -1,0 +1,7802 @@
+[
+  {
+    "street": "Austin Bluff Parkway",
+    "housenumber": "4457",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8958273,
+    "lon": -104.7483023
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4241",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8927371,
+    "lon": -104.7520678
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3450",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8911047,
+    "lon": -104.763567
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "6520",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7672954,
+    "lon": -104.814741
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "6556",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7669483,
+    "lon": -104.816112
+  },
+  {
+    "street": "Beverly Street",
+    "housenumber": "4085",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8923114,
+    "lon": -104.7527711
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4845",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9023029,
+    "lon": -104.769158
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2514",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8477258,
+    "lon": -104.8631632
+  },
+  {
+    "street": "Otis Street",
+    "housenumber": "360",
+    "city": "Colorado Springs",
+    "postcode": "80914",
+    "lat": 38.8305528,
+    "lon": -104.70592
+  },
+  {
+    "street": "Montebello Drive",
+    "housenumber": "4356",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8951245,
+    "lon": -104.756612
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4435",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8956865,
+    "lon": -104.849681
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4560",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.8982295,
+    "lon": -104.851644
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8973895,
+    "lon": -104.8543772
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4710",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.8991675,
+    "lon": -104.85228
+  },
+  {
+    "street": "Garden Of The Gods Road",
+    "housenumber": "1320",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8975873,
+    "lon": -104.851552
+  },
+  {
+    "street": "Mount View Lane",
+    "housenumber": "204",
+    "city": "Colorado Springs",
+    "lat": 38.8898095,
+    "lon": -104.818069
+  },
+  {
+    "street": "North Prospect Street",
+    "housenumber": "2940",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8730735,
+    "lon": -104.811331
+  },
+  {
+    "street": "East Fillmore Street",
+    "housenumber": "325",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8738639,
+    "lon": -104.816511
+  },
+  {
+    "street": "East Fillmore Street",
+    "housenumber": "317",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8739167,
+    "lon": -104.8171628
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "536",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8971447,
+    "lon": -104.833696
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2921",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8738524,
+    "lon": -104.8189073
+  },
+  {
+    "street": "Garden Of The Gods",
+    "housenumber": "425",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8964648,
+    "lon": -104.8278406
+  },
+  {
+    "street": "West Garden Of The Gods",
+    "housenumber": "878",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8971485,
+    "lon": -104.843121
+  },
+  {
+    "street": "Garden of the Gods Road",
+    "housenumber": "1035",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8964596,
+    "lon": -104.8414421
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1605",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9642787,
+    "lon": -104.7959077
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4272",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8927351,
+    "lon": -104.7578283
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1685",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9626342,
+    "lon": -104.7957968
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1845",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9627839,
+    "lon": -104.7946257
+  },
+  {
+    "street": "Village Center Drive",
+    "housenumber": "802",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9227819,
+    "lon": -104.843842
+  },
+  {
+    "street": "Corporate Drive",
+    "housenumber": "6650",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9277855,
+    "lon": -104.814553
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7790",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9436919,
+    "lon": -104.800922
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7465",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.938922,
+    "lon": -104.79758
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "30",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8341298,
+    "lon": -104.8240983
+  },
+  {
+    "street": "Lake Circle",
+    "housenumber": "19",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7922048,
+    "lon": -104.848966
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1685",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9626952,
+    "lon": -104.7953829
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "7055",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.93235,
+    "lon": -104.739215
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2656",
+    "city": "Colorado Springs",
+    "lat": 38.8104698,
+    "lon": -104.7814341
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2409",
+    "city": "Colorado Springs",
+    "lat": 38.8093077,
+    "lon": -104.7839285
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2384",
+    "city": "Colorado Springs",
+    "lat": 38.8094876,
+    "lon": -104.7841493
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2576",
+    "city": "Colorado Springs",
+    "lat": 38.8099378,
+    "lon": -104.7815196
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2408",
+    "city": "Colorado Springs",
+    "lat": 38.8094838,
+    "lon": -104.7839136
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2121",
+    "city": "Colorado Springs",
+    "lat": 38.8094394,
+    "lon": -104.7867475
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2104",
+    "city": "Colorado Springs",
+    "lat": 38.8098021,
+    "lon": -104.7869837
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2544",
+    "city": "Colorado Springs",
+    "lat": 38.8094047,
+    "lon": -104.7824449
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2513",
+    "city": "Colorado Springs",
+    "lat": 38.8091907,
+    "lon": -104.7828985
+  },
+  {
+    "street": "Gilpin Avenue",
+    "housenumber": "2377",
+    "city": "Colorado Springs",
+    "lat": 38.8091447,
+    "lon": -104.7842101
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1784",
+    "city": "Colorado Springs",
+    "lat": 38.8085532,
+    "lon": -104.786262
+  },
+  {
+    "street": "Herd Street",
+    "housenumber": "1773",
+    "city": "Colorado Springs",
+    "lat": 38.8085595,
+    "lon": -104.7850604
+  },
+  {
+    "street": "Hanham Drive",
+    "housenumber": "2202",
+    "city": "Colorado Springs",
+    "lat": 38.8083881,
+    "lon": -104.7859589
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1416",
+    "city": "Colorado Springs",
+    "lat": 38.8099327,
+    "lon": -104.78718
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1564",
+    "city": "Colorado Springs",
+    "lat": 38.8083609,
+    "lon": -104.7844542
+  },
+  {
+    "street": "Herd Street",
+    "housenumber": "1736",
+    "city": "Colorado Springs",
+    "lat": 38.8089085,
+    "lon": -104.7851838
+  },
+  {
+    "street": "Herd Street",
+    "housenumber": "1760",
+    "city": "Colorado Springs",
+    "lat": 38.8087016,
+    "lon": -104.7852267
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1736",
+    "city": "Colorado Springs",
+    "lat": 38.8090172,
+    "lon": -104.7865598
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1703",
+    "city": "Colorado Springs",
+    "lat": 38.8089754,
+    "lon": -104.7859133
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1704",
+    "city": "Colorado Springs",
+    "lat": 38.8089629,
+    "lon": -104.7860984
+  },
+  {
+    "street": "Herd Street",
+    "housenumber": "1737",
+    "city": "Colorado Springs",
+    "lat": 38.8088709,
+    "lon": -104.7850041
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1536",
+    "city": "Colorado Springs",
+    "lat": 38.8084216,
+    "lon": -104.7849907
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1720",
+    "city": "Colorado Springs",
+    "lat": 38.8087225,
+    "lon": -104.786144
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1719",
+    "city": "Colorado Springs",
+    "lat": 38.8087685,
+    "lon": -104.7859509
+  },
+  {
+    "street": "Hanham Drive",
+    "housenumber": "2282",
+    "city": "Colorado Springs",
+    "lat": 38.8083212,
+    "lon": -104.7853662
+  },
+  {
+    "street": "Iver Street",
+    "housenumber": "1592",
+    "city": "Colorado Springs",
+    "lat": 38.8107687,
+    "lon": -104.7857819
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1793",
+    "city": "Colorado Springs",
+    "lat": 38.8083526,
+    "lon": -104.7840652
+  },
+  {
+    "street": "Kirkham Street",
+    "housenumber": "1465",
+    "city": "Colorado Springs",
+    "lat": 38.8108042,
+    "lon": -104.7865088
+  },
+  {
+    "street": "Kirkham Street",
+    "housenumber": "1405",
+    "city": "Colorado Springs",
+    "lat": 38.8114137,
+    "lon": -104.7865661
+  },
+  {
+    "street": "Kirkham Street",
+    "housenumber": "1406",
+    "city": "Colorado Springs",
+    "lat": 38.8113998,
+    "lon": -104.7867421
+  },
+  {
+    "street": "Kirkham Street",
+    "housenumber": "1490",
+    "city": "Colorado Springs",
+    "lat": 38.8105263,
+    "lon": -104.786667
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1704",
+    "city": "Colorado Springs",
+    "lat": 38.808779,
+    "lon": -104.784304
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1703",
+    "city": "Colorado Springs",
+    "lat": 38.808994,
+    "lon": -104.7839617
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1776",
+    "city": "Colorado Springs",
+    "lat": 38.8085072,
+    "lon": -104.784355
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1873",
+    "city": "Colorado Springs",
+    "lat": 38.8072925,
+    "lon": -104.7839554
+  },
+  {
+    "street": "Antrim Loop",
+    "housenumber": "793",
+    "city": "Colorado Springs",
+    "lat": 38.8108447,
+    "lon": -104.7843597
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2286",
+    "city": "Colorado Springs",
+    "lat": 38.8103043,
+    "lon": -104.7849076
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2495",
+    "city": "Colorado Springs",
+    "lat": 38.809811,
+    "lon": -104.7818295
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2105",
+    "city": "Colorado Springs",
+    "lat": 38.81032,
+    "lon": -104.7867799
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1820",
+    "city": "Colorado Springs",
+    "lat": 38.8073317,
+    "lon": -104.7846475
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2355",
+    "city": "Colorado Springs",
+    "lat": 38.8100702,
+    "lon": -104.7840171
+  },
+  {
+    "street": "Antrim Loop",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8114686,
+    "lon": -104.7833224
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2434",
+    "city": "Colorado Springs",
+    "lat": 38.8100863,
+    "lon": -104.7826791
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1578",
+    "city": "Colorado Springs",
+    "lat": 38.8082125,
+    "lon": -104.7840895
+  },
+  {
+    "street": "Antrim Loop",
+    "housenumber": "761",
+    "city": "Colorado Springs",
+    "lat": 38.8102841,
+    "lon": -104.7844539
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1975",
+    "city": "Colorado Springs",
+    "lat": 38.8059188,
+    "lon": -104.7859053
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1849",
+    "city": "Colorado Springs",
+    "lat": 38.8069271,
+    "lon": -104.7841296
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2132",
+    "city": "Colorado Springs",
+    "lat": 38.810474,
+    "lon": -104.7864177
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2384",
+    "city": "Colorado Springs",
+    "lat": 38.8101637,
+    "lon": -104.7833421
+  },
+  {
+    "street": "Falkirk Drive",
+    "housenumber": "2365",
+    "city": "Colorado Springs",
+    "lat": 38.8100351,
+    "lon": -104.7838106
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1801",
+    "city": "Colorado Springs",
+    "lat": 38.8074204,
+    "lon": -104.7843523
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1802",
+    "city": "Colorado Springs",
+    "lat": 38.8074659,
+    "lon": -104.7845804
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1838",
+    "city": "Colorado Springs",
+    "lat": 38.8072197,
+    "lon": -104.7847036
+  },
+  {
+    "street": "Antrim Loop",
+    "housenumber": "1498",
+    "city": "Colorado Springs",
+    "lat": 38.8109545,
+    "lon": -104.7834082
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1903",
+    "city": "Colorado Springs",
+    "lat": 38.8061434,
+    "lon": -104.7854013
+  },
+  {
+    "street": "Flintshire Street",
+    "housenumber": "1843",
+    "city": "Colorado Springs",
+    "lat": 38.8070316,
+    "lon": -104.7845454
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1620",
+    "city": "Colorado Springs",
+    "lat": 38.8081018,
+    "lon": -104.783166
+  },
+  {
+    "street": "Dorset Drive",
+    "housenumber": "2579",
+    "city": "Colorado Springs",
+    "lat": 38.8112159,
+    "lon": -104.78086
+  },
+  {
+    "street": "Kempton Alley",
+    "housenumber": "1401",
+    "city": "Colorado Springs",
+    "lat": 38.8113768,
+    "lon": -104.7822896
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2401",
+    "city": "Colorado Springs",
+    "lat": 38.8107085,
+    "lon": -104.7832336
+  },
+  {
+    "street": "Joppa Alley",
+    "housenumber": "1502",
+    "city": "Colorado Springs",
+    "lat": 38.8105388,
+    "lon": -104.7818453
+  },
+  {
+    "street": "Joppa Alley",
+    "housenumber": "1592",
+    "city": "Colorado Springs",
+    "lat": 38.8099744,
+    "lon": -104.781958
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2482",
+    "city": "Colorado Springs",
+    "lat": 38.8108033,
+    "lon": -104.7825699
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2514",
+    "city": "Colorado Springs",
+    "lat": 38.8109113,
+    "lon": -104.7815825
+  },
+  {
+    "street": "Kempton Alley",
+    "housenumber": "1491",
+    "city": "Colorado Springs",
+    "lat": 38.8107833,
+    "lon": -104.7823969
+  },
+  {
+    "street": "Kempton Alley",
+    "housenumber": "1591",
+    "city": "Colorado Springs",
+    "lat": 38.8100455,
+    "lon": -104.7825444
+  },
+  {
+    "street": "Dorset Drive",
+    "housenumber": "2483",
+    "city": "Colorado Springs",
+    "lat": 38.8113862,
+    "lon": -104.7824553
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2271",
+    "city": "Colorado Springs",
+    "lat": 38.8108958,
+    "lon": -104.7848084
+  },
+  {
+    "street": "Joppa Alley",
+    "housenumber": "1402",
+    "city": "Colorado Springs",
+    "lat": 38.8113124,
+    "lon": -104.7817031
+  },
+  {
+    "street": "Dorset Drive",
+    "housenumber": "2515",
+    "city": "Colorado Springs",
+    "lat": 38.8112933,
+    "lon": -104.7815118
+  },
+  {
+    "street": "Dorset Drive",
+    "housenumber": "2403",
+    "city": "Colorado Springs",
+    "lat": 38.8114615,
+    "lon": -104.7830856
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2402",
+    "city": "Colorado Springs",
+    "lat": 38.8108785,
+    "lon": -104.7832002
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2481",
+    "city": "Colorado Springs",
+    "lat": 38.8106332,
+    "lon": -104.7826033
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2578",
+    "city": "Colorado Springs",
+    "lat": 38.8108749,
+    "lon": -104.7808433
+  },
+  {
+    "street": "Joppa Alley",
+    "housenumber": "1492",
+    "city": "Colorado Springs",
+    "lat": 38.8107189,
+    "lon": -104.7818104
+  },
+  {
+    "street": "Ellingwood Drive",
+    "housenumber": "2201",
+    "city": "Colorado Springs",
+    "lat": 38.8109777,
+    "lon": -104.7854895
+  },
+  {
+    "street": "Kempton Alley",
+    "housenumber": "1501",
+    "city": "Colorado Springs",
+    "lat": 38.8106098,
+    "lon": -104.7824318
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1633",
+    "city": "Colorado Springs",
+    "lat": 38.8070003,
+    "lon": -104.7830728
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "1647",
+    "city": "Colorado Springs",
+    "lat": 38.8065362,
+    "lon": -104.7827671
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1535",
+    "city": "Colorado Springs",
+    "lat": 38.8076399,
+    "lon": -104.7850628
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1619",
+    "city": "Colorado Springs",
+    "lat": 38.807063,
+    "lon": -104.7831721
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1605",
+    "city": "Colorado Springs",
+    "lat": 38.8073949,
+    "lon": -104.7838642
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1563",
+    "city": "Colorado Springs",
+    "lat": 38.8076482,
+    "lon": -104.7848592
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1577",
+    "city": "Colorado Springs",
+    "lat": 38.8074935,
+    "lon": -104.784202
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1591",
+    "city": "Colorado Springs",
+    "lat": 38.8074309,
+    "lon": -104.7839877
+  },
+  {
+    "street": "Monterey Road",
+    "housenumber": "1521",
+    "city": "Colorado Springs",
+    "lat": 38.8075782,
+    "lon": -104.7854869
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "1675",
+    "city": "Colorado Springs",
+    "lat": 38.8061433,
+    "lon": -104.7822387
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2404",
+    "city": "Colorado Springs",
+    "lat": 38.8065927,
+    "lon": -104.7834994
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2204",
+    "city": "Colorado Springs",
+    "lat": 38.8074455,
+    "lon": -104.7854788
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2464",
+    "city": "Colorado Springs",
+    "lat": 38.8064025,
+    "lon": -104.7831426
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2495",
+    "city": "Colorado Springs",
+    "lat": 38.8064297,
+    "lon": -104.7827886
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2465",
+    "city": "Colorado Springs",
+    "lat": 38.8059071,
+    "lon": -104.7825257
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2494",
+    "city": "Colorado Springs",
+    "lat": 38.8066968,
+    "lon": -104.7829361
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2444",
+    "city": "Colorado Springs",
+    "lat": 38.8069418,
+    "lon": -104.7832687
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2354",
+    "city": "Colorado Springs",
+    "lat": 38.8061621,
+    "lon": -104.7835691
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2355",
+    "city": "Colorado Springs",
+    "lat": 38.8059531,
+    "lon": -104.7832794
+  },
+  {
+    "street": "Saint Paul Drive",
+    "housenumber": "2385",
+    "city": "Colorado Springs",
+    "lat": 38.8058001,
+    "lon": -104.7826732
+  },
+  {
+    "street": "St James Drive",
+    "housenumber": "2140",
+    "city": "Colorado Springs",
+    "lat": 38.8050205,
+    "lon": -104.7831855
+  },
+  {
+    "street": "St James Drive",
+    "housenumber": "2154",
+    "city": "Colorado Springs",
+    "lat": 38.8047575,
+    "lon": -104.7834001
+  },
+  {
+    "street": "St James Drive",
+    "housenumber": "2196",
+    "city": "Colorado Springs",
+    "lat": 38.8045188,
+    "lon": -104.7838346
+  },
+  {
+    "street": "St James Drive",
+    "housenumber": "1902",
+    "city": "Colorado Springs",
+    "lat": 38.8063461,
+    "lon": -104.7850095
+  },
+  {
+    "street": "Phillips Alley",
+    "housenumber": "2194",
+    "city": "Colorado Springs",
+    "lat": 38.8044712,
+    "lon": -104.7839741
+  },
+  {
+    "street": "Phillips Alley",
+    "housenumber": "2202",
+    "city": "Colorado Springs",
+    "lat": 38.8055309,
+    "lon": -104.7848678
+  },
+  {
+    "street": "Phillips Alley",
+    "housenumber": "2282",
+    "city": "Colorado Springs",
+    "lat": 38.8050943,
+    "lon": -104.7844517
+  },
+  {
+    "street": "Phillips Alley",
+    "housenumber": "2114",
+    "city": "Colorado Springs",
+    "lat": 38.8049206,
+    "lon": -104.7843899
+  },
+  {
+    "street": "St Claire Park Alley",
+    "housenumber": "2003",
+    "city": "Colorado Springs",
+    "lat": 38.805322,
+    "lon": -104.7853266
+  },
+  {
+    "street": "St Claire Park Alley",
+    "housenumber": "2083",
+    "city": "Colorado Springs",
+    "lat": 38.8048268,
+    "lon": -104.7850142
+  },
+  {
+    "street": "Downend Street",
+    "housenumber": "2258",
+    "city": "Colorado Springs",
+    "lat": 38.8051683,
+    "lon": -104.7842895
+  },
+  {
+    "street": "Downend Street",
+    "housenumber": "2266",
+    "city": "Colorado Springs",
+    "lat": 38.8052572,
+    "lon": -104.7841488
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1798",
+    "city": "Colorado Springs",
+    "lat": 38.8070003,
+    "lon": -104.7881824
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1696",
+    "city": "Colorado Springs",
+    "lat": 38.8075209,
+    "lon": -104.7902878
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1744",
+    "city": "Colorado Springs",
+    "lat": 38.8068435,
+    "lon": -104.789038
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1701",
+    "city": "Colorado Springs",
+    "lat": 38.8075709,
+    "lon": -104.7900732
+  },
+  {
+    "street": "Springs Vista Street",
+    "housenumber": "1890",
+    "city": "Colorado Springs",
+    "lat": 38.8066345,
+    "lon": -104.7884694
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1725",
+    "city": "Colorado Springs",
+    "lat": 38.8070923,
+    "lon": -104.7896201
+  },
+  {
+    "street": "Springs Vista Street",
+    "housenumber": "1878",
+    "city": "Colorado Springs",
+    "lat": 38.8065342,
+    "lon": -104.7884319
+  },
+  {
+    "street": "Derbyshire Street",
+    "housenumber": "1788",
+    "city": "Colorado Springs",
+    "lat": 38.8071612,
+    "lon": -104.7891024
+  },
+  {
+    "street": "Grand Overlook Street",
+    "housenumber": "1750",
+    "city": "Colorado Springs",
+    "lat": 38.8068792,
+    "lon": -104.7888938
+  },
+  {
+    "street": "Derbyshire Street",
+    "housenumber": "1746",
+    "city": "Colorado Springs",
+    "lat": 38.8079074,
+    "lon": -104.7895373
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "1622",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8075717,
+    "lon": -104.7583915
+  },
+  {
+    "street": "Jamboree Drive",
+    "housenumber": "1935",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.952311,
+    "lon": -104.789315
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6922",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9310299,
+    "lon": -104.796219
+  },
+  {
+    "street": "Brookwood Drive",
+    "housenumber": "1722",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9305216,
+    "lon": -104.7932812
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6942",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.93161,
+    "lon": -104.7976632
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6850",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9305928,
+    "lon": -104.794982
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6932",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9314721,
+    "lon": -104.7972759
+  },
+  {
+    "street": "Earl Drive",
+    "housenumber": "6735",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9295282,
+    "lon": -104.7965021
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6820",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9303981,
+    "lon": -104.7950339
+  },
+  {
+    "street": "Brookwood Drive",
+    "housenumber": "1714",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9305235,
+    "lon": -104.7934007
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6950",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9320547,
+    "lon": -104.7985056
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6870",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9306418,
+    "lon": -104.7949802
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6940B",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315687,
+    "lon": -104.797564
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6944",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9316321,
+    "lon": -104.7977127
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6948",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9317904,
+    "lon": -104.7979693
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6840",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9304775,
+    "lon": -104.7950147
+  },
+  {
+    "street": "Earl Drive",
+    "housenumber": "6735",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9294921,
+    "lon": -104.7965021
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6946",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9317573,
+    "lon": -104.7978684
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6946",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9316582,
+    "lon": -104.797762
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6816",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9303458,
+    "lon": -104.7950804
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6938",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315403,
+    "lon": -104.7974423
+  },
+  {
+    "street": "Brookwood Drive",
+    "housenumber": "1726",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9305292,
+    "lon": -104.7931545
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6940",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315334,
+    "lon": -104.7975211
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6940A",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315495,
+    "lon": -104.7975074
+  },
+  {
+    "street": "York Road",
+    "housenumber": "1565",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9295775,
+    "lon": -104.7962462
+  },
+  {
+    "street": "York Road",
+    "housenumber": "1587",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9296291,
+    "lon": -104.7959037
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6936",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315081,
+    "lon": -104.7973622
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6934",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9315266,
+    "lon": -104.7973948
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6810",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9303055,
+    "lon": -104.7950787
+  },
+  {
+    "street": "York Road",
+    "housenumber": "1565",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9295775,
+    "lon": -104.7963169
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6910",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9308351,
+    "lon": -104.795592
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6912",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9308224,
+    "lon": -104.795661
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1706",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9329718,
+    "lon": -104.7937523
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1710",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9328912,
+    "lon": -104.7941573
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1724",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9337303,
+    "lon": -104.7958896
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6908",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9308478,
+    "lon": -104.7955225
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1708",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9328856,
+    "lon": -104.793752
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1720",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9337395,
+    "lon": -104.796125
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1760",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9339918,
+    "lon": -104.7946732
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1716",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9330094,
+    "lon": -104.7941621
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6902",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.930886,
+    "lon": -104.7953138
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6904",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9308733,
+    "lon": -104.7953834
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6906",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9308605,
+    "lon": -104.7954529
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1722",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9337321,
+    "lon": -104.7960066
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1770",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9339897,
+    "lon": -104.794249
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1780",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9339881,
+    "lon": -104.7939452
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5754",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9146815,
+    "lon": -104.7886745
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1234",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9334784,
+    "lon": -104.8029891
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1266",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9337572,
+    "lon": -104.800895
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1246",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9339386,
+    "lon": -104.8009409
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1234",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9334189,
+    "lon": -104.8029874
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1234",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9336272,
+    "lon": -104.8028813
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5160",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9052633,
+    "lon": -104.8640772
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4935",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9040278,
+    "lon": -104.8570875
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4935",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9038161,
+    "lon": -104.8570646
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5152",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9049564,
+    "lon": -104.863956
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4935",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.903636,
+    "lon": -104.85712
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4935",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9038814,
+    "lon": -104.8570614
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "6894",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9304583,
+    "lon": -104.8655705
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5154",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9050332,
+    "lon": -104.863954
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5156",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.905089,
+    "lon": -104.8639584
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5158",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9051779,
+    "lon": -104.8639764
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5162",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9053122,
+    "lon": -104.864187
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4935",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9039332,
+    "lon": -104.8570646
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4783",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.90057,
+    "lon": -104.7668854
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4849",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9023685,
+    "lon": -104.7690619
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4751",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9001334,
+    "lon": -104.767369
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4779",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9005199,
+    "lon": -104.7668758
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4759",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.900176,
+    "lon": -104.7671641
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4763",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.900292,
+    "lon": -104.7670431
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4845",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9023242,
+    "lon": -104.7690915
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4828",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9024057,
+    "lon": -104.7680423
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4755",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9001547,
+    "lon": -104.7672688
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4828",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9024712,
+    "lon": -104.7682244
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4775",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9004222,
+    "lon": -104.766953
+  },
+  {
+    "street": "Flintridge Drive",
+    "housenumber": "4747",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9001051,
+    "lon": -104.7674964
+  },
+  {
+    "street": "Pine Creek Road",
+    "housenumber": "7350",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9377481,
+    "lon": -104.8149474
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3670",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8913809,
+    "lon": -104.7592794
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3670",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.891102,
+    "lon": -104.7592652
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5102",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9026711,
+    "lon": -104.8181467
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8340749,
+    "lon": -104.8219809
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8342637,
+    "lon": -104.8219697
+  },
+  {
+    "street": "Cherrystone Way",
+    "housenumber": "3240",
+    "city": "Colorado Springs",
+    "lat": 38.9528078,
+    "lon": -104.8912988
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5172",
+    "city": "Colorado Springs",
+    "lat": 38.9047378,
+    "lon": -104.77986
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5160",
+    "city": "Colorado Springs",
+    "lat": 38.9045171,
+    "lon": -104.7794663
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5156",
+    "city": "Colorado Springs",
+    "lat": 38.9043022,
+    "lon": -104.7792556
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5140",
+    "city": "Colorado Springs",
+    "lat": 38.9041218,
+    "lon": -104.7785588
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5154",
+    "city": "Colorado Springs",
+    "lat": 38.9042762,
+    "lon": -104.7790497
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5158",
+    "city": "Colorado Springs",
+    "lat": 38.904474,
+    "lon": -104.7793807
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5146",
+    "city": "Colorado Springs",
+    "lat": 38.9041934,
+    "lon": -104.7787561
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5142",
+    "city": "Colorado Springs",
+    "lat": 38.9041423,
+    "lon": -104.7786101
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5146A",
+    "city": "Colorado Springs",
+    "lat": 38.9041761,
+    "lon": -104.7787052
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5164",
+    "city": "Colorado Springs",
+    "lat": 38.9045539,
+    "lon": -104.7795383
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5168",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9046528,
+    "lon": -104.7796817
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5166",
+    "city": "Colorado Springs",
+    "lat": 38.9045854,
+    "lon": -104.7796084
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5150",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9042294,
+    "lon": -104.7789104
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5170",
+    "city": "Colorado Springs",
+    "lat": 38.9046949,
+    "lon": -104.7797707
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5144",
+    "city": "Colorado Springs",
+    "lat": 38.9041585,
+    "lon": -104.7786555
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5138",
+    "city": "Colorado Springs",
+    "lat": 38.904104,
+    "lon": -104.7785047
+  },
+  {
+    "street": "Blodgett Ranch Trail",
+    "housenumber": "2710",
+    "city": "Colorado Springs",
+    "lat": 38.9436868,
+    "lon": -104.8783206
+  },
+  {
+    "street": "Blodgett Ranch Trail",
+    "housenumber": "2760",
+    "city": "Colorado Springs",
+    "lat": 38.943659,
+    "lon": -104.878887
+  },
+  {
+    "street": "Blodgett Ranch Trail",
+    "housenumber": "2810",
+    "city": "Colorado Springs",
+    "lat": 38.9436908,
+    "lon": -104.8795912
+  },
+  {
+    "street": "Blodgett Ranch Trail",
+    "housenumber": "2860",
+    "city": "Colorado Springs",
+    "lat": 38.9437582,
+    "lon": -104.8800555
+  },
+  {
+    "street": "Blodgett Ranch Trail",
+    "housenumber": "2865",
+    "city": "Colorado Springs",
+    "lat": 38.9435042,
+    "lon": -104.8802239
+  },
+  {
+    "street": "Blodgett Drive",
+    "housenumber": "3095",
+    "city": "Colorado Springs",
+    "lat": 38.9532646,
+    "lon": -104.8854814
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8974306,
+    "lon": -104.854582
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4201",
+    "city": "Colorado Springs",
+    "postcode": "80907-3770",
+    "lat": 38.8931659,
+    "lon": -104.8498629
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8974082,
+    "lon": -104.8546589
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12229",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0099985,
+    "lon": -104.8066979
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8973672,
+    "lon": -104.854932
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2417",
+    "city": "Colorado Springs",
+    "lat": 38.8425593,
+    "lon": -104.8631207
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2417",
+    "city": "Colorado Springs",
+    "lat": 38.8466567,
+    "lon": -104.8620802
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.897386,
+    "lon": -104.8547271
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1466",
+    "city": "Colorado Springs",
+    "lat": 38.8973899,
+    "lon": -104.855069
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "229",
+    "city": "Colorado Springs",
+    "lat": 38.8315553,
+    "lon": -104.839648
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "221",
+    "city": "Colorado Springs",
+    "postcode": "80905-1630",
+    "lat": 38.8317539,
+    "lon": -104.8398949
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "1520",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9459198,
+    "lon": -104.8002197
+  },
+  {
+    "street": "East Columbia Street",
+    "housenumber": "505",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8535892,
+    "lon": -104.815105
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "715",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7764009,
+    "lon": -104.8143474
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "710",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7768823,
+    "lon": -104.814901
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "710",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7770679,
+    "lon": -104.8151279
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "627",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8325443,
+    "lon": -104.83726
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "727",
+    "city": "Colorado Springs",
+    "lat": 38.8331512,
+    "lon": -104.83867
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "727",
+    "city": "Colorado Springs",
+    "lat": 38.8331807,
+    "lon": -104.838813
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3107",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8531208,
+    "lon": -104.873547
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3125",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8533361,
+    "lon": -104.8738966
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3113",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8532242,
+    "lon": -104.8737058
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "3236",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8764616,
+    "lon": -104.8475852
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4605",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.8988388,
+    "lon": -104.8505957
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2432",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8472742,
+    "lon": -104.8623377
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2304",
+    "city": "Colorado Springs",
+    "lat": 38.8457415,
+    "lon": -104.859823
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1675",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8949636,
+    "lon": -104.860577
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "110",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7905103,
+    "lon": -104.8246747
+  },
+  {
+    "street": "North Chestnut Street",
+    "housenumber": "4318",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8915532,
+    "lon": -104.8344127
+  },
+  {
+    "street": "Constitution Avenue",
+    "housenumber": "4125",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.860929,
+    "lon": -104.7490567
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3275",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8547601,
+    "lon": -104.8766568
+  },
+  {
+    "street": "West Fontanero Street",
+    "housenumber": "2998",
+    "city": "Colorado Springs",
+    "lat": 38.8611086,
+    "lon": -104.8652953
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "1604",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8111528,
+    "lon": -104.8273835
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "2819",
+    "city": "Colorado Springs",
+    "lat": 38.9248143,
+    "lon": -104.7739258
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2501",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8471595,
+    "lon": -104.8634077
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5825",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9103919,
+    "lon": -104.718175
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5885",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.9098724,
+    "lon": -104.7184858
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1645",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9627038,
+    "lon": -104.7959958
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1605",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9638324,
+    "lon": -104.7960381
+  },
+  {
+    "street": "South Circle Drive",
+    "housenumber": "1654",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8084439,
+    "lon": -104.7821262
+  },
+  {
+    "street": "South Circle Drive",
+    "housenumber": "1714",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8073544,
+    "lon": -104.7820993
+  },
+  {
+    "street": "Shasta Drive",
+    "housenumber": "1760",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8065491,
+    "lon": -104.7779418
+  },
+  {
+    "street": "East Fountain Boulevard",
+    "housenumber": "2835",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8164335,
+    "lon": -104.77863
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5825",
+    "city": "Colorado Springs",
+    "lat": 38.9101671,
+    "lon": -104.718179
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "2381",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8664244,
+    "lon": -104.75657
+  },
+  {
+    "street": "Ridgeline Drive",
+    "housenumber": "11641",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0011438,
+    "lon": -104.7968874
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1779",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8055851,
+    "lon": -104.840428
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1785",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8052165,
+    "lon": -104.840065
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1721",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8079318,
+    "lon": -104.8402104
+  },
+  {
+    "street": "Palmer Park Boulevard",
+    "housenumber": "5410",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8563966,
+    "lon": -104.7275441
+  },
+  {
+    "street": "Palmer Park Boulevard",
+    "housenumber": "3921",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.854056,
+    "lon": -104.754942
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "1090",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8492272,
+    "lon": -104.8267719
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "502",
+    "city": "Colorado Springs",
+    "lat": 38.8328846,
+    "lon": -104.834604
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "1801",
+    "city": "Colorado Springs",
+    "lat": 38.8586493,
+    "lon": -104.7920756
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7320",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9269629,
+    "lon": -104.6918942
+  },
+  {
+    "street": "East Fountain Boulevard",
+    "housenumber": "3655",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8137678,
+    "lon": -104.760638
+  },
+  {
+    "street": "Criterion Drive",
+    "housenumber": "8585",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9597989,
+    "lon": -104.788249
+  },
+  {
+    "street": "South 25th Street",
+    "housenumber": "204",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8463614,
+    "lon": -104.863622
+  },
+  {
+    "street": "East Uintah Street",
+    "housenumber": "2641",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8489016,
+    "lon": -104.778759
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "201",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.833228,
+    "lon": -104.82075
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1540",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.811101,
+    "lon": -104.841121
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3647",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.775543,
+    "lon": -104.816487
+  },
+  {
+    "street": "Lake Plaza Drive",
+    "housenumber": "1257",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7944793,
+    "lon": -104.804809
+  },
+  {
+    "street": "Lake Avenue",
+    "housenumber": "155",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7950982,
+    "lon": -104.830464
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "154",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7899091,
+    "lon": -104.824285
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "154",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7898821,
+    "lon": -104.82426
+  },
+  {
+    "street": "Southpointe Court",
+    "housenumber": "675",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7963732,
+    "lon": -104.816002
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "445",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7885231,
+    "lon": -104.82057
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1670",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7941009,
+    "lon": -104.802666
+  },
+  {
+    "street": "Lake Plaza Drive",
+    "housenumber": "1257",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7944959,
+    "lon": -104.804846
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "6520",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7671113,
+    "lon": -104.815189
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1920",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8052551,
+    "lon": -104.823303
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "154",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7898967,
+    "lon": -104.824274
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3141",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8537647,
+    "lon": -104.873432
+  },
+  {
+    "street": "East Vermijo Avenue",
+    "housenumber": "105",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8295151,
+    "lon": -104.8235765
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "128",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8311393,
+    "lon": -104.823836
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "90",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8330804,
+    "lon": -104.825612
+  },
+  {
+    "street": "East Vermijo Avenue",
+    "housenumber": "27",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8295345,
+    "lon": -104.824593
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "25",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8348208,
+    "lon": -104.825095
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "100",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8323845,
+    "lon": -104.825671
+  },
+  {
+    "street": "East Kiowa Street",
+    "housenumber": "130",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8353723,
+    "lon": -104.821959
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "403",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8281106,
+    "lon": -104.8236738
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "102",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8361603,
+    "lon": -104.825425
+  },
+  {
+    "street": "East Uintah Street",
+    "housenumber": "500",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.850519,
+    "lon": -104.815635
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "6",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8341355,
+    "lon": -104.823622
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "501",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8410203,
+    "lon": -104.823009
+  },
+  {
+    "street": "North Murray Boulevard",
+    "housenumber": "645",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8427927,
+    "lon": -104.7464797
+  },
+  {
+    "street": "Lakewood Circle",
+    "housenumber": "411",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8239856,
+    "lon": -104.760186
+  },
+  {
+    "street": "Oro Blanco Drive",
+    "housenumber": "4700",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.9009952,
+    "lon": -104.741279
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "777",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8965691,
+    "lon": -104.837317
+  },
+  {
+    "street": "North Carefree Circle",
+    "housenumber": "5720",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8857256,
+    "lon": -104.721773
+  },
+  {
+    "street": "North Powers Boulevard",
+    "housenumber": "2890",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8735366,
+    "lon": -104.722045
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3325",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8804606,
+    "lon": -104.755468
+  },
+  {
+    "street": "South Union Boulevard",
+    "housenumber": "175",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8292778,
+    "lon": -104.794021
+  },
+  {
+    "street": "East Fontanero Street",
+    "housenumber": "320",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8609618,
+    "lon": -104.817292
+  },
+  {
+    "street": "Maizeland Road",
+    "housenumber": "3960",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8681273,
+    "lon": -104.755848
+  },
+  {
+    "street": "Circle Drive",
+    "housenumber": "1121",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8488228,
+    "lon": -104.772699
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4315",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8944634,
+    "lon": -104.850236
+  },
+  {
+    "street": "North Carefree Circle",
+    "housenumber": "4715",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8856895,
+    "lon": -104.7394813
+  },
+  {
+    "street": "Circle Drive",
+    "housenumber": "3050",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8725356,
+    "lon": -104.793675
+  },
+  {
+    "street": "Templeton Gap Road",
+    "housenumber": "2129",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8629585,
+    "lon": -104.810661
+  },
+  {
+    "street": "East Platte Avenue",
+    "housenumber": "3201",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8370375,
+    "lon": -104.769766
+  },
+  {
+    "street": "West Carefree Circle",
+    "housenumber": "3434",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8809157,
+    "lon": -104.753806
+  },
+  {
+    "street": "East Boulder Street",
+    "housenumber": "1400",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8389513,
+    "lon": -104.799257
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "1733",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.858946,
+    "lon": -104.818448
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "1801",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8582236,
+    "lon": -104.794064
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "777",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8965691,
+    "lon": -104.836899
+  },
+  {
+    "street": "Space Center Drive",
+    "housenumber": "1575",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8550246,
+    "lon": -104.722104
+  },
+  {
+    "street": "North Murray Boulevard",
+    "housenumber": "2855",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8732915,
+    "lon": -104.7477
+  },
+  {
+    "street": "North Wahsatch Avenue",
+    "housenumber": "2230",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8659647,
+    "lon": -104.817063
+  },
+  {
+    "street": "Medical Center Point",
+    "housenumber": "1625",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8743776,
+    "lon": -104.797382
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "2808",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8328465,
+    "lon": -104.775021
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "5550",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9125568,
+    "lon": -104.7774002
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "2865",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9252792,
+    "lon": -104.773773
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6982",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9320311,
+    "lon": -104.79802
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "2865",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9253043,
+    "lon": -104.773773
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5691",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9131546,
+    "lon": -104.786637
+  },
+  {
+    "street": "Mark Dabling Boulevard",
+    "housenumber": "5745",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9145343,
+    "lon": -104.82156
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5001",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9043321,
+    "lon": -104.858061
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "2865",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9253294,
+    "lon": -104.773773
+  },
+  {
+    "street": "Delmonico Drive",
+    "housenumber": "6600",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9275099,
+    "lon": -104.830346
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4790",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9007358,
+    "lon": -104.767438
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5160",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9036912,
+    "lon": -104.776983
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "6820",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9287638,
+    "lon": -104.864418
+  },
+  {
+    "street": "Village Center Drive",
+    "housenumber": "840",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.922825,
+    "lon": -104.844449
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "1714",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9263202,
+    "lon": -104.795826
+  },
+  {
+    "street": "Telstar Drive",
+    "housenumber": "1755",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9596654,
+    "lon": -104.797156
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8890",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9606977,
+    "lon": -104.765364
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "3280",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9365752,
+    "lon": -104.764264
+  },
+  {
+    "street": "Hartsel Drive",
+    "housenumber": "3540",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9397361,
+    "lon": -104.760787
+  },
+  {
+    "street": "Explorer Drive",
+    "housenumber": "9240",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9669834,
+    "lon": -104.789979
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6020",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9120984,
+    "lon": -104.716303
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8750",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9578111,
+    "lon": -104.766691
+  },
+  {
+    "street": "Campus Drive",
+    "housenumber": "7150",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9352277,
+    "lon": -104.811073
+  },
+  {
+    "street": "Campus Drive",
+    "housenumber": "7150",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9352297,
+    "lon": -104.811057
+  },
+  {
+    "street": "Kelly Johnson Boulevard",
+    "housenumber": "1155",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9468853,
+    "lon": -104.808552
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "5550",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9420912,
+    "lon": -104.725186
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "7649",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9429759,
+    "lon": -104.773786
+  },
+  {
+    "street": "Center Park Drive",
+    "housenumber": "4090",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8119165,
+    "lon": -104.750765
+  },
+  {
+    "street": "Center Park Drive",
+    "housenumber": "4090",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8120952,
+    "lon": -104.7506362
+  },
+  {
+    "street": "Center Park Drive",
+    "housenumber": "4090",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8118476,
+    "lon": -104.7510855
+  },
+  {
+    "street": "Center Park Drive",
+    "housenumber": "4090",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8118935,
+    "lon": -104.7511915
+  },
+  {
+    "street": "Center Park Drive",
+    "housenumber": "4090",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8118026,
+    "lon": -104.7508508
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "802",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8443317,
+    "lon": -104.8195587
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "712",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8441103,
+    "lon": -104.8195668
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "735",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8449814,
+    "lon": -104.8226916
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "714",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8441971,
+    "lon": -104.8195561
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "711",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8442398,
+    "lon": -104.8208972
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "319",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8389651,
+    "lon": -104.8229931
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "402",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8397254,
+    "lon": -104.823427
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "218",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8329412,
+    "lon": -104.8299333
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "218",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8330437,
+    "lon": -104.8299041
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "218",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8328847,
+    "lon": -104.8299494
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "218",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8330915,
+    "lon": -104.8298877
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "218",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8329955,
+    "lon": -104.8299175
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "128",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.836323,
+    "lon": -104.8218157
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "25",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8351977,
+    "lon": -104.8249764
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "25",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.835133,
+    "lon": -104.824979
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "30",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8341343,
+    "lon": -104.8239464
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "102",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8341339,
+    "lon": -104.8232185
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "2",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.834478,
+    "lon": -104.8257525
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "27",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8330176,
+    "lon": -104.8285584
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "76",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8329947,
+    "lon": -104.8291589
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "50",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8336735,
+    "lon": -104.8289929
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "4",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8334376,
+    "lon": -104.8264177
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "76",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8330635,
+    "lon": -104.8291375
+  },
+  {
+    "street": "East Kiowa Street",
+    "housenumber": "221",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.834708,
+    "lon": -104.8200853
+  },
+  {
+    "street": "East Monument Street",
+    "housenumber": "1505",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8425131,
+    "lon": -104.7982447
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5102",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9024671,
+    "lon": -104.8181936
+  },
+  {
+    "street": "East Boulder Street",
+    "housenumber": "1400",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8393776,
+    "lon": -104.799593
+  },
+  {
+    "street": "South Union Boulevard",
+    "housenumber": "175",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.8297013,
+    "lon": -104.793531
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "13",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8332784,
+    "lon": -104.8233347
+  },
+  {
+    "street": "Royal Pine Drive",
+    "housenumber": "4120",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9737417,
+    "lon": -104.7523839
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1783",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7949179,
+    "lon": -104.8011127
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1785",
+    "city": "Colorado Springs",
+    "lat": 38.7949213,
+    "lon": -104.800977
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1805",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7952668,
+    "lon": -104.801157
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1795",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7952659,
+    "lon": -104.8007708
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1747",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.807273,
+    "lon": -104.8403263
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1757",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8067233,
+    "lon": -104.838526
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "1604",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8108617,
+    "lon": -104.827401
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "521",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8260086,
+    "lon": -104.823731
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "2",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8342035,
+    "lon": -104.8249522
+  },
+  {
+    "street": "Ore Mill Road",
+    "housenumber": "2845",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.848771,
+    "lon": -104.870653
+  },
+  {
+    "street": "Mount View Lane",
+    "housenumber": "204",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8904368,
+    "lon": -104.818099
+  },
+  {
+    "street": "South 21st Street",
+    "housenumber": "600",
+    "city": "Colorado Springs",
+    "lat": 38.8402285,
+    "lon": -104.859555
+  },
+  {
+    "street": "North El Paso Street",
+    "housenumber": "3121",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8777509,
+    "lon": -104.812437
+  },
+  {
+    "street": "East Platte Avenue",
+    "housenumber": "3255",
+    "city": "Colorado Springs",
+    "lat": 38.8390903,
+    "lon": -104.7686532
+  },
+  {
+    "street": "Fillmore Street",
+    "housenumber": "900",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8745475,
+    "lon": -104.8084078
+  },
+  {
+    "street": "Stone Avenue",
+    "housenumber": "3111",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8771716,
+    "lon": -104.8153762
+  },
+  {
+    "street": "Chapel Hills Drive",
+    "housenumber": "1110",
+    "city": "Colorado Springs",
+    "lat": 38.9542351,
+    "lon": -104.7911848
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "3210",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8763892,
+    "lon": -104.848813
+  },
+  {
+    "street": "Lakewood Circle",
+    "housenumber": "411",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8228711,
+    "lon": -104.7595292
+  },
+  {
+    "street": "Chapel Hills Drive",
+    "housenumber": "440",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.968736,
+    "lon": -104.784363
+  },
+  {
+    "street": "Industrial Place",
+    "housenumber": "5755",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8238255,
+    "lon": -104.7208397
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3107",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8531044,
+    "lon": -104.8735633
+  },
+  {
+    "street": "North Murray",
+    "housenumber": "645",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.842873,
+    "lon": -104.747523
+  },
+  {
+    "street": "JL Ranch Heights Road",
+    "housenumber": "410",
+    "city": "Colorado Springs",
+    "lat": 38.7352964,
+    "lon": -104.8194222
+  },
+  {
+    "street": "North Powers Boulevard",
+    "housenumber": "2848",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8729226,
+    "lon": -104.7221315
+  },
+  {
+    "street": "North Powers Boulevard",
+    "housenumber": "2878",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8731943,
+    "lon": -104.7221061
+  },
+  {
+    "street": "North Powers Boulevard",
+    "housenumber": "3050",
+    "city": "Colorado Springs",
+    "postcode": "80922-2803",
+    "lat": 38.8751663,
+    "lon": -104.7221161
+  },
+  {
+    "street": "North Powers Boulevard",
+    "housenumber": "3040",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8748041,
+    "lon": -104.7221175
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "5915",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.925232,
+    "lon": -104.718349
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "571",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8415969,
+    "lon": -104.7554857
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "839",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8451859,
+    "lon": -104.7553955
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "737",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8428066,
+    "lon": -104.756678
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "823",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8448277,
+    "lon": -104.755408
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "703",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8423942,
+    "lon": -104.7566588
+  },
+  {
+    "street": "Janitell Road",
+    "housenumber": "2713",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7954785,
+    "lon": -104.78846
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3345",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.881159,
+    "lon": -104.7564547
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "530",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8241108,
+    "lon": -104.758247
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "13461",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.026419,
+    "lon": -104.8166236
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "13425",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0260064,
+    "lon": -104.816704
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "13335",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0260835,
+    "lon": -104.8165512
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "335",
+    "city": "Colorado Springs",
+    "lat": 38.8377887,
+    "lon": -104.7551623
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1616",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.80943,
+    "lon": -104.8413818
+  },
+  {
+    "street": "West Pikes Peak Avenue",
+    "housenumber": "415",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8339628,
+    "lon": -104.8330686
+  },
+  {
+    "street": "North Murray Boulevard",
+    "housenumber": "609",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8415739,
+    "lon": -104.7476039
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2960",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7896553,
+    "lon": -104.7587775
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2960",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7897488,
+    "lon": -104.7587194
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2960",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7895536,
+    "lon": -104.7588089
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5410",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.906924,
+    "lon": -104.7827736
+  },
+  {
+    "street": "Montebello Square Drive",
+    "housenumber": "2360",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9091512,
+    "lon": -104.782859
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5406",
+    "city": "Colorado Springs",
+    "lat": 38.906794,
+    "lon": -104.7824614
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3230",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8907344,
+    "lon": -104.767754
+  },
+  {
+    "street": "Montebello Square Drive",
+    "housenumber": "2450",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9083892,
+    "lon": -104.7815301
+  },
+  {
+    "street": "Montebello Square Drive",
+    "housenumber": "2454",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9085732,
+    "lon": -104.781888
+  },
+  {
+    "street": "Montebello Square Drive",
+    "housenumber": "2460",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9089412,
+    "lon": -104.782504
+  },
+  {
+    "street": "Delta Drive",
+    "housenumber": "2549",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.794437,
+    "lon": -104.767323
+  },
+  {
+    "street": "Powers Center Point",
+    "housenumber": "5547",
+    "city": "Colorado Springs",
+    "lat": 38.9544641,
+    "lon": -104.728265
+  },
+  {
+    "street": "Integrity Center Drive",
+    "housenumber": "4359",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8946718,
+    "lon": -104.7207377
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "702",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8330255,
+    "lon": -104.837423
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2170",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8004361,
+    "lon": -104.8201361
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2110",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8022685,
+    "lon": -104.8186727
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2130",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8017176,
+    "lon": -104.8191779
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2310",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8020008,
+    "lon": -104.8192811
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2110",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8021177,
+    "lon": -104.8185951
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2310",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8018725,
+    "lon": -104.81922
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2020",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8037198,
+    "lon": -104.8190127
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2012",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8038529,
+    "lon": -104.8192022
+  },
+  {
+    "street": "Popes Bluff Trail",
+    "housenumber": "505",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8979288,
+    "lon": -104.8322951
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1635",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8470773,
+    "lon": -104.8442738
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1732",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8482383,
+    "lon": -104.8473886
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1915",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.847524,
+    "lon": -104.850376
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12229",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0098675,
+    "lon": -104.8064684
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0106774,
+    "lon": -104.8062428
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0106049,
+    "lon": -104.80624
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0103741,
+    "lon": -104.806072
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0103256,
+    "lon": -104.806062
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0109106,
+    "lon": -104.806392
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0105935,
+    "lon": -104.806203
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0110218,
+    "lon": -104.8064082
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0102842,
+    "lon": -104.8059459
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "12225",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0106544,
+    "lon": -104.806321
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "1733",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.808139,
+    "lon": -104.7570104
+  },
+  {
+    "street": "Lake Avenue",
+    "housenumber": "1",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7920172,
+    "lon": -104.8478803
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4710",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.8992222,
+    "lon": -104.8519155
+  },
+  {
+    "street": "Browning Avenue",
+    "housenumber": "4103",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8315322,
+    "lon": -104.7519598
+  },
+  {
+    "street": "Pebble Ridge Circle",
+    "housenumber": "4125",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7701922,
+    "lon": -104.8108195
+  },
+  {
+    "street": "Westmeadow Drive",
+    "housenumber": "4450",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7675136,
+    "lon": -104.8084541
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3430",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8910775,
+    "lon": -104.763983
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "5617",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8930567,
+    "lon": -104.7231816
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "503",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.83258,
+    "lon": -104.8346426
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "517",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8325871,
+    "lon": -104.8353282
+  },
+  {
+    "street": "North Spruce Street",
+    "housenumber": "141",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8365206,
+    "lon": -104.8322139
+  },
+  {
+    "street": "North Spruce Street",
+    "housenumber": "145",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8367531,
+    "lon": -104.8320995
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1744",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8484557,
+    "lon": -104.8473996
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1827",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8476342,
+    "lon": -104.8490943
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "1104",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8360293,
+    "lon": -104.8430673
+  },
+  {
+    "street": "East Bijou Street",
+    "housenumber": "120",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8368165,
+    "lon": -104.8225012
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "2150",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.897485,
+    "lon": -104.8679477
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "905",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8958293,
+    "lon": -104.8379288
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1720",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.848356,
+    "lon": -104.8469666
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1830",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8496997,
+    "lon": -104.849167
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1830",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8497525,
+    "lon": -104.8489147
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1810",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8497765,
+    "lon": -104.8481568
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1776",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8498293,
+    "lon": -104.8476207
+  },
+  {
+    "street": "Colbrunn Court",
+    "housenumber": "16",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8470925,
+    "lon": -104.861772
+  },
+  {
+    "street": "Ridgeline Drive",
+    "housenumber": "11550",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0024503,
+    "lon": -104.7993392
+  },
+  {
+    "street": "South Eighth Street",
+    "housenumber": "603",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8259253,
+    "lon": -104.8399078
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1536",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.811776,
+    "lon": -104.8232925
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1534",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8119307,
+    "lon": -104.8232979
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1530",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8120331,
+    "lon": -104.8233086
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1506",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8121961,
+    "lon": -104.8228365
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1410",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8134773,
+    "lon": -104.8228312
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3604",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8913122,
+    "lon": -104.7598819
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "1710",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8406258,
+    "lon": -104.851445
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3333",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8808267,
+    "lon": -104.755412
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "835",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7766139,
+    "lon": -104.8113561
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7495",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9394264,
+    "lon": -104.797784
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7469",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9390081,
+    "lon": -104.7975875
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7447",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9384896,
+    "lon": -104.7974186
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7344",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9393481,
+    "lon": -104.799691
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7252",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.938087,
+    "lon": -104.7991714
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6551",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9270757,
+    "lon": -104.7928132
+  },
+  {
+    "street": "Northgate Boulevard",
+    "housenumber": "161",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0264642,
+    "lon": -104.8227124
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "1710",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9263642,
+    "lon": -104.796381
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5765",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9141365,
+    "lon": -104.786007
+  },
+  {
+    "street": "Powers Center Point",
+    "housenumber": "5519",
+    "city": "Colorado Springs",
+    "lat": 38.9546846,
+    "lon": -104.727902
+  },
+  {
+    "street": "Powers Center Point",
+    "housenumber": "5490",
+    "city": "Colorado Springs",
+    "lat": 38.9551205,
+    "lon": -104.7274
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4290",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8935881,
+    "lon": -104.758157
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4296",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8936543,
+    "lon": -104.7583546
+  },
+  {
+    "street": "Voyager Parkway",
+    "housenumber": "8115",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9487857,
+    "lon": -104.802209
+  },
+  {
+    "street": "New Center Point",
+    "housenumber": "3036",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8770597,
+    "lon": -104.7179729
+  },
+  {
+    "street": "Constitution Avenue",
+    "housenumber": "5845",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8697792,
+    "lon": -104.7187507
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "3784",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8324964,
+    "lon": -104.757948
+  },
+  {
+    "street": "Garden of the Gods Road",
+    "housenumber": "1610",
+    "city": "Colorado Springs",
+    "lat": 38.899692,
+    "lon": -104.8557097
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5086",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9017731,
+    "lon": -104.8181641
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5102",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9022595,
+    "lon": -104.8182875
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2616",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8486759,
+    "lon": -104.8646119
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1603",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8104175,
+    "lon": -104.840563
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "445",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7883715,
+    "lon": -104.8205552
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "870",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8971592,
+    "lon": -104.8428792
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "6760",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9296279,
+    "lon": -104.7949476
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5086",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9018797,
+    "lon": -104.818128
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "5925",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9245042,
+    "lon": -104.71843
+  },
+  {
+    "street": "Tracker Drive",
+    "housenumber": "122",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0261842,
+    "lon": -104.8236153
+  },
+  {
+    "street": "Tracker Drive",
+    "housenumber": "122",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0261691,
+    "lon": -104.8240315
+  },
+  {
+    "street": "Tracker Drive",
+    "housenumber": "162",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0261353,
+    "lon": -104.8227201
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "2410",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8672194,
+    "lon": -104.7584318
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "2410",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8672474,
+    "lon": -104.7579171
+  },
+  {
+    "street": "Research Parkway",
+    "housenumber": "1975",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9576423,
+    "lon": -104.7947193
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1690",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7947229,
+    "lon": -104.8024692
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1670",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7940894,
+    "lon": -104.8027263
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1670",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7939744,
+    "lon": -104.802743
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "6915",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9327151,
+    "lon": -104.7128564
+  },
+  {
+    "street": "Vindicator Drive",
+    "housenumber": "1910",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9291117,
+    "lon": -104.862119
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "812",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8228094,
+    "lon": -104.8244841
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3945",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8889206,
+    "lon": -104.7556733
+  },
+  {
+    "street": "Town Center Drive",
+    "housenumber": "4751",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8352377,
+    "lon": -104.7399148
+  },
+  {
+    "street": "List Drive",
+    "housenumber": "5029",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9026228,
+    "lon": -104.852638
+  },
+  {
+    "street": "Abbott Lane",
+    "housenumber": "740",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.825153,
+    "lon": -104.838147
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "1595",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.944655,
+    "lon": -104.797617
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2930",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8739339,
+    "lon": -104.8201435
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4175",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.891753,
+    "lon": -104.753072
+  },
+  {
+    "street": "Montebello Lane",
+    "housenumber": "5312",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9093405,
+    "lon": -104.7862256
+  },
+  {
+    "street": "Stone Avenue",
+    "housenumber": "3190",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8784191,
+    "lon": -104.8164506
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "1050",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8172988,
+    "lon": -104.7583566
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "3755",
+    "city": "Colorado Springs",
+    "lat": 38.8870217,
+    "lon": -104.7124033
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "3955",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8889934,
+    "lon": -104.7137643
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "3905",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8887536,
+    "lon": -104.7121851
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "4025",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8897367,
+    "lon": -104.7143115
+  },
+  {
+    "street": "Tutt Boulevard",
+    "housenumber": "4033",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8899658,
+    "lon": -104.7143575
+  },
+  {
+    "street": "East Kiowa Street",
+    "housenumber": "130",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8354244,
+    "lon": -104.8221241
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "1109",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8180253,
+    "lon": -104.8240303
+  },
+  {
+    "street": "East Costilla Street",
+    "housenumber": "320",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8282902,
+    "lon": -104.8190742
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13467",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0267151,
+    "lon": -104.8239332
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13461",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0266558,
+    "lon": -104.8240415
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13271",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0253544,
+    "lon": -104.823518
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13271",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0249121,
+    "lon": -104.823537
+  },
+  {
+    "street": "East Las Vegas Street",
+    "housenumber": "114",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8185948,
+    "lon": -104.8236352
+  },
+  {
+    "street": "Sonoma Drive",
+    "housenumber": "2560",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.7964774,
+    "lon": -104.7674294
+  },
+  {
+    "street": "Lower Gold Camp Road",
+    "housenumber": "2310",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8286058,
+    "lon": -104.860176
+  },
+  {
+    "street": "South Wahsatch Avenue",
+    "housenumber": "601",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8255606,
+    "lon": -104.8180301
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "4",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8339433,
+    "lon": -104.8263363
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1785",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8054771,
+    "lon": -104.8399724
+  },
+  {
+    "street": "East Fountain Boulevard",
+    "housenumber": "2811",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.816348,
+    "lon": -104.778851
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3220",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8907165,
+    "lon": -104.76847
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1772",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8496983,
+    "lon": -104.8473795
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3671",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7751059,
+    "lon": -104.816759
+  },
+  {
+    "street": "North 20th Street",
+    "housenumber": "701",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8491018,
+    "lon": -104.8514778
+  },
+  {
+    "street": "North 19th Street",
+    "housenumber": "630",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8485023,
+    "lon": -104.8502387
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3605",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7757882,
+    "lon": -104.8156829
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3695",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7753537,
+    "lon": -104.8170551
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3669",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7750108,
+    "lon": -104.816689
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "725",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7758119,
+    "lon": -104.8141722
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1750",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8482164,
+    "lon": -104.848697
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1705",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8477275,
+    "lon": -104.8462211
+  },
+  {
+    "street": "North Spruce Street",
+    "housenumber": "125",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8363959,
+    "lon": -104.832231
+  },
+  {
+    "street": "South Walnut Street",
+    "housenumber": "24",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8332121,
+    "lon": -104.8346455
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "631",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8326452,
+    "lon": -104.83753
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "524",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8329289,
+    "lon": -104.8355575
+  },
+  {
+    "street": "Crump Road",
+    "housenumber": "12610",
+    "city": "Colorado Springs",
+    "postcode": "80908",
+    "lat": 38.9010075,
+    "lon": -104.837581
+  },
+  {
+    "street": "East Moreno Avenue",
+    "housenumber": "70",
+    "city": "Colorado Springs",
+    "lat": 38.8257951,
+    "lon": -104.824611
+  },
+  {
+    "street": "East Moreno Avenue",
+    "housenumber": "60",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8257998,
+    "lon": -104.8247333
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1634",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8101715,
+    "lon": -104.8228528
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "402",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8398776,
+    "lon": -104.823478
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1035",
+    "city": "Colorado Springs",
+    "lat": 38.896391,
+    "lon": -104.8417308
+  },
+  {
+    "street": "Wycliffe Drive",
+    "housenumber": "3659",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7749003,
+    "lon": -104.8165068
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3655",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7749697,
+    "lon": -104.8163358
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3643",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7751208,
+    "lon": -104.8159958
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3651",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7750121,
+    "lon": -104.8162379
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3641",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7751517,
+    "lon": -104.815922
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3639",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.775229,
+    "lon": -104.8157403
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3629",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7753006,
+    "lon": -104.8155546
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3625",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.775355,
+    "lon": -104.8154332
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3635",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7752643,
+    "lon": -104.8156646
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3647",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7750826,
+    "lon": -104.8160856
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3649",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7750525,
+    "lon": -104.816158
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3657",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7749388,
+    "lon": -104.8164221
+  },
+  {
+    "street": "Star Ranch Road",
+    "housenumber": "3665",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.774936,
+    "lon": -104.8166011
+  },
+  {
+    "street": "North Wahsatch Avenue",
+    "housenumber": "2306",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8657055,
+    "lon": -104.8170745
+  },
+  {
+    "street": "East Boulder Street",
+    "housenumber": "1400",
+    "city": "Colorado Springs",
+    "lat": 38.839738,
+    "lon": -104.7995594
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "707",
+    "city": "Colorado Springs",
+    "lat": 38.8234191,
+    "lon": -104.8381214
+  },
+  {
+    "street": "West Moreno Avenue",
+    "housenumber": "875",
+    "city": "Colorado Springs",
+    "lat": 38.8249247,
+    "lon": -104.8424212
+  },
+  {
+    "street": "South Parkside Drive",
+    "housenumber": "215",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8280523,
+    "lon": -104.7878182
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2222",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8654998,
+    "lon": -104.822358
+  },
+  {
+    "street": "Medical Center Point",
+    "housenumber": "1625",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8742548,
+    "lon": -104.7965594
+  },
+  {
+    "street": "Medical Center Point",
+    "housenumber": "1633",
+    "city": "Colorado Springs",
+    "lat": 38.8749633,
+    "lon": -104.7957227
+  },
+  {
+    "street": "North Circle Drive",
+    "housenumber": "3027",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8743805,
+    "lon": -104.793579
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5050",
+    "city": "Colorado Springs",
+    "lat": 38.9048841,
+    "lon": -104.8226088
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "2727",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8715794,
+    "lon": -104.8227218
+  },
+  {
+    "street": "Busch Avenue",
+    "housenumber": "2295",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8340649,
+    "lon": -104.8638284
+  },
+  {
+    "street": "Tenderfoot Hill Street",
+    "housenumber": "2630",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7953418,
+    "lon": -104.81254
+  },
+  {
+    "street": "North Wahsatch Avenue",
+    "housenumber": "2330",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8665173,
+    "lon": -104.8166868
+  },
+  {
+    "street": "North Tejon Street",
+    "housenumber": "101",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8354992,
+    "lon": -104.8229831
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1892",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8049093,
+    "lon": -104.8211228
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7560",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9403643,
+    "lon": -104.7996378
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "5657",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8920532,
+    "lon": -104.722358
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9235",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9651806,
+    "lon": -104.7548495
+  },
+  {
+    "street": "New Center Point",
+    "housenumber": "2835",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8716716,
+    "lon": -104.715961
+  },
+  {
+    "street": "East Fillmore Street",
+    "housenumber": "373",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.873904,
+    "lon": -104.815352
+  },
+  {
+    "street": "East Fillmore Street",
+    "housenumber": "389",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.873904,
+    "lon": -104.815279
+  },
+  {
+    "street": "Forest Bluffs View",
+    "housenumber": "9268",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9654252,
+    "lon": -104.788304
+  },
+  {
+    "street": "Forest Bluffs View",
+    "housenumber": "9278",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.965644,
+    "lon": -104.788166
+  },
+  {
+    "street": "Forest Bluffs View",
+    "housenumber": "9288",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9660211,
+    "lon": -104.787276
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1765",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9642005,
+    "lon": -104.793846
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1765",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9641035,
+    "lon": -104.793825
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1785",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9638374,
+    "lon": -104.79377
+  },
+  {
+    "street": "Stetson Boulevard",
+    "housenumber": "6082",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9107922,
+    "lon": -104.7153139
+  },
+  {
+    "street": "North Spruce Street",
+    "housenumber": "25",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8352376,
+    "lon": -104.8314704
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "501",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8325826,
+    "lon": -104.8345238
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "5620",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9421635,
+    "lon": -104.7229127
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "5620",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9422248,
+    "lon": -104.7228767
+  },
+  {
+    "street": "East Woodmen Rd",
+    "housenumber": "5750",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9448006,
+    "lon": -104.721689
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "111",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8313093,
+    "lon": -104.8232769
+  },
+  {
+    "street": "Prominent Point",
+    "housenumber": "9697",
+    "city": "Colorado Springs",
+    "postcode": "80924",
+    "lat": 38.9723914,
+    "lon": -104.743818
+  },
+  {
+    "street": "Cadence Point",
+    "housenumber": "10691",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9865048,
+    "lon": -104.8061916
+  },
+  {
+    "street": "North Cascade Avenue",
+    "housenumber": "215",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.837613,
+    "lon": -104.8248575
+  },
+  {
+    "street": "North Circle Drive",
+    "housenumber": "1225",
+    "city": "Colorado Springs",
+    "postcode": "80909-3136",
+    "lat": 38.8497437,
+    "lon": -104.7746802
+  },
+  {
+    "street": "Kingsley Circle",
+    "housenumber": "1320",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8520158,
+    "lon": -104.7696916
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "2303",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8655177,
+    "lon": -104.817972
+  },
+  {
+    "street": "South Weber Street",
+    "housenumber": "24",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8327531,
+    "lon": -104.8203086
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "102",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8322026,
+    "lon": -104.8240145
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "27",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8327295,
+    "lon": -104.8230794
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1750",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8486618,
+    "lon": -104.8473213
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2930",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8739897,
+    "lon": -104.8203573
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2819",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8728375,
+    "lon": -104.819264
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2831",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8730237,
+    "lon": -104.819303
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "3003",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8746166,
+    "lon": -104.8190822
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2907",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8734038,
+    "lon": -104.819266
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2801",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8721976,
+    "lon": -104.819219
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "2800",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8721609,
+    "lon": -104.8200908
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "817",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7770115,
+    "lon": -104.8113858
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "885",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7774205,
+    "lon": -104.8117493
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "3020",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8755357,
+    "lon": -104.821548
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "3010",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8749413,
+    "lon": -104.8199786
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "3014",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8749892,
+    "lon": -104.8208875
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "3232",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8764632,
+    "lon": -104.84771
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "3246",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8768234,
+    "lon": -104.847404
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "3244",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8767754,
+    "lon": -104.8474028
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4390",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8950113,
+    "lon": -104.759436
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "745",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7766478,
+    "lon": -104.8137283
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "805",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7758715,
+    "lon": -104.8131352
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "290",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7896561,
+    "lon": -104.8227566
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "252",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.789974,
+    "lon": -104.8234165
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "236",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7901638,
+    "lon": -104.8235289
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "182",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7904873,
+    "lon": -104.8234021
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "202",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7906782,
+    "lon": -104.822941
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "821",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7769315,
+    "lon": -104.81138
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "831",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7767184,
+    "lon": -104.811369
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "716",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7771471,
+    "lon": -104.8148916
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "730",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7773015,
+    "lon": -104.8142105
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "722",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7772339,
+    "lon": -104.8143823
+  },
+  {
+    "street": "Cheyenne Meadows Road",
+    "housenumber": "720",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7772469,
+    "lon": -104.8146085
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "265",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7889807,
+    "lon": -104.8228779
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "6945",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9328676,
+    "lon": -104.7405721
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "7055",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9328211,
+    "lon": -104.7390428
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "7055",
+    "city": "Colorado Springs",
+    "lat": 38.9322898,
+    "lon": -104.7389491
+  },
+  {
+    "street": "Source Center Point",
+    "housenumber": "6445",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9264138,
+    "lon": -104.722162
+  },
+  {
+    "street": "Source Center Point",
+    "housenumber": "6445",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9262643,
+    "lon": -104.722385
+  },
+  {
+    "street": "Source Center Point",
+    "housenumber": "6445",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9263455,
+    "lon": -104.722274
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "7480",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.939071,
+    "lon": -104.7405173
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7715",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9261563,
+    "lon": -104.683931
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7715",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9261533,
+    "lon": -104.6840337
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7715",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9261593,
+    "lon": -104.6841757
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7715",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9261585,
+    "lon": -104.6843353
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "7715",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9261609,
+    "lon": -104.6844047
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8832",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9595311,
+    "lon": -104.766115
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8834",
+    "city": "Colorado Springs",
+    "lat": 38.9595374,
+    "lon": -104.766041
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8838",
+    "city": "Colorado Springs",
+    "lat": 38.9595438,
+    "lon": -104.765906
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "8666",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9579769,
+    "lon": -104.7667223
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9275",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9650078,
+    "lon": -104.7567514
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9275",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9650075,
+    "lon": -104.7570138
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9205",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9641787,
+    "lon": -104.7572476
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9205",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9641766,
+    "lon": -104.7571251
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9205",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.964176,
+    "lon": -104.7567175
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "9205",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9641769,
+    "lon": -104.7568069
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1345",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9901318,
+    "lon": -104.801195
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "6130",
+    "city": "Colorado Springs",
+    "lat": 38.9214582,
+    "lon": -104.7390785
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4146",
+    "city": "Colorado Springs",
+    "lat": 38.8928133,
+    "lon": -104.7549027
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4438",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8972734,
+    "lon": -104.7495471
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4402",
+    "city": "Colorado Springs",
+    "lat": 38.8972361,
+    "lon": -104.750622
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4364",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8963497,
+    "lon": -104.7507244
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4322",
+    "city": "Colorado Springs",
+    "lat": 38.8961046,
+    "lon": -104.751024
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "4488",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8961413,
+    "lon": -104.7495212
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4703",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9013082,
+    "lon": -104.7659197
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5190",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.904873,
+    "lon": -104.7783554
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5190",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9050504,
+    "lon": -104.7782419
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "5620",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9131113,
+    "lon": -104.7766181
+  },
+  {
+    "street": "Montebello Square Drive",
+    "housenumber": "2458",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9088412,
+    "lon": -104.782344
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1264",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9915919,
+    "lon": -104.805755
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1258",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9915996,
+    "lon": -104.8059123
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1256",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9915959,
+    "lon": -104.8060382
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1254",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9915991,
+    "lon": -104.80616
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1252",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9916007,
+    "lon": -104.8062435
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1250",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9916007,
+    "lon": -104.8064077
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1353",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.990126,
+    "lon": -104.8010188
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1343",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9901317,
+    "lon": -104.8013714
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1337",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9901334,
+    "lon": -104.8016073
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1333",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9901328,
+    "lon": -104.8017852
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1327",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9901315,
+    "lon": -104.8019596
+  },
+  {
+    "street": "Prominent Point",
+    "housenumber": "9673",
+    "city": "Colorado Springs",
+    "postcode": "80924",
+    "lat": 38.9714617,
+    "lon": -104.7425719
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "2873",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9255243,
+    "lon": -104.773112
+  },
+  {
+    "street": "New Center Point",
+    "housenumber": "2991",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8762546,
+    "lon": -104.7170055
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "1725",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9445525,
+    "lon": -104.7956621
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3670",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8912546,
+    "lon": -104.7592716
+  },
+  {
+    "street": "Austin Bluffs Parkway",
+    "housenumber": "3640",
+    "city": "Colorado Springs",
+    "postcode": "80918-6680",
+    "lat": 38.8923354,
+    "lon": -104.7587713
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4276",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.892858,
+    "lon": -104.757901
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4268",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8926895,
+    "lon": -104.7579197
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "1409",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8531052,
+    "lon": -104.7555863
+  },
+  {
+    "street": "Rangewood Drive",
+    "housenumber": "6775",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9294565,
+    "lon": -104.7523833
+  },
+  {
+    "street": "Rangewood Drive",
+    "housenumber": "6745",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9284039,
+    "lon": -104.752057
+  },
+  {
+    "street": "Lee Vance View",
+    "housenumber": "4050",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9389864,
+    "lon": -104.7502379
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2801",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8498907,
+    "lon": -104.8674026
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2904",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8511462,
+    "lon": -104.8687463
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8505698,
+    "lon": -104.8675248
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8505392,
+    "lon": -104.8674663
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.850619,
+    "lon": -104.8674671
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8504625,
+    "lon": -104.867457
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8504235,
+    "lon": -104.8674963
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2812",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8503749,
+    "lon": -104.8674438
+  },
+  {
+    "street": "South 28th Street",
+    "housenumber": "4",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8502372,
+    "lon": -104.8670495
+  },
+  {
+    "street": "South 28th Street",
+    "housenumber": "112",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.849647,
+    "lon": -104.8679931
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2708",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8493691,
+    "lon": -104.8658884
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2708",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8494251,
+    "lon": -104.8659835
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2708",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8492604,
+    "lon": -104.8656948
+  },
+  {
+    "street": "Arrowswest Drive",
+    "housenumber": "4425",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8958218,
+    "lon": -104.8626432
+  },
+  {
+    "street": "South 21st Street",
+    "housenumber": "1540",
+    "city": "Colorado Springs",
+    "lat": 38.8313939,
+    "lon": -104.8596131
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "3131",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8534059,
+    "lon": -104.8739716
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "6033",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8934007,
+    "lon": -104.7156798
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "6037",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8934319,
+    "lon": -104.715611
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "6041",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8934697,
+    "lon": -104.7155476
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "6045",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8935102,
+    "lon": -104.7154765
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "6049",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8935466,
+    "lon": -104.715394
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3709",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.8859296,
+    "lon": -104.7164409
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3707",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8858688,
+    "lon": -104.7164391
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3765",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8863328,
+    "lon": -104.7164938
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3733",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8863456,
+    "lon": -104.7158674
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3735",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.886351,
+    "lon": -104.7159446
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3737",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8863503,
+    "lon": -104.7159949
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3739",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.886324,
+    "lon": -104.7160487
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3743",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.886324,
+    "lon": -104.7162214
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3747",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8863314,
+    "lon": -104.7163723
+  },
+  {
+    "street": "North Carefree Circle",
+    "housenumber": "6020",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8860886,
+    "lon": -104.714314
+  },
+  {
+    "street": "North Carefree Circle",
+    "housenumber": "6050",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8861496,
+    "lon": -104.7141258
+  },
+  {
+    "street": "Bloomington Street",
+    "housenumber": "3730",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8864264,
+    "lon": -104.718188
+  },
+  {
+    "street": "New Center Point",
+    "housenumber": "3646",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8831453,
+    "lon": -104.7179759
+  },
+  {
+    "street": "Cinema Point",
+    "housenumber": "3336",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8813482,
+    "lon": -104.7173127
+  },
+  {
+    "street": "Cinema Point",
+    "housenumber": "3356",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8816321,
+    "lon": -104.717423
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5865",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9097654,
+    "lon": -104.7180077
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6074",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9110272,
+    "lon": -104.7153197
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6068",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9111205,
+    "lon": -104.7153195
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6064",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9112243,
+    "lon": -104.7153241
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6056",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.9117933,
+    "lon": -104.7153386
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6080",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9108467,
+    "lon": -104.7153129
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6076",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9109277,
+    "lon": -104.7153165
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6054",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9117711,
+    "lon": -104.71539
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6052",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9117514,
+    "lon": -104.715452
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6050",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9117205,
+    "lon": -104.7155196
+  },
+  {
+    "street": "Stetson Hill Boulevard",
+    "housenumber": "6048",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.9116961,
+    "lon": -104.715581
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6046",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9116709,
+    "lon": -104.7156446
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6042",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9115975,
+    "lon": -104.7158319
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6044",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9116275,
+    "lon": -104.7157605
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "6044",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9116499,
+    "lon": -104.7157019
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5928",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9138485,
+    "lon": -104.718939
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "5925",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9244107,
+    "lon": -104.71843
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "5925",
+    "city": "Colorado Springs",
+    "lat": 38.9249169,
+    "lon": -104.718421
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5944",
+    "city": "Colorado Springs",
+    "postcode": "80923-3510",
+    "lat": 38.9145613,
+    "lon": -104.7174199
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5984",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9135731,
+    "lon": -104.7168316
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5984",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9134829,
+    "lon": -104.7167429
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5986",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9133333,
+    "lon": -104.7167279
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5988",
+    "city": "Colorado Springs",
+    "lat": 38.913284,
+    "lon": -104.7166924
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5990",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9132261,
+    "lon": -104.7166257
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5996",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9133686,
+    "lon": -104.7162704
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5994",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9132995,
+    "lon": -104.7164414
+  },
+  {
+    "street": "Stetson Hills Boulevard",
+    "housenumber": "5998",
+    "city": "Colorado Springs",
+    "postcode": "80923",
+    "lat": 38.9133938,
+    "lon": -104.7162015
+  },
+  {
+    "street": "Barnes Road",
+    "housenumber": "5944",
+    "city": "Colorado Springs",
+    "postcode": "80922",
+    "lat": 38.8961018,
+    "lon": -104.7179607
+  },
+  {
+    "street": "Space Center Drive",
+    "housenumber": "1079",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8474337,
+    "lon": -104.721939
+  },
+  {
+    "street": "Space Center Drive",
+    "housenumber": "1580",
+    "city": "Colorado Springs",
+    "lat": 38.8556298,
+    "lon": -104.723958
+  },
+  {
+    "street": "Space Center Drive",
+    "housenumber": "1580",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8555292,
+    "lon": -104.7239519
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "2767",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9412717,
+    "lon": -104.776639
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "2761",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9415022,
+    "lon": -104.776673
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5055",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9048149,
+    "lon": -104.7731971
+  },
+  {
+    "street": "Dublin Boulevard",
+    "housenumber": "1716",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.926508,
+    "lon": -104.7957604
+  },
+  {
+    "street": "Hollow Brook Drive",
+    "housenumber": "2155",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9207274,
+    "lon": -104.7871981
+  },
+  {
+    "street": "Hollow Brook Drive",
+    "housenumber": "2155",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9208274,
+    "lon": -104.7871076
+  },
+  {
+    "street": "Hollow Brook Drive",
+    "housenumber": "2165",
+    "city": "Colorado Springs",
+    "lat": 38.9206815,
+    "lon": -104.7870977
+  },
+  {
+    "street": "North Hancock Avenue",
+    "housenumber": "1506",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8544643,
+    "lon": -104.8036842
+  },
+  {
+    "street": "Chapel Hills Drive",
+    "housenumber": "595",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9599415,
+    "lon": -104.7856107
+  },
+  {
+    "street": "Briargate Parkway",
+    "housenumber": "1605",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9635835,
+    "lon": -104.7960595
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "105",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8357516,
+    "lon": -104.8195951
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "17",
+    "city": "Colorado Springs",
+    "lat": 38.8341434,
+    "lon": -104.8196812
+  },
+  {
+    "street": "East Moreno Avenue",
+    "housenumber": "909",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8247858,
+    "lon": -104.8075101
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "104",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8321054,
+    "lon": -104.826254
+  },
+  {
+    "street": "East Columbia Street",
+    "housenumber": "505",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8536008,
+    "lon": -104.814832
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2307",
+    "city": "Colorado Springs",
+    "lat": 38.8455842,
+    "lon": -104.860883
+  },
+  {
+    "street": "East Columbia Street",
+    "housenumber": "505",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8536066,
+    "lon": -104.8149609
+  },
+  {
+    "street": "North Corona Street",
+    "housenumber": "1412",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8541095,
+    "lon": -104.81556
+  },
+  {
+    "street": "Bott Av",
+    "housenumber": "2222",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8413856,
+    "lon": -104.863268
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5230",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9044038,
+    "lon": -104.8185695
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5198",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9043109,
+    "lon": -104.8197274
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "5020",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9035671,
+    "lon": -104.821591
+  },
+  {
+    "street": "Nevada Ave - Uni Village Multi-Use Path",
+    "housenumber": "5262",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9062042,
+    "lon": -104.8173551
+  },
+  {
+    "street": "Mount Baldy Drive",
+    "housenumber": "12441",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0101437,
+    "lon": -104.7965503
+  },
+  {
+    "street": "Arrowswest Drive",
+    "housenumber": "4360",
+    "city": "Colorado Springs",
+    "postcode": "80907-3444",
+    "lat": 38.8960746,
+    "lon": -104.8690195
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "1630",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7922769,
+    "lon": -104.8013038
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2910",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7900721,
+    "lon": -104.7607076
+  },
+  {
+    "street": "south",
+    "housenumber": "1425",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8125426,
+    "lon": -104.7465641
+  },
+  {
+    "street": "North Murray Boulevard",
+    "housenumber": "665",
+    "city": "Colorado Springs",
+    "postcode": "80915",
+    "lat": 38.8431767,
+    "lon": -104.7465906
+  },
+  {
+    "street": "North Circle Drive",
+    "housenumber": "1121",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8483495,
+    "lon": -104.7725322
+  },
+  {
+    "street": "East Woodmen Road",
+    "housenumber": "1850",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9334349,
+    "lon": -104.7911546
+  },
+  {
+    "street": "Bott Avenue",
+    "housenumber": "2222",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8413393,
+    "lon": -104.8631382
+  },
+  {
+    "street": "Kelly Johnson Boulevard",
+    "housenumber": "1175",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9462163,
+    "lon": -104.8091306
+  },
+  {
+    "street": "Ridgeline Drive",
+    "housenumber": "11550",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0024578,
+    "lon": -104.7996128
+  },
+  {
+    "street": "Ridgeline Drive",
+    "housenumber": "11550",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0024661,
+    "lon": -104.7988613
+  },
+  {
+    "street": "Ridgeline Drive",
+    "housenumber": "11550",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0024571,
+    "lon": -104.7986962
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "219",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8320557,
+    "lon": -104.8299748
+  },
+  {
+    "street": "South 21st Street",
+    "housenumber": "600",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8399022,
+    "lon": -104.859814
+  },
+  {
+    "street": "South Tejon Street",
+    "housenumber": "111",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8316957,
+    "lon": -104.8234268
+  },
+  {
+    "street": "East Fountain Boulevard",
+    "housenumber": "251",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8214992,
+    "lon": -104.8213422
+  },
+  {
+    "street": "East Pikes Peak Avenue",
+    "housenumber": "559",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8331961,
+    "lon": -104.8136558
+  },
+  {
+    "street": "West Uintah Street",
+    "housenumber": "1768",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8496542,
+    "lon": -104.8474003
+  },
+  {
+    "street": "North Hancock Avenue",
+    "housenumber": "1424",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8533448,
+    "lon": -104.8041431
+  },
+  {
+    "street": "North Union Boulevard",
+    "housenumber": "1512",
+    "city": "Colorado Springs",
+    "postcode": "80909",
+    "lat": 38.8544922,
+    "lon": -104.7945787
+  },
+  {
+    "street": "North Cedar Street",
+    "housenumber": "930",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8471587,
+    "lon": -104.8048232
+  },
+  {
+    "street": "Cheyenne Boulevard",
+    "housenumber": "730",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8037223,
+    "lon": -104.8405612
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1791",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8039061,
+    "lon": -104.839992
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1791",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8040265,
+    "lon": -104.839866
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "1050",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8177323,
+    "lon": -104.8429338
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1855",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8075647,
+    "lon": -104.8204169
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1877",
+    "city": "Colorado Springs",
+    "lat": 38.8070024,
+    "lon": -104.8203854
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1825",
+    "city": "Colorado Springs",
+    "lat": 38.8078083,
+    "lon": -104.8211635
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1817",
+    "city": "Colorado Springs",
+    "lat": 38.8078193,
+    "lon": -104.8216944
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1801",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8084205,
+    "lon": -104.8217439
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1815",
+    "city": "Colorado Springs",
+    "lat": 38.8081999,
+    "lon": -104.8217369
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1916",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8045019,
+    "lon": -104.8197122
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1914",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8045928,
+    "lon": -104.8197633
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1812",
+    "city": "Colorado Springs",
+    "lat": 38.8056082,
+    "lon": -104.8216063
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1832",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.80551,
+    "lon": -104.8215453
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "1852",
+    "city": "Colorado Springs",
+    "lat": 38.8054562,
+    "lon": -104.8214966
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2120",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8015152,
+    "lon": -104.8183461
+  },
+  {
+    "street": "Southgate Road",
+    "housenumber": "2120",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8015293,
+    "lon": -104.8181194
+  },
+  {
+    "street": "Janitell Road",
+    "housenumber": "2753",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7940223,
+    "lon": -104.7884005
+  },
+  {
+    "street": "Janitell Road",
+    "housenumber": "2767",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7942554,
+    "lon": -104.7880344
+  },
+  {
+    "street": "Janitell Road",
+    "housenumber": "2777",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7943139,
+    "lon": -104.787551
+  },
+  {
+    "street": "East Cheyenne Mountain Boulevard",
+    "housenumber": "245",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7889531,
+    "lon": -104.8234264
+  },
+  {
+    "street": "Broadmoor Valley Road",
+    "housenumber": "2965",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7886489,
+    "lon": -104.8242965
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2436",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.7967121,
+    "lon": -104.759135
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2810",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.791696,
+    "lon": -104.759676
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2850",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7913645,
+    "lon": -104.7600029
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2780",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.791843,
+    "lon": -104.7592969
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2780",
+    "city": "Colorado Springs",
+    "lat": 38.7920017,
+    "lon": -104.75922
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2850",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7911791,
+    "lon": -104.7600255
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2850",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7908684,
+    "lon": -104.7601902
+  },
+  {
+    "street": "West Garden of the Gods Road",
+    "housenumber": "1045",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8962454,
+    "lon": -104.8422347
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4329",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8943132,
+    "lon": -104.8500144
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "4325",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8941487,
+    "lon": -104.8499331
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5145",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9049033,
+    "lon": -104.8628039
+  },
+  {
+    "street": "Corporate Drive",
+    "housenumber": "6760",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9289501,
+    "lon": -104.8146593
+  },
+  {
+    "street": "Briargate Boulevard",
+    "housenumber": "3755",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9426361,
+    "lon": -104.756355
+  },
+  {
+    "street": "South Cascade Avenue",
+    "housenumber": "702",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8243074,
+    "lon": -104.8261597
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "10",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8344707,
+    "lon": -104.8288281
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "10",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8341507,
+    "lon": -104.8288817
+  },
+  {
+    "street": "South Sierra Madre Street",
+    "housenumber": "10",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8339341,
+    "lon": -104.8289199
+  },
+  {
+    "street": "South 21st Street",
+    "housenumber": "1412",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8328843,
+    "lon": -104.8597935
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13492",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0277776,
+    "lon": -104.8253591
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13492",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0276331,
+    "lon": -104.8251383
+  },
+  {
+    "street": "Bass Pro Drive",
+    "housenumber": "13492",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 39.0277101,
+    "lon": -104.8252441
+  },
+  {
+    "street": "Cragmor Road",
+    "housenumber": "412",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8929947,
+    "lon": -104.8110965
+  },
+  {
+    "street": "Edgewood Drive",
+    "housenumber": "429",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8949221,
+    "lon": -104.8093826
+  },
+  {
+    "street": "Applewood Drive",
+    "housenumber": "3946",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8916696,
+    "lon": -104.807277
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3743",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8853854,
+    "lon": -104.8041321
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3768",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8850368,
+    "lon": -104.8050883
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3724",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8848384,
+    "lon": -104.8045157
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3716",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8846766,
+    "lon": -104.8045103
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3715",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8846213,
+    "lon": -104.8041201
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3711",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8845294,
+    "lon": -104.8041254
+  },
+  {
+    "street": "Scott Lane",
+    "housenumber": "3707",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8844407,
+    "lon": -104.8041603
+  },
+  {
+    "street": "Magnolia Street",
+    "housenumber": "1042",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8878741,
+    "lon": -104.8081125
+  },
+  {
+    "street": "Magnolia Street",
+    "housenumber": "1030",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8879639,
+    "lon": -104.8083258
+  },
+  {
+    "street": "Magnolia Street",
+    "housenumber": "1006",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8881267,
+    "lon": -104.8087724
+  },
+  {
+    "street": "Magnolia Street",
+    "housenumber": "1085",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8871538,
+    "lon": -104.8073146
+  },
+  {
+    "street": "Wild Rose Lane",
+    "housenumber": "5185",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.903827,
+    "lon": -104.8091787
+  },
+  {
+    "street": "Eagle Rock Road",
+    "housenumber": "1087",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9025893,
+    "lon": -104.8072422
+  },
+  {
+    "street": "Meadow Lane",
+    "housenumber": "3820",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8882974,
+    "lon": -104.8004263
+  },
+  {
+    "street": "Mount View Lane",
+    "housenumber": "1215",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8896456,
+    "lon": -104.8021439
+  },
+  {
+    "street": "Janitell Road",
+    "housenumber": "2936",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.788985,
+    "lon": -104.791956
+  },
+  {
+    "street": "Castle Rd",
+    "housenumber": "501",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8563251,
+    "lon": -104.86376
+  },
+  {
+    "street": "Prairie Agate Drive",
+    "housenumber": "4459",
+    "city": "Colorado Springs",
+    "postcode": "80938",
+    "lat": 38.8947202,
+    "lon": -104.674491
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1612",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.8107066,
+    "lon": -104.8230963
+  },
+  {
+    "street": "South Nevada Avenue",
+    "housenumber": "1634",
+    "city": "Colorado Springs",
+    "postcode": "80905",
+    "lat": 38.8101646,
+    "lon": -104.82328
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "4771",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.901923,
+    "lon": -104.7670931
+  },
+  {
+    "street": "Meadow Lane",
+    "housenumber": "3823",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8882248,
+    "lon": -104.7999318
+  },
+  {
+    "street": "Windsor Avenue",
+    "housenumber": "3803",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8863552,
+    "lon": -104.7948168
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1330",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7893698,
+    "lon": -104.8031893
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1330",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.789282,
+    "lon": -104.8029721
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1330",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7891858,
+    "lon": -104.8033194
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1330",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7893405,
+    "lon": -104.8033637
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1640",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7872696,
+    "lon": -104.8028578
+  },
+  {
+    "street": "Quail Lake Loop",
+    "housenumber": "1360",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7895454,
+    "lon": -104.8022184
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "7489",
+    "city": "Colorado Springs",
+    "postcode": "80920",
+    "lat": 38.9393744,
+    "lon": -104.797757
+  },
+  {
+    "street": "Circle Drive",
+    "housenumber": "303",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8261204,
+    "lon": -104.7791982
+  },
+  {
+    "street": "Jet Wing Drive",
+    "housenumber": "3025",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7885328,
+    "lon": -104.753587
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2628",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8490547,
+    "lon": -104.865033
+  },
+  {
+    "street": "Lake Plaza Drive",
+    "housenumber": "1263",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7947358,
+    "lon": -104.804012
+  },
+  {
+    "street": "Lake Plaza Drive",
+    "housenumber": "1263",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7948332,
+    "lon": -104.8039339
+  },
+  {
+    "street": "Southpointe Court",
+    "housenumber": "665",
+    "city": "Colorado Springs",
+    "postcode": "80906",
+    "lat": 38.7959151,
+    "lon": -104.8153429
+  },
+  {
+    "street": "Moor Grass Heights",
+    "housenumber": "6437",
+    "city": "Colorado Springs",
+    "lat": 38.9723621,
+    "lon": -104.7164823
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "15",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8345174,
+    "lon": -104.821345
+  },
+  {
+    "street": "West Colorado Avenue",
+    "housenumber": "2429",
+    "city": "Colorado Springs",
+    "postcode": "80904",
+    "lat": 38.8468974,
+    "lon": -104.8625022
+  },
+  {
+    "street": "East Cimarron Street",
+    "housenumber": "19",
+    "city": "Colorado Springs",
+    "postcode": "80903",
+    "lat": 38.8266603,
+    "lon": -104.8250232
+  },
+  {
+    "street": "Centennial Boulevard",
+    "housenumber": "5135",
+    "city": "Colorado Springs",
+    "postcode": "80919",
+    "lat": 38.9038635,
+    "lon": -104.8615099
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1245",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9903665,
+    "lon": -104.8060036
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5120",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9040881,
+    "lon": -104.7783704
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5110",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.903856,
+    "lon": -104.778138
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "5190",
+    "city": "Colorado Springs",
+    "postcode": "80918",
+    "lat": 38.9049615,
+    "lon": -104.7783017
+  },
+  {
+    "street": "Interquest Parkway",
+    "housenumber": "1358",
+    "city": "Colorado Springs",
+    "postcode": "80921",
+    "lat": 38.9912257,
+    "lon": -104.8005936
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "1705",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8578414,
+    "lon": -104.818383
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3337",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8810449,
+    "lon": -104.755439
+  },
+  {
+    "street": "North Academy Boulevard",
+    "housenumber": "3355",
+    "city": "Colorado Springs",
+    "postcode": "80917",
+    "lat": 38.8812154,
+    "lon": -104.7554284
+  },
+  {
+    "street": "East Fountain Boulevard",
+    "housenumber": "2841",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8165096,
+    "lon": -104.7781477
+  },
+  {
+    "street": "Shasta Drive",
+    "housenumber": "1740",
+    "city": "Colorado Springs",
+    "postcode": "80910",
+    "lat": 38.8068947,
+    "lon": -104.7777223
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "1877",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.8053727,
+    "lon": -104.7564335
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2710",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7933781,
+    "lon": -104.7589352
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2710",
+    "city": "Colorado Springs",
+    "lat": 38.7932241,
+    "lon": -104.7589394
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2710",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7930387,
+    "lon": -104.7589455
+  },
+  {
+    "street": "South Academy Boulevard",
+    "housenumber": "2850",
+    "city": "Colorado Springs",
+    "postcode": "80916",
+    "lat": 38.7911294,
+    "lon": -104.7600525
+  },
+  {
+    "street": "North Weber Street",
+    "housenumber": "2201",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8643724,
+    "lon": -104.8180088
+  },
+  {
+    "street": "North Nevada Avenue",
+    "housenumber": "4242",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8940819,
+    "lon": -104.8199852
+  },
+  {
+    "street": "East Fillmore Street",
+    "housenumber": "610",
+    "city": "Colorado Springs",
+    "postcode": "80907",
+    "lat": 38.8745285,
+    "lon": -104.813924
+  }
+]

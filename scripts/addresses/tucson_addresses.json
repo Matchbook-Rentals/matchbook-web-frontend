@@ -1,0 +1,7861 @@
+[
+  {
+    "street": "South Alamo Avenue",
+    "housenumber": "4175",
+    "city": "Davis-Monthan Air Force Base",
+    "postcode": "85707",
+    "lat": 32.1732517,
+    "lon": -110.859544
+  },
+  {
+    "street": "East Lowell Street",
+    "housenumber": "1224",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2283081,
+    "lon": -110.952399
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "943",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2322402,
+    "lon": -110.9568807
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "412",
+    "city": "Tucson",
+    "postcode": "85705-8443",
+    "lat": 32.2269764,
+    "lon": -110.9654434
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "411",
+    "city": "Tucson",
+    "lat": 32.2267332,
+    "lon": -110.9657073
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "749",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2313908,
+    "lon": -110.9568741
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2279023,
+    "lon": -110.965139
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "534",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2286035,
+    "lon": -110.9654398
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "151",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2241361,
+    "lon": -110.9718073
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "17",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219772,
+    "lon": -110.9716125
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "1",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2220019,
+    "lon": -110.9714089
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "46",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219575,
+    "lon": -110.9718004
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "54",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219137,
+    "lon": -110.9722112
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "311",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2257186,
+    "lon": -110.9745755
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "905",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2318616,
+    "lon": -110.9575778
+  },
+  {
+    "street": "Olive Road",
+    "housenumber": "1031",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2355764,
+    "lon": -110.955811
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "845",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2324987,
+    "lon": -110.956933
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "527",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2285117,
+    "lon": -110.9657997
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "4390",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2863345,
+    "lon": -110.960581
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1303",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2324755,
+    "lon": -110.9514535
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1303",
+    "city": "Tucson",
+    "postcode": "85721-0017",
+    "lat": 32.2327687,
+    "lon": -110.9515775
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1303",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2324898,
+    "lon": -110.9517593
+  },
+  {
+    "street": "West Starr Pass Boulevard",
+    "housenumber": "3800",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.210727,
+    "lon": -111.040034
+  },
+  {
+    "street": "West River Road",
+    "housenumber": "98",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2972467,
+    "lon": -110.973398
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "405",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2870526,
+    "lon": -110.9656724
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "439",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2273903,
+    "lon": -110.9688017
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "403",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.226522,
+    "lon": -110.968785
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "820",
+    "city": "Tucson",
+    "lat": 32.2315054,
+    "lon": -110.9585976
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "825",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2319032,
+    "lon": -110.9590872
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "403",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2266589,
+    "lon": -110.968795
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "8201",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1024658,
+    "lon": -110.800641
+  },
+  {
+    "street": "South Stone Avenue",
+    "housenumber": "758",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2122293,
+    "lon": -110.9689793
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "#120, 2230",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2355817,
+    "lon": -110.9391772
+  },
+  {
+    "street": "East Valencia Road",
+    "housenumber": "225",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1344539,
+    "lon": -110.9662602
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "210 E",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2209934,
+    "lon": -110.9664075
+  },
+  {
+    "street": "West Starr Pass Boulevard",
+    "housenumber": "3800",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.215949,
+    "lon": -111.049929
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "2",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2214765,
+    "lon": -110.9710265
+  },
+  {
+    "street": "North Los Altos Avenue",
+    "housenumber": "2550",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2531359,
+    "lon": -110.9627461
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "8201",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1023898,
+    "lon": -110.8005916
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "698",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2862112,
+    "lon": -110.9615791
+  },
+  {
+    "street": "East River Road",
+    "housenumber": "1745",
+    "city": "Tucson",
+    "postcode": "85718",
+    "lat": 32.2888752,
+    "lon": -110.9459501
+  },
+  {
+    "street": "West Valencia Road",
+    "housenumber": "1610",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.1336045,
+    "lon": -111.0002114
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2894546,
+    "lon": -110.97568
+  },
+  {
+    "street": "West Ajo Way",
+    "housenumber": "1434",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1774703,
+    "lon": -110.972103
+  },
+  {
+    "street": "East River Road",
+    "housenumber": "1790",
+    "city": "Tucson",
+    "postcode": "85718",
+    "lat": 32.2866294,
+    "lon": -110.9451977
+  },
+  {
+    "street": "East Edison Street",
+    "housenumber": "2814",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2482791,
+    "lon": -110.9305401
+  },
+  {
+    "street": "North Dragoon Street",
+    "housenumber": "2551",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2534244,
+    "lon": -111.0010401
+  },
+  {
+    "street": "North Colette Place",
+    "housenumber": "732",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.2313279,
+    "lon": -110.7785678
+  },
+  {
+    "street": "North Alvernon Way",
+    "housenumber": "2802",
+    "city": "Tucson",
+    "lat": 32.2581602,
+    "lon": -110.909355
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "4390",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2862662,
+    "lon": -110.960639
+  },
+  {
+    "street": "West Miracle Mile",
+    "housenumber": "505",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2607804,
+    "lon": -110.9805474
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "1003",
+    "city": "Tucson",
+    "postcode": "85709",
+    "lat": 32.2345455,
+    "lon": -110.9720818
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "722",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2310312,
+    "lon": -110.9715299
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "712",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2307,
+    "lon": -110.9713839
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "640",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2299169,
+    "lon": -110.9714427
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "615",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2294893,
+    "lon": -110.9714991
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "600",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2292487,
+    "lon": -110.9714535
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "625",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2298761,
+    "lon": -110.9723574
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "2470",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2515191,
+    "lon": -110.977715
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "2470",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2515225,
+    "lon": -110.977642
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "2470",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2514362,
+    "lon": -110.977669
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "256",
+    "city": "Tucson",
+    "lat": 32.2219646,
+    "lon": -110.9677688
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221848,
+    "lon": -110.9674177
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "278",
+    "city": "Tucson",
+    "lat": 32.2219819,
+    "lon": -110.9672343
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "266",
+    "city": "Tucson",
+    "lat": 32.2219717,
+    "lon": -110.9675766
+  },
+  {
+    "street": "North Tyndall Avenue",
+    "housenumber": "1031",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2353223,
+    "lon": -110.9569301
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "1031",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2349911,
+    "lon": -110.9569246
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "311",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2255736,
+    "lon": -110.9744854
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "904",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315493,
+    "lon": -110.9577818
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "906",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315596,
+    "lon": -110.9576953
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "910",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315596,
+    "lon": -110.9576206
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "922",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315596,
+    "lon": -110.9575459
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "936",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315443,
+    "lon": -110.9574476
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "940",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315469,
+    "lon": -110.957393
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "942",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315478,
+    "lon": -110.9573219
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "944",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315597,
+    "lon": -110.9572469
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "970",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315597,
+    "lon": -110.9571722
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "982",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315597,
+    "lon": -110.9570974
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "988",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315597,
+    "lon": -110.9570227
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "990",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315597,
+    "lon": -110.9569479
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "994",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2315598,
+    "lon": -110.9568732
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "943",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2318678,
+    "lon": -110.9573208
+  },
+  {
+    "street": "East Nelson Drive",
+    "housenumber": "6508",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1885979,
+    "lon": -110.8532862
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "201",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2241058,
+    "lon": -110.9744461
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "201",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2242124,
+    "lon": -110.974258
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "201",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2242567,
+    "lon": -110.9744367
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "201",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2243599,
+    "lon": -110.9745051
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "201",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2242067,
+    "lon": -110.9740759
+  },
+  {
+    "street": "South Camino Seco",
+    "housenumber": "150",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2179703,
+    "lon": -110.8073842
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "33",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217886,
+    "lon": -110.9668818
+  },
+  {
+    "street": "East Adams Street",
+    "housenumber": "1420",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2404923,
+    "lon": -110.950596
+  },
+  {
+    "street": "East Wayne Moody Lane",
+    "housenumber": "10458",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1568233,
+    "lon": -110.7693019
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "802",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2319021,
+    "lon": -110.9653476
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2221914,
+    "lon": -110.9672615
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "350",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.221733,
+    "lon": -110.9658317
+  },
+  {
+    "street": "South 6th Avenue",
+    "housenumber": "11",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217694,
+    "lon": -110.9684536
+  },
+  {
+    "street": "East Tucson Marketplace Boulevard",
+    "housenumber": "1260",
+    "city": "Tucson",
+    "postcode": "85713",
+    "lat": 32.1856756,
+    "lon": -110.952801
+  },
+  {
+    "street": "East Tucson Marketplace Boulevard",
+    "housenumber": "1260",
+    "city": "Tucson",
+    "postcode": "85713",
+    "lat": 32.1857815,
+    "lon": -110.9534792
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2204634,
+    "lon": -110.866676
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2204567,
+    "lon": -110.8653395
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2190616,
+    "lon": -110.865466
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "8570",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2190449,
+    "lon": -110.8657428
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2182521,
+    "lon": -110.8653948
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1303",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2329509,
+    "lon": -110.952436
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2198607,
+    "lon": -110.98552
+  },
+  {
+    "street": "East Cooper Street",
+    "housenumber": "6600",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2186386,
+    "lon": -110.8520816
+  },
+  {
+    "street": "West Prince Road",
+    "housenumber": "917",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2715258,
+    "lon": -110.9874293
+  },
+  {
+    "street": "South Jefferson Avenue",
+    "housenumber": "2432",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.1939124,
+    "lon": -110.8738994
+  },
+  {
+    "street": "East Lowell Street",
+    "housenumber": "1064",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2280982,
+    "lon": -110.9551278
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "271",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2265964,
+    "lon": -110.9715557
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1225",
+    "city": "Tucson",
+    "postcode": "85714-1167",
+    "lat": 32.1604549,
+    "lon": -110.990223
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1221",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1613949,
+    "lon": -110.99047
+  },
+  {
+    "street": "East 33rd Street",
+    "housenumber": "9720",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.1950766,
+    "lon": -110.7836059
+  },
+  {
+    "street": "South 1st Avenue",
+    "housenumber": "4947",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.161725,
+    "lon": -110.9601887
+  },
+  {
+    "street": "East 27th Street",
+    "housenumber": "7509",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2030574,
+    "lon": -110.8318789
+  },
+  {
+    "street": "W Prince Rd",
+    "housenumber": "1870",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2730823,
+    "lon": -111.0053938
+  },
+  {
+    "street": "North Flowing Wells Road",
+    "housenumber": "2801",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2579915,
+    "lon": -110.9956437
+  },
+  {
+    "street": "South 12th Avenue",
+    "housenumber": "5311",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1557624,
+    "lon": -110.9771073
+  },
+  {
+    "street": "W Prince Road",
+    "housenumber": "1870",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2729186,
+    "lon": -111.0054459
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "1802",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2439763,
+    "lon": -110.9721782
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "333",
+    "city": "Tucson",
+    "lat": 32.2260933,
+    "lon": -110.9747165
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "2028",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2172662,
+    "lon": -110.9414599
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "118",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2218595,
+    "lon": -110.9692911
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "120",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217647,
+    "lon": -110.9692163
+  },
+  {
+    "street": "East Daniella Circle",
+    "housenumber": "8141",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2498063,
+    "lon": -110.8186598
+  },
+  {
+    "street": "West Broadway Boulevard",
+    "housenumber": "2800",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2220125,
+    "lon": -111.025934
+  },
+  {
+    "street": "South Scott Avenue",
+    "housenumber": "236",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2187067,
+    "lon": -110.9699702
+  },
+  {
+    "street": "South 4th Avenue",
+    "housenumber": "208",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2196923,
+    "lon": -110.9653307
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "308",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2197592,
+    "lon": -110.9653307
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "310",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2197603,
+    "lon": -110.9652793
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "312",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2197621,
+    "lon": -110.9652327
+  },
+  {
+    "street": "South 4th Avenue",
+    "housenumber": "219",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2193673,
+    "lon": -110.9667955
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "215",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.219429,
+    "lon": -110.9666509
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "217",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2193532,
+    "lon": -110.9666098
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "227",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2192001,
+    "lon": -110.9666335
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "229",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2192227,
+    "lon": -110.9668038
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "225",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2191683,
+    "lon": -110.9667603
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "235",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2190047,
+    "lon": -110.9668623
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "231",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2190665,
+    "lon": -110.9667742
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "233",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2190831,
+    "lon": -110.9666251
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "239",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2189149,
+    "lon": -110.9668372
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "241",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2188798,
+    "lon": -110.9668357
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "243",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2188429,
+    "lon": -110.9668347
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "245",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2188534,
+    "lon": -110.9667669
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "213",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2187881,
+    "lon": -110.9667902
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "531",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2285089,
+    "lon": -110.9659388
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "529",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2285077,
+    "lon": -110.9660591
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "521",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2282747,
+    "lon": -110.9657751
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "517",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2282308,
+    "lon": -110.9657723
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "536",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2287066,
+    "lon": -110.9654497
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "532",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2285409,
+    "lon": -110.9654652
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "526",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2284983,
+    "lon": -110.9654644
+  },
+  {
+    "street": "North Hoff Avenue",
+    "housenumber": "519",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2285232,
+    "lon": -110.965113
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "526",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2284296,
+    "lon": -110.9654582
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "3964",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2787111,
+    "lon": -110.977744
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7107",
+    "city": "Tucson",
+    "lat": 32.2231422,
+    "lon": -110.8404373
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7109",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2230741,
+    "lon": -110.8404346
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7117",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2229221,
+    "lon": -110.8404319
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7115",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2229947,
+    "lon": -110.8404332
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "943",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2320805,
+    "lon": -110.9569033
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "845",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2318821,
+    "lon": -110.958509
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "33",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.222603,
+    "lon": -110.9721754
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2198995,
+    "lon": -110.985804
+  },
+  {
+    "street": "East Congress",
+    "housenumber": "63",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2220617,
+    "lon": -110.970018
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "285",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2253862,
+    "lon": -110.9754703
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "287",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2254071,
+    "lon": -110.9753828
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "289",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.225426,
+    "lon": -110.9753055
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "291",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2254511,
+    "lon": -110.9751781
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "295",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2255639,
+    "lon": -110.9751594
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "293",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2255057,
+    "lon": -110.9751407
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "265",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2252234,
+    "lon": -110.9752721
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "259",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2250451,
+    "lon": -110.9752319
+  },
+  {
+    "street": "West Council Street",
+    "housenumber": "151",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2250313,
+    "lon": -110.9744175
+  },
+  {
+    "street": "West Council Street",
+    "housenumber": "141",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2251195,
+    "lon": -110.9743183
+  },
+  {
+    "street": "West Council Street",
+    "housenumber": "155",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2250263,
+    "lon": -110.9747073
+  },
+  {
+    "street": "West Council Street",
+    "housenumber": "153",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2250632,
+    "lon": -110.9745694
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "250",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2252429,
+    "lon": -110.9746776
+  },
+  {
+    "street": "West Franklin Street",
+    "housenumber": "198",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2257719,
+    "lon": -110.9749773
+  },
+  {
+    "street": "West Franklin Street",
+    "housenumber": "196",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2257156,
+    "lon": -110.9749565
+  },
+  {
+    "street": "West Franklin Street",
+    "housenumber": "192",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2257702,
+    "lon": -110.9748463
+  },
+  {
+    "street": "West Franklin Street",
+    "housenumber": "186",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2257954,
+    "lon": -110.9747589
+  },
+  {
+    "street": "North Main Avenue",
+    "housenumber": "223",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.224534,
+    "lon": -110.975682
+  },
+  {
+    "street": "North Main Avenue",
+    "housenumber": "221",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2243913,
+    "lon": -110.9756947
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "222",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2246727,
+    "lon": -110.9738591
+  },
+  {
+    "street": "North Court Avenue",
+    "housenumber": "240",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2248259,
+    "lon": -110.9739025
+  },
+  {
+    "street": "West Council Street",
+    "housenumber": "135",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2247604,
+    "lon": -110.9737043
+  },
+  {
+    "street": "West Saint Mary's Road",
+    "housenumber": "1502 #110",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.229291,
+    "lon": -110.9975128
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "9255",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.0839871,
+    "lon": -110.8034847
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4040",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2805478,
+    "lon": -110.976559
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "308",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2220061,
+    "lon": -110.9666415
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "2936",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2211564,
+    "lon": -110.9281739
+  },
+  {
+    "street": "East Mabel Street",
+    "housenumber": "1101",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2392199,
+    "lon": -110.954972
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "1801",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2353489,
+    "lon": -110.9449165
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "2033",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2362782,
+    "lon": -110.9415629
+  },
+  {
+    "street": "South Craycroft Road",
+    "housenumber": "250",
+    "city": "Tucson",
+    "lat": 32.218846,
+    "lon": -110.8758188
+  },
+  {
+    "street": "East Granite Street",
+    "housenumber": "5405",
+    "city": "Tucson",
+    "postcode": "85707",
+    "lat": 32.1833578,
+    "lon": -110.876851
+  },
+  {
+    "street": "East Granite Street",
+    "housenumber": "5405",
+    "city": "Davis Monthan Air Force Base",
+    "postcode": "85707",
+    "lat": 32.183396,
+    "lon": -110.876547
+  },
+  {
+    "street": "N Pantano Rd",
+    "housenumber": "555",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2279433,
+    "lon": -110.827952
+  },
+  {
+    "street": "N Pantano Rd",
+    "housenumber": "555",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2280359,
+    "lon": -110.827964
+  },
+  {
+    "street": "East Ventura Street",
+    "housenumber": "101",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2461976,
+    "lon": -110.9700069
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "616",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2292862,
+    "lon": -110.9654381
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "1130",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2367981,
+    "lon": -110.952038
+  },
+  {
+    "street": "East Rita Road",
+    "housenumber": "9348",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1136994,
+    "lon": -110.79339
+  },
+  {
+    "street": "North Martin Avenue",
+    "housenumber": "900",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2327976,
+    "lon": -110.945296
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "5810",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2066063,
+    "lon": -110.8677995
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "5605",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2365624,
+    "lon": -110.8724517
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "120",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.2192857,
+    "lon": -110.773948
+  },
+  {
+    "street": "East Aerospace Parkway",
+    "housenumber": "1805",
+    "city": "Tucson",
+    "postcode": "85756",
+    "lat": 32.0846782,
+    "lon": -110.9452163
+  },
+  {
+    "street": "East River Road",
+    "housenumber": "1765",
+    "city": "Tucson",
+    "postcode": "85718-7631",
+    "lat": 32.2886477,
+    "lon": -110.9459001
+  },
+  {
+    "street": "Stone Ave",
+    "housenumber": "4861 N",
+    "city": "Tucson",
+    "postcode": "85704",
+    "lat": 32.2946842,
+    "lon": -110.972456
+  },
+  {
+    "street": "East Tanque Verde Rd",
+    "housenumber": "8975",
+    "city": "Tucson",
+    "postcode": "85749-9466",
+    "lat": 32.2600889,
+    "lon": -110.8005906
+  },
+  {
+    "street": "North Alvernon Way",
+    "housenumber": "1204",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2382043,
+    "lon": -110.909279
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "6061",
+    "city": "tucson",
+    "postcode": "85711",
+    "lat": 32.222367,
+    "lon": -110.863161
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "845",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2319051,
+    "lon": -110.958558
+  },
+  {
+    "street": "North Country Club Road",
+    "housenumber": "3370",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2684192,
+    "lon": -110.926391
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "7335",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1184537,
+    "lon": -110.7720767
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "7335",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1184571,
+    "lon": -110.7717455
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "7895",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1925744,
+    "lon": -110.8244106
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "7910",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1914151,
+    "lon": -110.8232312
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "7910",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1911104,
+    "lon": -110.823254
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3550",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2717953,
+    "lon": -110.9433361
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1850",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2718702,
+    "lon": -110.9441466
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1850",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2717375,
+    "lon": -110.9443652
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "3902",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2355376,
+    "lon": -110.9091054
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "3902",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2357996,
+    "lon": -110.9092409
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "316",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2274983,
+    "lon": -110.9660128
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4676",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2502989,
+    "lon": -110.8931445
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4676",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2502801,
+    "lon": -110.8931883
+  },
+  {
+    "street": "South 12th Avenue",
+    "housenumber": "5323",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.155642,
+    "lon": -110.9771166
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "408",
+    "city": "Tucson",
+    "postcode": "85705-8443",
+    "lat": 32.2267379,
+    "lon": -110.9653693
+  },
+  {
+    "street": "E Grant Road",
+    "housenumber": "4023",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2514345,
+    "lon": -110.9068915
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4640",
+    "city": "Tucson",
+    "postcode": "85711-3512",
+    "lat": 32.2211046,
+    "lon": -110.8932268
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2204797,
+    "lon": -110.863669
+  },
+  {
+    "street": "South Alvernon Way",
+    "housenumber": "3900",
+    "city": "Tucson",
+    "lat": 32.2212442,
+    "lon": -110.9091594
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "15",
+    "city": "Tucson",
+    "lat": 32.2222646,
+    "lon": -110.9098802
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "1927",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2365225,
+    "lon": -110.943106
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "1903",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2365064,
+    "lon": -110.943451
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "876",
+    "city": "Tucson",
+    "lat": 32.2314272,
+    "lon": -110.9581578
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "21",
+    "city": "Tucson",
+    "lat": 32.2220227,
+    "lon": -110.9708759
+  },
+  {
+    "street": "South Tucson Boulevard",
+    "housenumber": "6610",
+    "city": "Tucson",
+    "postcode": "85756",
+    "lat": 32.1315837,
+    "lon": -110.935024
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2187865,
+    "lon": -110.9852818
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "1064",
+    "city": "Tucson",
+    "lat": 32.2352239,
+    "lon": -110.943611
+  },
+  {
+    "street": "East Irvington Road",
+    "housenumber": "1880",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1624866,
+    "lon": -110.9440335
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "6544",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2455305,
+    "lon": -110.8523957
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3025",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2618831,
+    "lon": -110.944502
+  },
+  {
+    "street": "East Ajo Way",
+    "housenumber": "1100",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1774958,
+    "lon": -110.9540658
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1226",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1641589,
+    "lon": -110.9905313
+  },
+  {
+    "street": "East Ohio Street",
+    "housenumber": "945",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1677823,
+    "lon": -110.9575126
+  },
+  {
+    "street": "East Wrightstown Road",
+    "housenumber": "7856",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2494535,
+    "lon": -110.8247443
+  },
+  {
+    "street": "East Helen Street",
+    "housenumber": "1130",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2365718,
+    "lon": -110.9548635
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "9255",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.0845386,
+    "lon": -110.803302
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "9255",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.0843386,
+    "lon": -110.8033104
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "8080",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.1051706,
+    "lon": -110.77379
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "2545",
+    "city": "Tucson",
+    "postcode": "95716",
+    "lat": 32.2365106,
+    "lon": -110.9342908
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1629",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.232559,
+    "lon": -110.9472127
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2200414,
+    "lon": -110.985582
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2197221,
+    "lon": -110.9856925
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2198609,
+    "lon": -110.9857946
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2200835,
+    "lon": -110.9858792
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2189273,
+    "lon": -110.985319
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2188908,
+    "lon": -110.985306
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2188493,
+    "lon": -110.985293
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2186231,
+    "lon": -110.985247
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2194242,
+    "lon": -110.985398
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2193659,
+    "lon": -110.985386
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2193195,
+    "lon": -110.985376
+  },
+  {
+    "street": "South Mission Road",
+    "housenumber": "4001",
+    "city": "Tucson",
+    "postcode": "85746",
+    "lat": 32.1748971,
+    "lon": -111.0022383
+  },
+  {
+    "street": "North Alvernon Way",
+    "housenumber": "630",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2295321,
+    "lon": -110.9091331
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "2555",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2219146,
+    "lon": -110.933839
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "56",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219197,
+    "lon": -110.9721547
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "46",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219507,
+    "lon": -110.9718739
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "58",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2219231,
+    "lon": -110.9721088
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221688,
+    "lon": -110.9677978
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221748,
+    "lon": -110.9676566
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221739,
+    "lon": -110.9676778
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221804,
+    "lon": -110.9675219
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "245",
+    "city": "Tucson",
+    "lat": 32.2221814,
+    "lon": -110.967499
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "272",
+    "city": "Tucson",
+    "lat": 32.2219784,
+    "lon": -110.967373
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "260",
+    "city": "Tucson",
+    "lat": 32.2219685,
+    "lon": -110.9676674
+  },
+  {
+    "street": "West 5th Street",
+    "housenumber": "105",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2288247,
+    "lon": -110.9736295
+  },
+  {
+    "street": "West 5th Street",
+    "housenumber": "101",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.228827,
+    "lon": -110.9734966
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "1055",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2357515,
+    "lon": -110.9569567
+  },
+  {
+    "street": "E. University Blvd.",
+    "housenumber": "800",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2314499,
+    "lon": -110.959229
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1080",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1636873,
+    "lon": -110.9871833
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1218",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1639694,
+    "lon": -110.9906939
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "5735",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2364206,
+    "lon": -110.870028
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2893219,
+    "lon": -110.9741858
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2892323,
+    "lon": -110.9745298
+  },
+  {
+    "street": "South 12th Avenue",
+    "housenumber": "5433",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1530591,
+    "lon": -110.977084
+  },
+  {
+    "street": "East Britannia Drive",
+    "housenumber": "3400",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1359245,
+    "lon": -110.9196307
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7000",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2499355,
+    "lon": -110.8418881
+  },
+  {
+    "street": "North Wilmot Road",
+    "housenumber": "899",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2318543,
+    "lon": -110.85839
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5855",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2222942,
+    "lon": -110.866773
+  },
+  {
+    "street": "Broadway Blvd",
+    "housenumber": "5151 E",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2228222,
+    "lon": -110.8827263
+  },
+  {
+    "street": "East 29th Street",
+    "housenumber": "5355",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.1998795,
+    "lon": -110.878251
+  },
+  {
+    "street": "South Tucson Boulevard",
+    "housenumber": "6351",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1361241,
+    "lon": -110.934343
+  },
+  {
+    "street": "South Wilmot Road",
+    "housenumber": "1111",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2075024,
+    "lon": -110.8575743
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "6330",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1898834,
+    "lon": -110.8573578
+  },
+  {
+    "street": "North Rosemont Boulevard",
+    "housenumber": "2221",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2487838,
+    "lon": -110.8844966
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4575",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2221731,
+    "lon": -110.8948742
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "6360",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1902283,
+    "lon": -110.8560379
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7045",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2521162,
+    "lon": -110.8417818
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5950",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2201914,
+    "lon": -110.863864
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5151",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2221357,
+    "lon": -110.8832074
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4501",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2220272,
+    "lon": -110.8963552
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4525",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2220841,
+    "lon": -110.8960827
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4533",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2220197,
+    "lon": -110.8958119
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4545",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2220976,
+    "lon": -110.8955023
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4758",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2494208,
+    "lon": -110.89082
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "9460",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.190357,
+    "lon": -110.7910475
+  },
+  {
+    "street": "South Harrison Road",
+    "housenumber": "2406",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.1935331,
+    "lon": -110.790225
+  },
+  {
+    "street": "South Harrison Road",
+    "housenumber": "2402",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.1935414,
+    "lon": -110.7901082
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "9568",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1913689,
+    "lon": -110.7879825
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "9564",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.191504,
+    "lon": -110.7879844
+  },
+  {
+    "street": "East Golf Links Road",
+    "housenumber": "9290",
+    "city": "Tucson",
+    "postcode": "85730",
+    "lat": 32.1910406,
+    "lon": -110.7944766
+  },
+  {
+    "street": "West Dakota Strteet",
+    "housenumber": "418",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1552286,
+    "lon": -110.9752051
+  },
+  {
+    "street": "North Wilmot Road",
+    "housenumber": "535",
+    "city": "Tucson",
+    "lat": 32.2277682,
+    "lon": -110.8586598
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5055",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.221989,
+    "lon": -110.8847012
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "2015",
+    "city": "Tucson",
+    "lat": 32.2294503,
+    "lon": -110.941947
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1849",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2431501,
+    "lon": -110.8451912
+  },
+  {
+    "street": "East Mohave Road",
+    "housenumber": "331",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2690218,
+    "lon": -110.966414
+  },
+  {
+    "street": "West Roger Road",
+    "housenumber": "460",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2796248,
+    "lon": -110.979566
+  },
+  {
+    "street": "E Speedway Blvd",
+    "housenumber": "4675",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2376516,
+    "lon": -110.8930725
+  },
+  {
+    "street": "North Swan Road",
+    "housenumber": "3110",
+    "city": "Tucson",
+    "lat": 32.2634805,
+    "lon": -110.8919978
+  },
+  {
+    "street": "e Juarez St",
+    "housenumber": "4120",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2040833,
+    "lon": -110.904703
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7033",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2521144,
+    "lon": -110.8421881
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.219273,
+    "lon": -110.9853656
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2195215,
+    "lon": -110.9854249
+  },
+  {
+    "street": "South Avenida del Convento",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2191667,
+    "lon": -110.9853373
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "3621",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726432,
+    "lon": -110.961455
+  },
+  {
+    "street": "West River Road",
+    "housenumber": "75",
+    "city": "Tucson",
+    "postcode": "85704",
+    "lat": 32.2958834,
+    "lon": -110.9731575
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "4841",
+    "city": "Tucson",
+    "postcode": "85704",
+    "lat": 32.2946863,
+    "lon": -110.9722106
+  },
+  {
+    "street": "West River Road",
+    "housenumber": "68",
+    "city": "Tucson",
+    "postcode": "85704",
+    "lat": 32.2970488,
+    "lon": -110.9718512
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "1640",
+    "city": "Tucson",
+    "lat": 32.242372,
+    "lon": -110.9437864
+  },
+  {
+    "street": "North Swan Road",
+    "housenumber": "2930",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2608431,
+    "lon": -110.8918234
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "6450",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2501385,
+    "lon": -110.8549992
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "835",
+    "city": "Tucson",
+    "postcode": "85713",
+    "lat": 32.2074123,
+    "lon": -110.9568991
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "2526",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2277001,
+    "lon": -110.9346894
+  },
+  {
+    "street": "North Park Boulevard",
+    "housenumber": "615",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2294431,
+    "lon": -110.9573946
+  },
+  {
+    "street": "South Campbell Avenue",
+    "housenumber": "4951",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1622687,
+    "lon": -110.9427454
+  },
+  {
+    "street": "East Irvington Road",
+    "housenumber": "1992",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1614341,
+    "lon": -110.9423935
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4590",
+    "city": "Tucson",
+    "lat": 32.2211665,
+    "lon": -110.8947342
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4445",
+    "city": "Tucson",
+    "lat": 32.2218228,
+    "lon": -110.8972268
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "4815",
+    "city": "Tucson",
+    "lat": 32.2365644,
+    "lon": -110.8898107
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7877",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2225416,
+    "lon": -110.8247739
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7177",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2519625,
+    "lon": -110.8390676
+  },
+  {
+    "street": "South Stone Avenue",
+    "housenumber": "141",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.21977,
+    "lon": -110.97069
+  },
+  {
+    "street": "South Stone Avenue",
+    "housenumber": "141",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2195825,
+    "lon": -110.9704439
+  },
+  {
+    "street": "East Ajo Way",
+    "housenumber": "2800",
+    "city": "Tucson",
+    "postcode": "85713",
+    "lat": 32.1764081,
+    "lon": -110.9301677
+  },
+  {
+    "street": "East Valencia Road",
+    "housenumber": "3191",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1345385,
+    "lon": -110.9241932
+  },
+  {
+    "street": "East Valencia Road",
+    "housenumber": "2680",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1336176,
+    "lon": -110.931867
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "33",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2226206,
+    "lon": -110.972081
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "33",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2225463,
+    "lon": -110.9723412
+  },
+  {
+    "street": "East Blacklidge Drive",
+    "housenumber": "711",
+    "city": "Tucson",
+    "lat": 32.2614635,
+    "lon": -110.9602297
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4400",
+    "city": "Tucson",
+    "lat": 32.220765,
+    "lon": -110.8980651
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7727",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2225702,
+    "lon": -110.826398
+  },
+  {
+    "street": "West Copper Street",
+    "housenumber": "1830",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2546845,
+    "lon": -111.0052966
+  },
+  {
+    "street": "N Swan Rd",
+    "housenumber": "2959",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2610811,
+    "lon": -110.893033
+  },
+  {
+    "street": "N Business Center Dr",
+    "housenumber": "3745",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2760953,
+    "lon": -111.015327
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "5570",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.206331,
+    "lon": -110.8732885
+  },
+  {
+    "street": "East Pima Street",
+    "housenumber": "6236",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2419268,
+    "lon": -110.8592915
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "138",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2207167,
+    "lon": -110.9183318
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "150",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206901,
+    "lon": -110.9189541
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "146",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206829,
+    "lon": -110.9187814
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "142",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206776,
+    "lon": -110.9185711
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "140",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206692,
+    "lon": -110.9184582
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "144",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206583,
+    "lon": -110.9186748
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "148",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206578,
+    "lon": -110.918873
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "152",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2206561,
+    "lon": -110.9190266
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "136",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.220636,
+    "lon": -110.9183205
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "174",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2205567,
+    "lon": -110.919018
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "158",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204578,
+    "lon": -110.9190292
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "170",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204493,
+    "lon": -110.9184565
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "166",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204501,
+    "lon": -110.9186754
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "162",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204461,
+    "lon": -110.9188796
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "154",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204238,
+    "lon": -110.9192353
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "168",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204152,
+    "lon": -110.9185632
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "156",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204155,
+    "lon": -110.9191079
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "172",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204077,
+    "lon": -110.9183293
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "164",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204082,
+    "lon": -110.9187795
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2204091,
+    "lon": -110.9189483
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "70",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2212858,
+    "lon": -110.9218938
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "80",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2212826,
+    "lon": -110.9220293
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2210788,
+    "lon": -110.9222183
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "110",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2210324,
+    "lon": -110.9221177
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "120",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2209807,
+    "lon": -110.9220075
+  },
+  {
+    "street": "South Placita Colonia Solana",
+    "housenumber": "130",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2209293,
+    "lon": -110.9218923
+  },
+  {
+    "street": "W Grant Rd Ste F",
+    "housenumber": "1955",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2501209,
+    "lon": -111.0100157
+  },
+  {
+    "street": "South Avenida Polar B1",
+    "housenumber": "1306",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2054447,
+    "lon": -110.8550094
+  },
+  {
+    "street": "South Campbell Avenue",
+    "housenumber": "4555",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1674085,
+    "lon": -110.9427402
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3073",
+    "city": "Tucson",
+    "lat": 32.2627717,
+    "lon": -110.9445425
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "300",
+    "city": "Tucson",
+    "lat": 32.225407,
+    "lon": -110.965451
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "98",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217553,
+    "lon": -110.9695873
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "3016",
+    "city": "Tucson",
+    "lat": 32.2210163,
+    "lon": -110.9272165
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "340",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2261814,
+    "lon": -110.9674258
+  },
+  {
+    "street": "South Swan Road",
+    "housenumber": "1134",
+    "city": "Tucson",
+    "lat": 32.2075756,
+    "lon": -110.892738
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "1929",
+    "city": "Tucson",
+    "lat": 32.2504653,
+    "lon": -110.9428446
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "4414",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2359151,
+    "lon": -110.8984955
+  },
+  {
+    "street": "North Swan Road",
+    "housenumber": "3148",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2634932,
+    "lon": -110.8900201
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "3444",
+    "city": "Tucson",
+    "postcode": "85716-2814",
+    "lat": 32.2501793,
+    "lon": -110.9186552
+  },
+  {
+    "street": "N Silverbell Rd",
+    "housenumber": "395",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2265936,
+    "lon": -111.0000905
+  },
+  {
+    "street": "N Silverbell Road",
+    "housenumber": "395",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2266476,
+    "lon": -110.9999938
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "8864",
+    "city": "Tucson",
+    "lat": 32.2575111,
+    "lon": -110.8034446
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7000",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2502373,
+    "lon": -110.8423922
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7055",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2522323,
+    "lon": -110.8415015
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7053",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2521348,
+    "lon": -110.8414961
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4134",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2820872,
+    "lon": -110.9775074
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4128",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2820895,
+    "lon": -110.9777668
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4144",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2823242,
+    "lon": -110.9771006
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4055",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2809771,
+    "lon": -110.9787164
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4144",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2826061,
+    "lon": -110.9771058
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "2230",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2356623,
+    "lon": -110.9389694
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8448",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047478,
+    "lon": -110.8122508
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8456",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047105,
+    "lon": -110.8120934
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8442",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047628,
+    "lon": -110.8123978
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8434",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.204767,
+    "lon": -110.8125436
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8428",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047784,
+    "lon": -110.812701
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8420",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047478,
+    "lon": -110.8128424
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8414",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047592,
+    "lon": -110.8129974
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8464",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046772,
+    "lon": -110.8119487
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8470",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046711,
+    "lon": -110.8118165
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8478",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.204645,
+    "lon": -110.8116495
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8484",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046477,
+    "lon": -110.8115012
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8490",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046464,
+    "lon": -110.8113463
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8496",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046505,
+    "lon": -110.8112085
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8498",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2047095,
+    "lon": -110.8112079
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8501",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046429,
+    "lon": -110.8110539
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8510",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046066,
+    "lon": -110.8109185
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8514",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046292,
+    "lon": -110.8107313
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8518",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2046834,
+    "lon": -110.810591
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8523",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2048542,
+    "lon": -110.8104856
+  },
+  {
+    "street": "East Bowline Road",
+    "housenumber": "8521",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2049701,
+    "lon": -110.8104751
+  },
+  {
+    "street": "North Silverbell Road",
+    "housenumber": "1150",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2369453,
+    "lon": -111.0042801
+  },
+  {
+    "street": "North Silverbell Road",
+    "housenumber": "1370",
+    "city": "Tucson",
+    "lat": 32.2388152,
+    "lon": -111.0051328
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2786",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2572619,
+    "lon": -110.9434179
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "800",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2314416,
+    "lon": -110.8405733
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7025",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2520916,
+    "lon": -110.8425594
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "77037",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2521089,
+    "lon": -110.8420433
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7043",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.25211,
+    "lon": -110.8418606
+  },
+  {
+    "street": "East Tanque Verde Road",
+    "housenumber": "7051",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2521068,
+    "lon": -110.841591
+  },
+  {
+    "street": "North Swan Road",
+    "housenumber": "4713",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2666522,
+    "lon": -110.8919826
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4703",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2656797,
+    "lon": -110.891856
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4703",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.265788,
+    "lon": -110.8919414
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4703",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2656275,
+    "lon": -110.8917089
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4745",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2674166,
+    "lon": -110.8909138
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4753",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2671583,
+    "lon": -110.8909059
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4757",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2670785,
+    "lon": -110.8913023
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4759",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2669855,
+    "lon": -110.8912293
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4763",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2666787,
+    "lon": -110.8912934
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4741",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2676777,
+    "lon": -110.8909441
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4737",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2679579,
+    "lon": -110.8910946
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4739",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2679009,
+    "lon": -110.891007
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4735",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.268068,
+    "lon": -110.8912282
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4733",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2681364,
+    "lon": -110.8913136
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4729",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2681535,
+    "lon": -110.8918156
+  },
+  {
+    "street": "East Camp Lowell",
+    "housenumber": "4721",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2673311,
+    "lon": -110.8919503
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4725",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2672499,
+    "lon": -110.8915969
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4723",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2673612,
+    "lon": -110.8917377
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4715",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2668984,
+    "lon": -110.8919896
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4790",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2649218,
+    "lon": -110.8904336
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4802",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2649326,
+    "lon": -110.8901868
+  },
+  {
+    "street": "East Camp Lowell Drive",
+    "housenumber": "4810",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2649371,
+    "lon": -110.8900332
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "3455",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2509131,
+    "lon": -110.9188758
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "5151",
+    "city": "Tucson",
+    "lat": 32.2999807,
+    "lon": -110.9790136
+  },
+  {
+    "street": "South 5th Avenue",
+    "housenumber": "135",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2203058,
+    "lon": -110.966891
+  },
+  {
+    "street": "South Cherry Ave",
+    "housenumber": "5085",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.2301946,
+    "lon": -110.947423
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "840",
+    "city": "Tucson",
+    "lat": 32.2209272,
+    "lon": -110.9587537
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "1040",
+    "city": "Tucson",
+    "lat": 32.2297275,
+    "lon": -110.9551916
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1510",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2310598,
+    "lon": -110.9490137
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1500",
+    "city": "Tucson",
+    "lat": 32.2317913,
+    "lon": -110.9495194
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1428",
+    "city": "Tucson",
+    "lat": 32.2311456,
+    "lon": -110.9501053
+  },
+  {
+    "street": "North Highland Avenue",
+    "housenumber": "744",
+    "city": "Tucson",
+    "lat": 32.2311216,
+    "lon": -110.9506945
+  },
+  {
+    "street": "South Campus Drive",
+    "housenumber": "1140",
+    "city": "Tucson",
+    "lat": 32.2309873,
+    "lon": -110.9533746
+  },
+  {
+    "street": "South Campus Drive",
+    "housenumber": "1145",
+    "city": "Tucson",
+    "lat": 32.2311101,
+    "lon": -110.9542895
+  },
+  {
+    "street": "East James E. Rogers Way",
+    "housenumber": "1100",
+    "city": "Tucson",
+    "lat": 32.2326707,
+    "lon": -110.9547537
+  },
+  {
+    "street": "East James E. Rogers Way",
+    "housenumber": "1110",
+    "city": "Tucson",
+    "lat": 32.232623,
+    "lon": -110.9542063
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1401",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2327155,
+    "lon": -110.9509448
+  },
+  {
+    "street": "North 2nd Avenue",
+    "housenumber": "400",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2263663,
+    "lon": -110.9618454
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "303",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2222876,
+    "lon": -110.9666708
+  },
+  {
+    "street": "North Toole Avenue",
+    "housenumber": "400",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2231261,
+    "lon": -110.9666961
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "1940",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2199892,
+    "lon": -110.94298
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1601",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2324311,
+    "lon": -110.9477154
+  },
+  {
+    "street": "South Park Avenue",
+    "housenumber": "299",
+    "city": "Tucson",
+    "lat": 32.218835,
+    "lon": -110.9559378
+  },
+  {
+    "street": "South Church Avenue",
+    "housenumber": "1",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2213994,
+    "lon": -110.9719563
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "300",
+    "city": "Tucson",
+    "lat": 32.2254165,
+    "lon": -110.9652325
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "1030",
+    "city": "Tucson",
+    "lat": 32.2346578,
+    "lon": -110.9520911
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "933",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.233109,
+    "lon": -110.9486565
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "650",
+    "city": "Tucson",
+    "postcode": "85721-0078",
+    "lat": 32.2298094,
+    "lon": -110.9563356
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1629",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2324964,
+    "lon": -110.9471061
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "1423",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2327262,
+    "lon": -110.950153
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "1430",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2334399,
+    "lon": -110.9497757
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "933",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2331895,
+    "lon": -110.9489839
+  },
+  {
+    "street": "East James E. Rogers Way",
+    "housenumber": "1031",
+    "city": "Tucson",
+    "lat": 32.2334972,
+    "lon": -110.9551548
+  },
+  {
+    "street": "East James E Rogers Way",
+    "housenumber": "1009",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2334775,
+    "lon": -110.9558919
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "1010",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2343198,
+    "lon": -110.9564821
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "1000",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2343285,
+    "lon": -110.9563045
+  },
+  {
+    "street": "Olive Road",
+    "housenumber": "1003",
+    "city": "Tucson",
+    "lat": 32.2341818,
+    "lon": -110.9554771
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "1027",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2341492,
+    "lon": -110.9559363
+  },
+  {
+    "street": "Olive Road",
+    "housenumber": "1030",
+    "city": "Tucson",
+    "lat": 32.235078,
+    "lon": -110.9545902
+  },
+  {
+    "street": "Olive Road",
+    "housenumber": "1040",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2355718,
+    "lon": -110.9546928
+  },
+  {
+    "street": "North Highland Avenue",
+    "housenumber": "1077",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2356444,
+    "lon": -110.951693
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "1333",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2341007,
+    "lon": -110.9513203
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "1615",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2341452,
+    "lon": -110.9476078
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "1621",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2352052,
+    "lon": -110.9475048
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "880",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2325248,
+    "lon": -110.9583214
+  },
+  {
+    "street": "North Martin Avenue",
+    "housenumber": "1030",
+    "city": "Tucson",
+    "lat": 32.2346529,
+    "lon": -110.9450625
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "1140",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2367572,
+    "lon": -110.9558378
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "1130",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2369251,
+    "lon": -110.9519428
+  },
+  {
+    "street": "North Fremont Avenue",
+    "housenumber": "1244",
+    "city": "Tucson",
+    "lat": 32.2384632,
+    "lon": -110.9550487
+  },
+  {
+    "street": "North Euclid Avenue",
+    "housenumber": "888",
+    "city": "Tucson",
+    "lat": 32.232495,
+    "lon": -110.9590053
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "151",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2214867,
+    "lon": -110.9675163
+  },
+  {
+    "street": "East Toole Avenue",
+    "housenumber": "345",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.22332,
+    "lon": -110.9676245
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "110",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.222108,
+    "lon": -110.9736194
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "33",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2225011,
+    "lon": -110.9719364
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "405",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2205318,
+    "lon": -110.9766173
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "120",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217684,
+    "lon": -110.9692501
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "2",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2215828,
+    "lon": -110.9710272
+  },
+  {
+    "street": "South Scott Avenue",
+    "housenumber": "38",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2213649,
+    "lon": -110.9701079
+  },
+  {
+    "street": "East Pennington Street;Pennington St.",
+    "housenumber": "101;101 E",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2234013,
+    "lon": -110.969722
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "63",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2222401,
+    "lon": -110.9700723
+  },
+  {
+    "street": "North Main Avenue",
+    "housenumber": "140",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.223431,
+    "lon": -110.9749746
+  },
+  {
+    "street": "North Meyer Avenue",
+    "housenumber": "173",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2239066,
+    "lon": -110.9747187
+  },
+  {
+    "street": "West Alameda Street",
+    "housenumber": "401",
+    "city": "Tucson",
+    "lat": 32.2219275,
+    "lon": -110.9769778
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "498",
+    "city": "Tucson",
+    "lat": 32.2218748,
+    "lon": -110.9785824
+  },
+  {
+    "street": "South Church Avenue",
+    "housenumber": "260",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2198788,
+    "lon": -110.9745231
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "1",
+    "city": "Tucson",
+    "lat": 32.2223211,
+    "lon": -110.9675214
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "40",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2216685,
+    "lon": -110.9703933
+  },
+  {
+    "street": "East Congress Street",
+    "housenumber": "72",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2217499,
+    "lon": -110.9699621
+  },
+  {
+    "street": "North Stone Avenue",
+    "housenumber": "150",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2239283,
+    "lon": -110.971231
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "407",
+    "city": "Tucson",
+    "lat": 32.2207346,
+    "lon": -110.97754
+  },
+  {
+    "street": "North Church Avenue",
+    "housenumber": "177",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2239303,
+    "lon": -110.9734416
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "101",
+    "city": "Tucson",
+    "lat": 32.2235655,
+    "lon": -110.9689595
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "117",
+    "city": "Tucson",
+    "lat": 32.2236865,
+    "lon": -110.9688474
+  },
+  {
+    "street": "East Alameda Street",
+    "housenumber": "126",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2239311,
+    "lon": -110.9694674
+  },
+  {
+    "street": "East Pennington Street",
+    "housenumber": "67,69,71,73,75",
+    "city": "Tucson",
+    "lat": 32.2233692,
+    "lon": -110.9701032
+  },
+  {
+    "street": "East Pennington Street",
+    "housenumber": "47",
+    "city": "Tucson",
+    "lat": 32.2232922,
+    "lon": -110.9705721
+  },
+  {
+    "street": "West Alameda Street",
+    "housenumber": "50",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2245405,
+    "lon": -110.9726296
+  },
+  {
+    "street": "South Church Avenue",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2209072,
+    "lon": -110.9728394
+  },
+  {
+    "street": "South 6th Avenue",
+    "housenumber": "200",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.219191,
+    "lon": -110.9692376
+  },
+  {
+    "street": "West Saint Mary's Road",
+    "housenumber": "1601",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2274484,
+    "lon": -111.0001309
+  },
+  {
+    "street": "West Broadway Boulevard",
+    "housenumber": "40",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2207262,
+    "lon": -110.9718576
+  },
+  {
+    "street": "West Jackson Street",
+    "housenumber": "80",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2205535,
+    "lon": -110.9713018
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "44",
+    "city": "Tucson",
+    "lat": 32.2208089,
+    "lon": -110.9702737
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "10",
+    "city": "Tucson",
+    "lat": 32.220743,
+    "lon": -110.9708985
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "20",
+    "city": "Tucson",
+    "lat": 32.2207655,
+    "lon": -110.970715
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "202",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2196792,
+    "lon": -110.9666643
+  },
+  {
+    "street": "South Stone Avenue",
+    "housenumber": "192",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2193552,
+    "lon": -110.9715111
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "182",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2209524,
+    "lon": -110.9673923
+  },
+  {
+    "street": "South 6th Avenue",
+    "housenumber": "141",
+    "city": "Tucson",
+    "lat": 32.2204412,
+    "lon": -110.9682794
+  },
+  {
+    "street": "South 6th Avenue",
+    "housenumber": "111",
+    "city": "Tucson",
+    "lat": 32.2208586,
+    "lon": -110.9683717
+  },
+  {
+    "street": "South Church Avenue",
+    "housenumber": "265",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2180275,
+    "lon": -110.9718486
+  },
+  {
+    "street": "South Stone Avenue",
+    "housenumber": "270",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.217565,
+    "lon": -110.9713962
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "814",
+    "city": "Tucson",
+    "lat": 32.2313154,
+    "lon": -110.9583028
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "802-804",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2314968,
+    "lon": -110.9590836
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "865",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2319838,
+    "lon": -110.9581711
+  },
+  {
+    "street": "North Park Avenue",
+    "housenumber": "1001",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2346585,
+    "lon": -110.9571045
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "977",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2366932,
+    "lon": -110.9572432
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "1001",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2364006,
+    "lon": -110.9565274
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "745",
+    "city": "Tucson",
+    "postcode": "85719-5325",
+    "lat": 32.2241748,
+    "lon": -110.9597612
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "901",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2346345,
+    "lon": -110.9576512
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "501",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2284044,
+    "lon": -110.9633053
+  },
+  {
+    "street": "South Randolph Way",
+    "housenumber": "900",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2118697,
+    "lon": -110.9243705
+  },
+  {
+    "street": "South Alvernon Way",
+    "housenumber": "50",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2204119,
+    "lon": -110.9109779
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "3689",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2247709,
+    "lon": -110.9152683
+  },
+  {
+    "street": "North Finance Center Drive",
+    "housenumber": "930",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2334422,
+    "lon": -110.8371571
+  },
+  {
+    "street": "North Finance Center Drive",
+    "housenumber": "1010",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2349542,
+    "lon": -110.8374114
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7150",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2335878,
+    "lon": -110.8395659
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "770",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2307669,
+    "lon": -110.8392224
+  },
+  {
+    "street": "East Rose Street",
+    "housenumber": "7220",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2309185,
+    "lon": -110.8379606
+  },
+  {
+    "street": "East Rosewood Street",
+    "housenumber": "7202",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.23212,
+    "lon": -110.8387247
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "9439",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2213522,
+    "lon": -110.7905525
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "8702",
+    "city": "Tucson",
+    "lat": 32.2348771,
+    "lon": -110.8062752
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5870",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2192487,
+    "lon": -110.865651
+  },
+  {
+    "street": "West Wetmore Road",
+    "housenumber": "300",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.286929,
+    "lon": -110.9769524
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4620",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2904949,
+    "lon": -110.9778621
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "9595",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.2216059,
+    "lon": -110.7875925
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "9495",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2360859,
+    "lon": -110.7903902
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "9401",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2078,
+    "lon": -110.7918159
+  },
+  {
+    "street": "East Broadway",
+    "housenumber": "8800",
+    "city": "Tucson",
+    "postcode": "85710-4035",
+    "lat": 32.2205072,
+    "lon": -110.8043917
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "8578",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2204081,
+    "lon": -110.8092618
+  },
+  {
+    "street": "E Broadway Boulevard",
+    "housenumber": "8675",
+    "city": "Tucson",
+    "lat": 32.2214924,
+    "lon": -110.8073651
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7980",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2205759,
+    "lon": -110.8212596
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7945",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2215503,
+    "lon": -110.8232877
+  },
+  {
+    "street": "North Pantano Road",
+    "housenumber": "210",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2234428,
+    "lon": -110.823373
+  },
+  {
+    "street": "North Pantano Road",
+    "housenumber": "280",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2243431,
+    "lon": -110.8233041
+  },
+  {
+    "street": "East Old Spanish Trail",
+    "housenumber": "9615",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.2075679,
+    "lon": -110.7861295
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "100",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.219843,
+    "lon": -110.7741747
+  },
+  {
+    "street": "South Houghton Road",
+    "housenumber": "30",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.2203973,
+    "lon": -110.7733788
+  },
+  {
+    "street": "South Harrison Road",
+    "housenumber": "990",
+    "city": "Tucson",
+    "postcode": "85748",
+    "lat": 32.209232,
+    "lon": -110.7902946
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7910",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2349853,
+    "lon": -110.8232636
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7920",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2344113,
+    "lon": -110.8233709
+  },
+  {
+    "street": "East Carondelet Drive",
+    "housenumber": "6565",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2260945,
+    "lon": -110.8528728
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "5301",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.252777,
+    "lon": -110.8781691
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "212",
+    "city": "Tucson",
+    "lat": 32.2209104,
+    "lon": -110.9667157
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "220",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2209091,
+    "lon": -110.9665567
+  },
+  {
+    "street": "East Grant",
+    "housenumber": "801",
+    "city": "Tucson",
+    "postcode": "85719-2933",
+    "lat": 32.2508889,
+    "lon": -110.9599555
+  },
+  {
+    "street": "West Starr Pass Boulevard",
+    "housenumber": "3800",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2159566,
+    "lon": -111.0490458
+  },
+  {
+    "street": "East Waverly Street",
+    "housenumber": "2090",
+    "city": "Tucson",
+    "lat": 32.2454965,
+    "lon": -110.9414289
+  },
+  {
+    "street": "West Nebraska Street",
+    "housenumber": "265",
+    "city": "Tucson",
+    "lat": 32.1546298,
+    "lon": -110.9716398
+  },
+  {
+    "street": "South 6th Avenue",
+    "housenumber": "3601",
+    "city": "Tucson",
+    "postcode": "85723",
+    "lat": 32.1815131,
+    "lon": -110.964804
+  },
+  {
+    "street": "East Valencia Road",
+    "housenumber": "6000",
+    "city": "Tucson",
+    "postcode": "85706",
+    "lat": 32.1395215,
+    "lon": -110.8660108
+  },
+  {
+    "street": "East Valencia Road",
+    "housenumber": "6000",
+    "city": "Tucson",
+    "postcode": "85756",
+    "lat": 32.1378709,
+    "lon": -110.8677883
+  },
+  {
+    "street": "West Irvington Road",
+    "housenumber": "1187",
+    "city": "Tucson",
+    "postcode": "85714",
+    "lat": 32.1625362,
+    "lon": -110.9891296
+  },
+  {
+    "street": "South Country Club Road",
+    "housenumber": "6363",
+    "city": "Tucson",
+    "lat": 32.1366963,
+    "lon": -110.9254379
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7055",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2226713,
+    "lon": -110.8423912
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7255",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2219009,
+    "lon": -110.8379826
+  },
+  {
+    "street": "South Craycroft Road",
+    "housenumber": "3965",
+    "city": "Tucson",
+    "postcode": "85707-3529",
+    "lat": 32.1752102,
+    "lon": -110.8677516
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "7501",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.207754,
+    "lon": -110.831742
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "7503",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2076681,
+    "lon": -110.830929
+  },
+  {
+    "street": "South Country Club Road",
+    "housenumber": "3003",
+    "city": "Tucson",
+    "lat": 32.18875,
+    "lon": -110.9251095
+  },
+  {
+    "street": "Westmore Road",
+    "housenumber": "160",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2876147,
+    "lon": -110.9737234
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4302",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2841092,
+    "lon": -110.9749575
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4301",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2848318,
+    "lon": -110.9786464
+  },
+  {
+    "street": "East 10th Street",
+    "housenumber": "2323E",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2226957,
+    "lon": -110.9381712
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "340",
+    "city": "Tucson",
+    "lat": 32.2261428,
+    "lon": -110.9683352
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "450",
+    "city": "Tucson",
+    "lat": 32.2275006,
+    "lon": -110.9682617
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "403",
+    "city": "Tucson",
+    "lat": 32.2268191,
+    "lon": -110.9690915
+  },
+  {
+    "street": "East Toole Avenue",
+    "housenumber": "191",
+    "city": "Tucson",
+    "postcode": "85701",
+    "lat": 32.2251137,
+    "lon": -110.9690316
+  },
+  {
+    "street": "North 6th Avenue",
+    "housenumber": "406",
+    "city": "Tucson",
+    "lat": 32.226794,
+    "lon": -110.9682614
+  },
+  {
+    "street": "North Wilmot Road",
+    "housenumber": "1100",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2361721,
+    "lon": -110.8574695
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "6260",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2352802,
+    "lon": -110.8586388
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "6477",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2362734,
+    "lon": -110.85441
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7083",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2362204,
+    "lon": -110.8417994
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7022",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2352567,
+    "lon": -110.8428669
+  },
+  {
+    "street": "East Century Park Drive",
+    "housenumber": "7000",
+    "city": "Tucson",
+    "postcode": "85756",
+    "lat": 32.1254657,
+    "lon": -110.8427788
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "5455",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2368015,
+    "lon": -110.8761783
+  },
+  {
+    "street": "South Rita Road",
+    "housenumber": "8755",
+    "city": "Tucson",
+    "postcode": "85747",
+    "lat": 32.093341,
+    "lon": -110.8002654
+  },
+  {
+    "street": "South Wilmot Road",
+    "housenumber": "9300",
+    "city": "Tucson",
+    "postcode": "85756",
+    "lat": 32.0838459,
+    "lon": -110.8670894
+  },
+  {
+    "street": "South Freeway Road",
+    "housenumber": "1000",
+    "city": "Tucson",
+    "postcode": "85745",
+    "lat": 32.2093914,
+    "lon": -110.9808101
+  },
+  {
+    "street": "West Congress Street",
+    "housenumber": "416",
+    "city": "Tucson",
+    "lat": 32.2215282,
+    "lon": -110.9775585
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2280678,
+    "lon": -110.9652798
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2279343,
+    "lon": -110.9651455
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "329",
+    "city": "Tucson",
+    "lat": 32.2279332,
+    "lon": -110.9662462
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "500",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2279384,
+    "lon": -110.9653346
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "501",
+    "city": "Tucson",
+    "postcode": "85705-8448",
+    "lat": 32.2278948,
+    "lon": -110.9658881
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3754",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750064,
+    "lon": -110.9497826
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3759",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751494,
+    "lon": -110.9501366
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3771",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754368,
+    "lon": -110.9500929
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3723",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2742036,
+    "lon": -110.9501607
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3748",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2748653,
+    "lon": -110.949776
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3760",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751505,
+    "lon": -110.9497787
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3740",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746913,
+    "lon": -110.9491961
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3761",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751468,
+    "lon": -110.9495498
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3753",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750048,
+    "lon": -110.9501239
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3742",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2747212,
+    "lon": -110.9497807
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3741",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2747002,
+    "lon": -110.9501224
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3749",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274867,
+    "lon": -110.9495402
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3777",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754067,
+    "lon": -110.9498489
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3789",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754034,
+    "lon": -110.9494937
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3743",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2747235,
+    "lon": -110.9495452
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3729",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744066,
+    "lon": -110.9501547
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3731",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744383,
+    "lon": -110.9495629
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3735",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2745484,
+    "lon": -110.9501218
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3783",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754112,
+    "lon": -110.9496633
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3755",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750076,
+    "lon": -110.9495654
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3705",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741681,
+    "lon": -110.949639
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3737",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274584,
+    "lon": -110.9495544
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3736",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.27458,
+    "lon": -110.9497807
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3711",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741691,
+    "lon": -110.9498207
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3717",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741725,
+    "lon": -110.9499972
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3747",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2748494,
+    "lon": -110.9501251
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3765",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753024,
+    "lon": -110.9501363
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3730",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744338,
+    "lon": -110.949776
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3601",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2725461,
+    "lon": -110.9462812
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1767",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2736856,
+    "lon": -110.9452361
+  },
+  {
+    "street": "North Campbell",
+    "housenumber": "3643",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.273153,
+    "lon": -110.9443621
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1761",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735961,
+    "lon": -110.9456867
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3180",
+    "city": "Tucson",
+    "lat": 32.2642669,
+    "lon": -110.9429308
+  },
+  {
+    "street": "North Arcadia Avenue",
+    "housenumber": "421",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2270076,
+    "lon": -110.890236
+  },
+  {
+    "street": "North Country Club Road",
+    "housenumber": "2400",
+    "city": "Tucson",
+    "lat": 32.2518889,
+    "lon": -110.9251346
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "3500",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2712698,
+    "lon": -110.9469984
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "5327",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2122796,
+    "lon": -110.8785373
+  },
+  {
+    "street": "North Alvernon Way",
+    "housenumber": "2150",
+    "city": "Tucson",
+    "lat": 32.2483953,
+    "lon": -110.9086157
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3758",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751204,
+    "lon": -110.9492167
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3795",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753997,
+    "lon": -110.9493068
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1503",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744821,
+    "lon": -110.9492257
+  },
+  {
+    "street": "North Bay Horse Loop",
+    "housenumber": "3770",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753692,
+    "lon": -110.9491333
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1594",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749714,
+    "lon": -110.9492045
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1595",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746589,
+    "lon": -110.94906
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1509",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744594,
+    "lon": -110.9490589
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1502",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741676,
+    "lon": -110.9492541
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1588",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749633,
+    "lon": -110.9490301
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3763",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753709,
+    "lon": -110.9489939
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3759",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751434,
+    "lon": -110.9490365
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3791",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2757121,
+    "lon": -110.9485874
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3779",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753926,
+    "lon": -110.9486197
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1302",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2714183,
+    "lon": -110.9519063
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1508",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741821,
+    "lon": -110.9490851
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1514",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741842,
+    "lon": -110.9489012
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3785",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2755402,
+    "lon": -110.9486082
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3767",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754059,
+    "lon": -110.9488359
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3232",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2657299,
+    "lon": -110.9433418
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1583",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274645,
+    "lon": -110.9487247
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1575",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746674,
+    "lon": -110.9485583
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3702",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2739927,
+    "lon": -110.9492973
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1527",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274476,
+    "lon": -110.9485555
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3632",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2729467,
+    "lon": -110.94931
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3622",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2728004,
+    "lon": -110.9492926
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3612",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726377,
+    "lon": -110.9492882
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3692",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2738407,
+    "lon": -110.9492755
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3682",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2736899,
+    "lon": -110.9492936
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3602",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2724645,
+    "lon": -110.9492601
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3662",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2733787,
+    "lon": -110.949293
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3642",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2730895,
+    "lon": -110.9492724
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1515",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744737,
+    "lon": -110.9488903
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3672",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735369,
+    "lon": -110.949291
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1589",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746512,
+    "lon": -110.9488952
+  },
+  {
+    "street": "North Crest Ranch Drive",
+    "housenumber": "3652",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732331,
+    "lon": -110.9492762
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1521",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744743,
+    "lon": -110.948723
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1526",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741795,
+    "lon": -110.9485308
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1520",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741616,
+    "lon": -110.948721
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1574",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749636,
+    "lon": -110.9485452
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3760",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751344,
+    "lon": -110.9487257
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3770",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751225,
+    "lon": -110.9485496
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1582",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749546,
+    "lon": -110.9487257
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "3501",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2707966,
+    "lon": -110.9486494
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1550",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2717469,
+    "lon": -110.94862
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "4036",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2805442,
+    "lon": -110.9594894
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "4209",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2835149,
+    "lon": -110.9447371
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "1801",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2502592,
+    "lon": -110.9449574
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2443",
+    "city": "Tucson",
+    "lat": 32.2507894,
+    "lon": -110.9442935
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2980",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2608537,
+    "lon": -110.9423279
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2970",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2605519,
+    "lon": -110.9426213
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2854",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2586388,
+    "lon": -110.9424209
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2980",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2608515,
+    "lon": -110.9426639
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2820",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2579091,
+    "lon": -110.9426215
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2802",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2579597,
+    "lon": -110.9433247
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2914",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2594784,
+    "lon": -110.9425189
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2980",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.260695,
+    "lon": -110.9423903
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2972",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2604445,
+    "lon": -110.9422641
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2930",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2596522,
+    "lon": -110.942416
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2960",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.260302,
+    "lon": -110.9432508
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1544",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2744324,
+    "lon": -110.948251
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1538",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274285,
+    "lon": -110.9482557
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1568",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750127,
+    "lon": -110.9483056
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1532",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741491,
+    "lon": -110.9482878
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3794",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2757166,
+    "lon": -110.9482515
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3788",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.275568,
+    "lon": -110.9482639
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3778",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2752683,
+    "lon": -110.948251
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1562",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2748726,
+    "lon": -110.9482535
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3782",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2754176,
+    "lon": -110.9482669
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3620",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2725099,
+    "lon": -110.9519935
+  },
+  {
+    "street": "North Lost Chestnut Drive",
+    "housenumber": "3774",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751316,
+    "lon": -110.948297
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1556",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2747246,
+    "lon": -110.9482516
+  },
+  {
+    "street": "East Painted Colt Loop",
+    "housenumber": "1550",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2745779,
+    "lon": -110.9482603
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1802",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2718388,
+    "lon": -110.9447144
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1702",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2717102,
+    "lon": -110.9457518
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3550",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2717937,
+    "lon": -110.9433315
+  },
+  {
+    "street": "North Martin Avenue",
+    "housenumber": "3226",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2656562,
+    "lon": -110.9456386
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1695",
+    "city": "Tucson",
+    "lat": 32.2654011,
+    "lon": -110.9465998
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "605",
+    "city": "Tucson",
+    "postcode": "85705-1797",
+    "lat": 32.2882899,
+    "lon": -110.9621274
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "575",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2883954,
+    "lon": -110.9630876
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "455",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.288434,
+    "lon": -110.9651207
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "6255",
+    "city": "Tucson",
+    "lat": 32.2510371,
+    "lon": -110.8583998
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "6255",
+    "city": "Tucson",
+    "postcode": "85712-5804",
+    "lat": 32.2514263,
+    "lon": -110.8597783
+  },
+  {
+    "street": "North Cambell Avenue",
+    "housenumber": "3765",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2755219,
+    "lon": -110.9443702
+  },
+  {
+    "street": "North Cambell Avenue",
+    "housenumber": "3765",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2757341,
+    "lon": -110.9443701
+  },
+  {
+    "street": "North Cambell Avenue",
+    "housenumber": "3755",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750017,
+    "lon": -110.9443685
+  },
+  {
+    "street": "North Cambell Avenue",
+    "housenumber": "3755",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2752209,
+    "lon": -110.9443696
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3255",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2664123,
+    "lon": -110.9443584
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3255",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2661731,
+    "lon": -110.9446561
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3001",
+    "city": "Tucson",
+    "lat": 32.2614337,
+    "lon": -110.9441743
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3915",
+    "city": "Tucson",
+    "lat": 32.278114,
+    "lon": -110.9460381
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1625",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2734043,
+    "lon": -110.9475923
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1637",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726682,
+    "lon": -110.9469626
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3286",
+    "city": "Tucson",
+    "lat": 32.2665006,
+    "lon": -110.9434607
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3250",
+    "city": "Tucson",
+    "lat": 32.2661631,
+    "lon": -110.943268
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3225",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2657934,
+    "lon": -110.9442145
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3219",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2654829,
+    "lon": -110.9441906
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1501-1599",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732058,
+    "lon": -110.9486468
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3269",
+    "city": "Tucson",
+    "lat": 32.2662956,
+    "lon": -110.9529439
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3443",
+    "city": "Tucson",
+    "lat": 32.2690793,
+    "lon": -110.9442356
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3122",
+    "city": "Tucson",
+    "lat": 32.2636965,
+    "lon": -110.9431707
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1250",
+    "city": "Tucson",
+    "lat": 32.2644005,
+    "lon": -110.9527176
+  },
+  {
+    "street": "East Roger Road",
+    "housenumber": "1802",
+    "city": "Tucson",
+    "lat": 32.2790231,
+    "lon": -110.945465
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "4213",
+    "city": "Tucson",
+    "lat": 32.2077322,
+    "lon": -110.9021202
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "4350",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2065572,
+    "lon": -110.90034
+  },
+  {
+    "street": "North Catalina Avenue",
+    "housenumber": "1377",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.239343,
+    "lon": -110.8994099
+  },
+  {
+    "street": "North First Avenue",
+    "housenumber": "3455",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2698504,
+    "lon": -110.9615252
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4040",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2801131,
+    "lon": -110.9761257
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4070",
+    "city": "Tucson",
+    "postcode": "85705-2720",
+    "lat": 32.2811785,
+    "lon": -110.976897
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4187",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2825561,
+    "lon": -110.9788494
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4370",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2860513,
+    "lon": -110.9765271
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4336",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.285025,
+    "lon": -110.9761444
+  },
+  {
+    "street": "West Wetmore Road",
+    "housenumber": "235",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2861658,
+    "lon": -110.9756804
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4368",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2848203,
+    "lon": -110.9749012
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4374",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2851463,
+    "lon": -110.9747057
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1454",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756624,
+    "lon": -110.9497546
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1502",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756859,
+    "lon": -110.9495476
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1528",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756798,
+    "lon": -110.9491317
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1522",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756832,
+    "lon": -110.9493346
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1536",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756659,
+    "lon": -110.9489282
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1645",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2729904,
+    "lon": -110.9468334
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1685",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2739812,
+    "lon": -110.946902
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1647",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732688,
+    "lon": -110.9468472
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1409",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2724944,
+    "lon": -110.9499974
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1403",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2724173,
+    "lon": -110.950156
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3601",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2723673,
+    "lon": -110.9505687
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1349",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2724087,
+    "lon": -110.9508687
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1339",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2724296,
+    "lon": -110.9510987
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2815",
+    "city": "Tucson",
+    "lat": 32.258004,
+    "lon": -110.9442561
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2943",
+    "city": "Tucson",
+    "lat": 32.2605344,
+    "lon": -110.9442202
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3026",
+    "city": "Tucson",
+    "lat": 32.2619112,
+    "lon": -110.943464
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2965",
+    "city": "Tucson",
+    "lat": 32.260915,
+    "lon": -110.9441686
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3333",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2674672,
+    "lon": -110.9442906
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2660",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.255541,
+    "lon": -110.9435155
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3100",
+    "city": "Tucson",
+    "lat": 32.2631913,
+    "lon": -110.9433794
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2700",
+    "city": "Tucson",
+    "lat": 32.2559695,
+    "lon": -110.9434203
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3323",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2670095,
+    "lon": -110.9441723
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2710",
+    "city": "Tucson",
+    "lat": 32.2561713,
+    "lon": -110.9433602
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3121",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2636497,
+    "lon": -110.9441008
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3002",
+    "city": "Tucson",
+    "lat": 32.2614717,
+    "lon": -110.9435092
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2575",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2538368,
+    "lon": -110.9441748
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2553",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2533037,
+    "lon": -110.9442107
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2574",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2537763,
+    "lon": -110.9436592
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2631",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2548341,
+    "lon": -110.9443346
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2601",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2542842,
+    "lon": -110.9443601
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2616",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2543576,
+    "lon": -110.9435365
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2545",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2528105,
+    "lon": -110.9443791
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "6291",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2364046,
+    "lon": -110.8584227
+  },
+  {
+    "street": "South Alvernon Way",
+    "housenumber": "777",
+    "city": "Tucson",
+    "lat": 32.2112475,
+    "lon": -110.909241
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "4024",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2359432,
+    "lon": -110.9066859
+  },
+  {
+    "street": "East Lee Street",
+    "housenumber": "4095-4115",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2419687,
+    "lon": -110.9054756
+  },
+  {
+    "street": "North Wilmot Road",
+    "housenumber": "603",
+    "city": "Tucson",
+    "lat": 32.2295167,
+    "lon": -110.8585299
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3608",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2730751,
+    "lon": -110.9500656
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3656",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2736629,
+    "lon": -110.9501105
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3603",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726703,
+    "lon": -110.950567
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3604",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2727203,
+    "lon": -110.9500646
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3605",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2729551,
+    "lon": -110.9506186
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1327",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2728451,
+    "lon": -110.9516037
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3610",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732559,
+    "lon": -110.9500612
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3606",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2729002,
+    "lon": -110.9500577
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3668",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2738858,
+    "lon": -110.9500964
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1314",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735326,
+    "lon": -110.9521496
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3640",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2730562,
+    "lon": -110.9519393
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "4645",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2375385,
+    "lon": -110.8935531
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "3711",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2219891,
+    "lon": -110.9141793
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3653",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.273472,
+    "lon": -110.9505702
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3607",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732024,
+    "lon": -110.9505784
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3665",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2738693,
+    "lon": -110.9506022
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1415",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2732117,
+    "lon": -110.9497217
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1336",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735936,
+    "lon": -110.9515192
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1318",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735082,
+    "lon": -110.9519039
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3699",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274137,
+    "lon": -110.9534935
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1310",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2737938,
+    "lon": -110.9521904
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1342",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2738092,
+    "lon": -110.9512309
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1352",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2737997,
+    "lon": -110.9508661
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3675",
+    "city": "Tucson",
+    "lat": 32.2737187,
+    "lon": -110.9526901
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3667",
+    "city": "Tucson",
+    "lat": 32.2735533,
+    "lon": -110.9526755
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3643",
+    "city": "Tucson",
+    "lat": 32.2730641,
+    "lon": -110.9526579
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3635",
+    "city": "Tucson",
+    "lat": 32.2728878,
+    "lon": -110.9526539
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3651",
+    "city": "Tucson",
+    "lat": 32.2732251,
+    "lon": -110.9526489
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3683",
+    "city": "Tucson",
+    "lat": 32.2738901,
+    "lon": -110.9526692
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3659",
+    "city": "Tucson",
+    "lat": 32.2733921,
+    "lon": -110.9526555
+  },
+  {
+    "street": "East Roger Road",
+    "housenumber": "2000",
+    "city": "Tucson",
+    "lat": 32.2783043,
+    "lon": -110.9413021
+  },
+  {
+    "street": "East Roger Road",
+    "housenumber": "1600",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2785248,
+    "lon": -110.9475964
+  },
+  {
+    "street": "North Rosemont Boulevard",
+    "housenumber": "255",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2250076,
+    "lon": -110.8848862
+  },
+  {
+    "street": "East Cecelia Street",
+    "housenumber": "4875",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2170309,
+    "lon": -110.8878018
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4740",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2492322,
+    "lon": -110.8915076
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4714",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.249269,
+    "lon": -110.8920217
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4685",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2512867,
+    "lon": -110.8933357
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4766",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2497999,
+    "lon": -110.8909187
+  },
+  {
+    "street": "North Swan Road",
+    "housenumber": "2480",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2525237,
+    "lon": -110.8910184
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4871",
+    "city": "Tucson",
+    "lat": 32.2514398,
+    "lon": -110.8886939
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4857",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2501295,
+    "lon": -110.8908884
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "4676",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2502989,
+    "lon": -110.8931449
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "2002",
+    "city": "Tucson",
+    "lat": 32.2643658,
+    "lon": -110.940618
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3737",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751641,
+    "lon": -110.9505992
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1341",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2742331,
+    "lon": -110.9511634
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1351",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2742797,
+    "lon": -110.9507996
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1321",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741884,
+    "lon": -110.9519517
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3715",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746322,
+    "lon": -110.9507824
+  },
+  {
+    "street": "East King Street",
+    "housenumber": "1311",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2741818,
+    "lon": -110.9521861
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3725",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2748321,
+    "lon": -110.9505777
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3767",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2752111,
+    "lon": -110.9503831
+  },
+  {
+    "street": "North Vine Avenue",
+    "housenumber": "3777",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2752188,
+    "lon": -110.9508813
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1340",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751395,
+    "lon": -110.9510616
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1414",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756381,
+    "lon": -110.9505081
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1338",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2751372,
+    "lon": -110.9512412
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1342",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2755104,
+    "lon": -110.9511507
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1404",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756349,
+    "lon": -110.9508081
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1300",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2641263,
+    "lon": -110.9512488
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1430",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2642952,
+    "lon": -110.9498109
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3073",
+    "city": "Tucson",
+    "lat": 32.2627194,
+    "lon": -110.9446387
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3055",
+    "city": "Tucson",
+    "lat": 32.2623581,
+    "lon": -110.944407
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3061",
+    "city": "Tucson",
+    "lat": 32.2626251,
+    "lon": -110.9443022
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3025",
+    "city": "Tucson",
+    "lat": 32.2619053,
+    "lon": -110.9444816
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1665",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735832,
+    "lon": -110.9468025
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1675",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2737866,
+    "lon": -110.946767
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1677",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2737904,
+    "lon": -110.9468682
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1683",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2739667,
+    "lon": -110.9468082
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1667",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2735969,
+    "lon": -110.9469011
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1643",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726707,
+    "lon": -110.9467339
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1641",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726697,
+    "lon": -110.9468135
+  },
+  {
+    "street": "East Prince Road",
+    "housenumber": "1639",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2726689,
+    "lon": -110.9468893
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "5101",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2511397,
+    "lon": -110.8837693
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1700",
+    "city": "Tucson",
+    "lat": 32.2642874,
+    "lon": -110.9463913
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3032",
+    "city": "Tucson",
+    "lat": 32.2621721,
+    "lon": -110.9429378
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3040",
+    "city": "Tucson",
+    "lat": 32.2623966,
+    "lon": -110.9432548
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3050",
+    "city": "Tucson",
+    "lat": 32.2623707,
+    "lon": -110.9435587
+  },
+  {
+    "street": "East Blacklidge Drive",
+    "housenumber": "1810",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2602988,
+    "lon": -110.945599
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2502",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2521895,
+    "lon": -110.9436238
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2504",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2523255,
+    "lon": -110.9436232
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2516",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2525961,
+    "lon": -110.9436225
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2564",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2535138,
+    "lon": -110.9435741
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2550",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2532638,
+    "lon": -110.9435749
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2564",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2534467,
+    "lon": -110.9435749
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2562",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2533832,
+    "lon": -110.9436639
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2904",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2594936,
+    "lon": -110.9432465
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2816",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2579073,
+    "lon": -110.9423638
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2962",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2603597,
+    "lon": -110.9426223
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2910",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2595708,
+    "lon": -110.9433657
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2966",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2604624,
+    "lon": -110.9426217
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2890",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2591923,
+    "lon": -110.9424468
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2830",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.258122,
+    "lon": -110.9425436
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2908",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2594726,
+    "lon": -110.9433674
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2902",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2594937,
+    "lon": -110.9431797
+  },
+  {
+    "street": "East Glenn Street",
+    "housenumber": "1717",
+    "city": "Tucson",
+    "lat": 32.2580849,
+    "lon": -110.9462452
+  },
+  {
+    "street": "East Glenn Street",
+    "housenumber": "1745",
+    "city": "Tucson",
+    "lat": 32.258499,
+    "lon": -110.9455072
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5151",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2222615,
+    "lon": -110.8826261
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "4550",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2356614,
+    "lon": -110.895465
+  },
+  {
+    "street": "East Glenn Street",
+    "housenumber": "2440",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2571214,
+    "lon": -110.9361622
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7255",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2228688,
+    "lon": -110.838499
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7101",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2214023,
+    "lon": -110.8403705
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7111",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2217697,
+    "lon": -110.8404411
+  },
+  {
+    "street": "North Martin Avenue",
+    "housenumber": "3460",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2698342,
+    "lon": -110.9456476
+  },
+  {
+    "street": "East Greenlee Road",
+    "housenumber": "1701",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2706091,
+    "lon": -110.9456456
+  },
+  {
+    "street": "North Martin Avenue",
+    "housenumber": "3520",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2710003,
+    "lon": -110.9456975
+  },
+  {
+    "street": "East Greenlee Road",
+    "housenumber": "1727",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2706712,
+    "lon": -110.9452626
+  },
+  {
+    "street": "South Toole Avenue",
+    "housenumber": "350",
+    "city": "Tucson",
+    "lat": 32.2166826,
+    "lon": -110.9615791
+  },
+  {
+    "street": "South Toole Avenue",
+    "housenumber": "310",
+    "city": "Tucson",
+    "lat": 32.2183359,
+    "lon": -110.9626036
+  },
+  {
+    "street": "South Toole Avenue",
+    "housenumber": "330",
+    "city": "Tucson",
+    "lat": 32.2176623,
+    "lon": -110.9616157
+  },
+  {
+    "street": "South Alvernon Way",
+    "housenumber": "445",
+    "city": "Tucson",
+    "postcode": "85711-4198",
+    "lat": 32.2151907,
+    "lon": -110.9073578
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "5410",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2212309,
+    "lon": -110.8767511
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "2745",
+    "city": "Tucson",
+    "lat": 32.2567419,
+    "lon": -110.9485298
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3535",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2710447,
+    "lon": -110.9527479
+  },
+  {
+    "street": "East Hedrick Drive",
+    "housenumber": "2109",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.263531,
+    "lon": -110.9402161
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3636",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2728006,
+    "lon": -110.9427343
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3700",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2740815,
+    "lon": -110.9426608
+  },
+  {
+    "street": "East Wetmore Road",
+    "housenumber": "850",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2848925,
+    "lon": -110.9578222
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2512",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2525091,
+    "lon": -110.9436223
+  },
+  {
+    "street": "East Elm Street",
+    "housenumber": "2200",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2419272,
+    "lon": -110.9396535
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1501",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2653877,
+    "lon": -110.949236
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1503",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2653953,
+    "lon": -110.9490203
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1435",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2654111,
+    "lon": -110.9496252
+  },
+  {
+    "street": "East Fort Lowell Road",
+    "housenumber": "1445",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2654228,
+    "lon": -110.9494083
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4151",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.281712,
+    "lon": -110.9801178
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4380",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2854708,
+    "lon": -110.9746973
+  },
+  {
+    "street": "North Oracle Road",
+    "housenumber": "4380",
+    "city": "Tucson",
+    "postcode": "85705",
+    "lat": 32.2857079,
+    "lon": -110.9747466
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3340",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2675264,
+    "lon": -110.9518458
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3360",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2681671,
+    "lon": -110.951847
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1580",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.241407,
+    "lon": -110.8424471
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1650",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2422389,
+    "lon": -110.8431528
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1610",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2418885,
+    "lon": -110.8428546
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1600",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2416716,
+    "lon": -110.8426726
+  },
+  {
+    "street": "North Kolb Road",
+    "housenumber": "1670",
+    "city": "Tucson",
+    "postcode": "85715",
+    "lat": 32.2425041,
+    "lon": -110.8433804
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "7105",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2370714,
+    "lon": -110.8396485
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3993",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2790282,
+    "lon": -110.944466
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3719",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746949,
+    "lon": -110.9442063
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3709",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2743302,
+    "lon": -110.9444027
+  },
+  {
+    "street": "East Grant Road",
+    "housenumber": "3925",
+    "city": "Tucson",
+    "postcode": "85712",
+    "lat": 32.2519685,
+    "lon": -110.9088083
+  },
+  {
+    "street": "East Lowell Street",
+    "housenumber": "1215",
+    "city": "Tucson",
+    "postcode": "85721",
+    "lat": 32.2289642,
+    "lon": -110.9524996
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2901",
+    "city": "Tucson",
+    "lat": 32.2597001,
+    "lon": -110.9442169
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "2921-2933",
+    "city": "Tucson",
+    "lat": 32.260132,
+    "lon": -110.9443747
+  },
+  {
+    "street": "East Ellis Drive",
+    "housenumber": "1323",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746732,
+    "lon": -110.9518166
+  },
+  {
+    "street": "East Ellis Drive",
+    "housenumber": "1301",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746752,
+    "lon": -110.9521928
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3722",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749616,
+    "lon": -110.9514796
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1302",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2756494,
+    "lon": -110.9520724
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3744",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2753281,
+    "lon": -110.952139
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1336",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2755253,
+    "lon": -110.9516177
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3716",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2749578,
+    "lon": -110.9520951
+  },
+  {
+    "street": "North Mountain Avenue",
+    "housenumber": "3718",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.274958,
+    "lon": -110.9518678
+  },
+  {
+    "street": "East Ellis Drive",
+    "housenumber": "1341",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746734,
+    "lon": -110.9515866
+  },
+  {
+    "street": "East Ellis Drive",
+    "housenumber": "1309",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746699,
+    "lon": -110.952055
+  },
+  {
+    "street": "North Campbell Avenue",
+    "housenumber": "3063",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2626926,
+    "lon": -110.9435049
+  },
+  {
+    "street": "East Hedrick Drive",
+    "housenumber": "2440",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2625826,
+    "lon": -110.9361541
+  },
+  {
+    "street": "North Wilmot Road",
+    "housenumber": "1021",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2348124,
+    "lon": -110.8583578
+  },
+  {
+    "street": "East Speedway Boulevard",
+    "housenumber": "3856",
+    "city": "Tucson",
+    "postcode": "85716",
+    "lat": 32.2357394,
+    "lon": -110.9101439
+  },
+  {
+    "street": "East Corona Road",
+    "housenumber": "2929",
+    "city": "Tucson",
+    "lat": 32.1242,
+    "lon": -110.9288553
+  },
+  {
+    "street": "East Elvira Road",
+    "housenumber": "2650",
+    "city": "Tucson",
+    "lat": 32.125882,
+    "lon": -110.9315063
+  },
+  {
+    "street": "South Country Club Road",
+    "housenumber": "6950",
+    "city": "Tucson",
+    "lat": 32.1246934,
+    "lon": -110.9269957
+  },
+  {
+    "street": "East Elvira Road",
+    "housenumber": "2900",
+    "city": "Tucson",
+    "lat": 32.125375,
+    "lon": -110.9294638
+  },
+  {
+    "street": "East Elvira Road",
+    "housenumber": "3000",
+    "city": "Tucson",
+    "lat": 32.1257549,
+    "lon": -110.9276958
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4301",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2218783,
+    "lon": -110.9004261
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "4301",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2218926,
+    "lon": -110.900561
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7220",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.219537,
+    "lon": -110.8385791
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7120",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2205378,
+    "lon": -110.8398154
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7260",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2201876,
+    "lon": -110.837778
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7102",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2206001,
+    "lon": -110.8405294
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7250",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.219564,
+    "lon": -110.8380625
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7204",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2196152,
+    "lon": -110.8388142
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7290",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2204506,
+    "lon": -110.8374288
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7150",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2194944,
+    "lon": -110.8402096
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7230",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2196566,
+    "lon": -110.8383836
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7280",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2206095,
+    "lon": -110.8378656
+  },
+  {
+    "street": "East Broadway Boulevard",
+    "housenumber": "7191",
+    "city": "Tucson",
+    "postcode": "85710",
+    "lat": 32.2216452,
+    "lon": -110.8391945
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "5910",
+    "city": "Tucson",
+    "postcode": "85711",
+    "lat": 32.2284481,
+    "lon": -110.8657717
+  },
+  {
+    "street": "East Allen Road",
+    "housenumber": "1602",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2755846,
+    "lon": -110.947908
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "3721",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2746011,
+    "lon": -110.9477111
+  },
+  {
+    "street": "North Cherry Avenue",
+    "housenumber": "3741",
+    "city": "Tucson",
+    "postcode": "85719",
+    "lat": 32.2750297,
+    "lon": -110.9478378
+  }
+]

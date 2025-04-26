@@ -12,7 +12,10 @@ async function TripDataWrapper({ children, params }: {
   const trip = await getTripById(params.tripId, { next: { tags: [`trip-${params.tripId}`, 'user-trips'] } });
   if (!trip) { return <p> NO TRIP FOUND </p> }
 
-  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100);
+  const locationArray = trip.locationString.split(',');
+  const state = locationArray[locationArray.length-1];
+
+  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100, state);
   const application = await getUserApplication();
   const hasApplicationData = !!application;
 

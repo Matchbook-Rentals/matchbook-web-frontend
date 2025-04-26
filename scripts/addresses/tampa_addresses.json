@@ -1,0 +1,7882 @@
+[
+  {
+    "street": "East Madison Street",
+    "housenumber": "220",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9485379,
+    "lon": -82.4585068
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9473718,
+    "lon": -82.4595414
+  },
+  {
+    "street": "East Drive M.L.K. Jr Boulevard",
+    "housenumber": "805",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9807363,
+    "lon": -82.4526041
+  },
+  {
+    "street": "North 21st Street",
+    "housenumber": "2302",
+    "city": "Tampa",
+    "postcode": "33605-3928",
+    "lat": 27.96406,
+    "lon": -82.4358295
+  },
+  {
+    "street": "East 13th Avenue",
+    "housenumber": "2101",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9642764,
+    "lon": -82.4353229
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "1600",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9614582,
+    "lon": -82.4416202
+  },
+  {
+    "street": "South 12th Street",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9469069,
+    "lon": -82.4468377
+  },
+  {
+    "street": "E Madison Street",
+    "housenumber": "212",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9484644,
+    "lon": -82.4586879
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "1609",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9575908,
+    "lon": -82.4605695
+  },
+  {
+    "street": "E Twiggs Street",
+    "housenumber": "620",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9504126,
+    "lon": -82.4554185
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "1600",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9613506,
+    "lon": -82.4416215
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1727",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601291,
+    "lon": -82.4396789
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1503",
+    "city": "Tampa",
+    "lat": 27.9604034,
+    "lon": -82.4432521
+  },
+  {
+    "street": "East Drive M L K Jr Drive",
+    "housenumber": "501",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9811245,
+    "lon": -82.4549159
+  },
+  {
+    "street": "N. Central Ave",
+    "housenumber": "10110",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0405736,
+    "lon": -82.4573166
+  },
+  {
+    "street": "Tampa Palms Boulevard West",
+    "housenumber": "16541",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.113841,
+    "lon": -82.392163
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "2418",
+    "city": "Tampa",
+    "lat": 27.936937,
+    "lon": -82.4846
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2501",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450692,
+    "lon": -82.4854173
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "5802",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 28.000775,
+    "lon": -82.427457
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "5802",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 28.000183,
+    "lon": -82.427346
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "209",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.927235,
+    "lon": -82.4534624
+  },
+  {
+    "street": "Commerce Park Boulevard",
+    "housenumber": "17410",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1342744,
+    "lon": -82.3849091
+  },
+  {
+    "street": "North Willow Avenue",
+    "housenumber": "2305",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9629707,
+    "lon": -82.4737902
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "442",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9447757,
+    "lon": -82.4651799
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "513",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.948592,
+    "lon": -82.4591121
+  },
+  {
+    "street": "N Franklin St",
+    "housenumber": "719",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9505815,
+    "lon": -82.4590187
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "614",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9413728,
+    "lon": -82.4664184
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "601",
+    "city": "Tampa",
+    "lat": 27.921573,
+    "lon": -82.450167
+  },
+  {
+    "street": "West Gray Street",
+    "housenumber": "5525",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9484487,
+    "lon": -82.5369225
+  },
+  {
+    "street": "W Snow Ave",
+    "housenumber": "1602",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9358529,
+    "lon": -82.4765011
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1702",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603819,
+    "lon": -82.4403506
+  },
+  {
+    "street": "Tampa Palms Boulevard West",
+    "housenumber": "16041",
+    "city": "Tampa",
+    "postcode": "33647-2001",
+    "lat": 28.1003017,
+    "lon": -82.3989778
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "519",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9490784,
+    "lon": -82.4583802
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18055",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1318715,
+    "lon": -82.3660768
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "232",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9266019,
+    "lon": -82.4535954
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18003",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1306637,
+    "lon": -82.3669206
+  },
+  {
+    "street": "North 50th Street",
+    "housenumber": "1702",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9598682,
+    "lon": -82.4023296
+  },
+  {
+    "street": "North 50th Street",
+    "housenumber": "2006",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9620945,
+    "lon": -82.4023134
+  },
+  {
+    "street": "North 50th Street",
+    "housenumber": "2016",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9627342,
+    "lon": -82.4022808
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "2202",
+    "city": "Tampa",
+    "lat": 27.944519,
+    "lon": -82.482158
+  },
+  {
+    "street": "East Broadway Avenue",
+    "housenumber": "1733",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9617228,
+    "lon": -82.4014503
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4616",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445624,
+    "lon": -82.5227903
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "5340",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9444425,
+    "lon": -82.5137079
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3843",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9451628,
+    "lon": -82.5076044
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "1544",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.956886,
+    "lon": -82.508372
+  },
+  {
+    "street": "Hillsborough Avenue",
+    "housenumber": "305 West",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 27.9968874,
+    "lon": -82.4638423
+  },
+  {
+    "street": "North Nebraska Avenue",
+    "housenumber": "6001",
+    "city": "Tampa",
+    "postcode": "33604-6855",
+    "lat": 28.0021566,
+    "lon": -82.4508314
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "1908",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9965335,
+    "lon": -82.4385794
+  },
+  {
+    "street": "S Howard Ave",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.939657,
+    "lon": -82.482749
+  },
+  {
+    "street": "USF Maple Drive",
+    "housenumber": "12302",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0603225,
+    "lon": -82.4098054
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "4202",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0597001,
+    "lon": -82.4105439
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5003",
+    "city": "Tampa",
+    "postcode": "33617",
+    "lat": 28.0540112,
+    "lon": -82.4011585
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5001",
+    "city": "Tampa",
+    "postcode": "33617",
+    "lat": 28.053687,
+    "lon": -82.4015064
+  },
+  {
+    "street": "W Kennedy Boulevard",
+    "housenumber": "1605",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448979,
+    "lon": -82.476158
+  },
+  {
+    "street": "North Himes Avenue",
+    "housenumber": "4201",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.977701,
+    "lon": -82.501088
+  },
+  {
+    "street": "South Edison Avenue",
+    "housenumber": "100",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.944581,
+    "lon": -82.476919
+  },
+  {
+    "street": "East Yukon Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.029428,
+    "lon": -82.456456
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5105",
+    "city": "Tampa",
+    "lat": 28.0540287,
+    "lon": -82.4007286
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5004",
+    "city": "Tampa",
+    "lat": 28.0547411,
+    "lon": -82.4008734
+  },
+  {
+    "street": "East Fowler",
+    "housenumber": "5006",
+    "city": "Tampa",
+    "postcode": "33617",
+    "lat": 28.0549471,
+    "lon": -82.4005167
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5025",
+    "city": "Tampa",
+    "lat": 28.0536641,
+    "lon": -82.4001358
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "2576",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0548772,
+    "lon": -82.4298511
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "2301",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.053661,
+    "lon": -82.4323133
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "2301",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0534006,
+    "lon": -82.4325601
+  },
+  {
+    "street": "E Fowler Avenue",
+    "housenumber": "2301",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0533341,
+    "lon": -82.4329791
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "208",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9513554,
+    "lon": -82.4601686
+  },
+  {
+    "street": "B-Cross Creek",
+    "housenumber": "10960",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.144646,
+    "lon": -82.2822058
+  },
+  {
+    "street": "Cross Creek Boulevard",
+    "housenumber": "10928",
+    "city": "Tampa",
+    "postcode": "33647-4034",
+    "lat": 28.1455541,
+    "lon": -82.2834382
+  },
+  {
+    "street": "W Swann Ave",
+    "housenumber": "1609",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.937569,
+    "lon": -82.476463
+  },
+  {
+    "street": "Tampa Palms Boulevard",
+    "housenumber": "16047",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1000977,
+    "lon": -82.3994584
+  },
+  {
+    "street": "Tampa Palms Boulevard West",
+    "housenumber": "16049",
+    "city": "Tampa",
+    "lat": 28.1000502,
+    "lon": -82.3995584
+  },
+  {
+    "street": "Cross Creek Boulevard",
+    "housenumber": "10865",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1432169,
+    "lon": -82.2910844
+  },
+  {
+    "street": "W Swann Ave",
+    "housenumber": "1409",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9375235,
+    "lon": -82.4745825
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "1407",
+    "city": "Tampa",
+    "lat": 27.9375401,
+    "lon": -82.4743652
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "1402",
+    "city": "Tampa",
+    "lat": 27.9371799,
+    "lon": -82.4739763
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "1318",
+    "city": "Tampa",
+    "lat": 27.9371088,
+    "lon": -82.4735632
+  },
+  {
+    "street": "W Swann Ave",
+    "housenumber": "1209",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9374951,
+    "lon": -82.4724152
+  },
+  {
+    "street": "South Boulevard",
+    "housenumber": "501",
+    "city": "Tampa",
+    "lat": 27.9395754,
+    "lon": -82.4688353
+  },
+  {
+    "street": "South Boulevard",
+    "housenumber": "325",
+    "city": "Tampa",
+    "lat": 27.9405991,
+    "lon": -82.468838
+  },
+  {
+    "street": "South Boulevard",
+    "housenumber": "307",
+    "city": "Tampa",
+    "lat": 27.9410375,
+    "lon": -82.4688514
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "930",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0551519,
+    "lon": -82.4486548
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "1031",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0540749,
+    "lon": -82.4486763
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "1248",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0549686,
+    "lon": -82.4452873
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "16350",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1125021,
+    "lon": -82.3853464
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3629",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945013,
+    "lon": -82.5027917
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "4415",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9857726,
+    "lon": -82.4593004
+  },
+  {
+    "street": "S Hyde Park Ave",
+    "housenumber": "123",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448246,
+    "lon": -82.4640512
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "502",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 27.9966233,
+    "lon": -82.4549431
+  },
+  {
+    "street": "East Regnas Avenue",
+    "housenumber": "3905",
+    "city": "Tampa",
+    "lat": 28.0250957,
+    "lon": -82.4169067
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "777",
+    "city": "Tampa",
+    "lat": 27.950015,
+    "lon": -82.460607
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9483499,
+    "lon": -82.458988
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "1241",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0538616,
+    "lon": -82.4467561
+  },
+  {
+    "street": "W Platt St",
+    "housenumber": "715",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9419036,
+    "lon": -82.4674405
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "1235",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0531309,
+    "lon": -82.4474857
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "502",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9483493,
+    "lon": -82.4593619
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5150",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.994024,
+    "lon": -82.4597
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5137",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.994135,
+    "lon": -82.459271
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18011",
+    "city": "Tampa",
+    "postcode": "33645",
+    "lat": 28.132073,
+    "lon": -82.3658546
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "2702",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0550022,
+    "lon": -82.4293652
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "6112",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0030909,
+    "lon": -82.4597496
+  },
+  {
+    "street": "N Armenia Ave",
+    "housenumber": "7137",
+    "city": "Tampa",
+    "postcode": "33604-5263",
+    "lat": 28.0142387,
+    "lon": -82.4849107
+  },
+  {
+    "street": "Dr MLK Jr Blvd W",
+    "housenumber": "2140",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 27.9810328,
+    "lon": -82.482257
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "6821",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0106019,
+    "lon": -82.484129
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "2001",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9576914,
+    "lon": -82.4852672
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "4202",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0633842,
+    "lon": -82.4139311
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "3320",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9964909,
+    "lon": -82.4228024
+  },
+  {
+    "street": "Bay to Bay Boulevard",
+    "housenumber": "3409",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9199272,
+    "lon": -82.4992532
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "210",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9271493,
+    "lon": -82.4539027
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "220",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9268082,
+    "lon": -82.4538173
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "238",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9263423,
+    "lon": -82.4534532
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "304",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9256628,
+    "lon": -82.4531051
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "304",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9256223,
+    "lon": -82.4530835
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "304",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9254626,
+    "lon": -82.4529928
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "227",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9267772,
+    "lon": -82.4532186
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "223",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9268371,
+    "lon": -82.4532506
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "19080",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1461217,
+    "lon": -82.3538165
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "19090",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1468958,
+    "lon": -82.3542027
+  },
+  {
+    "street": "South Trask St",
+    "housenumber": "7001",
+    "city": "Tampa",
+    "postcode": "33616",
+    "lat": 27.8645997,
+    "lon": -82.5228284
+  },
+  {
+    "street": "N Morgan St",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.950339,
+    "lon": -82.4559033
+  },
+  {
+    "street": "South 22nd St",
+    "housenumber": "111",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9481643,
+    "lon": -82.4350361
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "2100",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9360233,
+    "lon": -82.4814286
+  },
+  {
+    "street": "South Howard Avenue 105",
+    "housenumber": "701",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9371692,
+    "lon": -82.4832707
+  },
+  {
+    "street": "W Azeele St",
+    "housenumber": "2208",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9408734,
+    "lon": -82.4828093
+  },
+  {
+    "street": "Harbour Post Dr",
+    "housenumber": "710",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9396236,
+    "lon": -82.4515285
+  },
+  {
+    "street": "Harbour Post Dr",
+    "housenumber": "700",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9399629,
+    "lon": -82.4514682
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4860",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9439869,
+    "lon": -82.5252651
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4890",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9443635,
+    "lon": -82.5257277
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "609",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9388204,
+    "lon": -82.5062176
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9459457,
+    "lon": -82.4594841
+  },
+  {
+    "street": "N MacInnes Place",
+    "housenumber": "1010",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9511862,
+    "lon": -82.4635356
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "5035",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9968293,
+    "lon": -82.5305613
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "4201",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9965879,
+    "lon": -82.5139556
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "3920",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.995568,
+    "lon": -82.509698
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "2724",
+    "city": "Tampa",
+    "postcode": "33614-6053",
+    "lat": 27.9947749,
+    "lon": -82.4873464
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1831",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601637,
+    "lon": -82.4381293
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "4408",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9957263,
+    "lon": -82.5188607
+  },
+  {
+    "street": "North Morgan Street",
+    "housenumber": "202",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.947265,
+    "lon": -82.4550292
+  },
+  {
+    "street": "E Twiggs Street",
+    "housenumber": "601",
+    "city": "Tampa",
+    "lat": 27.9498259,
+    "lon": -82.4557704
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "9390",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.036698,
+    "lon": -82.459932
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "9312",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.034616,
+    "lon": -82.459843
+  },
+  {
+    "street": "West Kennedy Blvd",
+    "housenumber": "3841",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9451616,
+    "lon": -82.5074214
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3841",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945161,
+    "lon": -82.507344
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3839",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9451512,
+    "lon": -82.507253
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "102",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.944354,
+    "lon": -82.505199
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "10103",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.043122,
+    "lon": -82.458904
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "4400",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.98242,
+    "lon": -82.506313
+  },
+  {
+    "street": "Harbour Post Dr",
+    "housenumber": "711",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.939647,
+    "lon": -82.451778
+  },
+  {
+    "street": "Harbour Post Dr",
+    "housenumber": "700",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.940043,
+    "lon": -82.451371
+  },
+  {
+    "street": "Gandy Boulevard",
+    "housenumber": "3327",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.894182,
+    "lon": -82.499962
+  },
+  {
+    "street": "North Plaza Lane",
+    "housenumber": "347",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.94709,
+    "lon": -82.525847
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "207",
+    "city": "Tampa",
+    "lat": 27.946141,
+    "lon": -82.504251
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "211",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.946443,
+    "lon": -82.504156
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4289",
+    "city": "Tampa",
+    "lat": 27.945207,
+    "lon": -82.514692
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4235",
+    "city": "Tampa",
+    "lat": 27.94521,
+    "lon": -82.515159
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4311",
+    "city": "Tampa",
+    "lat": 27.94521,
+    "lon": -82.516385
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4307",
+    "city": "Tampa",
+    "lat": 27.945208,
+    "lon": -82.516294
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4323",
+    "city": "Tampa",
+    "lat": 27.945174,
+    "lon": -82.517068
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4325",
+    "city": "Tampa",
+    "lat": 27.945181,
+    "lon": -82.517121
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4327",
+    "city": "Tampa",
+    "lat": 27.945178,
+    "lon": -82.517181
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4355",
+    "city": "Tampa",
+    "lat": 27.945233,
+    "lon": -82.517876
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4347",
+    "city": "Tampa",
+    "lat": 27.945175,
+    "lon": -82.517697
+  },
+  {
+    "street": "George J Bean Parkway",
+    "housenumber": "4100",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9795136,
+    "lon": -82.5382647
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "3804",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.9077728,
+    "lon": -82.5050837
+  },
+  {
+    "street": "West Courtney Campbell Causeway",
+    "housenumber": "7627",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.967948,
+    "lon": -82.565808
+  },
+  {
+    "street": "Gandy Boulevard",
+    "housenumber": "4005",
+    "city": "Tampa",
+    "lat": 27.89414,
+    "lon": -82.51112
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "1106",
+    "city": "Tampa",
+    "lat": 27.953013,
+    "lon": -82.460435
+  },
+  {
+    "street": "W Snow Ave",
+    "housenumber": "1609",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.936273,
+    "lon": -82.47604
+  },
+  {
+    "street": "South Village Circle",
+    "housenumber": "802",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.936303,
+    "lon": -82.475229
+  },
+  {
+    "street": "South Dakota Avenue",
+    "housenumber": "727",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.936312,
+    "lon": -82.475953
+  },
+  {
+    "street": "Harbour Post Drive",
+    "housenumber": "701",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.939845,
+    "lon": -82.452093
+  },
+  {
+    "street": "Harbour Place Drive",
+    "housenumber": "301-399",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.938898,
+    "lon": -82.451661
+  },
+  {
+    "street": "South Florida Avenue",
+    "housenumber": "513",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.941954,
+    "lon": -82.455144
+  },
+  {
+    "street": "Harbour Post Drive",
+    "housenumber": "704",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9398349,
+    "lon": -82.451603
+  },
+  {
+    "street": "Knights Run Avenue",
+    "housenumber": "450",
+    "city": "Tampa ",
+    "postcode": "33602",
+    "lat": 27.938028,
+    "lon": -82.45121
+  },
+  {
+    "street": "Bayshore Boulevard",
+    "housenumber": "2905",
+    "city": "Tampa ",
+    "lat": 27.91959,
+    "lon": -82.490679
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3225",
+    "city": "Tampa",
+    "postcode": "33629-8171",
+    "lat": 27.9162245,
+    "lon": -82.4943336
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "3801",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.89405,
+    "lon": -82.506835
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "3801",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8941729,
+    "lon": -82.5068117
+  },
+  {
+    "street": "West Gandy Boulevard Northwest",
+    "housenumber": "3801",
+    "city": "corner of Dale Mabry",
+    "postcode": "33611",
+    "lat": 27.8944586,
+    "lon": -82.506802
+  },
+  {
+    "street": "S Howard Ave",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.939435,
+    "lon": -82.482767
+  },
+  {
+    "street": "S Howard Ave",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.939581,
+    "lon": -82.482769
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3635",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450108,
+    "lon": -82.503035
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "301",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.94202,
+    "lon": -82.462965
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3217A",
+    "city": "Tampa",
+    "lat": 27.91669,
+    "lon": -82.494084
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3217C",
+    "city": "Tampa",
+    "lat": 27.91673,
+    "lon": -82.494171
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3217D",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.916707,
+    "lon": -82.494277
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3217E",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.916728,
+    "lon": -82.494323
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3215",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9168,
+    "lon": -82.494279
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3215",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.916899,
+    "lon": -82.494245
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3215",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.916972,
+    "lon": -82.494212
+  },
+  {
+    "street": "George J Bean Parkway",
+    "housenumber": "4100",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.983046,
+    "lon": -82.531694
+  },
+  {
+    "street": "Channelside Walk Way",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.940052,
+    "lon": -82.451217
+  },
+  {
+    "street": "North Howard Avenue",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.945043,
+    "lon": -82.482647
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "777",
+    "city": "Tampa",
+    "lat": 27.949646,
+    "lon": -82.460508
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "813",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9510434,
+    "lon": -82.4601452
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1512",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603989,
+    "lon": -82.4425033
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1430",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9604031,
+    "lon": -82.4431119
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "533",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.939222,
+    "lon": -82.483373
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1600",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960401,
+    "lon": -82.441482
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1722",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960377,
+    "lon": -82.4397865
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "2104",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960376,
+    "lon": -82.435317
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "2102",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960372,
+    "lon": -82.435395
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "3813",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.908079,
+    "lon": -82.50663
+  },
+  {
+    "street": "North 40th Street",
+    "housenumber": "3212",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9708496,
+    "lon": -82.4144038
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "1205",
+    "city": "Tampa",
+    "postcode": "30605",
+    "lat": 27.960757,
+    "lon": -82.44603
+  },
+  {
+    "street": "Interbay Boulevard",
+    "housenumber": "7001",
+    "city": "Tampa",
+    "lat": 27.8694683,
+    "lon": -82.5112476
+  },
+  {
+    "street": "Henderson Boulevard",
+    "housenumber": "4062",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9286882,
+    "lon": -82.5113445
+  },
+  {
+    "street": "E.Kennedy Blvd",
+    "housenumber": "1120",
+    "city": "Tampa",
+    "lat": 27.9512475,
+    "lon": -82.4477748
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "203",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9488016,
+    "lon": -82.4591923
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "1001",
+    "city": "Tampa",
+    "lat": 27.933503,
+    "lon": -82.483252
+  },
+  {
+    "street": "West Columbus Drive",
+    "housenumber": "2348",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9664794,
+    "lon": -82.4846409
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "1820",
+    "city": "Tampa",
+    "lat": 27.9608863,
+    "lon": -82.4431024
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "1600",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960499,
+    "lon": -82.441588
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1616",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960379,
+    "lon": -82.441189
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1612",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.96039,
+    "lon": -82.441289
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1618",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960364,
+    "lon": -82.441111
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1704",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603804,
+    "lon": -82.4402414
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1730",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603742,
+    "lon": -82.4395551
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1728",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603754,
+    "lon": -82.4396368
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1714",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960377,
+    "lon": -82.4398696
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "1701",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960755,
+    "lon": -82.440301
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "211",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9461812,
+    "lon": -82.457984
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9464261,
+    "lon": -82.4585193
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.947517,
+    "lon": -82.4589833
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "305",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9484074,
+    "lon": -82.4579199
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "1901",
+    "city": "Tampa",
+    "lat": 27.9611062,
+    "lon": -82.4428366
+  },
+  {
+    "street": "Chenango Lane",
+    "housenumber": "17304",
+    "city": "Tampa",
+    "lat": 28.1278522,
+    "lon": -82.3856936
+  },
+  {
+    "street": "West Clear Avenue",
+    "housenumber": "4708",
+    "city": "Tampa",
+    "lat": 27.9292402,
+    "lon": -82.5233259
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9474806,
+    "lon": -82.459614
+  },
+  {
+    "street": "South Druid Lane",
+    "housenumber": "1207",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.932102,
+    "lon": -82.5226171
+  },
+  {
+    "street": "South Druid Lane",
+    "housenumber": "1208",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9316841,
+    "lon": -82.5221683
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "109",
+    "city": "Tampa",
+    "lat": 27.9485752,
+    "lon": -82.4465391
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "301",
+    "city": "Tampa",
+    "lat": 27.948718,
+    "lon": -82.4589429
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "614",
+    "city": "Tampa",
+    "lat": 27.937892,
+    "lon": -82.505311
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "700",
+    "city": "Tampa",
+    "lat": 27.93721,
+    "lon": -82.505295
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "619",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.937873,
+    "lon": -82.506159
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "533",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.939062,
+    "lon": -82.483377
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "420",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9449537,
+    "lon": -82.4646007
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "2002",
+    "city": "Tampa",
+    "lat": 27.9633747,
+    "lon": -82.4596501
+  },
+  {
+    "street": "Columbia Drive",
+    "housenumber": "81",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.932122,
+    "lon": -82.4550475
+  },
+  {
+    "street": "East Kennedy Boulevard",
+    "housenumber": "1208",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9512365,
+    "lon": -82.4475185
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "1413",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9284095,
+    "lon": -82.4833436
+  },
+  {
+    "street": "S. MacDill Ave, Suite C",
+    "housenumber": "2301",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9243006,
+    "lon": -82.4937134
+  },
+  {
+    "street": "South West Shore Boulevard",
+    "housenumber": "3861",
+    "city": "Tampa",
+    "lat": 27.9090113,
+    "lon": -82.5269603
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "2601",
+    "city": "Tampa",
+    "postcode": "33610-4409",
+    "lat": 27.9957974,
+    "lon": -82.4304739
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "2201",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9958015,
+    "lon": -82.434378
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "10909",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0477775,
+    "lon": -82.4591299
+  },
+  {
+    "street": "Westshore Plaza",
+    "housenumber": "241",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9468155,
+    "lon": -82.5271899
+  },
+  {
+    "street": "South Westshore Boulevard",
+    "housenumber": "118",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9466958,
+    "lon": -82.5267556
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "2231",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9947318,
+    "lon": -82.4339063
+  },
+  {
+    "street": "East Kennedy Boulvard",
+    "housenumber": "1120",
+    "city": "Tampa",
+    "lat": 27.9512201,
+    "lon": -82.4486647
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "714",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.936603,
+    "lon": -82.482907
+  },
+  {
+    "street": "North Westshore Boulevard",
+    "housenumber": "1715",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9574722,
+    "lon": -82.5235309
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "1350",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.929249,
+    "lon": -82.483056
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 101C",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964337,
+    "lon": -82.522407
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964854,
+    "lon": -82.521828
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 108",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964576,
+    "lon": -82.521844
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 183",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964375,
+    "lon": -82.521576
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 186",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964238,
+    "lon": -82.521785
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 185",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964283,
+    "lon": -82.521715
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 101A",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964186,
+    "lon": -82.522166
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 109",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964659,
+    "lon": -82.521796
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 107",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964738,
+    "lon": -82.521863
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 184",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964351,
+    "lon": -82.521637
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 103",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964486,
+    "lon": -82.522163
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965634,
+    "lon": -82.520836
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964051,
+    "lon": -82.519697
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.966129,
+    "lon": -82.520825
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4142",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964754,
+    "lon": -82.512482
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.966072,
+    "lon": -82.520728
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C203",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.96503,
+    "lon": -82.521016
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C201",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965136,
+    "lon": -82.52114
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.966158,
+    "lon": -82.521109
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C202",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965064,
+    "lon": -82.521086
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C204",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965001,
+    "lon": -82.520961
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C208",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9641876,
+    "lon": -82.5219653
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite 207",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964965,
+    "lon": -82.520771
+  },
+  {
+    "street": "N Westshore Blvd",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "lat": 27.9646979,
+    "lon": -82.5197323
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C206",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964973,
+    "lon": -82.520849
+  },
+  {
+    "street": "International Plaza",
+    "housenumber": "Suite C205",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.964989,
+    "lon": -82.520911
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4112",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965204,
+    "lon": -82.51289
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965848,
+    "lon": -82.521124
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965448,
+    "lon": -82.520602
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.965717,
+    "lon": -82.520975
+  },
+  {
+    "street": "South Lois Avenue",
+    "housenumber": "6727",
+    "city": "Tampa",
+    "lat": 27.8707455,
+    "lon": -82.5144978
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "6116",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0032693,
+    "lon": -82.4555594
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1411",
+    "city": "Tampa",
+    "lat": 27.9601765,
+    "lon": -82.4438574
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1401",
+    "city": "Tampa",
+    "lat": 27.960177,
+    "lon": -82.4441084
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "1811",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9608858,
+    "lon": -82.4428079
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1315",
+    "city": "Tampa",
+    "lat": 27.9601784,
+    "lon": -82.4448627
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1510",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603991,
+    "lon": -82.4425749
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1536",
+    "city": "Tampa",
+    "lat": 27.9603976,
+    "lon": -82.4418973
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1516",
+    "city": "Tampa",
+    "lat": 27.9603985,
+    "lon": -82.4423341
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1524",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960398,
+    "lon": -82.4421145
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1518",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603983,
+    "lon": -82.4422542
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1514",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603987,
+    "lon": -82.4424008
+  },
+  {
+    "street": "North Armenia Avenue Suite",
+    "housenumber": "4144",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9772329,
+    "lon": -82.4849653
+  },
+  {
+    "street": "South Dale Mabry Drive",
+    "housenumber": "6505",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8718473,
+    "lon": -82.5068485
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "1413",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9283254,
+    "lon": -82.4837261
+  },
+  {
+    "street": "USF Cedar Circle",
+    "housenumber": "4103",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0639515,
+    "lon": -82.4138511
+  },
+  {
+    "street": "N. Himes Avenue",
+    "housenumber": "4107",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.976884,
+    "lon": -82.5006688
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "3411",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0322543,
+    "lon": -82.4222892
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "3009",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0322022,
+    "lon": -82.425465
+  },
+  {
+    "street": "Tampa Street North",
+    "housenumber": "404",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9476001,
+    "lon": -82.4589852
+  },
+  {
+    "street": "North Marion Street",
+    "housenumber": "1211",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9550972,
+    "lon": -82.4584292
+  },
+  {
+    "street": "East Yukon Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0299167,
+    "lon": -82.456454
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1540",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9562442,
+    "lon": -82.5083764
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9472264,
+    "lon": -82.4560543
+  },
+  {
+    "street": "East Kennedy Blvd.",
+    "housenumber": "302",
+    "city": "Tampa",
+    "lat": 27.9478986,
+    "lon": -82.4578187
+  },
+  {
+    "street": "Nebraska Avenue",
+    "housenumber": "601 North",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9529744,
+    "lon": -82.4508736
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "5518",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9974524,
+    "lon": -82.484656
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "160",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9443249,
+    "lon": -82.5298732
+  },
+  {
+    "street": "West 7th Avenue",
+    "housenumber": "220",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9602337,
+    "lon": -82.4632704
+  },
+  {
+    "street": "West Snow Avenue",
+    "housenumber": "1601",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.936296,
+    "lon": -82.475956
+  },
+  {
+    "street": "East 9th Avenue",
+    "housenumber": "1713",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9615727,
+    "lon": -82.439376
+  },
+  {
+    "street": "North Pierce Street",
+    "housenumber": "210",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9476614,
+    "lon": -82.4543771
+  },
+  {
+    "street": "W Paxton Ave",
+    "housenumber": "3911",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8886579,
+    "lon": -82.5094648
+  },
+  {
+    "street": "West Drive Martin Luther King Jr Boulevard",
+    "housenumber": "3420",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9808615,
+    "lon": -82.499098
+  },
+  {
+    "street": "West Bay To Bay Boulevard",
+    "housenumber": "3216",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9195934,
+    "lon": -82.4965477
+  },
+  {
+    "street": "Henderson Blvd",
+    "housenumber": "4111",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9281299,
+    "lon": -82.5128546
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "11126",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0494967,
+    "lon": -82.4266819
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "2021",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0532182,
+    "lon": -82.4368589
+  },
+  {
+    "street": "us Highway 301",
+    "housenumber": "4800",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9672515,
+    "lon": -82.3898268
+  },
+  {
+    "street": "North Palms Village Place",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1260017,
+    "lon": -82.367382
+  },
+  {
+    "street": "West Palmira Avenue",
+    "housenumber": "3014",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9222591,
+    "lon": -82.4928638
+  },
+  {
+    "street": "Tampa Street North",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9477032,
+    "lon": -82.4594207
+  },
+  {
+    "street": "West Waters Avenue",
+    "housenumber": "915",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0254913,
+    "lon": -82.4684553
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "1810",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9274381,
+    "lon": -82.493249
+  },
+  {
+    "street": "N Nebraska Ave",
+    "housenumber": "6306",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0049592,
+    "lon": -82.4516549
+  },
+  {
+    "street": "South Harold Avenue",
+    "housenumber": "2410",
+    "city": "tampa",
+    "postcode": "33629",
+    "lat": 27.923114,
+    "lon": -82.5068881
+  },
+  {
+    "street": "West Jetton Avenue",
+    "housenumber": "3709",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.93324,
+    "lon": -82.5045869
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "3302",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9517826,
+    "lon": -82.4977439
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5910",
+    "city": "Tampa",
+    "lat": 28.0010717,
+    "lon": -82.4598803
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "4600",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445254,
+    "lon": -82.5224413
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "4546",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445677,
+    "lon": -82.5220308
+  },
+  {
+    "street": "N Nebraska Ave",
+    "housenumber": "5507",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 27.9974559,
+    "lon": -82.4525188
+  },
+  {
+    "street": "North Avenue Republica de Cuba",
+    "housenumber": "1701",
+    "city": "Tampa",
+    "lat": 27.9596986,
+    "lon": -82.4440596
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1324",
+    "city": "Tampa",
+    "lat": 27.9604212,
+    "lon": -82.4444707
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "4056",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9756201,
+    "lon": -82.4859997
+  },
+  {
+    "street": "Fiesta Plaza",
+    "housenumber": "4046",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9755467,
+    "lon": -82.4862867
+  },
+  {
+    "street": "West Dr Martin Luther King Jr Boulevard",
+    "housenumber": "3921",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9819992,
+    "lon": -82.5091102
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "505",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.947495,
+    "lon": -82.4553292
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "304",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9255676,
+    "lon": -82.4530492
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "245",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9263912,
+    "lon": -82.4530344
+  },
+  {
+    "street": "W Dr. Martin Luther King Jr. Blvd",
+    "housenumber": "2140",
+    "city": "Tampa",
+    "lat": 27.9810268,
+    "lon": -82.4821889
+  },
+  {
+    "street": "Westshore Plaza",
+    "housenumber": "258",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9466934,
+    "lon": -82.5292541
+  },
+  {
+    "street": "Nebraska Avenue",
+    "housenumber": "7410",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0159725,
+    "lon": -82.4515088
+  },
+  {
+    "street": "West South Avenue",
+    "housenumber": "3912",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9910517,
+    "lon": -82.5078694
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "8885",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.032076,
+    "lon": -82.457679
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "3914",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9948995,
+    "lon": -82.5095322
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "1155",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9325645,
+    "lon": -82.5062255
+  },
+  {
+    "street": "Bayshore Boulevard",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9377999,
+    "lon": -82.4652927
+  },
+  {
+    "street": "Nebraska Avenue",
+    "housenumber": "3115",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.972563,
+    "lon": -82.4508915
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "1248",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0548704,
+    "lon": -82.4453018
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "6403",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.170791,
+    "lon": -82.356505
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4526",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.90109,
+    "lon": -82.50564
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "3501",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0321833,
+    "lon": -82.4203788
+  },
+  {
+    "street": "Kennedy Blvd",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9468743,
+    "lon": -82.4592171
+  },
+  {
+    "street": "East Whiting Street",
+    "housenumber": "117",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9451441,
+    "lon": -82.4574036
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "310",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9418763,
+    "lon": -82.4928978
+  },
+  {
+    "street": "West De Leon Street",
+    "housenumber": "2835",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9395687,
+    "lon": -82.4909316
+  },
+  {
+    "street": "North Reo Street",
+    "housenumber": "550",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9494372,
+    "lon": -82.5364964
+  },
+  {
+    "street": "W Osborne Ave",
+    "housenumber": "4015",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9893045,
+    "lon": -82.511259
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "2420",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445502,
+    "lon": -82.4847243
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "212",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9513819,
+    "lon": -82.4600734
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4830",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9438291,
+    "lon": -82.5252077
+  },
+  {
+    "street": "Pointe of Tampa Way",
+    "housenumber": "5102",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1185107,
+    "lon": -82.378694
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6920",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1151571,
+    "lon": -82.3747303
+  },
+  {
+    "street": "south westshore blvd",
+    "housenumber": "3431",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9122147,
+    "lon": -82.5268403
+  },
+  {
+    "street": "Britton Plaza",
+    "housenumber": "3838",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.9070462,
+    "lon": -82.5029614
+  },
+  {
+    "street": "Dale Mabry Hwy",
+    "housenumber": "714",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9368416,
+    "lon": -82.5053278
+  },
+  {
+    "street": "West Linebaugh Avenue",
+    "housenumber": "6710",
+    "city": "Tampa",
+    "postcode": "33625",
+    "lat": 28.0399542,
+    "lon": -82.480639
+  },
+  {
+    "street": "North Marion Street",
+    "housenumber": "1005",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.953245,
+    "lon": -82.458226
+  },
+  {
+    "street": "Executive Drive",
+    "housenumber": "5540",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9466169,
+    "lon": -82.5376217
+  },
+  {
+    "street": "Bridge Hill Ct",
+    "housenumber": "17419",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.12827,
+    "lon": -82.3809538
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "201",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9468574,
+    "lon": -82.4569979
+  },
+  {
+    "street": "Henderson Boulvard",
+    "housenumber": "3401",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9396816,
+    "lon": -82.5006757
+  },
+  {
+    "street": "S Manhattan Ave",
+    "housenumber": "6818",
+    "city": "Tampa",
+    "postcode": "33616",
+    "lat": 27.867176,
+    "lon": -82.5179729
+  },
+  {
+    "street": "North Nebraska Avenue",
+    "housenumber": "7601",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0171392,
+    "lon": -82.4509745
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "5913",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 28.0010968,
+    "lon": -82.4841979
+  },
+  {
+    "street": "N Tampa St",
+    "housenumber": "1209",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9540853,
+    "lon": -82.4606212
+  },
+  {
+    "street": "W Kennedy Blvd",
+    "housenumber": "4111",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9451695,
+    "lon": -82.5124818
+  },
+  {
+    "street": "Henderson Boulevard",
+    "housenumber": "4108",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9278993,
+    "lon": -82.5123029
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "1605",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448994,
+    "lon": -82.4762656
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "18003",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1306693,
+    "lon": -82.3668699
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "2801",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9209238,
+    "lon": -82.4938134
+  },
+  {
+    "street": "North 40th Street",
+    "housenumber": "2610",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9663985,
+    "lon": -82.4145783
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "11028",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0506022,
+    "lon": -82.4601316
+  },
+  {
+    "street": "Paddock View Drive",
+    "housenumber": "19456",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1666458,
+    "lon": -82.2970127
+  },
+  {
+    "street": "Palm Royal Drive",
+    "housenumber": "16606",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1166182,
+    "lon": -82.3849385
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1802",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.96048,
+    "lon": -82.4390217
+  },
+  {
+    "street": "West 115th Avenue",
+    "housenumber": "701",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0531018,
+    "lon": -82.4643361
+  },
+  {
+    "street": "Hidden Oak Circle",
+    "housenumber": "9708",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0390945,
+    "lon": -82.4654474
+  },
+  {
+    "street": "Hidden Oak Circle",
+    "housenumber": "9607",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0382055,
+    "lon": -82.4642589
+  },
+  {
+    "street": "West Floriland Avenue",
+    "housenumber": "206",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0368552,
+    "lon": -82.4619981
+  },
+  {
+    "street": "Ashley Street",
+    "housenumber": "10109",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.041526,
+    "lon": -82.4610065
+  },
+  {
+    "street": "Hidden Oak Circle",
+    "housenumber": "9624",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0379049,
+    "lon": -82.4654301
+  },
+  {
+    "street": "West Bougainvillea Avenue",
+    "housenumber": "715",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0438446,
+    "lon": -82.4654063
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4248",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.902744,
+    "lon": -82.5054061
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4535",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.900549,
+    "lon": -82.5069841
+  },
+  {
+    "street": "B-Cross Creek",
+    "housenumber": "10960",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1446393,
+    "lon": -82.2822061
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "505",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9474386,
+    "lon": -82.4553555
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1703",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9514157,
+    "lon": -82.4771506
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "11158",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0502416,
+    "lon": -82.426725
+  },
+  {
+    "street": "Nebraska Avenue",
+    "housenumber": "5001",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9905009,
+    "lon": -82.4507784
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6206",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1159299,
+    "lon": -82.3787826
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2543",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9641359,
+    "lon": -82.5043048
+  },
+  {
+    "street": "North Rocky Point Drive West",
+    "housenumber": "3050",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9703367,
+    "lon": -82.5693111
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "533",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9396633,
+    "lon": -82.4833652
+  },
+  {
+    "street": "N Nebraska Ave",
+    "housenumber": "5001",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9904764,
+    "lon": -82.4507751
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "1300",
+    "city": "Tampa",
+    "lat": 27.9547154,
+    "lon": -82.5245871
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6250",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1171977,
+    "lon": -82.3744417
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9461953,
+    "lon": -82.4657563
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9456906,
+    "lon": -82.4656115
+  },
+  {
+    "street": "UT Poe Parkway",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9461314,
+    "lon": -82.4654237
+  },
+  {
+    "street": "UT University Drive",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9484764,
+    "lon": -82.4667693
+  },
+  {
+    "street": "West North A Street",
+    "housenumber": "820",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9451281,
+    "lon": -82.4680038
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "915",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9517895,
+    "lon": -82.4589894
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6278",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1167409,
+    "lon": -82.3743252
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6270",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1169335,
+    "lon": -82.3743384
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6206",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1159812,
+    "lon": -82.3788164
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "8402",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0257169,
+    "lon": -82.4847329
+  },
+  {
+    "street": "East Kennedy Boulevard",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9485334,
+    "lon": -82.4561262
+  },
+  {
+    "street": "South Franklin Street",
+    "housenumber": "225",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9426665,
+    "lon": -82.4561156
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "304",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9255299,
+    "lon": -82.4530306
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "238",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9263884,
+    "lon": -82.4534701
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "236",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9264822,
+    "lon": -82.4535509
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "232",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9266564,
+    "lon": -82.4536223
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "218",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9269121,
+    "lon": -82.4538699
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "235",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9265918,
+    "lon": -82.4531263
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "221",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9268908,
+    "lon": -82.4532833
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "214",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9270488,
+    "lon": -82.4538351
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "214",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9270191,
+    "lon": -82.4538236
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "215",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9269841,
+    "lon": -82.4533403
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "215",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9269571,
+    "lon": -82.4533251
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "241",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9264578,
+    "lon": -82.4530588
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "225",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.926809,
+    "lon": -82.4532356
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "233",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.926641,
+    "lon": -82.4531482
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "231",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9266985,
+    "lon": -82.4531757
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "2814",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9973494,
+    "lon": -82.4277668
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "2814",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.997463,
+    "lon": -82.4275809
+  },
+  {
+    "street": "North Boulevard",
+    "housenumber": "310",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9467233,
+    "lon": -82.4686919
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "442",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9447609,
+    "lon": -82.46554
+  },
+  {
+    "street": "South Hyde Park Avenue",
+    "housenumber": "113",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.945018,
+    "lon": -82.4640394
+  },
+  {
+    "street": "South Hyde Park Avenue",
+    "housenumber": "117",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9449354,
+    "lon": -82.4640426
+  },
+  {
+    "street": "West Grand Central Avenue",
+    "housenumber": "403",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9447275,
+    "lon": -82.4642755
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "615",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9429132,
+    "lon": -82.4470033
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "615",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9432017,
+    "lon": -82.447018
+  },
+  {
+    "street": "East Davis Boulevard",
+    "housenumber": "229",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9267408,
+    "lon": -82.4531959
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "920",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9444735,
+    "lon": -82.4693957
+  },
+  {
+    "street": "South Boulevard",
+    "housenumber": "103",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9442265,
+    "lon": -82.4687685
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "301",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9423174,
+    "lon": -82.4629694
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "300",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.946658,
+    "lon": -82.464038
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "903",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9517198,
+    "lon": -82.4594849
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "202",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9512998,
+    "lon": -82.4603288
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "803",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9506636,
+    "lon": -82.4599867
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "811",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9509697,
+    "lon": -82.4601107
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "808",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9507901,
+    "lon": -82.4595242
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "713",
+    "city": "TampaUS",
+    "postcode": "33602",
+    "lat": 27.9504663,
+    "lon": -82.4589669
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "514",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9489246,
+    "lon": -82.4589494
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "514",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9489827,
+    "lon": -82.4586946
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "512",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9487872,
+    "lon": -82.4585752
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9482376,
+    "lon": -82.4593201
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "110",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9481565,
+    "lon": -82.4595135
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "100",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9480463,
+    "lon": -82.4598108
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9477115,
+    "lon": -82.4590567
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "501",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9486079,
+    "lon": -82.4581953
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "611",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9494011,
+    "lon": -82.4584871
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "633",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9495223,
+    "lon": -82.4585603
+  },
+  {
+    "street": "N Westshore Blvd",
+    "housenumber": "2223",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9654237,
+    "lon": -82.521209
+  },
+  {
+    "street": "North Meridian Avenue",
+    "housenumber": "203",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9488903,
+    "lon": -82.448481
+  },
+  {
+    "street": "East Kennedy Boulevard",
+    "housenumber": "1155",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9503827,
+    "lon": -82.4486475
+  },
+  {
+    "street": "East Kennedy Boulevard",
+    "housenumber": "1120",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9510968,
+    "lon": -82.4486695
+  },
+  {
+    "street": "South Meridian Avenue",
+    "housenumber": "290",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9440039,
+    "lon": -82.4487279
+  },
+  {
+    "street": "Usf Holly Drive",
+    "housenumber": "4210",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0659465,
+    "lon": -82.4124359
+  },
+  {
+    "street": "USF Holly Drive",
+    "housenumber": "4210",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0659438,
+    "lon": -82.4127769
+  },
+  {
+    "street": "West Watrous Avenue",
+    "housenumber": "4201",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9323181,
+    "lon": -82.5142557
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "428",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448823,
+    "lon": -82.4648557
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "1120",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9444628,
+    "lon": -82.4713121
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "1118",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9444936,
+    "lon": -82.4711833
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "1108",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9444637,
+    "lon": -82.4710035
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "1104",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9444564,
+    "lon": -82.4707746
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "1607",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9585783,
+    "lon": -82.4600779
+  },
+  {
+    "street": "West el Prado Boulevard",
+    "housenumber": "4401",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9119505,
+    "lon": -82.5182369
+  },
+  {
+    "street": "West Grand Central Avenue",
+    "housenumber": "411",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9447499,
+    "lon": -82.4644663
+  },
+  {
+    "street": "Hunters Village Road",
+    "housenumber": "8680",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1388995,
+    "lon": -82.3580491
+  },
+  {
+    "street": "Hunters Village Road",
+    "housenumber": "8620",
+    "city": "New Tampa",
+    "postcode": "33647",
+    "lat": 28.1395448,
+    "lon": -82.3581305
+  },
+  {
+    "street": "Hunters Village Rd",
+    "housenumber": "8500",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1413884,
+    "lon": -82.3604404
+  },
+  {
+    "street": "W Snow Circle",
+    "housenumber": "1609",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9364398,
+    "lon": -82.476374
+  },
+  {
+    "street": "Cedar Circle",
+    "housenumber": "4103",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0637352,
+    "lon": -82.4135698
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3650",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9529249,
+    "lon": -82.5029163
+  },
+  {
+    "street": "East 32nd Avenue",
+    "housenumber": "2625",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9791047,
+    "lon": -82.4291904
+  },
+  {
+    "street": "East 32nd Avenue",
+    "housenumber": "2625",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.979104,
+    "lon": -82.4292716
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "4636",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9859216,
+    "lon": -82.5064542
+  },
+  {
+    "street": "South Harbour Island Boulevard",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.939394,
+    "lon": -82.4544058
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3310",
+    "city": "Tampa",
+    "lat": 27.9443893,
+    "lon": -82.497963
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4035",
+    "city": "Tampa",
+    "lat": 27.9051813,
+    "lon": -82.5066815
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4029",
+    "city": "Tampa",
+    "lat": 27.9053678,
+    "lon": -82.5066812
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4033",
+    "city": "Tampa",
+    "lat": 27.9052434,
+    "lon": -82.5066843
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "4031",
+    "city": "Tampa",
+    "lat": 27.9053025,
+    "lon": -82.5066814
+  },
+  {
+    "street": "North Mac Dill Avenue",
+    "housenumber": "2800",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9664927,
+    "lon": -82.4936856
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3650",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9529324,
+    "lon": -82.5025933
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "3402",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9129625,
+    "lon": -82.5057062
+  },
+  {
+    "street": "South Dale Mabry",
+    "housenumber": "3950",
+    "city": "Tampa",
+    "postcode": "33611-1404",
+    "lat": 27.905919,
+    "lon": -82.5054662
+  },
+  {
+    "street": "N Nebraska Ave",
+    "housenumber": "5010",
+    "city": "Tampa",
+    "lat": 27.9915579,
+    "lon": -82.4513416
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "5615",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8842136,
+    "lon": -82.5068931
+  },
+  {
+    "street": "W Hillsborough Ave",
+    "housenumber": "1242",
+    "city": "Tampa",
+    "lat": 27.9955517,
+    "lon": -82.4743576
+  },
+  {
+    "street": "South West Shore Boulevard",
+    "housenumber": "6301",
+    "city": "Tampa",
+    "postcode": "33616",
+    "lat": 27.8767836,
+    "lon": -82.5285529
+  },
+  {
+    "street": "South Harbour Island Boulevard",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9394582,
+    "lon": -82.4541778
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "5001",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9919957,
+    "lon": -82.5234277
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "3401",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9126749,
+    "lon": -82.4939003
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3655",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9532262,
+    "lon": -82.5032646
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "3740",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9524766,
+    "lon": -82.5048321
+  },
+  {
+    "street": "Assembly Drive",
+    "housenumber": "1152",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9533377,
+    "lon": -82.5044902
+  },
+  {
+    "street": "West Tampa Bay Boulevard",
+    "housenumber": "4001",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9754066,
+    "lon": -82.5101102
+  },
+  {
+    "street": "Condor Street",
+    "housenumber": "8102",
+    "city": "Tampa",
+    "postcode": "33621",
+    "lat": 27.8504674,
+    "lon": -82.4892193
+  },
+  {
+    "street": "West Tampa Bay Boulevard",
+    "housenumber": "4001",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9763295,
+    "lon": -82.5096526
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18061",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1317631,
+    "lon": -82.3664907
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18081",
+    "city": "Tampa",
+    "postcode": "33647-1761",
+    "lat": 28.1315345,
+    "lon": -82.3674942
+  },
+  {
+    "street": "George J Bean Parkway",
+    "housenumber": "4100",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9766656,
+    "lon": -82.5323318
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33601",
+    "lat": 27.9475141,
+    "lon": -82.4592353
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18029",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.131903,
+    "lon": -82.3652745
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18025",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1318626,
+    "lon": -82.365207
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18031",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1319539,
+    "lon": -82.3653235
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18061",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1317133,
+    "lon": -82.3662706
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "1801141",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1321499,
+    "lon": -82.3657434
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18027",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1318005,
+    "lon": -82.3651313
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18047",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1320137,
+    "lon": -82.3659013
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18043",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1320963,
+    "lon": -82.3658055
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18035",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1319911,
+    "lon": -82.3653647
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18059",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1317499,
+    "lon": -82.3662061
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1275198,
+    "lon": -82.3696478
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17509",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1279968,
+    "lon": -82.3689761
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17504",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1280378,
+    "lon": -82.3705005
+  },
+  {
+    "street": "Dona Michelle Drive",
+    "housenumber": "17512",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1259065,
+    "lon": -82.3713371
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1276995,
+    "lon": -82.369879
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1274553,
+    "lon": -82.3695649
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17525",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.128399,
+    "lon": -82.368573
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17521",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1282704,
+    "lon": -82.3687018
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17516",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1283485,
+    "lon": -82.3701051
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17505",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1279123,
+    "lon": -82.3693573
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17502",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1279851,
+    "lon": -82.370559
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17518",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1284199,
+    "lon": -82.3700324
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17514",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.128293,
+    "lon": -82.3701516
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17506",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1281648,
+    "lon": -82.3703621
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1276628,
+    "lon": -82.3698318
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17503",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1280556,
+    "lon": -82.3695391
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17515",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1282253,
+    "lon": -82.3687469
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1276203,
+    "lon": -82.3697772
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17503",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1279731,
+    "lon": -82.3694344
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17503",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.128018,
+    "lon": -82.3694914
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17501",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1275632,
+    "lon": -82.3697037
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17508",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1282495,
+    "lon": -82.3702943
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17503",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.128097,
+    "lon": -82.3695916
+  },
+  {
+    "street": "Preserve Walk Lane",
+    "housenumber": "17507",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1279032,
+    "lon": -82.3690685
+  },
+  {
+    "street": "South West Shore Blvd",
+    "housenumber": "4003",
+    "city": "Tampa",
+    "lat": 27.9052511,
+    "lon": -82.526523
+  },
+  {
+    "street": "North Morgan Street",
+    "housenumber": "501",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9496318,
+    "lon": -82.4556067
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1502",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9604043,
+    "lon": -82.4428391
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "3696",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8933881,
+    "lon": -82.5058751
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "420",
+    "city": "Tampa",
+    "lat": 27.9450736,
+    "lon": -82.4646009
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "5135",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9526415,
+    "lon": -82.5318298
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9491102,
+    "lon": -82.5246748
+  },
+  {
+    "street": "North Rocky Point Drive West",
+    "housenumber": "3030",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9688487,
+    "lon": -82.5697717
+  },
+  {
+    "street": "Hillsborough Avenue",
+    "housenumber": "4340",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9956093,
+    "lon": -82.5160294
+  },
+  {
+    "street": "Henderson Boulevard",
+    "housenumber": "4113",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9280109,
+    "lon": -82.5129322
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "512",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 27.9965978,
+    "lon": -82.4545155
+  },
+  {
+    "street": "South West Shore Boulevard",
+    "housenumber": "130",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9436615,
+    "lon": -82.5235073
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4011",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945196,
+    "lon": -82.5102612
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "2202",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9604486,
+    "lon": -82.5245417
+  },
+  {
+    "street": "South Howard Avenue",
+    "housenumber": "942",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9339075,
+    "lon": -82.4829046
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "105",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9464232,
+    "lon": -82.4586946
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "505",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9409532,
+    "lon": -82.4544921
+  },
+  {
+    "street": "South Edison Avenue",
+    "housenumber": "100",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9442473,
+    "lon": -82.469183
+  },
+  {
+    "street": "Adamo Drive",
+    "housenumber": "7006",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9527932,
+    "lon": -82.3752666
+  },
+  {
+    "street": "East Kennedy Boulevard, Suite 1400",
+    "housenumber": "201",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9472846,
+    "lon": -82.4583919
+  },
+  {
+    "street": "West Nassau Street",
+    "housenumber": "5007",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9544625,
+    "lon": -82.5290807
+  },
+  {
+    "street": "Bridge Hill Ct",
+    "housenumber": "17427",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1286348,
+    "lon": -82.3808772
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "555",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9432569,
+    "lon": -82.4497168
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "625",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9500658,
+    "lon": -82.4553397
+  },
+  {
+    "street": "West Laurel Street",
+    "housenumber": "5201",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9565794,
+    "lon": -82.5304752
+  },
+  {
+    "street": "North 13th Street",
+    "housenumber": "7801",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0184032,
+    "lon": -82.4463283
+  },
+  {
+    "street": "East 4th Avenue",
+    "housenumber": "3123",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9578787,
+    "lon": -82.4242033
+  },
+  {
+    "street": "Amberly Drive",
+    "housenumber": "15311",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.0886479,
+    "lon": -82.405074
+  },
+  {
+    "street": "Amberly Drive",
+    "housenumber": "15309",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.0887319,
+    "lon": -82.405152
+  },
+  {
+    "street": "Amberly Drive",
+    "housenumber": "15307",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.0887533,
+    "lon": -82.4052004
+  },
+  {
+    "street": "Amberly Drive",
+    "housenumber": "15305",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.0888006,
+    "lon": -82.4052445
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "201",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9467836,
+    "lon": -82.4572477
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7503",
+    "city": "Tampa",
+    "lat": 27.8581425,
+    "lon": -82.5312269
+  },
+  {
+    "street": "South Juanita Street",
+    "housenumber": "7303",
+    "city": "Tampa",
+    "lat": 27.8606469,
+    "lon": -82.5304449
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7511",
+    "city": "Tampa",
+    "lat": 27.8575497,
+    "lon": -82.5312449
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7501",
+    "city": "Tampa",
+    "lat": 27.8583142,
+    "lon": -82.5311959
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7507",
+    "city": "Tampa",
+    "lat": 27.8578456,
+    "lon": -82.5312188
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7505",
+    "city": "Tampa",
+    "lat": 27.8580072,
+    "lon": -82.5312293
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7509",
+    "city": "Tampa",
+    "lat": 27.8576966,
+    "lon": -82.531258
+  },
+  {
+    "street": "South Juanita Street",
+    "housenumber": "7301",
+    "city": "Tampa",
+    "lat": 27.8607907,
+    "lon": -82.5304485
+  },
+  {
+    "street": "South Sherrill Street",
+    "housenumber": "7509",
+    "city": "Tampa",
+    "lat": 27.8573917,
+    "lon": -82.5312534
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "1609",
+    "city": "Tampa",
+    "lat": 27.9568272,
+    "lon": -82.4807358
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "1611",
+    "city": "Tampa",
+    "lat": 27.9568735,
+    "lon": -82.4807402
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "1613",
+    "city": "Tampa",
+    "lat": 27.9569258,
+    "lon": -82.4807356
+  },
+  {
+    "street": "East Tyler Street",
+    "housenumber": "308",
+    "city": "Tampa",
+    "lat": 27.9524141,
+    "lon": -82.459639
+  },
+  {
+    "street": "Interbay Boulevard",
+    "housenumber": "8612",
+    "city": "Tampa",
+    "postcode": "33616",
+    "lat": 27.8658328,
+    "lon": -82.5266489
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1303574,
+    "lon": -82.365053
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1302606,
+    "lon": -82.3651454
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1302122,
+    "lon": -82.3651897
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1304432,
+    "lon": -82.3649649
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1304001,
+    "lon": -82.365007
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1303079,
+    "lon": -82.3651049
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "2129",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9572465,
+    "lon": -82.4820912
+  },
+  {
+    "street": "North Albany Avenue",
+    "housenumber": "2139",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9572669,
+    "lon": -82.4823545
+  },
+  {
+    "street": "North Rome Avenue",
+    "housenumber": "902",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9515387,
+    "lon": -82.4769139
+  },
+  {
+    "street": "West Azeele Street",
+    "housenumber": "2908",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.940805,
+    "lon": -82.4909744
+  },
+  {
+    "street": "N Himes Ave West",
+    "housenumber": "3705",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9724883,
+    "lon": -82.5012301
+  },
+  {
+    "street": "West Main Street",
+    "housenumber": "2106",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9570512,
+    "lon": -82.4811882
+  },
+  {
+    "street": "West Main Street",
+    "housenumber": "2104",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9570372,
+    "lon": -82.4810524
+  },
+  {
+    "street": "West Main Street",
+    "housenumber": "2100",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9570374,
+    "lon": -82.4809519
+  },
+  {
+    "street": "West Main Street",
+    "housenumber": "2110",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9570411,
+    "lon": -82.4813074
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1724",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603772,
+    "lon": -82.4397102
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1712",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603786,
+    "lon": -82.4399889
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "103",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9463471,
+    "lon": -82.4588051
+  },
+  {
+    "street": "Mohawk Ave",
+    "housenumber": "1424",
+    "city": "Tampa",
+    "lat": 27.9968227,
+    "lon": -82.4435864
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1829",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601641,
+    "lon": -82.4383436
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1815",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601646,
+    "lon": -82.4386451
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1813",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601647,
+    "lon": -82.4386981
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1821",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601644,
+    "lon": -82.4385469
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1823",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601642,
+    "lon": -82.4384463
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1817",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601645,
+    "lon": -82.4386057
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "5100",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9443308,
+    "lon": -82.5299297
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9468246,
+    "lon": -82.4561688
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "1607",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9585787,
+    "lon": -82.4600452
+  },
+  {
+    "street": "Gramercy Lane",
+    "housenumber": "1015",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9525875,
+    "lon": -82.503175
+  },
+  {
+    "street": "South Trask Street",
+    "housenumber": "206",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.942361,
+    "lon": -82.5219848
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9475597,
+    "lon": -82.4594352
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "418",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9489876,
+    "lon": -82.5060644
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "911",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9517257,
+    "lon": -82.5052489
+  },
+  {
+    "street": "South Harbour Island Boulevard",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9392203,
+    "lon": -82.4543529
+  },
+  {
+    "street": "Palm Springs Boulevard",
+    "housenumber": "5125",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.113764,
+    "lon": -82.3871385
+  },
+  {
+    "street": "West Grand Central Avenue",
+    "housenumber": "504",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9443407,
+    "lon": -82.4652748
+  },
+  {
+    "street": "North Lois Avenue",
+    "housenumber": "2203",
+    "city": "Tampa",
+    "lat": 27.9609172,
+    "lon": -82.513195
+  },
+  {
+    "street": "East Hillsborough Avenue",
+    "housenumber": "3322",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9964893,
+    "lon": -82.4226846
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "19090",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1468033,
+    "lon": -82.3541963
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "10002",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0403725,
+    "lon": -82.459843
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "5088",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9925368,
+    "lon": -82.5063439
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "5088",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9928177,
+    "lon": -82.5062616
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4142",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9649207,
+    "lon": -82.5126422
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4146",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9645881,
+    "lon": -82.5123438
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4110",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9656483,
+    "lon": -82.5121777
+  },
+  {
+    "street": "West Boy Scout Boulevard",
+    "housenumber": "4142",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9647863,
+    "lon": -82.512325
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "2017",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601329,
+    "lon": -82.4359746
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "2025",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601318,
+    "lon": -82.43586
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "2211",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601353,
+    "lon": -82.4339623
+  },
+  {
+    "street": "North 22nd Street",
+    "housenumber": "1801",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960466,
+    "lon": -82.4346655
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "4104",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8940563,
+    "lon": -82.5125772
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "4104",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8940567,
+    "lon": -82.5124594
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "65",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9416852,
+    "lon": -82.4578194
+  },
+  {
+    "street": "North Rocky Point Drive West",
+    "housenumber": "3050",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9706453,
+    "lon": -82.5693922
+  },
+  {
+    "street": "2221",
+    "housenumber": "W Platt Street",
+    "city": "Tampa",
+    "lat": 27.94207,
+    "lon": -82.4827805
+  },
+  {
+    "street": "South Meridian Avenue",
+    "housenumber": "142",
+    "city": "Tampa",
+    "lat": 27.9457199,
+    "lon": -82.448215
+  },
+  {
+    "street": "Habana Avenue",
+    "housenumber": "4918",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.99168,
+    "lon": -82.4898185
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5120",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9931006,
+    "lon": -82.4597166
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "6425",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.169089,
+    "lon": -82.356631
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1930",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9589734,
+    "lon": -82.5062208
+  },
+  {
+    "street": "South 12th Street",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.946654,
+    "lon": -82.4495505
+  },
+  {
+    "street": "North Howard Avenue",
+    "housenumber": "1901",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9587816,
+    "lon": -82.4827497
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9476445,
+    "lon": -82.460605
+  },
+  {
+    "street": "South Fremont Avenue",
+    "housenumber": "120",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9434287,
+    "lon": -82.4786096
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "1517",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9551299,
+    "lon": -82.475303
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "1519",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9551313,
+    "lon": -82.4754601
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "1515",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9551294,
+    "lon": -82.4752566
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "151 ½5",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9551666,
+    "lon": -82.4752573
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "1519 ½",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9551684,
+    "lon": -82.4754604
+  },
+  {
+    "street": "West La Salle Street",
+    "housenumber": "1517 ½",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.955167,
+    "lon": -82.475305
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1905",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601527,
+    "lon": -82.4378309
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1903",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601508,
+    "lon": -82.437752
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1920",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603798,
+    "lon": -82.4372275
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1901",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9601587,
+    "lon": -82.4378953
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1930",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603812,
+    "lon": -82.4368774
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1544",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9567545,
+    "lon": -82.5083529
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1500",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9566968,
+    "lon": -82.508358
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2013",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9602523,
+    "lon": -82.5050116
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2011",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9601575,
+    "lon": -82.5050098
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1500",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9568206,
+    "lon": -82.5069714
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "1702",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9574584,
+    "lon": -82.5079445
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1548",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9568726,
+    "lon": -82.5083483
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "1702",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.957654,
+    "lon": -82.5079174
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "1526",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9562908,
+    "lon": -82.5069343
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5803",
+    "city": "Tampa",
+    "lat": 28.0000478,
+    "lon": -82.4592134
+  },
+  {
+    "street": "3025",
+    "housenumber": "East Bush Boulevard",
+    "city": "Tampa",
+    "lat": 28.0323429,
+    "lon": -82.4251404
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "5114",
+    "city": "Temple Terrace",
+    "postcode": "33617",
+    "lat": 28.0549058,
+    "lon": -82.3992532
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1622",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960366,
+    "lon": -82.4409491
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1520",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603988,
+    "lon": -82.4421859
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1630",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603568,
+    "lon": -82.4407395
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1620",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.960368,
+    "lon": -82.4410235
+  },
+  {
+    "street": "East 7th Avenue",
+    "housenumber": "1624",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9603581,
+    "lon": -82.440852
+  },
+  {
+    "street": "Gramercy Lane",
+    "housenumber": "1010",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9524316,
+    "lon": -82.5036142
+  },
+  {
+    "street": "Gramercy Lane",
+    "housenumber": "1021",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9528324,
+    "lon": -82.5031795
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3620",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.953014,
+    "lon": -82.5021518
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3648",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9529618,
+    "lon": -82.5027766
+  },
+  {
+    "street": "Midtown Drive",
+    "housenumber": "3640",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9529557,
+    "lon": -82.5023639
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "625",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9499082,
+    "lon": -82.5053108
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945049,
+    "lon": -82.5018088
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450496,
+    "lon": -82.5018618
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450501,
+    "lon": -82.5019131
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450481,
+    "lon": -82.5017177
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450485,
+    "lon": -82.5017596
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450506,
+    "lon": -82.5019629
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945051,
+    "lon": -82.5019977
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3623",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450115,
+    "lon": -82.502567
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2109",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448611,
+    "lon": -82.4813111
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2109",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448603,
+    "lon": -82.481244
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2105",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448594,
+    "lon": -82.4811566
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2101",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448582,
+    "lon": -82.481048
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2019",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9448636,
+    "lon": -82.4806962
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2009",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.944907,
+    "lon": -82.480418
+  },
+  {
+    "street": "North Trask Street",
+    "housenumber": "411",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9483855,
+    "lon": -82.5219819
+  },
+  {
+    "street": "North Trask Street",
+    "housenumber": "413",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9483377,
+    "lon": -82.5219813
+  },
+  {
+    "street": "North Trask Street",
+    "housenumber": "415",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9482523,
+    "lon": -82.52198
+  },
+  {
+    "street": "North Trask Street",
+    "housenumber": "417",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9481982,
+    "lon": -82.5219793
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2320",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9624749,
+    "lon": -82.5059554
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2316",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9622349,
+    "lon": -82.505949
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2310",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9620035,
+    "lon": -82.5059709
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "4730",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9520042,
+    "lon": -82.5238907
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "4720",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9520264,
+    "lon": -82.5236636
+  },
+  {
+    "street": "South MacDill Avenue",
+    "housenumber": "3225",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9157463,
+    "lon": -82.4946717
+  },
+  {
+    "street": "Knights Run Avenue",
+    "housenumber": "450",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9388409,
+    "lon": -82.451619
+  },
+  {
+    "street": "Harbour Post Drive",
+    "housenumber": "708",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9397459,
+    "lon": -82.4515813
+  },
+  {
+    "street": "Harbour Post Drive",
+    "housenumber": "800",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9394036,
+    "lon": -82.451412
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1050",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9441471,
+    "lon": -82.4505893
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1001",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9436924,
+    "lon": -82.4501953
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1001",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9437681,
+    "lon": -82.450197
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "615",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9436195,
+    "lon": -82.4471678
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "615",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9431825,
+    "lon": -82.4471254
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "560",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9438337,
+    "lon": -82.4493424
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "210",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9484442,
+    "lon": -82.4587519
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "2314",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9621657,
+    "lon": -82.5059533
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "2537",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9639478,
+    "lon": -82.5043065
+  },
+  {
+    "street": "George J Bean Parkway",
+    "housenumber": "4200",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.980028,
+    "lon": -82.5382803
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1054",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9448554,
+    "lon": -82.4505722
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1042",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9444291,
+    "lon": -82.4505721
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1048",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9445629,
+    "lon": -82.4505813
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "1050",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9446884,
+    "lon": -82.4505768
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "5401",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945587,
+    "lon": -82.5346431
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "1313",
+    "city": "Tampa",
+    "postcode": "33629-5010",
+    "lat": 27.930802,
+    "lon": -82.5071279
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4900",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9442932,
+    "lon": -82.526873
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2618",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445494,
+    "lon": -82.4873577
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "4625",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9860178,
+    "lon": -82.5169328
+  },
+  {
+    "street": "East 9th Avenue",
+    "housenumber": "1501",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9615957,
+    "lon": -82.4428229
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "1911",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9615147,
+    "lon": -82.4428164
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "2220",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.944475,
+    "lon": -82.482525
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "210",
+    "city": "Tampa",
+    "postcode": "33606-2314",
+    "lat": 27.9415021,
+    "lon": -82.4620057
+  },
+  {
+    "street": "W Dr Martin Luther King Jr Blvd",
+    "housenumber": "4408",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9814226,
+    "lon": -82.5185403
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "2307",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0321243,
+    "lon": -82.433262
+  },
+  {
+    "street": "West Laurel Street",
+    "housenumber": "5222",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9549319,
+    "lon": -82.5341104
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "1523",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9292745,
+    "lon": -82.5064314
+  },
+  {
+    "street": "West 7th Avenue",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9605932,
+    "lon": -82.4611242
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "1105",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9530502,
+    "lon": -82.4607489
+  },
+  {
+    "street": "Harbour Place Drive",
+    "housenumber": "301",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9378905,
+    "lon": -82.4520877
+  },
+  {
+    "street": "West Osborne Avenue",
+    "housenumber": "4025",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9892338,
+    "lon": -82.5122721
+  },
+  {
+    "street": "East Broadway Avenue",
+    "housenumber": "5801",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9639087,
+    "lon": -82.3906489
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "4402",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8931316,
+    "lon": -82.5188242
+  },
+  {
+    "street": "Gandy Boulevard",
+    "housenumber": "4314",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.893235,
+    "lon": -82.5179136
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "5156",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.889518,
+    "lon": -82.50593
+  },
+  {
+    "street": "South 50th Street",
+    "housenumber": "410",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9479176,
+    "lon": -82.4009564
+  },
+  {
+    "street": "North 50th Street",
+    "housenumber": "1702",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.9599716,
+    "lon": -82.4023825
+  },
+  {
+    "street": "West Waters Avenue",
+    "housenumber": "222",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.02508,
+    "lon": -82.46149
+  },
+  {
+    "street": "East Fowler",
+    "housenumber": "1507",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0540407,
+    "lon": -82.4420071
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "1911",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0539574,
+    "lon": -82.4374732
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "3509",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0322796,
+    "lon": -82.4199486
+  },
+  {
+    "street": "East Busch Boulevard",
+    "housenumber": "2701",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.032165,
+    "lon": -82.428607
+  },
+  {
+    "street": "East Hillsborough",
+    "housenumber": "2115",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9955093,
+    "lon": -82.435388
+  },
+  {
+    "street": "West Hillsborough Avenue",
+    "housenumber": "2300",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9955354,
+    "lon": -82.4826652
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "4302",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9802231,
+    "lon": -82.4849366
+  },
+  {
+    "street": "West Martin Luther King Boulevard",
+    "housenumber": "2506",
+    "city": "Tampa",
+    "postcode": "33607-2606",
+    "lat": 27.9809964,
+    "lon": -82.4859024
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4115",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9450344,
+    "lon": -82.5017197
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "107",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.944343,
+    "lon": -82.506148
+  },
+  {
+    "street": "Westshore Boulevard",
+    "housenumber": "112",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9444959,
+    "lon": -82.5233563
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "4427",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.945172,
+    "lon": -82.519344
+  },
+  {
+    "street": "Hillsborough Plaza",
+    "housenumber": "4325",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9966506,
+    "lon": -82.5164748
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18071",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1316318,
+    "lon": -82.3670364
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "5135",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8899598,
+    "lon": -82.5096016
+  },
+  {
+    "street": "West Spruce Street",
+    "housenumber": "3702",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9589127,
+    "lon": -82.5038008
+  },
+  {
+    "street": "Airport Service Road",
+    "housenumber": "5405",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9639431,
+    "lon": -82.5351752
+  },
+  {
+    "street": "Henderson Blvd",
+    "housenumber": "3235",
+    "city": "Tampa",
+    "lat": 27.9441008,
+    "lon": -82.4961741
+  },
+  {
+    "street": "Henderson Blvd",
+    "housenumber": "3235",
+    "city": "Tampa",
+    "lat": 27.9440763,
+    "lon": -82.4961999
+  },
+  {
+    "street": "Busch Boulevard",
+    "housenumber": "2920",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0329895,
+    "lon": -82.4265405
+  },
+  {
+    "street": "East Fletcher Avenue",
+    "housenumber": "7320",
+    "city": "Tampa",
+    "postcode": "33637",
+    "lat": 28.069816,
+    "lon": -82.3667064
+  },
+  {
+    "street": "West Laurel Street",
+    "housenumber": "5402",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.955607,
+    "lon": -82.5359212
+  },
+  {
+    "street": "Henderson Boulevard",
+    "housenumber": "4016",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9294483,
+    "lon": -82.5103546
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "3300",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9153479,
+    "lon": -82.5056245
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "8512",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0277249,
+    "lon": -82.4599258
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "4901",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9908142,
+    "lon": -82.4841175
+  },
+  {
+    "street": "West Seneca Avenue",
+    "housenumber": "104",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0452537,
+    "lon": -82.4604472
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "701",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9505832,
+    "lon": -82.505047
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "4300",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9515858,
+    "lon": -82.5164567
+  },
+  {
+    "street": "West Hiawatha Street",
+    "housenumber": "2507",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 28.0092306,
+    "lon": -82.4850743
+  },
+  {
+    "street": "Bridge Hill Ct",
+    "housenumber": "17425",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.128608,
+    "lon": -82.381065
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "4230",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.9038778,
+    "lon": -82.4935741
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "1202",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9536107,
+    "lon": -82.4604292
+  },
+  {
+    "street": "Prime Rose Circle",
+    "housenumber": "5328",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1309597,
+    "lon": -82.3785358
+  },
+  {
+    "street": "West Gandy Boulevard",
+    "housenumber": "4711",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8936536,
+    "lon": -82.5256016
+  },
+  {
+    "street": "N Hubert Ave",
+    "housenumber": "4405",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9819904,
+    "lon": -82.5154437
+  },
+  {
+    "street": "South West Shore Boulevard",
+    "housenumber": "144",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9432652,
+    "lon": -82.5235906
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "5524",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8848335,
+    "lon": -82.5060988
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "5023",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9921074,
+    "lon": -82.4590532
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "802",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9552357,
+    "lon": -82.4470086
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "802",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9552665,
+    "lon": -82.4473217
+  },
+  {
+    "street": "East 2nd Avenue",
+    "housenumber": "2601",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9561707,
+    "lon": -82.4298454
+  },
+  {
+    "street": "North Dale Mabry Highway",
+    "housenumber": "202",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9460383,
+    "lon": -82.5060361
+  },
+  {
+    "street": "N Armenia Ave",
+    "housenumber": "3104",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9677161,
+    "lon": -82.4858503
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "6323",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8741874,
+    "lon": -82.5066041
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9477448,
+    "lon": -82.4597117
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "701",
+    "city": "Tampa",
+    "postcode": "33602-4006",
+    "lat": 27.9502707,
+    "lon": -82.4548788
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "625",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9500943,
+    "lon": -82.4553555
+  },
+  {
+    "street": "South Dakota Avenue",
+    "housenumber": "711",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9367419,
+    "lon": -82.4759807
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "5401",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9458908,
+    "lon": -82.5339078
+  },
+  {
+    "street": "South Dale Mabry Highway",
+    "housenumber": "5827",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8823077,
+    "lon": -82.5070907
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "3601",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.937775,
+    "lon": -82.5019705
+  },
+  {
+    "street": "North Howard Avenue",
+    "housenumber": "1301",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9545814,
+    "lon": -82.482764
+  },
+  {
+    "street": "North West Shore Boulevard",
+    "housenumber": "1300",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9545235,
+    "lon": -82.5246651
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3218",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445077,
+    "lon": -82.4967269
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3018",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445279,
+    "lon": -82.4917696
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "2832",
+    "city": "Tampa",
+    "lat": 27.9201291,
+    "lon": -82.4934328
+  },
+  {
+    "street": "South Macdill Avenue",
+    "housenumber": "2507",
+    "city": "Tampa",
+    "lat": 27.9225946,
+    "lon": -82.4938889
+  },
+  {
+    "street": "North Nebraska Avenue",
+    "housenumber": "5116",
+    "city": "Tampa",
+    "lat": 27.9930814,
+    "lon": -82.4514118
+  },
+  {
+    "street": "South West Shore Blvd",
+    "housenumber": "4015",
+    "city": "Tampa",
+    "lat": 27.9051361,
+    "lon": -82.5272522
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "10001",
+    "city": "Tampa",
+    "lat": 28.0402628,
+    "lon": -82.4795768
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "6109",
+    "city": "Tampa",
+    "lat": 28.0026984,
+    "lon": -82.4591052
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "8850",
+    "city": "Tampa",
+    "lat": 28.0300144,
+    "lon": -82.4597425
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "3128",
+    "city": "Tampa",
+    "postcode": "33609",
+    "lat": 27.9445518,
+    "lon": -82.4945072
+  },
+  {
+    "street": "Interbay Boulevard",
+    "housenumber": "6110",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8794052,
+    "lon": -82.4947003
+  },
+  {
+    "street": "North Nebraska Avenue",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9526914,
+    "lon": -82.4505337
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "615",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9433104,
+    "lon": -82.4469057
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "802",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9482971,
+    "lon": -82.4524764
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "325",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9477522,
+    "lon": -82.4565082
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "901",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9509779,
+    "lon": -82.452134
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "800",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9512361,
+    "lon": -82.4540161
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "906",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9527965,
+    "lon": -82.4567906
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "534",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9525135,
+    "lon": -82.4575728
+  },
+  {
+    "street": "North Jefferson Street",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9497476,
+    "lon": -82.4544685
+  },
+  {
+    "street": "Channelside Drive",
+    "housenumber": "1101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9500245,
+    "lon": -82.4451872
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "900",
+    "city": "Tampa",
+    "lat": 27.9509742,
+    "lon": -82.4621791
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9474347,
+    "lon": -82.4632907
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "300",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9467134,
+    "lon": -82.4642572
+  },
+  {
+    "street": "UT University Drive",
+    "housenumber": "403",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9480856,
+    "lon": -82.4639002
+  },
+  {
+    "street": "UT University Drive",
+    "housenumber": "405",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9484873,
+    "lon": -82.464849
+  },
+  {
+    "street": "UT Poe Parkway",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9458935,
+    "lon": -82.4656018
+  },
+  {
+    "street": "North Brevard Avenue",
+    "housenumber": "203",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9460227,
+    "lon": -82.4662497
+  },
+  {
+    "street": "UT Poe Parkway",
+    "housenumber": "110",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.945275,
+    "lon": -82.4660399
+  },
+  {
+    "street": "Frederic H Spaulding Drive",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9466889,
+    "lon": -82.4662459
+  },
+  {
+    "street": "North Boulevard",
+    "housenumber": "521",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.948639,
+    "lon": -82.4681399
+  },
+  {
+    "street": "North Brevard Avenue",
+    "housenumber": "202",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9459733,
+    "lon": -82.4671544
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "404",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9451541,
+    "lon": -82.4641887
+  },
+  {
+    "street": "East 9th Avenue",
+    "housenumber": "1818",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9619192,
+    "lon": -82.4383459
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "2204",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9633607,
+    "lon": -82.444007
+  },
+  {
+    "street": "East 11th Avenue",
+    "housenumber": "1411",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9628491,
+    "lon": -82.4438247
+  },
+  {
+    "street": "North 15th Street",
+    "housenumber": "2112",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.962979,
+    "lon": -82.4432188
+  },
+  {
+    "street": "North 14th Street",
+    "housenumber": "2001",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9620859,
+    "lon": -82.4438832
+  },
+  {
+    "street": "East 9th Avenue",
+    "housenumber": "1700",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9620879,
+    "lon": -82.439839
+  },
+  {
+    "street": "South Florida Avenue",
+    "housenumber": "513",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9422899,
+    "lon": -82.455054
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "505",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9409109,
+    "lon": -82.4538657
+  },
+  {
+    "street": "North W. C. Maciness Place",
+    "housenumber": "1010",
+    "city": "Tampa",
+    "lat": 27.9516273,
+    "lon": -82.4639486
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "200",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9461227,
+    "lon": -82.4594953
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9473992,
+    "lon": -82.4602091
+  },
+  {
+    "street": "North Ashley Drive",
+    "housenumber": "400",
+    "city": "Tampa",
+    "lat": 27.9472724,
+    "lon": -82.4605699
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "100",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9466791,
+    "lon": -82.4600965
+  },
+  {
+    "street": "West Fortune Street",
+    "housenumber": "111",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.952943,
+    "lon": -82.463966
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "901",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9492012,
+    "lon": -82.4523004
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "905",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.952032,
+    "lon": -82.4585671
+  },
+  {
+    "street": "East Tyler Street",
+    "housenumber": "101",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9515372,
+    "lon": -82.4610712
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "1700",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9583435,
+    "lon": -82.4617052
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "411",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9483818,
+    "lon": -82.4577496
+  },
+  {
+    "street": "E Zack Street",
+    "housenumber": "808",
+    "city": "Tampa",
+    "lat": 27.9517576,
+    "lon": -82.4544748
+  },
+  {
+    "street": "N Boulevard Street",
+    "housenumber": "1301",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9542673,
+    "lon": -82.4678125
+  },
+  {
+    "street": "North Oregon Avenue",
+    "housenumber": "2200",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.961437,
+    "lon": -82.4756134
+  },
+  {
+    "street": "North Jefferson Street",
+    "housenumber": "721",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9522958,
+    "lon": -82.4556214
+  },
+  {
+    "street": "North Marion Street",
+    "housenumber": "1211",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9551676,
+    "lon": -82.4584287
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "1119",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.954159,
+    "lon": -82.4591457
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "1313",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.954977,
+    "lon": -82.460499
+  },
+  {
+    "street": "East Tyler Street",
+    "housenumber": "606",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9535765,
+    "lon": -82.4570099
+  },
+  {
+    "street": "Columbia Drive",
+    "housenumber": "39",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9348328,
+    "lon": -82.4562894
+  },
+  {
+    "street": "Severn Avenue",
+    "housenumber": "1315",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9077611,
+    "lon": -82.4499825
+  },
+  {
+    "street": "South Plant Avenue",
+    "housenumber": "240",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9423266,
+    "lon": -82.4618777
+  },
+  {
+    "street": "North Franklin Street",
+    "housenumber": "1002",
+    "city": "Tampa",
+    "lat": 27.9524277,
+    "lon": -82.4602944
+  },
+  {
+    "street": "North 22nd Street",
+    "housenumber": "208",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9503393,
+    "lon": -82.4348981
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "801",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9514894,
+    "lon": -82.4581063
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "4202",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0617722,
+    "lon": -82.4138333
+  },
+  {
+    "street": "Cypress Glenn Lane",
+    "housenumber": "13565",
+    "city": "Tampa",
+    "postcode": "33637",
+    "lat": 28.0697924,
+    "lon": -82.3619607
+  },
+  {
+    "street": "Cypress Glenn Lane",
+    "housenumber": "13510",
+    "city": "Tampa",
+    "postcode": "33637",
+    "lat": 28.0697904,
+    "lon": -82.3628068
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "17601",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1282805,
+    "lon": -82.3647229
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "17605",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1291236,
+    "lon": -82.3642974
+  },
+  {
+    "street": "South Himes Avenue",
+    "housenumber": "2415",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9243055,
+    "lon": -82.5038671
+  },
+  {
+    "street": "West De Leon Street",
+    "housenumber": "705",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9392789,
+    "lon": -82.4676764
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "9211",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0338449,
+    "lon": -82.4589896
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "1005",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9380967,
+    "lon": -82.4698504
+  },
+  {
+    "street": "West Morrison Avenue",
+    "housenumber": "3111",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9343305,
+    "lon": -82.4942858
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "3751",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0538733,
+    "lon": -82.4174308
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "11402",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0522396,
+    "lon": -82.4266676
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "11302",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0511179,
+    "lon": -82.4264903
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18002",
+    "city": "Tamps",
+    "postcode": "33647",
+    "lat": 28.1305593,
+    "lon": -82.3706233
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "17621",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1294509,
+    "lon": -82.3660252
+  },
+  {
+    "street": "North 22nd Street",
+    "housenumber": "1607",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9593268,
+    "lon": -82.4345907
+  },
+  {
+    "street": "Crane Nest Drive",
+    "housenumber": "18206",
+    "city": "Tampa",
+    "lat": 28.1303135,
+    "lon": -82.3746689
+  },
+  {
+    "street": "Crane Nest Drive",
+    "housenumber": "18210",
+    "city": "Tampa",
+    "lat": 28.129708,
+    "lon": -82.374759
+  },
+  {
+    "street": "Crane Nest Drive",
+    "housenumber": "18216",
+    "city": "Tampa",
+    "lat": 28.1288603,
+    "lon": -82.3743513
+  },
+  {
+    "street": "N McKinley Dr",
+    "housenumber": "11201",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0506729,
+    "lon": -82.4146516
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17635",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1308718,
+    "lon": -82.36456
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17641",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1312779,
+    "lon": -82.3639218
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "17631",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1302687,
+    "lon": -82.3650346
+  },
+  {
+    "street": "Highwoods Preserve Parkway",
+    "housenumber": "18101",
+    "city": "Tampa",
+    "lat": 28.1315303,
+    "lon": -82.3690835
+  },
+  {
+    "street": "Melbourne Boulevard",
+    "housenumber": "2904",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9699238,
+    "lon": -82.4032222
+  },
+  {
+    "street": "Orient Road",
+    "housenumber": "1201",
+    "city": "Tampa",
+    "postcode": "33619",
+    "lat": 27.958182,
+    "lon": -82.3711098
+  },
+  {
+    "street": "West Cass Street",
+    "housenumber": "727",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9511045,
+    "lon": -82.4669397
+  },
+  {
+    "street": "Dale Mabry Highway",
+    "housenumber": "213",
+    "city": "Tampa",
+    "lat": 27.9465145,
+    "lon": -82.5049312
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "17513",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1271083,
+    "lon": -82.3681225
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "700",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9499188,
+    "lon": -82.4861181
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5800",
+    "city": "Tampa",
+    "lat": 28.0001589,
+    "lon": -82.455991
+  },
+  {
+    "street": "USF Holly Drive",
+    "housenumber": "3821",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0634958,
+    "lon": -82.4155503
+  },
+  {
+    "street": "USF Cedar Circle",
+    "housenumber": "4103",
+    "city": "Tampa",
+    "postcode": "33620",
+    "lat": 28.0637326,
+    "lon": -82.4134265
+  },
+  {
+    "street": "USF Magnolia Drive",
+    "housenumber": "13127",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0650279,
+    "lon": -82.4194354
+  },
+  {
+    "street": "USF Alumni Drive",
+    "housenumber": "3301",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0572114,
+    "lon": -82.4212381
+  },
+  {
+    "street": "Spectrum Boulevard",
+    "housenumber": "3705",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0557262,
+    "lon": -82.4174752
+  },
+  {
+    "street": "USF Magnolia Drive",
+    "housenumber": "12810",
+    "city": "Tampa",
+    "lat": 28.0627257,
+    "lon": -82.4202409
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6290",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1159049,
+    "lon": -82.3738714
+  },
+  {
+    "street": "Commerce Palms Drive",
+    "housenumber": "6201",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1138113,
+    "lon": -82.3797447
+  },
+  {
+    "street": "Water Street",
+    "housenumber": "801",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9422446,
+    "lon": -82.4499013
+  },
+  {
+    "street": "North Boulevard",
+    "housenumber": "9401",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0347151,
+    "lon": -82.4656736
+  },
+  {
+    "street": "George J. Bean Parkway",
+    "housenumber": "4100",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9779847,
+    "lon": -82.5277681
+  },
+  {
+    "street": "E 7th Ave",
+    "housenumber": "1412",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9606394,
+    "lon": -82.443829
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "503",
+    "city": "Tampa",
+    "lat": 28.0538314,
+    "lon": -82.399995
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "2004",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9619238,
+    "lon": -82.4418931
+  },
+  {
+    "street": "East 9th Avenue",
+    "housenumber": "1715",
+    "city": "Tampa",
+    "lat": 27.9614906,
+    "lon": -82.439445
+  },
+  {
+    "street": "West Tampa Bay Boulevard",
+    "housenumber": "4001",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9778194,
+    "lon": -82.5096426
+  },
+  {
+    "street": "East Palm Avenue",
+    "housenumber": "1320",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9627273,
+    "lon": -82.4447492
+  },
+  {
+    "street": "West Montgomery Avenue",
+    "housenumber": "4716",
+    "city": "Tampa",
+    "postcode": "33616",
+    "lat": 27.8767817,
+    "lon": -82.5243894
+  },
+  {
+    "street": "N Ashley Drive",
+    "housenumber": "1000",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9521862,
+    "lon": -82.4623854
+  },
+  {
+    "street": "East Fowler Avenue",
+    "housenumber": "920",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0550646,
+    "lon": -82.4500997
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "1102",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0549971,
+    "lon": -82.4479647
+  },
+  {
+    "street": "North Himes Avenue",
+    "housenumber": "4810",
+    "city": "Tampa",
+    "postcode": "33614",
+    "lat": 27.9886743,
+    "lon": -82.503114
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "5620",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9512152,
+    "lon": -82.5416129
+  },
+  {
+    "street": "Cross Creek Boulevard",
+    "housenumber": "10701",
+    "city": "Tampa",
+    "lat": 28.1434552,
+    "lon": -82.3009988
+  },
+  {
+    "street": "Cross Creek Boulevard",
+    "housenumber": "10865",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1434778,
+    "lon": -82.2910589
+  },
+  {
+    "street": "West Swann Avenue",
+    "housenumber": "1309",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9376799,
+    "lon": -82.4733447
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5000",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9906292,
+    "lon": -82.4563344
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4702",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9878613,
+    "lon": -82.4571419
+  },
+  {
+    "street": "E Fowler Ave",
+    "housenumber": "910",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0550631,
+    "lon": -82.4506692
+  },
+  {
+    "street": "East Sligh Avenue",
+    "housenumber": "2011",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 28.0091515,
+    "lon": -82.4367243
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "6201",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0041389,
+    "lon": -82.4543604
+  },
+  {
+    "street": "East 8th Avenue",
+    "housenumber": "2008",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9616929,
+    "lon": -82.4359238
+  },
+  {
+    "street": "Bayport Drive",
+    "housenumber": "2900",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.9651848,
+    "lon": -82.5501494
+  },
+  {
+    "street": "Dana Shores Drive",
+    "housenumber": "4151",
+    "city": "Tampa",
+    "postcode": "33634",
+    "lat": 27.9778908,
+    "lon": -82.5547703
+  },
+  {
+    "street": "North Boulevard",
+    "housenumber": "10201",
+    "city": "Tampa",
+    "postcode": "33612",
+    "lat": 28.0422702,
+    "lon": -82.4656564
+  },
+  {
+    "street": "East Polk Street",
+    "housenumber": "501",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.951191,
+    "lon": -82.4570593
+  },
+  {
+    "street": "North Florida Avenue",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9500481,
+    "lon": -82.4574196
+  },
+  {
+    "street": "East Zack Street",
+    "housenumber": "500",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.950882,
+    "lon": -82.4569142
+  },
+  {
+    "street": "East Polk Street",
+    "housenumber": "610",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9518765,
+    "lon": -82.4563921
+  },
+  {
+    "street": "East Cass Street",
+    "housenumber": "603",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9522226,
+    "lon": -82.4564792
+  },
+  {
+    "street": "North Tampa Street",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9476364,
+    "lon": -82.4593545
+  },
+  {
+    "street": "Tampa Street North",
+    "housenumber": "13801",
+    "city": "Tampa",
+    "postcode": "33613",
+    "lat": 27.946731,
+    "lon": -82.4569805
+  },
+  {
+    "street": "S Ashley Drive",
+    "housenumber": "100",
+    "city": "Tampa",
+    "lat": 27.9442667,
+    "lon": -82.4576985
+  },
+  {
+    "street": "South Franklin Street",
+    "housenumber": "107",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9448482,
+    "lon": -82.4569848
+  },
+  {
+    "street": "North Marion Street",
+    "housenumber": "1302",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9555016,
+    "lon": -82.4589685
+  },
+  {
+    "street": "North Marion Street",
+    "housenumber": "1305",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9557432,
+    "lon": -82.4590114
+  },
+  {
+    "street": "West Bay View Avenue",
+    "housenumber": "4444",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.9056093,
+    "lon": -82.5211128
+  },
+  {
+    "street": "West Ballast Point Boulevard",
+    "housenumber": "2802",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.888807,
+    "lon": -82.4885078
+  },
+  {
+    "street": "South Himes Avenue",
+    "housenumber": "6001",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8825025,
+    "lon": -82.5032077
+  },
+  {
+    "street": "West Fair Oaks Avenue",
+    "housenumber": "3910",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.8990157,
+    "lon": -82.5093486
+  },
+  {
+    "street": "N Franklin Street",
+    "housenumber": "808",
+    "city": "Tampa",
+    "lat": 27.9509001,
+    "lon": -82.4598265
+  },
+  {
+    "street": "East Twiggs Street",
+    "housenumber": "700",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9507276,
+    "lon": -82.4549069
+  },
+  {
+    "street": "East Zack Street",
+    "housenumber": "610",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9512662,
+    "lon": -82.4562701
+  },
+  {
+    "street": "East Kennedy Boulevard",
+    "housenumber": "501",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9480455,
+    "lon": -82.4556591
+  },
+  {
+    "street": "North 22nd Street",
+    "housenumber": "4801",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9906343,
+    "lon": -82.4319431
+  },
+  {
+    "street": "West Osborne Avenue",
+    "housenumber": "400",
+    "city": "Tampa",
+    "postcode": "33603",
+    "lat": 27.9876887,
+    "lon": -82.4644335
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "302",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9454808,
+    "lon": -82.463074
+  },
+  {
+    "street": "South Florida Avenue",
+    "housenumber": "401",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.943272,
+    "lon": -82.4553329
+  },
+  {
+    "street": "Bayshore Boulevard",
+    "housenumber": "243",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9422684,
+    "lon": -82.4604999
+  },
+  {
+    "street": "West Grand Central Avenue",
+    "housenumber": "215",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9445149,
+    "lon": -82.4621553
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1225",
+    "city": "Tampa",
+    "lat": 27.948509,
+    "lon": -82.4474625
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "201",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9418984,
+    "lon": -82.4612016
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "205",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9419008,
+    "lon": -82.4615974
+  },
+  {
+    "street": "West Platt Street",
+    "housenumber": "203",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.941812,
+    "lon": -82.4614566
+  },
+  {
+    "street": "North 40th Street",
+    "housenumber": "6402",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 28.0059641,
+    "lon": -82.415192
+  },
+  {
+    "street": "West Kennedy Boulevard",
+    "housenumber": "606",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9440906,
+    "lon": -82.4660591
+  },
+  {
+    "street": "South Boulevard",
+    "housenumber": "110",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.943523,
+    "lon": -82.4682329
+  },
+  {
+    "street": "North 22nd Street",
+    "housenumber": "1103",
+    "city": "Tampa",
+    "postcode": "33605",
+    "lat": 27.9539589,
+    "lon": -82.4318113
+  },
+  {
+    "street": "South Cedar Avenue",
+    "housenumber": "350",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9411049,
+    "lon": -82.4647066
+  },
+  {
+    "street": "W Platt St",
+    "housenumber": "601",
+    "city": "Tampa",
+    "postcode": "33606",
+    "lat": 27.9420354,
+    "lon": -82.4660538
+  },
+  {
+    "street": "East Cayuga Street",
+    "housenumber": "3224",
+    "city": "Tampa",
+    "postcode": "33610",
+    "lat": 27.9873031,
+    "lon": -82.4238151
+  },
+  {
+    "street": "Bruce B Downs Boulevard",
+    "housenumber": "19910",
+    "city": "Tampa",
+    "postcode": "33647",
+    "lat": 28.1554032,
+    "lon": -82.3567451
+  },
+  {
+    "street": "Bruce B. Downs Boulevard",
+    "housenumber": "19034",
+    "city": "Tampa",
+    "postcode": "33647-2434",
+    "lat": 28.1452515,
+    "lon": -82.3551626
+  },
+  {
+    "street": "N. 13th Street",
+    "housenumber": "8412",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0263651,
+    "lon": -82.4468499
+  },
+  {
+    "street": "South Himes Avenue",
+    "housenumber": "4411",
+    "city": "Tampa",
+    "postcode": "33611",
+    "lat": 27.9010886,
+    "lon": -82.5034417
+  },
+  {
+    "street": "North Armenia Avenue",
+    "housenumber": "6315",
+    "city": "Tampa",
+    "postcode": "33604",
+    "lat": 28.0043354,
+    "lon": -82.4823005
+  },
+  {
+    "street": "West Cherry Street",
+    "housenumber": "2700",
+    "city": "Tampa",
+    "postcode": "33607",
+    "lat": 27.960872,
+    "lon": -82.4880682
+  },
+  {
+    "street": "West Estrella Street",
+    "housenumber": "4201",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.92939,
+    "lon": -82.5161673
+  },
+  {
+    "street": "West Morrison Avenue",
+    "housenumber": "3809",
+    "city": "Tampa",
+    "postcode": "33629",
+    "lat": 27.9352815,
+    "lon": -82.5068422
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1190",
+    "city": "Tampa",
+    "postcode": "33602",
+    "lat": 27.9490994,
+    "lon": -82.4481945
+  },
+  {
+    "street": "East Corrine Street",
+    "housenumber": "2017",
+    "city": "Tampa",
+    "lat": 27.9485078,
+    "lon": -82.435302
+  },
+  {
+    "street": "South 22nd Street",
+    "housenumber": "101",
+    "city": "Tampa",
+    "lat": 27.9485938,
+    "lon": -82.434896
+  },
+  {
+    "street": "South 22nd Street",
+    "housenumber": "103",
+    "city": "Tampa",
+    "lat": 27.9485036,
+    "lon": -82.4349356
+  },
+  {
+    "street": "East Corine Street",
+    "housenumber": "2019",
+    "city": "Tampa",
+    "lat": 27.9485348,
+    "lon": -82.4351487
+  },
+  {
+    "street": "South 22nd Street",
+    "housenumber": "105",
+    "city": "Tampa",
+    "lat": 27.9484158,
+    "lon": -82.4349383
+  }
+]

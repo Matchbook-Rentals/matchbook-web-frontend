@@ -1,0 +1,7941 @@
+[
+  {
+    "street": "North Marine Drive",
+    "housenumber": "1014",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.6028514,
+    "lon": -122.6771416
+  },
+  {
+    "street": "North Fox Street",
+    "housenumber": "8617",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5974424,
+    "lon": -122.7492687
+  },
+  {
+    "street": "Forest Avenue",
+    "housenumber": "788",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6748635,
+    "lon": -70.2866857
+  },
+  {
+    "street": "Northwest 18th Avenue",
+    "housenumber": "479",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5261759,
+    "lon": -122.6897259
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1933",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5232208,
+    "lon": -122.6910835
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "320",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5252905,
+    "lon": -122.694221
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "1036",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5264071,
+    "lon": -122.6820853
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "8131",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4977586,
+    "lon": -122.5790287
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "4525",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.5054248,
+    "lon": -122.6155605
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "338",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5254759,
+    "lon": -122.6942314
+  },
+  {
+    "street": "Northeast 11th Avenue",
+    "housenumber": "340",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5252262,
+    "lon": -122.6542735
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "7115",
+    "city": "Portland",
+    "postcode": "97206-2543",
+    "lat": 45.4978083,
+    "lon": -122.5895983
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "2241",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5234797,
+    "lon": -122.6972333
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "2328",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5231344,
+    "lon": -122.6988675
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "2364",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.523444,
+    "lon": -122.699781
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "22",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.523818,
+    "lon": -122.698241
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "628",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5274057,
+    "lon": -122.6983708
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "734",
+    "city": "Portland",
+    "lat": 45.5282249,
+    "lon": -122.6983848
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "914",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5293387,
+    "lon": -122.6984254
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "930",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5294639,
+    "lon": -122.698398
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1310",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5321503,
+    "lon": -122.6984984
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1400",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5327992,
+    "lon": -122.698544
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1438",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5332357,
+    "lon": -122.6985728
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1506",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5334678,
+    "lon": -122.698605
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1514",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5336298,
+    "lon": -122.698613
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1716",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5349315,
+    "lon": -122.698594
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1309",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5322297,
+    "lon": -122.698862
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1305",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5321401,
+    "lon": -122.698859
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1301",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5320506,
+    "lon": -122.6988559
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1025",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5302289,
+    "lon": -122.6988111
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "715",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5279444,
+    "lon": -122.6987196
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "635",
+    "city": "Portland",
+    "lat": 45.5277772,
+    "lon": -122.6987129
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "921",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5176281,
+    "lon": -122.6796118
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "1222",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5151688,
+    "lon": -122.6803444
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "1300",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.514409,
+    "lon": -122.6806121
+  },
+  {
+    "street": "Southwest Market Street",
+    "housenumber": "200",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5118468,
+    "lon": -122.6781975
+  },
+  {
+    "street": "Southwest Columbia Street",
+    "housenumber": "1",
+    "city": "Portland",
+    "postcode": "97258",
+    "lat": 45.5131119,
+    "lon": -122.6752026
+  },
+  {
+    "street": "Red Bud Drive",
+    "housenumber": "105",
+    "city": "Portland",
+    "postcode": "37148",
+    "lat": 36.5573089,
+    "lon": -86.5113418
+  },
+  {
+    "street": "Northwest 8th Avenue",
+    "housenumber": "422",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5263112,
+    "lon": -122.6783966
+  },
+  {
+    "street": "Southeast Yamhill Street",
+    "housenumber": "7507",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.516558,
+    "lon": -122.5860445
+  },
+  {
+    "street": "Northeast Alameda Street",
+    "housenumber": "5830",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5420083,
+    "lon": -122.6030098
+  },
+  {
+    "street": "Northeast 132nd Avenue",
+    "housenumber": "1260",
+    "city": "Portland",
+    "lat": 45.5313288,
+    "lon": -122.5262172
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1401",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5315823,
+    "lon": -122.5946382
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "8840",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5531983,
+    "lon": -122.570882
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3841",
+    "city": "Portland",
+    "lat": 45.5165922,
+    "lon": -122.6234924
+  },
+  {
+    "street": "Northwest Wardway Street",
+    "housenumber": "2730",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5366164,
+    "lon": -122.7076687
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "11100",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5529805,
+    "lon": -122.5479443
+  },
+  {
+    "street": "Southeast 92nd Avenue",
+    "housenumber": "2252",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5063889,
+    "lon": -122.5683333
+  },
+  {
+    "street": "Southwest Dosch Road",
+    "housenumber": "5700",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.482164,
+    "lon": -122.7052658
+  },
+  {
+    "street": "Northeast 34th Avenue",
+    "housenumber": "2728",
+    "city": "Portland",
+    "lat": 45.5425745,
+    "lon": -122.6293427
+  },
+  {
+    "street": "Southeast 67th Avenue",
+    "housenumber": "2700",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.5026791,
+    "lon": -122.5940983
+  },
+  {
+    "street": "North Denver Avenue",
+    "housenumber": "8131",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5821154,
+    "lon": -122.6871355
+  },
+  {
+    "street": "Northeast 10th Avenue",
+    "housenumber": "6401",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5690947,
+    "lon": -122.6551057
+  },
+  {
+    "street": "Southeast 160th Avenue",
+    "housenumber": "660",
+    "city": "Portland",
+    "postcode": "97233",
+    "lat": 45.5176967,
+    "lon": -122.4983573
+  },
+  {
+    "street": "Northeast 143rd Avenue",
+    "housenumber": "50",
+    "city": "Portland",
+    "postcode": "97230",
+    "lat": 45.5230762,
+    "lon": -122.5148148
+  },
+  {
+    "street": "Northeast Ainsworth Street",
+    "housenumber": "2941",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5666521,
+    "lon": -122.6352444
+  },
+  {
+    "street": "North Willamette Boulevard",
+    "housenumber": "2149",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5621748,
+    "lon": -122.6896667
+  },
+  {
+    "street": "Southeast 76th Avenue",
+    "housenumber": "743",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5165341,
+    "lon": -122.5856453
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "5949",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5662458,
+    "lon": -122.6750966
+  },
+  {
+    "street": "Southwest Montgomery Street",
+    "housenumber": "633",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5121101,
+    "lon": -122.6833136
+  },
+  {
+    "street": "Southeast 67th Avenue",
+    "housenumber": "2700",
+    "city": "Portland",
+    "lat": 45.5031654,
+    "lon": -122.5940967
+  },
+  {
+    "street": "Northwest 3rd Avenue",
+    "housenumber": "3",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5233225,
+    "lon": -122.673667
+  },
+  {
+    "street": "Southeast Holgate Boulevard",
+    "housenumber": "10801",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4906298,
+    "lon": -122.550914
+  },
+  {
+    "street": "North Mississippi Avenue",
+    "housenumber": "7424",
+    "city": "Portland",
+    "lat": 45.5766268,
+    "lon": -122.6759042
+  },
+  {
+    "street": "Northeast Knott Street",
+    "housenumber": "1700",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5417969,
+    "lon": -122.6480086
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "11100",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5529853,
+    "lon": -122.5481631
+  },
+  {
+    "street": "Southeast 131st Avenue",
+    "housenumber": "2643",
+    "city": "Portland",
+    "postcode": "97236",
+    "lat": 45.5033072,
+    "lon": -122.5281168
+  },
+  {
+    "street": "Southeast Caruthers Street",
+    "housenumber": "9723",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5056153,
+    "lon": -122.5629187
+  },
+  {
+    "street": "Northeast San Rafael Street",
+    "housenumber": "13300",
+    "city": "Portland",
+    "postcode": "97230",
+    "lat": 45.5366996,
+    "lon": -122.5263162
+  },
+  {
+    "street": "Northeast 22nd Avenue",
+    "housenumber": "424",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5260208,
+    "lon": -122.6430376
+  },
+  {
+    "street": "Southwest 18th Avenue",
+    "housenumber": "1505",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5167005,
+    "lon": -122.69323
+  },
+  {
+    "street": "Presumpscot Street",
+    "housenumber": "189",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.688073,
+    "lon": -70.256928
+  },
+  {
+    "street": "Allen Avenue",
+    "housenumber": "524",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.7056622,
+    "lon": -70.283618
+  },
+  {
+    "street": "Summit Street",
+    "housenumber": "476",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.7178769,
+    "lon": -70.2960791
+  },
+  {
+    "street": "Deering Avenue",
+    "housenumber": "400",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6658285,
+    "lon": -70.2835199
+  },
+  {
+    "street": "Island Avenue",
+    "housenumber": "66",
+    "city": "Peaks Island",
+    "postcode": "04108",
+    "lat": 43.6561469,
+    "lon": -70.1981301
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "400",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6583793,
+    "lon": -70.25757
+  },
+  {
+    "street": "High Street",
+    "housenumber": "95",
+    "city": "Portland",
+    "postcode": "06480",
+    "lat": 41.58121,
+    "lon": -72.6223143
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "4040",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.537627,
+    "lon": -122.6211734
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "8645",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5547688,
+    "lon": -122.574043
+  },
+  {
+    "street": "Southwest Park Avenue",
+    "housenumber": "1200",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5157211,
+    "lon": -122.6824461
+  },
+  {
+    "street": "Northeast 20th Avenue",
+    "housenumber": "321",
+    "city": "Portland",
+    "lat": 45.5252727,
+    "lon": -122.6456449
+  },
+  {
+    "street": "Forest Avenue",
+    "housenumber": "1600",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6953169,
+    "lon": -70.3097918
+  },
+  {
+    "street": "Island Avenue",
+    "housenumber": "129",
+    "city": "Peaks Island",
+    "postcode": "04108",
+    "lat": 43.6582073,
+    "lon": -70.1983575
+  },
+  {
+    "street": "Baxter Boulevard",
+    "housenumber": "970",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6794165,
+    "lon": -70.2578339
+  },
+  {
+    "street": "Thompsons Point Road",
+    "housenumber": "250",
+    "city": "Portland",
+    "postcode": "04102",
+    "lat": 43.6507298,
+    "lon": -70.2907675
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "7",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6538904,
+    "lon": -70.262585
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3840",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5163316,
+    "lon": -122.6233025
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "2340",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5232052,
+    "lon": -122.6993847
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2222",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348523,
+    "lon": -122.6424368
+  },
+  {
+    "street": "Northeast 15th Avenue",
+    "housenumber": "4942",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5590178,
+    "lon": -122.6496365
+  },
+  {
+    "street": "Southeast Morrison Street",
+    "housenumber": "1412",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5170996,
+    "lon": -122.6512689
+  },
+  {
+    "street": "Southeast Morrison Street",
+    "housenumber": "1401",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5177104,
+    "lon": -122.6514274
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2310",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348562,
+    "lon": -122.6419836
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2300",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348583,
+    "lon": -122.6420935
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2236",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348583,
+    "lon": -122.6422051
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2222",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348523,
+    "lon": -122.642351
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2635",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5353153,
+    "lon": -122.6382912
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2571",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352933,
+    "lon": -122.6370446
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2502",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5349846,
+    "lon": -122.639913
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "3610",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5118311,
+    "lon": -122.6265949
+  },
+  {
+    "street": "Southeast Morrison Street",
+    "housenumber": "1400",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5170824,
+    "lon": -122.6514493
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9710 D",
+    "city": "Portland",
+    "lat": 45.5181449,
+    "lon": -122.5638694
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9710 A",
+    "city": "Portland",
+    "lat": 45.5179099,
+    "lon": -122.563869
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9710",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5180109,
+    "lon": -122.5638694
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9710 C",
+    "city": "Portland",
+    "lat": 45.5180609,
+    "lon": -122.563869
+  },
+  {
+    "street": "North Hancock Street",
+    "housenumber": "270",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5363052,
+    "lon": -122.6692301
+  },
+  {
+    "street": "North Flint Avenue",
+    "housenumber": "1835",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5363029,
+    "lon": -122.6690922
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "5444",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5625839,
+    "lon": -122.6303387
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "3334",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5625818,
+    "lon": -122.6300818
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1207",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5125232,
+    "lon": -122.653387
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1207",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5124979,
+    "lon": -122.6532409
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1207",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5125185,
+    "lon": -122.6534847
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1207",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.512423,
+    "lon": -122.6535495
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1207",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5123358,
+    "lon": -122.6533679
+  },
+  {
+    "street": "Southeast 12th Avenue",
+    "housenumber": "1340",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5131191,
+    "lon": -122.6534832
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2601",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5410517,
+    "lon": -122.6618857
+  },
+  {
+    "street": "Northeast Russell Street",
+    "housenumber": "325",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5410497,
+    "lon": -122.6620931
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "311",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5521844,
+    "lon": -122.6623586
+  },
+  {
+    "street": "Northeast 21st Avenue",
+    "housenumber": "801",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5288941,
+    "lon": -122.6447496
+  },
+  {
+    "street": "Northeast Pacific Street",
+    "housenumber": "1925",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5293846,
+    "lon": -122.6458882
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4637",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5567452,
+    "lon": -122.675134
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4631",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5566911,
+    "lon": -122.675134
+  },
+  {
+    "street": "Northeast 16th Avenue",
+    "housenumber": "128",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5240161,
+    "lon": -122.6493624
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4543",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5561071,
+    "lon": -122.6751137
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "5128",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5601998,
+    "lon": -122.6745386
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9730",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5167064,
+    "lon": -122.563743
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9732",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5170019,
+    "lon": -122.5634777
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9732G",
+    "city": "Portland",
+    "lat": 45.5171478,
+    "lon": -122.5633677
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9732H",
+    "city": "Portland",
+    "lat": 45.5172158,
+    "lon": -122.5633175
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9732K",
+    "city": "Portland",
+    "lat": 45.5172972,
+    "lon": -122.56326
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738L",
+    "city": "Portland",
+    "lat": 45.5174582,
+    "lon": -122.5631375
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738M",
+    "city": "Portland",
+    "lat": 45.5175118,
+    "lon": -122.5630893
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738P",
+    "city": "Portland",
+    "lat": 45.5175972,
+    "lon": -122.5630108
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738T",
+    "city": "Portland",
+    "lat": 45.5176313,
+    "lon": -122.562987
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738R",
+    "city": "Portland",
+    "lat": 45.5176919,
+    "lon": -122.5629263
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738S",
+    "city": "Portland",
+    "lat": 45.5177511,
+    "lon": -122.5628777
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738U",
+    "city": "Portland",
+    "lat": 45.5178902,
+    "lon": -122.5628566
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9738W",
+    "city": "Portland",
+    "lat": 45.5179686,
+    "lon": -122.5628629
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9740",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5180308,
+    "lon": -122.5628672
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9740A",
+    "city": "Portland",
+    "lat": 45.518158,
+    "lon": -122.562869
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9728",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5164314,
+    "lon": -122.5638854
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3120",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5457736,
+    "lon": -122.6665053
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3537",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488205,
+    "lon": -122.6669781
+  },
+  {
+    "street": "North Russell Street",
+    "housenumber": "36",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5408331,
+    "lon": -122.6674789
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2500",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5405648,
+    "lon": -122.6613965
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2511",
+    "city": "Portland",
+    "lat": 45.5407391,
+    "lon": -122.6618685
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2313",
+    "city": "Portland",
+    "lat": 45.5395428,
+    "lon": -122.6618514
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2808",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5432611,
+    "lon": -122.6618479
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2413",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5402088,
+    "lon": -122.6618198
+  },
+  {
+    "street": "Northeast Russell Street",
+    "housenumber": "205",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5411809,
+    "lon": -122.6635232
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2733",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352926,
+    "lon": -122.6373428
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "6611",
+    "city": "Portland",
+    "postcode": "97206-2635",
+    "lat": 45.4977275,
+    "lon": -122.5952598
+  },
+  {
+    "street": "Northeast Grand Avenue",
+    "housenumber": "505",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5267259,
+    "lon": -122.6609426
+  },
+  {
+    "street": "Southeast 52nd Avenue",
+    "housenumber": "3524",
+    "city": "Portland",
+    "lat": 45.4971332,
+    "lon": -122.6087852
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "6480",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4890009,
+    "lon": -122.5961336
+  },
+  {
+    "street": "Southeast César E. Chávez Boulevard",
+    "housenumber": "4030",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4935393,
+    "lon": -122.6222996
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "4114",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5535819,
+    "lon": -122.6676819
+  },
+  {
+    "street": "Wharf Road",
+    "housenumber": "1",
+    "city": "Cliff Island",
+    "postcode": "04019",
+    "lat": 43.695018,
+    "lon": -70.1101196
+  },
+  {
+    "street": "Pleasant Avenue",
+    "housenumber": "199",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6741668,
+    "lon": -70.295108
+  },
+  {
+    "street": "Northwest Thurman Street",
+    "housenumber": "2714",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5351646,
+    "lon": -122.7072184
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "5936",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5263398,
+    "lon": -122.6024091
+  },
+  {
+    "street": "Northwest Park Avenue",
+    "housenumber": "323",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5255788,
+    "lon": -122.6793577
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "5329",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5408493,
+    "lon": -122.608593
+  },
+  {
+    "street": "Southwest Park Avenue",
+    "housenumber": "1609",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5136474,
+    "lon": -122.6847615
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "830",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5180098,
+    "lon": -122.6789617
+  },
+  {
+    "street": "Southwest Spring Street",
+    "housenumber": "2440",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5093599,
+    "lon": -122.6988132
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1005",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5231098,
+    "lon": -122.6819149
+  },
+  {
+    "street": "Northwest Davis Street",
+    "housenumber": "716",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5243378,
+    "lon": -122.677832
+  },
+  {
+    "street": "Northwest Kearney Street",
+    "housenumber": "1987",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5293267,
+    "lon": -122.6923321
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "309",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5217274,
+    "lon": -122.677548
+  },
+  {
+    "street": "North Russell Street",
+    "housenumber": "955",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.541131,
+    "lon": -122.676924
+  },
+  {
+    "street": "Northwest 6th Avenue",
+    "housenumber": "210",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5247886,
+    "lon": -122.6762983
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "2618",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5191907,
+    "lon": -122.6368983
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "2816",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5191846,
+    "lon": -122.636636
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2501",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.504785,
+    "lon": -122.6794544
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "135",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6656437,
+    "lon": -70.2485043
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "90",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.666649,
+    "lon": -70.2467328
+  },
+  {
+    "street": "Southeast 92nd Avenue",
+    "housenumber": "5836",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4800662,
+    "lon": -122.568435
+  },
+  {
+    "street": "Southeast 92nd Avenue",
+    "housenumber": "5824",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.480259,
+    "lon": -122.568431
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "9710",
+    "city": "Portland",
+    "postcode": "97266-4541",
+    "lat": 45.4781338,
+    "lon": -122.5632671
+  },
+  {
+    "street": "Southwest Clay Street",
+    "housenumber": "213",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5129137,
+    "lon": -122.6778378
+  },
+  {
+    "street": "Northwest Thurman Street",
+    "housenumber": "2680",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.535082,
+    "lon": -122.706526
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "830",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.522793,
+    "lon": -122.6568779
+  },
+  {
+    "street": "South Bond Avenue",
+    "housenumber": "3355",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4987276,
+    "lon": -122.6709868
+  },
+  {
+    "street": "US Highway 181",
+    "housenumber": "2000",
+    "city": "Portland",
+    "postcode": "78374",
+    "lat": 27.8943821,
+    "lon": -97.305533
+  },
+  {
+    "street": "Southeast 52nd Avenue",
+    "housenumber": "5230",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4847403,
+    "lon": -122.6085975
+  },
+  {
+    "street": "North Fremont Street",
+    "housenumber": "750",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5477104,
+    "lon": -122.6744397
+  },
+  {
+    "street": "North Fremont Street",
+    "housenumber": "714",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5476395,
+    "lon": -122.6736008
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "2845",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5194092,
+    "lon": -122.6363354
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "11010",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4756236,
+    "lon": -122.5496467
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "1411",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352055,
+    "lon": -122.6510634
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "121",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.577485,
+    "lon": -122.6680608
+  },
+  {
+    "street": "Northwest Westover Road",
+    "housenumber": "2336",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5246229,
+    "lon": -122.6992768
+  },
+  {
+    "street": "North Killingsworth Street",
+    "housenumber": "1008",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5626002,
+    "lon": -122.6773293
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "6732",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5716343,
+    "lon": -122.6611768
+  },
+  {
+    "street": "Northwest York Street",
+    "housenumber": "2249",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.539551,
+    "lon": -122.697635
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "9132",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4971042,
+    "lon": -122.568868
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4333",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5371559,
+    "lon": -122.618088
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "2811",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.526559,
+    "lon": -122.6369298
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "267",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6625359,
+    "lon": -70.2530303
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "4204",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.533637,
+    "lon": -122.6201218
+  },
+  {
+    "street": "Southwest 11th Avenue",
+    "housenumber": "1809",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5128189,
+    "lon": -122.6875576
+  },
+  {
+    "street": "Northwest 26th Avenue",
+    "housenumber": "2016",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5369601,
+    "lon": -122.7045126
+  },
+  {
+    "street": "Northwest Vaughn Street",
+    "housenumber": "2601",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5369601,
+    "lon": -122.7051349
+  },
+  {
+    "street": "Northwest Thurman Street",
+    "housenumber": "2335",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5355983,
+    "lon": -122.6996881
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "1800",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5227385,
+    "lon": -122.6473497
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "326",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.525382,
+    "lon": -122.6942263
+  },
+  {
+    "street": "Northwest 23rd Place",
+    "housenumber": "1818",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5357795,
+    "lon": -122.6996933
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7125",
+    "city": "Portland",
+    "lat": 45.4725526,
+    "lon": -122.6501827
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "6705",
+    "city": "Portland",
+    "lat": 45.4744956,
+    "lon": -122.6519178
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7115",
+    "city": "Portland",
+    "lat": 45.4726956,
+    "lon": -122.6501842
+  },
+  {
+    "street": "Southeast Knapp Street",
+    "housenumber": "1516",
+    "city": "Portland",
+    "lat": 45.4713639,
+    "lon": -122.6505304
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7235",
+    "city": "Portland",
+    "lat": 45.471692,
+    "lon": -122.6501734
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7225",
+    "city": "Portland",
+    "lat": 45.4718462,
+    "lon": -122.6501575
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "1105",
+    "city": "Portland",
+    "lat": 45.4728331,
+    "lon": -122.6501857
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7215",
+    "city": "Portland",
+    "lat": 45.471991,
+    "lon": -122.6501764
+  },
+  {
+    "street": "Southeast Rural Street",
+    "housenumber": "1515",
+    "city": "Portland",
+    "lat": 45.4731366,
+    "lon": -122.6505679
+  },
+  {
+    "street": "Southeast Rural Street",
+    "housenumber": "1507",
+    "city": "Portland",
+    "lat": 45.4731321,
+    "lon": -122.6507612
+  },
+  {
+    "street": "Southeast Rural Street",
+    "housenumber": "1435",
+    "city": "Portland",
+    "lat": 45.4731278,
+    "lon": -122.6509434
+  },
+  {
+    "street": "Southeast Knapp Street",
+    "housenumber": "1436",
+    "city": "Portland",
+    "lat": 45.4713624,
+    "lon": -122.6509481
+  },
+  {
+    "street": "Southeast Knapp Street",
+    "housenumber": "1504",
+    "city": "Portland",
+    "lat": 45.4713631,
+    "lon": -122.6507503
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "7135",
+    "city": "Portland",
+    "lat": 45.4724417,
+    "lon": -122.6501815
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "2727",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5267237,
+    "lon": -122.6376423
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "2731",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5267851,
+    "lon": -122.6374553
+  },
+  {
+    "street": "Northeast 20th Avenue",
+    "housenumber": "336",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5255824,
+    "lon": -122.6452115
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3320",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5163481,
+    "lon": -122.630481
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3451",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5165599,
+    "lon": -122.6284775
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "1411",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352053,
+    "lon": -122.6511499
+  },
+  {
+    "street": "Northeast 100th Avenue",
+    "housenumber": "711",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5286723,
+    "lon": -122.5610291
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "10625",
+    "city": "Portland",
+    "lat": 45.559501,
+    "lon": -122.5536353
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "11417",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5581316,
+    "lon": -122.5443472
+  },
+  {
+    "street": "Northeast 122nd Avenue",
+    "housenumber": "12304",
+    "city": "Portland",
+    "lat": 45.5615588,
+    "lon": -122.5358497
+  },
+  {
+    "street": "Northeast 122nd Avenue",
+    "housenumber": "12310",
+    "city": "Portland",
+    "lat": 45.5615082,
+    "lon": -122.5356459
+  },
+  {
+    "street": "Northeast 122nd Avenue",
+    "housenumber": "12312",
+    "city": "Portland",
+    "lat": 45.5614537,
+    "lon": -122.535434
+  },
+  {
+    "street": "Northeast 122nd Avenue",
+    "housenumber": "12314",
+    "city": "Portland",
+    "lat": 45.5614028,
+    "lon": -122.5352197
+  },
+  {
+    "street": "North Going Street",
+    "housenumber": "1505",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5564956,
+    "lon": -122.6826364
+  },
+  {
+    "street": "North Interstate Avenue",
+    "housenumber": "4616",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5564846,
+    "lon": -122.68182
+  },
+  {
+    "street": "Northwest 6th Avenue",
+    "housenumber": "800",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5286287,
+    "lon": -122.676266
+  },
+  {
+    "street": "Northeast 82nd Avenue",
+    "housenumber": "3445",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5479077,
+    "lon": -122.5790485
+  },
+  {
+    "street": "Southeast Woodstock Boulevard",
+    "housenumber": "5122",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4790143,
+    "lon": -122.609026
+  },
+  {
+    "street": "North Fox Street",
+    "housenumber": "8615",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5975122,
+    "lon": -122.7493353
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "4100",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5046554,
+    "lon": -122.6203036
+  },
+  {
+    "street": "Northwest Irving Street",
+    "housenumber": "907",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.528087,
+    "lon": -122.680466
+  },
+  {
+    "street": "Southeast Water Avenue",
+    "housenumber": "1001",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.515284,
+    "lon": -122.666026
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "1012",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5264214,
+    "lon": -122.6814308
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "8218",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5889763,
+    "lon": -122.751384
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "2715",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5266489,
+    "lon": -122.6378636
+  },
+  {
+    "street": "Southeast 20th Avenue",
+    "housenumber": "1137",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5146734,
+    "lon": -122.64584
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "950",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.529659,
+    "lon": -122.698418
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "937",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5296935,
+    "lon": -122.6987367
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1001",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5299003,
+    "lon": -122.6987688
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1037",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5303617,
+    "lon": -122.6988135
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "4901",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4864695,
+    "lon": -122.6496198
+  },
+  {
+    "street": "Fore Street",
+    "housenumber": "396",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6562704,
+    "lon": -70.2534566
+  },
+  {
+    "street": "Canal Plaza",
+    "housenumber": "2",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6568703,
+    "lon": -70.255727
+  },
+  {
+    "street": "Southwest Beaverton Hillsdale Highway",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.4877195,
+    "lon": -122.7324142
+  },
+  {
+    "street": "State Street",
+    "housenumber": "188",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6528802,
+    "lon": -70.267026
+  },
+  {
+    "street": "State Street",
+    "housenumber": "190",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6529365,
+    "lon": -70.2671548
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "649",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6534274,
+    "lon": -70.265513
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "685",
+    "city": "Portland",
+    "postcode": "04102",
+    "lat": 43.6531868,
+    "lon": -70.2675866
+  },
+  {
+    "street": "Forest Avenue",
+    "housenumber": "295",
+    "city": "Portland",
+    "lat": 43.6636665,
+    "lon": -70.2685522
+  },
+  {
+    "street": "Northwest Hoyt Street",
+    "housenumber": "715",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5276623,
+    "lon": -122.6783153
+  },
+  {
+    "street": "Northwest 9th Avenue",
+    "housenumber": "1250",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5317713,
+    "lon": -122.680112
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4938",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5588973,
+    "lon": -122.6748445
+  },
+  {
+    "street": "North Interstate Avenue",
+    "housenumber": "6423",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.569522,
+    "lon": -122.6823877
+  },
+  {
+    "street": "North Rosa Parks Way",
+    "housenumber": "1507",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5700403,
+    "lon": -122.6824306
+  },
+  {
+    "street": "North Rosa Parks Way",
+    "housenumber": "729",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5702806,
+    "lon": -122.6745215
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "231",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5775278,
+    "lon": -122.6691107
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "7406",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.576682,
+    "lon": -122.6682989
+  },
+  {
+    "street": "Southeast Duke Street",
+    "housenumber": "5934",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4756316,
+    "lon": -122.6025547
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "1111",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5230413,
+    "lon": -122.6541573
+  },
+  {
+    "street": "Southeast Flavel Street",
+    "housenumber": "7120",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.468016,
+    "lon": -122.5899166
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "1201",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5314364,
+    "lon": -122.6948173
+  },
+  {
+    "street": "North Kerby Avenue",
+    "housenumber": "2119",
+    "city": "Portland",
+    "lat": 45.5381956,
+    "lon": -122.6723748
+  },
+  {
+    "street": "Northeast 7th Avenue",
+    "housenumber": "2723",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5424844,
+    "lon": -122.6588428
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "3008",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5349172,
+    "lon": -122.6346649
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "500",
+    "city": "Portland",
+    "lat": 45.526692,
+    "lon": -122.6614699
+  },
+  {
+    "street": "Southeast Ankeny Street",
+    "housenumber": "2348",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5220511,
+    "lon": -122.6416194
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "310",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5205345,
+    "lon": -122.6371535
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "2327",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5230039,
+    "lon": -122.6418608
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "304",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5206041,
+    "lon": -122.6371562
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2755",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5353048,
+    "lon": -122.636867
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2735",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352909,
+    "lon": -122.637255
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2745",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5352931,
+    "lon": -122.6371569
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3640",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5163527,
+    "lon": -122.626285
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "50",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5174389,
+    "lon": -122.6729788
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "340",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5178723,
+    "lon": -122.6763408
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "815",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5171582,
+    "lon": -122.6752651
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1951",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5231814,
+    "lon": -122.6914256
+  },
+  {
+    "street": "Southeast Sandy Boulevard",
+    "housenumber": "720",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5190308,
+    "lon": -122.6578887
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "922",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5198064,
+    "lon": -122.681771
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4644",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5380784,
+    "lon": -122.6152027
+  },
+  {
+    "street": "Northwest Irving Street",
+    "housenumber": "1323",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5280368,
+    "lon": -122.6850469
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "811",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.526701,
+    "lon": -122.6794787
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "815",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5266996,
+    "lon": -122.6795629
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "819",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5266983,
+    "lon": -122.6796405
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "825",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5266966,
+    "lon": -122.6799094
+  },
+  {
+    "street": "Northwest 9th Avenue",
+    "housenumber": "505",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5266906,
+    "lon": -122.6804696
+  },
+  {
+    "street": "Northwest 10th Avenue",
+    "housenumber": "500",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.526678,
+    "lon": -122.6810456
+  },
+  {
+    "street": "Northwest 24th Avenue",
+    "housenumber": "1706",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5349803,
+    "lon": -122.7002503
+  },
+  {
+    "street": "Northwest 9th Avenue",
+    "housenumber": "721",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.528276,
+    "lon": -122.68074
+  },
+  {
+    "street": "Northwest 19th Avenue",
+    "housenumber": "1336",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5325145,
+    "lon": -122.6903465
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2225",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5394166,
+    "lon": -122.6618113
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2225",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5394147,
+    "lon": -122.6619962
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "2821",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5194228,
+    "lon": -122.636746
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "2835",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5194213,
+    "lon": -122.6365397
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "6506",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4890375,
+    "lon": -122.5957262
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "6504",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4890817,
+    "lon": -122.5958402
+  },
+  {
+    "street": "Delaware Avenue",
+    "housenumber": "611",
+    "city": "Portland",
+    "postcode": "18351",
+    "lat": 40.9229739,
+    "lon": -75.0965367
+  },
+  {
+    "street": "Delaware Avenue",
+    "housenumber": "398",
+    "city": "Portland",
+    "postcode": "18351",
+    "lat": 40.9217495,
+    "lon": -75.0954388
+  },
+  {
+    "street": "Southeast Hawthorne Boulevard",
+    "housenumber": "1413",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5123482,
+    "lon": -122.6514719
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "1410",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5192168,
+    "lon": -122.6512559
+  },
+  {
+    "street": "Southeast Ramona Street",
+    "housenumber": "9215",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4808905,
+    "lon": -122.567934
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "1222",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5589185,
+    "lon": -122.6529667
+  },
+  {
+    "street": "North Marine Drive",
+    "housenumber": "1020",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.6028779,
+    "lon": -122.6773205
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "1332",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5324527,
+    "lon": -122.6944947
+  },
+  {
+    "street": "Northwest 21st Avenue",
+    "housenumber": "1332",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5325691,
+    "lon": -122.6944917
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "622",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5273474,
+    "lon": -122.6983681
+  },
+  {
+    "street": "Oak Street",
+    "housenumber": "51",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6550988,
+    "lon": -70.2613643
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "215",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5233211,
+    "lon": -122.6726712
+  },
+  {
+    "street": "Northwest 4th Avenue",
+    "housenumber": "323",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5256813,
+    "lon": -122.6747257
+  },
+  {
+    "street": "Northwest Everett Street",
+    "housenumber": "422",
+    "city": "Portland",
+    "lat": 45.525102,
+    "lon": -122.6751102
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "408",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5260839,
+    "lon": -122.6753393
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "412",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5262004,
+    "lon": -122.6753614
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "23",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5236282,
+    "lon": -122.6756133
+  },
+  {
+    "street": "Northwest Park Avenue",
+    "housenumber": "215",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5247239,
+    "lon": -122.679343
+  },
+  {
+    "street": "Northwest Park Avenue",
+    "housenumber": "105",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5239456,
+    "lon": -122.6794212
+  },
+  {
+    "street": "Northwest Everett Street",
+    "housenumber": "921",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5252429,
+    "lon": -122.6806416
+  },
+  {
+    "street": "Northwest 9th Avenue",
+    "housenumber": "339",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5255862,
+    "lon": -122.6803374
+  },
+  {
+    "street": "Northwest 9th Avenue",
+    "housenumber": "319",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.525355,
+    "lon": -122.680325
+  },
+  {
+    "street": "Northwest 10th Avenue",
+    "housenumber": "404",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.52602,
+    "lon": -122.6810424
+  },
+  {
+    "street": "Northwest 10th Avenue",
+    "housenumber": "404",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5259635,
+    "lon": -122.6810398
+  },
+  {
+    "street": "Northwest Hoyt Street",
+    "housenumber": "904",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5271369,
+    "lon": -122.680496
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "1100",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5263913,
+    "lon": -122.6825157
+  },
+  {
+    "street": "Northwest Hoyt Street",
+    "housenumber": "1136",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5271351,
+    "lon": -122.683042
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "4707",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5797252,
+    "lon": -122.7155724
+  },
+  {
+    "street": "Southwest 5th Avenue",
+    "housenumber": "620",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5191201,
+    "lon": -122.6771959
+  },
+  {
+    "street": "Northeast Rosa Parks Way",
+    "housenumber": "435",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5701353,
+    "lon": -122.6605648
+  },
+  {
+    "street": "Northeast Rosa Parks Way",
+    "housenumber": "435",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.57014,
+    "lon": -122.6606908
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2031",
+    "city": "Portland",
+    "lat": 45.5376342,
+    "lon": -122.6618817
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6238",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.478672,
+    "lon": -122.693092
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6238",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4785958,
+    "lon": -122.6930635
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6238",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4785266,
+    "lon": -122.6929421
+  },
+  {
+    "street": "Southeast Water Avenue",
+    "housenumber": "1028",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5152161,
+    "lon": -122.66543
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "5941",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.5054665,
+    "lon": -122.6018477
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "4537",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.5054225,
+    "lon": -122.6154038
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "628",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.53494,
+    "lon": -122.6587607
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3840",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5161907,
+    "lon": -122.6232807
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "1001",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5049827,
+    "lon": -122.6554586
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "2930",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5626017,
+    "lon": -122.6350508
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "6",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5227248,
+    "lon": -122.6370975
+  },
+  {
+    "street": "North Rosa Parks Way",
+    "housenumber": "1942",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5697411,
+    "lon": -122.6871897
+  },
+  {
+    "street": "North Rosa Parks Way",
+    "housenumber": "2020",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5696116,
+    "lon": -122.6879427
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "5021",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4976993,
+    "lon": -122.6106444
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5320",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.484732,
+    "lon": -122.6743541
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3356",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5163404,
+    "lon": -122.629737
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "920",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5191832,
+    "lon": -122.6559826
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "2406",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.527434,
+    "lon": -122.6410836
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "11140",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4961636,
+    "lon": -122.548419
+  },
+  {
+    "street": "Northwest Johnson Street",
+    "housenumber": "1410",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5284559,
+    "lon": -122.6855936
+  },
+  {
+    "street": "Northwest 14th Avenue",
+    "housenumber": "734",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5283481,
+    "lon": -122.6851849
+  },
+  {
+    "street": "Southeast Colt Drive",
+    "housenumber": "3000",
+    "city": "Portland",
+    "lat": 45.486466,
+    "lon": -122.634219
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "2141",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4992732,
+    "lon": -122.6437847
+  },
+  {
+    "street": "Northwest Park Avenue",
+    "housenumber": "333",
+    "city": "Portland",
+    "lat": 45.5257178,
+    "lon": -122.6793697
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "2007",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.499732,
+    "lon": -122.645468
+  },
+  {
+    "street": "Northwest 8th Avenue",
+    "housenumber": "412",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5260325,
+    "lon": -122.6783973
+  },
+  {
+    "street": "Southeast Brooklyn Street",
+    "housenumber": "1835",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5014996,
+    "lon": -122.6469484
+  },
+  {
+    "street": "Southeast Brooklyn Street",
+    "housenumber": "1825",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5015013,
+    "lon": -122.6470518
+  },
+  {
+    "street": "Southeast Brooklyn Street",
+    "housenumber": "1735",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5014969,
+    "lon": -122.6478987
+  },
+  {
+    "street": "Southeast Brooklyn Street",
+    "housenumber": "1725",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5014967,
+    "lon": -122.647998
+  },
+  {
+    "street": "Southeast Brooklyn Street",
+    "housenumber": "1710",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5011114,
+    "lon": -122.6483941
+  },
+  {
+    "street": "Southeast 19th Avenue",
+    "housenumber": "3053",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.501169,
+    "lon": -122.64642
+  },
+  {
+    "street": "Southeast 19th Avenue",
+    "housenumber": "3055",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.501158,
+    "lon": -122.64645
+  },
+  {
+    "street": "Southeast 19th Avenue",
+    "housenumber": "3011",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5010399,
+    "lon": -122.6468491
+  },
+  {
+    "street": "Southwest Yamhill Street",
+    "housenumber": "300",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5174806,
+    "lon": -122.676267
+  },
+  {
+    "street": "Southeast 26th Avenue",
+    "housenumber": "3139",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4998821,
+    "lon": -122.6398962
+  },
+  {
+    "street": "Southeast 26th Avenue",
+    "housenumber": "3143",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4998198,
+    "lon": -122.6398968
+  },
+  {
+    "street": "Southeast 26th Avenue",
+    "housenumber": "3224",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4993551,
+    "lon": -122.6394027
+  },
+  {
+    "street": "Southeast 26th Avenue",
+    "housenumber": "3222",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4993908,
+    "lon": -122.6394048
+  },
+  {
+    "street": "Southeast 26th Avenue",
+    "housenumber": "3536",
+    "city": "Portland",
+    "lat": 45.497281,
+    "lon": -122.639447
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "2419",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.498574,
+    "lon": -122.641254
+  },
+  {
+    "street": "Southeast Woodward Street",
+    "housenumber": "1904",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.501847,
+    "lon": -122.64625
+  },
+  {
+    "street": "Southeast Woodward Street",
+    "housenumber": "1902",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.501834,
+    "lon": -122.646433
+  },
+  {
+    "street": "Northeast Sumner Street",
+    "housenumber": "11918",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.56056,
+    "lon": -122.5407826
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "8621",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5903573,
+    "lon": -122.754846
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "2921",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5628506,
+    "lon": -122.6354057
+  },
+  {
+    "street": "Southeast Tibbetts Street",
+    "housenumber": "8122",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4996211,
+    "lon": -122.5790229
+  },
+  {
+    "street": "North Denver Avenue",
+    "housenumber": "6500",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5700622,
+    "lon": -122.6871425
+  },
+  {
+    "street": "Northeast Dekum Street",
+    "housenumber": "700",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.571646,
+    "lon": -122.6581382
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "5325",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5622175,
+    "lon": -122.6675336
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "1737",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5222423,
+    "lon": -122.6898004
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1955",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5231942,
+    "lon": -122.6915439
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "1410",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4998327,
+    "lon": -122.6509403
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1735",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.523068,
+    "lon": -122.6890709
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "338",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5257251,
+    "lon": -122.6753197
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "6633",
+    "city": "Portland",
+    "postcode": "97206-2635",
+    "lat": 45.4976128,
+    "lon": -122.5948923
+  },
+  {
+    "street": "Southwest Naito Parkway",
+    "housenumber": "43",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.522697,
+    "lon": -122.6705489
+  },
+  {
+    "street": "Southwest Naito Parkway",
+    "housenumber": "2",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5227219,
+    "lon": -122.6697912
+  },
+  {
+    "street": "Northwest 10th Avenue",
+    "housenumber": "600",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.527385,
+    "lon": -122.681089
+  },
+  {
+    "street": "South Harbor Way",
+    "housenumber": "1750",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5099694,
+    "lon": -122.6750679
+  },
+  {
+    "street": "Northwest Hoyt Street",
+    "housenumber": "911",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5274342,
+    "lon": -122.6804324
+  },
+  {
+    "street": "Northwest Irving Street",
+    "housenumber": "906",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5278513,
+    "lon": -122.6804592
+  },
+  {
+    "street": "Southeast Woodstock Boulevard",
+    "housenumber": "4804",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4789448,
+    "lon": -122.6129671
+  },
+  {
+    "street": "Southwest Washington Street",
+    "housenumber": "921",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5214889,
+    "lon": -122.680807
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "13521",
+    "city": "Portland",
+    "postcode": "97236",
+    "lat": 45.4981188,
+    "lon": -122.5238418
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "13639",
+    "city": "Portland",
+    "postcode": "97236",
+    "lat": 45.4982757,
+    "lon": -122.5228453
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "11709",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.5042916,
+    "lon": -122.5425327
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "11239",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.5045153,
+    "lon": -122.5471434
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "11214",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.5036825,
+    "lon": -122.547649
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "1100",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5263503,
+    "lon": -122.6825146
+  },
+  {
+    "street": "Northeast 42nd Avenue",
+    "housenumber": "1627",
+    "city": "Portland",
+    "lat": 45.5349243,
+    "lon": -122.6204904
+  },
+  {
+    "street": "Northeast César E. Chávez Boulevard",
+    "housenumber": "1815",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5361381,
+    "lon": -122.6233204
+  },
+  {
+    "street": "Northeast 41st Avenue",
+    "housenumber": "1814",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5362208,
+    "lon": -122.6207441
+  },
+  {
+    "street": "Northeast 41st Avenue",
+    "housenumber": "1815",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5359164,
+    "lon": -122.6211595
+  },
+  {
+    "street": "Northeast César E. Chávez Boulevard",
+    "housenumber": "1809",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5360592,
+    "lon": -122.623384
+  },
+  {
+    "street": "Northeast César E. Chávez Boulevard",
+    "housenumber": "1775",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5356801,
+    "lon": -122.623346
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "4531",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5168496,
+    "lon": -122.615515
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "4035",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.5049184,
+    "lon": -122.6207567
+  },
+  {
+    "street": "Southeast Division Street",
+    "housenumber": "3810",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.504667,
+    "lon": -122.623811
+  },
+  {
+    "street": "Southeast Belmont Street",
+    "housenumber": "3401",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5165772,
+    "lon": -122.6294195
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "619",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6537852,
+    "lon": -70.2642623
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "620",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6535653,
+    "lon": -70.2638498
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "585",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6545161,
+    "lon": -70.2627994
+  },
+  {
+    "street": "Southeast 7th Avenue",
+    "housenumber": "635",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5181887,
+    "lon": -122.6589575
+  },
+  {
+    "street": "Southeast Grand Avenue",
+    "housenumber": "1100",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5148683,
+    "lon": -122.6602388
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3001",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5452854,
+    "lon": -122.6701719
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "2800",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5430199,
+    "lon": -122.6674261
+  },
+  {
+    "street": "North Graham Street",
+    "housenumber": "300",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5424826,
+    "lon": -122.67007
+  },
+  {
+    "street": "North Graham Street",
+    "housenumber": "300",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5425492,
+    "lon": -122.6697648
+  },
+  {
+    "street": "North Graham Street",
+    "housenumber": "501",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5431541,
+    "lon": -122.6711803
+  },
+  {
+    "street": "Southwest Mill Street Terrace",
+    "housenumber": "1970",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5161414,
+    "lon": -122.695181
+  },
+  {
+    "street": "Wildcat Drive",
+    "housenumber": "1600",
+    "city": "Portland",
+    "postcode": "78374",
+    "lat": 27.8876239,
+    "lon": -97.3169281
+  },
+  {
+    "street": "Southwest Yamhill Street",
+    "housenumber": "520",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5180408,
+    "lon": -122.6784399
+  },
+  {
+    "street": "Northeast 60th Avenue",
+    "housenumber": "4507",
+    "city": "Portland",
+    "postcode": "97218-2606",
+    "lat": 45.5556941,
+    "lon": -122.601504
+  },
+  {
+    "street": "Northeast 57th Avenue",
+    "housenumber": "3443",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5480432,
+    "lon": -122.6049402
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "5365",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.541115,
+    "lon": -122.6078714
+  },
+  {
+    "street": "Southeast Ankeny Street",
+    "housenumber": "2717",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5223661,
+    "lon": -122.637959
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "8015",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5192609,
+    "lon": -122.581243
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "8005",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5192603,
+    "lon": -122.5813084
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "7818",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5190211,
+    "lon": -122.5827831
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "7609",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5193546,
+    "lon": -122.5842723
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "7804",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.519023,
+    "lon": -122.5829708
+  },
+  {
+    "street": "Southwest Taylor Street",
+    "housenumber": "1705",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5207252,
+    "lon": -122.6899878
+  },
+  {
+    "street": "Southwest Yamhill Street",
+    "housenumber": "1538",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5207768,
+    "lon": -122.6884224
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "2168",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5231672,
+    "lon": -122.6957401
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "1134",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5192417,
+    "lon": -122.6544263
+  },
+  {
+    "street": "Southeast 145th Avenue",
+    "housenumber": "2520",
+    "city": "Portland",
+    "postcode": "97236",
+    "lat": 45.5037977,
+    "lon": -122.5135197
+  },
+  {
+    "street": "Northeast 15th Avenue",
+    "housenumber": "3531",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5487537,
+    "lon": -122.6511889
+  },
+  {
+    "street": "Northeast Glisan Street",
+    "housenumber": "16001",
+    "city": "Portland",
+    "postcode": "97230",
+    "lat": 45.5267682,
+    "lon": -122.4987497
+  },
+  {
+    "street": "Northeast 6th Avenue",
+    "housenumber": "1523",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5340463,
+    "lon": -122.6598889
+  },
+  {
+    "street": "Northeast 42nd Avenue",
+    "housenumber": "1716",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5354175,
+    "lon": -122.619629
+  },
+  {
+    "street": "Northeast Hancock Street",
+    "housenumber": "3830",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.536402,
+    "lon": -122.6234202
+  },
+  {
+    "street": "Northeast Hancock Street",
+    "housenumber": "3913",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5366327,
+    "lon": -122.6227771
+  },
+  {
+    "street": "Northeast Hancock Street",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.53662,
+    "lon": -122.6231932
+  },
+  {
+    "street": "Northeast 41st Avenue",
+    "housenumber": "1905",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5366622,
+    "lon": -122.621167
+  },
+  {
+    "street": "Northeast Hancock Street",
+    "housenumber": "4011",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5366359,
+    "lon": -122.6217839
+  },
+  {
+    "street": "Northeast 42nd Avenue",
+    "housenumber": "2000",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5371442,
+    "lon": -122.6197267
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4344",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.536714,
+    "lon": -122.6181083
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4301",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5369335,
+    "lon": -122.6186587
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4340",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5366755,
+    "lon": -122.618201
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "4525",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5558984,
+    "lon": -122.6620077
+  },
+  {
+    "street": "Southeast Powell Boulevard",
+    "housenumber": "5835",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4976077,
+    "lon": -122.6020543
+  },
+  {
+    "street": "Northwest Vaughn Street",
+    "housenumber": "2701",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5376899,
+    "lon": -122.7079306
+  },
+  {
+    "street": "Southwest Broadway",
+    "housenumber": "1000",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5168718,
+    "lon": -122.680597
+  },
+  {
+    "street": "Northeast Airport Way",
+    "housenumber": "7000",
+    "city": "Portland",
+    "postcode": "97218",
+    "lat": 45.5907069,
+    "lon": -122.5946237
+  },
+  {
+    "street": "North Borthwick Avenue",
+    "housenumber": "4827",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5581675,
+    "lon": -122.6741926
+  },
+  {
+    "street": "North Humboldt Street",
+    "housenumber": "716",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5581671,
+    "lon": -122.6742104
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4732",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5573247,
+    "lon": -122.6746399
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "4734",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5574533,
+    "lon": -122.6746387
+  },
+  {
+    "street": "North Sumner Street",
+    "housenumber": "5204",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5605183,
+    "lon": -122.6746436
+  },
+  {
+    "street": "North Albina Avenue",
+    "housenumber": "5202",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5605409,
+    "lon": -122.6748649
+  },
+  {
+    "street": "Southeast 13th Avenue",
+    "housenumber": "8083",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4645053,
+    "lon": -122.653122
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "7638",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4690721,
+    "lon": -122.7086224
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "7822",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4678742,
+    "lon": -122.7132666
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "4709",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.556758,
+    "lon": -122.6618294
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "1939",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.52602,
+    "lon": -122.6458056
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "7526",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5226515,
+    "lon": -122.5853072
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2130",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.534901,
+    "lon": -122.6440073
+  },
+  {
+    "street": "North Interstate Avenue",
+    "housenumber": "1900",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.537654,
+    "lon": -122.6736577
+  },
+  {
+    "street": "Southeast Ankeny Street",
+    "housenumber": "2136",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5220692,
+    "lon": -122.6437123
+  },
+  {
+    "street": "Northeast Weidler Street",
+    "housenumber": "1923",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5344333,
+    "lon": -122.6460861
+  },
+  {
+    "street": "Northeast Flanders Street",
+    "housenumber": "2640",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5255682,
+    "lon": -122.6387809
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6238",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4786792,
+    "lon": -122.6929955
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6238",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4785533,
+    "lon": -122.6930052
+  },
+  {
+    "street": "Northeast Holladay Street",
+    "housenumber": "533",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5301769,
+    "lon": -122.6600091
+  },
+  {
+    "street": "Southwest Terwilliger Boulevard",
+    "housenumber": "6305",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4785633,
+    "lon": -122.6851769
+  },
+  {
+    "street": "Canal Plaza",
+    "housenumber": "4",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6571735,
+    "lon": -70.254852
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "609",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6539661,
+    "lon": -70.2636208
+  },
+  {
+    "street": "Southwest 17th Avenue",
+    "housenumber": "709",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.521719,
+    "lon": -122.68943
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "6901",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5477232,
+    "lon": -122.592465
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "6901",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5475611,
+    "lon": -122.5924656
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "7555",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.470568,
+    "lon": -122.6900244
+  },
+  {
+    "street": "North Mississippi Avenue",
+    "housenumber": "3925",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5512399,
+    "lon": -122.6758617
+  },
+  {
+    "street": "North Mississippi Avenue",
+    "housenumber": "3503",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5481004,
+    "lon": -122.6757483
+  },
+  {
+    "street": "North Interstate Avenue",
+    "housenumber": "4812",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5578135,
+    "lon": -122.6819451
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "2210",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5589474,
+    "lon": -122.6424481
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "7555",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4703912,
+    "lon": -122.6909806
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "7937",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5192833,
+    "lon": -122.5816834
+  },
+  {
+    "street": "Southeast Woodstock Boulevard",
+    "housenumber": "4103",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4795199,
+    "lon": -122.6203085
+  },
+  {
+    "street": "Southeast Woodstock Boulevard",
+    "housenumber": "4111",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4794536,
+    "lon": -122.6199773
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "7845",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4678943,
+    "lon": -122.7138066
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "7843",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4679385,
+    "lon": -122.713754
+  },
+  {
+    "street": "Southeast 122nd Avenue",
+    "housenumber": "4426",
+    "city": "Portland",
+    "postcode": "97236",
+    "lat": 45.4898917,
+    "lon": -122.5372568
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "7033",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4730906,
+    "lon": -122.671989
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "8145",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4657941,
+    "lon": -122.6983022
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "621",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5194349,
+    "lon": -122.6791341
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "206",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.576907,
+    "lon": -122.668867
+  },
+  {
+    "street": "Northeast Lombard Street",
+    "housenumber": "607",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.577425,
+    "lon": -122.659121
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "1408",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5141712,
+    "lon": -122.6809926
+  },
+  {
+    "street": "Southwest Capitol Hill Road",
+    "housenumber": "6875",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4743592,
+    "lon": -122.6969879
+  },
+  {
+    "street": "Southwest 18th Avenue",
+    "housenumber": "1126",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5188734,
+    "lon": -122.6920529
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "2200",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348854,
+    "lon": -122.642846
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "2817",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5431015,
+    "lon": -122.6618262
+  },
+  {
+    "street": "West Burnside Street",
+    "housenumber": "1650",
+    "city": "Portland",
+    "lat": 45.522808,
+    "lon": -122.6884339
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "6105",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4796992,
+    "lon": -122.6734163
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5901",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4805379,
+    "lon": -122.6735194
+  },
+  {
+    "street": "Southwest Ralston Drive",
+    "housenumber": "5870",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.480495,
+    "lon": -122.6813037
+  },
+  {
+    "street": "Southeast Woodstock Boulevard",
+    "housenumber": "9240",
+    "city": "Portland",
+    "postcode": "97266",
+    "lat": 45.4787597,
+    "lon": -122.5679414
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2929",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4665544,
+    "lon": -122.7071723
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2929",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4664896,
+    "lon": -122.7072308
+  },
+  {
+    "street": "Southwest Parkhill Way",
+    "housenumber": "6435",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4778161,
+    "lon": -122.6814325
+  },
+  {
+    "street": "Southeast Spokane Street",
+    "housenumber": "205",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.465516,
+    "lon": -122.6633289
+  },
+  {
+    "street": "Southwest 24th Avenue",
+    "housenumber": "8420",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4639838,
+    "lon": -122.7016101
+  },
+  {
+    "street": "Southeast 23rd Avenue",
+    "housenumber": "1418",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.512572,
+    "lon": -122.6423365
+  },
+  {
+    "street": "Southeast 23rd Avenue",
+    "housenumber": "1416",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5125913,
+    "lon": -122.6423364
+  },
+  {
+    "street": "Southeast 23rd Avenue",
+    "housenumber": "1414",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5126105,
+    "lon": -122.6423363
+  },
+  {
+    "street": "Southeast 23rd Avenue",
+    "housenumber": "1412",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5126298,
+    "lon": -122.6423362
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "2211",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.523006,
+    "lon": -122.643191
+  },
+  {
+    "street": "South Hood Avenue",
+    "housenumber": "6216",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4789279,
+    "lon": -122.6746072
+  },
+  {
+    "street": "South Hood Avenue",
+    "housenumber": "6214",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4789542,
+    "lon": -122.674606
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "2231",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5592795,
+    "lon": -122.6421644
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "2220",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5589999,
+    "lon": -122.6424054
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "2231",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5591797,
+    "lon": -122.6421853
+  },
+  {
+    "street": "Northeast Alberta Street",
+    "housenumber": "2231",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5591807,
+    "lon": -122.6420497
+  },
+  {
+    "street": "Southwest 5th Avenue",
+    "housenumber": "700",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5176045,
+    "lon": -122.677821
+  },
+  {
+    "street": "Southwest Vermont Street",
+    "housenumber": "3643",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4768098,
+    "lon": -122.7153212
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "8145",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4660322,
+    "lon": -122.698237
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "7033",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4730918,
+    "lon": -122.6720838
+  },
+  {
+    "street": "South Miles Street",
+    "housenumber": "757",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4712345,
+    "lon": -122.6705918
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "7033",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.473093,
+    "lon": -122.6721786
+  },
+  {
+    "street": "South Miles Place",
+    "housenumber": "7368",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4713745,
+    "lon": -122.6699561
+  },
+  {
+    "street": "Northeast 42nd Avenue",
+    "housenumber": "4830",
+    "city": "Portland",
+    "postcode": "97218",
+    "lat": 45.558075,
+    "lon": -122.620205
+  },
+  {
+    "street": "Southeast Johnson Creek Boulevard",
+    "housenumber": "4439",
+    "city": "Portland",
+    "postcode": "97222",
+    "lat": 45.4623367,
+    "lon": -122.615555
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "2828",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5027877,
+    "lon": -122.6759207
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "3210",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5348106,
+    "lon": -122.632647
+  },
+  {
+    "street": "South Vermont Street",
+    "housenumber": "321",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4760285,
+    "lon": -122.6753651
+  },
+  {
+    "street": "South Vermont Street",
+    "housenumber": "331",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4760285,
+    "lon": -122.6752023
+  },
+  {
+    "street": "Northeast Davis Street",
+    "housenumber": "525",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.524547,
+    "lon": -122.6600989
+  },
+  {
+    "street": "Southwest Broadway",
+    "housenumber": "1001",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5171128,
+    "lon": -122.6810368
+  },
+  {
+    "street": "Northeast 63rd Avenue",
+    "housenumber": "1515",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5340314,
+    "lon": -122.5988896
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1518",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.534361,
+    "lon": -122.5930347
+  },
+  {
+    "street": "Northeast 63rd Avenue",
+    "housenumber": "1521",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5340338,
+    "lon": -122.5988964
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1522",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5343638,
+    "lon": -122.5930382
+  },
+  {
+    "street": "Northeast 72nd Avenue",
+    "housenumber": "1523",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5340272,
+    "lon": -122.5896908
+  },
+  {
+    "street": "Northeast 72nd Avenue",
+    "housenumber": "1525",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5340277,
+    "lon": -122.5896888
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1526",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5344586,
+    "lon": -122.5930387
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1530",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5344549,
+    "lon": -122.5930368
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1554",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5346321,
+    "lon": -122.5930368
+  },
+  {
+    "street": "Northeast 68th Avenue",
+    "housenumber": "1558",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5346363,
+    "lon": -122.5930415
+  },
+  {
+    "street": "Northeast 72nd Avenue",
+    "housenumber": "1605",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5342952,
+    "lon": -122.5896846
+  },
+  {
+    "street": "Northeast 72nd Avenue",
+    "housenumber": "1607",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5343022,
+    "lon": -122.5896868
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "6623",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5338464,
+    "lon": -122.5946581
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "6627",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5338546,
+    "lon": -122.5946516
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "6631",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5338475,
+    "lon": -122.5946577
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "6635",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.533853,
+    "lon": -122.5946542
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "6637",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5338561,
+    "lon": -122.5946562
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "6802",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5347254,
+    "lon": -122.5929975
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "6806",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5347177,
+    "lon": -122.5929929
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7102",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370046,
+    "lon": -122.5900786
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7104",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5369972,
+    "lon": -122.5900816
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7106",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370022,
+    "lon": -122.5900808
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7108",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370045,
+    "lon": -122.5900804
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7110",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370012,
+    "lon": -122.5900751
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7112",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.537005,
+    "lon": -122.5900797
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7114",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370171,
+    "lon": -122.5896737
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7116",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370155,
+    "lon": -122.5896763
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7118",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370144,
+    "lon": -122.5896761
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7120",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370112,
+    "lon": -122.5896748
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7122",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370136,
+    "lon": -122.5896675
+  },
+  {
+    "street": "Northeast Tillamook Street",
+    "housenumber": "7124",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5370095,
+    "lon": -122.5896732
+  },
+  {
+    "street": "Northwest 23rd Avenue",
+    "housenumber": "1668",
+    "city": "Portland",
+    "postcode": "97210",
+    "lat": 45.5346787,
+    "lon": -122.698634
+  },
+  {
+    "street": "Northwest Couch Street",
+    "housenumber": "1210",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5235142,
+    "lon": -122.6833546
+  },
+  {
+    "street": "North Meridian",
+    "housenumber": "1610",
+    "city": "Portland",
+    "postcode": "47371-9301",
+    "lat": 40.4491454,
+    "lon": -84.9787496
+  },
+  {
+    "street": "North Meridian Street",
+    "housenumber": "611",
+    "city": "Portland",
+    "postcode": "47371",
+    "lat": 40.4391371,
+    "lon": -84.9775591
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "4630",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5379898,
+    "lon": -122.6153962
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5441",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4840805,
+    "lon": -122.6749404
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "5620",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4829709,
+    "lon": -122.6756085
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "5739",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4818976,
+    "lon": -122.6760786
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "5638",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4826793,
+    "lon": -122.6765971
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5410",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4842028,
+    "lon": -122.6742972
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "1220",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5204407,
+    "lon": -122.6846735
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5100",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4859369,
+    "lon": -122.6750084
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5100",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4861863,
+    "lon": -122.6750108
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5100",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4860081,
+    "lon": -122.6749987
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "5100",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4860981,
+    "lon": -122.6750084
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4515",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4905661,
+    "lon": -122.6764849
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4653",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4897246,
+    "lon": -122.6765199
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4651",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4897293,
+    "lon": -122.6765274
+  },
+  {
+    "street": "South Hamilton Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4906456,
+    "lon": -122.6756541
+  },
+  {
+    "street": "South Abernethy Street",
+    "housenumber": "324",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4948066,
+    "lon": -122.6743908
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4504",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4906428,
+    "lon": -122.675971
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3903",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.494746,
+    "lon": -122.675397
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4004",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4942422,
+    "lon": -122.6748173
+  },
+  {
+    "street": "South Hamilton Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4905154,
+    "lon": -122.6756591
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4233",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4926661,
+    "lon": -122.6763517
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "4235",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4926451,
+    "lon": -122.6763518
+  },
+  {
+    "street": "South Hamilton Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4906022,
+    "lon": -122.6756558
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4004",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4941971,
+    "lon": -122.6747942
+  },
+  {
+    "street": "South Hamilton Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4907324,
+    "lon": -122.6756508
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4953116,
+    "lon": -122.6752128
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4953771,
+    "lon": -122.6752108
+  },
+  {
+    "street": "South Abernethy Street",
+    "housenumber": "324",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4948321,
+    "lon": -122.674388
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4953443,
+    "lon": -122.6752118
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4004",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4942359,
+    "lon": -122.6747056
+  },
+  {
+    "street": "South Hamilton Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4905588,
+    "lon": -122.6756574
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4952788,
+    "lon": -122.6752139
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3903",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4949009,
+    "lon": -122.6753944
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.495246,
+    "lon": -122.6752149
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4004",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4942043,
+    "lon": -122.6746838
+  },
+  {
+    "street": "South Abernethy Street",
+    "housenumber": "324",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.494862,
+    "lon": -122.6743889
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "3835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4952133,
+    "lon": -122.6752159
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "4800",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.488909,
+    "lon": -122.6738967
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4899588,
+    "lon": -122.6744388
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4898698,
+    "lon": -122.674519
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4899116,
+    "lon": -122.6744388
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4898308,
+    "lon": -122.6745219
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "4640",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4893313,
+    "lon": -122.6718078
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "4330",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.492025,
+    "lon": -122.6727423
+  },
+  {
+    "street": "Northwest Thurman Street",
+    "housenumber": "1631",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5359873,
+    "lon": -122.688289
+  },
+  {
+    "street": "Northwest Thurman Street",
+    "housenumber": "1631",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5359878,
+    "lon": -122.6883655
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.489888,
+    "lon": -122.6744388
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4899536,
+    "lon": -122.6743675
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4899088,
+    "lon": -122.674516
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "4700",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4896332,
+    "lon": -122.6736553
+  },
+  {
+    "street": "South Macadam Avenue",
+    "housenumber": "4380",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4910443,
+    "lon": -122.6710974
+  },
+  {
+    "street": "South Kelly Avenue",
+    "housenumber": "4614",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4899352,
+    "lon": -122.6744388
+  },
+  {
+    "street": "South Bancroft Street",
+    "housenumber": "720",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4927282,
+    "lon": -122.6700354
+  },
+  {
+    "street": "South Bancroft Street",
+    "housenumber": "700",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4927306,
+    "lon": -122.6702918
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "10090",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.518123,
+    "lon": -122.560082
+  },
+  {
+    "street": "South Curry Street",
+    "housenumber": "126",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4977812,
+    "lon": -122.6763583
+  },
+  {
+    "street": "South Curry Street",
+    "housenumber": "130",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4977755,
+    "lon": -122.676359
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2350",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4651818,
+    "lon": -122.7019866
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2350",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4651814,
+    "lon": -122.701859
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2350",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4651809,
+    "lon": -122.7017315
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2350",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4651816,
+    "lon": -122.7019228
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "2350",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4651807,
+    "lon": -122.7016677
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4797064,
+    "lon": -122.6947276
+  },
+  {
+    "street": "Southwest Vermont Street",
+    "housenumber": "1820",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4756693,
+    "lon": -122.6973571
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4794161,
+    "lon": -122.6950989
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4794397,
+    "lon": -122.6950637
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4795532,
+    "lon": -122.6950301
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4795789,
+    "lon": -122.6950164
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1616",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4796614,
+    "lon": -122.69483
+  },
+  {
+    "street": "South Moody Avenue",
+    "housenumber": "4150",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4934128,
+    "lon": -122.6718127
+  },
+  {
+    "street": "South Lowell Street",
+    "housenumber": "630",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4938046,
+    "lon": -122.6715847
+  },
+  {
+    "street": "South Moody Avenue",
+    "housenumber": "4120",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4937209,
+    "lon": -122.6718056
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "6274",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4783878,
+    "lon": -122.6938937
+  },
+  {
+    "street": "Southwest Campus Drive",
+    "housenumber": "700",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4978699,
+    "lon": -122.6856805
+  },
+  {
+    "street": "Northeast Broadway",
+    "housenumber": "1801",
+    "city": "Portland",
+    "lat": 45.5351789,
+    "lon": -122.6474544
+  },
+  {
+    "street": "North Willamette Boulevard",
+    "housenumber": "5000",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5761474,
+    "lon": -122.7309448
+  },
+  {
+    "street": "South River Parkway",
+    "housenumber": "3700",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4957407,
+    "lon": -122.6690869
+  },
+  {
+    "street": "South Gaines Street",
+    "housenumber": "664",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4963116,
+    "lon": -122.6712803
+  },
+  {
+    "street": "South Bond Avenue",
+    "housenumber": "3704",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4962939,
+    "lon": -122.6706449
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "855",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.497187,
+    "lon": -122.6683501
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "851",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971886,
+    "lon": -122.6684297
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "847",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971904,
+    "lon": -122.6685171
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "843",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971922,
+    "lon": -122.6686077
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "839",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971939,
+    "lon": -122.6686933
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "835",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971958,
+    "lon": -122.6687868
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "831",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971976,
+    "lon": -122.6688753
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "827",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4971994,
+    "lon": -122.6689659
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "823",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4972008,
+    "lon": -122.6690337
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "819",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4972022,
+    "lon": -122.669107
+  },
+  {
+    "street": "South Pennoyer Street",
+    "housenumber": "815",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4972038,
+    "lon": -122.6691837
+  },
+  {
+    "street": "South Curry Street",
+    "housenumber": "848",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4977077,
+    "lon": -122.6684446
+  },
+  {
+    "street": "South Curry Street",
+    "housenumber": "844",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4977085,
+    "lon": -122.6685252
+  },
+  {
+    "street": "South Curry Street",
+    "housenumber": "840",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4977093,
+    "lon": -122.668597
+  },
+  {
+    "street": "South Corbett Avenue",
+    "housenumber": "2626",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5039648,
+    "lon": -122.6753255
+  },
+  {
+    "street": "Southwest 10th Avenue",
+    "housenumber": "1609",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5139342,
+    "lon": -122.6858039
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103072,
+    "lon": -122.7334582
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102454,
+    "lon": -122.7337379
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103772,
+    "lon": -122.7330648
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.510248,
+    "lon": -122.7332882
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.510309,
+    "lon": -122.7332591
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102486,
+    "lon": -122.7331758
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103729,
+    "lon": -122.7337286
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103109,
+    "lon": -122.7330599
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103763,
+    "lon": -122.7331975
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102467,
+    "lon": -122.733513
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102461,
+    "lon": -122.7336255
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103755,
+    "lon": -122.7333303
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102493,
+    "lon": -122.7330634
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103746,
+    "lon": -122.7334631
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102448,
+    "lon": -122.7338503
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103035,
+    "lon": -122.7338565
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103721,
+    "lon": -122.7338614
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103054,
+    "lon": -122.7336574
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5102473,
+    "lon": -122.7334006
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5440",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5103738,
+    "lon": -122.7335959
+  },
+  {
+    "street": "Custom House Wharf",
+    "housenumber": "20",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6563166,
+    "lon": -70.2500596
+  },
+  {
+    "street": "Northeast Sandy Boulevard",
+    "housenumber": "8217",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5531648,
+    "lon": -122.5785397
+  },
+  {
+    "street": "Southwest Multnomah Boulevard",
+    "housenumber": "3518",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4670392,
+    "lon": -122.713048
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4797207,
+    "lon": -122.693096
+  },
+  {
+    "street": "Southwest Spring Garden Street",
+    "housenumber": "2545",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4631091,
+    "lon": -122.7035245
+  },
+  {
+    "street": "Southwest Spring Garden Street",
+    "housenumber": "2545",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4629802,
+    "lon": -122.7035235
+  },
+  {
+    "street": "Southwest Spring Garden Street",
+    "housenumber": "2545",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4630661,
+    "lon": -122.7035242
+  },
+  {
+    "street": "Southwest Spring Garden Street",
+    "housenumber": "2545",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4631521,
+    "lon": -122.7035248
+  },
+  {
+    "street": "Southwest Spring Garden Street",
+    "housenumber": "2545",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4630232,
+    "lon": -122.7035238
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4549553,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4548811,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "8959",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4610926,
+    "lon": -122.7068197
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4550295,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4551778,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "8909",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4613154,
+    "lon": -122.7060421
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4551037,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "9700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4548069,
+    "lon": -122.7192951
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9221",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.458637,
+    "lon": -122.7106009
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9498",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4563457,
+    "lon": -122.7130462
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9320",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4576211,
+    "lon": -122.7103608
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9320",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4577564,
+    "lon": -122.710131
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4555291,
+    "lon": -122.7147418
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9442",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4568398,
+    "lon": -122.7125271
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4557692,
+    "lon": -122.7146044
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9414",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4569749,
+    "lon": -122.7118991
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9442",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4568997,
+    "lon": -122.7124223
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9500",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4561793,
+    "lon": -122.7133825
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4555891,
+    "lon": -122.7147075
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9320",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4574858,
+    "lon": -122.7105907
+  },
+  {
+    "street": "Southwest 26th Avenue",
+    "housenumber": "8700",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4620154,
+    "lon": -122.7031363
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9414",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4569391,
+    "lon": -122.7119664
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9500",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4559328,
+    "lon": -122.7139144
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9498",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.456385,
+    "lon": -122.7127934
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.455469,
+    "lon": -122.7147761
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9442",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4568098,
+    "lon": -122.7125795
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4556491,
+    "lon": -122.7146731
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9414",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4570466,
+    "lon": -122.7117646
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9414",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4570107,
+    "lon": -122.7118319
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9570",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4557092,
+    "lon": -122.7146388
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9500",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4560561,
+    "lon": -122.713648
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "9442",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4568697,
+    "lon": -122.7124747
+  },
+  {
+    "street": "North Catlin Avenue",
+    "housenumber": "7004",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.593771,
+    "lon": -122.7617885
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "9019",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5926501,
+    "lon": -122.757088
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "9000",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5924178,
+    "lon": -122.7572509
+  },
+  {
+    "street": "Southwest Beaverton Hillsdale Highway",
+    "housenumber": "6443",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.4875562,
+    "lon": -122.7434644
+  },
+  {
+    "street": "Southwest Beaverton Hillsdale Highway",
+    "housenumber": "6443",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.4877609,
+    "lon": -122.743462
+  },
+  {
+    "street": "Southwest Beaverton Hillsdale Highway",
+    "housenumber": "6443",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.4878632,
+    "lon": -122.743462
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185162,
+    "lon": -122.5610836
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5186343,
+    "lon": -122.5608338
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5186383,
+    "lon": -122.5609418
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5186116,
+    "lon": -122.5610815
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5186434,
+    "lon": -122.5610808
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185241,
+    "lon": -122.5609405
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185812,
+    "lon": -122.5609412
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185221,
+    "lon": -122.5608329
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185782,
+    "lon": -122.5608334
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.5185798,
+    "lon": -122.5610822
+  },
+  {
+    "street": "Southeast Washington Street",
+    "housenumber": "9955",
+    "city": "Portland",
+    "postcode": "97216",
+    "lat": 45.518548,
+    "lon": -122.5610829
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4797201,
+    "lon": -122.6932933
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4796423,
+    "lon": -122.6932905
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4796484,
+    "lon": -122.6929953
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4796464,
+    "lon": -122.6930937
+  },
+  {
+    "street": "Southwest Sunset Boulevard",
+    "housenumber": "1509",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4797204,
+    "lon": -122.6931947
+  },
+  {
+    "street": "Southeast 17th Avenue",
+    "housenumber": "8337",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4623215,
+    "lon": -122.647275
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2112",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5077558,
+    "lon": -122.6780742
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2112",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5076752,
+    "lon": -122.6780742
+  },
+  {
+    "street": "Northwest Hoyt Street",
+    "housenumber": "1231",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5273513,
+    "lon": -122.6840214
+  },
+  {
+    "street": "Southwest Broadway",
+    "housenumber": "322",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.521664,
+    "lon": -122.6781571
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "309",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5216339,
+    "lon": -122.6775965
+  },
+  {
+    "street": "Southwest 6th Avenue",
+    "housenumber": "317",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5214287,
+    "lon": -122.6776053
+  },
+  {
+    "street": "Southwest Broadway",
+    "housenumber": "326",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5215836,
+    "lon": -122.6781988
+  },
+  {
+    "street": "Northeast 19th Avenue",
+    "housenumber": "4801",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5578551,
+    "lon": -122.6460627
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3530",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488709,
+    "lon": -122.6677702
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10101",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4530163,
+    "lon": -122.7246498
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10000",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.452929,
+    "lon": -122.7217567
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10101",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4529705,
+    "lon": -122.7246494
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10101",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4529247,
+    "lon": -122.7246489
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "10230",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4512564,
+    "lon": -122.7223804
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "10230",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4513054,
+    "lon": -122.7223438
+  },
+  {
+    "street": "Southwest Gibbs Street",
+    "housenumber": "1010",
+    "city": "Portland",
+    "postcode": "97239",
+    "lat": 45.4989673,
+    "lon": -122.6903492
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10725",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4480843,
+    "lon": -122.7296894
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "11000",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.446,
+    "lon": -122.7303002
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10725",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4480166,
+    "lon": -122.7297171
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10101",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4528789,
+    "lon": -122.7246485
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "11000",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4459982,
+    "lon": -122.7302121
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10725",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4481519,
+    "lon": -122.7296618
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "11130",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4447968,
+    "lon": -122.7331613
+  },
+  {
+    "street": "Southwest Barbur Boulevard",
+    "housenumber": "10725",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.447949,
+    "lon": -122.7297447
+  },
+  {
+    "street": "Southwest Washington Street",
+    "housenumber": "720",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5205168,
+    "lon": -122.6795261
+  },
+  {
+    "street": "Southeast 81st Avenue",
+    "housenumber": "418",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5194528,
+    "lon": -122.5803624
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "8115",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5192645,
+    "lon": -122.5801677
+  },
+  {
+    "street": "Northeast Fremont Street",
+    "housenumber": "4303",
+    "city": "Portland",
+    "postcode": "97213",
+    "lat": 45.5484904,
+    "lon": -122.6190928
+  },
+  {
+    "street": "Northeast Martin Luther King Junior Boulevard",
+    "housenumber": "6250",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5680211,
+    "lon": -122.66115
+  },
+  {
+    "street": "Northeast Halsey Street",
+    "housenumber": "10414",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5333489,
+    "lon": -122.5551894
+  },
+  {
+    "street": "Southeast Stark Street",
+    "housenumber": "8048",
+    "city": "Portland",
+    "postcode": "97215",
+    "lat": 45.5190311,
+    "lon": -122.5805099
+  },
+  {
+    "street": "Southeast 52nd Avenue",
+    "housenumber": "7100",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4716463,
+    "lon": -122.6096773
+  },
+  {
+    "street": "Southeast Foster Road",
+    "housenumber": "7409",
+    "city": "Portland",
+    "postcode": "97206",
+    "lat": 45.4855756,
+    "lon": -122.5870443
+  },
+  {
+    "street": "Northwest Glisan Street",
+    "housenumber": "1621",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5268561,
+    "lon": -122.6878356
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "7825",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5895821,
+    "lon": -122.7469137
+  },
+  {
+    "street": "Northwest 16th Avenue",
+    "housenumber": "333",
+    "city": "Portland",
+    "postcode": "97209",
+    "lat": 45.5254132,
+    "lon": -122.6876423
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "11030",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4456272,
+    "lon": -122.7261235
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "11135",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4449797,
+    "lon": -122.7273934
+  },
+  {
+    "street": "Southwest Capitol Highway",
+    "housenumber": "11030",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4456614,
+    "lon": -122.7262189
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "88",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6667085,
+    "lon": -70.246641
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "76",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6671825,
+    "lon": -70.2460025
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "84",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6668319,
+    "lon": -70.2464761
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "181",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6644578,
+    "lon": -70.2499185
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "189",
+    "city": "Portland",
+    "postcode": "04101",
+    "lat": 43.6643206,
+    "lon": -70.2501141
+  },
+  {
+    "street": "Southeast 11th Avenue",
+    "housenumber": "8072",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4645208,
+    "lon": -122.6548413
+  },
+  {
+    "street": "Southwest Taylors Ferry Road",
+    "housenumber": "4729",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4550425,
+    "lon": -122.7259585
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "808",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5173209,
+    "lon": -122.6757023
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "808",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5172692,
+    "lon": -122.6757304
+  },
+  {
+    "street": "Southwest Taylor Street",
+    "housenumber": "135",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5167252,
+    "lon": -122.6750115
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "920",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5164726,
+    "lon": -122.6762569
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "820",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5171089,
+    "lon": -122.6748223
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "910",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5164944,
+    "lon": -122.675179
+  },
+  {
+    "street": "Southwest Taylor Street",
+    "housenumber": "333",
+    "city": "Portland",
+    "postcode": "97204",
+    "lat": 45.5171148,
+    "lon": -122.6764251
+  },
+  {
+    "street": "Southeast Oak Street",
+    "housenumber": "201",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5202483,
+    "lon": -122.6633701
+  },
+  {
+    "street": "Southeast 13th Avenue",
+    "housenumber": "8288",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.463033,
+    "lon": -122.6528263
+  },
+  {
+    "street": "Southeast 13th Avenue",
+    "housenumber": "8268",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4631872,
+    "lon": -122.6528323
+  },
+  {
+    "street": "Southeast 15th Avenue",
+    "housenumber": "8124",
+    "city": "Portland",
+    "postcode": "97202",
+    "lat": 45.4639026,
+    "lon": -122.6508066
+  },
+  {
+    "street": "Southwest 4th Avenue",
+    "housenumber": "2401",
+    "city": "Portland",
+    "postcode": "97201",
+    "lat": 45.5057546,
+    "lon": -122.6822366
+  },
+  {
+    "street": "Northeast Cascades Parkway",
+    "housenumber": "9401",
+    "city": "Portland",
+    "postcode": "97220",
+    "lat": 45.5767393,
+    "lon": -122.5649123
+  },
+  {
+    "street": "Southwest Yamhill Street",
+    "housenumber": "1023",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5196797,
+    "lon": -122.6829762
+  },
+  {
+    "street": "Southwest Morrison Street",
+    "housenumber": "1033",
+    "city": "Portland",
+    "postcode": "97205",
+    "lat": 45.5203232,
+    "lon": -122.6828437
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "14",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5625788,
+    "lon": -122.6665282
+  },
+  {
+    "street": "Northeast Killingsworth Street",
+    "housenumber": "8",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5625538,
+    "lon": -122.666715
+  },
+  {
+    "street": "North Interstate Avenue",
+    "housenumber": "7608",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5781113,
+    "lon": -122.681855
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "22",
+    "city": "Portland",
+    "lat": 45.5224662,
+    "lon": -122.6370988
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "12",
+    "city": "Portland",
+    "lat": 45.5225723,
+    "lon": -122.6371015
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "2803",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5230308,
+    "lon": -122.6371351
+  },
+  {
+    "street": "East Burnside Street",
+    "housenumber": "2811",
+    "city": "Portland",
+    "postcode": "97214",
+    "lat": 45.5230271,
+    "lon": -122.6370036
+  },
+  {
+    "street": "Northeast 28th Avenue",
+    "housenumber": "10",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5231231,
+    "lon": -122.6371438
+  },
+  {
+    "street": "Northeast 28th Avenue",
+    "housenumber": "14",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5231953,
+    "lon": -122.6371445
+  },
+  {
+    "street": "Northeast 28th Avenue",
+    "housenumber": "28",
+    "city": "Portland",
+    "postcode": "97232",
+    "lat": 45.5233832,
+    "lon": -122.6371351
+  },
+  {
+    "street": "Northeast 28th Avenue",
+    "housenumber": "24",
+    "city": "Portland",
+    "lat": 45.5233289,
+    "lon": -122.6371451
+  },
+  {
+    "street": "Northeast 28th Avenue",
+    "housenumber": "40",
+    "city": "Portland",
+    "lat": 45.5235211,
+    "lon": -122.6371418
+  },
+  {
+    "street": "Southeast 28th Avenue",
+    "housenumber": "137",
+    "city": "Portland",
+    "lat": 45.5216059,
+    "lon": -122.6374381
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096749,
+    "lon": -122.7325756
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096736,
+    "lon": -122.7326492
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096787,
+    "lon": -122.7323548
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096723,
+    "lon": -122.7327228
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096774,
+    "lon": -122.7324284
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5201",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5108218,
+    "lon": -122.7317859
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5201",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5108732,
+    "lon": -122.7319367
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5415",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5096761,
+    "lon": -122.732502
+  },
+  {
+    "street": "Southwest Westgate Drive",
+    "housenumber": "5201",
+    "city": "Portland",
+    "postcode": "97221",
+    "lat": 45.5106125,
+    "lon": -122.73134
+  },
+  {
+    "street": "Forest Avenue",
+    "housenumber": "1192",
+    "city": "Portland",
+    "postcode": "04103",
+    "lat": 43.6878911,
+    "lon": -70.2935533
+  },
+  {
+    "street": "Southwest Miles Court",
+    "housenumber": "6017",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4717463,
+    "lon": -122.7388012
+  },
+  {
+    "street": "Southwest 60th Avenue",
+    "housenumber": "7315",
+    "city": "Portland",
+    "postcode": "97219",
+    "lat": 45.4717479,
+    "lon": -122.7387662
+  },
+  {
+    "street": "North Yale Street",
+    "housenumber": "6721",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5812561,
+    "lon": -122.7383626
+  },
+  {
+    "street": "North Yale Street",
+    "housenumber": "6727",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5812714,
+    "lon": -122.7384364
+  },
+  {
+    "street": "North Amherst Street",
+    "housenumber": "6734",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5819107,
+    "lon": -122.7387847
+  },
+  {
+    "street": "North Amherst Street",
+    "housenumber": "6746",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5819199,
+    "lon": -122.7387775
+  },
+  {
+    "street": "North Polk Avenue",
+    "housenumber": "6814",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5836563,
+    "lon": -122.7481898
+  },
+  {
+    "street": "North Polk Avenue",
+    "housenumber": "6818",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5837096,
+    "lon": -122.7481523
+  },
+  {
+    "street": "North Macrum Avenue",
+    "housenumber": "6837",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5807302,
+    "lon": -122.7372681
+  },
+  {
+    "street": "North Macrum Avenue",
+    "housenumber": "6839",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5807591,
+    "lon": -122.7373846
+  },
+  {
+    "street": "North Ida Avenue",
+    "housenumber": "6901",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5825533,
+    "lon": -122.7418237
+  },
+  {
+    "street": "North Ida Avenue",
+    "housenumber": "6905",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5825968,
+    "lon": -122.7418019
+  },
+  {
+    "street": "North Ida Avenue",
+    "housenumber": "6909",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5826336,
+    "lon": -122.7417455
+  },
+  {
+    "street": "North Ida Avenue",
+    "housenumber": "6919",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5826722,
+    "lon": -122.7417262
+  },
+  {
+    "street": "North Amherst Street",
+    "housenumber": "7005",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5833066,
+    "lon": -122.7412687
+  },
+  {
+    "street": "North Amherst Street",
+    "housenumber": "7007",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5832855,
+    "lon": -122.7412174
+  },
+  {
+    "street": "North Carey Boulevard",
+    "housenumber": "7040",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5827033,
+    "lon": -122.7388408
+  },
+  {
+    "street": "North Carey Boulevard",
+    "housenumber": "7044",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.582773,
+    "lon": -122.7387956
+  },
+  {
+    "street": "North Decatur Street",
+    "housenumber": "7714",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5834097,
+    "lon": -122.74924
+  },
+  {
+    "street": "North Decatur Street",
+    "housenumber": "7718",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5834875,
+    "lon": -122.7491842
+  },
+  {
+    "street": "North Willamette Boulevard",
+    "housenumber": "7311",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5837946,
+    "lon": -122.7440967
+  },
+  {
+    "street": "North Hudson Street",
+    "housenumber": "5709",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5881096,
+    "lon": -122.7250559
+  },
+  {
+    "street": "North Willis Boulevard",
+    "housenumber": "5710",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5854012,
+    "lon": -122.7256492
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "6431",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5859503,
+    "lon": -122.7327848
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "6443",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5859806,
+    "lon": -122.7329486
+  },
+  {
+    "street": "North Westanna Avenue",
+    "housenumber": "7419",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5843801,
+    "lon": -122.7331262
+  },
+  {
+    "street": "North Westanna Avenue",
+    "housenumber": "7423",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5843903,
+    "lon": -122.7331761
+  },
+  {
+    "street": "North Westanna Avenue",
+    "housenumber": "7533",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5860159,
+    "lon": -122.7323375
+  },
+  {
+    "street": "North Westanna Avenue",
+    "housenumber": "7535",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5860104,
+    "lon": -122.7323406
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7602",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5848906,
+    "lon": -122.7291096
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7604",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5849174,
+    "lon": -122.7290815
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7605",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5850361,
+    "lon": -122.7295371
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7607",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5851758,
+    "lon": -122.7294234
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7609",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5851292,
+    "lon": -122.7294613
+  },
+  {
+    "street": "North Berkeley Avenue",
+    "housenumber": "7611",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5843587,
+    "lon": -122.727204
+  },
+  {
+    "street": "North Wall Avenue",
+    "housenumber": "7611",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5850827,
+    "lon": -122.7294992
+  },
+  {
+    "street": "North Berkeley Avenue",
+    "housenumber": "7613",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5843643,
+    "lon": -122.7272011
+  },
+  {
+    "street": "North Newell Avenue",
+    "housenumber": "7636",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5862025,
+    "lon": -122.7328663
+  },
+  {
+    "street": "North Berkeley Avenue",
+    "housenumber": "8020",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5854258,
+    "lon": -122.7258075
+  },
+  {
+    "street": "North Van Houten Avenue",
+    "housenumber": "8959",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5874802,
+    "lon": -122.7235219
+  },
+  {
+    "street": "North Van Houten Avenue",
+    "housenumber": "8961",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5875035,
+    "lon": -122.7235239
+  },
+  {
+    "street": "North Berkeley Avenue",
+    "housenumber": "9006",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5880906,
+    "lon": -122.7249143
+  },
+  {
+    "street": "North Macrum Avenue",
+    "housenumber": "9211",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5901219,
+    "lon": -122.7322515
+  },
+  {
+    "street": "North Macrum Avenue",
+    "housenumber": "9215",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5901378,
+    "lon": -122.7322413
+  },
+  {
+    "street": "North Fortune Avenue",
+    "housenumber": "9233",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5899965,
+    "lon": -122.7300392
+  },
+  {
+    "street": "North Fortune Avenue",
+    "housenumber": "9235",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5899966,
+    "lon": -122.7300389
+  },
+  {
+    "street": "North Lombard Street",
+    "housenumber": "6343",
+    "city": "Portland",
+    "postcode": "97203",
+    "lat": 45.5856198,
+    "lon": -122.7318177
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "104",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519049,
+    "lon": -122.664342
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "106",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519008,
+    "lon": -122.6643461
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "108",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5518982,
+    "lon": -122.6643475
+  },
+  {
+    "street": "Northeast Beech Street",
+    "housenumber": "110",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5493176,
+    "lon": -122.6642558
+  },
+  {
+    "street": "Northeast Beech Street",
+    "housenumber": "112",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5493222,
+    "lon": -122.6642572
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "112",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519053,
+    "lon": -122.6643495
+  },
+  {
+    "street": "Northeast Beech Street",
+    "housenumber": "113",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5497648,
+    "lon": -122.6642643
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "114",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519031,
+    "lon": -122.6643423
+  },
+  {
+    "street": "Northeast Beech Street",
+    "housenumber": "115",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5497592,
+    "lon": -122.6642641
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "116",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5518962,
+    "lon": -122.6643492
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "12",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5522176,
+    "lon": -122.666104
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "130",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5544426,
+    "lon": -122.663969
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "131",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5522136,
+    "lon": -122.6638971
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "137",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5522141,
+    "lon": -122.6638964
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "208",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5531593,
+    "lon": -122.668292
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "217",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5547308,
+    "lon": -122.663213
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "224",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544275,
+    "lon": -122.6686736
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "226",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544239,
+    "lon": -122.6686712
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "23",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5522107,
+    "lon": -122.6661038
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "234",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544266,
+    "lon": -122.668675
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "236",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544299,
+    "lon": -122.6686722
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "302",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519164,
+    "lon": -122.6623141
+  },
+  {
+    "street": "North Beech Street",
+    "housenumber": "303",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496861,
+    "lon": -122.6693656
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "304",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519143,
+    "lon": -122.6623165
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "305",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5534685,
+    "lon": -122.6693303
+  },
+  {
+    "street": "North Beech Street",
+    "housenumber": "307",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496875,
+    "lon": -122.6693608
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "307",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.553468,
+    "lon": -122.6693263
+  },
+  {
+    "street": "North Beech Street",
+    "housenumber": "313",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496841,
+    "lon": -122.6693687
+  },
+  {
+    "street": "North Beech Street",
+    "housenumber": "317",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496855,
+    "lon": -122.6693651
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "326",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5531631,
+    "lon": -122.6696821
+  },
+  {
+    "street": "Northeast Skidmore Street",
+    "housenumber": "326",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5547305,
+    "lon": -122.6632083
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "328",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5531632,
+    "lon": -122.6696834
+  },
+  {
+    "street": "Northeast Shaver Street",
+    "housenumber": "328",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5519197,
+    "lon": -122.6623098
+  },
+  {
+    "street": "North Beech Street",
+    "housenumber": "33",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496919,
+    "lon": -122.6670608
+  },
+  {
+    "street": "Northeast Failing Street",
+    "housenumber": "35",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5510203,
+    "lon": -122.6659142
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3513",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5485652,
+    "lon": -122.6659523
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3515",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5485654,
+    "lon": -122.6659597
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3522",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488434,
+    "lon": -122.6676463
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3526",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5486962,
+    "lon": -122.6677537
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3530",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488378,
+    "lon": -122.6676447
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "3531",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5487547,
+    "lon": -122.6648706
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "3533",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.548759,
+    "lon": -122.6648746
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "3537",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488368,
+    "lon": -122.6715487
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "3539",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488439,
+    "lon": -122.6715486
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3540",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5488377,
+    "lon": -122.6676439
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3540",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5489368,
+    "lon": -122.6653757
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3600",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.548937,
+    "lon": -122.6653776
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3602",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5489728,
+    "lon": -122.6687096
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3604",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5489757,
+    "lon": -122.668709
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "3614",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5491157,
+    "lon": -122.6643403
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "3620",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5491157,
+    "lon": -122.6643353
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3703",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496872,
+    "lon": -122.6670603
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3705",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496863,
+    "lon": -122.6670584
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3707",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496858,
+    "lon": -122.6670646
+  },
+  {
+    "street": "North Williams Avenue",
+    "housenumber": "3709",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5496908,
+    "lon": -122.6670584
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3715",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.549818,
+    "lon": -122.6693665
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3719",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5498184,
+    "lon": -122.6693627
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "3800",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.550243,
+    "lon": -122.6639705
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "3805",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5502433,
+    "lon": -122.6639695
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3827",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5505008,
+    "lon": -122.6682683
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "3829",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5504998,
+    "lon": -122.6682661
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "3834",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5506434,
+    "lon": -122.6709866
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3911",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5510243,
+    "lon": -122.6659105
+  },
+  {
+    "street": "North Haight Avenue",
+    "housenumber": "3928",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5512068,
+    "lon": -122.6697938
+  },
+  {
+    "street": "North Haight Avenue",
+    "housenumber": "3930",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5512057,
+    "lon": -122.6697892
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3933",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.551363,
+    "lon": -122.6660084
+  },
+  {
+    "street": "Northeast Cleveland Avenue",
+    "housenumber": "3935",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5513634,
+    "lon": -122.6660077
+  },
+  {
+    "street": "Northeast Garfield Avenue",
+    "housenumber": "3935",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5513365,
+    "lon": -122.6630597
+  },
+  {
+    "street": "Northeast Garfield Avenue",
+    "housenumber": "3937",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5513405,
+    "lon": -122.6630628
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3944",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5514922,
+    "lon": -122.6686961
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "3946",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5514918,
+    "lon": -122.6686893
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "4017",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5523493,
+    "lon": -122.6649908
+  },
+  {
+    "street": "Northeast Rodney Avenue",
+    "housenumber": "4019",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5523494,
+    "lon": -122.6649839
+  },
+  {
+    "street": "Northeast Garfield Avenue",
+    "housenumber": "4028",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5525536,
+    "lon": -122.6623823
+  },
+  {
+    "street": "Northeast Garfield Avenue",
+    "housenumber": "4030",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5525559,
+    "lon": -122.6623853
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4033",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5526262,
+    "lon": -122.6639701
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4035",
+    "city": "Portland",
+    "postcode": "97212",
+    "lat": 45.5526321,
+    "lon": -122.6639681
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "4054",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5528977,
+    "lon": -122.6676306
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "4058",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5528923,
+    "lon": -122.6676317
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "4060",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5528971,
+    "lon": -122.6676356
+  },
+  {
+    "street": "North Shaver Street",
+    "housenumber": "407",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5522077,
+    "lon": -122.6704311
+  },
+  {
+    "street": "North Vancouver Avenue",
+    "housenumber": "4075",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5531589,
+    "lon": -122.6683018
+  },
+  {
+    "street": "North Shaver Street",
+    "housenumber": "411",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5522085,
+    "lon": -122.6704328
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "4124",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5537374,
+    "lon": -122.6686793
+  },
+  {
+    "street": "North Gantenbein Avenue",
+    "housenumber": "4126",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5537377,
+    "lon": -122.6686791
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4127",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5537557,
+    "lon": -122.663973
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4129",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5537528,
+    "lon": -122.66397
+  },
+  {
+    "street": "North Shaver Street",
+    "housenumber": "413",
+    "city": "Portland",
+    "postcode": "97227",
+    "lat": 45.5522127,
+    "lon": -122.6704392
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4132",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5538923,
+    "lon": -122.6633418
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4134",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5538943,
+    "lon": -122.6633402
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "421",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5535027,
+    "lon": -122.6707788
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "4212",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5541571,
+    "lon": -122.670877
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4213",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5541616,
+    "lon": -122.6639703
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "4216",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5541605,
+    "lon": -122.670875
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4216",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5541599,
+    "lon": -122.6639727
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4217",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5541632,
+    "lon": -122.6639719
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "4220",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5542609,
+    "lon": -122.6708853
+  },
+  {
+    "street": "North Commercial Avenue",
+    "housenumber": "4222",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5542606,
+    "lon": -122.6708904
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "423",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5535097,
+    "lon": -122.6707823
+  },
+  {
+    "street": "Northeast Mallory Avenue",
+    "housenumber": "4231",
+    "city": "Portland",
+    "postcode": "97211",
+    "lat": 45.5544416,
+    "lon": -122.6639757
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "424",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544348,
+    "lon": -122.6708794
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "425",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5535046,
+    "lon": -122.6707844
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "426",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5531562,
+    "lon": -122.6707443
+  },
+  {
+    "street": "North Skidmore Street",
+    "housenumber": "426",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5544314,
+    "lon": -122.67088
+  },
+  {
+    "street": "North Mason Street",
+    "housenumber": "428",
+    "city": "Portland",
+    "postcode": "97217",
+    "lat": 45.5531611,
+    "lon": -122.6707376
+  }
+]

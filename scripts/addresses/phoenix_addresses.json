@@ -1,0 +1,7766 @@
+[
+  {
+    "street": "West Osborn Road",
+    "housenumber": "520",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4884996,
+    "lon": -112.0815495
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "3801",
+    "city": "Phoenix",
+    "lat": 33.446986,
+    "lon": -111.9981363
+  },
+  {
+    "street": "East Broadway Road",
+    "housenumber": "4760",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.4079854,
+    "lon": -111.9785383
+  },
+  {
+    "street": "North 31st Avenue",
+    "housenumber": "4602",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5047509,
+    "lon": -112.1268328
+  },
+  {
+    "street": "East Grant Street",
+    "housenumber": "415",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4405996,
+    "lon": -112.068203
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "2702",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4883765,
+    "lon": -112.0232029
+  },
+  {
+    "street": "East Oak Street",
+    "housenumber": "5048",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4735599,
+    "lon": -111.972546
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "522",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4544109,
+    "lon": -112.0742599
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "3100",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5098501,
+    "lon": -112.126155
+  },
+  {
+    "street": "East Jones Avenue",
+    "housenumber": "906",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.4109838,
+    "lon": -112.059522
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "555",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.537985,
+    "lon": -112.0819621
+  },
+  {
+    "street": "North 51st Avenue",
+    "housenumber": "4308",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.4982991,
+    "lon": -112.1715966
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "909",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.448007,
+    "lon": -112.0613764
+  },
+  {
+    "street": "South 50th Street",
+    "housenumber": "14647",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3127495,
+    "lon": -111.9750092
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "6310",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4807066,
+    "lon": -112.1954915
+  },
+  {
+    "street": "East Mountain View Road",
+    "housenumber": "341",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5747555,
+    "lon": -112.0678502
+  },
+  {
+    "street": "South 16th Street",
+    "housenumber": "3611",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.41346,
+    "lon": -112.0467321
+  },
+  {
+    "street": "West Tonto Street",
+    "housenumber": "1101",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.437575,
+    "lon": -112.087144
+  },
+  {
+    "street": "East Southern Avenue",
+    "housenumber": "3213",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3922165,
+    "lon": -112.0117767
+  },
+  {
+    "street": "West Tamarisk Avenue",
+    "housenumber": "33",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.403059,
+    "lon": -112.074133
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "350",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4810968,
+    "lon": -112.07999
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "5501",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5172029,
+    "lon": -112.09927
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "350",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4811191,
+    "lon": -112.079307
+  },
+  {
+    "street": "North 62nd Street",
+    "housenumber": "4330",
+    "city": "Phoenix",
+    "postcode": "85251",
+    "lat": 33.4997432,
+    "lon": -111.948262
+  },
+  {
+    "street": "North 61st Place",
+    "housenumber": "16406",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.6354025,
+    "lon": -111.9497681
+  },
+  {
+    "street": "West Thunderbird Road",
+    "housenumber": "1344",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6087342,
+    "lon": -112.087772
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "5730",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.611901,
+    "lon": -111.957404
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "3949",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3036078,
+    "lon": -111.998738
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4025",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3040314,
+    "lon": -111.9944973
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "3961",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3038588,
+    "lon": -111.9977738
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "2406",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4808051,
+    "lon": -112.0294081
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "4111",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4953968,
+    "lon": -112.0293999
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5042",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.510174,
+    "lon": -112.0740475
+  },
+  {
+    "street": "East Pierce Street",
+    "housenumber": "929",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.4556306,
+    "lon": -112.060791
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "24",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4485933,
+    "lon": -112.0714794
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "20",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4494824,
+    "lon": -112.0744233
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "18",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4505291,
+    "lon": -112.0743576
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "1",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4484813,
+    "lon": -112.0722016
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "18411",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6534775,
+    "lon": -112.0295607
+  },
+  {
+    "street": "North Paradise Village Parkway West",
+    "housenumber": "12602",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6003765,
+    "lon": -111.989399
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12415",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5995046,
+    "lon": -111.978748
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12409",
+    "city": "Phoenix",
+    "postcode": "85032-7708",
+    "lat": 33.5988761,
+    "lon": -111.978732
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12500",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.585016,
+    "lon": -111.9791293
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "12014",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5951483,
+    "lon": -112.014065
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10608",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5827291,
+    "lon": -112.0143427
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12629",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6004816,
+    "lon": -111.9788759
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "7835",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4771491,
+    "lon": -112.227017
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3132",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.51122,
+    "lon": -112.0147691
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "4824",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5080052,
+    "lon": -112.0479731
+  },
+  {
+    "street": "North Black Canyon Highway",
+    "housenumber": "8041",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5544681,
+    "lon": -112.1109487
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "202",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4505291,
+    "lon": -112.0740533
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "40",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4491187,
+    "lon": -112.072826
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "603",
+    "city": "Phoenix",
+    "lat": 33.4549636,
+    "lon": -112.0798328
+  },
+  {
+    "street": "East Mohave Street",
+    "housenumber": "1202",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4315057,
+    "lon": -112.0560301
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4509",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5986145,
+    "lon": -111.9868734
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "15412",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6266939,
+    "lon": -112.013685
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "3131",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6112023,
+    "lon": -112.0147387
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "100",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4479269,
+    "lon": -112.0746914
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "333",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4461642,
+    "lon": -112.069705
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "1",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4486694,
+    "lon": -112.0721962
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "10613",
+    "city": "Phoenix",
+    "postcode": "85029-3944",
+    "lat": 33.582675,
+    "lon": -112.149883
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "350",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4821684,
+    "lon": -112.079828
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1935",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5086966,
+    "lon": -112.0414738
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2006",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.469639,
+    "lon": -112.0741711
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2010",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4697374,
+    "lon": -112.0741792
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2016",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4698065,
+    "lon": -112.0741959
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "18",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4494796,
+    "lon": -112.0743051
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "4727",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6386021,
+    "lon": -111.978513
+  },
+  {
+    "street": "East Mayo Boulevard",
+    "housenumber": "7000",
+    "city": "Phoenix",
+    "postcode": "85054",
+    "lat": 33.6571278,
+    "lon": -111.92679
+  },
+  {
+    "street": "South 83rd Avenue",
+    "housenumber": "2610",
+    "city": "Phoenix",
+    "postcode": "85043",
+    "lat": 33.4249008,
+    "lon": -112.2390871
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "6601",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4931647,
+    "lon": -112.201687
+  },
+  {
+    "street": "North 67th Avenue",
+    "housenumber": "6615",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.493778,
+    "lon": -112.202775
+  },
+  {
+    "street": "West Lower Buckeye Road",
+    "housenumber": "9830",
+    "city": "Phoenix",
+    "postcode": "85353",
+    "lat": 33.4236492,
+    "lon": -112.269853
+  },
+  {
+    "street": "South 99th Avenue",
+    "housenumber": "2735",
+    "city": "Phoenix",
+    "postcode": "85353",
+    "lat": 33.4227801,
+    "lon": -112.271952
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "6650",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4807917,
+    "lon": -112.202939
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "2640",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4512963,
+    "lon": -112.117149
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "2709",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4505772,
+    "lon": -112.118003
+  },
+  {
+    "street": "North 5th Street",
+    "housenumber": "922",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4584551,
+    "lon": -112.0677288
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "501",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4585168,
+    "lon": -112.0673115
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "3717",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4948542,
+    "lon": -112.0015831
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "13240",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6064235,
+    "lon": -111.9782702
+  },
+  {
+    "street": "East Ray Road",
+    "housenumber": "5030",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3217704,
+    "lon": -111.975699
+  },
+  {
+    "street": "East Ray Road",
+    "housenumber": "4810",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3212926,
+    "lon": -111.979753
+  },
+  {
+    "street": "East Warner Road",
+    "housenumber": "4855",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.330375,
+    "lon": -111.978455
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "3246",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6418104,
+    "lon": -112.01108
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "3246",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6418759,
+    "lon": -112.011673
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4505",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4791949,
+    "lon": -111.984154
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3141",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4800388,
+    "lon": -112.013335
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "37",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4800229,
+    "lon": -112.07587
+  },
+  {
+    "street": "East Elliot Road",
+    "housenumber": "4747",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3474564,
+    "lon": -111.981239
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4657",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3044587,
+    "lon": -111.9810522
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "1334",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3067432,
+    "lon": -112.0538977
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4623",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5982252,
+    "lon": -111.9839647
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "3329",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6400081,
+    "lon": -112.0104
+  },
+  {
+    "street": "North 48th Street",
+    "housenumber": "12645",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6008229,
+    "lon": -111.9762826
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12841",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.602771,
+    "lon": -111.9763631
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "100",
+    "city": "Phoenix",
+    "lat": 33.4587722,
+    "lon": -112.0748483
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "107",
+    "city": "Phoenix",
+    "lat": 33.4597015,
+    "lon": -112.0746169
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "109",
+    "city": "Phoenix",
+    "lat": 33.4597265,
+    "lon": -112.0745258
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "111",
+    "city": "Phoenix",
+    "lat": 33.4597231,
+    "lon": -112.0748927
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "114",
+    "city": "Phoenix",
+    "lat": 33.4587828,
+    "lon": -112.0760529
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "115",
+    "city": "Phoenix",
+    "lat": 33.4597364,
+    "lon": -112.0747895
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "116",
+    "city": "Phoenix",
+    "lat": 33.4587843,
+    "lon": -112.0761234
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "118",
+    "city": "Phoenix",
+    "lat": 33.4587866,
+    "lon": -112.0761882
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "121",
+    "city": "Phoenix",
+    "lat": 33.4597303,
+    "lon": -112.0753023
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "122",
+    "city": "Phoenix",
+    "lat": 33.458791,
+    "lon": -112.0762413
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "126",
+    "city": "Phoenix",
+    "lat": 33.4587809,
+    "lon": -112.0762976
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "141",
+    "city": "Phoenix",
+    "lat": 33.459732,
+    "lon": -112.0756721
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "153",
+    "city": "Phoenix",
+    "lat": 33.4597251,
+    "lon": -112.0759946
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "165",
+    "city": "Phoenix",
+    "lat": 33.4597172,
+    "lon": -112.0762263
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "202",
+    "city": "Phoenix",
+    "lat": 33.458791,
+    "lon": -112.0767067
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "204",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4505899,
+    "lon": -112.0740536
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "205",
+    "city": "Phoenix",
+    "lat": 33.4597437,
+    "lon": -112.0767768
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "210",
+    "city": "Phoenix",
+    "lat": 33.458785,
+    "lon": -112.0769393
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "212",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4506359,
+    "lon": -112.0740538
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "213",
+    "city": "Phoenix",
+    "lat": 33.4508495,
+    "lon": -112.0740753
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "214",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4506767,
+    "lon": -112.074054
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "214",
+    "city": "Phoenix",
+    "lat": 33.45876,
+    "lon": -112.0771563
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "215",
+    "city": "Phoenix",
+    "lat": 33.4597418,
+    "lon": -112.0771282
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "216",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4507125,
+    "lon": -112.0740541
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "222",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4510395,
+    "lon": -112.0742305
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "225 to 243",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4596616,
+    "lon": -112.0775112
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "225",
+    "city": "Phoenix",
+    "lat": 33.4597433,
+    "lon": -112.0774113
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "234",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.451201,
+    "lon": -112.074127
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "245",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4585524,
+    "lon": -112.0772172
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "635",
+    "city": "Phoenix",
+    "lat": 33.4561397,
+    "lon": -112.0786629
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "645",
+    "city": "Phoenix",
+    "lat": 33.4564191,
+    "lon": -112.0787384
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "645a",
+    "city": "Phoenix",
+    "lat": 33.4563693,
+    "lon": -112.0787393
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "845",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4583889,
+    "lon": -112.0774482
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "849",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4585071,
+    "lon": -112.0774449
+  },
+  {
+    "street": "North 32nd Lane",
+    "housenumber": "28406",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7424095,
+    "lon": -112.129529
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3108",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7444863,
+    "lon": -112.1268891
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3113",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7442567,
+    "lon": -112.1271845
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3121",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7441255,
+    "lon": -112.1275029
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3127",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7441388,
+    "lon": -112.1276977
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3131",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7441419,
+    "lon": -112.1278877
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3201",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7441373,
+    "lon": -112.1280852
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3209",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7441164,
+    "lon": -112.1283728
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3215",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7440009,
+    "lon": -112.1285184
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3219",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7438871,
+    "lon": -112.1286609
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3227",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7436748,
+    "lon": -112.1289535
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3231",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7435275,
+    "lon": -112.1290551
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3235",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7434069,
+    "lon": -112.1292039
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3239",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7432885,
+    "lon": -112.1293504
+  },
+  {
+    "street": "West Mark Lane",
+    "housenumber": "3243",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.7431893,
+    "lon": -112.1294797
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4515",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5987045,
+    "lon": -111.9861919
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4533",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5986749,
+    "lon": -111.9856968
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4543",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5987728,
+    "lon": -111.9856898
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4547",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.59878,
+    "lon": -111.9855538
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4555",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5987704,
+    "lon": -111.9851724
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4611",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5985561,
+    "lon": -111.9840667
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4613",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5984568,
+    "lon": -111.9840752
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4615",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5983942,
+    "lon": -111.9840777
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4619",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5983247,
+    "lon": -111.984057
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4625",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5981583,
+    "lon": -111.9837892
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4627",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5981773,
+    "lon": -111.9838656
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4635",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5981307,
+    "lon": -111.9835288
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4639",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5980754,
+    "lon": -111.9834008
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4655",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974682,
+    "lon": -111.9818059
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4657",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974432,
+    "lon": -111.9817212
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4659",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974696,
+    "lon": -111.9816681
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4661",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974449,
+    "lon": -111.9815791
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4663",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974693,
+    "lon": -111.98151
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4665",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5974466,
+    "lon": -111.9814505
+  },
+  {
+    "street": "West Mariposa Street",
+    "housenumber": "102",
+    "city": "Phoenix",
+    "lat": 33.5085991,
+    "lon": -112.0772579
+  },
+  {
+    "street": "West Mariposa Street",
+    "housenumber": "192",
+    "city": "Phoenix",
+    "lat": 33.5086281,
+    "lon": -112.0775026
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3033",
+    "city": "Phoenix",
+    "lat": 33.4859862,
+    "lon": -112.0734913
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3215",
+    "city": "Phoenix",
+    "lat": 33.4861537,
+    "lon": -112.0735502
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3333",
+    "city": "Phoenix",
+    "lat": 33.4866619,
+    "lon": -112.0734998
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3525",
+    "city": "Phoenix",
+    "lat": 33.4863553,
+    "lon": -112.0735186
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3636",
+    "city": "Phoenix",
+    "lat": 33.4917358,
+    "lon": -112.074247
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4041",
+    "city": "Phoenix",
+    "lat": 33.4872898,
+    "lon": -112.0734716
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4402",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.500458,
+    "lon": -112.074125
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4735",
+    "city": "Phoenix",
+    "postcode": "85012-1711",
+    "lat": 33.5070956,
+    "lon": -112.0735209
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4739",
+    "city": "Phoenix",
+    "postcode": "85012-1711",
+    "lat": 33.5072645,
+    "lon": -112.0735197
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4955",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5086586,
+    "lon": -112.0822629
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4976",
+    "city": "Phoenix",
+    "lat": 33.5088261,
+    "lon": -112.082722
+  },
+  {
+    "street": "West Mariposa Street",
+    "housenumber": "526",
+    "city": "Phoenix",
+    "lat": 33.5087979,
+    "lon": -112.0817021
+  },
+  {
+    "street": "West Mariposa Street",
+    "housenumber": "545",
+    "city": "Phoenix",
+    "lat": 33.508181,
+    "lon": -112.0817007
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "901",
+    "city": "Phoenix",
+    "lat": 33.4579061,
+    "lon": -112.0649145
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "14",
+    "city": "Phoenix",
+    "lat": 33.5095308,
+    "lon": -112.0746396
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5026",
+    "city": "Phoenix",
+    "lat": 33.5098345,
+    "lon": -112.0740484
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5028",
+    "city": "Phoenix",
+    "lat": 33.509899,
+    "lon": -112.0740411
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5030",
+    "city": "Phoenix",
+    "lat": 33.5099767,
+    "lon": -112.0740423
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5032",
+    "city": "Phoenix",
+    "lat": 33.510022,
+    "lon": -112.0740424
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5036",
+    "city": "Phoenix",
+    "lat": 33.5100694,
+    "lon": -112.0740441
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5038",
+    "city": "Phoenix",
+    "lat": 33.5101191,
+    "lon": -112.0740461
+  },
+  {
+    "street": "West Northern Avenue",
+    "housenumber": "510",
+    "city": "Phoenix",
+    "postcode": "85021-7217",
+    "lat": 33.5531516,
+    "lon": -112.0818916
+  },
+  {
+    "street": "West Northern Avenue",
+    "housenumber": "520",
+    "city": "Phoenix",
+    "postcode": "85021-7217",
+    "lat": 33.5531633,
+    "lon": -112.0822328
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4654954,
+    "lon": -112.0830372
+  },
+  {
+    "street": "East Northern Avenue",
+    "housenumber": "750",
+    "city": "Phoenix",
+    "postcode": "85020-4161",
+    "lat": 33.5530392,
+    "lon": -112.0636355
+  },
+  {
+    "street": "North 17th Avenue",
+    "housenumber": "22639",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6924513,
+    "lon": -112.0935908
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "2323",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4945842,
+    "lon": -112.0311903
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "1950",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4954869,
+    "lon": -112.101633
+  },
+  {
+    "street": "North 29th Avenue",
+    "housenumber": "24601",
+    "city": "Phoenix",
+    "postcode": "85083",
+    "lat": 33.707103,
+    "lon": -112.1210328
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "22822",
+    "city": "Glendale",
+    "postcode": "85310-4403",
+    "lat": 33.6933388,
+    "lon": -112.1524865
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "140",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4496145,
+    "lon": -112.0779292
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "149",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4497537,
+    "lon": -112.0788274
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "150",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4500737,
+    "lon": -112.0792402
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "304",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4495347,
+    "lon": -112.077929
+  },
+  {
+    "street": "West Monroe Street",
+    "housenumber": "345",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4500542,
+    "lon": -112.078589
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "12306",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5983448,
+    "lon": -112.0135067
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "12310",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5984206,
+    "lon": -112.0135089
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13609",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6099392,
+    "lon": -112.0123611
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13611",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6099463,
+    "lon": -112.0122011
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13613",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6099989,
+    "lon": -112.0120918
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13617",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.610102,
+    "lon": -112.0120732
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13625",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.610729,
+    "lon": -112.0120351
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13627",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6109103,
+    "lon": -112.0120538
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13629",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6109646,
+    "lon": -112.0120389
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13631",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6110329,
+    "lon": -112.0120486
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13637",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6111175,
+    "lon": -112.0120405
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13645",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6112188,
+    "lon": -112.0120442
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13649",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6112984,
+    "lon": -112.0120516
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "13651",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6113297,
+    "lon": -112.0120553
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10230",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5799628,
+    "lon": -112.0133451
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1414",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4876458,
+    "lon": -112.051315
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1502",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4876617,
+    "lon": -112.049364
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3020",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4827084,
+    "lon": -112.0479771
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3026",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4828724,
+    "lon": -112.0480106
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3040",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4832395,
+    "lon": -112.0479256
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3046",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4833333,
+    "lon": -112.0479369
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3050",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4834209,
+    "lon": -112.0479481
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3110",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4843177,
+    "lon": -112.0479485
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3117",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4847763,
+    "lon": -112.0473532
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3201",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4851558,
+    "lon": -112.0474118
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3202",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4846487,
+    "lon": -112.0479838
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3208",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4849104,
+    "lon": -112.0479607
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "3335",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4869166,
+    "lon": -112.0473939
+  },
+  {
+    "street": "East Adams Street",
+    "housenumber": "139",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4491402,
+    "lon": -112.0718721
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "110",
+    "city": "Phoenix",
+    "lat": 33.4495053,
+    "lon": -112.0807388
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "112",
+    "city": "Phoenix",
+    "lat": 33.44968,
+    "lon": -112.080514
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "149",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4652747,
+    "lon": -112.0780554
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "222",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4509621,
+    "lon": -112.0804432
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "237",
+    "city": "Phoenix",
+    "lat": 33.4594012,
+    "lon": -112.0777147
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "241",
+    "city": "Phoenix",
+    "lat": 33.4592848,
+    "lon": -112.0776137
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "300",
+    "city": "Phoenix",
+    "lat": 33.4656485,
+    "lon": -112.0784658
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "302",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4656566,
+    "lon": -112.0786228
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "304",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4628693,
+    "lon": -112.0786021
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "306",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4628783,
+    "lon": -112.0786635
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "310",
+    "city": "Phoenix",
+    "lat": 33.4494732,
+    "lon": -112.0780152
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4338;4334",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4998674,
+    "lon": -112.082822
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4340",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.499916,
+    "lon": -112.0828057
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4429",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5015813,
+    "lon": -112.0822651
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "54",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4627465,
+    "lon": -112.0761714
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "549",
+    "city": "Phoenix",
+    "lat": 33.4595749,
+    "lon": -112.0822487
+  },
+  {
+    "street": "West Portland Street",
+    "housenumber": "551",
+    "city": "Phoenix",
+    "lat": 33.4595875,
+    "lon": -112.082341
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "56",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4627465,
+    "lon": -112.0762056
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "58",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4627535,
+    "lon": -112.0763683
+  },
+  {
+    "street": "West Culver Street",
+    "housenumber": "60",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4627535,
+    "lon": -112.0764103
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "610",
+    "city": "Phoenix",
+    "lat": 33.4588336,
+    "lon": -112.08193
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "612",
+    "city": "Phoenix",
+    "lat": 33.4552622,
+    "lon": -112.080387
+  },
+  {
+    "street": "North 5th Avenue",
+    "housenumber": "614",
+    "city": "Phoenix",
+    "lat": 33.4553281,
+    "lon": -112.0803676
+  },
+  {
+    "street": "West Lynwood Street",
+    "housenumber": "63",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4645458,
+    "lon": -112.0766355
+  },
+  {
+    "street": "West Lynwood Street",
+    "housenumber": "65",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4645455,
+    "lon": -112.0766917
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "844",
+    "city": "Phoenix",
+    "lat": 33.4583315,
+    "lon": -112.0791291
+  },
+  {
+    "street": "North 4th Avenue",
+    "housenumber": "850",
+    "city": "Phoenix",
+    "lat": 33.4584702,
+    "lon": -112.0791194
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "101",
+    "city": "Phoenix",
+    "lat": 33.4496403,
+    "lon": -112.0299785
+  },
+  {
+    "street": "East Monroe Street",
+    "housenumber": "101",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4500438,
+    "lon": -112.0721359
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "102",
+    "city": "Phoenix",
+    "lat": 33.4498301,
+    "lon": -112.0304419
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "106",
+    "city": "Phoenix",
+    "lat": 33.4498814,
+    "lon": -112.0304486
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "108",
+    "city": "Phoenix",
+    "lat": 33.4499504,
+    "lon": -112.0304558
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "11",
+    "city": "Phoenix",
+    "lat": 33.448878,
+    "lon": -112.0299683
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "110",
+    "city": "Phoenix",
+    "lat": 33.450005,
+    "lon": -112.0304311
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1110",
+    "city": "Phoenix",
+    "lat": 33.4484335,
+    "lon": -112.0584534
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1112",
+    "city": "Phoenix",
+    "lat": 33.4485011,
+    "lon": -112.0582224
+  },
+  {
+    "street": "East Adams Street",
+    "housenumber": "125",
+    "city": "Phoenix",
+    "lat": 33.4491415,
+    "lon": -112.0723145
+  },
+  {
+    "street": "East Taylor Street",
+    "housenumber": "120",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4538982,
+    "lon": -112.0722765
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1526",
+    "city": "Phoenix",
+    "lat": 33.4484503,
+    "lon": -112.0487917
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1530",
+    "city": "Phoenix",
+    "lat": 33.4484495,
+    "lon": -112.0487036
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1619",
+    "city": "Phoenix",
+    "lat": 33.4480826,
+    "lon": -112.0469154
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1624",
+    "city": "Phoenix",
+    "lat": 33.4484731,
+    "lon": -112.0466189
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1626",
+    "city": "Phoenix",
+    "lat": 33.4484801,
+    "lon": -112.0464805
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1721",
+    "city": "Phoenix",
+    "lat": 33.4480925,
+    "lon": -112.0445663
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1729",
+    "city": "Phoenix",
+    "lat": 33.4481035,
+    "lon": -112.0443849
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1737",
+    "city": "Phoenix",
+    "lat": 33.448112,
+    "lon": -112.0439437
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "18",
+    "city": "Phoenix",
+    "lat": 33.4491407,
+    "lon": -112.0348115
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1802",
+    "city": "Phoenix",
+    "lat": 33.4485549,
+    "lon": -112.0432701
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1830",
+    "city": "Phoenix",
+    "lat": 33.4485877,
+    "lon": -112.0425738
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1841",
+    "city": "Phoenix",
+    "lat": 33.4480835,
+    "lon": -112.0416779
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1904",
+    "city": "Phoenix",
+    "lat": 33.4485596,
+    "lon": -112.0407898
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1918",
+    "city": "Phoenix",
+    "lat": 33.4485265,
+    "lon": -112.0403602
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "210",
+    "city": "Phoenix",
+    "lat": 33.4505272,
+    "lon": -112.0305401
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2217",
+    "city": "Phoenix",
+    "lat": 33.4480433,
+    "lon": -112.0338777
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "222",
+    "city": "Phoenix",
+    "lat": 33.4508509,
+    "lon": -112.0304372
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2241",
+    "city": "Phoenix",
+    "lat": 33.4480794,
+    "lon": -112.0327731
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2245",
+    "city": "Phoenix",
+    "lat": 33.4480248,
+    "lon": -112.0326001
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2301",
+    "city": "Phoenix",
+    "lat": 33.4480268,
+    "lon": -112.0322335
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2302",
+    "city": "Phoenix",
+    "lat": 33.4486755,
+    "lon": -112.03216
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2312",
+    "city": "Phoenix",
+    "lat": 33.4486548,
+    "lon": -112.0319115
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2326",
+    "city": "Phoenix",
+    "lat": 33.4486748,
+    "lon": -112.0314999
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2332",
+    "city": "Phoenix",
+    "lat": 33.4486495,
+    "lon": -112.031222
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2343",
+    "city": "Phoenix",
+    "lat": 33.4479894,
+    "lon": -112.0304934
+  },
+  {
+    "street": "East Adams Street",
+    "housenumber": "2401",
+    "city": "Phoenix",
+    "lat": 33.4491327,
+    "lon": -112.0299663
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2411",
+    "city": "Phoenix",
+    "lat": 33.4478738,
+    "lon": -112.0289186
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2426",
+    "city": "Phoenix",
+    "lat": 33.4484963,
+    "lon": -112.0287184
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "2429",
+    "city": "Phoenix",
+    "lat": 33.4479901,
+    "lon": -112.0286871
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "600",
+    "city": "Phoenix",
+    "lat": 33.4485772,
+    "lon": -112.0662147
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "702",
+    "city": "Phoenix",
+    "lat": 33.4556876,
+    "lon": -112.0727833
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "705",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4558507,
+    "lon": -112.0722948
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "706",
+    "city": "Phoenix",
+    "lat": 33.4486796,
+    "lon": -112.0641421
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "706",
+    "city": "Phoenix",
+    "lat": 33.4558535,
+    "lon": -112.0727524
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "801",
+    "city": "Phoenix",
+    "lat": 33.4480272,
+    "lon": -112.0634717
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "803",
+    "city": "Phoenix",
+    "lat": 33.4478766,
+    "lon": -112.0632875
+  },
+  {
+    "street": "East Van Buren Street",
+    "housenumber": "2401",
+    "city": "Phoenix",
+    "lat": 33.4510213,
+    "lon": -112.02976
+  },
+  {
+    "street": "South 1st Avenue",
+    "housenumber": "1",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4479521,
+    "lon": -112.0750004
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "1033",
+    "city": "Phoenix",
+    "lat": 33.4448522,
+    "lon": -112.0593551
+  },
+  {
+    "street": "West Jefferson Street",
+    "housenumber": "11",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4469934,
+    "lon": -112.0742268
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1103",
+    "city": "Phoenix",
+    "lat": 33.4482711,
+    "lon": -112.0572889
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "1107",
+    "city": "Phoenix",
+    "lat": 33.4447099,
+    "lon": -112.0586864
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "1141",
+    "city": "Phoenix",
+    "lat": 33.4468831,
+    "lon": -112.0576799
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "1153",
+    "city": "Phoenix",
+    "lat": 33.4468827,
+    "lon": -112.0567236
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "1201",
+    "city": "Phoenix",
+    "lat": 33.4469083,
+    "lon": -112.0560828
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "1202",
+    "city": "Phoenix",
+    "lat": 33.4453315,
+    "lon": -112.0561861
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1217",
+    "city": "Phoenix",
+    "lat": 33.4459033,
+    "lon": -112.0555895
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1225",
+    "city": "Phoenix",
+    "lat": 33.4459308,
+    "lon": -112.0552094
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1229",
+    "city": "Phoenix",
+    "lat": 33.4459473,
+    "lon": -112.0550731
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1233",
+    "city": "Phoenix",
+    "lat": 33.4459196,
+    "lon": -112.0549055
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1237",
+    "city": "Phoenix",
+    "lat": 33.4459225,
+    "lon": -112.0547517
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1241",
+    "city": "Phoenix",
+    "lat": 33.4459499,
+    "lon": -112.0545997
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "1242",
+    "city": "Phoenix",
+    "lat": 33.4453179,
+    "lon": -112.054583
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1255",
+    "city": "Phoenix",
+    "lat": 33.4457752,
+    "lon": -112.0530713
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1302",
+    "city": "Phoenix",
+    "lat": 33.4463462,
+    "lon": -112.0540624
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1305",
+    "city": "Phoenix",
+    "lat": 33.4459851,
+    "lon": -112.0539038
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1309",
+    "city": "Phoenix",
+    "lat": 33.4459682,
+    "lon": -112.0537097
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1310",
+    "city": "Phoenix",
+    "lat": 33.446312,
+    "lon": -112.0537469
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1317",
+    "city": "Phoenix",
+    "lat": 33.4459607,
+    "lon": -112.0534252
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1321",
+    "city": "Phoenix",
+    "lat": 33.4459661,
+    "lon": -112.0532637
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1322",
+    "city": "Phoenix",
+    "lat": 33.4463095,
+    "lon": -112.0532492
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1341",
+    "city": "Phoenix",
+    "lat": 33.4459364,
+    "lon": -112.052449
+  },
+  {
+    "street": "South 12th Street",
+    "housenumber": "150",
+    "city": "Phoenix",
+    "lat": 33.445759,
+    "lon": -112.0568878
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "210",
+    "city": "Phoenix",
+    "lat": 33.4457139,
+    "lon": -112.0544271
+  },
+  {
+    "street": "South 13th Street",
+    "housenumber": "215",
+    "city": "Phoenix",
+    "lat": 33.4454767,
+    "lon": -112.0540573
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "220",
+    "city": "Phoenix",
+    "lat": 33.4452955,
+    "lon": -112.0628263
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "401",
+    "city": "Phoenix",
+    "lat": 33.4461581,
+    "lon": -112.0679106
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "lat": 33.4467291,
+    "lon": -112.0644947
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "801",
+    "city": "Phoenix",
+    "lat": 33.4466987,
+    "lon": -112.0636735
+  },
+  {
+    "street": "East Jefferson Street",
+    "housenumber": "808",
+    "city": "Phoenix",
+    "lat": 33.4473515,
+    "lon": -112.0633352
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "901",
+    "city": "Phoenix",
+    "lat": 33.4452983,
+    "lon": -112.0618518
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "919",
+    "city": "Phoenix",
+    "lat": 33.4448268,
+    "lon": -112.0612688
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "926",
+    "city": "Phoenix",
+    "lat": 33.4453051,
+    "lon": -112.0610195
+  },
+  {
+    "street": "East Jackson Street",
+    "housenumber": "929",
+    "city": "Phoenix",
+    "lat": 33.4447742,
+    "lon": -112.0605573
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "301",
+    "city": "Phoenix",
+    "lat": 33.4908891,
+    "lon": -112.0692033
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "305",
+    "city": "Phoenix",
+    "lat": 33.4908963,
+    "lon": -112.0690318
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "313",
+    "city": "Phoenix",
+    "lat": 33.4908953,
+    "lon": -112.0687236
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "314",
+    "city": "Phoenix",
+    "lat": 33.4913076,
+    "lon": -112.0685686
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "317",
+    "city": "Phoenix",
+    "lat": 33.4909021,
+    "lon": -112.0685729
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "321",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.491296,
+    "lon": -112.069179
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "325",
+    "city": "Phoenix",
+    "lat": 33.4909024,
+    "lon": -112.0682268
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "329",
+    "city": "Phoenix",
+    "lat": 33.4908892,
+    "lon": -112.0680479
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "333",
+    "city": "Phoenix",
+    "lat": 33.4909133,
+    "lon": -112.0678719
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3813",
+    "city": "Phoenix",
+    "lat": 33.4916033,
+    "lon": -112.0691733
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3815",
+    "city": "Phoenix",
+    "lat": 33.491724,
+    "lon": -112.0691828
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3819",
+    "city": "Phoenix",
+    "lat": 33.4919041,
+    "lon": -112.0691624
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3821",
+    "city": "Phoenix",
+    "lat": 33.4920141,
+    "lon": -112.0691701
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "402",
+    "city": "Phoenix",
+    "lat": 33.4912681,
+    "lon": -112.0677474
+  },
+  {
+    "street": "East Clarendon Avenue",
+    "housenumber": "333",
+    "city": "Phoenix",
+    "lat": 33.4909018,
+    "lon": -112.0688789
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3826",
+    "city": "Phoenix",
+    "lat": 33.492131,
+    "lon": -112.0697295
+  },
+  {
+    "street": "North 28th Avenue",
+    "housenumber": "3828",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.4920313,
+    "lon": -112.1194895
+  },
+  {
+    "street": "East Monroe Street",
+    "housenumber": "208",
+    "city": "Phoenix",
+    "lat": 33.4502494,
+    "lon": -112.0707456
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2706",
+    "city": "Phoenix",
+    "lat": 33.6408635,
+    "lon": -112.0241886
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2708",
+    "city": "Phoenix",
+    "lat": 33.640857,
+    "lon": -112.0240314
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2714",
+    "city": "Phoenix",
+    "lat": 33.6408557,
+    "lon": -112.0238696
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2716",
+    "city": "Phoenix",
+    "lat": 33.6408547,
+    "lon": -112.0238005
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2718",
+    "city": "Phoenix",
+    "lat": 33.6408537,
+    "lon": -112.0237313
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2720",
+    "city": "Phoenix",
+    "lat": 33.6408527,
+    "lon": -112.0236622
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2722",
+    "city": "Phoenix",
+    "lat": 33.6408628,
+    "lon": -112.0235042
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2724",
+    "city": "Phoenix",
+    "lat": 33.6408623,
+    "lon": -112.023438
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2726",
+    "city": "Phoenix",
+    "lat": 33.6408618,
+    "lon": -112.0233719
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2728",
+    "city": "Phoenix",
+    "lat": 33.6408614,
+    "lon": -112.0233057
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15827",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6311341,
+    "lon": -112.030364
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "12008",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5951487,
+    "lon": -112.013908
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "12020",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5951479,
+    "lon": -112.014222
+  },
+  {
+    "street": "East Hazelwood Street",
+    "housenumber": "3153",
+    "city": "Phoenix",
+    "lat": 33.504605,
+    "lon": -112.0135084
+  },
+  {
+    "street": "East Hazelwood Street",
+    "housenumber": "3155",
+    "city": "Phoenix",
+    "lat": 33.5046112,
+    "lon": -112.0134128
+  },
+  {
+    "street": "East Hazelwood Street",
+    "housenumber": "3157",
+    "city": "Phoenix",
+    "lat": 33.5046174,
+    "lon": -112.0132971
+  },
+  {
+    "street": "East Meadowbrook Avenue",
+    "housenumber": "3158",
+    "city": "Phoenix",
+    "lat": 33.5042145,
+    "lon": -112.0133242
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3201",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.509099,
+    "lon": -112.012829
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3205",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5091386,
+    "lon": -112.0127125
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3215",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5091827,
+    "lon": -112.0121675
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3217",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092771,
+    "lon": -112.012082
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3219",
+    "city": "Phoenix",
+    "postcode": "85018-8830",
+    "lat": 33.5094773,
+    "lon": -112.0119953
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3241",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5097031,
+    "lon": -112.0105331
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3243",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5096321,
+    "lon": -112.0105326
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3245",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5095539,
+    "lon": -112.0105337
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3247",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5094644,
+    "lon": -112.0105337
+  },
+  {
+    "street": "East Campbell Avenue",
+    "housenumber": "3248",
+    "city": "Phoenix",
+    "lat": 33.5027163,
+    "lon": -112.0109373
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3249",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092497,
+    "lon": -112.0108801
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3251",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092419,
+    "lon": -112.0107809
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3253",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092418,
+    "lon": -112.0106901
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3255",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092363,
+    "lon": -112.0105944
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3257",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5092957,
+    "lon": -112.0105322
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3259",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5093966,
+    "lon": -112.0105268
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3261",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5094681,
+    "lon": -112.0106945
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3263",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5095477,
+    "lon": -112.0106944
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3265",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5096207,
+    "lon": -112.0106956
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3267",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5097011,
+    "lon": -112.0106952
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4515",
+    "city": "Phoenix",
+    "lat": 33.5031942,
+    "lon": -112.0126593
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4517",
+    "city": "Phoenix",
+    "lat": 33.5033134,
+    "lon": -112.0126731
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4725",
+    "city": "Phoenix",
+    "lat": 33.507593,
+    "lon": -112.0122408
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4735",
+    "city": "Phoenix",
+    "lat": 33.5076013,
+    "lon": -112.0125498
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4745",
+    "city": "Phoenix",
+    "lat": 33.5078422,
+    "lon": -112.012555
+  },
+  {
+    "street": "East Devonshire Avenue",
+    "housenumber": "724",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4975557,
+    "lon": -112.0639387
+  },
+  {
+    "street": "East Devonshire Avenue",
+    "housenumber": "931",
+    "city": "Phoenix",
+    "lat": 33.497119,
+    "lon": -112.061701
+  },
+  {
+    "street": "East Devonshire Avenue",
+    "housenumber": "948",
+    "city": "Phoenix",
+    "lat": 33.4973995,
+    "lon": -112.0610677
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "1102",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4949886,
+    "lon": -112.0577376
+  },
+  {
+    "street": "South 21st Drive",
+    "housenumber": "7705",
+    "city": "Phoenix",
+    "lat": 33.3770933,
+    "lon": -112.1048784
+  },
+  {
+    "street": "South 21st Drive",
+    "housenumber": "7725",
+    "city": "Phoenix",
+    "lat": 33.3761658,
+    "lon": -112.1049587
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "3226",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5838791,
+    "lon": -112.0122289
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4511",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.5985706,
+    "lon": -111.9865212
+  },
+  {
+    "street": "East Glendale Avenue",
+    "housenumber": "1625",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5376913,
+    "lon": -112.046188
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "3226",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5837918,
+    "lon": -112.0122322
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5088395,
+    "lon": -112.064629
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.508963,
+    "lon": -112.064633
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "102",
+    "city": "Phoenix",
+    "postcode": "97535",
+    "lat": 42.2736476,
+    "lon": -122.8155183
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "106½",
+    "city": "Phoenix",
+    "postcode": "97535",
+    "lat": 42.2735507,
+    "lon": -122.8154063
+  },
+  {
+    "street": "South Central Avenue",
+    "housenumber": "5223",
+    "city": "Phoenix",
+    "lat": 33.398494,
+    "lon": -112.0724794
+  },
+  {
+    "street": "South 7th Avenue",
+    "housenumber": "4401",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.406329,
+    "lon": -112.081759
+  },
+  {
+    "street": "South 19th Avenue",
+    "housenumber": "4303",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.4069868,
+    "lon": -112.099096
+  },
+  {
+    "street": "West Willetta Street",
+    "housenumber": "314",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4639227,
+    "lon": -112.0790622
+  },
+  {
+    "street": "West Willetta Street",
+    "housenumber": "318",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4639227,
+    "lon": -112.0791092
+  },
+  {
+    "street": "West Willetta Street",
+    "housenumber": "518",
+    "city": "Phoenix",
+    "lat": 33.4639304,
+    "lon": -112.0813044
+  },
+  {
+    "street": "West Willetta Street",
+    "housenumber": "520",
+    "city": "Phoenix",
+    "lat": 33.4639304,
+    "lon": -112.0813997
+  },
+  {
+    "street": "West Cypress Street",
+    "housenumber": "102",
+    "city": "Phoenix",
+    "lat": 33.4719489,
+    "lon": -112.0779989
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "2013",
+    "city": "Phoenix",
+    "lat": 33.4699946,
+    "lon": -112.0781066
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "2017",
+    "city": "Phoenix",
+    "lat": 33.4701782,
+    "lon": -112.0780951
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "2219",
+    "city": "Phoenix",
+    "lat": 33.4726329,
+    "lon": -112.0780822
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "2221",
+    "city": "Phoenix",
+    "lat": 33.4727528,
+    "lon": -112.0780784
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "2349",
+    "city": "Phoenix",
+    "lat": 33.4743604,
+    "lon": -112.0781014
+  },
+  {
+    "street": "West Vernon Avenue",
+    "housenumber": "76",
+    "city": "Phoenix",
+    "lat": 33.474159,
+    "lon": -112.0779868
+  },
+  {
+    "street": "West Vernon Avenue",
+    "housenumber": "78",
+    "city": "Phoenix",
+    "lat": 33.4741713,
+    "lon": -112.0780753
+  },
+  {
+    "street": "East Pierce Street",
+    "housenumber": "104",
+    "city": "Phoenix",
+    "lat": 33.4557134,
+    "lon": -112.0721126
+  },
+  {
+    "street": "East Pierce Street",
+    "housenumber": "106",
+    "city": "Phoenix",
+    "lat": 33.4556703,
+    "lon": -112.072046
+  },
+  {
+    "street": "East Pierce Street",
+    "housenumber": "108",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4557117,
+    "lon": -112.071995
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "711",
+    "city": "Phoenix",
+    "lat": 33.4560142,
+    "lon": -112.0721025
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "321",
+    "city": "Phoenix",
+    "lat": 33.50912,
+    "lon": -112.0684807
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "323",
+    "city": "Phoenix",
+    "lat": 33.5091177,
+    "lon": -112.0683563
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "325",
+    "city": "Phoenix",
+    "lat": 33.5091154,
+    "lon": -112.068232
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "341",
+    "city": "Phoenix",
+    "lat": 33.5091238,
+    "lon": -112.0676475
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "5007",
+    "city": "Phoenix",
+    "lat": 33.509667,
+    "lon": -112.0704338
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5018",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.509835,
+    "lon": -112.0652393
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5020",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5098871,
+    "lon": -112.0652408
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5022",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5099391,
+    "lon": -112.0652423
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5024",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5099912,
+    "lon": -112.0652438
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "51",
+    "city": "Phoenix",
+    "lat": 33.5090152,
+    "lon": -112.0717392
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "6501",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.6241453,
+    "lon": -111.9404962
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5555",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5182973,
+    "lon": -112.0639045
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5555",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5176383,
+    "lon": -112.0634778
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5555",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5171067,
+    "lon": -112.0634145
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "7820",
+    "city": "Phoenix",
+    "postcode": "85020-4223",
+    "lat": 33.5514094,
+    "lon": -112.0581919
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "4912",
+    "city": "Phoenix",
+    "lat": 33.5834449,
+    "lon": -111.9764
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "719",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.606996,
+    "lon": -112.064281
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "719",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6070868,
+    "lon": -112.0644349
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "13240",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6067734,
+    "lon": -112.065639
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "3415",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5380515,
+    "lon": -112.1329478
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "7849",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5528088,
+    "lon": -112.150956
+  },
+  {
+    "street": "East Warner Road",
+    "housenumber": "5060",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3342977,
+    "lon": -111.977
+  },
+  {
+    "street": "East Warner Road",
+    "housenumber": "4740",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3319221,
+    "lon": -111.9813172
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "7730",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.49493,
+    "lon": -112.2264
+  },
+  {
+    "street": "East Bethany Home Road",
+    "housenumber": "1602",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5239151,
+    "lon": -112.0471584
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "1501",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4648334,
+    "lon": -112.1513538
+  },
+  {
+    "street": "West Southern Avenue",
+    "housenumber": "5115",
+    "city": "Phoenix",
+    "postcode": "85339",
+    "lat": 33.3915255,
+    "lon": -112.169026
+  },
+  {
+    "street": "East Southern Avenue",
+    "housenumber": "1533",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3922237,
+    "lon": -112.0479977
+  },
+  {
+    "street": "East Southern Avenue",
+    "housenumber": "2402",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3934407,
+    "lon": -112.02969
+  },
+  {
+    "street": "South 30th Street",
+    "housenumber": "6006",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3927313,
+    "lon": -112.018425
+  },
+  {
+    "street": "East Highland Avenue",
+    "housenumber": "2111",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5044537,
+    "lon": -112.0360867
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "9401",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5716745,
+    "lon": -112.0828297
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "11",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4480909,
+    "lon": -112.0746498
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "122",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4496404,
+    "lon": -112.0721355
+  },
+  {
+    "street": "West Jefferson Street",
+    "housenumber": "50",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4479813,
+    "lon": -112.0749296
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "114",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4497384,
+    "lon": -112.0753381
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "11",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4479599,
+    "lon": -112.0748358
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "114",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4494868,
+    "lon": -112.07535
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "122",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4498525,
+    "lon": -112.0718447
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "114",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4494868,
+    "lon": -112.0756401
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "138",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4501209,
+    "lon": -112.0740801
+  },
+  {
+    "street": "West Adams Street",
+    "housenumber": "145",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.449164,
+    "lon": -112.0756853
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6725",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5363266,
+    "lon": -112.1337083
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "20205",
+    "city": "Phoenix",
+    "postcode": "85024",
+    "lat": 33.6699542,
+    "lon": -112.0302378
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "21001",
+    "city": "Phoenix",
+    "postcode": "85050-4206",
+    "lat": 33.6770338,
+    "lon": -111.9769931
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "21150",
+    "city": "Phoenix",
+    "lat": 33.6785056,
+    "lon": -111.9782384
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "3610",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6410041,
+    "lon": -112.00466
+  },
+  {
+    "street": "East Pathfinder Drive",
+    "housenumber": "3300",
+    "city": "Phoenix",
+    "lat": 33.6866365,
+    "lon": -111.9734237
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "3143",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.624699,
+    "lon": -112.0138208
+  },
+  {
+    "street": "West Cactus Road",
+    "housenumber": "4212",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5977984,
+    "lon": -112.15077
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "18631",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.655527,
+    "lon": -112.0980987
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "1901",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5237808,
+    "lon": -112.100013
+  },
+  {
+    "street": "East Bethany Home Road",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5234874,
+    "lon": -112.064748
+  },
+  {
+    "street": "East Sonoran Desert Drive",
+    "housenumber": "2400",
+    "city": "Phoenix",
+    "lat": 33.7632109,
+    "lon": -112.0306303
+  },
+  {
+    "street": "East Sonoran Desert Drive",
+    "housenumber": "3200",
+    "city": "Phoenix",
+    "lat": 33.748402,
+    "lon": -112.0128286
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "26290",
+    "city": "Phoenix",
+    "postcode": "85050",
+    "lat": 33.7261636,
+    "lon": -111.97797
+  },
+  {
+    "street": "East Dynamite Boulevard",
+    "housenumber": "4740",
+    "city": "Phoenix",
+    "postcode": "85331",
+    "lat": 33.7415749,
+    "lon": -111.978771
+  },
+  {
+    "street": "East Dove Valley Road",
+    "housenumber": "700",
+    "city": "Phoenix",
+    "lat": 33.7732647,
+    "lon": -112.0652229
+  },
+  {
+    "street": "West Dove Valley Road",
+    "housenumber": "700",
+    "city": "Phoenix",
+    "lat": 33.7822775,
+    "lon": -112.0825098
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "5835",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5237001,
+    "lon": -112.116419
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "5835",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5236996,
+    "lon": -112.116568
+  },
+  {
+    "street": "West Northern Avenue",
+    "housenumber": "3101",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5529169,
+    "lon": -112.1260487
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "5101",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.4802069,
+    "lon": -112.169366
+  },
+  {
+    "street": "West Lower Buckeye Road",
+    "housenumber": "5041",
+    "city": "Phoenix",
+    "postcode": "85043",
+    "lat": 33.421942,
+    "lon": -112.1689817
+  },
+  {
+    "street": "West Southern Avenue",
+    "housenumber": "5115",
+    "city": "Phoenix",
+    "postcode": "85339",
+    "lat": 33.3912415,
+    "lon": -112.169261
+  },
+  {
+    "street": "West Thunderbird Road",
+    "housenumber": "4701",
+    "city": "Glendale",
+    "postcode": "85306",
+    "lat": 33.6079143,
+    "lon": -112.1598483
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "16843",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.638236,
+    "lon": -112.1511026
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "3441",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6541956,
+    "lon": -112.133991
+  },
+  {
+    "street": "North Black Canyon Highway",
+    "housenumber": "15650",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6294744,
+    "lon": -112.1172884
+  },
+  {
+    "street": "N 16th Ave",
+    "housenumber": "24820",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7117484,
+    "lon": -112.094315
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "3502",
+    "city": "Phoenix",
+    "postcode": "85019",
+    "lat": 33.4807382,
+    "lon": -112.134761
+  },
+  {
+    "street": "West Lower Buckeye Road",
+    "housenumber": "3501",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4221917,
+    "lon": -112.1350455
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "3445",
+    "city": "Glendale",
+    "postcode": "85017",
+    "lat": 33.5382438,
+    "lon": -112.133328
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "2415",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5082072,
+    "lon": -112.02874
+  },
+  {
+    "street": "West Campo Bello Drive",
+    "housenumber": "1520",
+    "city": "Phoenix",
+    "postcode": "85023-2542",
+    "lat": 33.6439921,
+    "lon": -112.0923908
+  },
+  {
+    "street": "South 35th Avenue",
+    "housenumber": "6150",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.3914133,
+    "lon": -112.136536
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "1902",
+    "city": "Phoenix",
+    "postcode": "85027-9998",
+    "lat": 33.6552569,
+    "lon": -112.100354
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "1514",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4653416,
+    "lon": -112.082922
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4654423,
+    "lon": -112.082829
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "16842",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6389658,
+    "lon": -112.06605
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "16838",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6387535,
+    "lon": -112.0660391
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "16842",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6391836,
+    "lon": -112.066044
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "711",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6391224,
+    "lon": -112.06484
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "820",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6380404,
+    "lon": -112.062989
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "830",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6380945,
+    "lon": -112.062777
+  },
+  {
+    "street": "East Ray Road",
+    "housenumber": "5037",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3174794,
+    "lon": -111.9745332
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4848",
+    "city": "Phoenix",
+    "postcode": "85254-4180",
+    "lat": 33.5993784,
+    "lon": -111.9767945
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "3739",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6401897,
+    "lon": -112.001082
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5019586,
+    "lon": -112.1723376
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "6324",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.6264034,
+    "lon": -111.943519
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "6324",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.626452,
+    "lon": -111.943451
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "3647",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4946207,
+    "lon": -112.0024873
+  },
+  {
+    "street": "North 40th Street",
+    "housenumber": "4410",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5021784,
+    "lon": -111.9957712
+  },
+  {
+    "street": "East Campbell Avenue",
+    "housenumber": "3939",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5021938,
+    "lon": -111.9963288
+  },
+  {
+    "street": "West Lower Buckeye Road",
+    "housenumber": "8350",
+    "city": "Phoenix",
+    "postcode": "85353",
+    "lat": 33.4232284,
+    "lon": -112.2405436
+  },
+  {
+    "street": "North 75th Avenue",
+    "housenumber": "1620",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.466154,
+    "lon": -112.223134
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "840",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4580965,
+    "lon": -112.0753665
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "620",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4588266,
+    "lon": -112.065559
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "620",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.458938,
+    "lon": -112.0655058
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "1101",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.4601567,
+    "lon": -112.064826
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "2710",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6417898,
+    "lon": -112.1175042
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "4315",
+    "city": "Phoenix",
+    "postcode": "85308",
+    "lat": 33.6379412,
+    "lon": -112.152591
+  },
+  {
+    "street": "North Maryvale Parkway",
+    "housenumber": "4524",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5031823,
+    "lon": -112.17242
+  },
+  {
+    "street": "East Virginia Avenue",
+    "housenumber": "386",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4769081,
+    "lon": -112.0657543
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "1703",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5223359,
+    "lon": -112.0949592
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "6502",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5312251,
+    "lon": -112.0653584
+  },
+  {
+    "street": "North Metro Parkway East",
+    "housenumber": "9617",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5751269,
+    "lon": -112.121538
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "3101",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5964518,
+    "lon": -112.0150617
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "3103",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5964525,
+    "lon": -112.0149851
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "3109",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5964538,
+    "lon": -112.0148321
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "3111",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5964545,
+    "lon": -112.0147556
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "750",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5824965,
+    "lon": -112.083356
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "4455",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5088383,
+    "lon": -111.9841859
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "4349",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.509061,
+    "lon": -111.986996
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "4340",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4953735,
+    "lon": -111.9882986
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "7835",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5528319,
+    "lon": -112.116666
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "4102",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4953689,
+    "lon": -112.0307353
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "3636",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5388823,
+    "lon": -112.137988
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "1815",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5381714,
+    "lon": -112.0977019
+  },
+  {
+    "street": "East Buckeye Road",
+    "housenumber": "699",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4363073,
+    "lon": -112.065646
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5018646,
+    "lon": -112.1723671
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5019541,
+    "lon": -112.1722491
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5018602,
+    "lon": -112.1722947
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5019496,
+    "lon": -112.1720989
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5019452,
+    "lon": -112.1720211
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5018758,
+    "lon": -112.1720264
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.501887,
+    "lon": -112.1721015
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "5251",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.5018758,
+    "lon": -112.1721793
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "5127",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.4937072,
+    "lon": -112.170682
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2434",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3783507,
+    "lon": -112.0286601
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "4720",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3787277,
+    "lon": -111.980232
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "4511",
+    "city": "Phoenix",
+    "postcode": "85016-5201",
+    "lat": 33.5026637,
+    "lon": -112.0297283
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "2401",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5380805,
+    "lon": -112.110813
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "1815",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5372756,
+    "lon": -112.098317
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2434",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3785005,
+    "lon": -112.0287736
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2415",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3772832,
+    "lon": -112.029722
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2434",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3786589,
+    "lon": -112.0286849
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2415",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3774046,
+    "lon": -112.0295696
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "1004",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4588231,
+    "lon": -112.0308
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "1616",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4665899,
+    "lon": -112.0307072
+  },
+  {
+    "street": "North 24th Street",
+    "housenumber": "1004",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4588254,
+    "lon": -112.030693
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "7011",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5392206,
+    "lon": -112.0992963
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "1816",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5388519,
+    "lon": -112.098137
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "1701",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5382888,
+    "lon": -112.0952545
+  },
+  {
+    "street": "East Dunlap Avenue",
+    "housenumber": "115",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5666981,
+    "lon": -112.072374
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "5101",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.480142,
+    "lon": -112.169361
+  },
+  {
+    "street": "East Sky Harbor Boulevard",
+    "housenumber": "3400",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4373731,
+    "lon": -112.0086817
+  },
+  {
+    "street": "East Sky Harbor Boulevard",
+    "housenumber": "3400",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4355958,
+    "lon": -112.008619
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4637",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3030311,
+    "lon": -111.9824054
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5223",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.5134661,
+    "lon": -112.0733997
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5223",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.5136381,
+    "lon": -112.073405
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "3450",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6406864,
+    "lon": -112.1333598
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5509",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5170644,
+    "lon": -112.064622
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5555",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5180922,
+    "lon": -112.0634164
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5551",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5185268,
+    "lon": -112.0641311
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5150",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5126634,
+    "lon": -112.0652603
+  },
+  {
+    "street": "West Montebello Avenue",
+    "housenumber": "1760",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5213623,
+    "lon": -112.097763
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "305",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4796525,
+    "lon": -112.0689329
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "305",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4798495,
+    "lon": -112.0689729
+  },
+  {
+    "street": "North 30th Street",
+    "housenumber": "19827",
+    "city": "Phoenix",
+    "postcode": "85050",
+    "lat": 33.6670125,
+    "lon": -112.0184633
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "7033",
+    "city": "Scottsdale;Phoenix",
+    "postcode": "85254",
+    "lat": 33.6213266,
+    "lon": -111.928914
+  },
+  {
+    "street": "North 51st Avenue",
+    "housenumber": "20325",
+    "city": "Glendale",
+    "postcode": "85308",
+    "lat": 33.6698596,
+    "lon": -112.1689851
+  },
+  {
+    "street": "West Clarendon Avenue",
+    "housenumber": "2955",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.4920623,
+    "lon": -112.123692
+  },
+  {
+    "street": "East Monterey Way",
+    "housenumber": "201",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4850924,
+    "lon": -112.070911
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "40",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4490301,
+    "lon": -112.0747747
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "3300",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.512411,
+    "lon": -112.1333961
+  },
+  {
+    "street": "North 34th Drive",
+    "housenumber": "2920",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.4814983,
+    "lon": -112.1331867
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "3022",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5030864,
+    "lon": -112.1242593
+  },
+  {
+    "street": "West Campbell Avenue",
+    "housenumber": "3232",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5029135,
+    "lon": -112.1277922
+  },
+  {
+    "street": "South 7th Avenue",
+    "housenumber": "2045",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4284355,
+    "lon": -112.0821172
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "2409",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6543238,
+    "lon": -112.1105816
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "675",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6542076,
+    "lon": -112.082345
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "701",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6543818,
+    "lon": -112.083243
+  },
+  {
+    "street": "East Union Hills Drive",
+    "housenumber": "2415",
+    "city": "Phoenix",
+    "postcode": "85050",
+    "lat": 33.6543553,
+    "lon": -112.0299731
+  },
+  {
+    "street": "East Union Hills Drive",
+    "housenumber": "3196",
+    "city": "Phoenix",
+    "postcode": "85050",
+    "lat": 33.6554255,
+    "lon": -112.0141
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1601",
+    "city": "Phoenix",
+    "lat": 33.5095182,
+    "lon": -112.0481412
+  },
+  {
+    "street": "West Montebello Avenue",
+    "housenumber": "1825",
+    "city": "Phoenix",
+    "lat": 33.5197261,
+    "lon": -112.0993729
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "7528",
+    "city": "Phoenix",
+    "lat": 33.54687,
+    "lon": -112.0998849
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "7550",
+    "city": "Phoenix",
+    "lat": 33.5478658,
+    "lon": -112.0999266
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "7654",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5502013,
+    "lon": -112.100312
+  },
+  {
+    "street": "West Northern Avenue",
+    "housenumber": "8072",
+    "city": "Phoenix",
+    "lat": 33.555187,
+    "lon": -112.1000896
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8520",
+    "city": "Phoenix",
+    "lat": 33.5610441,
+    "lon": -112.100209
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8640",
+    "city": "Phoenix",
+    "lat": 33.5633618,
+    "lon": -112.1001812
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8831",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5658922,
+    "lon": -112.0990344
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8841",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5658806,
+    "lon": -112.0992005
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8913",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5665505,
+    "lon": -112.0980229
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "8919",
+    "city": "Phoenix",
+    "postcode": "85021",
+    "lat": 33.5667846,
+    "lon": -112.0979998
+  },
+  {
+    "street": "West Southern Avenue",
+    "housenumber": "709",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.3919571,
+    "lon": -112.082303
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "1502",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4952066,
+    "lon": -112.091588
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "309",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4871538,
+    "lon": -112.068933
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "1601",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4944391,
+    "lon": -112.047358
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "8110",
+    "city": "Glendale",
+    "postcode": "85308",
+    "lat": 33.6551758,
+    "lon": -112.154091
+  },
+  {
+    "street": "North Scottsdale Road",
+    "housenumber": "15054",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.6237428,
+    "lon": -111.9264124
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1",
+    "city": "Phoenix",
+    "lat": 33.4478156,
+    "lon": -112.0729474
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "1950",
+    "city": "Phoenix",
+    "postcode": "85016-6017",
+    "lat": 33.4951604,
+    "lon": -112.0392615
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "1202",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4818439,
+    "lon": -112.08898
+  },
+  {
+    "street": "North 28th Drive",
+    "housenumber": "11225",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5891142,
+    "lon": -112.119314
+  },
+  {
+    "street": "North 28th Drive",
+    "housenumber": "11225",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.589112,
+    "lon": -112.119387
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "12231",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.5974301,
+    "lon": -112.035187
+  },
+  {
+    "street": "West Deer Valley Road",
+    "housenumber": "2710",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6842662,
+    "lon": -112.118249
+  },
+  {
+    "street": "West Deer Valley Road",
+    "housenumber": "2635",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6833564,
+    "lon": -112.11692
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "13801",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6118289,
+    "lon": -111.977546
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "13801",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6118426,
+    "lon": -111.977424
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "13843",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6129972,
+    "lon": -111.977074
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4510",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6018923,
+    "lon": -111.986445
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "3539",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6383537,
+    "lon": -112.135106
+  },
+  {
+    "street": "East Broadway Road",
+    "housenumber": "4760",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.4079007,
+    "lon": -111.9788064
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3960",
+    "city": "Phoenix",
+    "lat": 33.4878714,
+    "lon": -112.1253135
+  },
+  {
+    "street": "West Greenway Road",
+    "housenumber": "3401",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6241093,
+    "lon": -112.1319432
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "10810",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5840567,
+    "lon": -111.9795009
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4423",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4799173,
+    "lon": -111.9861668
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "903",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5089292,
+    "lon": -112.085006
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "26",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3792251,
+    "lon": -112.0710276
+  },
+  {
+    "street": "North 51st Avenue",
+    "housenumber": "4105",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.4964218,
+    "lon": -112.1672843
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "1618",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6406825,
+    "lon": -112.0471865
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4110",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4953755,
+    "lon": -112.091575
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264835,
+    "lon": -112.1317454
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "11811",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5943415,
+    "lon": -111.9796441
+  },
+  {
+    "street": "West Happy Valley Road",
+    "housenumber": "3820",
+    "city": "Phoenix",
+    "postcode": "85310",
+    "lat": 33.7143041,
+    "lon": -112.1416632
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "818",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4576792,
+    "lon": -112.0741011
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "6022",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5248657,
+    "lon": -112.1173764
+  },
+  {
+    "street": "East Sky Harbor Boulevard",
+    "housenumber": "3400",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4375742,
+    "lon": -111.9992185
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "3415",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5380556,
+    "lon": -112.132347
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "530",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.4662995,
+    "lon": -112.065443
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1702",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5094596,
+    "lon": -112.04511
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1702",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5095681,
+    "lon": -112.045086
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "3430",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5247822,
+    "lon": -112.1328808
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "725",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4945141,
+    "lon": -112.084291
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4342",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5000386,
+    "lon": -112.082768
+  },
+  {
+    "street": "East Lincoln Drive",
+    "housenumber": "3165",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5314078,
+    "lon": -112.013368
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "4636",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5052755,
+    "lon": -112.056486
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1601",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5088961,
+    "lon": -112.0471969
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1635",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5087485,
+    "lon": -112.0461776
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "7445",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4933781,
+    "lon": -112.218947
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15827",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6314877,
+    "lon": -112.030317
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "130",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.450005,
+    "lon": -112.0740669
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2819",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4794705,
+    "lon": -112.0733853
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3110",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.484294,
+    "lon": -112.075012
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "3110",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.483828,
+    "lon": -112.0749928
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2845",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4799524,
+    "lon": -112.0733852
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "2817",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4794132,
+    "lon": -112.0733918
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "502",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6080281,
+    "lon": -112.066237
+  },
+  {
+    "street": "East Thunderbird Road",
+    "housenumber": "502",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6080258,
+    "lon": -112.066412
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "214",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4588152,
+    "lon": -112.0704097
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "8645",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5639336,
+    "lon": -112.064836
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "8645",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5639304,
+    "lon": -112.064923
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "8615",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5628641,
+    "lon": -112.064931
+  },
+  {
+    "street": "East Buchanan Street",
+    "housenumber": "121",
+    "city": "Phoenix",
+    "lat": 33.4431259,
+    "lon": -112.071618
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5016",
+    "city": "Phoenix",
+    "lat": 33.5097529,
+    "lon": -112.0740591
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "5020",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5103588,
+    "lon": -112.134701
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "7051",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5401348,
+    "lon": -112.0649111
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "4210",
+    "city": "Phoenix",
+    "postcode": "85301",
+    "lat": 33.5252315,
+    "lon": -112.1497257
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "4216",
+    "city": "Phoenix",
+    "postcode": "85019",
+    "lat": 33.5252246,
+    "lon": -112.1498708
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "2530",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6412273,
+    "lon": -112.038742
+  },
+  {
+    "street": "West Thunderbird Road",
+    "housenumber": "3543",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6098786,
+    "lon": -112.1355131
+  },
+  {
+    "street": "East McDowell Road",
+    "housenumber": "4450",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4664602,
+    "lon": -111.985012
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4402",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4807451,
+    "lon": -111.986344
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4430",
+    "city": "Phoenix",
+    "postcode": "85018-7608",
+    "lat": 33.4807048,
+    "lon": -111.9856737
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "21705",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6828217,
+    "lon": -112.099248
+  },
+  {
+    "street": "North 44th Street",
+    "housenumber": "2641",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4780333,
+    "lon": -111.9863799
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "1610",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4660274,
+    "lon": -112.0053052
+  },
+  {
+    "street": "East Marriott Drive",
+    "housenumber": "5220",
+    "city": "Phoenix",
+    "postcode": "85054",
+    "lat": 33.6845198,
+    "lon": -111.972231
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3314",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4810632,
+    "lon": -112.009958
+  },
+  {
+    "street": "East Van Buren Street",
+    "housenumber": "3149",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4510575,
+    "lon": -112.013187
+  },
+  {
+    "street": "East Van Buren Street",
+    "housenumber": "965",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.4509359,
+    "lon": -112.05954
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "4000",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4925805,
+    "lon": -112.075192
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "7677",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5480228,
+    "lon": -112.046227
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "2101",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5076381,
+    "lon": -112.036153
+  },
+  {
+    "street": "West Greenway Road",
+    "housenumber": "2510",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6260133,
+    "lon": -112.114672
+  },
+  {
+    "street": "North 44th Street",
+    "housenumber": "320",
+    "city": "Phoenix",
+    "postcode": "85008-7698",
+    "lat": 33.451766,
+    "lon": -111.988025
+  },
+  {
+    "street": "East Van Buren Street",
+    "housenumber": "2836",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4515172,
+    "lon": -112.0196542
+  },
+  {
+    "street": "East Van Buren Street",
+    "housenumber": "2501",
+    "city": "Phoenix",
+    "postcode": "85008",
+    "lat": 33.4508641,
+    "lon": -112.0275729
+  },
+  {
+    "street": "South 24th Street",
+    "housenumber": "214",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.445134,
+    "lon": -112.030818
+  },
+  {
+    "street": "East Thistle Landing Drive",
+    "housenumber": "4809",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3107779,
+    "lon": -111.9774276
+  },
+  {
+    "street": "North 43rd Avenue",
+    "housenumber": "10625",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5830453,
+    "lon": -112.1502636
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "4170",
+    "city": "Phoenix",
+    "postcode": "85019",
+    "lat": 33.4972545,
+    "lon": -112.134508
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "3145",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3044877,
+    "lon": -112.0159744
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263145,
+    "lon": -112.130868
+  },
+  {
+    "street": "West Carefree Highway",
+    "housenumber": "3150",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7988596,
+    "lon": -112.128537
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10624",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5835283,
+    "lon": -112.0143975
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10633",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5838456,
+    "lon": -112.0126487
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10240",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.580415,
+    "lon": -112.013317
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "1342",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4806256,
+    "lon": -112.090978
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4870806,
+    "lon": -112.0542091
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4870495,
+    "lon": -112.0540443
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4869554,
+    "lon": -112.0541105
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4869544,
+    "lon": -112.0539513
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4869423,
+    "lon": -112.0543102
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4868762,
+    "lon": -112.0539886
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4868118,
+    "lon": -112.0540516
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4868695,
+    "lon": -112.0541817
+  },
+  {
+    "street": "East Osborn Road",
+    "housenumber": "1313",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4870203,
+    "lon": -112.0542549
+  },
+  {
+    "street": "North 6th Street",
+    "housenumber": "139",
+    "city": "Phoenix",
+    "lat": 33.4502075,
+    "lon": -112.0659782
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1714",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4514458,
+    "lon": -112.096427
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "1838",
+    "city": "Phoenix",
+    "postcode": "85023-3301",
+    "lat": 33.6407055,
+    "lon": -112.0990265
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "1335",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.480317,
+    "lon": -112.0906338
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1801",
+    "city": "Phoenix",
+    "postcode": "85007-2419",
+    "lat": 33.4511509,
+    "lon": -112.098432
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1803",
+    "city": "Phoenix",
+    "postcode": "85007-2419",
+    "lat": 33.4511489,
+    "lon": -112.0985068
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1805",
+    "city": "Phoenix",
+    "postcode": "85007-2419",
+    "lat": 33.4511496,
+    "lon": -112.0985772
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1807",
+    "city": "Phoenix",
+    "postcode": "85007-2419",
+    "lat": 33.4511479,
+    "lon": -112.0986474
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1554",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4514753,
+    "lon": -112.0937867
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1570",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4516773,
+    "lon": -112.0937834
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "8243",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4940334,
+    "lon": -112.236994
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "8225",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4937165,
+    "lon": -112.2366202
+  },
+  {
+    "street": "North 83rd Avenue",
+    "housenumber": "4131",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4953719,
+    "lon": -112.235807
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264271,
+    "lon": -112.132506
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264262,
+    "lon": -112.1323052
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263502,
+    "lon": -112.1312795
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264284,
+    "lon": -112.1324052
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "3320",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.524451,
+    "lon": -112.131113
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264025,
+    "lon": -112.133499
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5264347,
+    "lon": -112.1326696
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6145",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5269781,
+    "lon": -112.1335071
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "19636",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6646383,
+    "lon": -112.1180971
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "455",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4524961,
+    "lon": -112.0689749
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "1437",
+    "city": "Phoenix",
+    "lat": 33.4654258,
+    "lon": -112.0723682
+  },
+  {
+    "street": "West Durango Street",
+    "housenumber": "2302",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4299095,
+    "lon": -112.1092599
+  },
+  {
+    "street": "West Bell Road",
+    "housenumber": "2814",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.640986,
+    "lon": -112.1197927
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "6104",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5103285,
+    "lon": -112.0156445
+  },
+  {
+    "street": "North Cave Creek Rd, Building B",
+    "housenumber": "20823",
+    "city": "Phoenix",
+    "postcode": "85024",
+    "lat": 33.6757638,
+    "lon": -112.029114
+  },
+  {
+    "street": "West Dunlap Avenue",
+    "housenumber": "3501",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5672726,
+    "lon": -112.1347756
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "6505",
+    "city": "Phoenix",
+    "lat": 33.5312674,
+    "lon": -112.047266
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "6522",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5318571,
+    "lon": -112.0477358
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10630",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5836945,
+    "lon": -112.014347
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "10660",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5838369,
+    "lon": -112.0137949
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "1920",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.510112,
+    "lon": -112.1007837
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "4229",
+    "city": "Phoenix",
+    "postcode": "85019",
+    "lat": 33.5236567,
+    "lon": -112.1501916
+  },
+  {
+    "street": "South 24th Street",
+    "housenumber": "124",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.446289,
+    "lon": -112.030577
+  },
+  {
+    "street": "East Bethany Home Road",
+    "housenumber": "1528",
+    "city": "Phoenix",
+    "lat": 33.5239285,
+    "lon": -112.0485105
+  },
+  {
+    "street": "East Bethany Home Road",
+    "housenumber": "1590",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5239374,
+    "lon": -112.0477963
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "8243",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4939301,
+    "lon": -112.236993
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "5020",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5105366,
+    "lon": -112.134703
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "5020",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5104193,
+    "lon": -112.134704
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "5020",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5104726,
+    "lon": -112.134705
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "9611",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.5076664,
+    "lon": -112.2659919
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "9611",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.50766,
+    "lon": -112.2662545
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "9611",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.5076572,
+    "lon": -112.2663676
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "9611",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.5076633,
+    "lon": -112.2661177
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "6544",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.4812844,
+    "lon": -112.202838
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "231",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4799269,
+    "lon": -112.077953
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "1617",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4799774,
+    "lon": -112.04681
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "2835",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.479461,
+    "lon": -112.0469428
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "5201",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.479767,
+    "lon": -111.969184
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3560",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4808276,
+    "lon": -112.005082
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3146",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4814276,
+    "lon": -112.0138888
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "2415",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4799378,
+    "lon": -112.029447
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4539",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4797229,
+    "lon": -111.9829089
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3141",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.4800368,
+    "lon": -112.013462
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "6501",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.6242169,
+    "lon": -111.9423863
+  },
+  {
+    "street": "West Buckeye Road",
+    "housenumber": "2702",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.4371292,
+    "lon": -112.117741
+  },
+  {
+    "street": "West Broadway Road",
+    "housenumber": "1658",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.4075138,
+    "lon": -112.0946626
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "5131",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4656753,
+    "lon": -112.1701256
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263456,
+    "lon": -112.1310643
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263479,
+    "lon": -112.131149
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263471,
+    "lon": -112.1312143
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5263495,
+    "lon": -112.1313566
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "3320",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5246864,
+    "lon": -112.131112
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "3320",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5246094,
+    "lon": -112.131113
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.524989,
+    "lon": -112.1303946
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5251504,
+    "lon": -112.1303983
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5255337,
+    "lon": -112.1304263
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5256098,
+    "lon": -112.130429
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5257075,
+    "lon": -112.1304307
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5257904,
+    "lon": -112.1304307
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5258635,
+    "lon": -112.1304387
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6135",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5259496,
+    "lon": -112.1304323
+  },
+  {
+    "street": "North 35th Avenue",
+    "housenumber": "6135-3",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5261701,
+    "lon": -112.130588
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2140",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3793621,
+    "lon": -112.0340983
+  },
+  {
+    "street": "East Ray Road",
+    "housenumber": "4734",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3216016,
+    "lon": -111.981101
+  },
+  {
+    "street": "West Lower Buckeye Road",
+    "housenumber": "9830",
+    "city": "Phoenix",
+    "postcode": "85353",
+    "lat": 33.4234923,
+    "lon": -112.269394
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "10865",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5859877,
+    "lon": -111.9774173
+  },
+  {
+    "street": "West Van Buren Street",
+    "housenumber": "1718",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4514494,
+    "lon": -112.0965188
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "7333",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4767246,
+    "lon": -112.2191215
+  },
+  {
+    "street": "North 75th Avenue",
+    "housenumber": "2270",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4726797,
+    "lon": -112.2215787
+  },
+  {
+    "street": "North 51st Avenue",
+    "housenumber": "4308",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.4988153,
+    "lon": -112.1717763
+  },
+  {
+    "street": "North 20th Street",
+    "housenumber": "4724",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5069046,
+    "lon": -112.041189
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4041",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4798372,
+    "lon": -111.9949913
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "15414",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6265735,
+    "lon": -112.1002494
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "1515",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4653543,
+    "lon": -112.0819747
+  },
+  {
+    "street": "West Cheery Lynn Road",
+    "housenumber": "7815",
+    "city": "Phoenix",
+    "postcode": "85033",
+    "lat": 33.482429,
+    "lon": -112.2260391
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "5127",
+    "city": "Phoenix",
+    "postcode": "85031-2607",
+    "lat": 33.493745,
+    "lon": -112.1712915
+  },
+  {
+    "street": "West Camelback Road",
+    "housenumber": "3446",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5109385,
+    "lon": -112.133373
+  },
+  {
+    "street": "West Drive Mlk Jr Boulevard",
+    "housenumber": "702",
+    "city": "Phoenix",
+    "postcode": "85041",
+    "lat": 33.4070379,
+    "lon": -112.08239
+  },
+  {
+    "street": "East Elwood Street",
+    "housenumber": "3255",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4148093,
+    "lon": -112.0108311
+  },
+  {
+    "street": "East Elwood Street",
+    "housenumber": "3255",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4138645,
+    "lon": -112.0105951
+  },
+  {
+    "street": "East Bell Road",
+    "housenumber": "320",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.641281,
+    "lon": -112.0692933
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "3232",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.583792,
+    "lon": -112.0120505
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4324",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.600087,
+    "lon": -111.9892672
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "711",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4517108,
+    "lon": -112.08343
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "3342",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6266346,
+    "lon": -112.0093243
+  },
+  {
+    "street": "East Greenway Road",
+    "housenumber": "3202",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6274231,
+    "lon": -112.0098434
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4322",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6000415,
+    "lon": -111.9892561
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "4306",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4987722,
+    "lon": -112.0835098
+  },
+  {
+    "street": "East Bethany Home Road",
+    "housenumber": "1100",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5239785,
+    "lon": -112.0586749
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5122",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5841459,
+    "lon": -111.971892
+  },
+  {
+    "street": "East Victory Street",
+    "housenumber": "108",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.4167003,
+    "lon": -112.0708847
+  },
+  {
+    "street": "North 3rd Avenue",
+    "housenumber": "1001",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4587742,
+    "lon": -112.07738
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "5235",
+    "city": "Phoenix",
+    "postcode": "85031",
+    "lat": 33.493518,
+    "lon": -112.171583
+  },
+  {
+    "street": "North 16th Avenue",
+    "housenumber": "24825",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7118648,
+    "lon": -112.0952223
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "1751",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5225927,
+    "lon": -112.0978017
+  },
+  {
+    "street": "West Bethany Home Road",
+    "housenumber": "1745",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.5226195,
+    "lon": -112.0974637
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1949",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5080767,
+    "lon": -112.0402392
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "3626",
+    "city": "Phoenix",
+    "lat": 33.4954701,
+    "lon": -112.003036
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "7510",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4659569,
+    "lon": -112.2212378
+  },
+  {
+    "street": "North 75th Avenue",
+    "housenumber": "1820",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4682628,
+    "lon": -112.2210341
+  },
+  {
+    "street": "West McDowell Road",
+    "housenumber": "7510",
+    "city": "Phoenix",
+    "postcode": "85035",
+    "lat": 33.4661097,
+    "lon": -112.2212322
+  },
+  {
+    "street": "South 49th Avenue",
+    "housenumber": "2849",
+    "city": "Phoenix",
+    "postcode": "85043",
+    "lat": 33.4202773,
+    "lon": -112.165562
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12847",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6028429,
+    "lon": -111.978053
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12845",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6027207,
+    "lon": -111.9780639
+  },
+  {
+    "street": "West Thunderbird Road",
+    "housenumber": "2510",
+    "city": "Phoenix",
+    "postcode": "85023",
+    "lat": 33.6112281,
+    "lon": -112.1101322
+  },
+  {
+    "street": "East Northern Avenue",
+    "housenumber": "1301",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5528082,
+    "lon": -112.0543072
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3940",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.510139,
+    "lon": -111.995759
+  },
+  {
+    "street": "West Grant Street",
+    "housenumber": "1830",
+    "city": "Phoenix",
+    "postcode": "85007",
+    "lat": 33.4416568,
+    "lon": -112.099748
+  },
+  {
+    "street": "North 28th Avenue",
+    "housenumber": "15810",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6305111,
+    "lon": -112.1187296
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "6819",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5369402,
+    "lon": -112.0472262
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4001",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3047858,
+    "lon": -111.9967419
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4001",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3046906,
+    "lon": -111.9967455
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "20811",
+    "city": "Phoenix",
+    "postcode": "85024",
+    "lat": 33.6753627,
+    "lon": -112.0304838
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "9140",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.4799823,
+    "lon": -112.25743
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "9140",
+    "city": "Phoenix",
+    "postcode": "85037",
+    "lat": 33.4800999,
+    "lon": -112.2574201
+  },
+  {
+    "street": "West Buckeye Road",
+    "housenumber": "5049",
+    "city": "Phoenix",
+    "postcode": "85043",
+    "lat": 33.4364743,
+    "lon": -112.168784
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "3955",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4795569,
+    "lon": -111.9958546
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "6501",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.6242234,
+    "lon": -111.9421756
+  },
+  {
+    "street": "North 32nd Street",
+    "housenumber": "4444",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5021501,
+    "lon": -112.0132978
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "16876",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6392079,
+    "lon": -112.0313119
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "16880",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6391132,
+    "lon": -112.032353
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "17027",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6415602,
+    "lon": -112.0303895
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4710",
+    "city": "Phoenix",
+    "lat": 33.5986598,
+    "lon": -111.9787433
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4716",
+    "city": "Phoenix",
+    "lat": 33.5985964,
+    "lon": -111.9785159
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4718",
+    "city": "Phoenix",
+    "lat": 33.5985549,
+    "lon": -111.9784094
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4720",
+    "city": "Phoenix",
+    "lat": 33.5985347,
+    "lon": -111.9783175
+  },
+  {
+    "street": "East Cactus Road",
+    "housenumber": "4722",
+    "city": "Phoenix",
+    "lat": 33.5985364,
+    "lon": -111.9782488
+  },
+  {
+    "street": "North 16th Avenue",
+    "housenumber": "24825",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7119289,
+    "lon": -112.0931501
+  },
+  {
+    "street": "East Thomas Road",
+    "housenumber": "4222",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4808419,
+    "lon": -111.9908506
+  },
+  {
+    "street": "East Chandler Boulevard",
+    "housenumber": "4601",
+    "city": "Phoenix",
+    "postcode": "85048",
+    "lat": 33.3048432,
+    "lon": -111.9842001
+  },
+  {
+    "street": "West Hubbell Street",
+    "housenumber": "4129",
+    "city": "Phoenix",
+    "postcode": "85009",
+    "lat": 33.46987,
+    "lon": -112.1487316
+  },
+  {
+    "street": "East 151st Street",
+    "housenumber": "629",
+    "city": "Phoenix",
+    "postcode": "60426",
+    "lat": 41.6151557,
+    "lon": -87.6320098
+  },
+  {
+    "street": "North 1st Avenue",
+    "housenumber": "1020",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.4593529,
+    "lon": -112.074269
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3437",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4889191,
+    "lon": -112.0830034
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3403",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4883498,
+    "lon": -112.0823363
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3417",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4886129,
+    "lon": -112.0824071
+  },
+  {
+    "street": "North Tatum Boulevard",
+    "housenumber": "12601",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6000868,
+    "lon": -111.9786393
+  },
+  {
+    "street": "East Greenway Parkway",
+    "housenumber": "6501",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.6250285,
+    "lon": -111.9405207
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "1625",
+    "city": "Phoenix",
+    "postcode": "85016-3901",
+    "lat": 33.5075955,
+    "lon": -112.046474
+  },
+  {
+    "street": "West Roosevelt Street",
+    "housenumber": "1346",
+    "city": "Phoenix",
+    "lat": 33.4587297,
+    "lon": -112.0907464
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "3345",
+    "city": "Phoenix",
+    "lat": 33.4872575,
+    "lon": -112.0994851
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "3353",
+    "city": "Phoenix",
+    "lat": 33.487366,
+    "lon": -112.0994844
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "6002",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5241475,
+    "lon": -112.082687
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8937",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5674683,
+    "lon": -112.073432
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "9405",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5717134,
+    "lon": -112.0736703
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "9407",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5717553,
+    "lon": -112.0736703
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "9411",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5718318,
+    "lon": -112.0736694
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8843",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5657541,
+    "lon": -112.0735563
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8841",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5655876,
+    "lon": -112.0735744
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8837",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5654563,
+    "lon": -112.0737145
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8831",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5653585,
+    "lon": -112.0737192
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8829",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5653373,
+    "lon": -112.0737165
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "8827",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5652736,
+    "lon": -112.0737246
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "9820",
+    "city": "Phoenix",
+    "lat": 33.5752158,
+    "lon": -112.0740028
+  },
+  {
+    "street": "East Devonshire Avenue",
+    "housenumber": "920",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.4978714,
+    "lon": -112.0623592
+  },
+  {
+    "street": "North Scottsdale Road",
+    "housenumber": "13802",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.614506,
+    "lon": -111.9261378
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2340",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3787078,
+    "lon": -112.0306551
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2340",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3785837,
+    "lon": -112.0309991
+  },
+  {
+    "street": "West Thomas Road",
+    "housenumber": "3835",
+    "city": "Phoenix",
+    "postcode": "85019",
+    "lat": 33.4798888,
+    "lon": -112.1422263
+  },
+  {
+    "street": "West Happy Valley Road",
+    "housenumber": "6550",
+    "city": "Phoenix",
+    "postcode": "85310",
+    "lat": 33.713791,
+    "lon": -112.201314
+  },
+  {
+    "street": "North Scottsdale Road",
+    "housenumber": "15030",
+    "city": "Phoenix",
+    "postcode": "85254",
+    "lat": 33.6239548,
+    "lon": -111.9285671
+  },
+  {
+    "street": "West Union Hills Drive",
+    "housenumber": "3331",
+    "city": "Phoenix",
+    "postcode": "85053",
+    "lat": 33.6543428,
+    "lon": -112.131532
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "17601",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6462187,
+    "lon": -112.030426
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5120",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.5118347,
+    "lon": -112.0741412
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "2011",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5090043,
+    "lon": -112.0385463
+  },
+  {
+    "street": "West Happy Valley Road",
+    "housenumber": "2510",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7148419,
+    "lon": -112.1133865
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5700",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5827325,
+    "lon": -111.9584054
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5698",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5827331,
+    "lon": -111.9584664
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5800",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.582664,
+    "lon": -111.9562244
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5798",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.582667,
+    "lon": -111.9563203
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5898",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5826107,
+    "lon": -111.9545299
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5600",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5827951,
+    "lon": -111.9603959
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5501",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5825205,
+    "lon": -111.9620816
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5599",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5824976,
+    "lon": -111.9607449
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5401",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.582516,
+    "lon": -111.9648064
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5499",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.582518,
+    "lon": -111.9622543
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5598",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5827928,
+    "lon": -111.9607707
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5500",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5828007,
+    "lon": -111.9621249
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5498",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5828004,
+    "lon": -111.962308
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "5400",
+    "city": "Scottsdale",
+    "postcode": "85254",
+    "lat": 33.5828012,
+    "lon": -111.9648309
+  },
+  {
+    "street": "West Gardenia Avenue",
+    "housenumber": "1518",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5450459,
+    "lon": -112.09185
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4116",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4955216,
+    "lon": -112.0915466
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4118",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.495557,
+    "lon": -112.0915463
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4114",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4954861,
+    "lon": -112.0915469
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4112",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4954507,
+    "lon": -112.0915473
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4110",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4954152,
+    "lon": -112.0915476
+  },
+  {
+    "street": "North 15th Avenue",
+    "housenumber": "4106",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4953798,
+    "lon": -112.0915479
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15409",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6269307,
+    "lon": -112.0303655
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15413",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6269964,
+    "lon": -112.0303662
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15417",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6270622,
+    "lon": -112.030367
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "15421",
+    "city": "Phoenix",
+    "postcode": "85032",
+    "lat": 33.6271279,
+    "lon": -112.0303677
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "326",
+    "city": "Phoenix",
+    "postcode": "85006-3706",
+    "lat": 33.452113,
+    "lon": -112.0478473
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1846",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4485025,
+    "lon": -112.0414154
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "4290",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4958073,
+    "lon": -111.989225
+  },
+  {
+    "street": "East Ray Road",
+    "housenumber": "4722",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3215137,
+    "lon": -111.982356
+  },
+  {
+    "street": "West Sonoran Desert Drive",
+    "housenumber": "2575",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7688451,
+    "lon": -112.114717
+  },
+  {
+    "street": "East Camelback Road",
+    "housenumber": "3240",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.5104883,
+    "lon": -112.0110742
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "333",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4584746,
+    "lon": -112.069625
+  },
+  {
+    "street": "West Cactus Road",
+    "housenumber": "4312",
+    "city": "Phoenix",
+    "postcode": "85304",
+    "lat": 33.5972554,
+    "lon": -112.1519487
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "9155",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5695585,
+    "lon": -112.0688403
+  },
+  {
+    "street": "East Dunlap Avenue",
+    "housenumber": "527",
+    "city": "Phoenix",
+    "lat": 33.5676047,
+    "lon": -112.066404
+  },
+  {
+    "street": "East Dunlap Avenue",
+    "housenumber": "525",
+    "city": "Phoenix",
+    "lat": 33.5676062,
+    "lon": -112.0665153
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "3933",
+    "city": "Phoenix",
+    "postcode": "85018",
+    "lat": 33.4941797,
+    "lon": -111.9965582
+  },
+  {
+    "street": "North 27th Avenue",
+    "housenumber": "5115",
+    "city": "Phoenix",
+    "postcode": "85017",
+    "lat": 33.5112693,
+    "lon": -112.1138806
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "5024",
+    "city": "Phoenix",
+    "lat": 33.5097956,
+    "lon": -112.0740692
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "4626",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5051671,
+    "lon": -112.0477634
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "21705",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6826208,
+    "lon": -112.099272
+  },
+  {
+    "street": "East Indian School Road",
+    "housenumber": "1635",
+    "city": "Phoenix",
+    "lat": 33.4943147,
+    "lon": -112.0463483
+  },
+  {
+    "street": "N Tatum Blvd",
+    "housenumber": "11811",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5947779,
+    "lon": -111.9793276
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "1809",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4948216,
+    "lon": -112.0981574
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "1807",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4948194,
+    "lon": -112.0980633
+  },
+  {
+    "street": "West Indian School Road",
+    "housenumber": "1817",
+    "city": "Phoenix",
+    "postcode": "85015",
+    "lat": 33.4948109,
+    "lon": -112.0983537
+  },
+  {
+    "street": "East Roosevelt Street",
+    "housenumber": "924",
+    "city": "Phoenix",
+    "postcode": "85006",
+    "lat": 33.4588193,
+    "lon": -112.0610191
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2250",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3792927,
+    "lon": -112.031544
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2320",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3793174,
+    "lon": -112.031172
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2320",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3794278,
+    "lon": -112.0310281
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2320",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3793228,
+    "lon": -112.0308845
+  },
+  {
+    "street": "East Baseline Road",
+    "housenumber": "2340",
+    "city": "Phoenix",
+    "postcode": "85042",
+    "lat": 33.3785863,
+    "lon": -112.0307468
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "3030",
+    "city": "Phoenix",
+    "postcode": "85012",
+    "lat": 33.4834281,
+    "lon": -112.0701495
+  },
+  {
+    "street": "West Southern Avenue",
+    "housenumber": "1809",
+    "city": "Phoenix",
+    "lat": 33.391857,
+    "lon": -112.0971515
+  },
+  {
+    "street": "North 29th Place",
+    "housenumber": "20650",
+    "city": "Phoenix",
+    "postcode": "85050",
+    "lat": 33.6749083,
+    "lon": -112.0209141
+  },
+  {
+    "street": "West Pierson Street",
+    "housenumber": "717",
+    "city": "Phoenix",
+    "lat": 33.5073269,
+    "lon": -112.0834682
+  },
+  {
+    "street": "South 24th Street",
+    "housenumber": "5037",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.3999996,
+    "lon": -112.02959
+  },
+  {
+    "street": "South 24th Street",
+    "housenumber": "3445",
+    "city": "Phoenix",
+    "postcode": "85034",
+    "lat": 33.4145072,
+    "lon": -112.0294046
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "305",
+    "city": "Phoenix",
+    "postcode": "85003",
+    "lat": 33.447847,
+    "lon": -112.0782327
+  },
+  {
+    "street": "East Northern Avenue",
+    "housenumber": "1227",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5527091,
+    "lon": -112.0554115
+  },
+  {
+    "street": "West Glendale Avenue",
+    "housenumber": "3544",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5388593,
+    "lon": -112.1368841
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "12383",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6036761,
+    "lon": -112.0362859
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "12837",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6038195,
+    "lon": -112.0362902
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "12385",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6037574,
+    "lon": -112.0362862
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "12839",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.60391,
+    "lon": -112.0362912
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "13002",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6043103,
+    "lon": -112.0369204
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "13012",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6046722,
+    "lon": -112.0368833
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "13050",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6059824,
+    "lon": -112.0368623
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "13046",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.605933,
+    "lon": -112.0368679
+  },
+  {
+    "street": "North Cave Creek Road",
+    "housenumber": "13040",
+    "city": "Phoenix",
+    "postcode": "85022",
+    "lat": 33.6058584,
+    "lon": -112.0368763
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "5199",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.5123088,
+    "lon": -112.0821002
+  },
+  {
+    "street": "West Carefree Highway",
+    "housenumber": "2655",
+    "city": "Phoenix",
+    "postcode": "85085",
+    "lat": 33.7966741,
+    "lon": -112.11659
+  },
+  {
+    "street": "East Shea Boulevard",
+    "housenumber": "3217",
+    "city": "Phoenix",
+    "postcode": "85028",
+    "lat": 33.5818806,
+    "lon": -112.0117106
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2780",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5832051,
+    "lon": -112.1212097
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2772",
+    "city": "Phoenix",
+    "postcode": "85029-5129",
+    "lat": 33.5832213,
+    "lon": -112.1207035
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2750",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5832101,
+    "lon": -112.1195112
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2738",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5832209,
+    "lon": -112.1190965
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2815",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5813668,
+    "lon": -112.1231793
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "2815",
+    "city": "Phoenix",
+    "postcode": "85029",
+    "lat": 33.5813678,
+    "lon": -112.1230115
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "3039",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5812778,
+    "lon": -112.125144
+  },
+  {
+    "street": "West Peoria Avenue",
+    "housenumber": "3039",
+    "city": "Phoenix",
+    "postcode": "85051",
+    "lat": 33.5815471,
+    "lon": -112.125144
+  },
+  {
+    "street": "North 16th Street",
+    "housenumber": "6825",
+    "city": "Phoenix",
+    "postcode": "85016",
+    "lat": 33.5369528,
+    "lon": -112.0471034
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "7252",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5435818,
+    "lon": -112.0742132
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "7306",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5440165,
+    "lon": -112.0741982
+  },
+  {
+    "street": "North Central Avenue",
+    "housenumber": "7250",
+    "city": "Phoenix",
+    "postcode": "85020",
+    "lat": 33.5427594,
+    "lon": -112.0742232
+  },
+  {
+    "street": "East Mayo Boulevard",
+    "housenumber": "7000",
+    "city": "Phoenix",
+    "postcode": "85054",
+    "lat": 33.6569209,
+    "lon": -111.9259309
+  },
+  {
+    "street": "East Washington Street",
+    "housenumber": "1",
+    "city": "Phoenix",
+    "postcode": "85004",
+    "lat": 33.4479247,
+    "lon": -112.0729313
+  },
+  {
+    "street": "North 7th Street",
+    "housenumber": "5632",
+    "city": "Phoenix",
+    "postcode": "85014",
+    "lat": 33.5196566,
+    "lon": -112.0655626
+  },
+  {
+    "street": "South 5th Street",
+    "housenumber": "3405",
+    "city": "Phoenix",
+    "postcode": "85040",
+    "lat": 33.416357,
+    "lon": -112.0666093
+  },
+  {
+    "street": "North 19th Avenue",
+    "housenumber": "18631",
+    "city": "Phoenix",
+    "postcode": "85027",
+    "lat": 33.6561082,
+    "lon": -112.0982166
+  },
+  {
+    "street": "South 40th Place",
+    "housenumber": "15425",
+    "city": "Phoenix",
+    "postcode": "85044",
+    "lat": 33.3067392,
+    "lon": -111.9960152
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3421",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4887921,
+    "lon": -112.0824197
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3433",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4889239,
+    "lon": -112.0827185
+  },
+  {
+    "street": "North 7th Avenue",
+    "housenumber": "3427",
+    "city": "Phoenix",
+    "postcode": "85013",
+    "lat": 33.4889131,
+    "lon": -112.0828145
+  }
+]

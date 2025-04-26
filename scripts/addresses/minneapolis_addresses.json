@@ -1,0 +1,7765 @@
+[
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "315",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9800236,
+    "lon": -93.2363642
+  },
+  {
+    "street": "3rd Street North",
+    "housenumber": "514",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9857583,
+    "lon": -93.2762636
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "1301",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9801419,
+    "lon": -93.2375532
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1325",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9807682,
+    "lon": -93.2361251
+  },
+  {
+    "street": "Nicollet Avenue",
+    "housenumber": "1900",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9634412,
+    "lon": -93.278271
+  },
+  {
+    "street": "2nd Avenue South",
+    "housenumber": "1200",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9708,
+    "lon": -93.2739
+  },
+  {
+    "street": "Hiawatha Avenue",
+    "housenumber": "3301",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9426724,
+    "lon": -93.2339648
+  },
+  {
+    "street": "South Minnehaha Avenue",
+    "housenumber": "4801",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.91608,
+    "lon": -93.2108845
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2501",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734722,
+    "lon": -93.220995
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "313",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9800108,
+    "lon": -93.2364779
+  },
+  {
+    "street": "Stinson Boulevard Northeast",
+    "housenumber": "1540",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0037043,
+    "lon": -93.2278895
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "800",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734817,
+    "lon": -93.2269099
+  },
+  {
+    "street": "Southeast 8th Street ",
+    "housenumber": "630",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9882409,
+    "lon": -93.2426233
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1323",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.980791,
+    "lon": -93.2361825
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "lat": 44.987234,
+    "lon": -93.2415865
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "707",
+    "city": "Minneapolis",
+    "lat": 44.9871458,
+    "lon": -93.2416558
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "713",
+    "city": "Minneapolis",
+    "lat": 44.9872769,
+    "lon": -93.241553
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "709",
+    "city": "Minneapolis",
+    "lat": 44.9871841,
+    "lon": -93.241626
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "700",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9735342,
+    "lon": -93.228451
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "2730",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9496328,
+    "lon": -93.3152638
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "3822",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9485384,
+    "lon": -93.2167458
+  },
+  {
+    "street": "34th Avenue South",
+    "housenumber": "4563",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.919781,
+    "lon": -93.2227829
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2929",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9491224,
+    "lon": -93.2980632
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1320",
+    "city": "Minneapolis",
+    "lat": 44.9494325,
+    "lon": -93.296668
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2906",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9490481,
+    "lon": -93.2984984
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3226",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9493525,
+    "lon": -93.3204983
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3216",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9492713,
+    "lon": -93.320081
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9471471,
+    "lon": -93.2973017
+  },
+  {
+    "street": "West 31st Street",
+    "housenumber": "1432",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9467583,
+    "lon": -93.2987951
+  },
+  {
+    "street": "Harmon Place",
+    "housenumber": "1624",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9712654,
+    "lon": -93.2862364
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3200",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9487305,
+    "lon": -93.3199569
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "810",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485005,
+    "lon": -93.2901359
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2916",
+    "city": "Minneapolis",
+    "lat": 44.9485836,
+    "lon": -93.298494
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2922",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9491696,
+    "lon": -93.2883176
+  },
+  {
+    "street": "South 6th Street",
+    "housenumber": "50",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.978136,
+    "lon": -93.2717152
+  },
+  {
+    "street": "Nicollet Mall",
+    "housenumber": "1110",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9726619,
+    "lon": -93.2761026
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "710",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9779327,
+    "lon": -93.2753451
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2911",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9495124,
+    "lon": -93.2980478
+  },
+  {
+    "street": "South 2nd Street",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "lat": 44.9779146,
+    "lon": -93.255531
+  },
+  {
+    "street": "9th Avenue South",
+    "housenumber": "212",
+    "city": "Minneapolis",
+    "lat": 44.9776908,
+    "lon": -93.2557311
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "3440",
+    "city": "Minneapolis",
+    "lat": 44.9398848,
+    "lon": -93.2526453
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3240",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9491461,
+    "lon": -93.32135
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2440",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9578787,
+    "lon": -93.2960541
+  },
+  {
+    "street": "4th Avenue South",
+    "housenumber": "4544",
+    "city": "Minneapolis",
+    "lat": 44.9200859,
+    "lon": -93.270666
+  },
+  {
+    "street": "New Brighton Boulevard",
+    "housenumber": "1640",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0048737,
+    "lon": -93.2304452
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3224",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.949352,
+    "lon": -93.320347
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "4200",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9267409,
+    "lon": -93.2323585
+  },
+  {
+    "street": "East 42nd Street",
+    "housenumber": "3101",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9268873,
+    "lon": -93.2275298
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2308",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9125515,
+    "lon": -93.309182
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "2814",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9247785,
+    "lon": -93.3153451
+  },
+  {
+    "street": "West Franklin Avenue",
+    "housenumber": "1007",
+    "city": "Minneapolis",
+    "lat": 44.9625738,
+    "lon": -93.2921454
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2324",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9592619,
+    "lon": -93.2883241
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2401",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.959018,
+    "lon": -93.287828
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "4036",
+    "city": "Minneapolis",
+    "lat": 44.9294167,
+    "lon": -93.2531229
+  },
+  {
+    "street": "Southeast Oak Street",
+    "housenumber": "215",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9741748,
+    "lon": -93.2269256
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4300",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9248874,
+    "lon": -93.2910049
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4301",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9249536,
+    "lon": -93.2777658
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4257",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9252019,
+    "lon": -93.2776907
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "4555",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.919775,
+    "lon": -93.2842366
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "2803",
+    "city": "Minneapolis",
+    "lat": 44.9245328,
+    "lon": -93.3151027
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4314",
+    "city": "Minneapolis",
+    "lat": 44.92398,
+    "lon": -93.3150508
+  },
+  {
+    "street": "West 44th Street",
+    "housenumber": "3421",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9231553,
+    "lon": -93.3238556
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "528",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9839462,
+    "lon": -93.2480631
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "1113",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9624939,
+    "lon": -93.2575094
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "25",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9874099,
+    "lon": -93.2551503
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1444",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485199,
+    "lon": -93.2995026
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "607",
+    "city": "Minneapolis",
+    "lat": 44.9779222,
+    "lon": -93.259661
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "401",
+    "city": "Minneapolis",
+    "lat": 44.9886957,
+    "lon": -93.2548857
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "815",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9737665,
+    "lon": -93.2263179
+  },
+  {
+    "street": "Riverside Avenue",
+    "housenumber": "1821",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9695864,
+    "lon": -93.2461656
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2404",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9589344,
+    "lon": -93.2945444
+  },
+  {
+    "street": "West 28th Street",
+    "housenumber": "1414",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9520952,
+    "lon": -93.2976763
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "626",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9484963,
+    "lon": -93.2878758
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2218",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9487664,
+    "lon": -93.2399374
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2651",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9538488,
+    "lon": -93.2878323
+  },
+  {
+    "street": "Nicollet Mall",
+    "housenumber": "809",
+    "city": "Minneapolis",
+    "lat": 44.9754283,
+    "lon": -93.2731746
+  },
+  {
+    "street": "Hiawatha Avenue",
+    "housenumber": "4741",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9175564,
+    "lon": -93.2157303
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2200",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9628797,
+    "lon": -93.240525
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2207",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9626216,
+    "lon": -93.2405921
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2620",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9629174,
+    "lon": -93.2334519
+  },
+  {
+    "street": "Franklin Avenue East",
+    "housenumber": "325",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9624546,
+    "lon": -93.2712798
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2451",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9574462,
+    "lon": -93.2776589
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3238",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9493265,
+    "lon": -93.321095
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1418",
+    "city": "Minneapolis",
+    "lat": 44.9938897,
+    "lon": -93.2856618
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "lat": 44.9949317,
+    "lon": -93.2849664
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1504",
+    "city": "Minneapolis",
+    "lat": 44.9943415,
+    "lon": -93.2854268
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "512",
+    "city": "Minneapolis",
+    "lat": 44.9949963,
+    "lon": -93.2856976
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "613",
+    "city": "Minneapolis",
+    "lat": 44.9942541,
+    "lon": -93.28691
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "624",
+    "city": "Minneapolis",
+    "lat": 44.99379,
+    "lon": -93.2875697
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "633",
+    "city": "Minneapolis",
+    "lat": 44.9923181,
+    "lon": -93.2875788
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "625",
+    "city": "Minneapolis",
+    "lat": 44.9937962,
+    "lon": -93.2868595
+  },
+  {
+    "street": "14th Avenue North",
+    "housenumber": "606",
+    "city": "Minneapolis",
+    "lat": 44.9932643,
+    "lon": -93.2871554
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "613",
+    "city": "Minneapolis",
+    "lat": 44.9924301,
+    "lon": -93.2863637
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1500",
+    "city": "Minneapolis",
+    "lat": 44.9941692,
+    "lon": -93.2852841
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "518",
+    "city": "Minneapolis",
+    "lat": 44.9948824,
+    "lon": -93.2859391
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1508",
+    "city": "Minneapolis",
+    "lat": 44.9944731,
+    "lon": -93.2857019
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "634",
+    "city": "Minneapolis",
+    "lat": 44.9925101,
+    "lon": -93.2876327
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "631",
+    "city": "Minneapolis",
+    "lat": 44.9936657,
+    "lon": -93.2870666
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1401",
+    "city": "Minneapolis",
+    "lat": 44.9932914,
+    "lon": -93.2865427
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "625",
+    "city": "Minneapolis",
+    "lat": 44.9921826,
+    "lon": -93.2870252
+  },
+  {
+    "street": "14th Avenue North",
+    "housenumber": "612",
+    "city": "Minneapolis",
+    "lat": 44.993241,
+    "lon": -93.2874235
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "601",
+    "city": "Minneapolis",
+    "lat": 44.99284,
+    "lon": -93.285777
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "617",
+    "city": "Minneapolis",
+    "lat": 44.9923932,
+    "lon": -93.2865726
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "506",
+    "city": "Minneapolis",
+    "lat": 44.9951455,
+    "lon": -93.2853864
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "601",
+    "city": "Minneapolis",
+    "lat": 44.9944177,
+    "lon": -93.2867769
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "605",
+    "city": "Minneapolis",
+    "lat": 44.9926492,
+    "lon": -93.2858919
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "626",
+    "city": "Minneapolis",
+    "lat": 44.9927169,
+    "lon": -93.2872463
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1419",
+    "city": "Minneapolis",
+    "lat": 44.9938602,
+    "lon": -93.2862607
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "606",
+    "city": "Minneapolis",
+    "lat": 44.9944499,
+    "lon": -93.2874113
+  },
+  {
+    "street": "14th Avenue North",
+    "housenumber": "600",
+    "city": "Minneapolis",
+    "lat": 44.9932545,
+    "lon": -93.2868264
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "629",
+    "city": "Minneapolis",
+    "lat": 44.9921654,
+    "lon": -93.2872584
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "619",
+    "city": "Minneapolis",
+    "lat": 44.9940042,
+    "lon": -93.2868821
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1413",
+    "city": "Minneapolis",
+    "lat": 44.9936817,
+    "lon": -93.2862607
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "622",
+    "city": "Minneapolis",
+    "lat": 44.9926751,
+    "lon": -93.2870008
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1406",
+    "city": "Minneapolis",
+    "lat": 44.9934478,
+    "lon": -93.2857053
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "531",
+    "city": "Minneapolis",
+    "lat": 44.9944623,
+    "lon": -93.2863003
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "609",
+    "city": "Minneapolis",
+    "lat": 44.9925397,
+    "lon": -93.2861304
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1408",
+    "city": "Minneapolis",
+    "lat": 44.993641,
+    "lon": -93.2857071
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "507",
+    "city": "Minneapolis",
+    "lat": 44.9947655,
+    "lon": -93.2850709
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1400",
+    "city": "Minneapolis",
+    "lat": 44.9932635,
+    "lon": -93.2857196
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "500",
+    "city": "Minneapolis",
+    "lat": 44.9950902,
+    "lon": -93.2851274
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "618",
+    "city": "Minneapolis",
+    "lat": 44.9939956,
+    "lon": -93.2875245
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1407",
+    "city": "Minneapolis",
+    "lat": 44.9934502,
+    "lon": -93.2863094
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "621",
+    "city": "Minneapolis",
+    "lat": 44.9922922,
+    "lon": -93.2867849
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1501",
+    "city": "Minneapolis",
+    "lat": 44.9942664,
+    "lon": -93.2862206
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1424",
+    "city": "Minneapolis",
+    "lat": 44.9939574,
+    "lon": -93.2853815
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "612",
+    "city": "Minneapolis",
+    "lat": 44.9942221,
+    "lon": -93.2874897
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "630",
+    "city": "Minneapolis",
+    "lat": 44.9926911,
+    "lon": -93.2875248
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "630",
+    "city": "Minneapolis",
+    "lat": 44.993646,
+    "lon": -93.2873626
+  },
+  {
+    "street": "Hall Curve",
+    "housenumber": "1425",
+    "city": "Minneapolis",
+    "lat": 44.9940202,
+    "lon": -93.2862554
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "618",
+    "city": "Minneapolis",
+    "lat": 44.9927526,
+    "lon": -93.2867902
+  },
+  {
+    "street": "14th Avenue North",
+    "housenumber": "618",
+    "city": "Minneapolis",
+    "lat": 44.993252,
+    "lon": -93.287669
+  },
+  {
+    "street": "Hall Lane",
+    "housenumber": "513",
+    "city": "Minneapolis",
+    "lat": 44.9945885,
+    "lon": -93.2853037
+  },
+  {
+    "street": "Harry Davis Lane",
+    "housenumber": "614",
+    "city": "Minneapolis",
+    "lat": 44.9928425,
+    "lon": -93.286536
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1317",
+    "city": "Minneapolis",
+    "lat": 44.9926248,
+    "lon": -93.2891967
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1325",
+    "city": "Minneapolis",
+    "lat": 44.9928441,
+    "lon": -93.2891994
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1305",
+    "city": "Minneapolis",
+    "lat": 44.9923033,
+    "lon": -93.2891909
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1322",
+    "city": "Minneapolis",
+    "lat": 44.9928424,
+    "lon": -93.2888199
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1309",
+    "city": "Minneapolis",
+    "lat": 44.9924215,
+    "lon": -93.2891905
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1323",
+    "city": "Minneapolis",
+    "lat": 44.9927893,
+    "lon": -93.2891988
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1319",
+    "city": "Minneapolis",
+    "lat": 44.9926796,
+    "lon": -93.2891974
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1301",
+    "city": "Minneapolis",
+    "lat": 44.9921862,
+    "lon": -93.2891913
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1302",
+    "city": "Minneapolis",
+    "lat": 44.9922416,
+    "lon": -93.2888234
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1311",
+    "city": "Minneapolis",
+    "lat": 44.9924825,
+    "lon": -93.2891912
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1321",
+    "city": "Minneapolis",
+    "lat": 44.9927344,
+    "lon": -93.2891981
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1315",
+    "city": "Minneapolis",
+    "lat": 44.99257,
+    "lon": -93.289196
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1312",
+    "city": "Minneapolis",
+    "lat": 44.9925482,
+    "lon": -93.2888199
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1303",
+    "city": "Minneapolis",
+    "lat": 44.992241,
+    "lon": -93.289192
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1316",
+    "city": "Minneapolis",
+    "lat": 44.9926282,
+    "lon": -93.2888234
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1307",
+    "city": "Minneapolis",
+    "lat": 44.9923655,
+    "lon": -93.2891898
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1308",
+    "city": "Minneapolis",
+    "lat": 44.9924256,
+    "lon": -93.2888213
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1310",
+    "city": "Minneapolis",
+    "lat": 44.99248,
+    "lon": -93.2884469
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1316",
+    "city": "Minneapolis",
+    "lat": 44.9926411,
+    "lon": -93.2884476
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1310",
+    "city": "Minneapolis",
+    "lat": 44.9924869,
+    "lon": -93.2888206
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1304",
+    "city": "Minneapolis",
+    "lat": 44.9923029,
+    "lon": -93.2888227
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1308",
+    "city": "Minneapolis",
+    "lat": 44.9924187,
+    "lon": -93.2884476
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1306",
+    "city": "Minneapolis",
+    "lat": 44.9923574,
+    "lon": -93.2884483
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1320",
+    "city": "Minneapolis",
+    "lat": 44.9927839,
+    "lon": -93.2884453
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1318",
+    "city": "Minneapolis",
+    "lat": 44.9926996,
+    "lon": -93.2888222
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1306",
+    "city": "Minneapolis",
+    "lat": 44.9923642,
+    "lon": -93.288822
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1322",
+    "city": "Minneapolis",
+    "lat": 44.9928553,
+    "lon": -93.2884441
+  },
+  {
+    "street": "Boardwalk Avenue",
+    "housenumber": "1320",
+    "city": "Minneapolis",
+    "lat": 44.992771,
+    "lon": -93.2888211
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1312",
+    "city": "Minneapolis",
+    "lat": 44.9925413,
+    "lon": -93.2884462
+  },
+  {
+    "street": "Boardwalk Place",
+    "housenumber": "1318",
+    "city": "Minneapolis",
+    "lat": 44.9927125,
+    "lon": -93.2884465
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2922",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485128,
+    "lon": -93.2984989
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2910",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9488498,
+    "lon": -93.2984977
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1601",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482232,
+    "lon": -93.3022472
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1404",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485012,
+    "lon": -93.2974112
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1406",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485037,
+    "lon": -93.2975052
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9481963,
+    "lon": -93.2972087
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1220",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948493,
+    "lon": -93.295561
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1433A",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482153,
+    "lon": -93.2992257
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2401",
+    "city": "Minneapolis",
+    "lat": 44.9589028,
+    "lon": -93.293957
+  },
+  {
+    "street": "West 28th Street",
+    "housenumber": "1424",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9521554,
+    "lon": -93.2987215
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482327,
+    "lon": -93.2949966
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1010",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948595,
+    "lon": -93.2927868
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1200",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485128,
+    "lon": -93.2949052
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1430",
+    "city": "Minneapolis",
+    "lat": 44.9493934,
+    "lon": -93.2980067
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1015",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482351,
+    "lon": -93.2928306
+  },
+  {
+    "street": "Dupont Avenue South",
+    "housenumber": "2929",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.949132,
+    "lon": -93.2927789
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482293,
+    "lon": -93.2946309
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1201",
+    "city": "Minneapolis",
+    "lat": 44.9490625,
+    "lon": -93.2946165
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1203",
+    "city": "Minneapolis",
+    "lat": 44.9490625,
+    "lon": -93.294722
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948229,
+    "lon": -93.2947474
+  },
+  {
+    "street": "Dupont Avenue South",
+    "housenumber": "2925",
+    "city": "Minneapolis",
+    "lat": 44.9491639,
+    "lon": -93.2927789
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1300",
+    "city": "Minneapolis",
+    "lat": 44.9493798,
+    "lon": -93.2962855
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1400",
+    "city": "Minneapolis",
+    "lat": 44.9493962,
+    "lon": -93.2973284
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1715",
+    "city": "Minneapolis",
+    "lat": 44.9482472,
+    "lon": -93.3040905
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "400",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9805455,
+    "lon": -93.2355243
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "404",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9806674,
+    "lon": -93.2354367
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1407",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9804431,
+    "lon": -93.2352656
+  },
+  {
+    "street": "Southeast 13th Avenue",
+    "housenumber": "435",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.981987,
+    "lon": -93.2367773
+  },
+  {
+    "street": "West 33rd Street",
+    "housenumber": "128",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9432571,
+    "lon": -93.2810618
+  },
+  {
+    "street": "Midtown Greenway",
+    "housenumber": "1000",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9504477,
+    "lon": -93.2609274
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2100",
+    "city": "Minneapolis",
+    "postcode": "55407-1931",
+    "lat": 44.9486033,
+    "lon": -93.2419248
+  },
+  {
+    "street": "East 38th Street",
+    "housenumber": "1820",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.934259,
+    "lon": -93.2476685
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "401",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9806783,
+    "lon": -93.2358625
+  },
+  {
+    "street": "East 35th Street",
+    "housenumber": "821",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9392556,
+    "lon": -93.2617101
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4754",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9164014,
+    "lon": -93.2628246
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4762",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.916239,
+    "lon": -93.2628967
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4755",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9162235,
+    "lon": -93.2623884
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "4999",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9133423,
+    "lon": -93.3289033
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "4999",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9130473,
+    "lon": -93.3288937
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "4999",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9126387,
+    "lon": -93.3287978
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "5037",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9114315,
+    "lon": -93.3288607
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1608",
+    "city": "Minneapolis",
+    "lat": 44.9484771,
+    "lon": -93.3024833
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "215",
+    "city": "Minneapolis",
+    "lat": 44.9878388,
+    "lon": -93.2572704
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "405",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9808259,
+    "lon": -93.2357421
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "326",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9802944,
+    "lon": -93.23571
+  },
+  {
+    "street": "Southeast 15th Avenue",
+    "housenumber": "316",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9795311,
+    "lon": -93.2344993
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "409",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9808733,
+    "lon": -93.2357027
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "225",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9880009,
+    "lon": -93.2568965
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "403",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9807325,
+    "lon": -93.2358183
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1327",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9807253,
+    "lon": -93.235955
+  },
+  {
+    "street": "18th Avenue Northeast",
+    "housenumber": "2317",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0062615,
+    "lon": -93.2271653
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3262",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.94905,
+    "lon": -93.3214858
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "615",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9739642,
+    "lon": -93.2300642
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "820",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734722,
+    "lon": -93.2262707
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "615",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9739636,
+    "lon": -93.2298733
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "615",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9739855,
+    "lon": -93.2292651
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "324",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9802041,
+    "lon": -93.2357764
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "3804",
+    "city": "Minneapolis",
+    "lat": 44.9338263,
+    "lon": -93.2845359
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3400",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9411765,
+    "lon": -93.2884446
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3800",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9339718,
+    "lon": -93.2781224
+  },
+  {
+    "street": "Laurel Street",
+    "housenumber": "849",
+    "city": "Minneapolis",
+    "postcode": "67467",
+    "lat": 39.1180731,
+    "lon": -97.6960347
+  },
+  {
+    "street": "West 2nd Street",
+    "housenumber": "301",
+    "city": "Minneapolis",
+    "postcode": "67467",
+    "lat": 39.1220747,
+    "lon": -97.7086223
+  },
+  {
+    "street": "Southeast Ontario Street",
+    "housenumber": "325",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.972756,
+    "lon": -93.225244
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2937",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9490934,
+    "lon": -93.2878271
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "614",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485385,
+    "lon": -93.2878803
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4820",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9154531,
+    "lon": -93.2628071
+  },
+  {
+    "street": "2nd Avenue North",
+    "housenumber": "241",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.983349,
+    "lon": -93.271569
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2549",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9559044,
+    "lon": -93.2877103
+  },
+  {
+    "street": "Southeast Main Street",
+    "housenumber": "201",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9843629,
+    "lon": -93.2547089
+  },
+  {
+    "street": "Southeast Main Street",
+    "housenumber": "125",
+    "city": "Minneapolis",
+    "lat": 44.9844954,
+    "lon": -93.2550643
+  },
+  {
+    "street": "Southeast Main Street",
+    "housenumber": "115",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9847052,
+    "lon": -93.2555978
+  },
+  {
+    "street": "West 15th Street",
+    "housenumber": "329",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9678114,
+    "lon": -93.2837751
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "312",
+    "city": "Minneapolis",
+    "lat": 44.9880883,
+    "lon": -93.2555575
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "320",
+    "city": "Minneapolis",
+    "lat": 44.9881469,
+    "lon": -93.2553591
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "326",
+    "city": "Minneapolis",
+    "lat": 44.9882069,
+    "lon": -93.2551683
+  },
+  {
+    "street": "4th Street Northeast",
+    "housenumber": "21",
+    "city": "Minneapolis",
+    "lat": 44.989205,
+    "lon": -93.2552334
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "308",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.988042,
+    "lon": -93.2556847
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "318",
+    "city": "Minneapolis",
+    "lat": 44.9881306,
+    "lon": -93.2554053
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "306",
+    "city": "Minneapolis",
+    "lat": 44.987997,
+    "lon": -93.2557984
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "314",
+    "city": "Minneapolis",
+    "lat": 44.9881074,
+    "lon": -93.2554843
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3262",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9431093,
+    "lon": -93.2307075
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "2",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9557127,
+    "lon": -93.2776755
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2739",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9524668,
+    "lon": -93.2776832
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "3803",
+    "city": "Minneapolis",
+    "lat": 44.9338407,
+    "lon": -93.284188
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "4760",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9160681,
+    "lon": -93.2846396
+  },
+  {
+    "street": "East 46th Street",
+    "housenumber": "400",
+    "city": "Minneapolis",
+    "lat": 44.9198751,
+    "lon": -93.2699344
+  },
+  {
+    "street": "Clinton Avenue South",
+    "housenumber": "4500",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9208132,
+    "lon": -93.2717902
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "3812",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9126311,
+    "lon": -93.3282435
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "507",
+    "city": "Minneapolis",
+    "lat": 44.9886724,
+    "lon": -93.2517988
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "620",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9852424,
+    "lon": -93.2454367
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "608",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9854876,
+    "lon": -93.2457353
+  },
+  {
+    "street": "8th Avenue SE",
+    "housenumber": "427",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.984664,
+    "lon": -93.2436909
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "511",
+    "city": "Minneapolis",
+    "lat": 44.9887152,
+    "lon": -93.251764
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "505",
+    "city": "Minneapolis",
+    "lat": 44.9886425,
+    "lon": -93.2519041
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "121",
+    "city": "Minneapolis",
+    "lat": 44.9885639,
+    "lon": -93.2523022
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "115",
+    "city": "Minneapolis",
+    "lat": 44.9886407,
+    "lon": -93.2524655
+  },
+  {
+    "street": "6th Street SE",
+    "housenumber": "418",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9873268,
+    "lon": -93.2477093
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "614",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9852441,
+    "lon": -93.2456265
+  },
+  {
+    "street": "8th Avenue SE",
+    "housenumber": "431",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9847407,
+    "lon": -93.2436278
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "618",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9853444,
+    "lon": -93.2453683
+  },
+  {
+    "street": "8th Avenue SE",
+    "housenumber": "429",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9847064,
+    "lon": -93.2436634
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "503",
+    "city": "Minneapolis",
+    "lat": 44.9885821,
+    "lon": -93.2519472
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "lat": 44.988524,
+    "lon": -93.2519953
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "509",
+    "city": "Minneapolis",
+    "lat": 44.9886918,
+    "lon": -93.2517872
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "119",
+    "city": "Minneapolis",
+    "lat": 44.9885921,
+    "lon": -93.2523528
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "612",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9852764,
+    "lon": -93.2457049
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "610",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9854661,
+    "lon": -93.2456771
+  },
+  {
+    "street": "2nd Avenue SE",
+    "housenumber": "513",
+    "city": "Minneapolis",
+    "lat": 44.9887445,
+    "lon": -93.2517424
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "113",
+    "city": "Minneapolis",
+    "lat": 44.9886577,
+    "lon": -93.2525136
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "425",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9867912,
+    "lon": -93.2478257
+  },
+  {
+    "street": "8th Avenue SE",
+    "housenumber": "425",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.984625,
+    "lon": -93.2437201
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "123",
+    "city": "Minneapolis",
+    "lat": 44.9885399,
+    "lon": -93.25224
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "616",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9853659,
+    "lon": -93.2454266
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "423",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9868235,
+    "lon": -93.2479006
+  },
+  {
+    "street": "5th Street SE",
+    "housenumber": "117",
+    "city": "Minneapolis",
+    "lat": 44.9886126,
+    "lon": -93.2524067
+  },
+  {
+    "street": "6th Street SE",
+    "housenumber": "422",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9872649,
+    "lon": -93.2475392
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "3400",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9681584,
+    "lon": -93.208816
+  },
+  {
+    "street": "Northeast 13th Avenue",
+    "housenumber": "323",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0010082,
+    "lon": -93.2633437
+  },
+  {
+    "street": "13th Ave NE",
+    "housenumber": "339",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0010069,
+    "lon": -93.262564
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "301",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9710072,
+    "lon": -93.2469843
+  },
+  {
+    "street": "Main Street Southeast",
+    "housenumber": "43",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9858376,
+    "lon": -93.2579518
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "2551",
+    "city": "Minneapolis",
+    "lat": 45.0146156,
+    "lon": -93.2470382
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2800",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.95142,
+    "lon": -93.2883457
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "3740",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9346044,
+    "lon": -93.2627543
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2001",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9759244,
+    "lon": -93.2268521
+  },
+  {
+    "street": "Southeast Fulton Street",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9700038,
+    "lon": -93.2259999
+  },
+  {
+    "street": "East 35th Street",
+    "housenumber": "324",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9402904,
+    "lon": -93.2717958
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "201",
+    "city": "Minneapolis",
+    "lat": 44.9876894,
+    "lon": -93.257723
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1411",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9804011,
+    "lon": -93.2351638
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2750",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9521273,
+    "lon": -93.2782202
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2917",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9496843,
+    "lon": -93.2878172
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2451",
+    "city": "Minneapolis",
+    "lat": 44.957519,
+    "lon": -93.2950655
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "4204",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9266272,
+    "lon": -93.2323582
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "2027",
+    "city": "Minneapolis",
+    "postcode": "55411",
+    "lat": 45.0001164,
+    "lon": -93.2804707
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2800",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9515183,
+    "lon": -93.2986945
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2817 #110",
+    "city": "Minneapolis",
+    "lat": 44.9513223,
+    "lon": -93.2980747
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2833",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9508594,
+    "lon": -93.2980618
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1430",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485104,
+    "lon": -93.2991211
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1438",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485053,
+    "lon": -93.2992451
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "330",
+    "city": "Minneapolis",
+    "lat": 44.9882824,
+    "lon": -93.2550176
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1440",
+    "city": "Minneapolis",
+    "lat": 44.9485146,
+    "lon": -93.2993613
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2756",
+    "city": "Minneapolis",
+    "lat": 44.9521346,
+    "lon": -93.2985353
+  },
+  {
+    "street": "23rd Avenue South",
+    "housenumber": "2002",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9624445,
+    "lon": -93.2396664
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "3200",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9445996,
+    "lon": -93.2628597
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4307",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9242636,
+    "lon": -93.3145812
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "3446",
+    "city": "Minneapolis",
+    "lat": 44.9397147,
+    "lon": -93.2527531
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "825",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9737557,
+    "lon": -93.2258232
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "5416",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9045581,
+    "lon": -93.3088921
+  },
+  {
+    "street": "19th Avenue South",
+    "housenumber": "269",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9720244,
+    "lon": -93.2433423
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "720",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9735282,
+    "lon": -93.2277896
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "1414",
+    "city": "Minneapolis",
+    "lat": 44.9629047,
+    "lon": -93.2544523
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "1526",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9485249,
+    "lon": -93.2522744
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "5057",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9108828,
+    "lon": -93.3288985
+  },
+  {
+    "street": "France Avenue South",
+    "housenumber": "5055",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9108958,
+    "lon": -93.328899
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "25",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9871241,
+    "lon": -93.2549172
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "3759",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9342862,
+    "lon": -93.2622744
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "4956",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9128064,
+    "lon": -93.2324647
+  },
+  {
+    "street": "11th Avenue South",
+    "housenumber": "811",
+    "city": "Minneapolis",
+    "lat": 44.9689481,
+    "lon": -93.2579166
+  },
+  {
+    "street": "East 35th Street",
+    "housenumber": "2229",
+    "city": "Minneapolis",
+    "lat": 44.9394446,
+    "lon": -93.2390987
+  },
+  {
+    "street": "27th Avenue South",
+    "housenumber": "3756",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9342321,
+    "lon": -93.2335941
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "421",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9811533,
+    "lon": -93.2354738
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "417",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9810919,
+    "lon": -93.2355246
+  },
+  {
+    "street": "42nd Avenue South",
+    "housenumber": "3809",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9340165,
+    "lon": -93.2125405
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3510",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9392291,
+    "lon": -93.27825
+  },
+  {
+    "street": "Xerxes Avenue South",
+    "housenumber": "5557",
+    "city": "Minneapolis",
+    "lat": 44.9018142,
+    "lon": -93.3185328
+  },
+  {
+    "street": "Hawthorne Avenue",
+    "housenumber": "950",
+    "city": "Minneapolis",
+    "lat": 44.9771212,
+    "lon": -93.2784874
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "1900",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9638452,
+    "lon": -93.27673
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "1902",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9637946,
+    "lon": -93.27673
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "1904",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9636936,
+    "lon": -93.2767307
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "1906",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9636553,
+    "lon": -93.2767307
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "1931",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9628489,
+    "lon": -93.2776305
+  },
+  {
+    "street": "3rd Avenue South",
+    "housenumber": "1830",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9644461,
+    "lon": -93.2729264
+  },
+  {
+    "street": "Stevens Avenue South",
+    "housenumber": "1705",
+    "city": "Minneapolis",
+    "lat": 44.9661261,
+    "lon": -93.2751555
+  },
+  {
+    "street": "Stevens Avenue South",
+    "housenumber": "1707",
+    "city": "Minneapolis",
+    "lat": 44.9659863,
+    "lon": -93.2751555
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "208",
+    "city": "Minneapolis",
+    "lat": 44.9628156,
+    "lon": -93.2735436
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "210",
+    "city": "Minneapolis",
+    "lat": 44.9628156,
+    "lon": -93.273497
+  },
+  {
+    "street": "25th Avenue South",
+    "housenumber": "2537",
+    "city": "Minneapolis",
+    "lat": 44.9557798,
+    "lon": -93.2357195
+  },
+  {
+    "street": "Clinton Avenue South",
+    "housenumber": "2401",
+    "city": "Minneapolis",
+    "lat": 44.9589648,
+    "lon": -93.2711908
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3100",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9462922,
+    "lon": -93.2986909
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "3546",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9379577,
+    "lon": -93.2845289
+  },
+  {
+    "street": "West 36th Street",
+    "housenumber": "822",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9378627,
+    "lon": -93.2904619
+  },
+  {
+    "street": "West 36th Street",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9378665,
+    "lon": -93.2903278
+  },
+  {
+    "street": "West 36th Street",
+    "housenumber": "814",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9378665,
+    "lon": -93.290183
+  },
+  {
+    "street": "West 36th Street",
+    "housenumber": "826",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9378475,
+    "lon": -93.290596
+  },
+  {
+    "street": "West 36th Street",
+    "housenumber": "904",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.937822,
+    "lon": -93.2911231
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "4553",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9199284,
+    "lon": -93.2521671
+  },
+  {
+    "street": "Northeast Marshall Street",
+    "housenumber": "2501",
+    "city": "Minneapolis",
+    "lat": 45.0133544,
+    "lon": -93.2713712
+  },
+  {
+    "street": "7th Place E",
+    "housenumber": "121",
+    "city": "St. Paul",
+    "postcode": "55101",
+    "lat": 44.974564,
+    "lon": -93.2715651
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "3430",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9677755,
+    "lon": -93.2079564
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "2504",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0134405,
+    "lon": -93.2476538
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "229",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9730427,
+    "lon": -93.2470354
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1500",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.973794,
+    "lon": -93.2476609
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "221",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9732188,
+    "lon": -93.2470471
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1430",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.973346,
+    "lon": -93.2477323
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "2726",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9246269,
+    "lon": -93.3141261
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "300",
+    "city": "Minneapolis",
+    "lat": 44.9879048,
+    "lon": -93.256065
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "300",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9729378,
+    "lon": -93.2356456
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "300",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9729281,
+    "lon": -93.2351132
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1501",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9728885,
+    "lon": -93.247691
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1427",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9730344,
+    "lon": -93.2480776
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2216",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9490513,
+    "lon": -93.2402594
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "2750",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9521346,
+    "lon": -93.2530234
+  },
+  {
+    "street": "Market Street",
+    "housenumber": "275",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.97984,
+    "lon": -93.288413
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "5351",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.905213,
+    "lon": -93.2879882
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "4215",
+    "city": "Minneapolis",
+    "lat": 44.9264026,
+    "lon": -93.2520975
+  },
+  {
+    "street": "North 6th Street",
+    "housenumber": "85",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9791939,
+    "lon": -93.2745987
+  },
+  {
+    "street": "North 5th Street",
+    "housenumber": "110",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9810467,
+    "lon": -93.2741697
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "lat": 44.9774722,
+    "lon": -93.2751921
+  },
+  {
+    "street": "South 7th Street",
+    "housenumber": "425",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9740555,
+    "lon": -93.2660003
+  },
+  {
+    "street": "East 38th Street",
+    "housenumber": "2716",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9342257,
+    "lon": -93.2323804
+  },
+  {
+    "street": "West Grant Street",
+    "housenumber": "101",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9697371,
+    "lon": -93.2795961
+  },
+  {
+    "street": "34th Avenue South",
+    "housenumber": "5010",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9120308,
+    "lon": -93.2231868
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "233",
+    "city": "Minneapolis",
+    "lat": 44.9880692,
+    "lon": -93.2567249
+  },
+  {
+    "street": "Northeast University Avenue",
+    "housenumber": "14",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9881866,
+    "lon": -93.2567783
+  },
+  {
+    "street": "21st Street West",
+    "housenumber": "2115",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9616622,
+    "lon": -93.3080738
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "730",
+    "city": "Minneapolis",
+    "lat": 44.9888886,
+    "lon": -93.2781256
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "730",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9888468,
+    "lon": -93.2781739
+  },
+  {
+    "street": "Northeast 2nd Street",
+    "housenumber": "1300",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0010399,
+    "lon": -93.2663511
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "lat": 45.0033817,
+    "lon": -93.2515432
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "205",
+    "city": "Minneapolis",
+    "lat": 44.9877268,
+    "lon": -93.2576298
+  },
+  {
+    "street": "6th Avenue SE",
+    "housenumber": "900",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9897787,
+    "lon": -93.2416808
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3024",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9474391,
+    "lon": -93.2986641
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482216,
+    "lon": -93.2977348
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3018",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477081,
+    "lon": -93.2986651
+  },
+  {
+    "street": "Northeast Broadway Street",
+    "housenumber": "945",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9989947,
+    "lon": -93.2468322
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2743",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9525468,
+    "lon": -93.28781
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2944",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485137,
+    "lon": -93.288355
+  },
+  {
+    "street": "South 2nd Street",
+    "housenumber": "750",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9783371,
+    "lon": -93.2564916
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2325",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.959329,
+    "lon": -93.2874725
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "413",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9810411,
+    "lon": -93.2355665
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "412",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9808525,
+    "lon": -93.2352682
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "411",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9809689,
+    "lon": -93.2356254
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "3801",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.93396,
+    "lon": -93.284153
+  },
+  {
+    "street": "Hiawatha Avenue",
+    "housenumber": "4135",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9277216,
+    "lon": -93.2238299
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3260",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9431763,
+    "lon": -93.2307499
+  },
+  {
+    "street": "E 33rd St",
+    "housenumber": "2820",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9431846,
+    "lon": -93.2310287
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2150",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9486802,
+    "lon": -93.2410155
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4600",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.919427,
+    "lon": -93.2910239
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4602",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.91936,
+    "lon": -93.2910268
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "821",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9122111,
+    "lon": -93.2906491
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "907",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9121282,
+    "lon": -93.2911255
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "813",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9122074,
+    "lon": -93.2903167
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4555",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197034,
+    "lon": -93.2907291
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4553",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197746,
+    "lon": -93.2907298
+  },
+  {
+    "street": "Washington Ave. N.",
+    "housenumber": "603",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9868817,
+    "lon": -93.276275
+  },
+  {
+    "street": "Washington Ave. N.",
+    "housenumber": "606",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9872838,
+    "lon": -93.2761088
+  },
+  {
+    "street": "North Washington Avenue",
+    "housenumber": "600",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9871359,
+    "lon": -93.2758888
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4249",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9252482,
+    "lon": -93.2906583
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3350",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9414562,
+    "lon": -93.2884271
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "1309",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9810181,
+    "lon": -93.2366791
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "3608",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9126779,
+    "lon": -93.3255905
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "3624",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9127331,
+    "lon": -93.3261457
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2221",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9122405,
+    "lon": -93.3083925
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "4956",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9125571,
+    "lon": -93.3089399
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "5315",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9060701,
+    "lon": -93.2880696
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2610",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9549193,
+    "lon": -93.2883209
+  },
+  {
+    "street": "Lake Street West",
+    "housenumber": "3246",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9489682,
+    "lon": -93.3216013
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "731",
+    "city": "Minneapolis",
+    "lat": 44.9771259,
+    "lon": -93.2755061
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "1501",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.991741,
+    "lon": -93.2302818
+  },
+  {
+    "street": "South 6th Street",
+    "housenumber": "50",
+    "city": "Minneapolis",
+    "lat": 44.9782957,
+    "lon": -93.2718215
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477435,
+    "lon": -93.2980815
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3028",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9473103,
+    "lon": -93.2985591
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3038",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9471369,
+    "lon": -93.2986536
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1350",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.949907,
+    "lon": -93.2974767
+  },
+  {
+    "street": "West 35th Street",
+    "housenumber": "1101",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9393964,
+    "lon": -93.2935
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.94737,
+    "lon": -93.298059
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "725",
+    "city": "Minneapolis",
+    "lat": 44.9869799,
+    "lon": -93.2419032
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "723",
+    "city": "Minneapolis",
+    "lat": 44.9869875,
+    "lon": -93.2419226
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "721",
+    "city": "Minneapolis",
+    "lat": 44.9870773,
+    "lon": -93.2421506
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "719",
+    "city": "Minneapolis",
+    "lat": 44.9870856,
+    "lon": -93.2421718
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "606",
+    "city": "Minneapolis",
+    "lat": 44.9875964,
+    "lon": -93.2442472
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "608",
+    "city": "Minneapolis",
+    "lat": 44.98759,
+    "lon": -93.2442308
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "602",
+    "city": "Minneapolis",
+    "lat": 44.9876587,
+    "lon": -93.2443939
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "600",
+    "city": "Minneapolis",
+    "lat": 44.9876693,
+    "lon": -93.2444219
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "623",
+    "city": "Minneapolis",
+    "lat": 44.9865693,
+    "lon": -93.24228
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "625",
+    "city": "Minneapolis",
+    "lat": 44.9866334,
+    "lon": -93.2421737
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "623 1/2",
+    "city": "Minneapolis",
+    "lat": 44.9865581,
+    "lon": -93.2422891
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "604",
+    "city": "Minneapolis",
+    "lat": 44.9859663,
+    "lon": -93.2421768
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "801",
+    "city": "Minneapolis",
+    "lat": 44.9858313,
+    "lon": -93.2422047
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "800",
+    "city": "Minneapolis",
+    "lat": 44.9865104,
+    "lon": -93.2416106
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "624",
+    "city": "Minneapolis",
+    "lat": 44.9864841,
+    "lon": -93.2417124
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "611",
+    "city": "Minneapolis",
+    "lat": 44.9863006,
+    "lon": -93.2423641
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "620",
+    "city": "Minneapolis",
+    "lat": 44.9863081,
+    "lon": -93.2418359
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "609",
+    "city": "Minneapolis",
+    "lat": 44.9862823,
+    "lon": -93.2423783
+  },
+  {
+    "street": "Southeast 8th Avenue",
+    "housenumber": "622",
+    "city": "Minneapolis",
+    "lat": 44.9863573,
+    "lon": -93.2418212
+  },
+  {
+    "street": "Nicollet Avenue",
+    "housenumber": "2544",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9557701,
+    "lon": -93.2780776
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "1804",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9652525,
+    "lon": -93.2780719
+  },
+  {
+    "street": "East 38th Street",
+    "housenumber": "2803",
+    "city": "Minneapolis",
+    "lat": 44.9339877,
+    "lon": -93.2318741
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "222",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.982479,
+    "lon": -93.269045
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "508",
+    "city": "Minneapolis",
+    "lat": 44.9891208,
+    "lon": -93.2448573
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "512",
+    "city": "Minneapolis",
+    "lat": 44.9890841,
+    "lon": -93.2447568
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "506",
+    "city": "Minneapolis",
+    "lat": 44.9891283,
+    "lon": -93.2448763
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "616",
+    "city": "Minneapolis",
+    "lat": 44.9883975,
+    "lon": -93.2429623
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "618",
+    "city": "Minneapolis",
+    "lat": 44.9883835,
+    "lon": -93.2429258
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "510",
+    "city": "Minneapolis",
+    "lat": 44.9890917,
+    "lon": -93.2447762
+  },
+  {
+    "street": "Southeast 16th Avenue",
+    "housenumber": "315",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9790516,
+    "lon": -93.233684
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4801",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.915817,
+    "lon": -93.2623415
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "603",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9859515,
+    "lon": -93.2457336
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "601",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9859676,
+    "lon": -93.245772
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "513",
+    "city": "Minneapolis",
+    "lat": 44.9882823,
+    "lon": -93.2451618
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "514",
+    "city": "Minneapolis",
+    "lat": 44.9879252,
+    "lon": -93.2454292
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "512",
+    "city": "Minneapolis",
+    "lat": 44.9879455,
+    "lon": -93.2454797
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "lat": 44.9882702,
+    "lon": -93.2451309
+  },
+  {
+    "street": "Northeast 2nd Street",
+    "housenumber": "1306",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0013387,
+    "lon": -93.2663307
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "1831",
+    "city": "Minneapolis",
+    "lat": 45.0070337,
+    "lon": -93.2471597
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4255",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9251219,
+    "lon": -93.2906706
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "821",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9248807,
+    "lon": -93.2905284
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3764",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9342725,
+    "lon": -93.2781768
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "800",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9894358,
+    "lon": -93.2787914
+  },
+  {
+    "street": "Thomas Avenue South",
+    "housenumber": "2900",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9500108,
+    "lon": -93.3142509
+  },
+  {
+    "street": "Nicollet Mall",
+    "housenumber": "1100",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9728998,
+    "lon": -93.2758849
+  },
+  {
+    "street": "Southeast Como Avenue",
+    "housenumber": "1820",
+    "city": "Minneapolis",
+    "lat": 44.9876259,
+    "lon": -93.2257744
+  },
+  {
+    "street": "Fillmore St. NE",
+    "housenumber": "1500",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0044808,
+    "lon": -93.2443703
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2100",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9617589,
+    "lon": -93.2885872
+  },
+  {
+    "street": "Southeast Harvard Street",
+    "housenumber": "140",
+    "city": "Minneapolis",
+    "lat": 44.9756011,
+    "lon": -93.2315451
+  },
+  {
+    "street": "South Washington Avenue",
+    "housenumber": "1105",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9751548,
+    "lon": -93.2531116
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1111",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9750485,
+    "lon": -93.2528319
+  },
+  {
+    "street": "North Washington Avenue",
+    "housenumber": "2014",
+    "city": "Minneapolis",
+    "postcode": "55411",
+    "lat": 44.9998557,
+    "lon": -93.281608
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1513",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482436,
+    "lon": -93.3015358
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2431",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9626286,
+    "lon": -93.2363942
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3700",
+    "city": "Minneapolis",
+    "lat": 44.9357734,
+    "lon": -93.2781723
+  },
+  {
+    "street": "Nicollet Mall",
+    "housenumber": "931",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9740816,
+    "lon": -93.2743945
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "901",
+    "city": "Minneapolis",
+    "lat": 44.9761327,
+    "lon": -93.2770078
+  },
+  {
+    "street": "3rd Street North",
+    "housenumber": "126",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9827725,
+    "lon": -93.2720968
+  },
+  {
+    "street": "South 6th Street",
+    "housenumber": "120",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9772332,
+    "lon": -93.268579
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "615",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9741818,
+    "lon": -93.2292869
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4534",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9203181,
+    "lon": -93.2781856
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3036",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.946958,
+    "lon": -93.2984641
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2124",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9497253,
+    "lon": -93.2410598
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "3800",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9340121,
+    "lon": -93.2322906
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "2021",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.991947,
+    "lon": -93.2236434
+  },
+  {
+    "street": "Southeast Oak Street",
+    "housenumber": "304",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9733142,
+    "lon": -93.2273051
+  },
+  {
+    "street": "Southeast Oak Street",
+    "housenumber": "213",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9742538,
+    "lon": -93.2269289
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "630",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9735341,
+    "lon": -93.2289653
+  },
+  {
+    "street": "South 5th Street",
+    "housenumber": "1939",
+    "city": "Minneapolis",
+    "lat": 44.9687464,
+    "lon": -93.2443085
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2301",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9747673,
+    "lon": -93.2228415
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "80",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9746825,
+    "lon": -93.2729655
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "4750",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9163072,
+    "lon": -93.2846413
+  },
+  {
+    "street": "South 2nd Street",
+    "housenumber": "1100",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9764334,
+    "lon": -93.2520433
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1103",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9750086,
+    "lon": -93.253188
+  },
+  {
+    "street": "South 4th Street",
+    "housenumber": "1925",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9698287,
+    "lon": -93.2446896
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "720",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9735294,
+    "lon": -93.2273233
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2201",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9626336,
+    "lon": -93.2407647
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "1322",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9814347,
+    "lon": -93.2352617
+  },
+  {
+    "street": "South 5th Street",
+    "housenumber": "150",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9781821,
+    "lon": -93.2681287
+  },
+  {
+    "street": "Vincent Avenue South",
+    "housenumber": "5802",
+    "city": "Minneapolis",
+    "lat": 44.8977669,
+    "lon": -93.316581
+  },
+  {
+    "street": "Thomas Avenue South",
+    "housenumber": "5003",
+    "city": "Minneapolis",
+    "lat": 44.91226,
+    "lon": -93.3135538
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "2730",
+    "city": "Minneapolis",
+    "lat": 44.9246313,
+    "lon": -93.3141679
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "4157",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9270863,
+    "lon": -93.2471424
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "500",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9124327,
+    "lon": -93.328883
+  },
+  {
+    "street": "19th Avenue South",
+    "housenumber": "301",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9716445,
+    "lon": -93.2441292
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734728,
+    "lon": -93.2258535
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "1329",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9816802,
+    "lon": -93.2350859
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "2337",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0120003,
+    "lon": -93.2470587
+  },
+  {
+    "street": "South Washington Avenue",
+    "housenumber": "1101",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9749921,
+    "lon": -93.2531394
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "602",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9784254,
+    "lon": -93.2595305
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2900",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9491784,
+    "lon": -93.2984691
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "2627",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9626364,
+    "lon": -93.2332025
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "3338",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9685548,
+    "lon": -93.2097558
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "5309",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9062396,
+    "lon": -93.2880278
+  },
+  {
+    "street": "East 42nd Street",
+    "housenumber": "2809",
+    "city": "Minneapolis",
+    "lat": 44.9267665,
+    "lon": -93.2315981
+  },
+  {
+    "street": "East 42nd Street",
+    "housenumber": "2803",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9267684,
+    "lon": -93.23181
+  },
+  {
+    "street": "East 42nd Street",
+    "housenumber": "3107",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.926756,
+    "lon": -93.2266495
+  },
+  {
+    "street": "Northeast University Avenue",
+    "housenumber": "422",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.992882,
+    "lon": -93.260142
+  },
+  {
+    "street": "Girard Avenue South",
+    "housenumber": "2923",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9490987,
+    "lon": -93.2968063
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2230,2232",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9602606,
+    "lon": -93.2941144
+  },
+  {
+    "street": "Excelsior Boulevard",
+    "housenumber": "3040",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9475084,
+    "lon": -93.3212601
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "4554",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9199656,
+    "lon": -93.2154841
+  },
+  {
+    "street": "East 42nd Street",
+    "housenumber": "2719",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9267764,
+    "lon": -93.2325762
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2809",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9515347,
+    "lon": -93.2980014
+  },
+  {
+    "street": "Excelsior Boulevard",
+    "housenumber": "3060",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9477738,
+    "lon": -93.322214
+  },
+  {
+    "street": "Excelsior Boulevard",
+    "housenumber": "3058",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9480245,
+    "lon": -93.3222113
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "3730",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9347391,
+    "lon": -93.2627788
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9783219,
+    "lon": -93.2611917
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "813",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9836596,
+    "lon": -93.2433694
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9783351,
+    "lon": -93.2614036
+  },
+  {
+    "street": "21st Avenue South",
+    "housenumber": "2801",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9510382,
+    "lon": -93.242324
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3600",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9373995,
+    "lon": -93.2782069
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "1",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9553817,
+    "lon": -93.2776225
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2605",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9551678,
+    "lon": -93.277711
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "17",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9553979,
+    "lon": -93.2770772
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2550",
+    "city": "Minneapolis",
+    "lat": 44.9556897,
+    "lon": -93.2781128
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3101",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9466534,
+    "lon": -93.2326665
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "5001",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9122414,
+    "lon": -93.3085235
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "114",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9750608,
+    "lon": -93.2705505
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "4705",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9176768,
+    "lon": -93.2467967
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "4703",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9177671,
+    "lon": -93.2470716
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "815",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482322,
+    "lon": -93.2901305
+  },
+  {
+    "street": "15th Avenue Southeast",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.981255,
+    "lon": -93.2339602
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3469",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9396909,
+    "lon": -93.2276023
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "117",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9832039,
+    "lon": -93.2710693
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "111",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9830881,
+    "lon": -93.2708335
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "107",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9830256,
+    "lon": -93.2707161
+  },
+  {
+    "street": "34th Avenue South",
+    "housenumber": "5011",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9121827,
+    "lon": -93.2226584
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1504",
+    "city": "Minneapolis",
+    "lat": 44.9485181,
+    "lon": -93.301205
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "856",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734251,
+    "lon": -93.2264609
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "720",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.973532,
+    "lon": -93.227597
+  },
+  {
+    "street": "Harmon Place",
+    "housenumber": "1612",
+    "city": "Minneapolis",
+    "lat": 44.9715093,
+    "lon": -93.2855725
+  },
+  {
+    "street": "Cedar Lake Road South",
+    "housenumber": "230",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9746908,
+    "lon": -93.3069297
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1010",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9484996,
+    "lon": -93.2926288
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "3717",
+    "city": "Minneapolis",
+    "lat": 44.9124096,
+    "lon": -93.3274235
+  },
+  {
+    "street": "34th Avenue South",
+    "housenumber": "5748",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.898578,
+    "lon": -93.2234518
+  },
+  {
+    "street": "Johnson Street NE",
+    "housenumber": "2859",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0203365,
+    "lon": -93.2369269
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1201",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9746007,
+    "lon": -93.2517651
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1203",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9745732,
+    "lon": -93.25169
+  },
+  {
+    "street": "Riverside Avenue",
+    "housenumber": "1813",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9697608,
+    "lon": -93.2465448
+  },
+  {
+    "street": "West 60th Street",
+    "housenumber": "150",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.893971,
+    "lon": -93.2818564
+  },
+  {
+    "street": "3rd Avenue South",
+    "housenumber": "650",
+    "city": "Minneapolis",
+    "postcode": "55488",
+    "lat": 44.9756129,
+    "lon": -93.268257
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "2506",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0135434,
+    "lon": -93.2476008
+  },
+  {
+    "street": "East 38th Street",
+    "housenumber": "2818",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9342478,
+    "lon": -93.2312652
+  },
+  {
+    "street": "Nicollet Avenue",
+    "housenumber": "1428",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9678585,
+    "lon": -93.2780767
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482326,
+    "lon": -93.2953013
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948231,
+    "lon": -93.2955511
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2934",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9489151,
+    "lon": -93.2883255
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2112",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9615212,
+    "lon": -93.292617
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3860",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9326006,
+    "lon": -93.2230747
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "3300",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9486078,
+    "lon": -93.2240812
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "601",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9713197,
+    "lon": -93.2656245
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "603",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9712782,
+    "lon": -93.2655273
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "605",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9712327,
+    "lon": -93.26542
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "607",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9711871,
+    "lon": -93.2653127
+  },
+  {
+    "street": "South 9th Street",
+    "housenumber": "609",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9711428,
+    "lon": -93.2652054
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2718",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9530659,
+    "lon": -93.2782101
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2750",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9523248,
+    "lon": -93.2781331
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4244",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.925428,
+    "lon": -93.2781936
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "1229",
+    "city": "Minneapolis",
+    "lat": 44.9741602,
+    "lon": -93.2814699
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2306",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9125533,
+    "lon": -93.3090797
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2312",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.912552,
+    "lon": -93.3092565
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2227",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.912244,
+    "lon": -93.3084594
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "5011",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9119799,
+    "lon": -93.3084245
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "5015",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9119011,
+    "lon": -93.3084205
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "2313",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9122297,
+    "lon": -93.3092775
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2300",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9597706,
+    "lon": -93.2939432
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3500",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9394333,
+    "lon": -93.2782023
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4306",
+    "city": "Minneapolis",
+    "lat": 44.9243496,
+    "lon": -93.3149018
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4313",
+    "city": "Minneapolis",
+    "lat": 44.9241128,
+    "lon": -93.3145952
+  },
+  {
+    "street": "Sheridan Avenue South",
+    "housenumber": "4729",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9248491,
+    "lon": -93.3143546
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4303",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9243526,
+    "lon": -93.3145134
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4306",
+    "city": "Minneapolis",
+    "lat": 44.9242879,
+    "lon": -93.314917
+  },
+  {
+    "street": "Sheridan Avenue South",
+    "housenumber": "4289",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9247133,
+    "lon": -93.3144236
+  },
+  {
+    "street": "West 43rd Street",
+    "housenumber": "2812",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9247604,
+    "lon": -93.315208
+  },
+  {
+    "street": "Upton Avenue South",
+    "housenumber": "4305",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9243029,
+    "lon": -93.3145303
+  },
+  {
+    "street": "Penn Avenue South",
+    "housenumber": "5005",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.912143,
+    "lon": -93.3085243
+  },
+  {
+    "street": "West Lake Nokomis Parkway",
+    "housenumber": "5022",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9127625,
+    "lon": -93.2423714
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "4209",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9265302,
+    "lon": -93.231859
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "1213",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9621347,
+    "lon": -93.2569499
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "1035",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9625702,
+    "lon": -93.2585024
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "3739",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9347617,
+    "lon": -93.2240896
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "402",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9806406,
+    "lon": -93.2354558
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "1027",
+    "city": "Minneapolis",
+    "lat": 44.9753409,
+    "lon": -93.2535517
+  },
+  {
+    "street": "East 25th Street",
+    "housenumber": "3330",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9575458,
+    "lon": -93.2228864
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "3119",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9552675,
+    "lon": -93.2260116
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4532",
+    "city": "Minneapolis",
+    "lat": 44.9204997,
+    "lon": -93.2628818
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "801",
+    "city": "Minneapolis",
+    "lat": 44.9757207,
+    "lon": -93.2729873
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "45",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9761837,
+    "lon": -93.2741682
+  },
+  {
+    "street": "West 22nd Street",
+    "housenumber": "708",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9610412,
+    "lon": -93.288555
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "613",
+    "city": "Minneapolis",
+    "postcode": "55454",
+    "lat": 44.9672406,
+    "lon": -93.2470669
+  },
+  {
+    "street": "Southeast 9th Street",
+    "housenumber": "610",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9894829,
+    "lon": -93.242793
+  },
+  {
+    "street": "Washington Avenue North",
+    "housenumber": "207",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9838244,
+    "lon": -93.2718528
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "822",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948512,
+    "lon": -93.290483
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "4813",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9154955,
+    "lon": -93.2842174
+  },
+  {
+    "street": "Grand Avenue South",
+    "housenumber": "4811",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9155534,
+    "lon": -93.2842187
+  },
+  {
+    "street": "Excelsior Boulevard",
+    "housenumber": "3040",
+    "city": "Minneapolis",
+    "postcode": "55416",
+    "lat": 44.9475218,
+    "lon": -93.3213318
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "1111",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9749762,
+    "lon": -93.2794949
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "1113",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9749503,
+    "lon": -93.2795828
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "305",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9797242,
+    "lon": -93.2639546
+  },
+  {
+    "street": "Hiawatha Avenue",
+    "housenumber": "4701",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9182332,
+    "lon": -93.216471
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3920",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9316525,
+    "lon": -93.2781782
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482465,
+    "lon": -93.2889148
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3048",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9467885,
+    "lon": -93.2985316
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "721",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482141,
+    "lon": -93.2892116
+  },
+  {
+    "street": "27th Avenue South",
+    "housenumber": "2901",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9500545,
+    "lon": -93.2329805
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "5003",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.912101,
+    "lon": -93.2906569
+  },
+  {
+    "street": "Park Avenue South",
+    "housenumber": "2600",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9547083,
+    "lon": -93.2660015
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2940",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9486708,
+    "lon": -93.288398
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3016",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477025,
+    "lon": -93.2883421
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "920",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9485479,
+    "lon": -93.2604553
+  },
+  {
+    "street": "Minnehaha Avenue",
+    "housenumber": "4461",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9217319,
+    "lon": -93.2156782
+  },
+  {
+    "street": "4th Avenue North",
+    "housenumber": "50",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9884124,
+    "lon": -93.2717735
+  },
+  {
+    "street": "Southeast Union Street",
+    "housenumber": "200",
+    "city": "Minneapolis",
+    "postcode": "55455",
+    "lat": 44.9742357,
+    "lon": -93.2325514
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9480734,
+    "lon": -93.28876
+  },
+  {
+    "street": "South 7th Street",
+    "housenumber": "212",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.975656,
+    "lon": -93.2689117
+  },
+  {
+    "street": "Northeast Central Avenue",
+    "housenumber": "2415",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0127852,
+    "lon": -93.2471291
+  },
+  {
+    "street": "Northeast Central Avenue",
+    "housenumber": "2413",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.01272,
+    "lon": -93.2471292
+  },
+  {
+    "street": "Northeast Central Avenue",
+    "housenumber": "2411",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0126425,
+    "lon": -93.2471206
+  },
+  {
+    "street": "Central Avenue Northeast",
+    "housenumber": "2409",
+    "city": "Minneapolis",
+    "lat": 45.012581,
+    "lon": -93.2471206
+  },
+  {
+    "street": "Northeast Central Avenue",
+    "housenumber": "2405",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0124265,
+    "lon": -93.2471206
+  },
+  {
+    "street": "Northeast Central Avenue",
+    "housenumber": "2401",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0122973,
+    "lon": -93.2471137
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4805",
+    "city": "Minneapolis",
+    "lat": 44.9157929,
+    "lon": -93.2778082
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "825",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9763819,
+    "lon": -93.2765764
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3747",
+    "city": "Minneapolis",
+    "lat": 44.9343699,
+    "lon": -93.2777357
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3758",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9343432,
+    "lon": -93.2781541
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3753",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9342426,
+    "lon": -93.2777303
+  },
+  {
+    "street": "Washington Avenue South",
+    "housenumber": "903",
+    "city": "Minneapolis",
+    "postcode": "55415",
+    "lat": 44.9762646,
+    "lon": -93.2557428
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "112",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9825458,
+    "lon": -93.2717414
+  },
+  {
+    "street": "North 1st Street",
+    "housenumber": "211",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9854942,
+    "lon": -93.2695002
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2751",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9517492,
+    "lon": -93.298047
+  },
+  {
+    "street": "West 44th Street",
+    "housenumber": "3545",
+    "city": "Minneapolis",
+    "postcode": "55410",
+    "lat": 44.9229614,
+    "lon": -93.3250579
+  },
+  {
+    "street": "Southeast Como Avenue",
+    "housenumber": "1514",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9877297,
+    "lon": -93.2297228
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2737",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9526404,
+    "lon": -93.2978432
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2741",
+    "city": "Minneapolis",
+    "lat": 44.9525115,
+    "lon": -93.2979076
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "1000",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734718,
+    "lon": -93.2234493
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4741",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9164443,
+    "lon": -93.2624431
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3013",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9478486,
+    "lon": -93.2878754
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "2828",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9710283,
+    "lon": -93.2161298
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2535",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9731967,
+    "lon": -93.2199077
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2545",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9730961,
+    "lon": -93.219601
+  },
+  {
+    "street": "University Avenue Southeast",
+    "housenumber": "3008",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9703626,
+    "lon": -93.2143298
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2600",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9725411,
+    "lon": -93.2196612
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2639",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9727666,
+    "lon": -93.2186065
+  },
+  {
+    "street": "Southeast Delaware Street",
+    "housenumber": "2423",
+    "city": "Minneapolis",
+    "lat": 44.9726483,
+    "lon": -93.2222828
+  },
+  {
+    "street": "Southeast University Avenue",
+    "housenumber": "2724",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9716657,
+    "lon": -93.2175208
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "3223",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9480371,
+    "lon": -93.2248147
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2743",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9524543,
+    "lon": -93.2878045
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "3754",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9344398,
+    "lon": -93.2777399
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "720",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9735282,
+    "lon": -93.227459
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "720",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9734964,
+    "lon": -93.2276749
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "1312",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9816067,
+    "lon": -93.23573
+  },
+  {
+    "street": "Southeast Washington Avenue",
+    "housenumber": "1008",
+    "city": "Minneapolis",
+    "lat": 44.9735133,
+    "lon": -93.2232284
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "509",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9819479,
+    "lon": -93.2348641
+  },
+  {
+    "street": "Southeast 14th Avenue",
+    "housenumber": "425",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9813439,
+    "lon": -93.2353416
+  },
+  {
+    "street": "Southeast Huron Boulevard",
+    "housenumber": "317",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9732,
+    "lon": -93.2233072
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3146",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9450172,
+    "lon": -93.2984883
+  },
+  {
+    "street": "Northeast 13th Avenue",
+    "housenumber": "302",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0007585,
+    "lon": -93.2643528
+  },
+  {
+    "street": "North 44th Avenue",
+    "housenumber": "2203",
+    "city": "Minneapolis",
+    "postcode": "55412",
+    "lat": 45.0353228,
+    "lon": -93.3088958
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1422",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9486193,
+    "lon": -93.2986814
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "3225",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.948043,
+    "lon": -93.2246717
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "1221",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482308,
+    "lon": -93.2954162
+  },
+  {
+    "street": "2nd Avenue South",
+    "housenumber": "608",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.976604,
+    "lon": -93.2691277
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "3425",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.948021,
+    "lon": -93.2220176
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "1350",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9498244,
+    "lon": -93.2972639
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2424",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9582387,
+    "lon": -93.2780578
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2424",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9582168,
+    "lon": -93.2781153
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2424",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9581777,
+    "lon": -93.2780689
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2012",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9621333,
+    "lon": -93.2780361
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2109",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9617367,
+    "lon": -93.2776391
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2109",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9615697,
+    "lon": -93.2776284
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2110 #101",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9615355,
+    "lon": -93.2780737
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2100",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9617757,
+    "lon": -93.2780249
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2109 #106",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9616584,
+    "lon": -93.2776294
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2120",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.961076,
+    "lon": -93.2780423
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2121",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9612083,
+    "lon": -93.2774664
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2121 Suite 4",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9611248,
+    "lon": -93.2774664
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2200",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9606313,
+    "lon": -93.2781852
+  },
+  {
+    "street": "East 22nd Street",
+    "housenumber": "9",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9607566,
+    "lon": -93.2775844
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2201",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9606161,
+    "lon": -93.2775696
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2309",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9598445,
+    "lon": -93.2775342
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2344",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9593519,
+    "lon": -93.2782375
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2401",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9590977,
+    "lon": -93.2776582
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2407",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9589533,
+    "lon": -93.2776475
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2409",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9589042,
+    "lon": -93.2776408
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2008",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9623399,
+    "lon": -93.2780762
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2001",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9624727,
+    "lon": -93.2776014
+  },
+  {
+    "street": "East Franklin Avenue",
+    "housenumber": "25",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9625145,
+    "lon": -93.276947
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2025",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9619869,
+    "lon": -93.2775612
+  },
+  {
+    "street": "Blaisdell Avenue South",
+    "housenumber": "2322",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9593738,
+    "lon": -93.2800585
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2424",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9581895,
+    "lon": -93.2781292
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2430",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9580192,
+    "lon": -93.2780777
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2429",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9580719,
+    "lon": -93.2776422
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "12",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9574597,
+    "lon": -93.2785761
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2447",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9575327,
+    "lon": -93.2776728
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2445",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.95758,
+    "lon": -93.2775849
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2508",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9570137,
+    "lon": -93.27807
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2510",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9569137,
+    "lon": -93.2780643
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2520",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.956575,
+    "lon": -93.2780819
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2524",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9564783,
+    "lon": -93.2780604
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2515",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9566716,
+    "lon": -93.2776781
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2523",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9565,
+    "lon": -93.2776919
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2529",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9563695,
+    "lon": -93.2776576
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2522 #202",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9564238,
+    "lon": -93.2783873
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2538",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9562545,
+    "lon": -93.2783398
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2528",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9563475,
+    "lon": -93.2780696
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2532",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9562646,
+    "lon": -93.2780896
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2539",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9560392,
+    "lon": -93.2776833
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2543",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.955893,
+    "lon": -93.2776538
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "8",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9556615,
+    "lon": -93.2775465
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "118",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9556799,
+    "lon": -93.2754982
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "111",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9554003,
+    "lon": -93.2760823
+  },
+  {
+    "street": "East 26th Street",
+    "housenumber": "25",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9554003,
+    "lon": -93.2768234
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2624",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9547267,
+    "lon": -93.2780493
+  },
+  {
+    "street": "Blaisdell Avenue South",
+    "housenumber": "2550",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9557114,
+    "lon": -93.2799556
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2613",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9550284,
+    "lon": -93.2777132
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2628",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9545062,
+    "lon": -93.2781288
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2632",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9543405,
+    "lon": -93.2781332
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2620",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9547399,
+    "lon": -93.2780498
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2614",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9550032,
+    "lon": -93.2780725
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2616",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9548737,
+    "lon": -93.2780583
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2620",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9547823,
+    "lon": -93.278054
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2015",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9619154,
+    "lon": -93.2776209
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2403",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9590097,
+    "lon": -93.2776451
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2529",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9563445,
+    "lon": -93.2775625
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2529",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9563292,
+    "lon": -93.2776592
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2529",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9562928,
+    "lon": -93.2776581
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2635",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9543798,
+    "lon": -93.2777042
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2635",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9543121,
+    "lon": -93.2776969
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2637",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9542601,
+    "lon": -93.2776987
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2641",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.954182,
+    "lon": -93.2776973
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2643",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9541157,
+    "lon": -93.2777084
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2627",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9540533,
+    "lon": -93.277701
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2647",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9539804,
+    "lon": -93.277701
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2653",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9539258,
+    "lon": -93.2777047
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2635",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9538594,
+    "lon": -93.2776955
+  },
+  {
+    "street": "East 27th Street",
+    "housenumber": "6",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9538477,
+    "lon": -93.2774473
+  },
+  {
+    "street": "North 2nd Street",
+    "housenumber": "210",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9849919,
+    "lon": -93.2703703
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2701",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9535661,
+    "lon": -93.2776173
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2712",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9532676,
+    "lon": -93.2781038
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2718 #101",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.953067,
+    "lon": -93.2781551
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2718 #204",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9530686,
+    "lon": -93.2780904
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2718",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9530702,
+    "lon": -93.2783358
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2710",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9533639,
+    "lon": -93.2781149
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2727 #104",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9528365,
+    "lon": -93.2774343
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2727",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9527575,
+    "lon": -93.2774343
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2727 #9",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9527354,
+    "lon": -93.2774432
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2727 #6",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9526912,
+    "lon": -93.2774343
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2724",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9528908,
+    "lon": -93.2785529
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2734",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9528024,
+    "lon": -93.2783571
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2738",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9527385,
+    "lon": -93.2783315
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2740",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9527084,
+    "lon": -93.2781672
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2745",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9522806,
+    "lon": -93.2777259
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2747",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9522095,
+    "lon": -93.277727
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2805",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9515647,
+    "lon": -93.2774946
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "2821",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9512249,
+    "lon": -93.2775482
+  },
+  {
+    "street": "Nicollet Avenue",
+    "housenumber": "2837",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9507475,
+    "lon": -93.2777179
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2827",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9509787,
+    "lon": -93.2764441
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2835",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9507383,
+    "lon": -93.2764491
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2838",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9506172,
+    "lon": -93.2768855
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2645 Ste 114",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9539057,
+    "lon": -93.2763871
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2614",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9547436,
+    "lon": -93.2768294
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2611",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9550635,
+    "lon": -93.2763917
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2608",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9551601,
+    "lon": -93.2767454
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2533",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9559547,
+    "lon": -93.2762219
+  },
+  {
+    "street": "Stevens Avenue South",
+    "housenumber": "2420",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9584151,
+    "lon": -93.2755911
+  },
+  {
+    "street": "Stevens Avenue South",
+    "housenumber": "2400",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9590074,
+    "lon": -93.2756249
+  },
+  {
+    "street": "East 24th Street",
+    "housenumber": "17",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9590663,
+    "lon": -93.2768993
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2318",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9593798,
+    "lon": -93.2768829
+  },
+  {
+    "street": "East 24th Street",
+    "housenumber": "106",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9593975,
+    "lon": -93.2762985
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "2201",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9602386,
+    "lon": -93.2760787
+  },
+  {
+    "street": "4th Avenue South",
+    "housenumber": "2408",
+    "city": "Minneapolis",
+    "postcode": "55404",
+    "lat": 44.9606548,
+    "lon": -93.2712552
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "2210",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9644095,
+    "lon": -93.2082756
+  },
+  {
+    "street": "13th Avenue Northeast",
+    "housenumber": "34",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9992338,
+    "lon": -93.2716719
+  },
+  {
+    "street": "2nd Avenue South",
+    "housenumber": "706",
+    "city": "Minneapolis",
+    "postcode": "55402",
+    "lat": 44.9755888,
+    "lon": -93.269903
+  },
+  {
+    "street": "Northeast Broadway Street",
+    "housenumber": "807",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9989645,
+    "lon": -93.2508921
+  },
+  {
+    "street": "Northeast Broadway Street",
+    "housenumber": "807",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9996566,
+    "lon": -93.2501121
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4600",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9194255,
+    "lon": -93.2781704
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4606",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9194986,
+    "lon": -93.2784054
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4610",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9193191,
+    "lon": -93.2785203
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3304",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9410939,
+    "lon": -93.2885131
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3406",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9410163,
+    "lon": -93.2884485
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3514",
+    "city": "Minneapolis",
+    "lat": 44.9407095,
+    "lon": -93.287907
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3452",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9396515,
+    "lon": -93.2885337
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3447",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9396935,
+    "lon": -93.2878266
+  },
+  {
+    "street": "West 34th Street",
+    "housenumber": "718",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9414883,
+    "lon": -93.2887724
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "3255",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9430421,
+    "lon": -93.2905077
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3252",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9430315,
+    "lon": -93.2883995
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3255",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9430302,
+    "lon": -93.287887
+  },
+  {
+    "street": "East 50th Street",
+    "housenumber": "2718",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9128207,
+    "lon": -93.2328119
+  },
+  {
+    "street": "East Lake Nokomis Parkway",
+    "housenumber": "5000",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9130286,
+    "lon": -93.2343637
+  },
+  {
+    "street": "West Lake Nokomis Parkway",
+    "housenumber": "5022",
+    "city": "Minneapolis",
+    "postcode": "55417",
+    "lat": 44.9126664,
+    "lon": -93.2426304
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "3753",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9343148,
+    "lon": -93.2471622
+  },
+  {
+    "street": "East 46th Street",
+    "housenumber": "1530",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9198154,
+    "lon": -93.2518935
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "4547",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9200727,
+    "lon": -93.2521616
+  },
+  {
+    "street": "Bloomington Avenue South",
+    "housenumber": "4601",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9195021,
+    "lon": -93.2521289
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4554",
+    "city": "Minneapolis",
+    "lat": 44.9198405,
+    "lon": -93.2628862
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "4600",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9195889,
+    "lon": -93.2627836
+  },
+  {
+    "street": "East Hennepin Avenue",
+    "housenumber": "855",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9917676,
+    "lon": -93.2443963
+  },
+  {
+    "street": "South 7th Street",
+    "housenumber": "913",
+    "city": "Minneapolis",
+    "lat": 44.9715105,
+    "lon": -93.2599128
+  },
+  {
+    "street": "South 6th Street",
+    "housenumber": "717",
+    "city": "Minneapolis",
+    "lat": 44.9730224,
+    "lon": -93.2615118
+  },
+  {
+    "street": "South 7th Street",
+    "housenumber": "716",
+    "city": "Minneapolis",
+    "lat": 44.9727816,
+    "lon": -93.2616302
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "900",
+    "city": "Minneapolis",
+    "lat": 44.9708706,
+    "lon": -93.2606923
+  },
+  {
+    "street": "South 8th Street",
+    "housenumber": "730",
+    "city": "Minneapolis",
+    "lat": 44.971829,
+    "lon": -93.2626799
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4803",
+    "city": "Minneapolis",
+    "lat": 44.9158511,
+    "lon": -93.2778034
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "1936",
+    "city": "Minneapolis",
+    "postcode": "55403",
+    "lat": 44.9632017,
+    "lon": -93.2882897
+  },
+  {
+    "street": "Northeast 13th Avenue",
+    "housenumber": "165",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.0010524,
+    "lon": -93.2666974
+  },
+  {
+    "street": "Northeast 14th Avenue",
+    "housenumber": "117",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 45.001521,
+    "lon": -93.2704364
+  },
+  {
+    "street": "Nicollet Avenue South",
+    "housenumber": "4811",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9156198,
+    "lon": -93.2778046
+  },
+  {
+    "street": "Main Street Southeast",
+    "housenumber": "1",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9868046,
+    "lon": -93.2585564
+  },
+  {
+    "street": "Hennepin Ave. S.",
+    "housenumber": "2402",
+    "city": "Minneapolis",
+    "lat": 44.9587615,
+    "lon": -93.2950153
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477021,
+    "lon": -93.2971765
+  },
+  {
+    "street": "West 27th Street",
+    "housenumber": "1016",
+    "city": "Minneapolis",
+    "lat": 44.9538578,
+    "lon": -93.2928863
+  },
+  {
+    "street": "Dupont Avenue South",
+    "housenumber": "2657",
+    "city": "Minneapolis",
+    "lat": 44.9539282,
+    "lon": -93.2930177
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2653",
+    "city": "Minneapolis",
+    "lat": 44.9539167,
+    "lon": -93.2972663
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2717",
+    "city": "Minneapolis",
+    "lat": 44.9531096,
+    "lon": -93.2975859
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2640",
+    "city": "Minneapolis",
+    "lat": 44.9543623,
+    "lon": -93.2975732
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2617",
+    "city": "Minneapolis",
+    "lat": 44.9548122,
+    "lon": -93.2967301
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2603",
+    "city": "Minneapolis",
+    "lat": 44.9553295,
+    "lon": -93.2966517
+  },
+  {
+    "street": "Hennepin Avenue South",
+    "housenumber": "2605",
+    "city": "Minneapolis",
+    "lat": 44.955224,
+    "lon": -93.2966953
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2403",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.958941,
+    "lon": -93.2878308
+  },
+  {
+    "street": "West 24th Street",
+    "housenumber": "613",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9590143,
+    "lon": -93.2875304
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2407",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9588909,
+    "lon": -93.2878293
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2225",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9600225,
+    "lon": -93.2877514
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2217",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9602913,
+    "lon": -93.287599
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2211",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9604897,
+    "lon": -93.2877997
+  },
+  {
+    "street": "Quincy Street Northeast",
+    "housenumber": "1121",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9993934,
+    "lon": -93.2510686
+  },
+  {
+    "street": "23rd Avenue South",
+    "housenumber": "3746",
+    "city": "Minneapolis",
+    "lat": 44.9342686,
+    "lon": -93.2390991
+  },
+  {
+    "street": "23rd Avenue South",
+    "housenumber": "3742",
+    "city": "Minneapolis",
+    "lat": 44.9344129,
+    "lon": -93.2390964
+  },
+  {
+    "street": "West 46th Street",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197084,
+    "lon": -93.2905007
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "800",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485166,
+    "lon": -93.2896105
+  },
+  {
+    "street": "Hennepin Avenue",
+    "housenumber": "120",
+    "city": "Minneapolis",
+    "postcode": "55401",
+    "lat": 44.9836755,
+    "lon": -93.2680114
+  },
+  {
+    "street": "West River Road North",
+    "housenumber": "1401",
+    "city": "Minneapolis",
+    "postcode": "55411",
+    "lat": 44.9935022,
+    "lon": -93.2763222
+  },
+  {
+    "street": "Northeast Columbia Avenue",
+    "housenumber": "3055",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0235903,
+    "lon": -93.2721458
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "323",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948212,
+    "lon": -93.2841176
+  },
+  {
+    "street": "East Lake Street",
+    "housenumber": "2927",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9482157,
+    "lon": -93.2288024
+  },
+  {
+    "street": "East 38th Street",
+    "housenumber": "1830",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9342195,
+    "lon": -93.2469424
+  },
+  {
+    "street": "Northeast Kennedy Street",
+    "housenumber": "2300",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9945242,
+    "lon": -93.2284304
+  },
+  {
+    "street": "Southeast Main Street",
+    "housenumber": "43",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9863219,
+    "lon": -93.2581192
+  },
+  {
+    "street": "Chicago Avenue South",
+    "housenumber": "3730",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9348142,
+    "lon": -93.262781
+  },
+  {
+    "street": "Cedar Avenue South",
+    "housenumber": "3749",
+    "city": "Minneapolis",
+    "postcode": "55407",
+    "lat": 44.9344405,
+    "lon": -93.2471616
+  },
+  {
+    "street": "Aldrich Avenue South",
+    "housenumber": "3501",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9393379,
+    "lon": -93.2891719
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3544",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9379996,
+    "lon": -93.2886403
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3544",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9380728,
+    "lon": -93.2886935
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "3609",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9372852,
+    "lon": -93.2906232
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3300",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.942805,
+    "lon": -93.2884639
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3601",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9374085,
+    "lon": -93.2878109
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3952",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9306015,
+    "lon": -93.2885195
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3948",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9306573,
+    "lon": -93.2886523
+  },
+  {
+    "street": "West 40th Street",
+    "housenumber": "710",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9306042,
+    "lon": -93.2888294
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "4000",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9302409,
+    "lon": -93.2888324
+  },
+  {
+    "street": "Aldrich Avenue South",
+    "housenumber": "4441",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9218942,
+    "lon": -93.2893139
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4301",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9248242,
+    "lon": -93.2906835
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4306",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9247387,
+    "lon": -93.2910218
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4308",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9246645,
+    "lon": -93.291009
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4310",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.924604,
+    "lon": -93.2910004
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4328",
+    "city": "Minneapolis",
+    "postcode": "55409",
+    "lat": 44.9241604,
+    "lon": -93.2911673
+  },
+  {
+    "street": "Colfax Avenue South",
+    "housenumber": "4501",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9212228,
+    "lon": -93.2917504
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "4530",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9204883,
+    "lon": -93.2887296
+  },
+  {
+    "street": "Bryant Avenue South",
+    "housenumber": "4552",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197165,
+    "lon": -93.2911026
+  },
+  {
+    "street": "West 46th Street",
+    "housenumber": "908",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197136,
+    "lon": -93.2913152
+  },
+  {
+    "street": "Colfax Avenue South",
+    "housenumber": "4557",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9197828,
+    "lon": -93.2916415
+  },
+  {
+    "street": "Aldrich Avenue South",
+    "housenumber": "4953",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9124802,
+    "lon": -93.289205
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "820",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9124454,
+    "lon": -93.2903667
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "822",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.9124451,
+    "lon": -93.2904721
+  },
+  {
+    "street": "West 50th Street",
+    "housenumber": "911",
+    "city": "Minneapolis",
+    "postcode": "55419",
+    "lat": 44.912197,
+    "lon": -93.2913652
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2457",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.957449,
+    "lon": -93.2877141
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2501",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9571768,
+    "lon": -93.2875286
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2001",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9625477,
+    "lon": -93.287771
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2100",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9617448,
+    "lon": -93.2883001
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2106",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9616278,
+    "lon": -93.2882526
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2108",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9615138,
+    "lon": -93.2882609
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2114",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9613776,
+    "lon": -93.2882524
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2112",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9614465,
+    "lon": -93.2882671
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2116",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9612359,
+    "lon": -93.2882712
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2126",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9610633,
+    "lon": -93.2882712
+  },
+  {
+    "street": "West 22nd Street",
+    "housenumber": "704",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9610487,
+    "lon": -93.2883952
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2220",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9602663,
+    "lon": -93.2883084
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2409",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9587852,
+    "lon": -93.2876968
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2429",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9582161,
+    "lon": -93.2877779
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2431",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9582119,
+    "lon": -93.287571
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2544",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9560013,
+    "lon": -93.288276
+  },
+  {
+    "street": "West 26th Street",
+    "housenumber": "708",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9556622,
+    "lon": -93.2887012
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2551",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9558058,
+    "lon": -93.2878204
+  },
+  {
+    "street": "West 26th Street",
+    "housenumber": "604",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9557056,
+    "lon": -93.2872514
+  },
+  {
+    "street": "West 26th Street",
+    "housenumber": "721",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9554341,
+    "lon": -93.2889073
+  },
+  {
+    "street": "West 26th Street",
+    "housenumber": "723",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9552871,
+    "lon": -93.2889156
+  },
+  {
+    "street": "Aldrich Avenue South",
+    "housenumber": "2609",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9552013,
+    "lon": -93.2890591
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2604",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.95527,
+    "lon": -93.2884987
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2604",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9552793,
+    "lon": -93.2883663
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2610",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9549882,
+    "lon": -93.2882879
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2640",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9542036,
+    "lon": -93.2884523
+  },
+  {
+    "street": "Aldrich Avenue South",
+    "housenumber": "2644",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9542307,
+    "lon": -93.2896097
+  },
+  {
+    "street": "West 27th Street",
+    "housenumber": "614",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9538757,
+    "lon": -93.2878089
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2700",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9536248,
+    "lon": -93.2883207
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2708",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9534365,
+    "lon": -93.2883244
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2710",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9533709,
+    "lon": -93.2883085
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2716",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9532897,
+    "lon": -93.2883012
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2707",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9535004,
+    "lon": -93.2878472
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2717",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9532301,
+    "lon": -93.2878021
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2727",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9529279,
+    "lon": -93.287844
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2728",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9529623,
+    "lon": -93.2883088
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2736",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9526957,
+    "lon": -93.2883305
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2752",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.952232,
+    "lon": -93.2884481
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2743",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9522875,
+    "lon": -93.2878017
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2441",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9578944,
+    "lon": -93.2877835
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2800",
+    "city": "Minneapolis",
+    "postcode": "55405",
+    "lat": 44.9518028,
+    "lon": -93.2883288
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2800",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9516444,
+    "lon": -93.2884069
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2800",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9516124,
+    "lon": -93.288372
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2817",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9513478,
+    "lon": -93.2878338
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2822",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9512097,
+    "lon": -93.2882772
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2822",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9511051,
+    "lon": -93.2883371
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2828",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9509888,
+    "lon": -93.2883165
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2837",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9507373,
+    "lon": -93.2878379
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2841",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.950589,
+    "lon": -93.2878205
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2839",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9506719,
+    "lon": -93.2878318
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2836",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9505913,
+    "lon": -93.2883236
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2836",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9505371,
+    "lon": -93.2883375
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2836",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9504829,
+    "lon": -93.288327
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2901",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9500151,
+    "lon": -93.2878718
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2904",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9497895,
+    "lon": -93.2883772
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2913",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9497916,
+    "lon": -93.2878664
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2921",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9495898,
+    "lon": -93.2878574
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2916",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9494637,
+    "lon": -93.2883446
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2916",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9494175,
+    "lon": -93.2883356
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2929",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.949364,
+    "lon": -93.2878041
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2933",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9492555,
+    "lon": -93.2878766
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2937",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9491479,
+    "lon": -93.2878696
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2937",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9491468,
+    "lon": -93.2877119
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2928",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9490763,
+    "lon": -93.2883266
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "2938",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9487661,
+    "lon": -93.2883224
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "611",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948231,
+    "lon": -93.287482
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "611",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.94823,
+    "lon": -93.2875879
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "611",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9481906,
+    "lon": -93.2875545
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "615",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948235,
+    "lon": -93.2876827
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "617",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482399,
+    "lon": -93.2877705
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3001",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482319,
+    "lon": -93.2878726
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3007",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9480387,
+    "lon": -93.2878792
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "711",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.948245,
+    "lon": -93.288749
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "707",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482518,
+    "lon": -93.2886479
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "705",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482512,
+    "lon": -93.2885337
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3012",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9478087,
+    "lon": -93.2883394
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "710",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485128,
+    "lon": -93.2886994
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3015",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477322,
+    "lon": -93.2879025
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3019",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9476744,
+    "lon": -93.2879064
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3019",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9477087,
+    "lon": -93.2879012
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3021",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9476558,
+    "lon": -93.2879089
+  },
+  {
+    "street": "Lyndale Avenue South",
+    "housenumber": "3040",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9468199,
+    "lon": -93.2884474
+  },
+  {
+    "street": "West 31st Street",
+    "housenumber": "625",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9459904,
+    "lon": -93.2878204
+  },
+  {
+    "street": "East 46th Street",
+    "housenumber": "3550",
+    "city": "Minneapolis",
+    "postcode": "55406",
+    "lat": 44.9199757,
+    "lon": -93.2197754
+  },
+  {
+    "street": "Northeast Taft Street",
+    "housenumber": "451",
+    "city": "Minneapolis",
+    "postcode": "55413",
+    "lat": 44.9935911,
+    "lon": -93.2238819
+  },
+  {
+    "street": "Northeast Marshall Street",
+    "housenumber": "2124",
+    "city": "Minneapolis",
+    "postcode": "55418",
+    "lat": 45.0095742,
+    "lon": -93.2719072
+  },
+  {
+    "street": "Southeast Oak Street",
+    "housenumber": "211",
+    "city": "Minneapolis",
+    "postcode": "55414",
+    "lat": 44.9742924,
+    "lon": -93.2267246
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9480533,
+    "lon": -93.2863456
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9479598,
+    "lon": -93.2865814
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9481267,
+    "lon": -93.2863623
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482285,
+    "lon": -93.2863589
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "515",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482392,
+    "lon": -93.2862753
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "505",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482096,
+    "lon": -93.2859943
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "501",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9479776,
+    "lon": -93.2858856
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "802",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485181,
+    "lon": -93.289774
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "900",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485118,
+    "lon": -93.290831
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "818",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485168,
+    "lon": -93.2902757
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "904 1/2",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9484988,
+    "lon": -93.2910212
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "908",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485171,
+    "lon": -93.2911093
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "810",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485237,
+    "lon": -93.2901829
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "910",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9485185,
+    "lon": -93.2912185
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "907",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482379,
+    "lon": -93.2911685
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "913",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482327,
+    "lon": -93.2913625
+  },
+  {
+    "street": "West Lake Street",
+    "housenumber": "915",
+    "city": "Minneapolis",
+    "postcode": "55408",
+    "lat": 44.9482448,
+    "lon": -93.2914771
+  }
+]

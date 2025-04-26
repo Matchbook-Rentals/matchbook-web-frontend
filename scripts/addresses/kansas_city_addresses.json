@@ -1,0 +1,7812 @@
+[
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "5545",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1953328,
+    "lon": -94.5758325
+  },
+  {
+    "street": "Norton Avenue",
+    "housenumber": "934",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.1008685,
+    "lon": -94.5352963
+  },
+  {
+    "street": "Northwest 56th Street",
+    "housenumber": "5301",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1958362,
+    "lon": -94.6438462
+  },
+  {
+    "street": "Grandview Road",
+    "housenumber": "10515",
+    "city": "Kansas City",
+    "postcode": "64137",
+    "lat": 38.9352845,
+    "lon": -94.5402322
+  },
+  {
+    "street": "Northeast 54th Street",
+    "housenumber": "211",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.191513,
+    "lon": -94.578809
+  },
+  {
+    "street": "Armstrong Avenue",
+    "housenumber": "4900",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1141254,
+    "lon": -94.6916968
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "1500",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.105126,
+    "lon": -94.64618
+  },
+  {
+    "street": "North 18th Street",
+    "housenumber": "1119",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1171031,
+    "lon": -94.6489238
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "1400",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1205324,
+    "lon": -94.6700208
+  },
+  {
+    "street": "North 53rd Street",
+    "housenumber": "3024",
+    "city": "Kansas City",
+    "postcode": "66104",
+    "lat": 39.142483,
+    "lon": -94.702464
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4826",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1826125,
+    "lon": -94.5776101
+  },
+  {
+    "street": "North 70th Street",
+    "housenumber": "1900",
+    "city": "Kansas City",
+    "lat": 39.12727,
+    "lon": -94.740909
+  },
+  {
+    "street": "North 7th Street Trafficway",
+    "housenumber": "710",
+    "city": "Kansas City",
+    "postcode": "66101",
+    "lat": 39.1132016,
+    "lon": -94.627323
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "400",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1094408,
+    "lon": -94.5814477
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "4740",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0413106,
+    "lon": -94.5854702
+  },
+  {
+    "street": "Northeast Flintlock Road",
+    "housenumber": "8700",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2478256,
+    "lon": -94.4659204
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "4043",
+    "city": "Kansas City",
+    "lat": 39.0539603,
+    "lon": -94.5904903
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "7534",
+    "city": "Kansas City",
+    "postcode": "64132",
+    "lat": 38.9895158,
+    "lon": -94.5576764
+  },
+  {
+    "street": "East Gregory Boulevard",
+    "housenumber": "2600",
+    "city": "Kansas City",
+    "postcode": "64132",
+    "lat": 38.9982646,
+    "lon": -94.5565741
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "7033",
+    "city": "Kansas City",
+    "lat": 38.9985655,
+    "lon": -94.556458
+  },
+  {
+    "street": "Bannister Road",
+    "housenumber": "5373",
+    "city": "Kansas City",
+    "postcode": "64137",
+    "lat": 38.9526994,
+    "lon": -94.5269459
+  },
+  {
+    "street": "Northwest 83rd Street",
+    "housenumber": "7014",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2444223,
+    "lon": -94.6618199
+  },
+  {
+    "street": "Northwest Waukomis Drive",
+    "housenumber": "7101",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2237227,
+    "lon": -94.6262609
+  },
+  {
+    "street": "Village West Parkway",
+    "housenumber": "1813",
+    "city": "Kansas City",
+    "postcode": "66111",
+    "lat": 39.1260713,
+    "lon": -94.8234706
+  },
+  {
+    "street": "North 110th Street",
+    "housenumber": "605",
+    "city": "Kansas City",
+    "postcode": "66111",
+    "lat": 39.1093792,
+    "lon": -94.8343323
+  },
+  {
+    "street": "North Brighton Avenue",
+    "housenumber": "8300",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2439859,
+    "lon": -94.5212256
+  },
+  {
+    "street": "North McGee Street",
+    "housenumber": "9571",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2662802,
+    "lon": -94.5764493
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9301",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2627605,
+    "lon": -94.5750322
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "303",
+    "city": "Kansas City",
+    "lat": 39.1022028,
+    "lon": -94.5872597
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "1616",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0914359,
+    "lon": -94.5625125
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "2",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0806754,
+    "lon": -94.5860757
+  },
+  {
+    "street": "Wyandotte Street",
+    "housenumber": "4701",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0420309,
+    "lon": -94.5886581
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4031",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1680408,
+    "lon": -94.5765506
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "3916",
+    "city": "Kansas City",
+    "lat": 39.0561619,
+    "lon": -94.5910501
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3300",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.06666,
+    "lon": -94.5858989
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "1020",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1013504,
+    "lon": -94.5885672
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "1221",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.0984243,
+    "lon": -94.5557678
+  },
+  {
+    "street": "Troost Avenue",
+    "housenumber": "3360",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0651414,
+    "lon": -94.571983
+  },
+  {
+    "street": "Blue Ridge Boulevard",
+    "housenumber": "8793",
+    "city": "Kansas City",
+    "postcode": "64138",
+    "lat": 38.9646383,
+    "lon": -94.4986525
+  },
+  {
+    "street": "East Blue Parkway",
+    "housenumber": "4209",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0340092,
+    "lon": -94.5357225
+  },
+  {
+    "street": "East Blue Parkway",
+    "housenumber": "4201",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0343665,
+    "lon": -94.5357185
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "3714",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1170927,
+    "lon": -94.671903
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "3748",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1185724,
+    "lon": -94.6729572
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "3712",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1170887,
+    "lon": -94.6716482
+  },
+  {
+    "street": "East Truman Road",
+    "housenumber": "3803",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.0936569,
+    "lon": -94.5372384
+  },
+  {
+    "street": "East Truman Road",
+    "housenumber": "3550",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.0945833,
+    "lon": -94.5405054
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "1714",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.091257,
+    "lon": -94.5611617
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "2405",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0833027,
+    "lon": -94.5814386
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8055",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155302,
+    "lon": -94.7669001
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "8509",
+    "city": "Kansas City",
+    "postcode": "64114-2723",
+    "lat": 38.9722175,
+    "lon": -94.6073083
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9706119,
+    "lon": -94.6060979
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3111",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0691796,
+    "lon": -94.5519989
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3041",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0700472,
+    "lon": -94.5523708
+  },
+  {
+    "street": "Truman Road",
+    "housenumber": "2504",
+    "city": "Kansas City",
+    "lat": 39.0949511,
+    "lon": -94.5524633
+  },
+  {
+    "street": "Blue Ridge Cutoff",
+    "housenumber": "4011",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.049336,
+    "lon": -94.4745237
+  },
+  {
+    "street": "Blue Ridge",
+    "housenumber": "4113",
+    "city": "Kansas City",
+    "postcode": "64113",
+    "lat": 39.0479792,
+    "lon": -94.4750525
+  },
+  {
+    "street": "Holmes Road",
+    "housenumber": "9938",
+    "city": "Kansas City",
+    "postcode": "64131",
+    "lat": 38.946666,
+    "lon": -94.5830316
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "921",
+    "city": "Kansas City",
+    "lat": 39.1025257,
+    "lon": -94.582906
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1301",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.100077,
+    "lon": -94.583438
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1111",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1009781,
+    "lon": -94.5823996
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8119",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155023,
+    "lon": -94.7686129
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8101",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155287,
+    "lon": -94.767526
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8115",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155142,
+    "lon": -94.7684496
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8079",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155295,
+    "lon": -94.7672059
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8043",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1154218,
+    "lon": -94.7666697
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8067",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1155297,
+    "lon": -94.7671264
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8113",
+    "city": "Kansas City",
+    "lat": 39.1155278,
+    "lon": -94.7678861
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8145",
+    "city": "Kansas City",
+    "lat": 39.1157464,
+    "lon": -94.7690873
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7600",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1175925,
+    "lon": -94.7567551
+  },
+  {
+    "street": "West 22nd Street",
+    "housenumber": "101",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0876931,
+    "lon": -94.5848216
+  },
+  {
+    "street": "West 22nd Street",
+    "housenumber": "101",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0873457,
+    "lon": -94.5856117
+  },
+  {
+    "street": "South 18th Street",
+    "housenumber": "151",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.0988174,
+    "lon": -94.647626
+  },
+  {
+    "street": "South 18th Street",
+    "housenumber": "151",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.0992826,
+    "lon": -94.6476203
+  },
+  {
+    "street": "East Meyer Boulevard",
+    "housenumber": "1104",
+    "city": "Kansas City",
+    "postcode": "64131",
+    "lat": 39.0123924,
+    "lon": -94.5737623
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "1512",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0913681,
+    "lon": -94.5639945
+  },
+  {
+    "street": "East Blue Parkway",
+    "housenumber": "4205",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0340899,
+    "lon": -94.5357215
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3017",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0709768,
+    "lon": -94.5523333
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3031",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0704791,
+    "lon": -94.5524258
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3027",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0706092,
+    "lon": -94.5524151
+  },
+  {
+    "street": "Wyandotte Street",
+    "housenumber": "4704",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0420793,
+    "lon": -94.5904122
+  },
+  {
+    "street": "Wyandotte Street",
+    "housenumber": "4747",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0412186,
+    "lon": -94.5886703
+  },
+  {
+    "street": "North Stoddard Avenue",
+    "housenumber": "8661",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2509459,
+    "lon": -94.6645194
+  },
+  {
+    "street": "Northwest 87th Street",
+    "housenumber": "7260",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2516851,
+    "lon": -94.6648099
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8450",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2484469,
+    "lon": -94.6616825
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "5905",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2463913,
+    "lon": -94.6482269
+  },
+  {
+    "street": "North Boardwalk Avenue",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2530996,
+    "lon": -94.6539121
+  },
+  {
+    "street": "Northwest Plaza Circle",
+    "housenumber": "11820",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.308554,
+    "lon": -94.6851491
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "10225",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2787222,
+    "lon": -94.5734108
+  },
+  {
+    "street": "Barry Road Northwest",
+    "housenumber": "6242",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2482326,
+    "lon": -94.6527047
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9223",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2621922,
+    "lon": -94.5739691
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "7100",
+    "city": "Kansas City",
+    "lat": 39.2229989,
+    "lon": -94.6522969
+  },
+  {
+    "street": "Northwest Englewood Road",
+    "housenumber": "612",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1963895,
+    "lon": -94.5881518
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8029",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2398029,
+    "lon": -94.5754423
+  },
+  {
+    "street": "South Benton",
+    "housenumber": "4128",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.050552,
+    "lon": -94.5503998
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9324",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2632393,
+    "lon": -94.5773699
+  },
+  {
+    "street": "Delaware St",
+    "housenumber": "412",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1084045,
+    "lon": -94.5844541
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8671",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2512794,
+    "lon": -94.6617815
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8615",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2507006,
+    "lon": -94.661471
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "170",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0973868,
+    "lon": -94.5813911
+  },
+  {
+    "street": "Rainbow Boulevard",
+    "housenumber": "3930",
+    "city": "Kansas City",
+    "postcode": "66103",
+    "lat": 39.0560141,
+    "lon": -94.612105
+  },
+  {
+    "street": "North Agnes Avenue",
+    "housenumber": "1036",
+    "city": "Kansas City",
+    "postcode": "64120",
+    "lat": 39.1275055,
+    "lon": -94.5458034
+  },
+  {
+    "street": "63rd Street",
+    "housenumber": "440",
+    "city": "Kansas City",
+    "postcode": "64110",
+    "lat": 39.0138262,
+    "lon": -94.5823747
+  },
+  {
+    "street": "Swope Parkway",
+    "housenumber": "5802",
+    "city": "Kansas City",
+    "lat": 39.0209084,
+    "lon": -94.542099
+  },
+  {
+    "street": "I-70",
+    "housenumber": "7330 ",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1065658,
+    "lon": -94.7495462
+  },
+  {
+    "street": "Village West Parkway",
+    "housenumber": "1803",
+    "city": "Kansas City",
+    "postcode": "66111",
+    "lat": 39.1255511,
+    "lon": -94.8260984
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3907",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.056194,
+    "lon": -94.5859799
+  },
+  {
+    "street": "West 18th Street",
+    "housenumber": "214",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0920493,
+    "lon": -94.5867944
+  },
+  {
+    "street": "Rochester Ave",
+    "housenumber": "2715",
+    "city": "Kansas City",
+    "postcode": "64120",
+    "lat": 39.120497,
+    "lon": -94.548651
+  },
+  {
+    "street": "Truman Road",
+    "housenumber": "1401",
+    "city": "Kansas City",
+    "lat": 39.0948439,
+    "lon": -94.5654915
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7530",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1169386,
+    "lon": -94.7546913
+  },
+  {
+    "street": "East 13th Street",
+    "housenumber": "111",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0983704,
+    "lon": -94.5817658
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1331",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.097878,
+    "lon": -94.5819144
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1334",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0982044,
+    "lon": -94.5813465
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1370",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0973699,
+    "lon": -94.5825574
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "14",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0973678,
+    "lon": -94.5831414
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "13000",
+    "city": "Kansas City",
+    "postcode": "66109",
+    "lat": 39.1167802,
+    "lon": -94.8823182
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "5106",
+    "city": "Kansas City",
+    "lat": 39.0333195,
+    "lon": -94.5549756
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7517",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1160787,
+    "lon": -94.7537936
+  },
+  {
+    "street": "West 136th Street",
+    "housenumber": "1201",
+    "city": "Kansas City",
+    "postcode": "64145-1647",
+    "lat": 38.8795354,
+    "lon": -94.6069609
+  },
+  {
+    "street": "Troost Avenue",
+    "housenumber": "6040",
+    "city": "Kansas City",
+    "lat": 39.0169946,
+    "lon": -94.5747358
+  },
+  {
+    "street": "Nichols Road",
+    "housenumber": "220",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0417165,
+    "lon": -94.5899213
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "317",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1091212,
+    "lon": -94.5842965
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3939",
+    "city": "Kansas City",
+    "lat": 39.0552809,
+    "lon": -94.5859708
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3907A",
+    "city": "Kansas City",
+    "lat": 39.0560969,
+    "lon": -94.5859849
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3023",
+    "city": "Kansas City",
+    "lat": 39.0718538,
+    "lon": -94.5850922
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3921",
+    "city": "Kansas City",
+    "lat": 39.0558901,
+    "lon": -94.585951
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3427",
+    "city": "Kansas City",
+    "lat": 39.0649611,
+    "lon": -94.5854409
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3421",
+    "city": "Kansas City",
+    "lat": 39.0650643,
+    "lon": -94.5854393
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3911",
+    "city": "Kansas City",
+    "lat": 39.056022,
+    "lon": -94.5859888
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3429",
+    "city": "Kansas City",
+    "lat": 39.0649242,
+    "lon": -94.5854414
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3931",
+    "city": "Kansas City",
+    "lat": 39.0555412,
+    "lon": -94.5859732
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3025",
+    "city": "Kansas City",
+    "lat": 39.071779,
+    "lon": -94.5850945
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3933",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0554733,
+    "lon": -94.5860015
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "1150",
+    "city": "Kansas City",
+    "postcode": "64106-2303",
+    "lat": 39.1000758,
+    "lon": -94.5811434
+  },
+  {
+    "street": "Enterprise Road",
+    "housenumber": "6300",
+    "city": "Kansas City",
+    "postcode": "64120",
+    "lat": 39.1342716,
+    "lon": -94.5068842
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "310",
+    "city": "Kansas City",
+    "lat": 39.0885045,
+    "lon": -94.5880913
+  },
+  {
+    "street": "Central Street",
+    "housenumber": "2030",
+    "city": "Kansas City",
+    "lat": 39.0877732,
+    "lon": -94.587777
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "6640",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1172735,
+    "lon": -94.7322831
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "106",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0904787,
+    "lon": -94.5851073
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "114",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0903157,
+    "lon": -94.5853686
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "316",
+    "city": "Kansas City",
+    "lat": 39.0884019,
+    "lon": -94.5882351
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "800",
+    "city": "Kansas City",
+    "lat": 39.0848661,
+    "lon": -94.5939488
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "826",
+    "city": "Kansas City",
+    "lat": 39.0846122,
+    "lon": -94.5943819
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "830",
+    "city": "Kansas City",
+    "lat": 39.0845819,
+    "lon": -94.5944444
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "904",
+    "city": "Kansas City",
+    "lat": 39.0842485,
+    "lon": -94.5950819
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "906",
+    "city": "Kansas City",
+    "lat": 39.0842153,
+    "lon": -94.5951532
+  },
+  {
+    "street": "North McGee Street",
+    "housenumber": "9580",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2666558,
+    "lon": -94.5774537
+  },
+  {
+    "street": "Wyandotte Street",
+    "housenumber": "1920",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0904244,
+    "lon": -94.5865545
+  },
+  {
+    "street": "West 2nd Street",
+    "housenumber": "230",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1100574,
+    "lon": -94.5868571
+  },
+  {
+    "street": "West 2nd Street",
+    "housenumber": "240",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1102694,
+    "lon": -94.5859674
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8111",
+    "city": "Kansas City",
+    "lat": 39.2435772,
+    "lon": -94.6549867
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8121",
+    "city": "Kansas City",
+    "lat": 39.243733,
+    "lon": -94.6549143
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8201",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.244191,
+    "lon": -94.6546984
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8321",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2445862,
+    "lon": -94.6546186
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8201",
+    "city": "Kansas City",
+    "lat": 39.2442261,
+    "lon": -94.6548117
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8111",
+    "city": "Kansas City",
+    "lat": 39.2436008,
+    "lon": -94.6550766
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8121",
+    "city": "Kansas City",
+    "lat": 39.2437608,
+    "lon": -94.6550075
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8321",
+    "city": "Kansas City",
+    "lat": 39.244594,
+    "lon": -94.6546997
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8331",
+    "city": "Kansas City",
+    "lat": 39.2449347,
+    "lon": -94.654693
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8331",
+    "city": "Kansas City",
+    "postcode": "64151-1358",
+    "lat": 39.2449227,
+    "lon": -94.6546052
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "8341",
+    "city": "Kansas City",
+    "lat": 39.2453891,
+    "lon": -94.6546561
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6301",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2464583,
+    "lon": -94.6527511
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6003",
+    "city": "Kansas City",
+    "lat": 39.2463716,
+    "lon": -94.6489812
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "5811",
+    "city": "Kansas City",
+    "lat": 39.2459187,
+    "lon": -94.6474882
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "5557",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2463985,
+    "lon": -94.6439893
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6519",
+    "city": "Kansas City",
+    "lat": 39.2456683,
+    "lon": -94.6545353
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6234",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.248231,
+    "lon": -94.6524418
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6312",
+    "city": "Kansas City",
+    "lat": 39.2491281,
+    "lon": -94.6535201
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6308",
+    "city": "Kansas City",
+    "lat": 39.2491402,
+    "lon": -94.6532753
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6238",
+    "city": "Kansas City",
+    "lat": 39.2482284,
+    "lon": -94.6525833
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6212",
+    "city": "Kansas City",
+    "lat": 39.2491475,
+    "lon": -94.6527026
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6220",
+    "city": "Kansas City",
+    "lat": 39.2484185,
+    "lon": -94.6524666
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6202",
+    "city": "Kansas City",
+    "lat": 39.2491423,
+    "lon": -94.6522306
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6204",
+    "city": "Kansas City",
+    "lat": 39.2491475,
+    "lon": -94.6523245
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6200",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2491475,
+    "lon": -94.6520857
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6110",
+    "city": "Kansas City",
+    "lat": 39.2491364,
+    "lon": -94.6508318
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6040",
+    "city": "Kansas City",
+    "lat": 39.2491462,
+    "lon": -94.650343
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6106",
+    "city": "Kansas City",
+    "lat": 39.2491384,
+    "lon": -94.6507145
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6048",
+    "city": "Kansas City",
+    "lat": 39.2491457,
+    "lon": -94.6504523
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "6102",
+    "city": "Kansas City",
+    "lat": 39.2491405,
+    "lon": -94.650579
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "88431",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.247897,
+    "lon": -94.6608147
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8720",
+    "city": "Kansas City",
+    "lat": 39.2524325,
+    "lon": -94.6641534
+  },
+  {
+    "street": "North Stoddard Avenue",
+    "housenumber": "8742",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2525144,
+    "lon": -94.664812
+  },
+  {
+    "street": "Northwest 86th Place",
+    "housenumber": "7251",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2510148,
+    "lon": -94.664006
+  },
+  {
+    "street": "Northwest 86th Terrace",
+    "housenumber": "7311",
+    "city": "Kansas City",
+    "lat": 39.2505836,
+    "lon": -94.6648086
+  },
+  {
+    "street": "Northwest 86th Street",
+    "housenumber": "7105",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2504543,
+    "lon": -94.6631275
+  },
+  {
+    "street": "Winter Avenue",
+    "housenumber": "8601",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2505706,
+    "lon": -94.6631302
+  },
+  {
+    "street": "Northwest 87th Street",
+    "housenumber": "7260",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.251693,
+    "lon": -94.6645303
+  },
+  {
+    "street": "North Dixson Avenue",
+    "housenumber": "8642",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2511118,
+    "lon": -94.6655212
+  },
+  {
+    "street": "North Dixson Avenue",
+    "housenumber": "8630",
+    "city": "Kansas City",
+    "lat": 39.2509883,
+    "lon": -94.6655163
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8500",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2492106,
+    "lon": -94.6613941
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "7553",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2464412,
+    "lon": -94.6671421
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "7577A",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2465731,
+    "lon": -94.6678679
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "7101",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2463003,
+    "lon": -94.6621209
+  },
+  {
+    "street": "North Ambassador Drive",
+    "housenumber": "4704",
+    "city": "Kansas City",
+    "lat": 39.251468,
+    "lon": -94.6501828
+  },
+  {
+    "street": "North Ambassador Drive",
+    "housenumber": "8656",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2534707,
+    "lon": -94.6507328
+  },
+  {
+    "street": "Northeast Vivion Road",
+    "housenumber": "4321",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1876011,
+    "lon": -94.5280519
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9703671,
+    "lon": -94.6072492
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "8509",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9702748,
+    "lon": -94.6071031
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9709572,
+    "lon": -94.6072766
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9712607,
+    "lon": -94.6062882
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "8015",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9824861,
+    "lon": -94.6077031
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "8025",
+    "city": "Kansas City",
+    "lat": 38.9821253,
+    "lon": -94.6077179
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "8017",
+    "city": "Kansas City",
+    "lat": 38.9824089,
+    "lon": -94.6077071
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "7887",
+    "city": "Kansas City",
+    "postcode": "64114-1636",
+    "lat": 38.9859747,
+    "lon": -94.6077279
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "7715",
+    "city": "Kansas City",
+    "lat": 38.9883576,
+    "lon": -94.6075154
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "1809",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.050077,
+    "lon": -94.6069641
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "1511",
+    "city": "Kansas City",
+    "lat": 39.0499815,
+    "lon": -94.6042061
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "1314",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0502997,
+    "lon": -94.6029193
+  },
+  {
+    "street": "Roanoke",
+    "housenumber": "4300",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0497425,
+    "lon": -94.6028523
+  },
+  {
+    "street": "Central Street",
+    "housenumber": "3906",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0529354,
+    "lon": -94.5909624
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3732",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0588608,
+    "lon": -94.5862729
+  },
+  {
+    "street": "Kansas Avenue",
+    "housenumber": "54",
+    "city": "Kansas City",
+    "lat": 39.0891381,
+    "lon": -94.6171447
+  },
+  {
+    "street": "Kansas Avenue",
+    "housenumber": "631",
+    "city": "Kansas City",
+    "postcode": "66105-1327",
+    "lat": 39.0873984,
+    "lon": -94.6242545
+  },
+  {
+    "street": "Kansas Avenue",
+    "housenumber": "1440",
+    "city": "Kansas City",
+    "lat": 39.0875436,
+    "lon": -94.6464914
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1700",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0573874,
+    "lon": -94.6051494
+  },
+  {
+    "street": "Rainbow Boulevard",
+    "housenumber": "4316",
+    "city": "Kansas City",
+    "lat": 39.0493857,
+    "lon": -94.6122978
+  },
+  {
+    "street": "West 39th Avenue",
+    "housenumber": "1610",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0573951,
+    "lon": -94.6043856
+  },
+  {
+    "street": "Parallel Parkway",
+    "housenumber": "8226",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1289527,
+    "lon": -94.7709971
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "2120",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.0993202,
+    "lon": -94.5569445
+  },
+  {
+    "street": "East Gregory Boulevard",
+    "housenumber": "3800",
+    "city": "Kansas City",
+    "lat": 38.9987102,
+    "lon": -94.5425623
+  },
+  {
+    "street": "Independence Avenue",
+    "housenumber": "3405",
+    "city": "Kansas City",
+    "lat": 39.1061439,
+    "lon": -94.5407174
+  },
+  {
+    "street": "Broadway Street",
+    "housenumber": "3805",
+    "city": "Kansas City",
+    "lat": 39.0583311,
+    "lon": -94.590402
+  },
+  {
+    "street": "Independence Avenue",
+    "housenumber": "1447",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.106411,
+    "lon": -94.5626781
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1715",
+    "city": "Kansas City",
+    "lat": 39.0571737,
+    "lon": -94.6057602
+  },
+  {
+    "street": "Northwest Englewood Road",
+    "housenumber": "516",
+    "city": "Kansas City",
+    "lat": 39.1971244,
+    "lon": -94.5875193
+  },
+  {
+    "street": "Front Street",
+    "housenumber": "6701",
+    "city": "Kansas City",
+    "postcode": "64120-1322",
+    "lat": 39.1296816,
+    "lon": -94.5035606
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "1100",
+    "city": "Kansas City",
+    "lat": 39.117841,
+    "lon": -94.6392254
+  },
+  {
+    "street": "Gibbs Road",
+    "housenumber": "4815",
+    "city": "Kansas City",
+    "postcode": "66106",
+    "lat": 39.0583003,
+    "lon": -94.6901745
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "500",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1079671,
+    "lon": -94.5841891
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "2",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0567554,
+    "lon": -94.5863931
+  },
+  {
+    "street": "North Madison Avenue",
+    "housenumber": "8431",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2477834,
+    "lon": -94.5934178
+  },
+  {
+    "street": "Terrace Street",
+    "housenumber": "7812",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9871371,
+    "lon": -94.6062525
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "229",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0885824,
+    "lon": -94.5873998
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1733",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0922074,
+    "lon": -94.5834037
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1717",
+    "city": "Kansas City",
+    "lat": 39.0927619,
+    "lon": -94.5833862
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1610",
+    "city": "Kansas City",
+    "lat": 39.0941264,
+    "lon": -94.5836917
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "1002",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0509005,
+    "lon": -94.5990699
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "1110",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0501063,
+    "lon": -94.6001673
+  },
+  {
+    "street": "East 13th Street",
+    "housenumber": "10",
+    "city": "Kansas City",
+    "postcode": "64106-2924",
+    "lat": 39.0987093,
+    "lon": -94.5830685
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "905",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0502047,
+    "lon": -94.5967879
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "905",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0500513,
+    "lon": -94.5967153
+  },
+  {
+    "street": "North Oak Traffic Way",
+    "housenumber": "4227",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1711484,
+    "lon": -94.5762581
+  },
+  {
+    "street": "East 63rd Street",
+    "housenumber": "319",
+    "city": "Kansas City",
+    "postcode": "64113-2225",
+    "lat": 39.0133852,
+    "lon": -94.584135
+  },
+  {
+    "street": "West Pershing Road",
+    "housenumber": "30",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0863287,
+    "lon": -94.5857133
+  },
+  {
+    "street": "Nichols Road",
+    "housenumber": "435",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.041097,
+    "lon": -94.5930586
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1617",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0938383,
+    "lon": -94.5833352
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7354",
+    "city": "Kansas City",
+    "lat": 39.1171987,
+    "lon": -94.749646
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "1656",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0934108,
+    "lon": -94.588932
+  },
+  {
+    "street": "West 22nd Street",
+    "housenumber": "380",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.086455,
+    "lon": -94.5886459
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "500",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.107842,
+    "lon": -94.5842685
+  },
+  {
+    "street": "Parallel Parkway",
+    "housenumber": "10620",
+    "city": "Tbd",
+    "postcode": "66109",
+    "lat": 39.1290211,
+    "lon": -94.8255472
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "13612",
+    "city": "Kansas City",
+    "lat": 38.8825626,
+    "lon": -94.6013372
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "13127",
+    "city": "Kansas City",
+    "postcode": "64145",
+    "lat": 38.8889335,
+    "lon": -94.6073407
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "13121",
+    "city": "Kansas City",
+    "postcode": "64145",
+    "lat": 38.8890979,
+    "lon": -94.6073491
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "13615",
+    "city": "Kansas City",
+    "postcode": "64145",
+    "lat": 38.8814575,
+    "lon": -94.6014817
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7500",
+    "city": "Kansas City",
+    "postcode": "66102",
+    "lat": 39.1169274,
+    "lon": -94.7522528
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7361",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1162244,
+    "lon": -94.7514764
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4700",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0420014,
+    "lon": -94.5937956
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4742",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.040757,
+    "lon": -94.593985
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4749",
+    "city": "Kansas City",
+    "lat": 39.0403668,
+    "lon": -94.5936554
+  },
+  {
+    "street": "Northwest 63rd Street",
+    "housenumber": "6000",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2091249,
+    "lon": -94.6500047
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7711",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2343976,
+    "lon": -94.575789
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "1020",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1012148,
+    "lon": -94.5885767
+  },
+  {
+    "street": "North Skiles Avenue",
+    "housenumber": "8300",
+    "city": "Kansas City",
+    "postcode": "64158",
+    "lat": 39.2432595,
+    "lon": -94.4807254
+  },
+  {
+    "street": "Northeast 82nd Terrace",
+    "housenumber": "8880",
+    "city": "Kansas City",
+    "postcode": "64158",
+    "lat": 39.243855,
+    "lon": -94.471456
+  },
+  {
+    "street": "North Dalton Avenue",
+    "housenumber": "10631",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2882223,
+    "lon": -94.647035
+  },
+  {
+    "street": "West 135th Street",
+    "housenumber": "13627",
+    "city": "Kansas City",
+    "postcode": "64145-1670",
+    "lat": 38.8805211,
+    "lon": -94.6014031
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "13637",
+    "city": "Kansas City",
+    "postcode": "64145",
+    "lat": 38.8801772,
+    "lon": -94.601355
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "347",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.245893,
+    "lon": -94.5841585
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "345",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2458977,
+    "lon": -94.5839969
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "343",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.245904,
+    "lon": -94.5838526
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "335",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2459079,
+    "lon": -94.5835751
+  },
+  {
+    "street": "North Mulberry Drive",
+    "housenumber": "4111",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1693467,
+    "lon": -94.5983838
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "10203",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.277981,
+    "lon": -94.5734608
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "10221",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2782109,
+    "lon": -94.5734376
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "500",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.108661,
+    "lon": -94.580626
+  },
+  {
+    "street": "Roanoke Road",
+    "housenumber": "3148",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0695491,
+    "lon": -94.6060104
+  },
+  {
+    "street": "Northwest 82nd Terrace",
+    "housenumber": "5507",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2434778,
+    "lon": -94.6434203
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "412",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1084771,
+    "lon": -94.5844182
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "412",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1082699,
+    "lon": -94.5843227
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7831",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2365134,
+    "lon": -94.5752517
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1712",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0929313,
+    "lon": -94.5837563
+  },
+  {
+    "street": "North Revere Avenue",
+    "housenumber": "6300",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2085729,
+    "lon": -94.6516305
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1403",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.057077,
+    "lon": -94.6029972
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1411",
+    "city": "Kansas City",
+    "lat": 39.0570609,
+    "lon": -94.6031227
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1410",
+    "city": "Kansas City",
+    "lat": 39.0573049,
+    "lon": -94.6031302
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1607",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0570847,
+    "lon": -94.6042615
+  },
+  {
+    "street": "Union Avenue",
+    "housenumber": "1400",
+    "city": "Kansas City",
+    "postcode": "64101",
+    "lat": 39.1026469,
+    "lon": -94.6015579
+  },
+  {
+    "street": "Genessee Street",
+    "housenumber": "1613",
+    "city": "Kansas City",
+    "postcode": "64102",
+    "lat": 39.0940896,
+    "lon": -94.6048309
+  },
+  {
+    "street": "Genessee Street",
+    "housenumber": "1615",
+    "city": "Kansas City",
+    "postcode": "64102",
+    "lat": 39.0940391,
+    "lon": -94.6047544
+  },
+  {
+    "street": "Genessee Street",
+    "housenumber": "1617",
+    "city": "Kansas City",
+    "postcode": "64102",
+    "lat": 39.0939392,
+    "lon": -94.6047579
+  },
+  {
+    "street": "Village West Parkway",
+    "housenumber": "1813",
+    "city": "Kansas City",
+    "postcode": "66111",
+    "lat": 39.1265943,
+    "lon": -94.8235175
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6109",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2090444,
+    "lon": -94.6516479
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6107",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2090293,
+    "lon": -94.6515872
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6131",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2093578,
+    "lon": -94.6519911
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6203",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2094538,
+    "lon": -94.6521318
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6205",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.209475,
+    "lon": -94.6521781
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6209",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2095326,
+    "lon": -94.6524227
+  },
+  {
+    "street": "Wilson Road",
+    "housenumber": "8116",
+    "city": "Kansas City",
+    "postcode": "64125",
+    "lat": 39.1129306,
+    "lon": -94.4959459
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "1010",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0917183,
+    "lon": -94.5707485
+  },
+  {
+    "street": "Baltimore Avenue",
+    "housenumber": "1701",
+    "city": "Kansas City",
+    "lat": 39.0933142,
+    "lon": -94.5844544
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "320",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0883309,
+    "lon": -94.5883486
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1300",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.0984513,
+    "lon": -94.5835691
+  },
+  {
+    "street": "Central Street",
+    "housenumber": "4741",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0410628,
+    "lon": -94.5900116
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "101",
+    "city": "Kansas City",
+    "lat": 39.1035013,
+    "lon": -94.5843092
+  },
+  {
+    "street": "Southwest Trafficway",
+    "housenumber": "3703",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0593058,
+    "lon": -94.5950889
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1740",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0920241,
+    "lon": -94.5839724
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1333",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.097928,
+    "lon": -94.5819122
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1370",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0974958,
+    "lon": -94.5813891
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1323",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0981085,
+    "lon": -94.5818975
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1310",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0982586,
+    "lon": -94.5813465
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1320",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0980911,
+    "lon": -94.5813451
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1330",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0977879,
+    "lon": -94.5813414
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1201",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0998245,
+    "lon": -94.5830258
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "11",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0970763,
+    "lon": -94.5831466
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "51",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.097078,
+    "lon": -94.5827969
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "71",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0970679,
+    "lon": -94.5824973
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "31",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0969861,
+    "lon": -94.5831408
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "101",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0970401,
+    "lon": -94.5820297
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1524",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0949098,
+    "lon": -94.5825425
+  },
+  {
+    "street": "Church Road",
+    "housenumber": "8580",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2463267,
+    "lon": -94.4597302
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "507",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1083408,
+    "lon": -94.5813751
+  },
+  {
+    "street": "Woodswether Road",
+    "housenumber": "1012",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1082444,
+    "lon": -94.5961585
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "2000",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0888681,
+    "lon": -94.5817619
+  },
+  {
+    "street": "Baltimore Avenue",
+    "housenumber": "1535",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0951453,
+    "lon": -94.5843779
+  },
+  {
+    "street": "Baltimore Avenue",
+    "housenumber": "1535",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0948694,
+    "lon": -94.58439
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6413",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2116256,
+    "lon": -94.6452468
+  },
+  {
+    "street": "Wornall Road",
+    "housenumber": "8315",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9771661,
+    "lon": -94.5945957
+  },
+  {
+    "street": "Minnesota Avenue",
+    "housenumber": "1710",
+    "city": "Kansas City",
+    "lat": 39.1158982,
+    "lon": -94.6484599
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8080",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9827603,
+    "lon": -94.6069814
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "721",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1043486,
+    "lon": -94.5631111
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "7746",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1174606,
+    "lon": -94.7600077
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "429",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1087135,
+    "lon": -94.5815061
+  },
+  {
+    "street": "Nichols Road",
+    "housenumber": "227",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0413167,
+    "lon": -94.5901383
+  },
+  {
+    "street": "Genessee Street",
+    "housenumber": "1600",
+    "city": "Kansas City",
+    "postcode": "64102",
+    "lat": 39.0942418,
+    "lon": -94.6051726
+  },
+  {
+    "street": "Northeast Chouteau Trafficway",
+    "housenumber": "4357",
+    "city": "Kansas City",
+    "postcode": "64117",
+    "lat": 39.1731017,
+    "lon": -94.5328692
+  },
+  {
+    "street": "East 54th Street",
+    "housenumber": "12919",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.0229238,
+    "lon": -94.4279845
+  },
+  {
+    "street": "East Linwood Boulevard",
+    "housenumber": "601",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0685093,
+    "lon": -94.5775105
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "4310",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1722093,
+    "lon": -94.5495726
+  },
+  {
+    "street": "Northwest 83rd Terrace",
+    "housenumber": "6994",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2444104,
+    "lon": -94.661195
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "1",
+    "city": "Kansas City",
+    "lat": 39.0751393,
+    "lon": -94.5857204
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1345",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.0975813,
+    "lon": -94.5831261
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "54",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.097396,
+    "lon": -94.5827988
+  },
+  {
+    "street": "Northeast Barry Road",
+    "housenumber": "9140",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2455572,
+    "lon": -94.4663624
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6409",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2117423,
+    "lon": -94.6453852
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6423",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2119397,
+    "lon": -94.6452014
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6427",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.212157,
+    "lon": -94.6450803
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6431",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2122815,
+    "lon": -94.6450114
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6433",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2123857,
+    "lon": -94.6449957
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6441",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.212578,
+    "lon": -94.6450396
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6501",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2130543,
+    "lon": -94.6451069
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6461",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2128121,
+    "lon": -94.6450976
+  },
+  {
+    "street": "Northwest 64th Terrace",
+    "housenumber": "5775",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2113488,
+    "lon": -94.6482697
+  },
+  {
+    "street": "Northwest 64th Terrace",
+    "housenumber": "5903",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2112785,
+    "lon": -94.6494155
+  },
+  {
+    "street": "Northwest 64th Terrace",
+    "housenumber": "6003",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2113741,
+    "lon": -94.6496711
+  },
+  {
+    "street": "Northwest 64th Terrace",
+    "housenumber": "6005",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2113722,
+    "lon": -94.6497798
+  },
+  {
+    "street": "Northwest 64th Terrace",
+    "housenumber": "6007",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2113736,
+    "lon": -94.6499304
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6421",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2114808,
+    "lon": -94.6502433
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6417",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2113507,
+    "lon": -94.6505375
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6411",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2112689,
+    "lon": -94.6508322
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6407",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2111442,
+    "lon": -94.6511931
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6404",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2114004,
+    "lon": -94.6515443
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6412",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2115937,
+    "lon": -94.650968
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6416",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2116549,
+    "lon": -94.6505827
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6420",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2118258,
+    "lon": -94.6503027
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6424",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2120716,
+    "lon": -94.6501199
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6426",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2121666,
+    "lon": -94.6500591
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6502",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2124641,
+    "lon": -94.6499314
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6504",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2124976,
+    "lon": -94.6499174
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6506",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2126681,
+    "lon": -94.6499294
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6626",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2148098,
+    "lon": -94.6479076
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6628",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2148331,
+    "lon": -94.6477378
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6630",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2149079,
+    "lon": -94.6476547
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6620",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145261,
+    "lon": -94.6483185
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6622",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145771,
+    "lon": -94.6481553
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6635",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2149437,
+    "lon": -94.6471887
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6637",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.214919,
+    "lon": -94.6471532
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6639",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2148952,
+    "lon": -94.647119
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6631",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.215074,
+    "lon": -94.6466341
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6629",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2150578,
+    "lon": -94.6465914
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6627",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.215033,
+    "lon": -94.6465256
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6619",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146629,
+    "lon": -94.6466302
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6621",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146806,
+    "lon": -94.646557
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6623",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146901,
+    "lon": -94.6465175
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6518",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2132682,
+    "lon": -94.6496703
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6520",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2133916,
+    "lon": -94.6495466
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6526",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.213634,
+    "lon": -94.6494187
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6528",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137081,
+    "lon": -94.6493413
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6530",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137844,
+    "lon": -94.6492933
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6602",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.213952,
+    "lon": -94.6491639
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6604",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2140667,
+    "lon": -94.6490979
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6606",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2141476,
+    "lon": -94.6490078
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6610",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2142479,
+    "lon": -94.6488052
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6612",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143489,
+    "lon": -94.6486758
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6614",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144196,
+    "lon": -94.6486031
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6512",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2130056,
+    "lon": -94.6497723
+  },
+  {
+    "street": "West Pershing Road",
+    "housenumber": "30",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0850768,
+    "lon": -94.5858953
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6445",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2122693,
+    "lon": -94.6456947
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6449",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.212357,
+    "lon": -94.6456858
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6453",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2124431,
+    "lon": -94.6456871
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6443",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2122866,
+    "lon": -94.6459041
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6447",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2123649,
+    "lon": -94.6459084
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6451",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2124473,
+    "lon": -94.6458998
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6427",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2118799,
+    "lon": -94.6497686
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6503",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2121453,
+    "lon": -94.6496895
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6507",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2123415,
+    "lon": -94.6495371
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6511",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2125916,
+    "lon": -94.6495022
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6513",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2127183,
+    "lon": -94.649451
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6515",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2127771,
+    "lon": -94.6493473
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6519",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2129828,
+    "lon": -94.6492627
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6521",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2130311,
+    "lon": -94.6492254
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6523",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2131235,
+    "lon": -94.649186
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6527",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2133413,
+    "lon": -94.6491569
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6529",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2134576,
+    "lon": -94.6490472
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6531",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.213538,
+    "lon": -94.6490386
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6603",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137679,
+    "lon": -94.648792
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6605",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138078,
+    "lon": -94.6487034
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6607",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138515,
+    "lon": -94.6486711
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6611",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2140335,
+    "lon": -94.6483383
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6613",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2140547,
+    "lon": -94.6482633
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6615",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2141097,
+    "lon": -94.6481731
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6619",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2142671,
+    "lon": -94.6479002
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6621",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2142905,
+    "lon": -94.6478546
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6623",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143516,
+    "lon": -94.6477137
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6627",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145592,
+    "lon": -94.647559
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6629",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145855,
+    "lon": -94.6473815
+  },
+  {
+    "street": "North Revere Drive",
+    "housenumber": "6631",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146628,
+    "lon": -94.6473106
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6507",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.213592,
+    "lon": -94.6460069
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6509",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2136141,
+    "lon": -94.645923
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6511",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2136299,
+    "lon": -94.6458774
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6513",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2136554,
+    "lon": -94.6456322
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6519",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2136656,
+    "lon": -94.6455795
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6545",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138927,
+    "lon": -94.6445902
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6543",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138897,
+    "lon": -94.6447734
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6541",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138697,
+    "lon": -94.6448607
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6537",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138554,
+    "lon": -94.6449332
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6533",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2138139,
+    "lon": -94.6449942
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6531",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137966,
+    "lon": -94.6450793
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6529",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137721,
+    "lon": -94.6451903
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6527",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137636,
+    "lon": -94.6452952
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6525",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137476,
+    "lon": -94.6453589
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6523",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2137381,
+    "lon": -94.6454133
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6521",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.213715,
+    "lon": -94.6454984
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5618",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144294,
+    "lon": -94.6461305
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5620",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144101,
+    "lon": -94.6461887
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5622",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143881,
+    "lon": -94.6462551
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5610",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145048,
+    "lon": -94.6458627
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5612",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144939,
+    "lon": -94.6459058
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5614",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144792,
+    "lon": -94.6459637
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5602",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145777,
+    "lon": -94.6455664
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5604",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145643,
+    "lon": -94.6456198
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5606",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145502,
+    "lon": -94.6456763
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5516",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146522,
+    "lon": -94.6452797
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5518",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146411,
+    "lon": -94.6453252
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5520",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2146272,
+    "lon": -94.6453818
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5619",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2141045,
+    "lon": -94.6461683
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5621",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2140835,
+    "lon": -94.64623
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "5623",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2140687,
+    "lon": -94.6462734
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5611",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2142383,
+    "lon": -94.6457609
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5613",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2142233,
+    "lon": -94.645815
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5615",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.21421,
+    "lon": -94.6458629
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5607",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143099,
+    "lon": -94.64549
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5603",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143422,
+    "lon": -94.6453623
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5605",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2143273,
+    "lon": -94.6454213
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5527",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.214403,
+    "lon": -94.6451079
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5525",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2144109,
+    "lon": -94.6448009
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5521",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2145309,
+    "lon": -94.6445472
+  },
+  {
+    "street": "Northwest 66th Terrace",
+    "housenumber": "5517",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2147371,
+    "lon": -94.6445773
+  },
+  {
+    "street": "East Truman Road",
+    "housenumber": "2420",
+    "city": "Kansas City",
+    "postcode": "64127",
+    "lat": 39.0949901,
+    "lon": -94.5529087
+  },
+  {
+    "street": "no",
+    "housenumber": "9901",
+    "city": "Kansas City",
+    "lat": 39.2441224,
+    "lon": -94.4613634
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4248",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1712042,
+    "lon": -94.5771902
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4244",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1711198,
+    "lon": -94.577185
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4225",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1709794,
+    "lon": -94.5761166
+  },
+  {
+    "street": "North Lawndale Avenue",
+    "housenumber": "8122",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.24044,
+    "lon": -94.5129643
+  },
+  {
+    "street": "North Lawndale Avenue",
+    "housenumber": "8124",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2404999,
+    "lon": -94.512967
+  },
+  {
+    "street": "North Lawndale Avenue",
+    "housenumber": "8102",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2398746,
+    "lon": -94.5129721
+  },
+  {
+    "street": "North Lawndale Avenue",
+    "housenumber": "8104",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399282,
+    "lon": -94.5129729
+  },
+  {
+    "street": "North Lawndale Avenue",
+    "housenumber": "8106",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399819,
+    "lon": -94.5129685
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7821",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2362184,
+    "lon": -94.5752673
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8716",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2415954,
+    "lon": -94.5146301
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8174",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2415444,
+    "lon": -94.5146286
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8172",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2414863,
+    "lon": -94.5146286
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8168",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2413046,
+    "lon": -94.5146343
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8166",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2412658,
+    "lon": -94.5146346
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8164",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2412159,
+    "lon": -94.5146361
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8156",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2410094,
+    "lon": -94.5146421
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8154",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2409537,
+    "lon": -94.5146406
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8152",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2408945,
+    "lon": -94.5146406
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8177",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.241585,
+    "lon": -94.514302
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8175",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2415397,
+    "lon": -94.5143049
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8173",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2414875,
+    "lon": -94.5143094
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8167",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2413111,
+    "lon": -94.5143139
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8165",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2412658,
+    "lon": -94.5143154
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8163",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2412101,
+    "lon": -94.5143169
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8157",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2410047,
+    "lon": -94.5143169
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8155",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2409514,
+    "lon": -94.5143193
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8153",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2408956,
+    "lon": -94.5143214
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8127",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.240568,
+    "lon": -94.5143271
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8125",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2405194,
+    "lon": -94.5143344
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8123",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2404665,
+    "lon": -94.5143362
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8130",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2404761,
+    "lon": -94.514769
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8134",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2404768,
+    "lon": -94.5146944
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8120",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.24034,
+    "lon": -94.515012
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8122",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2403862,
+    "lon": -94.5149811
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8124",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2404328,
+    "lon": -94.5149479
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8110",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.24008,
+    "lon": -94.5150004
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8112",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2401292,
+    "lon": -94.5150352
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8114",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2401805,
+    "lon": -94.5150628
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8102",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399345,
+    "lon": -94.5147607
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8104",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399358,
+    "lon": -94.5148297
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8105",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399805,
+    "lon": -94.5143502
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8107",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2400339,
+    "lon": -94.5143503
+  },
+  {
+    "street": "North Drury Avenue",
+    "housenumber": "8103",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2399295,
+    "lon": -94.5143456
+  },
+  {
+    "street": "North Forest Avenue",
+    "housenumber": "3848",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.163453,
+    "lon": -94.5669245
+  },
+  {
+    "street": "Lydia Avenue",
+    "housenumber": "1300",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0973633,
+    "lon": -94.5661618
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1501",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0955854,
+    "lon": -94.580933
+  },
+  {
+    "street": "North Platte Purchase Drive",
+    "housenumber": "6907",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2203889,
+    "lon": -94.6006586
+  },
+  {
+    "street": "North Platte Purchase Drive",
+    "housenumber": "6911",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2207885,
+    "lon": -94.6005318
+  },
+  {
+    "street": "North Platte Purchase Drive",
+    "housenumber": "6917",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2208457,
+    "lon": -94.6007689
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1903",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.220943,
+    "lon": -94.6022464
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1811",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2208655,
+    "lon": -94.6019882
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1807",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2208599,
+    "lon": -94.6017335
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1803",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.220843,
+    "lon": -94.6014796
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1804",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2211861,
+    "lon": -94.6015706
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1810",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2212161,
+    "lon": -94.6018476
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1908",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2213222,
+    "lon": -94.6020998
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1914",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2214803,
+    "lon": -94.602319
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1918",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2216355,
+    "lon": -94.602484
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1922",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.221743,
+    "lon": -94.6026723
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1926",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2218063,
+    "lon": -94.6029032
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1930",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2218225,
+    "lon": -94.6031618
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8327",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2458366,
+    "lon": -94.6666051
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8329",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2459014,
+    "lon": -94.6666624
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8331",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2459634,
+    "lon": -94.6666706
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8333",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2460057,
+    "lon": -94.6665915
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8335",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2460451,
+    "lon": -94.6665387
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8337",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2460761,
+    "lon": -94.6664732
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8339",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2461191,
+    "lon": -94.6664104
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "7577B",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2465726,
+    "lon": -94.6677189
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8355",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2461816,
+    "lon": -94.6680034
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8357",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2461816,
+    "lon": -94.6678871
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8359",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2461846,
+    "lon": -94.6677893
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8361",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2461828,
+    "lon": -94.6676722
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8301",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2456973,
+    "lon": -94.6678457
+  },
+  {
+    "street": "North Congress Avenue",
+    "housenumber": "8303",
+    "city": "Kansas City",
+    "postcode": "64152",
+    "lat": 39.2456001,
+    "lon": -94.6678343
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7005",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2221516,
+    "lon": -94.6030386
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7009",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2223289,
+    "lon": -94.602971
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7016",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2225005,
+    "lon": -94.6033906
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7010",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2223533,
+    "lon": -94.6035482
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7006",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2221578,
+    "lon": -94.6035403
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "7002",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2219548,
+    "lon": -94.6035482
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6972",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2217508,
+    "lon": -94.6035359
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6968",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2215479,
+    "lon": -94.6035407
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6964",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2213556,
+    "lon": -94.6035406
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6960",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.221143,
+    "lon": -94.6035487
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6953",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2208141,
+    "lon": -94.6031863
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6957",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2209557,
+    "lon": -94.6030084
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6969",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2214945,
+    "lon": -94.6031475
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6961",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2211182,
+    "lon": -94.6030208
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6965",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2212984,
+    "lon": -94.6031185
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7018",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2222147,
+    "lon": -94.600504
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7014",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2220094,
+    "lon": -94.6004986
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7010",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.221824,
+    "lon": -94.6005008
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7006",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2216143,
+    "lon": -94.6005089
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7002",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2214665,
+    "lon": -94.6003109
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7003",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2215344,
+    "lon": -94.600002
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7007",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2216907,
+    "lon": -94.5999176
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7011",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2218756,
+    "lon": -94.5999588
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7017",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2220627,
+    "lon": -94.6001052
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7021",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2222735,
+    "lon": -94.6000966
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7103",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2224754,
+    "lon": -94.6001007
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7107",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2227152,
+    "lon": -94.6000675
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7111",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2229053,
+    "lon": -94.6000012
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7117",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2231155,
+    "lon": -94.5999783
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7121",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2233067,
+    "lon": -94.599977
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7102",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2225784,
+    "lon": -94.6005049
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7106",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2227648,
+    "lon": -94.6004735
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7110",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2229529,
+    "lon": -94.6004212
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7118",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2231464,
+    "lon": -94.6003815
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7122",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2233391,
+    "lon": -94.600392
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7126",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.22354,
+    "lon": -94.6004568
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7125",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2235094,
+    "lon": -94.6000245
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7129",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2236931,
+    "lon": -94.6000883
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7130",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2237197,
+    "lon": -94.6005257
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7134",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2239151,
+    "lon": -94.6005508
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7133",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2239126,
+    "lon": -94.6001541
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7137",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2241537,
+    "lon": -94.6001171
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7038",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2241099,
+    "lon": -94.6005419
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7141",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2244078,
+    "lon": -94.5999878
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7145",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.224588,
+    "lon": -94.5998601
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7151",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2248906,
+    "lon": -94.5997583
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7155",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2251126,
+    "lon": -94.599777
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7203",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2252891,
+    "lon": -94.5998915
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7207",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2254509,
+    "lon": -94.6000576
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "7211",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2255605,
+    "lon": -94.6002936
+  },
+  {
+    "street": "Northwest Waukomis Drive",
+    "housenumber": "6060",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2036863,
+    "lon": -94.6108846
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "7615",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2332502,
+    "lon": -94.6572419
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "7110",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2238049,
+    "lon": -94.6522398
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "529",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1077556,
+    "lon": -94.5811909
+  },
+  {
+    "street": "East Missouri Avenue",
+    "housenumber": "108",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1077973,
+    "lon": -94.5808969
+  },
+  {
+    "street": "East Missouri Avenue",
+    "housenumber": "110",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.107814,
+    "lon": -94.5808163
+  },
+  {
+    "street": "East Missouri Avenue",
+    "housenumber": "112",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1078533,
+    "lon": -94.5806388
+  },
+  {
+    "street": "East Missouri Avenue",
+    "housenumber": "112",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1078332,
+    "lon": -94.5807164
+  },
+  {
+    "street": "East 11th Street",
+    "housenumber": "327",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1008302,
+    "lon": -94.5787513
+  },
+  {
+    "street": "Campbell Street",
+    "housenumber": "1708",
+    "city": "Downtown Kansas City",
+    "postcode": "64108",
+    "lat": 39.0925081,
+    "lon": -94.5730932
+  },
+  {
+    "street": "West 8th Street",
+    "housenumber": "310",
+    "city": "Kansas City",
+    "lat": 39.1047985,
+    "lon": -94.5868952
+  },
+  {
+    "street": "West 8th Street",
+    "housenumber": "302",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1047702,
+    "lon": -94.5863285
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "305",
+    "city": "Kansas City",
+    "lat": 39.1095807,
+    "lon": -94.5830391
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "307",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1095242,
+    "lon": -94.5830219
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "419",
+    "city": "Kansas City",
+    "lat": 39.1092267,
+    "lon": -94.5829165
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "411",
+    "city": "Kansas City",
+    "lat": 39.1089923,
+    "lon": -94.5828381
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "413",
+    "city": "Kansas City",
+    "lat": 39.1089149,
+    "lon": -94.5828138
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "910",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1104212,
+    "lon": -94.5729188
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "303",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0536895,
+    "lon": -94.5893579
+  },
+  {
+    "street": "Mill Street",
+    "housenumber": "4115",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0520286,
+    "lon": -94.5917233
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "515",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.052456,
+    "lon": -94.5919817
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4058",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0531587,
+    "lon": -94.5918533
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4050",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0534501,
+    "lon": -94.5921591
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4050",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0539973,
+    "lon": -94.5926464
+  },
+  {
+    "street": "Pennsylvania Avenue",
+    "housenumber": "4010",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0544808,
+    "lon": -94.5932559
+  },
+  {
+    "street": "West 47th Street",
+    "housenumber": "439",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0421755,
+    "lon": -94.5928082
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1183",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1001292,
+    "lon": -94.5829465
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "1010",
+    "city": "Kansas City",
+    "lat": 39.1019655,
+    "lon": -94.5885408
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "3601",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0620187,
+    "lon": -94.5902442
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "3605",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0618347,
+    "lon": -94.5902605
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "3700",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.060861,
+    "lon": -94.5907579
+  },
+  {
+    "street": "East 31st Street",
+    "housenumber": "600",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.070887,
+    "lon": -94.5775247
+  },
+  {
+    "street": "Gillham Road",
+    "housenumber": "2976",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0730306,
+    "lon": -94.5790349
+  },
+  {
+    "street": "Holmes Street",
+    "housenumber": "2518",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0807365,
+    "lon": -94.576162
+  },
+  {
+    "street": "Holmes Street",
+    "housenumber": "2520",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0805991,
+    "lon": -94.5761691
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5351",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1913463,
+    "lon": -94.5469889
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5223",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1888921,
+    "lon": -94.5482856
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5227",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1889757,
+    "lon": -94.5482826
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5231",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1890714,
+    "lon": -94.5482768
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5235",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1891945,
+    "lon": -94.5482686
+  },
+  {
+    "street": "Northeast Vivion Road",
+    "housenumber": "2682",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1887775,
+    "lon": -94.5468241
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5243",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1896059,
+    "lon": -94.5482804
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5251",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1897444,
+    "lon": -94.5482665
+  },
+  {
+    "street": "North Antioch Road",
+    "housenumber": "5255",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1898402,
+    "lon": -94.5482792
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "211",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1943487,
+    "lon": -94.5800101
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "215B",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1941813,
+    "lon": -94.5800033
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "215C",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1940991,
+    "lon": -94.5800086
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "215D",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1940139,
+    "lon": -94.5800046
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "303B",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1937279,
+    "lon": -94.5797065
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "303E",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1937317,
+    "lon": -94.5795628
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "303",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1937322,
+    "lon": -94.5792584
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "203",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1954394,
+    "lon": -94.5799814
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "203",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1954658,
+    "lon": -94.5801539
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "203",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1954652,
+    "lon": -94.5805422
+  },
+  {
+    "street": "Northeast Englewood Road",
+    "housenumber": "307",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1937465,
+    "lon": -94.5784621
+  },
+  {
+    "street": "Northwest Englewood Road",
+    "housenumber": "634",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1964049,
+    "lon": -94.588927
+  },
+  {
+    "street": "Northeast Vivion Road",
+    "housenumber": "4722",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.188405,
+    "lon": -94.5236997
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "4034",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.05357,
+    "lon": -94.5910188
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "4030",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0538871,
+    "lon": -94.591257
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8948",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2578544,
+    "lon": -94.6519853
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9194",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2602312,
+    "lon": -94.6578213
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9188",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2600521,
+    "lon": -94.6579716
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9182",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2597536,
+    "lon": -94.6582384
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6368",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2092693,
+    "lon": -94.6485742
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6364",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2091081,
+    "lon": -94.6486181
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6356",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2089674,
+    "lon": -94.6486666
+  },
+  {
+    "street": "North Cosby Avenue",
+    "housenumber": "6352",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2088713,
+    "lon": -94.6487174
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "5900",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2087507,
+    "lon": -94.6487963
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "5914",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2089523,
+    "lon": -94.6495187
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "5912",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2089257,
+    "lon": -94.6493929
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "5910",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2089117,
+    "lon": -94.6493189
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "5904",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2088514,
+    "lon": -94.6491402
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6127",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2092883,
+    "lon": -94.6517812
+  },
+  {
+    "street": "North Chatham Avenue",
+    "housenumber": "6320",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2099425,
+    "lon": -94.6450547
+  },
+  {
+    "street": "North Chatham Avenue",
+    "housenumber": "6322",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2099492,
+    "lon": -94.6451084
+  },
+  {
+    "street": "North Chatham Avenue",
+    "housenumber": "6324",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2099497,
+    "lon": -94.6451848
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8673",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2513593,
+    "lon": -94.6615991
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9040",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2577997,
+    "lon": -94.6552733
+  },
+  {
+    "street": "Northeast Barry Road",
+    "housenumber": "500",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2480577,
+    "lon": -94.5724519
+  },
+  {
+    "street": "North Madison Avenue",
+    "housenumber": "8420",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2491237,
+    "lon": -94.5954058
+  },
+  {
+    "street": "Northeast Parvin Road",
+    "housenumber": "5008",
+    "city": "Kansas City",
+    "postcode": "64117",
+    "lat": 39.1679614,
+    "lon": -94.5201552
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "403",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0915086,
+    "lon": -94.5787576
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9040",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2576766,
+    "lon": -94.6550586
+  },
+  {
+    "street": "Rainbow Boulevard",
+    "housenumber": "4301",
+    "city": "Kansas City",
+    "postcode": "66103",
+    "lat": 39.0500331,
+    "lon": -94.6115912
+  },
+  {
+    "street": "Rainbow Boulevard",
+    "housenumber": "4215",
+    "city": "Kansas City",
+    "postcode": "66103-3112",
+    "lat": 39.0505359,
+    "lon": -94.6115943
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "712",
+    "city": "Kansas City",
+    "lat": 39.1050029,
+    "lon": -94.5884979
+  },
+  {
+    "street": "Parallel Pwky",
+    "housenumber": "10902",
+    "city": "Kansas City",
+    "postcode": "66109",
+    "lat": 39.1292576,
+    "lon": -94.8341847
+  },
+  {
+    "street": "Northeast 92nd Street",
+    "housenumber": "1201",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.261126,
+    "lon": -94.5641413
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9018",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2585736,
+    "lon": -94.6534047
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9024",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2586265,
+    "lon": -94.6535455
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "11101",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2951305,
+    "lon": -94.574839
+  },
+  {
+    "street": "Northwest 112th Street",
+    "housenumber": "9205",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2952345,
+    "lon": -94.6878993
+  },
+  {
+    "street": "East 63rd Street",
+    "housenumber": "1414",
+    "city": "Kansas City",
+    "postcode": "64110",
+    "lat": 39.0135513,
+    "lon": -94.5690924
+  },
+  {
+    "street": "East 67th Street",
+    "housenumber": "7405",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.0032757,
+    "lon": -94.4991708
+  },
+  {
+    "street": "North Brighton Avenue",
+    "housenumber": "4836",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1822799,
+    "lon": -94.5219573
+  },
+  {
+    "street": "Benton Boulevard",
+    "housenumber": "4520",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0410985,
+    "lon": -94.5471497
+  },
+  {
+    "street": "East Red Bridge Road",
+    "housenumber": "6006",
+    "city": "Kansas City",
+    "postcode": "64134",
+    "lat": 38.9244979,
+    "lon": -94.5201758
+  },
+  {
+    "street": "East Blue Ridge Boulevard",
+    "housenumber": "524",
+    "city": "Kansas City",
+    "postcode": "64145",
+    "lat": 38.8901366,
+    "lon": -94.5885822
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "300",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1093943,
+    "lon": -94.5847337
+  },
+  {
+    "street": "East 39th Street South",
+    "housenumber": "9103",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.0515602,
+    "lon": -94.4715077
+  },
+  {
+    "street": "East 39th Street South",
+    "housenumber": "9103",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.0517141,
+    "lon": -94.4713474
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "221",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0886704,
+    "lon": -94.5872755
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "114",
+    "city": "Kansas City",
+    "lat": 39.1097362,
+    "lon": -94.5855564
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1103",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0846698,
+    "lon": -94.5812073
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "2345",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0846722,
+    "lon": -94.5812608
+  },
+  {
+    "street": "North Saint Clair Avenue",
+    "housenumber": "8301",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2454179,
+    "lon": -94.6461645
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1624",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0934894,
+    "lon": -94.5815152
+  },
+  {
+    "street": "Oak Street",
+    "housenumber": "1627",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0934557,
+    "lon": -94.5786732
+  },
+  {
+    "street": "North Ash Avenue",
+    "housenumber": "9754",
+    "city": "Kansas City",
+    "postcode": "641576326 NW Barry Rd, Kansas City, MO 641546326 NW Barry Rd, Kansas City, MO 64154",
+    "lat": 39.2689391,
+    "lon": -94.4518329
+  },
+  {
+    "street": "North Ash Avenue",
+    "housenumber": "9772",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2691224,
+    "lon": -94.4523106
+  },
+  {
+    "street": "North Ash Avenue",
+    "housenumber": "9774",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2691574,
+    "lon": -94.4524019
+  },
+  {
+    "street": "North Cedar Avenue",
+    "housenumber": "9771",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2693283,
+    "lon": -94.4528387
+  },
+  {
+    "street": "North Cedar Avenue",
+    "housenumber": "9763",
+    "city": "Kansas City",
+    "postcode": "64157",
+    "lat": 39.2694013,
+    "lon": -94.4530544
+  },
+  {
+    "street": "Mc Gee Street",
+    "housenumber": "1911",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0898941,
+    "lon": -94.5800519
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "929",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1024454,
+    "lon": -94.5817487
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "905",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1034996,
+    "lon": -94.5880765
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "105",
+    "city": "Kansas City",
+    "lat": 39.103505,
+    "lon": -94.5843995
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "1130",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.1000834,
+    "lon": -94.5823204
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "208",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.102467,
+    "lon": -94.5859248
+  },
+  {
+    "street": "Northwest 87th Terrace",
+    "housenumber": "7328",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.253463,
+    "lon": -94.6647018
+  },
+  {
+    "street": "North Stoddard Avenue",
+    "housenumber": "8721",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2523123,
+    "lon": -94.6647963
+  },
+  {
+    "street": "Northwest 86th Terrace",
+    "housenumber": "7250",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.250892,
+    "lon": -94.6640049
+  },
+  {
+    "street": "E 33rd St",
+    "housenumber": "413",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0661801,
+    "lon": -94.5795553
+  },
+  {
+    "street": "Westport Road",
+    "housenumber": "4",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0553772,
+    "lon": -94.5864396
+  },
+  {
+    "street": "Northeast 56th Street",
+    "housenumber": "3307",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1933257,
+    "lon": -94.5400285
+  },
+  {
+    "street": "North Boardwalk Avenue",
+    "housenumber": "8602",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2532099,
+    "lon": -94.6534472
+  },
+  {
+    "street": "Wornall Road",
+    "housenumber": "7142",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9980777,
+    "lon": -94.5942555
+  },
+  {
+    "street": "Wornall Road",
+    "housenumber": "7144",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9979819,
+    "lon": -94.5942593
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "1500",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0946951,
+    "lon": -94.5650276
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "2501",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0676498,
+    "lon": -94.5534879
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8930",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2575734,
+    "lon": -94.6514767
+  },
+  {
+    "street": "E 93rd Terrace",
+    "housenumber": "7906",
+    "city": "Kansas City",
+    "postcode": "64138",
+    "lat": 38.9545535,
+    "lon": -94.4968448
+  },
+  {
+    "street": "East 104th Street",
+    "housenumber": "903",
+    "city": "Kansas City",
+    "postcode": "64131",
+    "lat": 38.9393258,
+    "lon": -94.5786216
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3120",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0685379,
+    "lon": -94.5541414
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3116",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0686493,
+    "lon": -94.55414
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "3114",
+    "city": "Kansas City",
+    "postcode": "64128",
+    "lat": 39.0687295,
+    "lon": -94.5541615
+  },
+  {
+    "street": "Campbell Street",
+    "housenumber": "1708",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0927094,
+    "lon": -94.573181
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1813",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0912298,
+    "lon": -94.5811712
+  },
+  {
+    "street": "W 39th St",
+    "housenumber": "805",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0567965,
+    "lon": -94.5959926
+  },
+  {
+    "street": "West 41st Street",
+    "housenumber": "1225",
+    "city": "Kansas City",
+    "lat": 39.0540716,
+    "lon": -94.6017735
+  },
+  {
+    "street": "West 41st Street",
+    "housenumber": "1223",
+    "city": "Kansas City",
+    "lat": 39.0540679,
+    "lon": -94.6016863
+  },
+  {
+    "street": "North Brighton Avenue",
+    "housenumber": "8016",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.2394496,
+    "lon": -94.5215309
+  },
+  {
+    "street": "Minnesota Avenue",
+    "housenumber": "1710",
+    "city": "Kansas City",
+    "lat": 39.1157659,
+    "lon": -94.6484669
+  },
+  {
+    "street": "West 113th Street",
+    "housenumber": "105",
+    "city": "Kansas City",
+    "lat": 38.9220989,
+    "lon": -94.5952337
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "400",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0917491,
+    "lon": -94.5787868
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "406",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0917581,
+    "lon": -94.5786142
+  },
+  {
+    "street": "East 18th Street",
+    "housenumber": "409",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0915007,
+    "lon": -94.5785183
+  },
+  {
+    "street": "State Line Road",
+    "housenumber": "3625",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0613091,
+    "lon": -94.6068885
+  },
+  {
+    "street": "Brush Creek Boulevard",
+    "housenumber": "600",
+    "city": "Kansas City",
+    "postcode": "64110",
+    "lat": 39.0431123,
+    "lon": -94.5786659
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9411",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2657736,
+    "lon": -94.5740998
+  },
+  {
+    "street": "North 79th Street",
+    "housenumber": "2818",
+    "city": "Kansas City",
+    "postcode": "66109",
+    "lat": 39.1380254,
+    "lon": -94.7630628
+  },
+  {
+    "street": "West 47th Street",
+    "housenumber": "1209",
+    "city": "Kansas City",
+    "lat": 39.0424626,
+    "lon": -94.6012326
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9693156,
+    "lon": -94.6062852
+  },
+  {
+    "street": "East 51st Street",
+    "housenumber": "301",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.034463,
+    "lon": -94.5836061
+  },
+  {
+    "street": "Oak Street",
+    "housenumber": "5060",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.034911,
+    "lon": -94.5829576
+  },
+  {
+    "street": "West 47th Street",
+    "housenumber": "605",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0421237,
+    "lon": -94.594168
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6917",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2197422,
+    "lon": -94.6040962
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6917",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2196375,
+    "lon": -94.603703
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6919",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2196902,
+    "lon": -94.6036364
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6921",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2197648,
+    "lon": -94.6035845
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6923",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.219822,
+    "lon": -94.6035448
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6925",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2199955,
+    "lon": -94.6036167
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6927",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2200221,
+    "lon": -94.6036984
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6929",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2200574,
+    "lon": -94.6038066
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6931",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2200826,
+    "lon": -94.6038842
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6920",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.219819,
+    "lon": -94.6041529
+  },
+  {
+    "street": "North Bedford Avenue",
+    "housenumber": "6922",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2198722,
+    "lon": -94.6041921
+  },
+  {
+    "street": "Broadway Boulevard",
+    "housenumber": "3600",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0620885,
+    "lon": -94.5922963
+  },
+  {
+    "street": "North Chouteau Trafficway",
+    "housenumber": "4323",
+    "city": "Kansas City",
+    "postcode": "64117",
+    "lat": 39.1736386,
+    "lon": -94.5355433
+  },
+  {
+    "street": "Northeast Chouteau Trafficway",
+    "housenumber": "4315",
+    "city": "Kansas City",
+    "postcode": "64117",
+    "lat": 39.1740626,
+    "lon": -94.534935
+  },
+  {
+    "street": "Holmes Road",
+    "housenumber": "8131",
+    "city": "Kansas City",
+    "postcode": "64131",
+    "lat": 38.9801202,
+    "lon": -94.5818662
+  },
+  {
+    "street": "Northeast 46th Street",
+    "housenumber": "600",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1776659,
+    "lon": -94.5745931
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7809",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2358411,
+    "lon": -94.5752534
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7828",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2363481,
+    "lon": -94.5752876
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7827",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2363027,
+    "lon": -94.5752762
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8545",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2487398,
+    "lon": -94.5754294
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8557",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2490016,
+    "lon": -94.5754119
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8516",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2480123,
+    "lon": -94.5763823
+  },
+  {
+    "street": "Northeast 85th Terrace",
+    "housenumber": "201",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2481208,
+    "lon": -94.5775026
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9329",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2630164,
+    "lon": -94.5740651
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "9310",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2627006,
+    "lon": -94.576407
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "5373",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1929257,
+    "lon": -94.6150356
+  },
+  {
+    "street": "Northwest Roanridge Road",
+    "housenumber": "5415",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.194007,
+    "lon": -94.616678
+  },
+  {
+    "street": "Northwest Platte Purchase Drive",
+    "housenumber": "5611",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.196949,
+    "lon": -94.6157972
+  },
+  {
+    "street": "Northwest Platte Purchase Drive",
+    "housenumber": "5607",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.196594,
+    "lon": -94.6156817
+  },
+  {
+    "street": "North Mayview Avenue",
+    "housenumber": "5934",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2028519,
+    "lon": -94.6167366
+  },
+  {
+    "street": "North Colrain Avenue",
+    "housenumber": "5601",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1961967,
+    "lon": -94.6193653
+  },
+  {
+    "street": "North Lilac Court",
+    "housenumber": "5717",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1982316,
+    "lon": -94.6193821
+  },
+  {
+    "street": "North Belton Avenue",
+    "housenumber": "5929",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.203007,
+    "lon": -94.6197255
+  },
+  {
+    "street": "Northwest 81st Terrace",
+    "housenumber": "5621",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2419207,
+    "lon": -94.6458034
+  },
+  {
+    "street": "West 31st Street",
+    "housenumber": "1501",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0714511,
+    "lon": -94.6032191
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "5306",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.189155,
+    "lon": -94.5774866
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "4824",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1825189,
+    "lon": -94.5780433
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2392861,
+    "lon": -94.5768012
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2393259,
+    "lon": -94.5768025
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2393907,
+    "lon": -94.5768012
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2394959,
+    "lon": -94.5767987
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Gladstone",
+    "postcode": "64118",
+    "lat": 39.2396747,
+    "lon": -94.5767974
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8002",
+    "city": "Gladstone",
+    "postcode": "64118",
+    "lat": 39.2397238,
+    "lon": -94.5767962
+  },
+  {
+    "street": "Indiana Avenue",
+    "housenumber": "616",
+    "city": "Kansas City",
+    "postcode": "64124",
+    "lat": 39.105255,
+    "lon": -94.5420964
+  },
+  {
+    "street": "Benton Boulevard",
+    "housenumber": "635",
+    "city": "Kansas City",
+    "postcode": "64124",
+    "lat": 39.1046748,
+    "lon": -94.5439293
+  },
+  {
+    "street": "Benton Boulevard",
+    "housenumber": "639",
+    "city": "Kansas City",
+    "postcode": "64124",
+    "lat": 39.1045434,
+    "lon": -94.5439322
+  },
+  {
+    "street": "Northwest 43rd Terrace",
+    "housenumber": "1200",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1718566,
+    "lon": -94.5958083
+  },
+  {
+    "street": "North Holly Court",
+    "housenumber": "4303",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1708555,
+    "lon": -94.597015
+  },
+  {
+    "street": "North Hickory Lane",
+    "housenumber": "4200",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1705035,
+    "lon": -94.6011025
+  },
+  {
+    "street": "Northeast 100th Street",
+    "housenumber": "636",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2744787,
+    "lon": -94.5726389
+  },
+  {
+    "street": "Northeast 99th Street",
+    "housenumber": "720",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2734401,
+    "lon": -94.5713384
+  },
+  {
+    "street": "Troost Avenue",
+    "housenumber": "3339",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0651386,
+    "lon": -94.5713252
+  },
+  {
+    "street": "North Karen Road",
+    "housenumber": "6106",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2058918,
+    "lon": -94.6170565
+  },
+  {
+    "street": "21st",
+    "housenumber": "950",
+    "city": "Kansas City",
+    "lat": 39.087994,
+    "lon": -94.5720667
+  },
+  {
+    "street": "North McGee Street",
+    "housenumber": "9558",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2658592,
+    "lon": -94.5773824
+  },
+  {
+    "street": "Troost Avenue",
+    "housenumber": "8625",
+    "city": "Kansas City",
+    "lat": 38.9719359,
+    "lon": -94.5754429
+  },
+  {
+    "street": "Flora Avenue",
+    "housenumber": "8612",
+    "city": "Kansas City",
+    "lat": 38.9715296,
+    "lon": -94.5719873
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "8461",
+    "city": "Kansas City",
+    "lat": 38.9732965,
+    "lon": -94.5669964
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "8449",
+    "city": "Kansas City",
+    "lat": 38.9735263,
+    "lon": -94.5670682
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "8418",
+    "city": "Kansas City",
+    "lat": 38.9746023,
+    "lon": -94.5687243
+  },
+  {
+    "street": "Lydia Avenue",
+    "housenumber": "8333",
+    "city": "Kansas City",
+    "lat": 38.975982,
+    "lon": -94.5715079
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "8330",
+    "city": "Kansas City",
+    "lat": 38.9756933,
+    "lon": -94.5675437
+  },
+  {
+    "street": "Park Avenue",
+    "housenumber": "8313",
+    "city": "Kansas City",
+    "lat": 38.9760176,
+    "lon": -94.5611234
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8311",
+    "city": "Kansas City",
+    "lat": 38.9758613,
+    "lon": -94.5540072
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8305",
+    "city": "Kansas City",
+    "lat": 38.9759982,
+    "lon": -94.5544351
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8305",
+    "city": "Kansas City",
+    "lat": 38.9762747,
+    "lon": -94.5622523
+  },
+  {
+    "street": "Olive Street",
+    "housenumber": "8304",
+    "city": "Kansas City",
+    "lat": 38.9761358,
+    "lon": -94.5606334
+  },
+  {
+    "street": "Virginia Avenue",
+    "housenumber": "8231",
+    "city": "Kansas City",
+    "lat": 38.9771708,
+    "lon": -94.5729608
+  },
+  {
+    "street": "Tracy Avenue",
+    "housenumber": "8231",
+    "city": "Kansas City",
+    "lat": 38.9777778,
+    "lon": -94.5734171
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8223",
+    "city": "Kansas City",
+    "lat": 38.9769893,
+    "lon": -94.5622509
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8221",
+    "city": "Kansas City",
+    "lat": 38.9771251,
+    "lon": -94.5622442
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8219",
+    "city": "Kansas City",
+    "lat": 38.9772619,
+    "lon": -94.5622375
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8217",
+    "city": "Kansas City",
+    "lat": 38.9773988,
+    "lon": -94.5622307
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8215",
+    "city": "Kansas City",
+    "lat": 38.9770428,
+    "lon": -94.5547393
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "7906",
+    "city": "Kansas City",
+    "lat": 38.9830995,
+    "lon": -94.5555957
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "7847",
+    "city": "Kansas City",
+    "lat": 38.9837234,
+    "lon": -94.5523839
+  },
+  {
+    "street": "East 79th Street",
+    "housenumber": "3024",
+    "city": "Kansas City",
+    "lat": 38.9836728,
+    "lon": -94.5512455
+  },
+  {
+    "street": "East 83rd Street",
+    "housenumber": "3001",
+    "city": "Kansas City",
+    "lat": 38.9758715,
+    "lon": -94.5531632
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "2800",
+    "city": "Kansas City",
+    "lat": 38.973204,
+    "lon": -94.5548988
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "2740",
+    "city": "Kansas City",
+    "lat": 38.9729925,
+    "lon": -94.5557757
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8211",
+    "city": "Kansas City",
+    "lat": 38.9776722,
+    "lon": -94.5622172
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8207",
+    "city": "Kansas City",
+    "lat": 38.9779457,
+    "lon": -94.5622036
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8205",
+    "city": "Kansas City",
+    "lat": 38.9775481,
+    "lon": -94.5555507
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8201",
+    "city": "Kansas City",
+    "lat": 38.9779025,
+    "lon": -94.5565832
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8149",
+    "city": "Kansas City",
+    "lat": 38.9784921,
+    "lon": -94.5621766
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "8147",
+    "city": "Kansas City",
+    "lat": 38.9785479,
+    "lon": -94.5546649
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "8143",
+    "city": "Kansas City",
+    "lat": 38.9793222,
+    "lon": -94.5550163
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8143",
+    "city": "Kansas City",
+    "lat": 38.9789004,
+    "lon": -94.5621565
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "8132",
+    "city": "Kansas City",
+    "lat": 38.9791408,
+    "lon": -94.5558683
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8130",
+    "city": "Kansas City",
+    "lat": 38.9784555,
+    "lon": -94.5535598
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8129",
+    "city": "Kansas City",
+    "lat": 38.9782633,
+    "lon": -94.5569647
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8126",
+    "city": "Kansas City",
+    "lat": 38.9786754,
+    "lon": -94.5535486
+  },
+  {
+    "street": "Olive Street",
+    "housenumber": "8122",
+    "city": "Kansas City",
+    "lat": 38.9784657,
+    "lon": -94.5605515
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8122",
+    "city": "Kansas City",
+    "lat": 38.9789371,
+    "lon": -94.5535352
+  },
+  {
+    "street": "Park Avenue",
+    "housenumber": "8117",
+    "city": "Kansas City",
+    "lat": 38.979038,
+    "lon": -94.5610507
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8116",
+    "city": "Kansas City",
+    "lat": 38.9786931,
+    "lon": -94.5576373
+  },
+  {
+    "street": "Park Avenue",
+    "housenumber": "8114",
+    "city": "Kansas City",
+    "lat": 38.9791244,
+    "lon": -94.5617038
+  },
+  {
+    "street": "Park Avenue",
+    "housenumber": "8113",
+    "city": "Kansas City",
+    "lat": 38.9793139,
+    "lon": -94.5610373
+  },
+  {
+    "street": "Montgall Avenue",
+    "housenumber": "8112",
+    "city": "Kansas City",
+    "lat": 38.9791336,
+    "lon": -94.5569224
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8108",
+    "city": "Kansas City",
+    "lat": 38.979348,
+    "lon": -94.553534
+  },
+  {
+    "street": "Campbell Street",
+    "housenumber": "8101",
+    "city": "Kansas City",
+    "lat": 38.9809987,
+    "lon": -94.5773769
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "8100",
+    "city": "Kansas City",
+    "lat": 38.9796671,
+    "lon": -94.5558413
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "8041",
+    "city": "Kansas City",
+    "lat": 38.9804149,
+    "lon": -94.5620779
+  },
+  {
+    "street": "South Benton Avenue",
+    "housenumber": "8036",
+    "city": "Kansas City",
+    "lat": 38.980012,
+    "lon": -94.5546509
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8036",
+    "city": "Kansas City",
+    "lat": 38.9802336,
+    "lon": -94.5534711
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8035",
+    "city": "Kansas City",
+    "lat": 38.9802226,
+    "lon": -94.5528125
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "8034",
+    "city": "Kansas City",
+    "lat": 38.9806415,
+    "lon": -94.5638934
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "8033",
+    "city": "Kansas City",
+    "lat": 38.9807344,
+    "lon": -94.5632029
+  },
+  {
+    "street": "Chestnut Avenue",
+    "housenumber": "8031",
+    "city": "Kansas City",
+    "lat": 38.9799926,
+    "lon": -94.5551659
+  },
+  {
+    "street": "Bellefontaine Avenue",
+    "housenumber": "8026",
+    "city": "Kansas City",
+    "lat": 38.9804703,
+    "lon": -94.5522852
+  },
+  {
+    "street": "South Benton Avenue",
+    "housenumber": "8021",
+    "city": "Kansas City",
+    "lat": 38.9805997,
+    "lon": -94.5539655
+  },
+  {
+    "street": "South Benton Avenue",
+    "housenumber": "8020",
+    "city": "Kansas City",
+    "lat": 38.9810473,
+    "lon": -94.5545102
+  },
+  {
+    "street": "South Benton Avenue",
+    "housenumber": "8017",
+    "city": "Kansas City",
+    "lat": 38.9808061,
+    "lon": -94.5539551
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "8014",
+    "city": "Kansas City",
+    "lat": 38.9808995,
+    "lon": -94.5585967
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "8006",
+    "city": "Kansas City",
+    "lat": 38.9810568,
+    "lon": -94.5534302
+  },
+  {
+    "street": "Park Avenue",
+    "housenumber": "7940",
+    "city": "Kansas City",
+    "lat": 38.9820688,
+    "lon": -94.5615786
+  },
+  {
+    "street": "East 80th Street",
+    "housenumber": "2810",
+    "city": "Kansas City",
+    "lat": 38.9820742,
+    "lon": -94.5551351
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "7937",
+    "city": "Kansas City",
+    "lat": 38.9827551,
+    "lon": -94.5631011
+  },
+  {
+    "street": "East 82nd Street",
+    "housenumber": "2132",
+    "city": "Kansas City",
+    "lat": 38.9785495,
+    "lon": -94.5626864
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "2130",
+    "city": "Kansas City",
+    "lat": 38.9792648,
+    "lon": -94.5628474
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "2122",
+    "city": "Kansas City",
+    "lat": 38.9792834,
+    "lon": -94.5630728
+  },
+  {
+    "street": "East 82nd Street",
+    "housenumber": "2120",
+    "city": "Kansas City",
+    "lat": 38.9785785,
+    "lon": -94.5633537
+  },
+  {
+    "street": "East 83rd Street",
+    "housenumber": "2119",
+    "city": "Kansas City",
+    "lat": 38.9767201,
+    "lon": -94.5637264
+  },
+  {
+    "street": "East 81st Street",
+    "housenumber": "2100",
+    "city": "Kansas City",
+    "lat": 38.9800323,
+    "lon": -94.5633826
+  },
+  {
+    "street": "East 83rd Street",
+    "housenumber": "2017",
+    "city": "Kansas City",
+    "lat": 38.9767263,
+    "lon": -94.5638662
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "2010",
+    "city": "Kansas City",
+    "lat": 38.9793251,
+    "lon": -94.5640184
+  },
+  {
+    "street": "East 82nd Street",
+    "housenumber": "2006",
+    "city": "Kansas City",
+    "lat": 38.9786176,
+    "lon": -94.5642543
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "2000",
+    "city": "Kansas City",
+    "lat": 38.9793493,
+    "lon": -94.5645691
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "1823",
+    "city": "Kansas City",
+    "lat": 38.9789807,
+    "lon": -94.5656213
+  },
+  {
+    "street": "East 81st Terrace",
+    "housenumber": "1812",
+    "city": "Kansas City",
+    "lat": 38.9794183,
+    "lon": -94.5661299
+  },
+  {
+    "street": "East 81st Street",
+    "housenumber": "1811",
+    "city": "Kansas City",
+    "lat": 38.9797238,
+    "lon": -94.5662215
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "1775",
+    "city": "Kansas City",
+    "lat": 38.9728708,
+    "lon": -94.5677285
+  },
+  {
+    "street": "East 84th Street",
+    "housenumber": "1314",
+    "city": "Kansas City",
+    "lat": 38.9751323,
+    "lon": -94.5734424
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "1205",
+    "city": "Kansas City",
+    "lat": 38.9728872,
+    "lon": -94.5749291
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "1111",
+    "city": "Kansas City",
+    "lat": 38.9731326,
+    "lon": -94.5757701
+  },
+  {
+    "street": "East 85th Street",
+    "housenumber": "1101",
+    "city": "Kansas City",
+    "lat": 38.9732375,
+    "lon": -94.5762095
+  },
+  {
+    "street": "Northwest 62nd Terrace",
+    "housenumber": "3417",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2078984,
+    "lon": -94.6193196
+  },
+  {
+    "street": "North Robinhood Lane",
+    "housenumber": "6307",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.208982,
+    "lon": -94.6213718
+  },
+  {
+    "street": "North Robinhood Lane",
+    "housenumber": "6308",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2091227,
+    "lon": -94.6218535
+  },
+  {
+    "street": "Troost Avenue",
+    "housenumber": "7940",
+    "city": "Kansas City",
+    "postcode": "64131",
+    "lat": 38.9826655,
+    "lon": -94.5766206
+  },
+  {
+    "street": "Ward Parkway",
+    "housenumber": "8600",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9704549,
+    "lon": -94.6061161
+  },
+  {
+    "street": "Oak Street",
+    "housenumber": "1301",
+    "city": "Kansas City",
+    "postcode": "64106",
+    "lat": 39.0983592,
+    "lon": -94.5783485
+  },
+  {
+    "street": "E 77TH ST ROW-STR-PW",
+    "housenumber": "2200",
+    "city": "Kansas City",
+    "lat": 38.9865218,
+    "lon": -94.5595147
+  },
+  {
+    "street": "The Paseo",
+    "housenumber": "7933",
+    "city": "Kansas City",
+    "lat": 38.9825165,
+    "lon": -94.5665432
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "7501",
+    "city": "Kansas City",
+    "lat": 38.98888,
+    "lon": -94.5550014
+  },
+  {
+    "street": "Holmes Road",
+    "housenumber": "7777",
+    "city": "Kansas City",
+    "lat": 38.9868942,
+    "lon": -94.5793381
+  },
+  {
+    "street": "East 76th Terrace",
+    "housenumber": "2201",
+    "city": "Kansas City",
+    "lat": 38.9872283,
+    "lon": -94.5598634
+  },
+  {
+    "street": "North 74th Drive",
+    "housenumber": "941",
+    "city": "Kansas City",
+    "lat": 39.1153928,
+    "lon": -94.750265
+  },
+  {
+    "street": "North Green Hills Lane",
+    "housenumber": "6132",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2063375,
+    "lon": -94.6311271
+  },
+  {
+    "street": "West 8th Street",
+    "housenumber": "312",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1048029,
+    "lon": -94.5870977
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "308",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.109248,
+    "lon": -94.5846817
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "316",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1090909,
+    "lon": -94.5846321
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "509",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1078275,
+    "lon": -94.5838543
+  },
+  {
+    "street": "East Blue Parkway",
+    "housenumber": "4201",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0343106,
+    "lon": -94.5357194
+  },
+  {
+    "street": "East Blue Parkway",
+    "housenumber": "4203",
+    "city": "Kansas City",
+    "postcode": "64130",
+    "lat": 39.0342533,
+    "lon": -94.5357181
+  },
+  {
+    "street": "East 31st Street",
+    "housenumber": "2202",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0703087,
+    "lon": -94.556819
+  },
+  {
+    "street": "East 31st Street",
+    "housenumber": "2202",
+    "city": "Kansas City",
+    "postcode": "64109",
+    "lat": 39.0702184,
+    "lon": -94.5570392
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7915",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2383843,
+    "lon": -94.5752963
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "5720",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1981724,
+    "lon": -94.6007866
+  },
+  {
+    "street": "North Wyoming Avenue",
+    "housenumber": "5724",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1982715,
+    "lon": -94.6006787
+  },
+  {
+    "street": "Northwest 63rd Terrace",
+    "housenumber": "6100",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2094941,
+    "lon": -94.6511568
+  },
+  {
+    "street": "North Chatham Avenue",
+    "housenumber": "6314",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2094614,
+    "lon": -94.6458235
+  },
+  {
+    "street": "Wornall Rd",
+    "housenumber": "7964",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9821265,
+    "lon": -94.5950809
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8952",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2577233,
+    "lon": -94.6521452
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8944",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2577469,
+    "lon": -94.6517916
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8936",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2576689,
+    "lon": -94.6516743
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "8934",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.25764,
+    "lon": -94.6516005
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9026",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2588158,
+    "lon": -94.6538836
+  },
+  {
+    "street": "Northwest Skyview Avenue",
+    "housenumber": "9028",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2586621,
+    "lon": -94.6540043
+  },
+  {
+    "street": "Northwest Skyview Ave",
+    "housenumber": "8820",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2557805,
+    "lon": -94.6504286
+  },
+  {
+    "street": "North Ames Avenue",
+    "housenumber": "5731",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1989318,
+    "lon": -94.601343
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1416",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013211,
+    "lon": -94.5985428
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1500",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2012962,
+    "lon": -94.5988566
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1504",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013107,
+    "lon": -94.5991811
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1804",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013731,
+    "lon": -94.600997
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1800",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013585,
+    "lon": -94.6006751
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1704",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013378,
+    "lon": -94.6004042
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1700",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013253,
+    "lon": -94.6000743
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1604",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2013253,
+    "lon": -94.5997819
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1601",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2009511,
+    "lon": -94.5995647
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1605",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2009387,
+    "lon": -94.599916
+  },
+  {
+    "street": "Northwest 59th Street",
+    "housenumber": "1701",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2009283,
+    "lon": -94.6002808
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5811",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2004502,
+    "lon": -94.6001869
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5807",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2002361,
+    "lon": -94.6002111
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5801",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2001156,
+    "lon": -94.6003747
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5800",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2001093,
+    "lon": -94.6006456
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5806",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2002507,
+    "lon": -94.6008146
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5814",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2007994,
+    "lon": -94.6008253
+  },
+  {
+    "street": "North Bell Court",
+    "housenumber": "5818",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2010166,
+    "lon": -94.6008521
+  },
+  {
+    "street": "North Liberty Avenue",
+    "housenumber": "5705",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1990306,
+    "lon": -94.6003827
+  },
+  {
+    "street": "North Liberty Avenue",
+    "housenumber": "5700",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1993569,
+    "lon": -94.6006349
+  },
+  {
+    "street": "North Liberty Avenue",
+    "housenumber": "5704",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1995107,
+    "lon": -94.6004471
+  },
+  {
+    "street": "North Liberty Avenue",
+    "housenumber": "5710",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1995481,
+    "lon": -94.6002567
+  },
+  {
+    "street": "North Liberty Avenue",
+    "housenumber": "5816",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2009179,
+    "lon": -94.5991516
+  },
+  {
+    "street": "Northwest 60th Court",
+    "housenumber": "1834",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2026108,
+    "lon": -94.6018781
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "7759",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.236068,
+    "lon": -94.658359
+  },
+  {
+    "street": "Northwest 59th Court",
+    "housenumber": "2000",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2012505,
+    "lon": -94.603816
+  },
+  {
+    "street": "Northwest 58th Street",
+    "housenumber": "2100",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.1997044,
+    "lon": -94.6063462
+  },
+  {
+    "street": "North Mulberry Drive",
+    "housenumber": "4151",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1700292,
+    "lon": -94.5970676
+  },
+  {
+    "street": "Hickman Mills Drive",
+    "housenumber": "10245",
+    "city": "Kansas City",
+    "postcode": "64137",
+    "lat": 38.9410623,
+    "lon": -94.5306977
+  },
+  {
+    "street": "Northeast 50th Terrace",
+    "housenumber": "1523",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1852793,
+    "lon": -94.5593557
+  },
+  {
+    "street": "North Walnut Street",
+    "housenumber": "5409",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1929421,
+    "lon": -94.5796707
+  },
+  {
+    "street": "Northeast 53rd Terrace",
+    "housenumber": "2",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1918071,
+    "lon": -94.5806256
+  },
+  {
+    "street": "North Walnut Street",
+    "housenumber": "5402",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.192412,
+    "lon": -94.579888
+  },
+  {
+    "street": "North Walnut Street",
+    "housenumber": "5400",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1921833,
+    "lon": -94.5799041
+  },
+  {
+    "street": "North Walnut Street",
+    "housenumber": "5329",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.1921761,
+    "lon": -94.579436
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "2475",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0821582,
+    "lon": -94.5815999
+  },
+  {
+    "street": "North Oregon Avenue",
+    "housenumber": "8666",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2522037,
+    "lon": -94.6349725
+  },
+  {
+    "street": "Northwest 87th Street",
+    "housenumber": "5100",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.2536518,
+    "lon": -94.63879
+  },
+  {
+    "street": "Nichols Road",
+    "housenumber": "517",
+    "city": "Kansas City",
+    "postcode": "64112",
+    "lat": 39.0411246,
+    "lon": -94.5943235
+  },
+  {
+    "street": "Willow Avenue",
+    "housenumber": "3927",
+    "city": "Kansas City",
+    "postcode": "64133",
+    "lat": 39.0499194,
+    "lon": -94.4535754
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1834",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0905064,
+    "lon": -94.5816454
+  },
+  {
+    "street": "Grand Boulevard",
+    "housenumber": "1837",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0905067,
+    "lon": -94.5811508
+  },
+  {
+    "street": "Genessee Street",
+    "housenumber": "1600",
+    "city": "Kansas City",
+    "postcode": "64102",
+    "lat": 39.0943547,
+    "lon": -94.6051081
+  },
+  {
+    "street": "McGee Street",
+    "housenumber": "1725",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0924688,
+    "lon": -94.5799299
+  },
+  {
+    "street": "Wyandotte Street",
+    "housenumber": "1901",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0908158,
+    "lon": -94.5858475
+  },
+  {
+    "street": "Madison Avenue",
+    "housenumber": "2534",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0813157,
+    "lon": -94.5954084
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "20",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1085989,
+    "lon": -94.5824106
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "8612",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2503021,
+    "lon": -94.5762176
+  },
+  {
+    "street": "Atlantic Ave",
+    "housenumber": "500",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1216013,
+    "lon": -94.5829158
+  },
+  {
+    "street": "North Oak Trafficway",
+    "housenumber": "7711",
+    "city": "Kansas City",
+    "postcode": "64118",
+    "lat": 39.2343497,
+    "lon": -94.5756546
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "10619",
+    "city": "Kansas City",
+    "postcode": "64155",
+    "lat": 39.2862855,
+    "lon": -94.580183
+  },
+  {
+    "street": "West 11th Street",
+    "housenumber": "101",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1007411,
+    "lon": -94.5846519
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "5575",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.246259,
+    "lon": -94.6445315
+  },
+  {
+    "street": "West 34th Street",
+    "housenumber": "406",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.0667892,
+    "lon": -94.5906621
+  },
+  {
+    "street": "Parallel Parkway",
+    "housenumber": "10950",
+    "city": "Kansas City",
+    "lat": 39.1292559,
+    "lon": -94.8343438
+  },
+  {
+    "street": "Northeast Vivion Road",
+    "housenumber": "3522",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1885635,
+    "lon": -94.5376501
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8132",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.241841,
+    "lon": -94.6600927
+  },
+  {
+    "street": "Northwest Prairie View Road",
+    "housenumber": "8140",
+    "city": "Kansas City",
+    "postcode": "64151",
+    "lat": 39.2421713,
+    "lon": -94.6601034
+  },
+  {
+    "street": "Delaware Street",
+    "housenumber": "512",
+    "city": "Kansas City",
+    "postcode": "64105",
+    "lat": 39.1075547,
+    "lon": -94.5841016
+  },
+  {
+    "street": "Eastwood Trafficway",
+    "housenumber": "7200",
+    "city": "Kansas City",
+    "lat": 39.0315782,
+    "lon": -94.5019205
+  },
+  {
+    "street": "East 45th Street",
+    "housenumber": "5200",
+    "city": "Kansas City",
+    "lat": 39.0439963,
+    "lon": -94.5245575
+  },
+  {
+    "street": "East 17th Terrace",
+    "housenumber": "1622",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0938718,
+    "lon": -94.5625324
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "405",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0871919,
+    "lon": -94.5895709
+  },
+  {
+    "street": "State Avenue",
+    "housenumber": "8039",
+    "city": "Kansas City",
+    "postcode": "66112",
+    "lat": 39.1154218,
+    "lon": -94.7666669
+  },
+  {
+    "street": "SW Peterson Road",
+    "housenumber": "14651",
+    "city": "Kansas City",
+    "postcode": "64149",
+    "lat": 38.8561214,
+    "lon": -94.4627436
+  },
+  {
+    "street": "Southwest Boulevard",
+    "housenumber": "703",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0751703,
+    "lon": -94.6031658
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "1713",
+    "city": "Kansas City",
+    "postcode": "64111",
+    "lat": 39.057085,
+    "lon": -94.6055964
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "7033",
+    "city": "Kansas City",
+    "lat": 38.9986888,
+    "lon": -94.5566866
+  },
+  {
+    "street": "North Hardesty Avenue",
+    "housenumber": "5204",
+    "city": "Kansas City",
+    "postcode": "64119",
+    "lat": 39.1887663,
+    "lon": -94.5169043
+  },
+  {
+    "street": "Blue Ridge Boulevard",
+    "housenumber": "2701",
+    "city": "Independence",
+    "postcode": "64052",
+    "lat": 39.0740722,
+    "lon": -94.4705131
+  },
+  {
+    "street": "McGee Street",
+    "housenumber": "1860",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0904582,
+    "lon": -94.5803976
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "7440",
+    "city": "Kansas City",
+    "postcode": "64114",
+    "lat": 38.9927801,
+    "lon": -94.5954886
+  },
+  {
+    "street": "West 19th Terrace",
+    "housenumber": "210",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0905227,
+    "lon": -94.5868784
+  },
+  {
+    "street": "West Pershing Road",
+    "housenumber": "30",
+    "city": "Kansas City",
+    "postcode": "64108",
+    "lat": 39.0847488,
+    "lon": -94.5857665
+  },
+  {
+    "street": "Northwest 85th Terrace",
+    "housenumber": "8625",
+    "city": "Kansas City",
+    "postcode": "64153",
+    "lat": 39.2473204,
+    "lon": -94.6801838
+  },
+  {
+    "street": "North Bellaire",
+    "housenumber": "5125",
+    "city": "Kansas City",
+    "postcode": "64116",
+    "lat": 39.1869408,
+    "lon": -94.5093764
+  },
+  {
+    "street": "Northwest Barry Road",
+    "housenumber": "2820",
+    "city": "Kansas City",
+    "postcode": "64154",
+    "lat": 39.247825,
+    "lon": -94.6143586
+  }
+]

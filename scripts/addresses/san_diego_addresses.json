@@ -1,0 +1,7964 @@
+[
+  {
+    "street": "Villa La Jolla Drive",
+    "housenumber": "8657",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8664098,
+    "lon": -117.2320867
+  },
+  {
+    "street": "Villa La Jolla Drive",
+    "housenumber": "8657",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.865636,
+    "lon": -117.232406
+  },
+  {
+    "street": "Villa La Jolla Drive",
+    "housenumber": "8657",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8657668,
+    "lon": -117.2321777
+  },
+  {
+    "street": "Villa La Jolla Drive",
+    "housenumber": "8657",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8646869,
+    "lon": -117.2318922
+  },
+  {
+    "street": "Villa la Jolla Drive",
+    "housenumber": "8657",
+    "city": "San Diego",
+    "lat": 32.8646443,
+    "lon": -117.2312656
+  },
+  {
+    "street": "Governor Drive",
+    "housenumber": "3358",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.8516297,
+    "lon": -117.2144772
+  },
+  {
+    "street": "Genesee Avenue",
+    "housenumber": "4439",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8242878,
+    "lon": -117.1837196
+  },
+  {
+    "street": "Governor Drive",
+    "housenumber": "4199",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.8538449,
+    "lon": -117.2004664
+  },
+  {
+    "street": "Regents Road",
+    "housenumber": "7770",
+    "city": "San Diego",
+    "lat": 32.8626604,
+    "lon": -117.2243029
+  },
+  {
+    "street": "9th Avenue",
+    "housenumber": "721",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7127302,
+    "lon": -117.1563121
+  },
+  {
+    "street": "Island Avenue",
+    "housenumber": "222",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7105552,
+    "lon": -117.1626707
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1020",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.749375,
+    "lon": -117.1546337
+  },
+  {
+    "street": "Kettner Boulevard",
+    "housenumber": "1670",
+    "city": "San Diego",
+    "postcode": "92101-2522",
+    "lat": 32.7221378,
+    "lon": -117.169481
+  },
+  {
+    "street": "Kettner Boulevard",
+    "housenumber": "1670",
+    "city": "San Diego",
+    "lat": 32.7224939,
+    "lon": -117.1692535
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "501",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7155659,
+    "lon": -117.1678716
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "330",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7158398,
+    "lon": -117.1660547
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "400",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7158355,
+    "lon": -117.1669465
+  },
+  {
+    "street": "America Plz",
+    "housenumber": "1",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.715847,
+    "lon": -117.168603
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "475",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7155781,
+    "lon": -117.1669495
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "401",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7481272,
+    "lon": -117.161435
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "3864",
+    "city": "San Diego",
+    "lat": 32.747803,
+    "lon": -117.1609665
+  },
+  {
+    "street": "Robinson Avenue",
+    "housenumber": "420",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7472,
+    "lon": -117.1612824
+  },
+  {
+    "street": "Robinson Avenue",
+    "housenumber": "420",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7472,
+    "lon": -117.1612285
+  },
+  {
+    "street": "Robinson Avenue",
+    "housenumber": "420",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7472008,
+    "lon": -117.1611159
+  },
+  {
+    "street": "Cantina Way",
+    "housenumber": "5120",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.77121,
+    "lon": -117.069448
+  },
+  {
+    "street": "Cantina Way",
+    "housenumber": "5110",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7708647,
+    "lon": -117.0694905
+  },
+  {
+    "street": "Rosecrans Street",
+    "housenumber": "1224",
+    "city": "San Diego",
+    "lat": 32.7230999,
+    "lon": -117.2307176
+  },
+  {
+    "street": "30th Street",
+    "housenumber": "3918",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7488752,
+    "lon": -117.1305692
+  },
+  {
+    "street": "Home Avenue",
+    "housenumber": "4110",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7237331,
+    "lon": -117.107177
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1017",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7482502,
+    "lon": -117.15478
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "2121",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7273142,
+    "lon": -117.160118
+  },
+  {
+    "street": "Midway Drive",
+    "housenumber": "2363",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.745288,
+    "lon": -117.199807
+  },
+  {
+    "street": "Midway Drive",
+    "housenumber": "2353",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7453809,
+    "lon": -117.1997263
+  },
+  {
+    "street": "E Street",
+    "housenumber": "947",
+    "city": "San Diego",
+    "lat": 32.7145812,
+    "lon": -117.1557561
+  },
+  {
+    "street": "34th Street",
+    "housenumber": "4630",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.7616154,
+    "lon": -117.1209583
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "5550",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7493389,
+    "lon": -117.0766646
+  },
+  {
+    "street": "West Bernardo Drive",
+    "housenumber": "17645",
+    "city": "San Diego",
+    "postcode": "92127",
+    "lat": 33.0335914,
+    "lon": -117.0800597
+  },
+  {
+    "street": "Santa Clara Place",
+    "housenumber": "1008",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7835507,
+    "lon": -117.2491395
+  },
+  {
+    "street": "Wall Street",
+    "housenumber": "1140",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8473808,
+    "lon": -117.272453
+  },
+  {
+    "street": "Prospect Street",
+    "housenumber": "743",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8446471,
+    "lon": -117.276915
+  },
+  {
+    "street": "Prospect Street",
+    "housenumber": "464",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8425856,
+    "lon": -117.2790674
+  },
+  {
+    "street": "Cave Street",
+    "housenumber": "1216",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8479505,
+    "lon": -117.272127
+  },
+  {
+    "street": "Alcala Knolls Drive",
+    "housenumber": "6545",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.7732337,
+    "lon": -117.1767667
+  },
+  {
+    "street": "Balboa Ave",
+    "housenumber": "6555",
+    "city": "San Diego",
+    "lat": 32.8200334,
+    "lon": -117.1720206
+  },
+  {
+    "street": "Osler Street",
+    "housenumber": "6840",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.7931181,
+    "lon": -117.1724026
+  },
+  {
+    "street": "Linda Vista Road",
+    "housenumber": "6736",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.7758271,
+    "lon": -117.1736496
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "3325",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8291391,
+    "lon": -117.2143808
+  },
+  {
+    "street": "Jackdaw Street",
+    "housenumber": "4070",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7511614,
+    "lon": -117.1744784
+  },
+  {
+    "street": "Success Avenue",
+    "housenumber": "9320",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.8060829,
+    "lon": -117.1282876
+  },
+  {
+    "street": "Mount Herbert Avenue",
+    "housenumber": "4570",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8264471,
+    "lon": -117.1916842
+  },
+  {
+    "street": "Milton Street",
+    "housenumber": "5050",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7831929,
+    "lon": -117.1898335
+  },
+  {
+    "street": "Merton Avenue",
+    "housenumber": "2825",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.7960138,
+    "lon": -117.164752
+  },
+  {
+    "street": "Governor Drive",
+    "housenumber": "2880",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.8502254,
+    "lon": -117.2233984
+  },
+  {
+    "street": "51st Street",
+    "housenumber": "6767",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7950005,
+    "lon": -117.0827772
+  },
+  {
+    "street": "Kensington Drive",
+    "housenumber": "4720",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.76385,
+    "lon": -117.10762
+  },
+  {
+    "street": "Montezuma Plaza",
+    "housenumber": "5130",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7714234,
+    "lon": -117.0707388
+  },
+  {
+    "street": "Elm Street",
+    "housenumber": "120",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7246672,
+    "lon": -117.1634605
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "2017",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7265586,
+    "lon": -117.163667
+  },
+  {
+    "street": "Upas Street",
+    "housenumber": "1440",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7414396,
+    "lon": -117.150866
+  },
+  {
+    "street": "Cape May Avenue",
+    "housenumber": "4694",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7462382,
+    "lon": -117.2433418
+  },
+  {
+    "street": "Maple Street",
+    "housenumber": "328",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7327317,
+    "lon": -117.161598
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "2825",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.734773,
+    "lon": -117.1600333
+  },
+  {
+    "street": "54th Street",
+    "housenumber": "3060",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7370712,
+    "lon": -117.0801345
+  },
+  {
+    "street": "Alaquinas Drive",
+    "housenumber": "2020",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.5601139,
+    "lon": -117.0445511
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "3219",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8310437,
+    "lon": -117.2160946
+  },
+  {
+    "street": "Fir Street",
+    "housenumber": "201",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7249023,
+    "lon": -117.1626556
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "3441",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8279049,
+    "lon": -117.2122419
+  },
+  {
+    "street": "La Jolla Shores Drive",
+    "housenumber": "9595",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.874464,
+    "lon": -117.244313
+  },
+  {
+    "street": "6th Avenue",
+    "housenumber": "2728",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.733827,
+    "lon": -117.1599073
+  },
+  {
+    "street": "Front Street",
+    "housenumber": "3858",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7479331,
+    "lon": -117.165372
+  },
+  {
+    "street": "Lark Street",
+    "housenumber": "4044",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7506862,
+    "lon": -117.1761119
+  },
+  {
+    "street": "Genetic Center Drive",
+    "housenumber": "10210",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.905439,
+    "lon": -117.183124
+  },
+  {
+    "street": "Udall Street",
+    "housenumber": "3707",
+    "city": "San Diego",
+    "lat": 32.7389509,
+    "lon": -117.2297444
+  },
+  {
+    "street": "Kansas Street",
+    "housenumber": "3911",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7486892,
+    "lon": -117.1311294
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "5509",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.758176,
+    "lon": -117.0760831
+  },
+  {
+    "street": "Juan Street",
+    "housenumber": "2510",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7542041,
+    "lon": -117.1940918
+  },
+  {
+    "street": "Valley Centre Drive",
+    "housenumber": "3880",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.938362,
+    "lon": -117.2326962
+  },
+  {
+    "street": "Bisby Lake Avenue",
+    "housenumber": "6519",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.8006398,
+    "lon": -117.013555
+  },
+  {
+    "street": "Willow Creek Road",
+    "housenumber": "10060",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.9022035,
+    "lon": -117.1100586
+  },
+  {
+    "street": "Fir Street",
+    "housenumber": "590",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7253636,
+    "lon": -117.1597004
+  },
+  {
+    "street": "4th Avenue",
+    "housenumber": "3804",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7470585,
+    "lon": -117.16179
+  },
+  {
+    "street": "Mendocino Boulevard",
+    "housenumber": "2205",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7451623,
+    "lon": -117.2355344
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "5821",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7811788,
+    "lon": -117.1009461
+  },
+  {
+    "street": "La Jolla Boulevard",
+    "housenumber": "5157",
+    "city": "San Diego",
+    "lat": 32.807978,
+    "lon": -117.261309
+  },
+  {
+    "street": "Bacon Street",
+    "housenumber": "2228",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7526157,
+    "lon": -117.2463784
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "3523",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7550162,
+    "lon": -117.117481
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "1807",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.724296,
+    "lon": -117.1600744
+  },
+  {
+    "street": "Waring Road",
+    "housenumber": "5147",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7909861,
+    "lon": -117.0810806
+  },
+  {
+    "street": "Ventura Place",
+    "housenumber": "744",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7721941,
+    "lon": -117.2517631
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "2046",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7486179,
+    "lon": -117.1428157
+  },
+  {
+    "street": "El Cajon Boulvard East",
+    "housenumber": "7059",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.768416,
+    "lon": -117.04571
+  },
+  {
+    "street": "30th Street",
+    "housenumber": "3829",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.747951,
+    "lon": -117.129772
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "3750",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7499202,
+    "lon": -117.1121539
+  },
+  {
+    "street": "Park Boulevard",
+    "housenumber": "3811",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.747724,
+    "lon": -117.146013
+  },
+  {
+    "street": "Ivy Lane",
+    "housenumber": "506",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.742256,
+    "lon": -117.160131
+  },
+  {
+    "street": "10th Avenue",
+    "housenumber": "1023",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.715984,
+    "lon": -117.155318
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1071",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7481819,
+    "lon": -117.154067
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1403",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7482886,
+    "lon": -117.151061
+  },
+  {
+    "street": "Convoy Street",
+    "housenumber": "4646",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.8252455,
+    "lon": -117.1558813
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "3100",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7378352,
+    "lon": -117.1605703
+  },
+  {
+    "street": "Voltaire Street",
+    "housenumber": "4970",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7518099,
+    "lon": -117.2459898
+  },
+  {
+    "street": "Adams Avenue",
+    "housenumber": "4077",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.763005,
+    "lon": -117.107695
+  },
+  {
+    "street": "Convoy Street",
+    "housenumber": "4690",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.8270118,
+    "lon": -117.1557652
+  },
+  {
+    "street": "Navajo Road",
+    "housenumber": "8515",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.8026319,
+    "lon": -117.0131845
+  },
+  {
+    "street": "Miramar Road",
+    "housenumber": "8670",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.8943252,
+    "lon": -117.1374
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "6949",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7684834,
+    "lon": -117.0480876
+  },
+  {
+    "street": "Rosecrans Street",
+    "housenumber": "1872",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7309688,
+    "lon": -117.22432
+  },
+  {
+    "street": "Hancock Street",
+    "housenumber": "2030",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.744532,
+    "lon": -117.188111
+  },
+  {
+    "street": "F Street",
+    "housenumber": "428",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7137402,
+    "lon": -117.1605641
+  },
+  {
+    "street": "6th Avenue",
+    "housenumber": "818",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7139147,
+    "lon": -117.159487
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "3333",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7550093,
+    "lon": -117.1215388
+  },
+  {
+    "street": "Market Street",
+    "housenumber": "4280",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.71172,
+    "lon": -117.102982
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1600",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7152558,
+    "lon": -117.149052
+  },
+  {
+    "street": "Lytton Street",
+    "housenumber": "2820",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.743579,
+    "lon": -117.21075
+  },
+  {
+    "street": "Adams Avenue",
+    "housenumber": "3391",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.7632083,
+    "lon": -117.1208728
+  },
+  {
+    "street": "25th Street",
+    "housenumber": "547",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.7113977,
+    "lon": -117.1398974
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6519",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7916217,
+    "lon": -117.0966108
+  },
+  {
+    "street": "Mission Boulevard",
+    "housenumber": "4315",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7942263,
+    "lon": -117.254304
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "4665",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.755239,
+    "lon": -117.094062
+  },
+  {
+    "street": "Mira Mesa Boulevard",
+    "housenumber": "8955",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9137858,
+    "lon": -117.1315685
+  },
+  {
+    "street": "Mission Center Road",
+    "housenumber": "5680",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.7758811,
+    "lon": -117.155431
+  },
+  {
+    "street": "Mira Mesa Boulevard",
+    "housenumber": "9326",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9189539,
+    "lon": -117.12427
+  },
+  {
+    "street": "Coronado Avenue",
+    "housenumber": "2909",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5759506,
+    "lon": -117.070391
+  },
+  {
+    "street": "Balboa Avenue",
+    "housenumber": "4220",
+    "city": "San Diego",
+    "lat": 32.812549,
+    "lon": -117.2001002
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "3239",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7545883,
+    "lon": -117.1233809
+  },
+  {
+    "street": "Sports Arena Boulevard",
+    "housenumber": "3345",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.751781,
+    "lon": -117.2109327
+  },
+  {
+    "street": "Voltaire Street",
+    "housenumber": "3720",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7412777,
+    "lon": -117.2291935
+  },
+  {
+    "street": "Rancho Bernardo Road",
+    "housenumber": "12475",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0178029,
+    "lon": -117.061518
+  },
+  {
+    "street": "West San Ysidro Boulevard",
+    "housenumber": "350",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.5548088,
+    "lon": -117.05133
+  },
+  {
+    "street": "Montezuma Road",
+    "housenumber": "6670",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.769245,
+    "lon": -117.054379
+  },
+  {
+    "street": "Alta View Drive",
+    "housenumber": "3011",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.676575,
+    "lon": -117.038896
+  },
+  {
+    "street": "West San Ysidro Boulevard",
+    "housenumber": "191",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.554101,
+    "lon": -117.047775
+  },
+  {
+    "street": "Midway Drive",
+    "housenumber": "3185",
+    "city": "San Diego",
+    "postcode": "92110-4552",
+    "lat": 32.7500269,
+    "lon": -117.2094062
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "1305",
+    "city": "San Diego",
+    "postcode": "92109-3012",
+    "lat": 32.798286,
+    "lon": -117.2460145
+  },
+  {
+    "street": "Cass Street",
+    "housenumber": "4983",
+    "city": "San Diego",
+    "postcode": "92109-2039",
+    "lat": 32.8056506,
+    "lon": -117.2539937
+  },
+  {
+    "street": "Ohio Street",
+    "housenumber": "4687",
+    "city": "San Diego",
+    "postcode": "92116-3227",
+    "lat": 32.762696,
+    "lon": -117.128601
+  },
+  {
+    "street": "Palm Avenue",
+    "housenumber": "2295",
+    "city": "San Diego",
+    "postcode": "92154-4759",
+    "lat": 32.583488,
+    "lon": -117.084474
+  },
+  {
+    "street": "Mission Bvd",
+    "housenumber": "4340",
+    "city": "San Diego",
+    "postcode": "92109-3916",
+    "lat": 32.7941989,
+    "lon": -117.2549988
+  },
+  {
+    "street": "Gold Coast Drive",
+    "housenumber": "8261",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9048684,
+    "lon": -117.1454271
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "2275",
+    "city": "San Diego",
+    "postcode": "92109-3712",
+    "lat": 32.8023308,
+    "lon": -117.2283213
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "2475",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.7153608,
+    "lon": -117.1406053
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "1995",
+    "city": "San Diego",
+    "postcode": "92104-1047",
+    "lat": 32.7548486,
+    "lon": -117.1439395
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "5202",
+    "city": "San Diego",
+    "postcode": "92115-4724",
+    "lat": 32.757552,
+    "lon": -117.083317
+  },
+  {
+    "street": "Rancho Penasquitos",
+    "housenumber": "12890",
+    "city": "San Diego",
+    "postcode": "92129-2935",
+    "lat": 32.9512344,
+    "lon": -117.1080951
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "2406",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7487391,
+    "lon": -117.138524
+  },
+  {
+    "street": "Peñasquitos Drive",
+    "housenumber": "14391",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.9774909,
+    "lon": -117.0895225
+  },
+  {
+    "street": "Clairemont Drive",
+    "housenumber": "3090",
+    "city": "San Diego",
+    "postcode": "92117-6767",
+    "lat": 32.797057,
+    "lon": -117.193547
+  },
+  {
+    "street": "Spruce Street",
+    "housenumber": "432",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.739036,
+    "lon": -117.160622
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "4919",
+    "city": "San Diego",
+    "postcode": "92105-2110",
+    "lat": 32.749278,
+    "lon": -117.088293
+  },
+  {
+    "street": "Mango Drive",
+    "housenumber": "13835",
+    "city": "Del Mar",
+    "postcode": "92014-3101",
+    "lat": 32.949148,
+    "lon": -117.247084
+  },
+  {
+    "street": "Linda Vista Road",
+    "housenumber": "5150",
+    "city": "San Diego",
+    "postcode": "92110-2601",
+    "lat": 32.7652358,
+    "lon": -117.1973403
+  },
+  {
+    "street": "Mission Bay Drive",
+    "housenumber": "4527",
+    "city": "San Diego",
+    "postcode": "92109-4920",
+    "lat": 32.804259,
+    "lon": -117.215586
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "4745",
+    "city": "San Diego",
+    "postcode": "92115-4508",
+    "lat": 32.7556653,
+    "lon": -117.0924114
+  },
+  {
+    "street": "Bernardo Center Drive",
+    "housenumber": "15883",
+    "city": "San Diego",
+    "postcode": "92127-2321",
+    "lat": 33.0051451,
+    "lon": -117.0906816
+  },
+  {
+    "street": "Balboa Avenue",
+    "housenumber": "1906",
+    "city": "San Diego",
+    "postcode": "92109-4502",
+    "lat": 32.7995506,
+    "lon": -117.2346064
+  },
+  {
+    "street": "Adams Avenue",
+    "housenumber": "3436",
+    "city": "San Diego",
+    "postcode": "92116-2430",
+    "lat": 32.763593,
+    "lon": -117.119159
+  },
+  {
+    "street": "Carmel Mountain Road",
+    "housenumber": "9701",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.961918,
+    "lon": -117.117341
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1602",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.748675,
+    "lon": -117.149257
+  },
+  {
+    "street": "Bernardo Center Drive",
+    "housenumber": "16703",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0168929,
+    "lon": -117.07518
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "6991",
+    "city": "San Diego",
+    "postcode": "92115-1739",
+    "lat": 32.7682849,
+    "lon": -117.047358
+  },
+  {
+    "street": "Adrian Street",
+    "housenumber": "2920;2918",
+    "city": "San Diego",
+    "postcode": "92110-5725;92110",
+    "lat": 32.7520119,
+    "lon": -117.2265914
+  },
+  {
+    "street": "Meade Avenue",
+    "housenumber": "3019",
+    "city": "San Diego",
+    "postcode": "92116-4325",
+    "lat": 32.7570324,
+    "lon": -117.1297689
+  },
+  {
+    "street": "Home Avenue",
+    "housenumber": "4080",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7231487,
+    "lon": -117.108062
+  },
+  {
+    "street": "Coronado Avenue",
+    "housenumber": "2509",
+    "city": "San Diego",
+    "postcode": "92154-2143",
+    "lat": 32.576172,
+    "lon": -117.079292
+  },
+  {
+    "street": "Voltaire Street",
+    "housenumber": "4205",
+    "city": "San Diego",
+    "postcode": "92107-1709;92107",
+    "lat": 32.7437437,
+    "lon": -117.2353277
+  },
+  {
+    "street": "West Point Loma Boulevard",
+    "housenumber": "4111",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7533359,
+    "lon": -117.2235609
+  },
+  {
+    "street": "Hollister Street",
+    "housenumber": "688",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584013,
+    "lon": -117.084375
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "2796",
+    "city": "San Diego",
+    "postcode": "92113-3712",
+    "lat": 32.6929813,
+    "lon": -117.1343828
+  },
+  {
+    "street": "Alta View Drive",
+    "housenumber": "2905",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.676223,
+    "lon": -117.039815
+  },
+  {
+    "street": "Rancho Peñasquitos Boulevard",
+    "housenumber": "12808",
+    "city": "San Diego",
+    "postcode": "92129-2935",
+    "lat": 32.9500164,
+    "lon": -117.1076564
+  },
+  {
+    "street": "Nobel Drive",
+    "housenumber": "4260",
+    "city": "San Diego",
+    "postcode": "92122-1126",
+    "lat": 32.8668261,
+    "lon": -117.2153561
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "1925",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7548463,
+    "lon": -117.1444705
+  },
+  {
+    "street": "La Jolla Boulevard",
+    "housenumber": "7345",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8372204,
+    "lon": -117.2780344
+  },
+  {
+    "street": "South 28th Street",
+    "housenumber": "1220",
+    "city": "San Diego",
+    "postcode": "92113-3705",
+    "lat": 32.6934457,
+    "lon": -117.1341801
+  },
+  {
+    "street": "Del Mar Heights Road",
+    "housenumber": "3505",
+    "city": "San Diego",
+    "postcode": "92130-2122",
+    "lat": 32.9544633,
+    "lon": -117.2314068
+  },
+  {
+    "street": "Camino del Rio North",
+    "housenumber": "4242",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.779658,
+    "lon": -117.10411
+  },
+  {
+    "street": "Mission Boulevard",
+    "housenumber": "4401",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.795126,
+    "lon": -117.254495
+  },
+  {
+    "street": "Del Mar Heights Road",
+    "housenumber": "3545",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.9542211,
+    "lon": -117.2306033
+  },
+  {
+    "street": "Fairmount Avenue",
+    "housenumber": "3807",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7480878,
+    "lon": -117.1004553
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "1121",
+    "city": "San Diego",
+    "postcode": "92109-2906",
+    "lat": 32.797622,
+    "lon": -117.249498
+  },
+  {
+    "street": "Midway Drive",
+    "housenumber": "3838",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.754527,
+    "lon": -117.2185
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "7373",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.8323799,
+    "lon": -117.1596661
+  },
+  {
+    "street": "Friars Road",
+    "housenumber": "10460 Suite A",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7921004,
+    "lon": -117.0983628
+  },
+  {
+    "street": "Penasquitos Drive",
+    "housenumber": "14371",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.9780483,
+    "lon": -117.0892887
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "4120",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8301096,
+    "lon": -117.2022627
+  },
+  {
+    "street": "Imperial Avenue",
+    "housenumber": "4415",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.7030831,
+    "lon": -117.1001942
+  },
+  {
+    "street": "Valley Centre Drive",
+    "housenumber": "3860",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.93886,
+    "lon": -117.232104
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1515",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7206163,
+    "lon": -117.0845627
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "4751",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.755842,
+    "lon": -117.0919
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "9290",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.8317656,
+    "lon": -117.1289396
+  },
+  {
+    "street": "Mission Center Road",
+    "housenumber": "5698",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.7763538,
+    "lon": -117.1546503
+  },
+  {
+    "street": "4th Avenue",
+    "housenumber": "3886",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7480187,
+    "lon": -117.161974
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "1071",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.716075,
+    "lon": -117.161533
+  },
+  {
+    "street": "Underpass Street",
+    "housenumber": "2959",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7408663,
+    "lon": -117.1301272
+  },
+  {
+    "street": "Border Village Road",
+    "housenumber": "4698",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.5475016,
+    "lon": -117.0343002
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "220",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7501276,
+    "lon": -117.1653396
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6326",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7894357,
+    "lon": -117.098113
+  },
+  {
+    "street": "Rio San Diego Drive",
+    "housenumber": "8310",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.774536,
+    "lon": -117.1464883
+  },
+  {
+    "street": "Tierrasanta Boulevard",
+    "housenumber": "10425",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.8228241,
+    "lon": -117.103264
+  },
+  {
+    "street": "C Street",
+    "housenumber": "1100",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7169654,
+    "lon": -117.1544228
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6171",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7868268,
+    "lon": -117.0975188
+  },
+  {
+    "street": "Murphy Canyon Road",
+    "housenumber": "3675",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.8084726,
+    "lon": -117.115161
+  },
+  {
+    "street": "Paradise Valley Road",
+    "housenumber": "6915",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.688532,
+    "lon": -117.045535
+  },
+  {
+    "street": "Carmel Mountain Road",
+    "housenumber": "11688",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.979921,
+    "lon": -117.0799625
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "3008",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7557543,
+    "lon": -117.1299215
+  },
+  {
+    "street": "Sabre Springs Parkway",
+    "housenumber": "12608",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.9485231,
+    "lon": -117.096973
+  },
+  {
+    "street": "Linda Vista Road",
+    "housenumber": "6947",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.766284,
+    "lon": -117.195635
+  },
+  {
+    "street": "Regents Park Row",
+    "housenumber": "4150",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8729705,
+    "lon": -117.2175663
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "2829",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7549603,
+    "lon": -117.1328912
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6080",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7846671,
+    "lon": -117.0980732
+  },
+  {
+    "street": "Miramar Road",
+    "housenumber": "7140",
+    "city": "San Diego",
+    "postcode": "92121-2316",
+    "lat": 32.8803916,
+    "lon": -117.1596476
+  },
+  {
+    "street": "Carroll Canyon Road",
+    "housenumber": "9805",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.902998,
+    "lon": -117.115346
+  },
+  {
+    "street": "Sports Arena Boulevard",
+    "housenumber": "3176",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7521504,
+    "lon": -117.2051666
+  },
+  {
+    "street": "Outer Road",
+    "housenumber": "1090",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5767788,
+    "lon": -117.0811002
+  },
+  {
+    "street": "Black Mountain Road",
+    "housenumber": "13293",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.9588582,
+    "lon": -117.1250634
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "815",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7482543,
+    "lon": -117.1568259
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "2015",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.801225,
+    "lon": -117.233122
+  },
+  {
+    "street": "Rancho Bernardo Road",
+    "housenumber": "11808",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0232946,
+    "lon": -117.0765498
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "2345",
+    "city": "San Diego",
+    "postcode": "92104-1105",
+    "lat": 32.7548229,
+    "lon": -117.1391997
+  },
+  {
+    "street": "Fay Avenue",
+    "housenumber": "7475",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.84009,
+    "lon": -117.27331
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "6925",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.768312,
+    "lon": -117.048798
+  },
+  {
+    "street": "Convoy Street",
+    "housenumber": "4770",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.8287019,
+    "lon": -117.15374
+  },
+  {
+    "street": "Ashford Street",
+    "housenumber": "3520",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.8082209,
+    "lon": -117.160702
+  },
+  {
+    "street": "Market Street",
+    "housenumber": "2510",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.7118565,
+    "lon": -117.1421867
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "2626",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7556079,
+    "lon": -117.1361258
+  },
+  {
+    "street": "Camino Ruiz",
+    "housenumber": "10606",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.910265,
+    "lon": -117.144981
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "4701",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.755678,
+    "lon": -117.093118
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "1290",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7492157,
+    "lon": -117.1516106
+  },
+  {
+    "street": "Roll Drive",
+    "housenumber": "2335",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5557819,
+    "lon": -116.937248
+  },
+  {
+    "street": "Lake Murray Boulevard",
+    "housenumber": "8736",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.8027341,
+    "lon": -117.0126034
+  },
+  {
+    "street": "Dennery Road",
+    "housenumber": "710",
+    "city": "San Diego",
+    "postcode": "92173",
+    "lat": 32.5817334,
+    "lon": -117.0349774
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6225",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7881524,
+    "lon": -117.0974355
+  },
+  {
+    "street": "Convoy Street",
+    "housenumber": "4140",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.817391,
+    "lon": -117.155412
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1636",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.722126,
+    "lon": -117.085366
+  },
+  {
+    "street": "Scripps Poway Parkway",
+    "housenumber": "10196",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.9367077,
+    "lon": -117.1086929
+  },
+  {
+    "street": "Rosecrans Street",
+    "housenumber": "1624",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7279388,
+    "lon": -117.2267579
+  },
+  {
+    "street": "Northside Drive",
+    "housenumber": "2482",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.7835308,
+    "lon": -117.1279348
+  },
+  {
+    "street": "Clairemont Drive",
+    "housenumber": "3089",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.79457,
+    "lon": -117.192489
+  },
+  {
+    "street": "Carmel Mountain Road",
+    "housenumber": "9889",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.959996,
+    "lon": -117.114538
+  },
+  {
+    "street": "Mira Mesa Boulevard",
+    "housenumber": "9035",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9153468,
+    "lon": -117.130259
+  },
+  {
+    "street": "Linda Vista Road",
+    "housenumber": "7170",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.78977,
+    "lon": -117.167948
+  },
+  {
+    "street": "Mission Center Road",
+    "housenumber": "5638",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.7740588,
+    "lon": -117.157454
+  },
+  {
+    "street": "College Avenue",
+    "housenumber": "3406 suite A",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.742278,
+    "lon": -117.051773
+  },
+  {
+    "street": "Rancho Bernardo Road",
+    "housenumber": "12467",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0178888,
+    "lon": -117.061973
+  },
+  {
+    "street": "Tierrasanta Boulevard",
+    "housenumber": "10789",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.8213635,
+    "lon": -117.099538
+  },
+  {
+    "street": "Palm Avenue",
+    "housenumber": "3404",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5842116,
+    "lon": -117.061457
+  },
+  {
+    "street": "B Street",
+    "housenumber": "1005",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7176491,
+    "lon": -117.1552907
+  },
+  {
+    "street": "Tierrasanta Boulevard",
+    "housenumber": "10809",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.821457,
+    "lon": -117.09878
+  },
+  {
+    "street": "Park Boulevard",
+    "housenumber": "1280",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7186782,
+    "lon": -117.1540573
+  },
+  {
+    "street": "Alemania Road",
+    "housenumber": "12305",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.9373505,
+    "lon": -117.1123159
+  },
+  {
+    "street": "Scripps Summit Drive",
+    "housenumber": "12030",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.9381022,
+    "lon": -117.1015724
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "1621",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7977221,
+    "lon": -117.2397203
+  },
+  {
+    "street": "Bernardo Center Drive",
+    "housenumber": "16725",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0176581,
+    "lon": -117.0752465
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "6135",
+    "city": "San Diego",
+    "postcode": "92115-3915",
+    "lat": 32.761873,
+    "lon": -117.065599
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "2829",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7481139,
+    "lon": -117.1330781
+  },
+  {
+    "street": "Paradise Valley Road",
+    "housenumber": "6925",
+    "city": "San Diego",
+    "postcode": "92139-1218",
+    "lat": 32.689023,
+    "lon": -117.043769
+  },
+  {
+    "street": "Bernardo Plaza Drive",
+    "housenumber": "11980",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.0214137,
+    "lon": -117.0727245
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "1905",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.8008976,
+    "lon": -117.2349386
+  },
+  {
+    "street": "Bernardo Heights Parkway",
+    "housenumber": "15721",
+    "city": "Poway",
+    "postcode": "92128",
+    "lat": 33.002173,
+    "lon": -117.0591041
+  },
+  {
+    "street": "Dennery Road",
+    "housenumber": "640",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5819739,
+    "lon": -117.033185
+  },
+  {
+    "street": "Miramar Road",
+    "housenumber": "7180",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.8810716,
+    "lon": -117.158505
+  },
+  {
+    "street": "Linda Vista Road",
+    "housenumber": "6945",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.785708,
+    "lon": -117.170114
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "4151",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.754927,
+    "lon": -117.105822
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "1222",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7179522,
+    "lon": -117.164486
+  },
+  {
+    "street": "West San Ysidro Boulevard",
+    "housenumber": "198",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.5533494,
+    "lon": -117.0474425
+  },
+  {
+    "street": "Burgener Boulevard",
+    "housenumber": "2920",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7935955,
+    "lon": -117.1939592
+  },
+  {
+    "street": "Mount Abernathy Avenue",
+    "housenumber": "4255",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8223204,
+    "lon": -117.1749653
+  },
+  {
+    "street": "Zion Avenue",
+    "housenumber": "5188",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.7930662,
+    "lon": -117.0814929
+  },
+  {
+    "street": "La Cuenta Drive",
+    "housenumber": "4985",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.8208823,
+    "lon": -117.0980871
+  },
+  {
+    "street": "Governor Drive",
+    "housenumber": "4155",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.853995,
+    "lon": -117.200979
+  },
+  {
+    "street": "Clairemont Drive",
+    "housenumber": "4616",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8283728,
+    "lon": -117.206457
+  },
+  {
+    "street": "Ulric Street",
+    "housenumber": "2160",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.783262,
+    "lon": -117.17004
+  },
+  {
+    "street": "Park Boulevard",
+    "housenumber": "4193",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7538404,
+    "lon": -117.14593
+  },
+  {
+    "street": "Santa Monica Avenue",
+    "housenumber": "4801",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7454845,
+    "lon": -117.2472119
+  },
+  {
+    "street": "54th Street",
+    "housenumber": "2802",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.7350515,
+    "lon": -117.08003
+  },
+  {
+    "street": "Father Junipero Serra Trail",
+    "housenumber": "1",
+    "city": "San Diego",
+    "lat": 32.8200525,
+    "lon": -117.0567375
+  },
+  {
+    "street": "Jackson Drive",
+    "housenumber": "7265",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.8019999,
+    "lon": -117.0406498
+  },
+  {
+    "street": "B Street",
+    "housenumber": "750",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7179701,
+    "lon": -117.158045
+  },
+  {
+    "street": "el prado",
+    "housenumber": "1875",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7309728,
+    "lon": -117.147406
+  },
+  {
+    "street": "East Campus Drive",
+    "housenumber": "5110",
+    "city": "San Diego",
+    "postcode": "92182",
+    "lat": 32.7711988,
+    "lon": -117.067356
+  },
+  {
+    "street": "Prospect Street",
+    "housenumber": "700",
+    "city": "La Jolla",
+    "postcode": "92037-4291",
+    "lat": 32.8445548,
+    "lon": -117.277995
+  },
+  {
+    "street": "El Prado",
+    "housenumber": "1450",
+    "city": "San Diego",
+    "lat": 32.7321695,
+    "lon": -117.1504503
+  },
+  {
+    "street": "Kettner Boulevard",
+    "housenumber": "1100",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7172469,
+    "lon": -117.1694057
+  },
+  {
+    "street": "Presidio Drive",
+    "housenumber": "2727",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.759473,
+    "lon": -117.193396
+  },
+  {
+    "street": "Pan American Plaza",
+    "housenumber": "2001",
+    "city": "San Diego",
+    "lat": 32.7264309,
+    "lon": -117.1543532
+  },
+  {
+    "street": "Camino Del Rio North",
+    "housenumber": "1288",
+    "city": "San Diego",
+    "postcode": "92108-1511",
+    "lat": 32.7679184,
+    "lon": -117.1505136
+  },
+  {
+    "street": "Sixth Avenue",
+    "housenumber": "170",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7071365,
+    "lon": -117.1593664
+  },
+  {
+    "street": "Roosevelt Road",
+    "housenumber": "2820",
+    "city": "San Diego",
+    "lat": 32.7373242,
+    "lon": -117.2139208
+  },
+  {
+    "street": "Truxton Road",
+    "housenumber": "2495",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7363135,
+    "lon": -117.2171051
+  },
+  {
+    "street": "Truxtun Road",
+    "housenumber": "2401",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.736068,
+    "lon": -117.2173712
+  },
+  {
+    "street": "Laning Road",
+    "housenumber": "2560",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7285927,
+    "lon": -117.2178418
+  },
+  {
+    "street": "Laning Road",
+    "housenumber": "2556",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7279645,
+    "lon": -117.2177045
+  },
+  {
+    "street": "Gilman Drive",
+    "housenumber": "9500",
+    "city": "La Jolla",
+    "postcode": "92093",
+    "lat": 32.8799606,
+    "lon": -117.236444
+  },
+  {
+    "street": "Gil",
+    "housenumber": "9500",
+    "city": "La Jolla",
+    "postcode": "92093-0001",
+    "lat": 32.8799364,
+    "lon": -117.2357406
+  },
+  {
+    "street": "Felspar Street",
+    "housenumber": "976",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7984796,
+    "lon": -117.252365
+  },
+  {
+    "street": "Pearl Street",
+    "housenumber": "634",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8397883,
+    "lon": -117.276407
+  },
+  {
+    "street": "Pearl Street",
+    "housenumber": "627",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8394155,
+    "lon": -117.276595
+  },
+  {
+    "street": "Voltaire Street",
+    "housenumber": "4765",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.7495327,
+    "lon": -117.242901
+  },
+  {
+    "street": "Gilman Drive",
+    "housenumber": "9500",
+    "city": "La Jolla",
+    "postcode": "92093",
+    "lat": 32.8796343,
+    "lon": -117.2364514
+  },
+  {
+    "street": "Pearl Street",
+    "housenumber": "637",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8395016,
+    "lon": -117.276224
+  },
+  {
+    "street": "Pearl Street",
+    "housenumber": "623",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8393906,
+    "lon": -117.2767362
+  },
+  {
+    "street": "Pearl Street",
+    "housenumber": "615",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8392991,
+    "lon": -117.277109
+  },
+  {
+    "street": "South 43rd Street",
+    "housenumber": "1350",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.6922622,
+    "lon": -117.1028401
+  },
+  {
+    "street": "La Jolla Village Drive",
+    "housenumber": "4545",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.8705269,
+    "lon": -117.210525
+  },
+  {
+    "street": "La Jolla Village Drive",
+    "housenumber": "4545",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.8707524,
+    "lon": -117.210405
+  },
+  {
+    "street": "Ocean Blvd",
+    "housenumber": "4500",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7962129,
+    "lon": -117.256704
+  },
+  {
+    "street": "Reynard Way",
+    "housenumber": "2822",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.733403,
+    "lon": -117.169442
+  },
+  {
+    "street": "West Grape",
+    "housenumber": "600",
+    "city": "San Diego",
+    "postcode": "92101-2211",
+    "lat": 32.7255823,
+    "lon": -117.1688936
+  },
+  {
+    "street": "West Washington Street",
+    "housenumber": "1810",
+    "city": "San Diego",
+    "lat": 32.743249,
+    "lon": -117.181614
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "1905",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.7548457,
+    "lon": -117.144702
+  },
+  {
+    "street": "Garnet Ave",
+    "housenumber": "832",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7969294,
+    "lon": -117.2547099
+  },
+  {
+    "street": "Garnet Avenue",
+    "housenumber": "909",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7968389,
+    "lon": -117.2532349
+  },
+  {
+    "street": "Roll Drive",
+    "housenumber": "2365",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.5553116,
+    "lon": -116.937059
+  },
+  {
+    "street": "University Avenue",
+    "housenumber": "350",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7484639,
+    "lon": -117.1620046
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "600",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.7159749,
+    "lon": -117.1688263
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1469",
+    "city": "San Diego",
+    "postcode": "92101-3421",
+    "lat": 32.720787,
+    "lon": -117.166342
+  },
+  {
+    "street": "Prospect Street",
+    "housenumber": "1250",
+    "city": "San Diego",
+    "lat": 32.849307,
+    "lon": -117.271881
+  },
+  {
+    "street": "March Place",
+    "housenumber": "2162",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7782357,
+    "lon": -117.1911361
+  },
+  {
+    "street": "Renaissance Avenue",
+    "housenumber": "5552",
+    "city": "San Diego",
+    "lat": 32.869583,
+    "lon": -117.206254
+  },
+  {
+    "street": "Lockwood Drive",
+    "housenumber": "3401",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.805384,
+    "lon": -117.124268
+  },
+  {
+    "street": "Lamont Street",
+    "housenumber": "4621",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.802273,
+    "lon": -117.235421
+  },
+  {
+    "street": "Manzana Way",
+    "housenumber": "1737",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.687602,
+    "lon": -117.024928
+  },
+  {
+    "street": "Yosemite Street",
+    "housenumber": "3521",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.783327,
+    "lon": -117.235531
+  },
+  {
+    "street": "Shaw Street",
+    "housenumber": "5719",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.672516,
+    "lon": -117.066464
+  },
+  {
+    "street": "Clematis Street",
+    "housenumber": "2128",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.728253,
+    "lon": -117.095886
+  },
+  {
+    "street": "El Camino Real",
+    "housenumber": "13985",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.970328,
+    "lon": -117.228203
+  },
+  {
+    "street": "Tommy Drive",
+    "housenumber": "8274",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.804197,
+    "lon": -117.018287
+  },
+  {
+    "street": "Voltaire Street",
+    "housenumber": "4654",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.748576,
+    "lon": -117.240472
+  },
+  {
+    "street": "La Jolla Rancho Road",
+    "housenumber": "1383",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.82334,
+    "lon": -117.260382
+  },
+  {
+    "street": "Rancho Hills Drive",
+    "housenumber": "5721",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.67022,
+    "lon": -117.064009
+  },
+  {
+    "street": "Rancho Bernardo Road",
+    "housenumber": "12182",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.021132,
+    "lon": -117.06715
+  },
+  {
+    "street": "Tanglewood Road",
+    "housenumber": "6531",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.811617,
+    "lon": -117.173023
+  },
+  {
+    "street": "45th Street",
+    "housenumber": "3303",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.740451,
+    "lon": -117.097447
+  },
+  {
+    "street": "Calle Serena",
+    "housenumber": "2574",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.673716,
+    "lon": -117.058057
+  },
+  {
+    "street": "Grim Avenue",
+    "housenumber": "3357",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.740336,
+    "lon": -117.12791
+  },
+  {
+    "street": "Penara Place",
+    "housenumber": "7330",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.911768,
+    "lon": -117.167826
+  },
+  {
+    "street": "Thomas Avenue",
+    "housenumber": "1470",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.796713,
+    "lon": -117.24232
+  },
+  {
+    "street": "10th Avenue",
+    "housenumber": "3765",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.746841,
+    "lon": -117.154953
+  },
+  {
+    "street": "Werner Street",
+    "housenumber": "7103",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.85736,
+    "lon": -117.19054
+  },
+  {
+    "street": "Notre Dame Avenue",
+    "housenumber": "3717",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.849479,
+    "lon": -117.208225
+  },
+  {
+    "street": "Byrd Street",
+    "housenumber": "3727",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584341,
+    "lon": -117.053007
+  },
+  {
+    "street": "Falcon Street",
+    "housenumber": "4055",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.751087,
+    "lon": -117.170188
+  },
+  {
+    "street": "Cibola Road",
+    "housenumber": "6414",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.804319,
+    "lon": -117.054227
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "3590",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.743039,
+    "lon": -117.160734
+  },
+  {
+    "street": "Calle Nueva",
+    "housenumber": "8229",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.930223,
+    "lon": -117.146912
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "4377",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.833993,
+    "lon": -117.198488
+  },
+  {
+    "street": "Cordero Road",
+    "housenumber": "2380",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.947386,
+    "lon": -117.25232
+  },
+  {
+    "street": "Klauber Avenue",
+    "housenumber": "1711",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.722885,
+    "lon": -117.054196
+  },
+  {
+    "street": "Creekbridge Place",
+    "housenumber": "11027",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.945979,
+    "lon": -117.09255
+  },
+  {
+    "street": "Carnegie Street",
+    "housenumber": "5915",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.848713,
+    "lon": -117.217337
+  },
+  {
+    "street": "Parrot Street",
+    "housenumber": "1743",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.724337,
+    "lon": -117.11346
+  },
+  {
+    "street": "Armitage Street",
+    "housenumber": "3661",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.83799,
+    "lon": -117.207776
+  },
+  {
+    "street": "Polaris Drive",
+    "housenumber": "11521",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.932594,
+    "lon": -117.12749
+  },
+  {
+    "street": "Arvinels Avenue",
+    "housenumber": "5197",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.84041,
+    "lon": -117.174845
+  },
+  {
+    "street": "Laurel Street",
+    "housenumber": "5335",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.730525,
+    "lon": -117.08102
+  },
+  {
+    "street": "Caminito Mira del Mar",
+    "housenumber": "12505",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.942366,
+    "lon": -117.233209
+  },
+  {
+    "street": "21st Street",
+    "housenumber": "953",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.715476,
+    "lon": -117.144639
+  },
+  {
+    "street": "Stillman Place",
+    "housenumber": "2035",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.689992,
+    "lon": -117.034916
+  },
+  {
+    "street": "Santa Cruz Avenue",
+    "housenumber": "4684",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.740375,
+    "lon": -117.248232
+  },
+  {
+    "street": "Rimstone Lane",
+    "housenumber": "16186",
+    "city": "San Diego",
+    "postcode": "92127",
+    "lat": 33.0089703,
+    "lon": -117.0875121
+  },
+  {
+    "street": "Altamont Court",
+    "housenumber": "1804",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.68277,
+    "lon": -117.068117
+  },
+  {
+    "street": "Yosemite Street",
+    "housenumber": "3721",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.787788,
+    "lon": -117.235944
+  },
+  {
+    "street": "Cassioepia Way",
+    "housenumber": "8870",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.928044,
+    "lon": -117.132496
+  },
+  {
+    "street": "Roseland Drive",
+    "housenumber": "7888",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.84976,
+    "lon": -117.256119
+  },
+  {
+    "street": "Ashford Street",
+    "housenumber": "3468",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.807251,
+    "lon": -117.160222
+  },
+  {
+    "street": "Abbe Street",
+    "housenumber": "1973",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.780264,
+    "lon": -117.167418
+  },
+  {
+    "street": "Otis Court",
+    "housenumber": "6911",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.778139,
+    "lon": -117.171235
+  },
+  {
+    "street": "Meriden Lane",
+    "housenumber": "11954",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.973337,
+    "lon": -117.074859
+  },
+  {
+    "street": "Upas Street",
+    "housenumber": "2228",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.741252,
+    "lon": -117.140447
+  },
+  {
+    "street": "Westleigh Place",
+    "housenumber": "6921",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.908476,
+    "lon": -117.17118
+  },
+  {
+    "street": "Del Mar Avenue",
+    "housenumber": "4741",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.738823,
+    "lon": -117.251169
+  },
+  {
+    "street": "Jemez Drive",
+    "housenumber": "3563",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.826679,
+    "lon": -117.209448
+  },
+  {
+    "street": "Hawthorn Street",
+    "housenumber": "3129",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.727266,
+    "lon": -117.126792
+  },
+  {
+    "street": "Calle del Oro",
+    "housenumber": "2356",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.86011,
+    "lon": -117.252332
+  },
+  {
+    "street": "Orozco Road",
+    "housenumber": "10307",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.837281,
+    "lon": -117.106644
+  },
+  {
+    "street": "Esmeraldas Drive",
+    "housenumber": "10692",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.827478,
+    "lon": -117.099675
+  },
+  {
+    "street": "Sula Way",
+    "housenumber": "2737",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.673809,
+    "lon": -117.044684
+  },
+  {
+    "street": "Martinique Way",
+    "housenumber": "10943",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.917778,
+    "lon": -117.157121
+  },
+  {
+    "street": "Russmar Drive",
+    "housenumber": "2674",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.794163,
+    "lon": -117.138987
+  },
+  {
+    "street": "McBurney Ridge Lane",
+    "housenumber": "11316",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.925805,
+    "lon": -117.10443
+  },
+  {
+    "street": "Angola Road",
+    "housenumber": "10885",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.915729,
+    "lon": -117.15792
+  },
+  {
+    "street": "Avenida Costa Norte",
+    "housenumber": "8737",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.558622,
+    "lon": -116.955917
+  },
+  {
+    "street": "Poipu Way",
+    "housenumber": "2303",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.585646,
+    "lon": -117.069061
+  },
+  {
+    "street": "Camino Aleta",
+    "housenumber": "3109",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.575953,
+    "lon": -117.065162
+  },
+  {
+    "street": "Torrey Pines Road",
+    "housenumber": "2510",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.851636,
+    "lon": -117.249152
+  },
+  {
+    "street": "Kalmia Street",
+    "housenumber": "5081",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.729731,
+    "lon": -117.086184
+  },
+  {
+    "street": "49th Street",
+    "housenumber": "844",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.714401,
+    "lon": -117.090169
+  },
+  {
+    "street": "Calle de Vida",
+    "housenumber": "4278",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.822694,
+    "lon": -117.087619
+  },
+  {
+    "street": "Boquita Drive",
+    "housenumber": "13555",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.94459,
+    "lon": -117.249454
+  },
+  {
+    "street": "Beryl Street",
+    "housenumber": "1203",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.804485,
+    "lon": -117.249901
+  },
+  {
+    "street": "Dalbergia Street",
+    "housenumber": "3732",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.686219,
+    "lon": -117.113742
+  },
+  {
+    "street": "Beyer Boulevard",
+    "housenumber": "3704",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.561741,
+    "lon": -117.053673
+  },
+  {
+    "street": "Avenida Rorras",
+    "housenumber": "15272",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.994395,
+    "lon": -117.071004
+  },
+  {
+    "street": "Zapata Avenue",
+    "housenumber": "11227",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9261,
+    "lon": -117.145426
+  },
+  {
+    "street": "Natalie Drive",
+    "housenumber": "4737",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.764483,
+    "lon": -117.093098
+  },
+  {
+    "street": "Revena Street",
+    "housenumber": "1858",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.562132,
+    "lon": -117.079662
+  },
+  {
+    "street": "Corte Playa Merida",
+    "housenumber": "11010",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.838133,
+    "lon": -117.092662
+  },
+  {
+    "street": "Felspar Street",
+    "housenumber": "1376",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.800062,
+    "lon": -117.245584
+  },
+  {
+    "street": "Lake Lomond Drive",
+    "housenumber": "6213",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.792399,
+    "lon": -117.034316
+  },
+  {
+    "street": "Dennig Place",
+    "housenumber": "11354",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.924171,
+    "lon": -117.163586
+  },
+  {
+    "street": "Granada Avenue",
+    "housenumber": "3844",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.748168,
+    "lon": -117.132186
+  },
+  {
+    "street": "Boone Street",
+    "housenumber": "3890",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.813152,
+    "lon": -117.204661
+  },
+  {
+    "street": "Meridian Avenue",
+    "housenumber": "3302",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.740471,
+    "lon": -117.057815
+  },
+  {
+    "street": "Carlsbad Street",
+    "housenumber": "1363",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.717598,
+    "lon": -117.024093
+  },
+  {
+    "street": "Alabama Street",
+    "housenumber": "4374",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.756759,
+    "lon": -117.142901
+  },
+  {
+    "street": "Galvez Court",
+    "housenumber": "1975",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.561294,
+    "lon": -117.068467
+  },
+  {
+    "street": "Dove Street",
+    "housenumber": "3821",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.747654,
+    "lon": -117.168345
+  },
+  {
+    "street": "Kansas Street",
+    "housenumber": "4474",
+    "city": "San Diego",
+    "lat": 32.758723,
+    "lon": -117.131777
+  },
+  {
+    "street": "39th Street",
+    "housenumber": "814",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.713757,
+    "lon": -117.111006
+  },
+  {
+    "street": "Pacifica Drive",
+    "housenumber": "4856",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.8097,
+    "lon": -117.222752
+  },
+  {
+    "street": "Menlo Avenue",
+    "housenumber": "4346",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.756714,
+    "lon": -117.094749
+  },
+  {
+    "street": "Lincoln Avenue",
+    "housenumber": "1212",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.752536,
+    "lon": -117.153093
+  },
+  {
+    "street": "San Juan Place",
+    "housenumber": "717",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.780238,
+    "lon": -117.252831
+  },
+  {
+    "street": "Bervy Street",
+    "housenumber": "1740",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.777759,
+    "lon": -117.201391
+  },
+  {
+    "street": "Bougainville Road",
+    "housenumber": "6544",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.686239,
+    "lon": -117.052932
+  },
+  {
+    "street": "Medio Street",
+    "housenumber": "6381",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.703022,
+    "lon": -117.061116
+  },
+  {
+    "street": "Soledad Avenue",
+    "housenumber": "1560",
+    "city": "San Diego",
+    "lat": 32.845765,
+    "lon": -117.265053
+  },
+  {
+    "street": "Thomas Avenue",
+    "housenumber": "2128",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.799318,
+    "lon": -117.230193
+  },
+  {
+    "street": "Fargo Avenue",
+    "housenumber": "4695",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.833929,
+    "lon": -117.224752
+  },
+  {
+    "street": "Falkirk Row",
+    "housenumber": "2367",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.831088,
+    "lon": -117.242683
+  },
+  {
+    "street": "Shaw Lopez Row",
+    "housenumber": "5921",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.9129736,
+    "lon": -117.1895219
+  },
+  {
+    "street": "60th Street",
+    "housenumber": "611",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.711417,
+    "lon": -117.0676
+  },
+  {
+    "street": "Park Rim Court",
+    "housenumber": "3398",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.838106,
+    "lon": -117.213825
+  },
+  {
+    "street": "Grove Avenue",
+    "housenumber": "2081",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.572627,
+    "lon": -117.088758
+  },
+  {
+    "street": "Caminito Exquisito",
+    "housenumber": "5204",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.94503,
+    "lon": -117.207448
+  },
+  {
+    "street": "Costebelle Drive",
+    "housenumber": "2683",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.850211,
+    "lon": -117.246528
+  },
+  {
+    "street": "Caminito Halago",
+    "housenumber": "1333",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.816554,
+    "lon": -117.251172
+  },
+  {
+    "street": "Beryl Street",
+    "housenumber": "1822",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.807527,
+    "lon": -117.238717
+  },
+  {
+    "street": "Lodi Street",
+    "housenumber": "5754",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8437927,
+    "lon": -117.2072121
+  },
+  {
+    "street": "World Trade Drive",
+    "housenumber": "12029",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.979615,
+    "lon": -117.074355
+  },
+  {
+    "street": "Via San Loreno",
+    "housenumber": "12115",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.976232,
+    "lon": -117.069056
+  },
+  {
+    "street": "August Street",
+    "housenumber": "5048",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.781777,
+    "lon": -117.189235
+  },
+  {
+    "street": "Mount Blackburn Avenue",
+    "housenumber": "3775",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.809746,
+    "lon": -117.186796
+  },
+  {
+    "street": "Alaquinas Drive",
+    "housenumber": "1706",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.566219,
+    "lon": -117.042748
+  },
+  {
+    "street": "Columbia Street",
+    "housenumber": "2859",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.734311,
+    "lon": -117.171857
+  },
+  {
+    "street": "Illinois Street",
+    "housenumber": "4425",
+    "city": "San Diego",
+    "lat": 32.757886,
+    "lon": -117.127355
+  },
+  {
+    "street": "Tomahawk Lane",
+    "housenumber": "3822",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.809352,
+    "lon": -117.197874
+  },
+  {
+    "street": "Murray Ridge Road",
+    "housenumber": "3031",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.79967,
+    "lon": -117.141802
+  },
+  {
+    "street": "A Street",
+    "housenumber": "2681",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.718801,
+    "lon": -117.136432
+  },
+  {
+    "street": "Marquette Street",
+    "housenumber": "2925",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.749749,
+    "lon": -117.219165
+  },
+  {
+    "street": "36th Street",
+    "housenumber": "4540",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.759895,
+    "lon": -117.115489
+  },
+  {
+    "street": "Windsor Drive",
+    "housenumber": "5121",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.810952,
+    "lon": -117.245838
+  },
+  {
+    "street": "Verlane Drive",
+    "housenumber": "8712",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.805584,
+    "lon": -117.010496
+  },
+  {
+    "street": "Nancy Ridge Drive",
+    "housenumber": "6605",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.886512,
+    "lon": -117.179866
+  },
+  {
+    "street": "Valentino Street",
+    "housenumber": "2055",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.559117,
+    "lon": -117.066923
+  },
+  {
+    "street": "Saginaw Avenue",
+    "housenumber": "4246",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.827368,
+    "lon": -117.199722
+  },
+  {
+    "street": "West Bernardo Drive",
+    "housenumber": "16745",
+    "city": "San Diego",
+    "postcode": "92127",
+    "lat": 33.014772,
+    "lon": -117.081141
+  },
+  {
+    "street": "Olamar Way",
+    "housenumber": "1625",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.688409,
+    "lon": -117.028298
+  },
+  {
+    "street": "Bangor Street",
+    "housenumber": "870",
+    "city": "San Diego",
+    "lat": 32.719457,
+    "lon": -117.239724
+  },
+  {
+    "street": "Via de la Bandola",
+    "housenumber": "3891",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.566939,
+    "lon": -117.049824
+  },
+  {
+    "street": "Powderhorn Drive",
+    "housenumber": "4147",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584696,
+    "lon": -117.044031
+  },
+  {
+    "street": "Iroquois Avenue",
+    "housenumber": "4636",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.797098,
+    "lon": -117.198403
+  },
+  {
+    "street": "Coconino Way",
+    "housenumber": "4905",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.833106,
+    "lon": -117.204505
+  },
+  {
+    "street": "Malcolm Drive",
+    "housenumber": "6313",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.754927,
+    "lon": -117.059839
+  },
+  {
+    "street": "Anchorage Lane",
+    "housenumber": "1150",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.720523,
+    "lon": -117.229043
+  },
+  {
+    "street": "Trailbrush Point",
+    "housenumber": "11605",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.928647,
+    "lon": -117.157317
+  },
+  {
+    "street": "Marathon Drive",
+    "housenumber": "3466",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.805157,
+    "lon": -117.127635
+  },
+  {
+    "street": "16th Street",
+    "housenumber": "640",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.71218,
+    "lon": -117.149758
+  },
+  {
+    "street": "Bettyhill Drive",
+    "housenumber": "6976",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.822712,
+    "lon": -117.165549
+  },
+  {
+    "street": "Saginaw Avenue",
+    "housenumber": "4245",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.826936,
+    "lon": -117.19989
+  },
+  {
+    "street": "Whiteport Lane",
+    "housenumber": "8844",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.807712,
+    "lon": -117.007999
+  },
+  {
+    "street": "Lodi Street",
+    "housenumber": "5311",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8420752,
+    "lon": -117.2005179
+  },
+  {
+    "street": "Cadence Grove Way",
+    "housenumber": "11396",
+    "city": "San Diego",
+    "lat": 32.925626,
+    "lon": -117.213595
+  },
+  {
+    "street": "Bamburgh Drive",
+    "housenumber": "6814",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.823673,
+    "lon": -117.166892
+  },
+  {
+    "street": "Camino Regalado",
+    "housenumber": "1114",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.576901,
+    "lon": -117.06675
+  },
+  {
+    "street": "Roseland Drive",
+    "housenumber": "7726",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.848397,
+    "lon": -117.25307
+  },
+  {
+    "street": "42nd Street",
+    "housenumber": "4360",
+    "city": "San Diego",
+    "lat": 32.756347,
+    "lon": -117.105354
+  },
+  {
+    "street": "Acuna Street",
+    "housenumber": "4917",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.830545,
+    "lon": -117.184618
+  },
+  {
+    "street": "Palm Avenue",
+    "housenumber": "2264",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584125,
+    "lon": -117.085323
+  },
+  {
+    "street": "Via Santa Brisa",
+    "housenumber": "11517",
+    "city": "San Diego",
+    "postcode": "92145",
+    "lat": 32.927461,
+    "lon": -117.021473
+  },
+  {
+    "street": "Altamont Drive",
+    "housenumber": "5871",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.680684,
+    "lon": -117.067266
+  },
+  {
+    "street": "Beryl Street",
+    "housenumber": "1222",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.805104,
+    "lon": -117.24976
+  },
+  {
+    "street": "Meadow Grove Drive",
+    "housenumber": "3111",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7488533,
+    "lon": -117.2107966
+  },
+  {
+    "street": "Linbrook Drive",
+    "housenumber": "1760",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.77682,
+    "lon": -117.165157
+  },
+  {
+    "street": "Consolidated Way",
+    "housenumber": "6955",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.877538,
+    "lon": -117.164475
+  },
+  {
+    "street": "Meadow Grove Drive",
+    "housenumber": "3112",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.749149,
+    "lon": -117.2105823
+  },
+  {
+    "street": "Reo Drive",
+    "housenumber": "2360",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.675407,
+    "lon": -117.064819
+  },
+  {
+    "street": "Antiem Street",
+    "housenumber": "3717",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.81113,
+    "lon": -117.158763
+  },
+  {
+    "street": "Birchcreek Road",
+    "housenumber": "7037",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.804927,
+    "lon": -117.044645
+  },
+  {
+    "street": "Via Marin",
+    "housenumber": "3290",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.856771,
+    "lon": -117.232975
+  },
+  {
+    "street": "Felton Street",
+    "housenumber": "4857",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.766563,
+    "lon": -117.121404
+  },
+  {
+    "street": "Olamar Way",
+    "housenumber": "1690",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.687526,
+    "lon": -117.029345
+  },
+  {
+    "street": "Lake Arrowhead Drive",
+    "housenumber": "6265",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.793558,
+    "lon": -117.010132
+  },
+  {
+    "street": "Camino del Rincon",
+    "housenumber": "6056",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.796204,
+    "lon": -117.063361
+  },
+  {
+    "street": "Glancy Drive",
+    "housenumber": "3125",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.547305,
+    "lon": -117.05392
+  },
+  {
+    "street": "Randall Street",
+    "housenumber": "4901",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.809663,
+    "lon": -117.225992
+  },
+  {
+    "street": "40th Street",
+    "housenumber": "4558",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.760038,
+    "lon": -117.109912
+  },
+  {
+    "street": "Armstrong Street",
+    "housenumber": "3563",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.808947,
+    "lon": -117.161364
+  },
+  {
+    "street": "Pipit Court",
+    "housenumber": "12245",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.941674,
+    "lon": -117.155502
+  },
+  {
+    "street": "Oliver Avenue",
+    "housenumber": "1170",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.793607,
+    "lon": -117.247153
+  },
+  {
+    "street": "53rd Street",
+    "housenumber": "3104",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.737947,
+    "lon": -117.081599
+  },
+  {
+    "street": "Winnett Street",
+    "housenumber": "2039",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.727019,
+    "lon": -117.062564
+  },
+  {
+    "street": "Caminito Cercado",
+    "housenumber": "15735",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.002114,
+    "lon": -117.076057
+  },
+  {
+    "street": "Carmel Canyon Road",
+    "housenumber": "12589",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.945508,
+    "lon": -117.215671
+  },
+  {
+    "street": "Ridley Road",
+    "housenumber": "13497",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.9579908,
+    "lon": -117.1201607
+  },
+  {
+    "street": "Daniel Avenue",
+    "housenumber": "2610",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.792629,
+    "lon": -117.163902
+  },
+  {
+    "street": "Hidden Valley Road",
+    "housenumber": "2767",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.845855,
+    "lon": -117.249318
+  },
+  {
+    "street": "Crowell Street",
+    "housenumber": "3523",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.742643,
+    "lon": -117.177065
+  },
+  {
+    "street": "33rd Street",
+    "housenumber": "3015",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.736862,
+    "lon": -117.122819
+  },
+  {
+    "street": "West Maple Street",
+    "housenumber": "806",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.731967,
+    "lon": -117.170253
+  },
+  {
+    "street": "Calle Cristobal",
+    "housenumber": "7370",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.921582,
+    "lon": -117.169044
+  },
+  {
+    "street": "Santa Arminta Avenue",
+    "housenumber": "8147",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.927996,
+    "lon": -117.148481
+  },
+  {
+    "street": "Donald Avenue",
+    "housenumber": "4409",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.822683,
+    "lon": -117.198964
+  },
+  {
+    "street": "26th Street",
+    "housenumber": "1030",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.716422,
+    "lon": -117.138452
+  },
+  {
+    "street": "Hortensia Street",
+    "housenumber": "4476",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.75633,
+    "lon": -117.1837656
+  },
+  {
+    "street": "Monroe Avenue",
+    "housenumber": "4780",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.759279,
+    "lon": -117.091178
+  },
+  {
+    "street": "42nd Street",
+    "housenumber": "4321",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.755672,
+    "lon": -117.104718
+  },
+  {
+    "street": "Hamlet Avenue",
+    "housenumber": "7367",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.801154,
+    "lon": -117.067076
+  },
+  {
+    "street": "36th Street",
+    "housenumber": "4475",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.75856,
+    "lon": -117.114913
+  },
+  {
+    "street": "Monroe Avenue",
+    "housenumber": "3576",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.759198,
+    "lon": -117.115498
+  },
+  {
+    "street": "Mount Henry Place",
+    "housenumber": "4555",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.821237,
+    "lon": -117.197063
+  },
+  {
+    "street": "Evergreen Street",
+    "housenumber": "2524",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.739972,
+    "lon": -117.219405
+  },
+  {
+    "street": "Matanza Road",
+    "housenumber": "12745",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.016239,
+    "lon": -117.055236
+  },
+  {
+    "street": "Rue Chamberry",
+    "housenumber": "10335",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.904197,
+    "lon": -117.067549
+  },
+  {
+    "street": "Wilson Avenue",
+    "housenumber": "3535",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.74341,
+    "lon": -117.116524
+  },
+  {
+    "street": "Hemlock Street",
+    "housenumber": "3911",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.699391,
+    "lon": -117.110001
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1400",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.715996,
+    "lon": -117.151677
+  },
+  {
+    "street": "Proctor Place",
+    "housenumber": "4320",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.7560533,
+    "lon": -117.1531157
+  },
+  {
+    "street": "Randolph Street",
+    "housenumber": "4343",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.756503,
+    "lon": -117.176067
+  },
+  {
+    "street": "Montalvo Street",
+    "housenumber": "4230",
+    "city": "San Diego",
+    "lat": 32.748899,
+    "lon": -117.2298582
+  },
+  {
+    "street": "Almayo Avenue",
+    "housenumber": "4663",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.829141,
+    "lon": -117.184779
+  },
+  {
+    "street": "Akron Street",
+    "housenumber": "1150",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7238012,
+    "lon": -117.2366869
+  },
+  {
+    "street": "Avenida de Los Lobos",
+    "housenumber": "11106",
+    "city": "San Diego",
+    "postcode": "92127",
+    "lat": 32.999691,
+    "lon": -117.093649
+  },
+  {
+    "street": "Elevation Road",
+    "housenumber": "1441",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.771526,
+    "lon": -117.196495
+  },
+  {
+    "street": "Epanow Avenue",
+    "housenumber": "4073",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.815372,
+    "lon": -117.202623
+  },
+  {
+    "street": "Iowa Street",
+    "housenumber": "3924",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.748936,
+    "lon": -117.126802
+  },
+  {
+    "street": "Winnett Street",
+    "housenumber": "2036",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.726837,
+    "lon": -117.063698
+  },
+  {
+    "street": "Cleveland Avenue",
+    "housenumber": "4313",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.755729,
+    "lon": -117.149653
+  },
+  {
+    "street": "Wittman Way",
+    "housenumber": "3107",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.547976,
+    "lon": -117.051373
+  },
+  {
+    "street": "Kleefeld Avenue",
+    "housenumber": "4779",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.832307,
+    "lon": -117.199505
+  },
+  {
+    "street": "Cypress Avenue",
+    "housenumber": "1624",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.744657,
+    "lon": -117.148456
+  },
+  {
+    "street": "46th Street",
+    "housenumber": "2721",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.73469,
+    "lon": -117.095706
+  },
+  {
+    "street": "Newton Avenue",
+    "housenumber": "2272",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.695823,
+    "lon": -117.139413
+  },
+  {
+    "street": "La Sena Avenue",
+    "housenumber": "7076",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.707295,
+    "lon": -117.044256
+  },
+  {
+    "street": "Louisiana Street",
+    "housenumber": "4482",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.758741,
+    "lon": -117.140432
+  },
+  {
+    "street": "Parkbrook Lane",
+    "housenumber": "8450",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.7005,
+    "lon": -117.021603
+  },
+  {
+    "street": "Magnus Way",
+    "housenumber": "4721",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.692349,
+    "lon": -117.093003
+  },
+  {
+    "street": "32nd Street",
+    "housenumber": "3632",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.744426,
+    "lon": -117.125312
+  },
+  {
+    "street": "Hanford Drive",
+    "housenumber": "2036",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.781972,
+    "lon": -117.164436
+  },
+  {
+    "street": "Narragansett Avenue",
+    "housenumber": "4868",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.744069,
+    "lon": -117.24997
+  },
+  {
+    "street": "Eureka Street",
+    "housenumber": "1121",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.766937,
+    "lon": -117.188176
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1105",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.715498,
+    "lon": -117.154404
+  },
+  {
+    "street": "Madra Avenue",
+    "housenumber": "5811",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.78472,
+    "lon": -117.058426
+  },
+  {
+    "street": "Soledad Mountain Road",
+    "housenumber": "5330",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.816071,
+    "lon": -117.236632
+  },
+  {
+    "street": "Bancroft Street",
+    "housenumber": "3592",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.74365,
+    "lon": -117.124136
+  },
+  {
+    "street": "24th Street",
+    "housenumber": "912",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.715064,
+    "lon": -117.142708
+  },
+  {
+    "street": "Cheames Way",
+    "housenumber": "6551",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.826039,
+    "lon": -117.166815
+  },
+  {
+    "street": "Trumbull Street",
+    "housenumber": "3357",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.722863,
+    "lon": -117.237936
+  },
+  {
+    "street": "Brant Street",
+    "housenumber": "2790",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.734678,
+    "lon": -117.166932
+  },
+  {
+    "street": "Evergreen Avenue",
+    "housenumber": "1644",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.579861,
+    "lon": -117.098113
+  },
+  {
+    "street": "Chatsworth Boulevard",
+    "housenumber": "2475",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7415204,
+    "lon": -117.2237591
+  },
+  {
+    "street": "Reynard Way",
+    "housenumber": "3256",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.739273,
+    "lon": -117.169845
+  },
+  {
+    "street": "Delbarton Street",
+    "housenumber": "6423",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.789773,
+    "lon": -117.090584
+  },
+  {
+    "street": "Atherton Avenue",
+    "housenumber": "2389",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.56125,
+    "lon": -117.082789
+  },
+  {
+    "street": "Verlane Drive",
+    "housenumber": "8645",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.804399,
+    "lon": -117.01087
+  },
+  {
+    "street": "Vancouver Avenue",
+    "housenumber": "3558",
+    "city": "San Diego",
+    "lat": 32.743109,
+    "lon": -117.119209
+  },
+  {
+    "street": "Negley Avenue",
+    "housenumber": "11009",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.902339,
+    "lon": -117.094405
+  },
+  {
+    "street": "Herrick Street",
+    "housenumber": "6576",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.711728,
+    "lon": -117.056279
+  },
+  {
+    "street": "Kalmia Street",
+    "housenumber": "3061",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.730346,
+    "lon": -117.128017
+  },
+  {
+    "street": "Twining Avenue",
+    "housenumber": "980",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.578135,
+    "lon": -117.04572
+  },
+  {
+    "street": "Ediwhar Avenue",
+    "housenumber": "3496",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.806453,
+    "lon": -117.13676
+  },
+  {
+    "street": "Citrus Avenue",
+    "housenumber": "2276",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.585009,
+    "lon": -117.084855
+  },
+  {
+    "street": "Sorbonne Court",
+    "housenumber": "13746",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.968841,
+    "lon": -117.078561
+  },
+  {
+    "street": "Allenhurst Place",
+    "housenumber": "4716",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.829787,
+    "lon": -117.18149
+  },
+  {
+    "street": "Carmel Ridge Road",
+    "housenumber": "13864",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.972538,
+    "lon": -117.07798
+  },
+  {
+    "street": "Calle Altura",
+    "housenumber": "1455",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.814576,
+    "lon": -117.255188
+  },
+  {
+    "street": "Kalmia Street",
+    "housenumber": "3195",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.730335,
+    "lon": -117.125434
+  },
+  {
+    "street": "Canyon Lake Drive",
+    "housenumber": "10657",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.905681,
+    "lon": -117.101667
+  },
+  {
+    "street": "53rd Street",
+    "housenumber": "2987",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.736333,
+    "lon": -117.081257
+  },
+  {
+    "street": "Conrad Avenue",
+    "housenumber": "3694",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.835611,
+    "lon": -117.207605
+  },
+  {
+    "street": "Crandall Drive",
+    "housenumber": "2208",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.783623,
+    "lon": -117.165472
+  },
+  {
+    "street": "Linwood Street",
+    "housenumber": "2225",
+    "city": "San Diego",
+    "lat": 32.749527,
+    "lon": -117.18994
+  },
+  {
+    "street": "Blue Lake Drive",
+    "housenumber": "7747",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.79171,
+    "lon": -117.031832
+  },
+  {
+    "street": "El Paso Real",
+    "housenumber": "1640",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.830513,
+    "lon": -117.258187
+  },
+  {
+    "street": "Westbrook Avenue",
+    "housenumber": "7568",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.685877,
+    "lon": -117.026051
+  },
+  {
+    "street": "Edgeware Road",
+    "housenumber": "4803",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.765116,
+    "lon": -117.104974
+  },
+  {
+    "street": "Altadena Avenue",
+    "housenumber": "4234",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.753623,
+    "lon": -117.086077
+  },
+  {
+    "street": "55th Street",
+    "housenumber": "3312",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.741504,
+    "lon": -117.077819
+  },
+  {
+    "street": "Trade Street",
+    "housenumber": "7572",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.890612,
+    "lon": -117.160231
+  },
+  {
+    "street": "Mount Ashmun Drive",
+    "housenumber": "4982",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.808305,
+    "lon": -117.187338
+  },
+  {
+    "street": "30th Street",
+    "housenumber": "3986",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.750057,
+    "lon": -117.13051
+  },
+  {
+    "street": "Rockaway Court",
+    "housenumber": "831",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.784382,
+    "lon": -117.252024
+  },
+  {
+    "street": "Calais Drive",
+    "housenumber": "13607",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.946201,
+    "lon": -117.246307
+  },
+  {
+    "street": "Carleton Street",
+    "housenumber": "2817",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.722079,
+    "lon": -117.229078
+  },
+  {
+    "street": "34th Street",
+    "housenumber": "4161",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.752624,
+    "lon": -117.120129
+  },
+  {
+    "street": "Lamont Street",
+    "housenumber": "4055",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.794644,
+    "lon": -117.233081
+  },
+  {
+    "street": "Morning Creek South Drive",
+    "housenumber": "11052",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.95433,
+    "lon": -117.092174
+  },
+  {
+    "street": "Campillo Drive",
+    "housenumber": "17311",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.028248,
+    "lon": -117.064325
+  },
+  {
+    "street": "Lemonseed Drive",
+    "housenumber": "4233",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584011,
+    "lon": -117.042241
+  },
+  {
+    "street": "Burgener Boulevard",
+    "housenumber": "2167",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.781557,
+    "lon": -117.188283
+  },
+  {
+    "street": "Cable Street",
+    "housenumber": "1641",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.741323,
+    "lon": -117.252955
+  },
+  {
+    "street": "Menlo Avenue",
+    "housenumber": "3730",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.746491,
+    "lon": -117.09476
+  },
+  {
+    "street": "Aber Street",
+    "housenumber": "2911",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.828851,
+    "lon": -117.224081
+  },
+  {
+    "street": "Surf Crest Drive",
+    "housenumber": "1198",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.573882,
+    "lon": -117.02733
+  },
+  {
+    "street": "Castejon Drive",
+    "housenumber": "6352",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.831137,
+    "lon": -117.249745
+  },
+  {
+    "street": "Golfcrest Drive",
+    "housenumber": "7711",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.814694,
+    "lon": -117.045723
+  },
+  {
+    "street": "Bantam Avenue",
+    "housenumber": "9482",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.794913,
+    "lon": -117.12194
+  },
+  {
+    "street": "Paducah Drive",
+    "housenumber": "4090",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.814081,
+    "lon": -117.212781
+  },
+  {
+    "street": "Floresta Court",
+    "housenumber": "12467",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.034075,
+    "lon": -117.061438
+  },
+  {
+    "street": "Caminito Verano",
+    "housenumber": "8988",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.870181,
+    "lon": -117.240204
+  },
+  {
+    "street": "Niagara Avenue",
+    "housenumber": "4781",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.743554,
+    "lon": -117.248161
+  },
+  {
+    "street": "Historic Decatur Road",
+    "housenumber": "2485",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.735841,
+    "lon": -117.214202
+  },
+  {
+    "street": "Manzana Way",
+    "housenumber": "2089",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.689912,
+    "lon": -117.023725
+  },
+  {
+    "street": "40th Street",
+    "housenumber": "3319",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.74079,
+    "lon": -117.109143
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "4444",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7579665,
+    "lon": -117.0995263
+  },
+  {
+    "street": "Isla de la Gaita",
+    "housenumber": "1813",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.563309,
+    "lon": -117.061538
+  },
+  {
+    "street": "Avenida de la Madrid",
+    "housenumber": "193",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.562679,
+    "lon": -117.045326
+  },
+  {
+    "street": "West Arbor Drive",
+    "housenumber": "1748",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.7536027,
+    "lon": -117.1793198
+  },
+  {
+    "street": "Larkdale Avenue",
+    "housenumber": "8288",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.800707,
+    "lon": -117.148613
+  },
+  {
+    "street": "Reo Drive",
+    "housenumber": "2228",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.677482,
+    "lon": -117.066767
+  },
+  {
+    "street": "32nd Street",
+    "housenumber": "4631",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.76183,
+    "lon": -117.124693
+  },
+  {
+    "street": "El Camino del Teatro",
+    "housenumber": "1903",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.828337,
+    "lon": -117.255032
+  },
+  {
+    "street": "Avenida de la Cruz",
+    "housenumber": "1885",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.561929,
+    "lon": -117.046
+  },
+  {
+    "street": "Nantasket Court",
+    "housenumber": "816",
+    "city": "San Diego",
+    "lat": 32.779996,
+    "lon": -117.252006
+  },
+  {
+    "street": "Meandro Drive",
+    "housenumber": "16831",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.017661,
+    "lon": -117.063716
+  },
+  {
+    "street": "Ingalls Street",
+    "housenumber": "4024",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.750343,
+    "lon": -117.175311
+  },
+  {
+    "street": "Canis Lane",
+    "housenumber": "8970",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.921581,
+    "lon": -117.132726
+  },
+  {
+    "street": "Caminito Vista Lujo",
+    "housenumber": "5205",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.943488,
+    "lon": -117.207291
+  },
+  {
+    "street": "East Lake Drive",
+    "housenumber": "6264",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.792922,
+    "lon": -117.006918
+  },
+  {
+    "street": "Park Boulevard",
+    "housenumber": "4155",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.753671,
+    "lon": -117.14535
+  },
+  {
+    "street": "Del Oro Court",
+    "housenumber": "8351",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.858073,
+    "lon": -117.252464
+  },
+  {
+    "street": "Hannon Court",
+    "housenumber": "6220",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.828979,
+    "lon": -117.168512
+  },
+  {
+    "street": "Carly Court",
+    "housenumber": "1428",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.694978,
+    "lon": -117.047166
+  },
+  {
+    "street": "Devon Court",
+    "housenumber": "817",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.766045,
+    "lon": -117.250587
+  },
+  {
+    "street": "Witherby Street",
+    "housenumber": "4245",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.751774,
+    "lon": -117.187006
+  },
+  {
+    "street": "Zurich Drive",
+    "housenumber": "1223",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.574603,
+    "lon": -117.089877
+  },
+  {
+    "street": "Burgener Boulevard",
+    "housenumber": "2735",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.791262,
+    "lon": -117.19234
+  },
+  {
+    "street": "Avenida de Las Pescas",
+    "housenumber": "6673",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.831425,
+    "lon": -117.264567
+  },
+  {
+    "street": "Daves Way",
+    "housenumber": "4023",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.579999,
+    "lon": -117.04771
+  },
+  {
+    "street": "Herbert Street",
+    "housenumber": "3436",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.741928,
+    "lon": -117.149496
+  },
+  {
+    "street": "Kendall Street",
+    "housenumber": "3970",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.792469,
+    "lon": -117.235046
+  },
+  {
+    "street": "Naylor Road",
+    "housenumber": "3221",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.545523,
+    "lon": -117.052829
+  },
+  {
+    "street": "Whellock Way",
+    "housenumber": "9536",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.961154,
+    "lon": -117.120138
+  },
+  {
+    "street": "Thermal Avenue",
+    "housenumber": "1042",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.577335,
+    "lon": -117.097311
+  },
+  {
+    "street": "Onate Avenue",
+    "housenumber": "4856",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.832923,
+    "lon": -117.176762
+  },
+  {
+    "street": "Eden Mills Place",
+    "housenumber": "14836",
+    "city": "San Diego",
+    "postcode": "92145",
+    "lat": 32.923982,
+    "lon": -117.02469
+  },
+  {
+    "street": "Benavente Way",
+    "housenumber": "12734",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.948361,
+    "lon": -117.112776
+  },
+  {
+    "street": "Mount Longs Drive",
+    "housenumber": "4606",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.82804,
+    "lon": -117.191064
+  },
+  {
+    "street": "Portofino Drive",
+    "housenumber": "13046",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.937262,
+    "lon": -117.243579
+  },
+  {
+    "street": "Radio Drive",
+    "housenumber": "6576",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.723909,
+    "lon": -117.056399
+  },
+  {
+    "street": "T Street",
+    "housenumber": "3803",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.698681,
+    "lon": -117.112304
+  },
+  {
+    "street": "Prego Court",
+    "housenumber": "12608",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.947674,
+    "lon": -117.2155
+  },
+  {
+    "street": "Poe Street",
+    "housenumber": "3329",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.732952,
+    "lon": -117.227427
+  },
+  {
+    "street": "Oro Vista Road",
+    "housenumber": "1771",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.564702,
+    "lon": -117.0785726
+  },
+  {
+    "street": "45th Street",
+    "housenumber": "4020",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.750042,
+    "lon": -117.097946
+  },
+  {
+    "street": "Wyatt Place",
+    "housenumber": "5019",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.566595,
+    "lon": -117.030367
+  },
+  {
+    "street": "Pacific Highway",
+    "housenumber": "4450",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7514886,
+    "lon": -117.2007409
+  },
+  {
+    "street": "Olivetas Avenue",
+    "housenumber": "7127",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.834632,
+    "lon": -117.278151
+  },
+  {
+    "street": "29th Street",
+    "housenumber": "3018",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.736885,
+    "lon": -117.131736
+  },
+  {
+    "street": "Antiem Street",
+    "housenumber": "3856",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.813656,
+    "lon": -117.159258
+  },
+  {
+    "street": "Viacha Drive",
+    "housenumber": "10787",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.815078,
+    "lon": -117.095174
+  },
+  {
+    "street": "Dumas Street",
+    "housenumber": "3021",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.739538,
+    "lon": -117.217218
+  },
+  {
+    "street": "Pocahontas Avenue",
+    "housenumber": "4664",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.829995,
+    "lon": -117.208166
+  },
+  {
+    "street": "Albatross Street",
+    "housenumber": "3959",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.74937,
+    "lon": -117.165799
+  },
+  {
+    "street": "Seagirt Court",
+    "housenumber": "818",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.78555,
+    "lon": -117.25267
+  },
+  {
+    "street": "Utah Street",
+    "housenumber": "4784",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.76443,
+    "lon": -117.133035
+  },
+  {
+    "street": "Trias Street",
+    "housenumber": "4237",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.752854,
+    "lon": -117.188929
+  },
+  {
+    "street": "Neptune Place",
+    "housenumber": "6611",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.827306,
+    "lon": -117.279504
+  },
+  {
+    "street": "Caminito Gilbar",
+    "housenumber": "15720",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.001155,
+    "lon": -117.07862
+  },
+  {
+    "street": "Blando Lane",
+    "housenumber": "1886",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.561926,
+    "lon": -117.043803
+  },
+  {
+    "street": "Brookline Street",
+    "housenumber": "1810",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.72444,
+    "lon": -117.091601
+  },
+  {
+    "street": "Felspar Street",
+    "housenumber": "1123",
+    "city": "San Diego",
+    "lat": 32.798552,
+    "lon": -117.249686
+  },
+  {
+    "street": "31st Street",
+    "housenumber": "3527",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.742545,
+    "lon": -117.126836
+  },
+  {
+    "street": "Midway Drive",
+    "housenumber": "3757",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.753357,
+    "lon": -117.217793
+  },
+  {
+    "street": "Radio Drive",
+    "housenumber": "6623",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.724292,
+    "lon": -117.054611
+  },
+  {
+    "street": "Boulder Lake Avenue",
+    "housenumber": "6297",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.794084,
+    "lon": -117.019735
+  },
+  {
+    "street": "Racetrack View Drive",
+    "housenumber": "2829",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.961455,
+    "lon": -117.252751
+  },
+  {
+    "street": "Benavente Street",
+    "housenumber": "9642",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.946363,
+    "lon": -117.112909
+  },
+  {
+    "street": "Caminito Abrazo",
+    "housenumber": "8761",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.86671,
+    "lon": -117.238983
+  },
+  {
+    "street": "Wilshire Terrace",
+    "housenumber": "3512",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.742563,
+    "lon": -117.144504
+  },
+  {
+    "street": "Linares Street",
+    "housenumber": "11222",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.992697,
+    "lon": -117.09443
+  },
+  {
+    "street": "Logan Avenue",
+    "housenumber": "4036",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.697372,
+    "lon": -117.107036
+  },
+  {
+    "street": "Hickok Point",
+    "housenumber": "4721",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.566019,
+    "lon": -117.035865
+  },
+  {
+    "street": "Johnson Avenue",
+    "housenumber": "1014",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.755112,
+    "lon": -117.155212
+  },
+  {
+    "street": "Smythe Avenue",
+    "housenumber": "1509",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.56738,
+    "lon": -117.052799
+  },
+  {
+    "street": "Eta Street",
+    "housenumber": "4016",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.686981,
+    "lon": -117.107657
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "3122",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.755729,
+    "lon": -117.12715
+  },
+  {
+    "street": "Deer Canyon Place",
+    "housenumber": "13234",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.959606,
+    "lon": -117.151236
+  },
+  {
+    "street": "El Camino Real",
+    "housenumber": "12559",
+    "city": "San Diego",
+    "lat": 32.945813,
+    "lon": -117.234636
+  },
+  {
+    "street": "Del Mar Avenue",
+    "housenumber": "4850",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.740475,
+    "lon": -117.252607
+  },
+  {
+    "street": "Twining Avenue",
+    "housenumber": "869",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.580045,
+    "lon": -117.04518
+  },
+  {
+    "street": "Desert View Drive",
+    "housenumber": "5971",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8287865,
+    "lon": -117.2370794
+  },
+  {
+    "street": "Madison Avenue",
+    "housenumber": "3580",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.761129,
+    "lon": -117.115499
+  },
+  {
+    "street": "Pershing Avenue",
+    "housenumber": "3745",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.746612,
+    "lon": -117.134341
+  },
+  {
+    "street": "Coast Boulevard South",
+    "housenumber": "950",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8480322,
+    "lon": -117.2757187
+  },
+  {
+    "street": "15th Street",
+    "housenumber": "1117",
+    "city": "Imperial Beach",
+    "postcode": "91932",
+    "lat": 32.575938,
+    "lon": -117.101075
+  },
+  {
+    "street": "Nile Street",
+    "housenumber": "3318",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.740435,
+    "lon": -117.119555
+  },
+  {
+    "street": "Billow Drive",
+    "housenumber": "602",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.711155,
+    "lon": -117.02344
+  },
+  {
+    "street": "Sorrento Valley Boulevard",
+    "housenumber": "6576",
+    "city": "San Diego",
+    "postcode": "92121",
+    "lat": 32.920482,
+    "lon": -117.180919
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "3966",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.749142,
+    "lon": -117.164203
+  },
+  {
+    "street": "Silverwood Street",
+    "housenumber": "7042",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.694474,
+    "lon": -117.042146
+  },
+  {
+    "street": "Mason Heights Lane",
+    "housenumber": "7444",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.924621,
+    "lon": -117.164533
+  },
+  {
+    "street": "Zapata Avenue",
+    "housenumber": "11215",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.925708,
+    "lon": -117.145611
+  },
+  {
+    "street": "42nd Street",
+    "housenumber": "4422",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.757552,
+    "lon": -117.105345
+  },
+  {
+    "street": "Frankel Way",
+    "housenumber": "2969",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.796532,
+    "lon": -117.177754
+  },
+  {
+    "street": "Opal Street",
+    "housenumber": "1221",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.807443,
+    "lon": -117.250463
+  },
+  {
+    "street": "Joan Court",
+    "housenumber": "5230",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.771056,
+    "lon": -117.083129
+  },
+  {
+    "street": "Villa Terrace",
+    "housenumber": "3639",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.74473,
+    "lon": -117.135415
+  },
+  {
+    "street": "Forney Avenue",
+    "housenumber": "4081",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.815246,
+    "lon": -117.203476
+  },
+  {
+    "street": "East Beyer Boulevard",
+    "housenumber": "2643",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.55172,
+    "lon": -117.037518
+  },
+  {
+    "street": "Avenida Sivrita",
+    "housenumber": "11617",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.998926,
+    "lon": -117.081213
+  },
+  {
+    "street": "San Diego Avenue",
+    "housenumber": "1970",
+    "city": "San Diego",
+    "lat": 32.745578,
+    "lon": -117.186696
+  },
+  {
+    "street": "Jason Street",
+    "housenumber": "1511",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.569451,
+    "lon": -117.100963
+  },
+  {
+    "street": "Grove View Road",
+    "housenumber": "2204",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.687726,
+    "lon": -117.035314
+  },
+  {
+    "street": "Avenida Circo",
+    "housenumber": "5719",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.836785,
+    "lon": -117.106408
+  },
+  {
+    "street": "Madera Rosa Way",
+    "housenumber": "11553",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.813325,
+    "lon": -117.079399
+  },
+  {
+    "street": "Colonnades Place",
+    "housenumber": "18111",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.038865,
+    "lon": -117.073513
+  },
+  {
+    "street": "Renovo Way",
+    "housenumber": "4740",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.827152,
+    "lon": -117.078009
+  },
+  {
+    "street": "Palm Avenue",
+    "housenumber": "4039",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.583427,
+    "lon": -117.0468
+  },
+  {
+    "street": "North Avenue",
+    "housenumber": "4565",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.760371,
+    "lon": -117.147138
+  },
+  {
+    "street": "Mount Castle Avenue",
+    "housenumber": "4420",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.821657,
+    "lon": -117.185577
+  },
+  {
+    "street": "East Mountain View Drive",
+    "housenumber": "4742",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.764026,
+    "lon": -117.113173
+  },
+  {
+    "street": "Morrison Street",
+    "housenumber": "632",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.712131,
+    "lon": -117.105883
+  },
+  {
+    "street": "Twining Avenue",
+    "housenumber": "641",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.584849,
+    "lon": -117.045152
+  },
+  {
+    "street": "Mount Ainsworth Avenue",
+    "housenumber": "3715",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.812798,
+    "lon": -117.176625
+  },
+  {
+    "street": "54th Place",
+    "housenumber": "4135",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.751667,
+    "lon": -117.0779451
+  },
+  {
+    "street": "Roswell Street",
+    "housenumber": "5794",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.71778,
+    "lon": -117.072792
+  },
+  {
+    "street": "Emerald Street",
+    "housenumber": "1235",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.799965,
+    "lon": -117.247863
+  },
+  {
+    "street": "Curlew Street",
+    "housenumber": "3040",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.737028,
+    "lon": -117.167897
+  },
+  {
+    "street": "Picador Boulevard",
+    "housenumber": "695",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.582639,
+    "lon": -117.060992
+  },
+  {
+    "street": "Longford Court",
+    "housenumber": "4980",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.831813,
+    "lon": -117.18331
+  },
+  {
+    "street": "Blue Lake Drive",
+    "housenumber": "7904",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.792279,
+    "lon": -117.028853
+  },
+  {
+    "street": "Edgeware Road",
+    "housenumber": "4875",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.766314,
+    "lon": -117.104944
+  },
+  {
+    "street": "Albata Court",
+    "housenumber": "1544",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.568414,
+    "lon": -117.085734
+  },
+  {
+    "street": "Hornblend Street",
+    "housenumber": "1352",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.7982,
+    "lon": -117.244989
+  },
+  {
+    "street": "Granada Avenue",
+    "housenumber": "1627",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.722952,
+    "lon": -117.132665
+  },
+  {
+    "street": "Glenroy Street",
+    "housenumber": "6565",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.79215,
+    "lon": -117.082314
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "1819",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.798485,
+    "lon": -117.235982
+  },
+  {
+    "street": "Wessex Street",
+    "housenumber": "18547",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.049544,
+    "lon": -117.06449
+  },
+  {
+    "street": "Collwood Boulevard",
+    "housenumber": "4501",
+    "city": "San Diego",
+    "lat": 32.759986,
+    "lon": -117.080396
+  },
+  {
+    "street": "Bayside Walk",
+    "housenumber": "3750",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.783928,
+    "lon": -117.251595
+  },
+  {
+    "street": "College Avenue",
+    "housenumber": "4774",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.764645,
+    "lon": -117.067171
+  },
+  {
+    "street": "Ivy Hill Drive",
+    "housenumber": "10976",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.937824,
+    "lon": -117.0922
+  },
+  {
+    "street": "Caminito Verdugo",
+    "housenumber": "2734",
+    "city": "Del Mar",
+    "postcode": "92014",
+    "lat": 32.935089,
+    "lon": -117.243147
+  },
+  {
+    "street": "Maury Drive",
+    "housenumber": "6883",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.807487,
+    "lon": -117.010757
+  },
+  {
+    "street": "West Olive Drive",
+    "housenumber": "133",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.553732,
+    "lon": -117.043183
+  },
+  {
+    "street": "Laurel Street",
+    "housenumber": "3042",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.732407,
+    "lon": -117.128152
+  },
+  {
+    "street": "Dubois Drive",
+    "housenumber": "5110",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.837902,
+    "lon": -117.199839
+  },
+  {
+    "street": "Amnest Street",
+    "housenumber": "5061",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.836957,
+    "lon": -117.185995
+  },
+  {
+    "street": "La Jolla Scenic Drive South",
+    "housenumber": "6705",
+    "city": "San Diego",
+    "lat": 32.837414,
+    "lon": -117.248663
+  },
+  {
+    "street": "Audrey Lane",
+    "housenumber": "3475",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7452809,
+    "lon": -117.0672046
+  },
+  {
+    "street": "Avenida Chamnez",
+    "housenumber": "5942",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.820815,
+    "lon": -117.264282
+  },
+  {
+    "street": "Georgia Street",
+    "housenumber": "3936",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.749232,
+    "lon": -117.145331
+  },
+  {
+    "street": "Rytko Street",
+    "housenumber": "666",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.710314,
+    "lon": -117.032214
+  },
+  {
+    "street": "Westbourne Street",
+    "housenumber": "530",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.83334,
+    "lon": -117.276384
+  },
+  {
+    "street": "Saratoga Avenue",
+    "housenumber": "4860",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.747312,
+    "lon": -117.24694
+  },
+  {
+    "street": "Kalmia Street",
+    "housenumber": "2965",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.730509,
+    "lon": -117.130306
+  },
+  {
+    "street": "Beagle Place",
+    "housenumber": "3448",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.808636,
+    "lon": -117.168017
+  },
+  {
+    "street": "Piccard Avenue",
+    "housenumber": "1138",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.57566,
+    "lon": -117.050304
+  },
+  {
+    "street": "Casita Way",
+    "housenumber": "3915",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.748217,
+    "lon": -117.051069
+  },
+  {
+    "street": "26th Street",
+    "housenumber": "1234",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.718651,
+    "lon": -117.138455
+  },
+  {
+    "street": "Dunhaven Street",
+    "housenumber": "2251",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.783618,
+    "lon": -117.195193
+  },
+  {
+    "street": "New Salem Street",
+    "housenumber": "8007",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.915494,
+    "lon": -117.150483
+  },
+  {
+    "street": "Estrella Avenue",
+    "housenumber": "4424",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.757022,
+    "lon": -117.090343
+  },
+  {
+    "street": "Art Street",
+    "housenumber": "4830",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.765395,
+    "lon": -117.061534
+  },
+  {
+    "street": "Waring Road",
+    "housenumber": "5683",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.795357,
+    "lon": -117.069897
+  },
+  {
+    "street": "Via del Conquistador",
+    "housenumber": "3702",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.80495,
+    "lon": -117.207086
+  },
+  {
+    "street": "55th Street",
+    "housenumber": "3003",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.738575,
+    "lon": -117.075416
+  },
+  {
+    "street": "Omeara Street",
+    "housenumber": "620",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.699332,
+    "lon": -117.063198
+  },
+  {
+    "street": "Abbottswood Row",
+    "housenumber": "6055",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.83074,
+    "lon": -117.237921
+  },
+  {
+    "street": "52nd Street",
+    "housenumber": "4464",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.758563,
+    "lon": -117.083825
+  },
+  {
+    "street": "Zola Street",
+    "housenumber": "3303",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7387835,
+    "lon": -117.2219352
+  },
+  {
+    "street": "Etude Road",
+    "housenumber": "13650",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.968281,
+    "lon": -117.068784
+  },
+  {
+    "street": "Rancho Capistrano Bend",
+    "housenumber": "13941",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.969521,
+    "lon": -117.208934
+  },
+  {
+    "street": "Caminito Sereno",
+    "housenumber": "12337",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.923111,
+    "lon": -117.06567
+  },
+  {
+    "street": "Poe Street",
+    "housenumber": "3406",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.733621,
+    "lon": -117.227691
+  },
+  {
+    "street": "Rushville Street",
+    "housenumber": "760",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.835469,
+    "lon": -117.273923
+  },
+  {
+    "street": "Buckwheat Court",
+    "housenumber": "12695",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.946596,
+    "lon": -117.130544
+  },
+  {
+    "street": "Belford Street",
+    "housenumber": "3787",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.812492,
+    "lon": -117.164322
+  },
+  {
+    "street": "Cass Street",
+    "housenumber": "4617",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.798753,
+    "lon": -117.251969
+  },
+  {
+    "street": "Gwen Street",
+    "housenumber": "875",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.696567,
+    "lon": -117.081122
+  },
+  {
+    "street": "Kendall Street",
+    "housenumber": "3964",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.792332,
+    "lon": -117.235006
+  },
+  {
+    "street": "Midvale Drive",
+    "housenumber": "1851",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.725415,
+    "lon": -117.109405
+  },
+  {
+    "street": "Rolando Boulevard",
+    "housenumber": "4511",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.759623,
+    "lon": -117.0564
+  },
+  {
+    "street": "Greenstone Court",
+    "housenumber": "13383",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.920991,
+    "lon": -117.041413
+  },
+  {
+    "street": "Salinas Way",
+    "housenumber": "10951",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.918059,
+    "lon": -117.155489
+  },
+  {
+    "street": "East Falls View Drive",
+    "housenumber": "5227",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.773159,
+    "lon": -117.064013
+  },
+  {
+    "street": "Holderness Lane",
+    "housenumber": "2655",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.581767,
+    "lon": -117.075888
+  },
+  {
+    "street": "Northrup Drive",
+    "housenumber": "7648",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.901679,
+    "lon": -117.158568
+  },
+  {
+    "street": "Elsa Road",
+    "housenumber": "4811",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.783598,
+    "lon": -117.09127
+  },
+  {
+    "street": "Da Vinci Street",
+    "housenumber": "4574",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.9427,
+    "lon": -117.21813
+  },
+  {
+    "street": "Estrella Avenue",
+    "housenumber": "4492",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.758609,
+    "lon": -117.090327
+  },
+  {
+    "street": "Nautilus Street",
+    "housenumber": "433",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.831411,
+    "lon": -117.277342
+  },
+  {
+    "street": "Morenci Street",
+    "housenumber": "1431",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.776789,
+    "lon": -117.205212
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "3692",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.744944,
+    "lon": -117.160621
+  },
+  {
+    "street": "High Park Lane",
+    "housenumber": "9528",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.958157,
+    "lon": -117.118638
+  },
+  {
+    "street": "Paseo Albacete",
+    "housenumber": "11379",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.994418,
+    "lon": -117.0859
+  },
+  {
+    "street": "Boren Street",
+    "housenumber": "3715",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.746483,
+    "lon": -117.062079
+  },
+  {
+    "street": "Bangor Street",
+    "housenumber": "1238",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.725572,
+    "lon": -117.238623
+  },
+  {
+    "street": "Seda Drive",
+    "housenumber": "4855",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.82785,
+    "lon": -117.07622
+  },
+  {
+    "street": "Judson Street",
+    "housenumber": "2551",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.789368,
+    "lon": -117.161043
+  },
+  {
+    "street": "Rock Canyon Drive",
+    "housenumber": "7365",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.922168,
+    "lon": -117.162127
+  },
+  {
+    "street": "Treena Street",
+    "housenumber": "10695",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.911973,
+    "lon": -117.113093
+  },
+  {
+    "street": "Craigie Street",
+    "housenumber": "4483",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.714157,
+    "lon": -117.098022
+  },
+  {
+    "street": "Sarape Drive",
+    "housenumber": "16331",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 33.01036,
+    "lon": -117.060478
+  },
+  {
+    "street": "Caminito Flecha",
+    "housenumber": "6320",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.768996,
+    "lon": -117.181966
+  },
+  {
+    "street": "Delta Street",
+    "housenumber": "3991",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.688465,
+    "lon": -117.108278
+  },
+  {
+    "street": "Antiem Street",
+    "housenumber": "4004",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.816235,
+    "lon": -117.160115
+  },
+  {
+    "street": "Camino Aleta",
+    "housenumber": "3125",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.576179,
+    "lon": -117.065047
+  },
+  {
+    "street": "Rue Fontainbleau",
+    "housenumber": "12445",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.906472,
+    "lon": -117.070816
+  },
+  {
+    "street": "Millwood Road",
+    "housenumber": "5049",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.837423,
+    "lon": -117.194661
+  },
+  {
+    "street": "Birch Street",
+    "housenumber": "3644",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.689947,
+    "lon": -117.115225
+  },
+  {
+    "street": "San Miguel Avenue",
+    "housenumber": "705",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.698317,
+    "lon": -117.104431
+  },
+  {
+    "street": "Old El Camino Real",
+    "housenumber": "13843",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.968925,
+    "lon": -117.220568
+  },
+  {
+    "street": "New Salem Street",
+    "housenumber": "7427",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9146714,
+    "lon": -117.1620475
+  },
+  {
+    "street": "Greenford Drive",
+    "housenumber": "10352",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.905938,
+    "lon": -117.131533
+  },
+  {
+    "street": "Hamilton Street",
+    "housenumber": "4632",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.761657,
+    "lon": -117.136733
+  },
+  {
+    "street": "Mission Mesa Way",
+    "housenumber": "3634",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.811653,
+    "lon": -117.067456
+  },
+  {
+    "street": "Caminito Genio",
+    "housenumber": "5694",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.817997,
+    "lon": -117.252073
+  },
+  {
+    "street": "55th Street",
+    "housenumber": "2605",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.732909,
+    "lon": -117.077148
+  },
+  {
+    "street": "La Jolla Mesa Drive",
+    "housenumber": "5398",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.812652,
+    "lon": -117.260567
+  },
+  {
+    "street": "Serafina Lane",
+    "housenumber": "10855",
+    "city": "San Diego",
+    "lat": 32.9475877,
+    "lon": -117.0952751
+  },
+  {
+    "street": "Hopedale Court",
+    "housenumber": "6543",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.792286,
+    "lon": -117.055529
+  },
+  {
+    "street": "Seahill Court",
+    "housenumber": "1242",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.573991,
+    "lon": -117.019026
+  },
+  {
+    "street": "Pola Court",
+    "housenumber": "4946",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.786719,
+    "lon": -117.193118
+  },
+  {
+    "street": "31st Street",
+    "housenumber": "3204",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.738424,
+    "lon": -117.127452
+  },
+  {
+    "street": "Redbird Drive",
+    "housenumber": "2095",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.782981,
+    "lon": -117.155818
+  },
+  {
+    "street": "Sea Ridge Drive",
+    "housenumber": "332",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.80849,
+    "lon": -117.266687
+  },
+  {
+    "street": "Leo Street",
+    "housenumber": "5080",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.770376,
+    "lon": -117.057379
+  },
+  {
+    "street": "Columbia Street",
+    "housenumber": "1721",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.723439,
+    "lon": -117.166861
+  },
+  {
+    "street": "El Banquero Place",
+    "housenumber": "6782",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.816844,
+    "lon": -117.049874
+  },
+  {
+    "street": "Terra Cotta Road",
+    "housenumber": "7165",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.701026,
+    "lon": -117.041157
+  },
+  {
+    "street": "Rueda Drive",
+    "housenumber": "4250",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.823282,
+    "lon": -117.090344
+  },
+  {
+    "street": "Borana Street",
+    "housenumber": "1641",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.775006,
+    "lon": -117.177833
+  },
+  {
+    "street": "Papagallo Court",
+    "housenumber": "11707",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.816207,
+    "lon": -117.077729
+  },
+  {
+    "street": "Parkdale Circle",
+    "housenumber": "7695",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.910722,
+    "lon": -117.155952
+  },
+  {
+    "street": "Romford Court",
+    "housenumber": "7163",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.801726,
+    "lon": -117.080321
+  },
+  {
+    "street": "Manitou Way",
+    "housenumber": "4436",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.833823,
+    "lon": -117.196456
+  },
+  {
+    "street": "Georgia Street",
+    "housenumber": "4374",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.756776,
+    "lon": -117.145331
+  },
+  {
+    "street": "Village Ridge Road",
+    "housenumber": "11510",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.936286,
+    "lon": -117.084661
+  },
+  {
+    "street": "Thalia Street",
+    "housenumber": "1244",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.573873,
+    "lon": -117.098159
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "1800",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.724249,
+    "lon": -117.162351
+  },
+  {
+    "street": "59th Street",
+    "housenumber": "4642",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.761672,
+    "lon": -117.071059
+  },
+  {
+    "street": "Cardinal Drive",
+    "housenumber": "2420",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.787941,
+    "lon": -117.158096
+  },
+  {
+    "street": "Bannock Avenue",
+    "housenumber": "4615",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.832503,
+    "lon": -117.19241
+  },
+  {
+    "street": "Camino Playa Malaga",
+    "housenumber": "5174",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.834611,
+    "lon": -117.092285
+  },
+  {
+    "street": "Babauta Road",
+    "housenumber": "9522",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.93689,
+    "lon": -117.122793
+  },
+  {
+    "street": "Ivy Hill Drive",
+    "housenumber": "10944",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.937822,
+    "lon": -117.093535
+  },
+  {
+    "street": "Greyling Drive",
+    "housenumber": "2661",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.793732,
+    "lon": -117.143293
+  },
+  {
+    "street": "Piantino Circle",
+    "housenumber": "2798",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.783813,
+    "lon": -117.132923
+  },
+  {
+    "street": "Clairemont Mesa Boulevard",
+    "housenumber": "4538",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.834796,
+    "lon": -117.193371
+  },
+  {
+    "street": "Kendall Street",
+    "housenumber": "4083",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.794686,
+    "lon": -117.235143
+  },
+  {
+    "street": "Fleetridge Drive",
+    "housenumber": "1202",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.727897,
+    "lon": -117.243289
+  },
+  {
+    "street": "Niagara Avenue",
+    "housenumber": "4445",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.739883,
+    "lon": -117.2424
+  },
+  {
+    "street": "Portobelo Court",
+    "housenumber": "5924",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.838936,
+    "lon": -117.097565
+  },
+  {
+    "street": "Beech Fern Court",
+    "housenumber": "11435",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.926579,
+    "lon": -117.085841
+  },
+  {
+    "street": "Pabellon Court",
+    "housenumber": "11257",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.823431,
+    "lon": -117.08431
+  },
+  {
+    "street": "16th Street",
+    "housenumber": "962",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.578791,
+    "lon": -117.099552
+  },
+  {
+    "street": "Marjorie Drive",
+    "housenumber": "913",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.715373,
+    "lon": -117.037496
+  },
+  {
+    "street": "Aspendell Drive",
+    "housenumber": "11616",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.929447,
+    "lon": -117.107897
+  },
+  {
+    "street": "Caminito Solitario",
+    "housenumber": "5216",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.772711,
+    "lon": -117.101993
+  },
+  {
+    "street": "Melton Court",
+    "housenumber": "11072",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.928389,
+    "lon": -117.09123
+  },
+  {
+    "street": "Red Fern Circle",
+    "housenumber": "10808",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.915879,
+    "lon": -117.078602
+  },
+  {
+    "street": "Bookham Court",
+    "housenumber": "7468",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.7826117,
+    "lon": -117.1649267
+  },
+  {
+    "street": "Smythe Avenue",
+    "housenumber": "1588",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.565763,
+    "lon": -117.052145
+  },
+  {
+    "street": "Dimarino Street",
+    "housenumber": "981",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.717016,
+    "lon": -117.040632
+  },
+  {
+    "street": "Luna Avenue",
+    "housenumber": "2802",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.835003,
+    "lon": -117.22492
+  },
+  {
+    "street": "Lady Fern Court",
+    "housenumber": "11225",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.926725,
+    "lon": -117.087186
+  },
+  {
+    "street": "Edgeware Road",
+    "housenumber": "5159",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.771711,
+    "lon": -117.10538
+  },
+  {
+    "street": "Eldergardens Street",
+    "housenumber": "5806",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.790067,
+    "lon": -117.070749
+  },
+  {
+    "street": "Dahlia Court",
+    "housenumber": "840",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.582071,
+    "lon": -117.075243
+  },
+  {
+    "street": "Cape May Avenue",
+    "housenumber": "4585",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.744838,
+    "lon": -117.241888
+  },
+  {
+    "street": "Muir Avenue",
+    "housenumber": "4951",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.750734,
+    "lon": -117.246422
+  },
+  {
+    "street": "Cole Street",
+    "housenumber": "5050",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.837086,
+    "lon": -117.201649
+  },
+  {
+    "street": "Mohawk Street",
+    "housenumber": "7095",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.769619,
+    "lon": -117.04507
+  },
+  {
+    "street": "Armstrong Street",
+    "housenumber": "3862",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.814026,
+    "lon": -117.163985
+  },
+  {
+    "street": "Mountain Pass Road",
+    "housenumber": "12027",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.9391028,
+    "lon": -117.071341
+  },
+  {
+    "street": "Hermes Street",
+    "housenumber": "1629",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.570817,
+    "lon": -117.098505
+  },
+  {
+    "street": "Larmier Circle",
+    "housenumber": "11454",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.923771,
+    "lon": -117.083804
+  },
+  {
+    "street": "La Jolla Shores Drive",
+    "housenumber": "8558",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.8632,
+    "lon": -117.25362
+  },
+  {
+    "street": "Lake Shore Drive",
+    "housenumber": "6271",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.793786,
+    "lon": -117.036196
+  },
+  {
+    "street": "11th Avenue",
+    "housenumber": "735",
+    "city": "San Diego",
+    "postcode": "92101",
+    "lat": 32.713067,
+    "lon": -117.154369
+  },
+  {
+    "street": "Roanoke Street",
+    "housenumber": "5646",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.670997,
+    "lon": -117.06684
+  },
+  {
+    "street": "Glade Street",
+    "housenumber": "3535",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.744932,
+    "lon": -117.063035
+  },
+  {
+    "street": "Richard Street",
+    "housenumber": "6606",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.773991,
+    "lon": -117.055131
+  },
+  {
+    "street": "Wittman Way",
+    "housenumber": "3078",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.548687,
+    "lon": -117.052013
+  },
+  {
+    "street": "Esmeraldas Drive",
+    "housenumber": "10780",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.826517,
+    "lon": -117.097096
+  },
+  {
+    "street": "Cypress Terrace Place",
+    "housenumber": "11407",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.92599,
+    "lon": -117.065249
+  },
+  {
+    "street": "Brooklyn Avenue",
+    "housenumber": "6378",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.713537,
+    "lon": -117.060314
+  },
+  {
+    "street": "Riviera Drive",
+    "housenumber": "3867",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.789445,
+    "lon": -117.240341
+  },
+  {
+    "street": "48th Street",
+    "housenumber": "6056",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.784123,
+    "lon": -117.091884
+  },
+  {
+    "street": "Avenida de Las Vistas",
+    "housenumber": "6369",
+    "city": "San Diego",
+    "lat": 32.579738,
+    "lon": -117.003032
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "3161",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.738461,
+    "lon": -117.16369
+  },
+  {
+    "street": "Fond du Lac Avenue",
+    "housenumber": "4010",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.834874,
+    "lon": -117.203376
+  },
+  {
+    "street": "16th Street",
+    "housenumber": "1187",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.575017,
+    "lon": -117.098482
+  },
+  {
+    "street": "Hadley Place",
+    "housenumber": "9089",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.928108,
+    "lon": -117.128731
+  },
+  {
+    "street": "Mission Gorge Road",
+    "housenumber": "6136",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.786036,
+    "lon": -117.098196
+  },
+  {
+    "street": "Baily Avenue",
+    "housenumber": "2654",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.733824,
+    "lon": -117.091512
+  },
+  {
+    "street": "60th Street",
+    "housenumber": "4704",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.762763,
+    "lon": -117.069065
+  },
+  {
+    "street": "Alpha Street",
+    "housenumber": "4094",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.692199,
+    "lon": -117.10604
+  },
+  {
+    "street": "College Avenue",
+    "housenumber": "3743",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.747802,
+    "lon": -117.061558
+  },
+  {
+    "street": "Los Altos Road",
+    "housenumber": "1652",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.811383,
+    "lon": -117.241572
+  },
+  {
+    "street": "Eads Avenue",
+    "housenumber": "7555",
+    "city": "San Diego",
+    "lat": 32.841119,
+    "lon": -117.27492
+  },
+  {
+    "street": "Lake Badin Avenue",
+    "housenumber": "6212",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.792196,
+    "lon": -117.024663
+  },
+  {
+    "street": "Cabezon Place",
+    "housenumber": "12685",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.946491,
+    "lon": -117.113171
+  },
+  {
+    "street": "Demeter Way",
+    "housenumber": "2944",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.668288,
+    "lon": -117.05485
+  },
+  {
+    "street": "Redondo Street",
+    "housenumber": "1764",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.735834,
+    "lon": -117.238751
+  },
+  {
+    "street": "Murphy Canyon Road",
+    "housenumber": "3870",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.813936,
+    "lon": -117.117451
+  },
+  {
+    "street": "Galahad Road",
+    "housenumber": "2324",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.7876,
+    "lon": -117.143382
+  },
+  {
+    "street": "Brookes Avenue",
+    "housenumber": "426",
+    "city": "San Diego",
+    "lat": 32.743539,
+    "lon": -117.161099
+  },
+  {
+    "street": "Dale Street",
+    "housenumber": "2767",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.73479,
+    "lon": -117.130087
+  },
+  {
+    "street": "Shady Oak Road",
+    "housenumber": "261",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.694946,
+    "lon": -117.041164
+  },
+  {
+    "street": "Caminito Marcial",
+    "housenumber": "6344",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.771296,
+    "lon": -117.181639
+  },
+  {
+    "street": "Del Monte Avenue",
+    "housenumber": "4319",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.736904,
+    "lon": -117.241693
+  },
+  {
+    "street": "East Mountain View Drive",
+    "housenumber": "4671",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.762071,
+    "lon": -117.112565
+  },
+  {
+    "street": "Wilbee Court",
+    "housenumber": "2850",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.794882,
+    "lon": -117.130911
+  },
+  {
+    "street": "C Street",
+    "housenumber": "3073",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.7166919,
+    "lon": -117.127932
+  },
+  {
+    "street": "San Gorgonio Street",
+    "housenumber": "535",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.71278,
+    "lon": -117.240886
+  },
+  {
+    "street": "Armstrong Street",
+    "housenumber": "4060",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.817374,
+    "lon": -117.161231
+  },
+  {
+    "street": "Savoy Street",
+    "housenumber": "637",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.71687,
+    "lon": -117.247707
+  },
+  {
+    "street": "Garston Street",
+    "housenumber": "2170",
+    "city": "San Diego",
+    "postcode": "92111",
+    "lat": 32.783113,
+    "lon": -117.166265
+  },
+  {
+    "street": "69th Street",
+    "housenumber": "175",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.704652,
+    "lon": -117.048555
+  },
+  {
+    "street": "Midvale Drive",
+    "housenumber": "1775",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.724311,
+    "lon": -117.108796
+  },
+  {
+    "street": "Rutgers Road",
+    "housenumber": "5635",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.818,
+    "lon": -117.253946
+  },
+  {
+    "street": "Seahorn Circle",
+    "housenumber": "3508",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.954003,
+    "lon": -117.239636
+  },
+  {
+    "street": "Winthrop Street",
+    "housenumber": "5179",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.839375,
+    "lon": -117.178928
+  },
+  {
+    "street": "Newcastle Place",
+    "housenumber": "6104",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.69992,
+    "lon": -117.066609
+  },
+  {
+    "street": "Oak Park Drive",
+    "housenumber": "5211",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.731367,
+    "lon": -117.083359
+  },
+  {
+    "street": "Port Rush Row",
+    "housenumber": "11446",
+    "city": "San Diego",
+    "postcode": "92128",
+    "lat": 32.970175,
+    "lon": -117.084241
+  },
+  {
+    "street": "Mission Mesa Way",
+    "housenumber": "3534",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.8105,
+    "lon": -117.06782
+  },
+  {
+    "street": "Rockfield Way",
+    "housenumber": "9234",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9268492,
+    "lon": -117.1258754
+  },
+  {
+    "street": "Park Run Road",
+    "housenumber": "8565",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.952351,
+    "lon": -117.140269
+  },
+  {
+    "street": "Amantha Avenue",
+    "housenumber": "10480",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.909164,
+    "lon": -117.151016
+  },
+  {
+    "street": "Picrus Street",
+    "housenumber": "12304",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.942562,
+    "lon": -117.144841
+  },
+  {
+    "street": "43rd Street",
+    "housenumber": "515",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.710891,
+    "lon": -117.101963
+  },
+  {
+    "street": "Somerset Avenue",
+    "housenumber": "8656",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.792332,
+    "lon": -117.146515
+  },
+  {
+    "street": "Fairbrook Road",
+    "housenumber": "12666",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.907368,
+    "lon": -117.065062
+  },
+  {
+    "street": "Brunswick Avenue",
+    "housenumber": "5578",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.79785,
+    "lon": -117.070771
+  },
+  {
+    "street": "Lowell Street",
+    "housenumber": "3547",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.731269,
+    "lon": -117.232249
+  },
+  {
+    "street": "Malcolm Drive",
+    "housenumber": "6103",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.753856,
+    "lon": -117.064168
+  },
+  {
+    "street": "Fairmount Avenue",
+    "housenumber": "2516",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.731893,
+    "lon": -117.101407
+  },
+  {
+    "street": "Calle Cristobal",
+    "housenumber": "7245",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.920344,
+    "lon": -117.168311
+  },
+  {
+    "street": "Jamul Avenue",
+    "housenumber": "4117",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.700759,
+    "lon": -117.105919
+  },
+  {
+    "street": "Walsh Way",
+    "housenumber": "5152",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.775678,
+    "lon": -117.084323
+  },
+  {
+    "street": "Cape May Avenue",
+    "housenumber": "4813",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.747176,
+    "lon": -117.245813
+  },
+  {
+    "street": "Chalar Street",
+    "housenumber": "2781",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.795541,
+    "lon": -117.14459
+  },
+  {
+    "street": "Point Loma Way",
+    "housenumber": "1472",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.7302924,
+    "lon": -117.2426714
+  },
+  {
+    "street": "Alvarez Meadow Court",
+    "housenumber": "11360",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.924758,
+    "lon": -117.163076
+  },
+  {
+    "street": "Camino Largo",
+    "housenumber": "6036",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.796685,
+    "lon": -117.063585
+  },
+  {
+    "street": "Bonita Drive",
+    "housenumber": "5330",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.69484,
+    "lon": -117.080262
+  },
+  {
+    "street": "Harcourt Drive",
+    "housenumber": "2580",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.792734,
+    "lon": -117.121103
+  },
+  {
+    "street": "49th Street",
+    "housenumber": "1855",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.725625,
+    "lon": -117.089395
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3676",
+    "city": "San Diego",
+    "postcode": "92136",
+    "lat": 32.685984,
+    "lon": -117.115547
+  },
+  {
+    "street": "Caminito Halago",
+    "housenumber": "1373",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.81651,
+    "lon": -117.250355
+  },
+  {
+    "street": "Larmier Circle",
+    "housenumber": "11402",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.923829,
+    "lon": -117.085476
+  },
+  {
+    "street": "Eastridge Court",
+    "housenumber": "12760",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.928107,
+    "lon": -117.058066
+  },
+  {
+    "street": "Spruce Grove Avenue",
+    "housenumber": "10435",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.911507,
+    "lon": -117.070326
+  },
+  {
+    "street": "Via del Norte",
+    "housenumber": "300",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.822965,
+    "lon": -117.277948
+  },
+  {
+    "street": "Solana Street",
+    "housenumber": "8004",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.716577,
+    "lon": -117.031731
+  },
+  {
+    "street": "Tilton Street",
+    "housenumber": "10120",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9028723,
+    "lon": -117.1655723
+  },
+  {
+    "street": "Caminito Joven",
+    "housenumber": "9747",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.899717,
+    "lon": -117.080916
+  },
+  {
+    "street": "Plaza Ridge Road",
+    "housenumber": "6472",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.689914,
+    "lon": -117.056278
+  },
+  {
+    "street": "Tuckaway Street",
+    "housenumber": "7004",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.799802,
+    "lon": -117.044589
+  },
+  {
+    "street": "Anella Road",
+    "housenumber": "3151",
+    "city": "San Ysidro",
+    "postcode": "92173",
+    "lat": 32.547456,
+    "lon": -117.04998
+  },
+  {
+    "street": "Scripps Westview Way",
+    "housenumber": "9889",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.922041,
+    "lon": -117.114266
+  },
+  {
+    "street": "Pearlman Way",
+    "housenumber": "5247",
+    "city": "San Diego",
+    "postcode": "92130",
+    "lat": 32.953581,
+    "lon": -117.205285
+  },
+  {
+    "street": "Danville Avenue",
+    "housenumber": "6618",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.794381,
+    "lon": -117.053837
+  },
+  {
+    "street": "Grove Avenue",
+    "housenumber": "1545",
+    "city": "San Diego",
+    "postcode": "92154",
+    "lat": 32.572622,
+    "lon": -117.100035
+  },
+  {
+    "street": "Avenger Road",
+    "housenumber": "11304",
+    "city": "San Diego",
+    "postcode": "92126",
+    "lat": 32.9248543,
+    "lon": -117.117507
+  },
+  {
+    "street": "Caminito Ocio",
+    "housenumber": "4465",
+    "city": "San Diego",
+    "postcode": "92108",
+    "lat": 32.774774,
+    "lon": -117.100103
+  },
+  {
+    "street": "West Date Street",
+    "housenumber": "606",
+    "city": "San Diego",
+    "lat": 32.723236,
+    "lon": -117.1686
+  },
+  {
+    "street": "Spruce Grove Place",
+    "housenumber": "12245",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.913694,
+    "lon": -117.070559
+  },
+  {
+    "street": "Gaines Street",
+    "housenumber": "3330",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.7493398,
+    "lon": -117.2082106
+  },
+  {
+    "street": "South 45th Street",
+    "housenumber": "214",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.703436,
+    "lon": -117.098279
+  },
+  {
+    "street": "Lace Place",
+    "housenumber": "4940",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.716726,
+    "lon": -117.088033
+  },
+  {
+    "street": "Qualtrough Street",
+    "housenumber": "3125",
+    "city": "San Diego",
+    "postcode": "92106",
+    "lat": 32.714267,
+    "lon": -117.239088
+  },
+  {
+    "street": "50th Street",
+    "housenumber": "4121",
+    "city": "San Diego",
+    "postcode": "92105",
+    "lat": 32.751722,
+    "lon": -117.086567
+  },
+  {
+    "street": "Hilltop Drive",
+    "housenumber": "4608",
+    "city": "San Diego",
+    "postcode": "92102",
+    "lat": 32.715288,
+    "lon": -117.095523
+  },
+  {
+    "street": "Caminito Arcada",
+    "housenumber": "10892",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.933754,
+    "lon": -117.094064
+  },
+  {
+    "street": "Park West Lane",
+    "housenumber": "3415",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.839168,
+    "lon": -117.213498
+  },
+  {
+    "street": "Sandleford Way",
+    "housenumber": "6956",
+    "city": "San Diego",
+    "postcode": "92139",
+    "lat": 32.683013,
+    "lon": -117.042056
+  },
+  {
+    "street": "Paradise Road",
+    "housenumber": "1446",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.692909,
+    "lon": -117.076457
+  },
+  {
+    "street": "Balboa Court",
+    "housenumber": "730",
+    "city": "San Diego",
+    "postcode": "92109",
+    "lat": 32.762598,
+    "lon": -117.251553
+  },
+  {
+    "street": "Ronda Avenue",
+    "housenumber": "9141",
+    "city": "San Diego",
+    "postcode": "92123",
+    "lat": 32.788696,
+    "lon": -117.127732
+  },
+  {
+    "street": "El Cajon Boulevard",
+    "housenumber": "7304",
+    "city": "La Mesa",
+    "postcode": "91941",
+    "lat": 32.7692,
+    "lon": -117.040048
+  },
+  {
+    "street": "Amherst Street",
+    "housenumber": "7120",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.767996,
+    "lon": -117.044224
+  },
+  {
+    "street": "Caminito Alegra",
+    "housenumber": "11084",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.923799,
+    "lon": -117.064632
+  },
+  {
+    "street": "Alamo Drive",
+    "housenumber": "4369",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.756944,
+    "lon": -117.053624
+  },
+  {
+    "street": "Cleo Street",
+    "housenumber": "6343",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.7754436,
+    "lon": -117.0617772
+  },
+  {
+    "street": "Z Street",
+    "housenumber": "3979",
+    "city": "San Diego",
+    "postcode": "92113",
+    "lat": 32.692653,
+    "lon": -117.108694
+  },
+  {
+    "street": "College Avenue",
+    "housenumber": "4784",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.764921,
+    "lon": -117.067167
+  },
+  {
+    "street": "Seminole Drive",
+    "housenumber": "4797",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.765001,
+    "lon": -117.058855
+  },
+  {
+    "street": "Linwood Street",
+    "housenumber": "1785",
+    "city": "San Diego",
+    "postcode": "92110",
+    "lat": 32.744925,
+    "lon": -117.182029
+  },
+  {
+    "street": "Saranac Street",
+    "housenumber": "6737",
+    "city": "San Diego",
+    "postcode": "92115",
+    "lat": 32.770446,
+    "lon": -117.052872
+  },
+  {
+    "street": "Kika Court",
+    "housenumber": "9765",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.940111,
+    "lon": -117.113231
+  },
+  {
+    "street": "West Point Loma Boulevard",
+    "housenumber": "4824",
+    "city": "San Diego",
+    "postcode": "92107",
+    "lat": 32.751419,
+    "lon": -117.242538
+  },
+  {
+    "street": "Prospect Street",
+    "housenumber": "1158",
+    "city": "La Jolla",
+    "postcode": "92037",
+    "lat": 32.848961,
+    "lon": -117.273237
+  },
+  {
+    "street": "Garrison Street",
+    "housenumber": "3502",
+    "city": "San Diego",
+    "lat": 32.7289089,
+    "lon": -117.2333416
+  },
+  {
+    "street": "59th Street",
+    "housenumber": "298",
+    "city": "San Diego",
+    "postcode": "92114",
+    "lat": 32.707116,
+    "lon": -117.072707
+  },
+  {
+    "street": "Radcliffe Drive",
+    "housenumber": "6247",
+    "city": "San Diego",
+    "postcode": "92122",
+    "lat": 32.851023,
+    "lon": -117.205643
+  },
+  {
+    "street": "Ibis Street",
+    "housenumber": "3289",
+    "city": "San Diego",
+    "postcode": "92103",
+    "lat": 32.738693,
+    "lon": -117.17322
+  },
+  {
+    "street": "Glasgow Drive",
+    "housenumber": "5047",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.8373709,
+    "lon": -117.2072109
+  },
+  {
+    "street": "Monroe Avenue",
+    "housenumber": "3363",
+    "city": "San Diego",
+    "postcode": "92116",
+    "lat": 32.75893,
+    "lon": -117.120658
+  },
+  {
+    "street": "Calle de Vida",
+    "housenumber": "4705",
+    "city": "San Diego",
+    "postcode": "92124",
+    "lat": 32.824483,
+    "lon": -117.082463
+  },
+  {
+    "street": "Almazon Street",
+    "housenumber": "11535",
+    "city": "San Diego",
+    "postcode": "92129",
+    "lat": 32.995698,
+    "lon": -117.088573
+  },
+  {
+    "street": "33rd Street",
+    "housenumber": "2604",
+    "city": "San Diego",
+    "postcode": "92104",
+    "lat": 32.732924,
+    "lon": -117.123627
+  },
+  {
+    "street": "Caminito Curva",
+    "housenumber": "6993",
+    "city": "San Diego",
+    "postcode": "92119",
+    "lat": 32.803669,
+    "lon": -117.037023
+  },
+  {
+    "street": "Castleton Drive",
+    "housenumber": "5941",
+    "city": "San Diego",
+    "postcode": "92117",
+    "lat": 32.824914,
+    "lon": -117.1729
+  },
+  {
+    "street": "Trillium Court",
+    "housenumber": "11487",
+    "city": "San Diego",
+    "postcode": "92131",
+    "lat": 32.926944,
+    "lon": -117.103466
+  },
+  {
+    "street": "Burgundy Street",
+    "housenumber": "6304",
+    "city": "San Diego",
+    "postcode": "92120",
+    "lat": 32.788958,
+    "lon": -117.093183
+  }
+]

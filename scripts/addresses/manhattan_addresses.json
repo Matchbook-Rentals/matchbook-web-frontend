@@ -1,0 +1,7953 @@
+[
+  {
+    "street": "South State Street",
+    "housenumber": "185",
+    "city": "Manhattan",
+    "postcode": "60442",
+    "lat": 41.4238016,
+    "lon": -87.9870872
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1113",
+    "city": "Manhattan",
+    "lat": 39.1856056,
+    "lon": -96.5739228
+  },
+  {
+    "street": "Market Place",
+    "housenumber": "260",
+    "city": "Manhattan",
+    "postcode": "60442",
+    "lat": 41.4330056,
+    "lon": -87.9947955
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3240",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2048172,
+    "lon": -96.618639
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1110",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1915231,
+    "lon": -96.6083689
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "2815",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.189793,
+    "lon": -96.6089884
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3033",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1883651,
+    "lon": -96.6157713
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "304",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795017,
+    "lon": -96.560587
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1304",
+    "city": "Manhattan",
+    "lat": 39.1922105,
+    "lon": -96.6092247
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3041",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1886174,
+    "lon": -96.6157635
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1131",
+    "city": "Manhattan",
+    "lat": 39.1856097,
+    "lon": -96.5747192
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1231",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1856011,
+    "lon": -96.5762943
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3260",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2043488,
+    "lon": -96.6192985
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3254",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.20445,
+    "lon": -96.6190234
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3248",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2045776,
+    "lon": -96.6189437
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3230",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.204987,
+    "lon": -96.6183747
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3256",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.204398,
+    "lon": -96.6190963
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3218",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2052387,
+    "lon": -96.6182577
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3216",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053663,
+    "lon": -96.6182752
+  },
+  {
+    "street": "Kimball Avenue",
+    "housenumber": "3252",
+    "city": "Manhattan",
+    "lat": 39.2044906,
+    "lon": -96.6190056
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3037",
+    "city": "Manhattan",
+    "lat": 39.1884711,
+    "lon": -96.615771
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3043",
+    "city": "Manhattan",
+    "lat": 39.1886879,
+    "lon": -96.6157674
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3049",
+    "city": "Manhattan",
+    "lat": 39.1888985,
+    "lon": -96.6157714
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3039",
+    "city": "Manhattan",
+    "lat": 39.188535,
+    "lon": -96.6157674
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3047",
+    "city": "Manhattan",
+    "lat": 39.1888032,
+    "lon": -96.6157674
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3110",
+    "city": "Manhattan",
+    "lat": 39.1896022,
+    "lon": -96.6152778
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3112",
+    "city": "Manhattan",
+    "lat": 39.1895991,
+    "lon": -96.6153684
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3108",
+    "city": "Manhattan",
+    "lat": 39.1896034,
+    "lon": -96.6151762
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "614",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1744868,
+    "lon": -96.5659575
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "612",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1744886,
+    "lon": -96.5658407
+  },
+  {
+    "street": "Manhattan Town Center",
+    "housenumber": "100",
+    "city": "Manhattan",
+    "lat": 39.1791195,
+    "lon": -96.5583238
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "105",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1798019,
+    "lon": -96.5603526
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1316",
+    "city": "Manhattan",
+    "lat": 39.1926383,
+    "lon": -96.6092901
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1314",
+    "city": "Manhattan",
+    "lat": 39.1925273,
+    "lon": -96.6091744
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1130",
+    "city": "Manhattan",
+    "lat": 39.1917122,
+    "lon": -96.6084561
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1330",
+    "city": "Manhattan",
+    "lat": 39.19261,
+    "lon": -96.6095503
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "927",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1871042,
+    "lon": -96.6078413
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "920",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1879821,
+    "lon": -96.6078022
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "922",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1878229,
+    "lon": -96.607745
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "925",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1870397,
+    "lon": -96.6076378
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2250",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2082117,
+    "lon": -96.6183251
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2260",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2083619,
+    "lon": -96.6183183
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2100",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053143,
+    "lon": -96.6195018
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2275",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2087754,
+    "lon": -96.6177455
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2205",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067786,
+    "lon": -96.618008
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2110",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2056951,
+    "lon": -96.6194976
+  },
+  {
+    "street": "Canterbury Street",
+    "housenumber": "3225",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2065493,
+    "lon": -96.6186452
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2255",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2083067,
+    "lon": -96.6177468
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2145",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2060597,
+    "lon": -96.618295
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2140",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2062768,
+    "lon": -96.6193437
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2220",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2071989,
+    "lon": -96.6186591
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2235",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074928,
+    "lon": -96.6178521
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2125",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2057287,
+    "lon": -96.6186891
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2150",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2065452,
+    "lon": -96.6191665
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2280",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2088026,
+    "lon": -96.6183172
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2215",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069279,
+    "lon": -96.6179776
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.205405,
+    "lon": -96.6190658
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2240",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075807,
+    "lon": -96.618461
+  },
+  {
+    "street": "Canterbury Street",
+    "housenumber": "3215",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2064635,
+    "lon": -96.6184791
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2265",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2086189,
+    "lon": -96.6177452
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2155",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061708,
+    "lon": -96.6181628
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2120",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058477,
+    "lon": -96.6194864
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2210",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070576,
+    "lon": -96.6187632
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2245",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2081566,
+    "lon": -96.6177465
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2135",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058407,
+    "lon": -96.6185594
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2130",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061347,
+    "lon": -96.6194047
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2270",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2086502,
+    "lon": -96.6183154
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2225",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2073405,
+    "lon": -96.6178809
+  },
+  {
+    "street": "Buckingham Street",
+    "housenumber": "2115",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2055161,
+    "lon": -96.6189388
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2230",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074383,
+    "lon": -96.6185267
+  },
+  {
+    "street": "Westchester Drive",
+    "housenumber": "2160",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066645,
+    "lon": -96.6190665
+  },
+  {
+    "street": "Plymate Lane",
+    "housenumber": "307",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1852796,
+    "lon": -96.6061359
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "830",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715261,
+    "lon": -96.6049896
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "820",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715143,
+    "lon": -96.6049265
+  },
+  {
+    "street": "Southwind Road",
+    "housenumber": "319",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1738162,
+    "lon": -96.6043044
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "850",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715513,
+    "lon": -96.6051232
+  },
+  {
+    "street": "Southwind Place",
+    "housenumber": "327",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1738023,
+    "lon": -96.6046217
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "810",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715045,
+    "lon": -96.6048588
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "840",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715387,
+    "lon": -96.60506
+  },
+  {
+    "street": "Commons Place",
+    "housenumber": "707",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1728943,
+    "lon": -96.6044814
+  },
+  {
+    "street": "Claflin Road",
+    "housenumber": "1800",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1934475,
+    "lon": -96.5856689
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2301",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2075432,
+    "lon": -96.5726182
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2303",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2076309,
+    "lon": -96.5727139
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2307",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2078218,
+    "lon": -96.5729221
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2309",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.207926,
+    "lon": -96.5730357
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2311",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2080021,
+    "lon": -96.5731187
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2313",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2080793,
+    "lon": -96.5732028
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2315",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2081385,
+    "lon": -96.5732675
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2317",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2082357,
+    "lon": -96.5733734
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1209",
+    "city": "Manhattan",
+    "lat": 39.1845528,
+    "lon": -96.5751663
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "521",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1845138,
+    "lon": -96.5750393
+  },
+  {
+    "street": "Claflin Road",
+    "housenumber": "1800",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1933467,
+    "lon": -96.585949
+  },
+  {
+    "street": "Vanesta Drive",
+    "housenumber": "3901",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2051808,
+    "lon": -96.634694
+  },
+  {
+    "street": "Vanesta Drive",
+    "housenumber": "3905",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2045191,
+    "lon": -96.6349873
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "300",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795007,
+    "lon": -96.5603551
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "302",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795011,
+    "lon": -96.5604402
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "311",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791698,
+    "lon": -96.5608044
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "313",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791529,
+    "lon": -96.5609176
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "315",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791728,
+    "lon": -96.5609871
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "317A",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791563,
+    "lon": -96.561094
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "317B",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791585,
+    "lon": -96.5612085
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "329",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791647,
+    "lon": -96.5615322
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "328",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795057,
+    "lon": -96.5615516
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "330",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795063,
+    "lon": -96.5617044
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "320",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795067,
+    "lon": -96.5613631
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "318",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795046,
+    "lon": -96.5611487
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "321",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.179162,
+    "lon": -96.5613886
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "314",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795033,
+    "lon": -96.5609792
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "312",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795029,
+    "lon": -96.5608842
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "310",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795024,
+    "lon": -96.5607541
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "308",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1794995,
+    "lon": -96.5606994
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3011",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1882844,
+    "lon": -96.6144362
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "616",
+    "city": "Manhattan",
+    "lat": 39.1853085,
+    "lon": -96.5763015
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1224",
+    "city": "Manhattan",
+    "lat": 39.1858315,
+    "lon": -96.5760405
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "622",
+    "city": "Manhattan",
+    "lat": 39.1854704,
+    "lon": -96.5763037
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1222",
+    "city": "Manhattan",
+    "lat": 39.1858334,
+    "lon": -96.5759592
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1220",
+    "city": "Manhattan",
+    "lat": 39.185833,
+    "lon": -96.5758828
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1218 1/2",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858343,
+    "lon": -96.575793
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1214 B",
+    "city": "Manhattan",
+    "lat": 39.1860659,
+    "lon": -96.575507
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1214 C",
+    "city": "Manhattan",
+    "lat": 39.1861735,
+    "lon": -96.5755081
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "505",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1813683,
+    "lon": -96.5637173
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "507",
+    "city": "Manhattan",
+    "lat": 39.1813686,
+    "lon": -96.5637561
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "511",
+    "city": "Manhattan",
+    "lat": 39.1813697,
+    "lon": -96.5638874
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "513",
+    "city": "Manhattan",
+    "lat": 39.1813704,
+    "lon": -96.5639839
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "613",
+    "city": "Manhattan",
+    "lat": 39.1852612,
+    "lon": -96.5749823
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "612",
+    "city": "Manhattan",
+    "lat": 39.1852431,
+    "lon": -96.5747278
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "616",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1853393,
+    "lon": -96.5747066
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "620 1/2",
+    "city": "Manhattan",
+    "lat": 39.185443,
+    "lon": -96.5747383
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1125",
+    "city": "Manhattan",
+    "lat": 39.1856079,
+    "lon": -96.5744232
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1111",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.185604,
+    "lon": -96.573854
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "lat": 39.1858253,
+    "lon": -96.5741529
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1120-B",
+    "city": "Manhattan",
+    "lat": 39.1858266,
+    "lon": -96.5742096
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1120 C",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858302,
+    "lon": -96.5743774
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "718 1/2",
+    "city": "Manhattan",
+    "lat": 39.1865964,
+    "lon": -96.5763157
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "718 1/2",
+    "city": "Manhattan",
+    "lat": 39.1865452,
+    "lon": -96.5763208
+  },
+  {
+    "street": "South 4th Street",
+    "housenumber": "111",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1788794,
+    "lon": -96.5616572
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849923,
+    "lon": -96.5741221
+  },
+  {
+    "street": "Stagg Hill Road",
+    "housenumber": "2304",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1680623,
+    "lon": -96.5961037
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1130",
+    "city": "Manhattan",
+    "lat": 39.1860922,
+    "lon": -96.5746726
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1344",
+    "city": "Manhattan",
+    "lat": 39.1926156,
+    "lon": -96.6100943
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1338",
+    "city": "Manhattan",
+    "lat": 39.1926072,
+    "lon": -96.6097887
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "501-A",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1835506,
+    "lon": -96.5605266
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "501-B",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1836219,
+    "lon": -96.560525
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "501-C",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1837047,
+    "lon": -96.5605231
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "501",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1837719,
+    "lon": -96.5605216
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "501",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1838751,
+    "lon": -96.5605192
+  },
+  {
+    "street": "3rd Place",
+    "housenumber": "705 A",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1859187,
+    "lon": -96.5603788
+  },
+  {
+    "street": "North 3rd Place",
+    "housenumber": "705 D",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1860848,
+    "lon": -96.5603789
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "705",
+    "city": "Manhattan",
+    "lat": 39.1862432,
+    "lon": -96.5603722
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "418",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795379,
+    "lon": -96.5626193
+  },
+  {
+    "street": "Westloop Place",
+    "housenumber": "1348",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.192602,
+    "lon": -96.610231
+  },
+  {
+    "street": "Westport Landing Place",
+    "housenumber": "1419",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1940363,
+    "lon": -96.6066506
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3104",
+    "city": "Manhattan",
+    "lat": 39.1896104,
+    "lon": -96.6150621
+  },
+  {
+    "street": "Hayes Drive",
+    "housenumber": "900",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1882019,
+    "lon": -96.5539679
+  },
+  {
+    "street": "Lookout Drive",
+    "housenumber": "2412",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1870233,
+    "lon": -96.6003541
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3011",
+    "city": "Manhattan",
+    "lat": 39.1882711,
+    "lon": -96.6150347
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1101",
+    "city": "Manhattan",
+    "lat": 39.1855266,
+    "lon": -96.5734092
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1206 1/2",
+    "city": "Manhattan",
+    "lat": 39.1858301,
+    "lon": -96.5752625
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2401",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2114608,
+    "lon": -96.6191343
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2403",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2115703,
+    "lon": -96.6191747
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2501",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2121836,
+    "lon": -96.6194651
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2503",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2122818,
+    "lon": -96.6195058
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2505",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2124793,
+    "lon": -96.6196082
+  },
+  {
+    "street": "Candlewood Drive",
+    "housenumber": "2507",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2125677,
+    "lon": -96.6196828
+  },
+  {
+    "street": "Effingham Street",
+    "housenumber": "3300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2073752,
+    "lon": -96.6195341
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2117917,
+    "lon": -96.6192641
+  },
+  {
+    "street": "Effingham Street",
+    "housenumber": "3301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070237,
+    "lon": -96.6197856
+  },
+  {
+    "street": "Effingham Street",
+    "housenumber": "3302",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074112,
+    "lon": -96.6196066
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3303",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2117587,
+    "lon": -96.6193957
+  },
+  {
+    "street": "Effingham Street",
+    "housenumber": "3303",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070848,
+    "lon": -96.6199062
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3304",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120906,
+    "lon": -96.6197538
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3305",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2115701,
+    "lon": -96.6195704
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3306",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120448,
+    "lon": -96.6198887
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3307",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2115624,
+    "lon": -96.6197103
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3308",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2119387,
+    "lon": -96.6200555
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3309",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2115937,
+    "lon": -96.6199147
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3310",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2118408,
+    "lon": -96.6200893
+  },
+  {
+    "street": "Abbey Circle",
+    "housenumber": "3311",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2116699,
+    "lon": -96.6200137
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3318",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2111061,
+    "lon": -96.619446
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3320",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2111043,
+    "lon": -96.6195726
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3322",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2111216,
+    "lon": -96.6197823
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3324",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2111213,
+    "lon": -96.6199013
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3326",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2110871,
+    "lon": -96.6201713
+  },
+  {
+    "street": "Gary Avenue",
+    "housenumber": "3330",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2110671,
+    "lon": -96.6204688
+  },
+  {
+    "street": "Grandview Drive",
+    "housenumber": "2100",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1844256,
+    "lon": -96.5935097
+  },
+  {
+    "street": "Grandview Drive",
+    "housenumber": "2120",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1844471,
+    "lon": -96.59397
+  },
+  {
+    "street": "Grandview Drive",
+    "housenumber": "2205",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.184124,
+    "lon": -96.5947871
+  },
+  {
+    "street": "Grandview Drive",
+    "housenumber": "2216",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.184448,
+    "lon": -96.5952482
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "500",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1845228,
+    "lon": -96.5956288
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "505",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1846212,
+    "lon": -96.5960022
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "510",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1848047,
+    "lon": -96.5956361
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "515",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849069,
+    "lon": -96.5961332
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "516",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849278,
+    "lon": -96.5956126
+  },
+  {
+    "street": "Oakdale Drive",
+    "housenumber": "522",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.185196,
+    "lon": -96.5956189
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "610",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1744845,
+    "lon": -96.5657231
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "616",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1744866,
+    "lon": -96.5660381
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "618",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.174488,
+    "lon": -96.5662281
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "620",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1744939,
+    "lon": -96.5663945
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3035",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1884232,
+    "lon": -96.6157748
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "3019",
+    "city": "Manhattan",
+    "lat": 39.1882867,
+    "lon": -96.6154394
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "414",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795192,
+    "lon": -96.5624694
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "431",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791954,
+    "lon": -96.5632837
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "427",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791882,
+    "lon": -96.5631099
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "427 A",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791868,
+    "lon": -96.5630743
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "425",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791853,
+    "lon": -96.5630373
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "421",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791783,
+    "lon": -96.5628674
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "421",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791719,
+    "lon": -96.5627806
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "419",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791711,
+    "lon": -96.562706
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "409A",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.179168,
+    "lon": -96.5624237
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "409",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791672,
+    "lon": -96.562346
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "407",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.179166,
+    "lon": -96.5622415
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "405",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791653,
+    "lon": -96.5621764
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "401",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791637,
+    "lon": -96.5620297
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2233",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2103783,
+    "lon": -96.5769454
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2231",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2101602,
+    "lon": -96.5769632
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2243",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2108234,
+    "lon": -96.5767219
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2241",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.21063,
+    "lon": -96.576853
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2253",
+    "city": "Manhattan",
+    "lat": 39.2111723,
+    "lon": -96.5764709
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2251",
+    "city": "Manhattan",
+    "lat": 39.2110343,
+    "lon": -96.5766314
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2263",
+    "city": "Manhattan",
+    "lat": 39.211576,
+    "lon": -96.575895
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2261",
+    "city": "Manhattan",
+    "lat": 39.2114569,
+    "lon": -96.5761178
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2250",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2109815,
+    "lon": -96.5760563
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2252",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2111106,
+    "lon": -96.5758475
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2240",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2105944,
+    "lon": -96.5763362
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2242",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2107967,
+    "lon": -96.5762109
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2230",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2101287,
+    "lon": -96.5763662
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2232",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.210303,
+    "lon": -96.5763295
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2095478,
+    "lon": -96.5780456
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2089883,
+    "lon": -96.5780002
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2093093,
+    "lon": -96.5780277
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2084103,
+    "lon": -96.5776413
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2092719,
+    "lon": -96.5771361
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2087919,
+    "lon": -96.5778188
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.208659,
+    "lon": -96.5780106
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.209503,
+    "lon": -96.5772675
+  },
+  {
+    "street": "Bluemont Avenue",
+    "housenumber": "100",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1860531,
+    "lon": -96.5569473
+  },
+  {
+    "street": "Bluemont Avenue",
+    "housenumber": "100",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1860536,
+    "lon": -96.5570111
+  },
+  {
+    "street": "Bluemont Avenue",
+    "housenumber": "100",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1860155,
+    "lon": -96.55698
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.170157,
+    "lon": -96.6223248
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715865,
+    "lon": -96.6211677
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1875591,
+    "lon": -96.6088318
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1817355,
+    "lon": -96.5718857
+  },
+  {
+    "street": "North Manhattan Avenue",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1890357,
+    "lon": -96.5760126
+  },
+  {
+    "street": "Overhill Road",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1719027,
+    "lon": -96.6186922
+  },
+  {
+    "street": "Pottawatomie Court",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1721793,
+    "lon": -96.5728778
+  },
+  {
+    "street": "Stratford Circle",
+    "housenumber": "1000",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1718826,
+    "lon": -96.6196129
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1001",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1699187,
+    "lon": -96.622727
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1001",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1871034,
+    "lon": -96.6090048
+  },
+  {
+    "street": "Overhill Road",
+    "housenumber": "1001",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1718901,
+    "lon": -96.6179982
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "1001",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1791664,
+    "lon": -96.571905
+  },
+  {
+    "street": "White Oak Place",
+    "housenumber": "1001",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1682451,
+    "lon": -96.6233238
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1002",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1876086,
+    "lon": -96.608793
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1004",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1700422,
+    "lon": -96.622249
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1004",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1715098,
+    "lon": -96.6211755
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1004",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1876751,
+    "lon": -96.6086934
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1005",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1700477,
+    "lon": -96.6228757
+  },
+  {
+    "street": "Mill Valley Circle",
+    "housenumber": "1005",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1707246,
+    "lon": -96.6250573
+  },
+  {
+    "street": "White Oak Place",
+    "housenumber": "1005",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1682006,
+    "lon": -96.6234085
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1006",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1877395,
+    "lon": -96.6086732
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1008",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1703652,
+    "lon": -96.6225964
+  },
+  {
+    "street": "Brierwood Drive",
+    "housenumber": "1008",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1612079,
+    "lon": -96.6006985
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1008",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.171431,
+    "lon": -96.6211834
+  },
+  {
+    "street": "Connecticut Avenue",
+    "housenumber": "1008",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886354,
+    "lon": -96.603653
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1008",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1878456,
+    "lon": -96.60869
+  },
+  {
+    "street": "Overhill Road",
+    "housenumber": "1009",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1708984,
+    "lon": -96.6180461
+  },
+  {
+    "street": "South Wreath Avenue",
+    "housenumber": "1009",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1703047,
+    "lon": -96.6264184
+  },
+  {
+    "street": "White Oak Place",
+    "housenumber": "1009",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.168169,
+    "lon": -96.6234986
+  },
+  {
+    "street": "Connecticut Avenue",
+    "housenumber": "1010",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1887353,
+    "lon": -96.6037051
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1010",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1879044,
+    "lon": -96.6086813
+  },
+  {
+    "street": "North 11th Street",
+    "housenumber": "1010",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1893379,
+    "lon": -96.5729471
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1012",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1703974,
+    "lon": -96.6227494
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1012",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1713401,
+    "lon": -96.6211925
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1012",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1879764,
+    "lon": -96.6085552
+  },
+  {
+    "street": "Brierwood Drive",
+    "housenumber": "1013",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1610623,
+    "lon": -96.6012599
+  },
+  {
+    "street": "White Oak Place",
+    "housenumber": "1013",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1681373,
+    "lon": -96.6235794
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1014",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1880263,
+    "lon": -96.6085428
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "1015",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1813209,
+    "lon": -96.5724134
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1016",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1705442,
+    "lon": -96.6229636
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1016",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1711884,
+    "lon": -96.6211617
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1016",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1881367,
+    "lon": -96.6086767
+  },
+  {
+    "street": "Mill Valley Circle",
+    "housenumber": "1016",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1700079,
+    "lon": -96.6257261
+  },
+  {
+    "street": "White Oak Place",
+    "housenumber": "1017",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1680988,
+    "lon": -96.6236824
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1018",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1881522,
+    "lon": -96.6087445
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1019",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1749285,
+    "lon": -96.573003
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1020",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.170588,
+    "lon": -96.623131
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1020",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1711219,
+    "lon": -96.6211666
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1020",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1882359,
+    "lon": -96.6088562
+  },
+  {
+    "street": "Fremont Street",
+    "housenumber": "1021",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1834101,
+    "lon": -96.5726823
+  },
+  {
+    "street": "North Mill Point Circle",
+    "housenumber": "1021",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1685634,
+    "lon": -96.6246634
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1022",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1882397,
+    "lon": -96.6089242
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1024",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1705904,
+    "lon": -96.6236529
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1024",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1710384,
+    "lon": -96.6211727
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1024",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1883843,
+    "lon": -96.6089667
+  },
+  {
+    "street": "Sunset Avenue",
+    "housenumber": "1024",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1904377,
+    "lon": -96.5885769
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1026",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1884403,
+    "lon": -96.6089353
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1028",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.170548,
+    "lon": -96.6237635
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1028",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1709466,
+    "lon": -96.6211793
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1028",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1879278,
+    "lon": -96.6094104
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1030",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1878692,
+    "lon": -96.6094304
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1032",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1702473,
+    "lon": -96.6238645
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1032",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.170794,
+    "lon": -96.6211604
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1032",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1877882,
+    "lon": -96.6095454
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1034",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1877315,
+    "lon": -96.6095628
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1036",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1701256,
+    "lon": -96.6238449
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1036",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1707062,
+    "lon": -96.6211686
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1040",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1699158,
+    "lon": -96.6237612
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1040",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1706238,
+    "lon": -96.6211762
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1041",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1699244,
+    "lon": -96.6232098
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1044",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1698183,
+    "lon": -96.6237021
+  },
+  {
+    "street": "Burton Place",
+    "housenumber": "1044",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.170537,
+    "lon": -96.6211843
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1045",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1698522,
+    "lon": -96.6230454
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1048",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.169653,
+    "lon": -96.6235322
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1052",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1695699,
+    "lon": -96.6234143
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1056",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1694426,
+    "lon": -96.6232461
+  },
+  {
+    "street": "Brianna Court",
+    "housenumber": "1060",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1693462,
+    "lon": -96.6231163
+  },
+  {
+    "street": "Oakwood Circle",
+    "housenumber": "108",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1797138,
+    "lon": -96.616119
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "110",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.179841,
+    "lon": -96.5600443
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1100",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1881405,
+    "lon": -96.609977
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1100",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1699501,
+    "lon": -96.6325722
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1100",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1940015,
+    "lon": -96.6428191
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1100",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1921471,
+    "lon": -96.6356258
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1101",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1686281,
+    "lon": -96.6267049
+  },
+  {
+    "street": "Mill Knoll Terrace",
+    "housenumber": "1101",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1672025,
+    "lon": -96.6244195
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1101",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1936098,
+    "lon": -96.6428742
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1101",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1916583,
+    "lon": -96.6356462
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1102",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.188122,
+    "lon": -96.6099055
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1102",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1913948,
+    "lon": -96.5571109
+  },
+  {
+    "street": "Houston Street",
+    "housenumber": "1103",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1781693,
+    "lon": -96.5735874
+  },
+  {
+    "street": "Crossgate Terrace",
+    "housenumber": "1104",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1699333,
+    "lon": -96.6184634
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1104",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1880383,
+    "lon": -96.6097975
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1104",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1913877,
+    "lon": -96.5569558
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1104",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.19406,
+    "lon": -96.6428985
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1671506,
+    "lon": -96.6274957
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1683756,
+    "lon": -96.6267837
+  },
+  {
+    "street": "Leone Ridge Drive",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1685739,
+    "lon": -96.6293638
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1936329,
+    "lon": -96.6429761
+  },
+  {
+    "street": "South Mill Point Circle",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1679779,
+    "lon": -96.6253629
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1916496,
+    "lon": -96.636114
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1106",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.188023,
+    "lon": -96.6097449
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1108",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1880476,
+    "lon": -96.6095895
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1108",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1915104,
+    "lon": -96.5571152
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1108",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194093,
+    "lon": -96.6429904
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1108",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1923405,
+    "lon": -96.63636
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1680943,
+    "lon": -96.6268597
+  },
+  {
+    "street": "Lesmer Court",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1683885,
+    "lon": -96.6319568
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1855706,
+    "lon": -96.5736913
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1936596,
+    "lon": -96.6430648
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1918019,
+    "lon": -96.6364946
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1109",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1750905,
+    "lon": -96.5739268
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1110",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1880352,
+    "lon": -96.609533
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1110",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1754882,
+    "lon": -96.5739565
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1112",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1885923,
+    "lon": -96.6092916
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1112",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1915084,
+    "lon": -96.5569534
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1112",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1693099,
+    "lon": -96.6336113
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1112",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1941452,
+    "lon": -96.6430634
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1113",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1678682,
+    "lon": -96.6269648
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1113",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1936915,
+    "lon": -96.64315
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1113",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1919162,
+    "lon": -96.6367847
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1114",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886068,
+    "lon": -96.6093668
+  },
+  {
+    "street": "North 12th Street",
+    "housenumber": "1114",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1905335,
+    "lon": -96.5745448
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1114",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1754959,
+    "lon": -96.5741516
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1115",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1873173,
+    "lon": -96.6105595
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1116",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1885791,
+    "lon": -96.6095109
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1116",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1690118,
+    "lon": -96.6337847
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1116",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1942006,
+    "lon": -96.643135
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1116",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1754712,
+    "lon": -96.5743131
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1117",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1676208,
+    "lon": -96.6270401
+  },
+  {
+    "street": "Leone Ridge Drive",
+    "housenumber": "1117",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1677565,
+    "lon": -96.6297145
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1117",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1937474,
+    "lon": -96.6432101
+  },
+  {
+    "street": "Pioneer Lane",
+    "housenumber": "1117",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1949006,
+    "lon": -96.5734638
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1118",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1885917,
+    "lon": -96.6095787
+  },
+  {
+    "street": "El Paso Lane",
+    "housenumber": "1119",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1746854,
+    "lon": -96.5743156
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1119",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1877553,
+    "lon": -96.6106499
+  },
+  {
+    "street": "Pioneer Lane",
+    "housenumber": "1119",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1949008,
+    "lon": -96.5736564
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886871,
+    "lon": -96.6096865
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1917998,
+    "lon": -96.5571633
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1687256,
+    "lon": -96.6338615
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1942516,
+    "lon": -96.6431895
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1120",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1754922,
+    "lon": -96.5744977
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1121",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1674082,
+    "lon": -96.6271819
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1121",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1937781,
+    "lon": -96.6433036
+  },
+  {
+    "street": "Pioneer Lane",
+    "housenumber": "1121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1949449,
+    "lon": -96.5738367
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1122",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886966,
+    "lon": -96.6097468
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1122",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1918024,
+    "lon": -96.5569541
+  },
+  {
+    "street": "Pioneer Lane",
+    "housenumber": "1123",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1948786,
+    "lon": -96.5738267
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1123",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1750893,
+    "lon": -96.5744784
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1124",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886777,
+    "lon": -96.6098832
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1124",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1917946,
+    "lon": -96.5567451
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1124",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1684169,
+    "lon": -96.6339597
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1125",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.193833,
+    "lon": -96.6433884
+  },
+  {
+    "street": "Garden Way",
+    "housenumber": "1126",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1886933,
+    "lon": -96.6099585
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1126",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1754995,
+    "lon": -96.5746585
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1127",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1750787,
+    "lon": -96.5747013
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1128",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1918943,
+    "lon": -96.5571614
+  },
+  {
+    "street": "Lochenshire Circle",
+    "housenumber": "1128",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1680654,
+    "lon": -96.634091
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1130",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1919002,
+    "lon": -96.5567901
+  },
+  {
+    "street": "Westport Drive",
+    "housenumber": "1130",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1920029,
+    "lon": -96.6057026
+  },
+  {
+    "street": "Hostetler Drive",
+    "housenumber": "1131",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1920489,
+    "lon": -96.5581002
+  },
+  {
+    "street": "South 10th Street",
+    "housenumber": "114",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1788088,
+    "lon": -96.5719447
+  },
+  {
+    "street": "North 19th Street",
+    "housenumber": "115",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1802436,
+    "lon": -96.5850685
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1200",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1944821,
+    "lon": -96.6443162
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1200",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1943764,
+    "lon": -96.6433165
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1200",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1938623,
+    "lon": -96.6423078
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1201",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1845114,
+    "lon": -96.5750963
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1201",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1938962,
+    "lon": -96.6435177
+  },
+  {
+    "street": "North 3rd Street",
+    "housenumber": "1201",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1923889,
+    "lon": -96.5641034
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1201",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1671344,
+    "lon": -96.6278989
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1203",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2079873,
+    "lon": -96.5750616
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1204",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945612,
+    "lon": -96.6443242
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1204",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1944397,
+    "lon": -96.6433642
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1204",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1939477,
+    "lon": -96.6423227
+  },
+  {
+    "street": "Leone Ridge Drive",
+    "housenumber": "1205",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1667478,
+    "lon": -96.630353
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1205",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1939648,
+    "lon": -96.643556
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1205",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1671994,
+    "lon": -96.6283105
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1207",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2079126,
+    "lon": -96.575286
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1208",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946376,
+    "lon": -96.6443196
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1208",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945102,
+    "lon": -96.6434144
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1208",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1940229,
+    "lon": -96.6423006
+  },
+  {
+    "street": "Leone Ridge Drive",
+    "housenumber": "1209",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1664355,
+    "lon": -96.6305546
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1209",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1940273,
+    "lon": -96.6436308
+  },
+  {
+    "street": "North 11th Street",
+    "housenumber": "1209",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1913563,
+    "lon": -96.5732594
+  },
+  {
+    "street": "South 4th Street",
+    "housenumber": "121",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1785561,
+    "lon": -96.5615711
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1210",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858943,
+    "lon": -96.5754043
+  },
+  {
+    "street": "El Paso Lane",
+    "housenumber": "1211",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1746565,
+    "lon": -96.5756142
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1211",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2078162,
+    "lon": -96.5754989
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1212",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1947066,
+    "lon": -96.6443151
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1212",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945714,
+    "lon": -96.643466
+  },
+  {
+    "street": "South Mill Point Circle",
+    "housenumber": "1212",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1664985,
+    "lon": -96.6268702
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1212",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1940953,
+    "lon": -96.6423116
+  },
+  {
+    "street": "Hylton Heights Road",
+    "housenumber": "1213",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.192233,
+    "lon": -96.6052021
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1213",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1940805,
+    "lon": -96.643671
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1213",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1676974,
+    "lon": -96.6286567
+  },
+  {
+    "street": "Marlatt Avenue",
+    "housenumber": "1214",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2188892,
+    "lon": -96.5718066
+  },
+  {
+    "street": "Moro Street",
+    "housenumber": "1214",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1861362,
+    "lon": -96.5755323
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1215",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1844833,
+    "lon": -96.5759038
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1215",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2077853,
+    "lon": -96.5757622
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1216",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1947864,
+    "lon": -96.6443167
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1216",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946336,
+    "lon": -96.6435071
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1216",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1941757,
+    "lon": -96.6423224
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1217",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194157,
+    "lon": -96.6437307
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1217",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1679223,
+    "lon": -96.6286724
+  },
+  {
+    "street": "El Paso Lane",
+    "housenumber": "1218",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1746554,
+    "lon": -96.5759814
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1219",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2076956,
+    "lon": -96.5760227
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1220",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194266,
+    "lon": -96.6423517
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1221",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1942051,
+    "lon": -96.6437826
+  },
+  {
+    "street": "Park Grove Drive",
+    "housenumber": "1221",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1682045,
+    "lon": -96.6286703
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1223",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2076051,
+    "lon": -96.5762156
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1224",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1943255,
+    "lon": -96.6423526
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1225",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1943092,
+    "lon": -96.6438879
+  },
+  {
+    "street": "Marlatt Avenue",
+    "housenumber": "1226",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2189516,
+    "lon": -96.5759973
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1227",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2073962,
+    "lon": -96.5763551
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1229",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194384,
+    "lon": -96.6439162
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1231",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2073339,
+    "lon": -96.5765713
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1233",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1944617,
+    "lon": -96.6439642
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1235",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2071601,
+    "lon": -96.5770484
+  },
+  {
+    "street": "Meadowlark Valley",
+    "housenumber": "1239",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2071782,
+    "lon": -96.5772629
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1950052,
+    "lon": -96.6443188
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1947928,
+    "lon": -96.6434872
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1944499,
+    "lon": -96.6425132
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945838,
+    "lon": -96.6439652
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958596,
+    "lon": -96.6434824
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1942903,
+    "lon": -96.6428928
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1304",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1950812,
+    "lon": -96.6443448
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1304",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.19485,
+    "lon": -96.6434333
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1304",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945015,
+    "lon": -96.6424415
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1305",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946562,
+    "lon": -96.6440051
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1305",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958668,
+    "lon": -96.6433866
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1305",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1943636,
+    "lon": -96.6429204
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1308",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1951579,
+    "lon": -96.6443592
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1308",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949137,
+    "lon": -96.6433825
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1308",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945481,
+    "lon": -96.6423684
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1309",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1947322,
+    "lon": -96.6440168
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1309",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958713,
+    "lon": -96.6432873
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1309",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194423,
+    "lon": -96.6429933
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1312",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952338,
+    "lon": -96.6443789
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1312",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949761,
+    "lon": -96.6433301
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1312",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945972,
+    "lon": -96.6422888
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1313",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1948603,
+    "lon": -96.6439847
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1313",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958683,
+    "lon": -96.6431905
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1313",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945016,
+    "lon": -96.6430327
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1316",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953125,
+    "lon": -96.6443615
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1316",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946439,
+    "lon": -96.6422252
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1317",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949282,
+    "lon": -96.6439619
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1317",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1945606,
+    "lon": -96.6430633
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1318",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1853376,
+    "lon": -96.5770015
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1320",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953924,
+    "lon": -96.6443759
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1320",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946928,
+    "lon": -96.6421296
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1321",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949972,
+    "lon": -96.6439341
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1321",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946302,
+    "lon": -96.6431254
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1324",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1954629,
+    "lon": -96.6443555
+  },
+  {
+    "street": "Newfoundland Drive",
+    "housenumber": "1325",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1950688,
+    "lon": -96.6439014
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1325",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1946914,
+    "lon": -96.6431757
+  },
+  {
+    "street": "El Paso Lane",
+    "housenumber": "1326",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1745856,
+    "lon": -96.5781355
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1329",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1947464,
+    "lon": -96.6432156
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1400",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1957517,
+    "lon": -96.6443693
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1400",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.195453,
+    "lon": -96.643171
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1400",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.194773,
+    "lon": -96.6420429
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1401",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849067,
+    "lon": -96.5784591
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1401",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958274,
+    "lon": -96.6430347
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1401",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952082,
+    "lon": -96.6436784
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1404",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958328,
+    "lon": -96.6443761
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1404",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843545,
+    "lon": -96.5785047
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1404",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953982,
+    "lon": -96.6430989
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1404",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1948282,
+    "lon": -96.6419616
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1405",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849052,
+    "lon": -96.5786098
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1405",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1958235,
+    "lon": -96.6429427
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1405",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952529,
+    "lon": -96.6437211
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "1407",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858378,
+    "lon": -96.5790062
+  },
+  {
+    "street": "Beechwood Terrace",
+    "housenumber": "1408",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1938261,
+    "lon": -96.6096154
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1408",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.195899,
+    "lon": -96.6443892
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1408",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843406,
+    "lon": -96.5787374
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1408",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953503,
+    "lon": -96.6430176
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1408",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1948749,
+    "lon": -96.6418885
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1409",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1848969,
+    "lon": -96.5787477
+  },
+  {
+    "street": "Normandy Place",
+    "housenumber": "1409",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1938729,
+    "lon": -96.5735639
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1409",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1957522,
+    "lon": -96.6427761
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1409",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953063,
+    "lon": -96.643802
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1410",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1755241,
+    "lon": -96.5789501
+  },
+  {
+    "street": "Normandy Place",
+    "housenumber": "1411",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1940447,
+    "lon": -96.5735576
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1412",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1959762,
+    "lon": -96.6443853
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1412",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953084,
+    "lon": -96.6429452
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1412",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949291,
+    "lon": -96.641828
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1413",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1849185,
+    "lon": -96.5788721
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1413",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1957261,
+    "lon": -96.6426816
+  },
+  {
+    "street": "Sundance Drive",
+    "housenumber": "1413",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953834,
+    "lon": -96.6438864
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1414",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843674,
+    "lon": -96.579008
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1414",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.193879,
+    "lon": -96.5742434
+  },
+  {
+    "street": "Yuma Street",
+    "housenumber": "1414",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1755095,
+    "lon": -96.5791301
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "1415",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1739487,
+    "lon": -96.579184
+  },
+  {
+    "street": "Normandy Place",
+    "housenumber": "1415",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1942848,
+    "lon": -96.5735528
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1416",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1960422,
+    "lon": -96.6443865
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1416",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1939649,
+    "lon": -96.5742416
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1416",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952557,
+    "lon": -96.6428769
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1416",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1949757,
+    "lon": -96.6417533
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1417",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1848874,
+    "lon": -96.5790664
+  },
+  {
+    "street": "Leavenworth Street",
+    "housenumber": "1417",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1813633,
+    "lon": -96.5791088
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1417",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1957171,
+    "lon": -96.6425918
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1418",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843434,
+    "lon": -96.5792367
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1418",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1939124,
+    "lon": -96.5740898
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1420",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1961176,
+    "lon": -96.644385
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1420",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1736318,
+    "lon": -96.5794604
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1420",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1939102,
+    "lon": -96.5739114
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1420",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952069,
+    "lon": -96.6428033
+  },
+  {
+    "street": "El Paso Lane",
+    "housenumber": "1421",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1746962,
+    "lon": -96.5794051
+  },
+  {
+    "street": "Normandy Place",
+    "housenumber": "1421",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1944258,
+    "lon": -96.5735556
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1421",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1956911,
+    "lon": -96.642505
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1422",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1941666,
+    "lon": -96.5739799
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "1422",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1797662,
+    "lon": -96.5793842
+  },
+  {
+    "street": "Christy Drive",
+    "housenumber": "1424",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1961912,
+    "lon": -96.644392
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1424",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843364,
+    "lon": -96.5794865
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1424",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.194168,
+    "lon": -96.5740874
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1425",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1956861,
+    "lon": -96.6424164
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1426",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1942862,
+    "lon": -96.5740284
+  },
+  {
+    "street": "Normandy Place",
+    "housenumber": "1427",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1946705,
+    "lon": -96.5735591
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1428",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1852833,
+    "lon": -96.5793942
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1428",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1944162,
+    "lon": -96.5740258
+  },
+  {
+    "street": "Fairchild Avenue",
+    "housenumber": "1430",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.184365,
+    "lon": -96.5799077
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1430",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1946676,
+    "lon": -96.5740462
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1432",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1948329,
+    "lon": -96.5740485
+  },
+  {
+    "street": "McCain Lane",
+    "housenumber": "1434",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1949805,
+    "lon": -96.5740484
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "144",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.181961,
+    "lon": -96.6134443
+  },
+  {
+    "street": "Laramie Street",
+    "housenumber": "1446",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1852534,
+    "lon": -96.5805097
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "146",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1821177,
+    "lon": -96.613933
+  },
+  {
+    "street": "E. J. Frick Drive",
+    "housenumber": "147",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1746049,
+    "lon": -96.6159105
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1500",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1951276,
+    "lon": -96.6426045
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1500",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952773,
+    "lon": -96.6412626
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1501",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1955838,
+    "lon": -96.6423041
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1502",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1954213,
+    "lon": -96.5697527
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1504",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1954098,
+    "lon": -96.5696514
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1504",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1951664,
+    "lon": -96.6425099
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1504",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1945308,
+    "lon": -96.605612
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1504",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953232,
+    "lon": -96.6413372
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1505",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1955037,
+    "lon": -96.6422864
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1506",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1952837,
+    "lon": -96.5695694
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1506",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1946478,
+    "lon": -96.6056114
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1508",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1951664,
+    "lon": -96.5695815
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1508",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952035,
+    "lon": -96.6424322
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1508",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.195375,
+    "lon": -96.6413891
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1509",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1954366,
+    "lon": -96.6422748
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1509",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1950153,
+    "lon": -96.6062023
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1510",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.195081,
+    "lon": -96.5695192
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1510",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1947983,
+    "lon": -96.6056289
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1511",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1951213,
+    "lon": -96.6061746
+  },
+  {
+    "street": "Country Club Place",
+    "housenumber": "1512",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1950279,
+    "lon": -96.5694031
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1512",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1736164,
+    "lon": -96.5810228
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1512",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1952486,
+    "lon": -96.6423517
+  },
+  {
+    "street": "Yorkshire Court",
+    "housenumber": "1512",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1954298,
+    "lon": -96.6414844
+  },
+  {
+    "street": "Paddington Circle",
+    "housenumber": "1513",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1953561,
+    "lon": -96.6422327
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1513",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1954498,
+    "lon": -96.6059527
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1515",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1955375,
+    "lon": -96.6058382
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1517",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1740049,
+    "lon": -96.5809663
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1517",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1956551,
+    "lon": -96.6056598
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1519",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1957158,
+    "lon": -96.6055117
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1520",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1736178,
+    "lon": -96.5811379
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1520",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1949684,
+    "lon": -96.6056221
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1521",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1957373,
+    "lon": -96.6053061
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1522",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1950838,
+    "lon": -96.6055908
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1523",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1957716,
+    "lon": -96.6051687
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1524",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1952357,
+    "lon": -96.6053998
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1525",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1739759,
+    "lon": -96.5811307
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1526",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1953034,
+    "lon": -96.6052754
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1527",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1739782,
+    "lon": -96.581312
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1528",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1953056,
+    "lon": -96.6050156
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1529",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1739872,
+    "lon": -96.5814889
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "153",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1830893,
+    "lon": -96.6158826
+  },
+  {
+    "street": "North Dartmouth Drive",
+    "housenumber": "153",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1778512,
+    "lon": -96.613099
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1530",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1952991,
+    "lon": -96.6049149
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "1531",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1792469,
+    "lon": -96.5813841
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1532",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.195241,
+    "lon": -96.6046221
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1533",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1956367,
+    "lon": -96.6043459
+  },
+  {
+    "street": "Williamsburg Drive",
+    "housenumber": "1534",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1951939,
+    "lon": -96.6044658
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1545",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.195723,
+    "lon": -96.604886
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1546",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1956925,
+    "lon": -96.6044542
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1547",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.195837,
+    "lon": -96.6048581
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1548",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1958772,
+    "lon": -96.6043292
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1549",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1960358,
+    "lon": -96.6050268
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "155",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1835007,
+    "lon": -96.6157136
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1550",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1960062,
+    "lon": -96.6043283
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1551",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1961442,
+    "lon": -96.6049665
+  },
+  {
+    "street": "Williamsburg Court",
+    "housenumber": "1554",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1962286,
+    "lon": -96.6046897
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "156",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1839756,
+    "lon": -96.6148826
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "157",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1841231,
+    "lon": -96.6158945
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "158",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.184489,
+    "lon": -96.6150347
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1600",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967956,
+    "lon": -96.6048179
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1600",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1735137,
+    "lon": -96.5819188
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1600",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967201,
+    "lon": -96.6014247
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1600",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967439,
+    "lon": -96.5998809
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1601",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1740637,
+    "lon": -96.5818281
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1601",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967339,
+    "lon": -96.6018812
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1601",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967281,
+    "lon": -96.6003295
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1602",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968685,
+    "lon": -96.6048239
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1602",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967948,
+    "lon": -96.6014232
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1602",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967814,
+    "lon": -96.5997905
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1603",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967981,
+    "lon": -96.6018663
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1603",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967607,
+    "lon": -96.6002488
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1603",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.196679,
+    "lon": -96.637816
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1604",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1969454,
+    "lon": -96.6048322
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1604",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968708,
+    "lon": -96.6014265
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1604",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967862,
+    "lon": -96.5998784
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1605",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.196872,
+    "lon": -96.6018649
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1605",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967829,
+    "lon": -96.60033
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1606",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.197028,
+    "lon": -96.6048429
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1606",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.196953,
+    "lon": -96.6014233
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1606",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967684,
+    "lon": -96.5999508
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1607",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1740746,
+    "lon": -96.5821553
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1607",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.196948,
+    "lon": -96.6018661
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1607",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967616,
+    "lon": -96.6004201
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1608",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1971733,
+    "lon": -96.6049535
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1608",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1736,
+    "lon": -96.5822224
+  },
+  {
+    "street": "Wyndham Heights",
+    "housenumber": "1609",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1971699,
+    "lon": -96.6376295
+  },
+  {
+    "street": "Bethany Drive",
+    "housenumber": "161",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1845302,
+    "lon": -96.6164178
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1610",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1972539,
+    "lon": -96.6049543
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1610",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1971105,
+    "lon": -96.6013609
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1610",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970033,
+    "lon": -96.5998069
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1611",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1971729,
+    "lon": -96.6018602
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1611",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970139,
+    "lon": -96.6002677
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1612",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.197325,
+    "lon": -96.6049677
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1612",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.197195,
+    "lon": -96.6013416
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1612",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1969907,
+    "lon": -96.5998968
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1613",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1972444,
+    "lon": -96.6018398
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1613",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1969798,
+    "lon": -96.6003357
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1614",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1974133,
+    "lon": -96.6049709
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1614",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1972684,
+    "lon": -96.6013354
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1614",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970289,
+    "lon": -96.5999649
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1615",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1973226,
+    "lon": -96.6018437
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1615",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970196,
+    "lon": -96.6004341
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1616",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1975603,
+    "lon": -96.6049088
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1616",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1973341,
+    "lon": -96.6013101
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1616",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970392,
+    "lon": -96.5998862
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1617",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1973921,
+    "lon": -96.6018233
+  },
+  {
+    "street": "Woodoak Court",
+    "housenumber": "1617",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1970446,
+    "lon": -96.6003392
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1618",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1976639,
+    "lon": -96.6049068
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1620",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979401,
+    "lon": -96.6048988
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1620",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1976345,
+    "lon": -96.6011686
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1621",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1977299,
+    "lon": -96.6019703
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1622",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979602,
+    "lon": -96.6049773
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1622",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1976315,
+    "lon": -96.6010605
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1623",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1977958,
+    "lon": -96.6019648
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1624",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979764,
+    "lon": -96.6050436
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1624",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1976337,
+    "lon": -96.6009693
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1625",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1740429,
+    "lon": -96.5829481
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1625",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1978814,
+    "lon": -96.601944
+  },
+  {
+    "street": "Delaney Drive",
+    "housenumber": "1626",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1980022,
+    "lon": -96.6051171
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1626",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1976195,
+    "lon": -96.6008848
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1629",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1740378,
+    "lon": -96.5830987
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1630",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979497,
+    "lon": -96.6008994
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1632",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979556,
+    "lon": -96.600982
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1634",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979584,
+    "lon": -96.6010774
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1636",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979729,
+    "lon": -96.6011831
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1640",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979737,
+    "lon": -96.6013866
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1642",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979733,
+    "lon": -96.6014969
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1644",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979744,
+    "lon": -96.6015838
+  },
+  {
+    "street": "Woodcrest Drive",
+    "housenumber": "1646",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1979755,
+    "lon": -96.6016792
+  },
+  {
+    "street": "South Airport Road",
+    "housenumber": "1725",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1386907,
+    "lon": -96.663978
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "1728",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2009039,
+    "lon": -96.630342
+  },
+  {
+    "street": "Thomas Circle",
+    "housenumber": "1728",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1983646,
+    "lon": -96.5728783
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "1733",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858356,
+    "lon": -96.5847416
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "1735",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858359,
+    "lon": -96.5849378
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1740",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1996197,
+    "lon": -96.6291948
+  },
+  {
+    "street": "Anderson Avenue",
+    "housenumber": "1745",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1858364,
+    "lon": -96.5852368
+  },
+  {
+    "street": "Colorado Street",
+    "housenumber": "1800",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1766192,
+    "lon": -96.5851533
+  },
+  {
+    "street": "Concord Lane",
+    "housenumber": "1805",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1996551,
+    "lon": -96.6290208
+  },
+  {
+    "street": "Humboldt Street",
+    "housenumber": "1821",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1804808,
+    "lon": -96.585876
+  },
+  {
+    "street": "Fair Lane",
+    "housenumber": "1822",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1736273,
+    "lon": -96.5862877
+  },
+  {
+    "street": "College Heights Road",
+    "housenumber": "1841",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1892952,
+    "lon": -96.5875485
+  },
+  {
+    "street": "College Heights Road",
+    "housenumber": "1843",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.189296,
+    "lon": -96.5876117
+  },
+  {
+    "street": "Daisy Court",
+    "housenumber": "1900",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1991899,
+    "lon": -96.5549513
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1900",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2025069,
+    "lon": -96.6285896
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1901",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2020783,
+    "lon": -96.6286398
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1903",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2021294,
+    "lon": -96.6287521
+  },
+  {
+    "street": "Violet Circle",
+    "housenumber": "1903",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1992694,
+    "lon": -96.5571056
+  },
+  {
+    "street": "Daisy Court",
+    "housenumber": "1904",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1992671,
+    "lon": -96.5546896
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1904",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2025408,
+    "lon": -96.6286997
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1905",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2021904,
+    "lon": -96.6288863
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1907",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2022429,
+    "lon": -96.6291143
+  },
+  {
+    "street": "Violet Circle",
+    "housenumber": "1907",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1994998,
+    "lon": -96.5571293
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1908",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2025762,
+    "lon": -96.6287803
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1909",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2022865,
+    "lon": -96.6292342
+  },
+  {
+    "street": "Plymouth Landing",
+    "housenumber": "1911",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2023807,
+    "lon": -96.6292594
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1916",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2024938,
+    "lon": -96.6280614
+  },
+  {
+    "street": "Bluehills Road",
+    "housenumber": "1920",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2028517,
+    "lon": -96.5749093
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1920",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.202546,
+    "lon": -96.628052
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1921",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2029109,
+    "lon": -96.6285645
+  },
+  {
+    "street": "Lexington Lane",
+    "housenumber": "1922",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2029784,
+    "lon": -96.6290902
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1923",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2030121,
+    "lon": -96.6285354
+  },
+  {
+    "street": "Lexington Lane",
+    "housenumber": "1924",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2030569,
+    "lon": -96.6290813
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1925",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2031706,
+    "lon": -96.6284855
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1927",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2012316,
+    "lon": -96.6276482
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "1927",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1739567,
+    "lon": -96.5878664
+  },
+  {
+    "street": "Plymouth Road",
+    "housenumber": "1927",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2032819,
+    "lon": -96.6285006
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1929",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2013357,
+    "lon": -96.6276424
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1941",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2020858,
+    "lon": -96.6271725
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1943",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2021117,
+    "lon": -96.6271017
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1945",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2021549,
+    "lon": -96.6269764
+  },
+  {
+    "street": "Crescent Drive",
+    "housenumber": "1947",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2021805,
+    "lon": -96.6268982
+  },
+  {
+    "street": "Lincoln Drive",
+    "housenumber": "1990",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2032688,
+    "lon": -96.5662282
+  },
+  {
+    "street": "Plymate Lane",
+    "housenumber": "200",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1843029,
+    "lon": -96.6058503
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2000",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2038921,
+    "lon": -96.6311037
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2000",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2040407,
+    "lon": -96.6081255
+  },
+  {
+    "street": "Estella Drive",
+    "housenumber": "2001",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2039227,
+    "lon": -96.6302499
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2002",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2039898,
+    "lon": -96.6310979
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2002",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2040486,
+    "lon": -96.6080229
+  },
+  {
+    "street": "Estella Drive",
+    "housenumber": "2003",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2039681,
+    "lon": -96.6303292
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2004",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2041461,
+    "lon": -96.6310885
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2004",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2041013,
+    "lon": -96.6078868
+  },
+  {
+    "street": "Estella Drive",
+    "housenumber": "2005",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2041435,
+    "lon": -96.6304482
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2005",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2042251,
+    "lon": -96.6087038
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2006",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2042284,
+    "lon": -96.6310694
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2006",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2041548,
+    "lon": -96.6078159
+  },
+  {
+    "street": "Estella Drive",
+    "housenumber": "2007",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2042182,
+    "lon": -96.6304479
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2007",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2042939,
+    "lon": -96.6086978
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2008",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2043727,
+    "lon": -96.6310415
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2008",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2042919,
+    "lon": -96.6077713
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2009",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2044078,
+    "lon": -96.6086769
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2010",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2044586,
+    "lon": -96.6310031
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2010",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2043552,
+    "lon": -96.6077631
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2011",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2033241,
+    "lon": -96.6403152
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2011",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.20448,
+    "lon": -96.6086615
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2012",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2046206,
+    "lon": -96.630969
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2013",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2046335,
+    "lon": -96.6084676
+  },
+  {
+    "street": "Vanesta Place",
+    "housenumber": "2013",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2045257,
+    "lon": -96.6367952
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2014",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2046961,
+    "lon": -96.630949
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2015",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2034601,
+    "lon": -96.6401744
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2015",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2046596,
+    "lon": -96.6085323
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2016",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2047174,
+    "lon": -96.6077799
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2017",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2047917,
+    "lon": -96.6086717
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2018",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2047853,
+    "lon": -96.6077863
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2019",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2048625,
+    "lon": -96.6086889
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2020",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2051534,
+    "lon": -96.6309202
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2020",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2048994,
+    "lon": -96.6077658
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2021",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2035663,
+    "lon": -96.6400602
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2021",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2050018,
+    "lon": -96.6086791
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2022",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053621,
+    "lon": -96.630882
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2022",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2049653,
+    "lon": -96.6077737
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2023",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2078633,
+    "lon": -96.578311
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2023",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2050702,
+    "lon": -96.6086429
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2024",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2054806,
+    "lon": -96.6309479
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2024",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2050811,
+    "lon": -96.6078065
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2025",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2036792,
+    "lon": -96.63995
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2025",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2079153,
+    "lon": -96.5783281
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2025",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2051717,
+    "lon": -96.6084919
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2026",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2055934,
+    "lon": -96.6310251
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2026",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.205144,
+    "lon": -96.6078183
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2027",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2051996,
+    "lon": -96.6084029
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2028",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2057065,
+    "lon": -96.6311214
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2028",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2052605,
+    "lon": -96.6078303
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2030",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058076,
+    "lon": -96.6312102
+  },
+  {
+    "street": "North Pointe Drive",
+    "housenumber": "2030",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2053225,
+    "lon": -96.607846
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2031",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2037919,
+    "lon": -96.6398184
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2032",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2059119,
+    "lon": -96.6313104
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2034",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2060043,
+    "lon": -96.6314032
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2035",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2038949,
+    "lon": -96.6397214
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2036",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2060765,
+    "lon": -96.6315343
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2038",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061754,
+    "lon": -96.6316876
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2040",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2062649,
+    "lon": -96.6317842
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2040",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067763,
+    "lon": -96.6311968
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2041",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2040233,
+    "lon": -96.6395074
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2041",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067107,
+    "lon": -96.6312523
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2042",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2063489,
+    "lon": -96.6319113
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2042",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069401,
+    "lon": -96.6311317
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2043",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066938,
+    "lon": -96.6315236
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2044",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2064296,
+    "lon": -96.6320157
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2044",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2071182,
+    "lon": -96.6310792
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2045",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2041089,
+    "lon": -96.6393589
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2045",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067171,
+    "lon": -96.6316315
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2046",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2064987,
+    "lon": -96.6321355
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2046",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2072206,
+    "lon": -96.6312476
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2047",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2068413,
+    "lon": -96.6317736
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2048",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2065827,
+    "lon": -96.6322625
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2048",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2072877,
+    "lon": -96.6313237
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "2049",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1730363,
+    "lon": -96.5904982
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2049",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2068985,
+    "lon": -96.6318551
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2050",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066694,
+    "lon": -96.6323744
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2050",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2073554,
+    "lon": -96.6314411
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2051",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2042111,
+    "lon": -96.6391886
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2051",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070161,
+    "lon": -96.6319586
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2052",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067771,
+    "lon": -96.6325199
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2052",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074124,
+    "lon": -96.6315071
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2053",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.207071,
+    "lon": -96.6320169
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2054",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069109,
+    "lon": -96.6326271
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2054",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075141,
+    "lon": -96.6316186
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2055",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2043072,
+    "lon": -96.6390788
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2055",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2071584,
+    "lon": -96.6321081
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2056",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070556,
+    "lon": -96.6326621
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2056",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075572,
+    "lon": -96.631703
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2057",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2072356,
+    "lon": -96.6321789
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2058",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2076527,
+    "lon": -96.6317992
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2059",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2073333,
+    "lon": -96.6322983
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2060",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2072474,
+    "lon": -96.6327
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2060",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2077139,
+    "lon": -96.6318806
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2061",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074042,
+    "lon": -96.632346
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2062",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075376,
+    "lon": -96.6325846
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2062",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2078179,
+    "lon": -96.6320128
+  },
+  {
+    "street": "Stephen Court",
+    "housenumber": "2064",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2078691,
+    "lon": -96.6321021
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2101",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.204368,
+    "lon": -96.6388229
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2101",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2080689,
+    "lon": -96.5783764
+  },
+  {
+    "street": "Meadowlark Road",
+    "housenumber": "2103",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2081324,
+    "lon": -96.5783752
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2104",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2081786,
+    "lon": -96.6323101
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2105",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2044372,
+    "lon": -96.6387094
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2106",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2082909,
+    "lon": -96.6322656
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2108",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2084527,
+    "lon": -96.6322566
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2110",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2085666,
+    "lon": -96.6322026
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2111",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.204502,
+    "lon": -96.6385009
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2112",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2087049,
+    "lon": -96.632148
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2114",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2088415,
+    "lon": -96.6321007
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2115",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2045537,
+    "lon": -96.6383315
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2116",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2089895,
+    "lon": -96.6320511
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2118",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2091035,
+    "lon": -96.6320006
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2120",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2092609,
+    "lon": -96.6319476
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2122",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.209369,
+    "lon": -96.6318959
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2124",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.209559,
+    "lon": -96.6318696
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "2125",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1729258,
+    "lon": -96.5909572
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2126",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2096452,
+    "lon": -96.6318368
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2128",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2098215,
+    "lon": -96.6317837
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2130",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2099048,
+    "lon": -96.6317496
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2132",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2101114,
+    "lon": -96.6316738
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2134",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2102046,
+    "lon": -96.6316435
+  },
+  {
+    "street": "Hunter Place",
+    "housenumber": "214",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1832609,
+    "lon": -96.6418785
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2141",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2045297,
+    "lon": -96.6374254
+  },
+  {
+    "street": "Grand Ridge Court",
+    "housenumber": "2145",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2043231,
+    "lon": -96.6372826
+  },
+  {
+    "street": "Southwind Place",
+    "housenumber": "215",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1753504,
+    "lon": -96.6047122
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "2151",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1710232,
+    "lon": -96.5918052
+  },
+  {
+    "street": "Southwind Place",
+    "housenumber": "217",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1751785,
+    "lon": -96.6046876
+  },
+  {
+    "street": "Fort Riley Boulevard",
+    "housenumber": "2200",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1717546,
+    "lon": -96.593237
+  },
+  {
+    "street": "Little Kitten Avenue",
+    "housenumber": "2205",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2106452,
+    "lon": -96.6321637
+  },
+  {
+    "street": "Saint Andrew Circle",
+    "housenumber": "2208",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.208843,
+    "lon": -96.5994445
+  },
+  {
+    "street": "Londondery Drive",
+    "housenumber": "2213",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.209453,
+    "lon": -96.6280664
+  },
+  {
+    "street": "Londondery Drive",
+    "housenumber": "2217",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2093896,
+    "lon": -96.6276711
+  },
+  {
+    "street": "Tuttle Creek Boulevard",
+    "housenumber": "2225",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2071898,
+    "lon": -96.5715716
+  },
+  {
+    "street": "Woodridge Drive",
+    "housenumber": "2228",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2095486,
+    "lon": -96.6307118
+  },
+  {
+    "street": "Woodridge Drive",
+    "housenumber": "2232",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.209897,
+    "lon": -96.6305129
+  },
+  {
+    "street": "Hunter Place",
+    "housenumber": "301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1836032,
+    "lon": -96.6437269
+  },
+  {
+    "street": "Starlight Lane",
+    "housenumber": "225",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1826888,
+    "lon": -96.6187373
+  },
+  {
+    "street": "Blue Earth Place",
+    "housenumber": "227",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1748345,
+    "lon": -96.5600334
+  },
+  {
+    "street": "Londondery Drive",
+    "housenumber": "2288",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2095688,
+    "lon": -96.6286466
+  },
+  {
+    "street": "Hunter Place",
+    "housenumber": "230",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.1838389,
+    "lon": -96.6425514
+  },
+  {
+    "street": "Poyntz Avenue",
+    "housenumber": "230",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1795133,
+    "lon": -96.5600273
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053476,
+    "lon": -96.644715
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2300",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2052745,
+    "lon": -96.6435867
+  },
+  {
+    "street": "Stagg Hill Road",
+    "housenumber": "2300",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.168101,
+    "lon": -96.596357
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.205185,
+    "lon": -96.6448776
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2301",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.205835,
+    "lon": -96.643812
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2305",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2051877,
+    "lon": -96.6451124
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2306",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2056062,
+    "lon": -96.6447365
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2308",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2057227,
+    "lon": -96.6448769
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2309",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053884,
+    "lon": -96.6453083
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2310",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2053483,
+    "lon": -96.6431401
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2311",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2059787,
+    "lon": -96.643379
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2312",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058374,
+    "lon": -96.6449754
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2313",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2056175,
+    "lon": -96.6454717
+  },
+  {
+    "street": "Hillview Drive",
+    "housenumber": "2313",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.209861,
+    "lon": -96.6004132
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2314",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2059393,
+    "lon": -96.6450909
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2316",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2060633,
+    "lon": -96.6451959
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2317",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058087,
+    "lon": -96.6456375
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2318",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061792,
+    "lon": -96.6452893
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2320",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.205416,
+    "lon": -96.6427684
+  },
+  {
+    "street": "Sky-Vue Lane",
+    "housenumber": "2320",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1664773,
+    "lon": -96.5970381
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2321",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061834,
+    "lon": -96.6429896
+  },
+  {
+    "street": "Hillview Drive",
+    "housenumber": "2321",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2100784,
+    "lon": -96.5994988
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2330",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2056858,
+    "lon": -96.6423778
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2331",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2062943,
+    "lon": -96.6425334
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2400",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2058958,
+    "lon": -96.6420511
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2401",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2059843,
+    "lon": -96.6458019
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2401",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2065653,
+    "lon": -96.6419538
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2402",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2062811,
+    "lon": -96.6454082
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2404",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2063842,
+    "lon": -96.6455169
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2405",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061716,
+    "lon": -96.6459661
+  },
+  {
+    "street": "Hillview Drive",
+    "housenumber": "2405",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2098967,
+    "lon": -96.5987479
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2406",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2065029,
+    "lon": -96.6456187
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2408",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066127,
+    "lon": -96.6457424
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2409",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.206324,
+    "lon": -96.6461595
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2410",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066849,
+    "lon": -96.6458887
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2410",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2060444,
+    "lon": -96.6416389
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2411",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.206635,
+    "lon": -96.6414595
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2412",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067715,
+    "lon": -96.6460364
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2413",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2064832,
+    "lon": -96.6463813
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2414",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2068592,
+    "lon": -96.6461707
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2416",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069752,
+    "lon": -96.6462658
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2417",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066123,
+    "lon": -96.646587
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2420",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070771,
+    "lon": -96.6463762
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2420",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061575,
+    "lon": -96.641189
+  },
+  {
+    "street": "Sumac Drive",
+    "housenumber": "2420",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1606803,
+    "lon": -96.5999376
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2421",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2067879,
+    "lon": -96.6467581
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2421",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.206673,
+    "lon": -96.6409807
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2422",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2071843,
+    "lon": -96.6465017
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2422",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967839,
+    "lon": -96.6006245
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2424",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968586,
+    "lon": -96.6007191
+  },
+  {
+    "street": "Bellerive Circle",
+    "housenumber": "2425",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.206948,
+    "lon": -96.6469446
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2426",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968423,
+    "lon": -96.6008171
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2428",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967738,
+    "lon": -96.6009193
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2430",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968371,
+    "lon": -96.6010061
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2430",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061245,
+    "lon": -96.6406845
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2431",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066562,
+    "lon": -96.6405366
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2432",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1968509,
+    "lon": -96.6011147
+  },
+  {
+    "street": "Dickens Avenue",
+    "housenumber": "2434",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1967683,
+    "lon": -96.6011884
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2500",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120386,
+    "lon": -96.6176711
+  },
+  {
+    "street": "Farm Bureau Road",
+    "housenumber": "2500",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.1789074,
+    "lon": -96.6019149
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2500",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2061206,
+    "lon": -96.6400574
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2501",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2071211,
+    "lon": -96.6471175
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2501",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2117757,
+    "lon": -96.6186507
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2502",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075442,
+    "lon": -96.6468265
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2502",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120824,
+    "lon": -96.617689
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2503",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2118306,
+    "lon": -96.6186847
+  },
+  {
+    "street": "Meade Circle",
+    "housenumber": "2503",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2060397,
+    "lon": -96.6009379
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2504",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2076439,
+    "lon": -96.6469353
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2504",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2121285,
+    "lon": -96.6177442
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2505",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2073183,
+    "lon": -96.6473453
+  },
+  {
+    "street": "Butterfield Court",
+    "housenumber": "2505",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2113494,
+    "lon": -96.56848
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2505",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2118766,
+    "lon": -96.6187282
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2506",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2077442,
+    "lon": -96.6471665
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2506",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2121796,
+    "lon": -96.6177572
+  },
+  {
+    "street": "Butterfield Court",
+    "housenumber": "2507",
+    "city": "Manhattan",
+    "postcode": "66502",
+    "lat": 39.2115538,
+    "lon": -96.5684841
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2507",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2119187,
+    "lon": -96.6187578
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2508",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2078207,
+    "lon": -96.6473395
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2508",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2122325,
+    "lon": -96.6177748
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2509",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074693,
+    "lon": -96.6476495
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2509",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2119878,
+    "lon": -96.6187564
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2510",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.207867,
+    "lon": -96.6475237
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2510",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2122927,
+    "lon": -96.617797
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2510",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2070979,
+    "lon": -96.6420294
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2511",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120335,
+    "lon": -96.6187742
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2511",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066359,
+    "lon": -96.6426998
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2512",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2079144,
+    "lon": -96.6476755
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2512",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2123367,
+    "lon": -96.6178242
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2513",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2075652,
+    "lon": -96.6479246
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2513",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2120795,
+    "lon": -96.6188247
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2514",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2079819,
+    "lon": -96.647825
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2514",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2123897,
+    "lon": -96.6178512
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2515",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.212129,
+    "lon": -96.6188588
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2516",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2080275,
+    "lon": -96.6479744
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2516",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2125192,
+    "lon": -96.617886
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2517",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2076528,
+    "lon": -96.6481612
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2517",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2123845,
+    "lon": -96.6189426
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2518",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2080995,
+    "lon": -96.648145
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2518",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2125685,
+    "lon": -96.6179038
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2519",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2124282,
+    "lon": -96.6189511
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2520",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2081517,
+    "lon": -96.6483215
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2520",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2126182,
+    "lon": -96.6179565
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2520",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2066534,
+    "lon": -96.6398424
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2520",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2072866,
+    "lon": -96.6415253
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2521",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2124764,
+    "lon": -96.6190226
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2521",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069785,
+    "lon": -96.642728
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2522",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2126676,
+    "lon": -96.6179813
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2523",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2125273,
+    "lon": -96.6190286
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2524",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2127293,
+    "lon": -96.6179707
+  },
+  {
+    "street": "Bellerive Drive",
+    "housenumber": "2525",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2078192,
+    "lon": -96.6487739
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2525",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2125891,
+    "lon": -96.6190274
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2526",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2127787,
+    "lon": -96.6179955
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2527",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2126384,
+    "lon": -96.6190451
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2528",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2128266,
+    "lon": -96.6180553
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2529",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2126882,
+    "lon": -96.6191026
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2530",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2128743,
+    "lon": -96.6180847
+  },
+  {
+    "street": "Heartland Drive",
+    "housenumber": "2530",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2069609,
+    "lon": -96.6397668
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2530",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2077034,
+    "lon": -96.6416331
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2531",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2127357,
+    "lon": -96.6191203
+  },
+  {
+    "street": "Heartland Valley Road",
+    "housenumber": "2531",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2074419,
+    "lon": -96.6426624
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2532",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2130474,
+    "lon": -96.6181187
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2534",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.213086,
+    "lon": -96.61816
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2536",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2131034,
+    "lon": -96.6182461
+  },
+  {
+    "street": "Candlecrest Circle",
+    "housenumber": "2538",
+    "city": "Manhattan",
+    "postcode": "66503",
+    "lat": 39.2131421,
+    "lon": -96.6182921
+  }
+]

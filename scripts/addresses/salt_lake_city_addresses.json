@@ -1,0 +1,7839 @@
+[
+  {
+    "street": "B Street",
+    "housenumber": "140",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7726019,
+    "lon": -111.8813854
+  },
+  {
+    "street": "East South Temple",
+    "housenumber": "709",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7696623,
+    "lon": -111.8705717
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1400",
+    "city": "Salt Lake City",
+    "lat": 40.7386668,
+    "lon": -111.8263901
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1417",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7388632,
+    "lon": -111.8592925
+  },
+  {
+    "street": "North Mario Capecchi Drive",
+    "housenumber": "10",
+    "city": "Salt Lake City",
+    "lat": 40.769541,
+    "lon": -111.8388623
+  },
+  {
+    "street": "North Beck Street",
+    "housenumber": "965",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7903653,
+    "lon": -111.9021565
+  },
+  {
+    "street": "State Street",
+    "housenumber": "360 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7612642,
+    "lon": -111.888579
+  },
+  {
+    "street": "State Street",
+    "housenumber": "348 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7615877,
+    "lon": -111.888533
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "165 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7661234,
+    "lon": -111.903657
+  },
+  {
+    "street": "North Beck Street",
+    "housenumber": "965",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.790528,
+    "lon": -111.9018847
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1264 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.78054,
+    "lon": -111.927431
+  },
+  {
+    "street": "2700 South",
+    "housenumber": "2005",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7129134,
+    "lon": -111.8336732
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "255 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7634789,
+    "lon": -111.891109
+  },
+  {
+    "street": "400 South",
+    "housenumber": "210 East, Suite 8",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.759717,
+    "lon": -111.883792
+  },
+  {
+    "street": "400 South",
+    "housenumber": "210 East, Suite 7",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.759644,
+    "lon": -111.883778
+  },
+  {
+    "street": "I Street",
+    "housenumber": "39",
+    "city": "Salt Lake City",
+    "lat": 40.7703563,
+    "lon": -111.8718
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "222",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7642882,
+    "lon": -111.8542045
+  },
+  {
+    "street": "Richmond Street",
+    "housenumber": "3292 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002469,
+    "lon": -111.854524
+  },
+  {
+    "street": "South Richmond Street",
+    "housenumber": "3292",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002469,
+    "lon": -111.854704
+  },
+  {
+    "street": "400 South",
+    "housenumber": "365",
+    "city": "Salt Lake City",
+    "lat": 40.7604055,
+    "lon": -111.902042
+  },
+  {
+    "street": "East 200 South",
+    "housenumber": "1330",
+    "city": "Salt Lake City",
+    "lat": 40.764783,
+    "lon": -111.8527457
+  },
+  {
+    "street": "200 South",
+    "housenumber": "1320 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7647806,
+    "lon": -111.8529876
+  },
+  {
+    "street": "200 South",
+    "housenumber": "1320 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7647825,
+    "lon": -111.8528877
+  },
+  {
+    "street": "South University Street",
+    "housenumber": "210",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7645606,
+    "lon": -111.8525386
+  },
+  {
+    "street": "South 1300 East",
+    "housenumber": "209",
+    "city": "Salt Lake City",
+    "postcode": "84102-2608",
+    "lat": 40.7645121,
+    "lon": -111.853212
+  },
+  {
+    "street": "State Street",
+    "housenumber": "645 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7551428,
+    "lon": -111.887897
+  },
+  {
+    "street": "200 South",
+    "housenumber": "353",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7652586,
+    "lon": -111.880676
+  },
+  {
+    "street": "400 West",
+    "housenumber": "235 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7640918,
+    "lon": -111.902231
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "317 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7622892,
+    "lon": -111.890811
+  },
+  {
+    "street": "State Street",
+    "housenumber": "344 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7616461,
+    "lon": -111.888534
+  },
+  {
+    "street": "South 600 West",
+    "housenumber": "250",
+    "city": "Salt Lake City",
+    "lat": 40.7615928,
+    "lon": -111.9089901
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "202 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647475,
+    "lon": -111.891448
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "866 West",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7696677,
+    "lon": -111.9161461
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "21",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7686899,
+    "lon": -111.8903169
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "55",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7683619,
+    "lon": -111.8933268
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680597,
+    "lon": -111.8920787
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680709,
+    "lon": -111.8923674
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7679885,
+    "lon": -111.8903485
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7678262,
+    "lon": -111.890798
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680269,
+    "lon": -111.891786
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680361,
+    "lon": -111.892757
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680069,
+    "lon": -111.89076
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7681812,
+    "lon": -111.8899713
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7679626,
+    "lon": -111.8900445
+  },
+  {
+    "street": "6th Avenue",
+    "housenumber": "402",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7754657,
+    "lon": -111.8769888
+  },
+  {
+    "street": "University Village",
+    "housenumber": "1027",
+    "city": "Salt Lake City",
+    "lat": 40.7542464,
+    "lon": -111.8341569
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1429",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7386831,
+    "lon": -111.859331
+  },
+  {
+    "street": "300 South",
+    "housenumber": "307 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630581,
+    "lon": -111.881972
+  },
+  {
+    "street": "300 South",
+    "housenumber": "111 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630556,
+    "lon": -111.886762
+  },
+  {
+    "street": "300 South",
+    "housenumber": "111 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.76306,
+    "lon": -111.887169
+  },
+  {
+    "street": "200 South",
+    "housenumber": "328 West",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7651915,
+    "lon": -111.9007374
+  },
+  {
+    "street": "State Street",
+    "housenumber": "376 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7609317,
+    "lon": -111.888528
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "215",
+    "city": "Salt Lake City",
+    "lat": 40.7643963,
+    "lon": -111.8878181
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "215",
+    "city": "Salt Lake City",
+    "lat": 40.7643402,
+    "lon": -111.887786
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "128",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.766377,
+    "lon": -111.8913896
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "264 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7634267,
+    "lon": -111.891411
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "124 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7664407,
+    "lon": -111.891391
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "30",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7686438,
+    "lon": -111.8914128
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "268 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7633638,
+    "lon": -111.891402
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "132 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7662848,
+    "lon": -111.891402
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "238 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7639549,
+    "lon": -111.89142
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "154",
+    "city": "Salt Lake City",
+    "lat": 40.7657998,
+    "lon": -111.8914088
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "310",
+    "city": "Salt Lake City",
+    "lat": 40.7622928,
+    "lon": -111.891417
+  },
+  {
+    "street": "300 South",
+    "housenumber": "83 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7631168,
+    "lon": -111.88887
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "350 W",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7693482,
+    "lon": -111.900611
+  },
+  {
+    "street": "400 South",
+    "housenumber": "225 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7606443,
+    "lon": -111.8844777
+  },
+  {
+    "street": "West 200 South",
+    "housenumber": "554",
+    "city": "Salt Lake City",
+    "lat": 40.7650151,
+    "lon": -111.9063115
+  },
+  {
+    "street": "South 400 West",
+    "housenumber": "150",
+    "city": "Salt Lake City",
+    "lat": 40.7664763,
+    "lon": -111.9025548
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "155 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7693488,
+    "lon": -111.894828
+  },
+  {
+    "street": "East 400 South",
+    "housenumber": "875",
+    "city": "Salt Lake City",
+    "lat": 40.760674,
+    "lon": -111.866247
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1360",
+    "city": "Salt Lake City",
+    "lat": 40.7397039,
+    "lon": -111.8269041
+  },
+  {
+    "street": "East 400 South",
+    "housenumber": "634",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7598613,
+    "lon": -111.872625
+  },
+  {
+    "street": "900 South",
+    "housenumber": "902 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.749577,
+    "lon": -111.86517
+  },
+  {
+    "street": "South 900 East",
+    "housenumber": "1298",
+    "city": "Salt Lake City",
+    "lat": 40.7417743,
+    "lon": -111.8655922
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "1026",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7714732,
+    "lon": -111.8587601
+  },
+  {
+    "street": "900 South",
+    "housenumber": "920 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495663,
+    "lon": -111.8647276
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571463,
+    "lon": -111.8730497
+  },
+  {
+    "street": "Edison Street",
+    "housenumber": "244 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7638184,
+    "lon": -111.886832
+  },
+  {
+    "street": "South West Temple",
+    "housenumber": "165",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7657194,
+    "lon": -111.8930078
+  },
+  {
+    "street": "200 South",
+    "housenumber": "163 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7648014,
+    "lon": -111.8961146
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "9",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7615515,
+    "lon": -111.890811
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "555 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7579588,
+    "lon": -111.89041
+  },
+  {
+    "street": "400 South",
+    "housenumber": "532 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7602663,
+    "lon": -111.875525
+  },
+  {
+    "street": "400 West",
+    "housenumber": "162 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7657643,
+    "lon": -111.902931
+  },
+  {
+    "street": "State Street",
+    "housenumber": "36 S",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7682992,
+    "lon": -111.889244
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "65 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7676044,
+    "lon": -111.889609
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7686282,
+    "lon": -111.8887563
+  },
+  {
+    "street": "South Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7684495,
+    "lon": -111.888877
+  },
+  {
+    "street": "State Street",
+    "housenumber": "36",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7686892,
+    "lon": -111.8886517
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "153 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7658999,
+    "lon": -111.903718
+  },
+  {
+    "street": "South 400 West",
+    "housenumber": "20",
+    "city": "Salt Lake City",
+    "lat": 40.7688377,
+    "lon": -111.903454
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7686791,
+    "lon": -111.889006
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7686018,
+    "lon": -111.888936
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7686486,
+    "lon": -111.889202
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "50 E",
+    "city": "Salt Lake City",
+    "lat": 40.769098,
+    "lon": -111.889791
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7687288,
+    "lon": -111.888863
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "lat": 40.7686445,
+    "lon": -111.888861
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7687339,
+    "lon": -111.889194
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "30",
+    "city": "Salt Lake City",
+    "lat": 40.7626199,
+    "lon": -111.889756
+  },
+  {
+    "street": "200 West",
+    "housenumber": "260 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7634257,
+    "lon": -111.897106
+  },
+  {
+    "street": "West 300 South",
+    "housenumber": "336",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.763035,
+    "lon": -111.900692
+  },
+  {
+    "street": "200 South",
+    "housenumber": "254 South",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7636633,
+    "lon": -111.8971122
+  },
+  {
+    "street": "100 South",
+    "housenumber": "444 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7673973,
+    "lon": -111.903884
+  },
+  {
+    "street": "400 South",
+    "housenumber": "255 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7609168,
+    "lon": -111.88344
+  },
+  {
+    "street": "400 South",
+    "housenumber": "249 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7609919,
+    "lon": -111.883684
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7567515,
+    "lon": -111.8717433
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7567677,
+    "lon": -111.87299
+  },
+  {
+    "street": "South West Temple",
+    "housenumber": "255",
+    "city": "Salt Lake City",
+    "lat": 40.7640215,
+    "lon": -111.893552
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "275",
+    "city": "Salt Lake City",
+    "lat": 40.7631002,
+    "lon": -111.893617
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "72 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7675399,
+    "lon": -111.891408
+  },
+  {
+    "street": "West 100 South",
+    "housenumber": "18",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7673957,
+    "lon": -111.891575
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "379 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7608504,
+    "lon": -111.890836
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "14 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7626324,
+    "lon": -111.890427
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1704 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.772271,
+    "lon": -111.939779
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "25",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7698845,
+    "lon": -111.9402449
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1645 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7843576,
+    "lon": -111.9378049
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1028",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7250222,
+    "lon": -111.861711
+  },
+  {
+    "street": "South 1300 Street East",
+    "housenumber": "2236",
+    "city": "Salt Lake City",
+    "postcode": "84106-2803",
+    "lat": 40.72228,
+    "lon": -111.8564872
+  },
+  {
+    "street": "South 1300 East",
+    "housenumber": "2236",
+    "city": "Salt Lake City",
+    "postcode": "84106-2898",
+    "lat": 40.7222719,
+    "lon": -111.856127
+  },
+  {
+    "street": "100 South",
+    "housenumber": "55 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.76691,
+    "lon": -111.893012
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "75",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7674342,
+    "lon": -111.893517
+  },
+  {
+    "street": "100 South",
+    "housenumber": "69 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7669141,
+    "lon": -111.893426
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "59 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7691252,
+    "lon": -111.8930585
+  },
+  {
+    "street": "400 South",
+    "housenumber": "31 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7608888,
+    "lon": -111.889872
+  },
+  {
+    "street": "Market Street",
+    "housenumber": "48 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.761872,
+    "lon": -111.892713
+  },
+  {
+    "street": "800 South",
+    "housenumber": "232 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7516923,
+    "lon": -111.88409
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "1953",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7398887,
+    "lon": -111.9462246
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1154",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7018411,
+    "lon": -111.85835
+  },
+  {
+    "street": "Richmond Street",
+    "housenumber": "3190 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7017213,
+    "lon": -111.855127
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1180",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7014999,
+    "lon": -111.8574041
+  },
+  {
+    "street": "State Street",
+    "housenumber": "810 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7514907,
+    "lon": -111.888771
+  },
+  {
+    "street": "West 600 South",
+    "housenumber": "224",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7567375,
+    "lon": -111.897696
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "1309",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7414372,
+    "lon": -111.8262649
+  },
+  {
+    "street": "South Foothill Drive",
+    "housenumber": "1345",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7406365,
+    "lon": -111.825878
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1309 S",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7413432,
+    "lon": -111.8262589
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1400",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7387201,
+    "lon": -111.8261042
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1350",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7402569,
+    "lon": -111.827139
+  },
+  {
+    "street": "500 South",
+    "housenumber": "216 East",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7582677,
+    "lon": -111.884655
+  },
+  {
+    "street": "500 South",
+    "housenumber": "212",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7582564,
+    "lon": -111.884832
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "169 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7659589,
+    "lon": -111.90333
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "80 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7675353,
+    "lon": -111.889961
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "758",
+    "city": "Salt Lake City",
+    "lat": 40.7690293,
+    "lon": -111.8692608
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "314",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.763265,
+    "lon": -111.900498
+  },
+  {
+    "street": "300 West",
+    "housenumber": "282 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7630373,
+    "lon": -111.900315
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "215 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7691106,
+    "lon": -111.897951
+  },
+  {
+    "street": "800 South",
+    "housenumber": "18 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7516502,
+    "lon": -111.890482
+  },
+  {
+    "street": "400 South",
+    "housenumber": "613 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615678,
+    "lon": -111.873453
+  },
+  {
+    "street": "400 South",
+    "housenumber": "613 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.761566,
+    "lon": -111.8735471
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.761566,
+    "lon": -111.8714047
+  },
+  {
+    "street": "East 400 South",
+    "housenumber": "613",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615736,
+    "lon": -111.873142
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615655,
+    "lon": -111.8715789
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615644,
+    "lon": -111.871912
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.756979,
+    "lon": -111.873135
+  },
+  {
+    "street": "Trolley Square",
+    "housenumber": "607",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.756593,
+    "lon": -111.8728672
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "20",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7681897,
+    "lon": -111.894389
+  },
+  {
+    "street": "300 South",
+    "housenumber": "469 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630432,
+    "lon": -111.877404
+  },
+  {
+    "street": "200 South",
+    "housenumber": "20 West",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7652235,
+    "lon": -111.891953
+  },
+  {
+    "street": "South 900 West",
+    "housenumber": "180",
+    "city": "Salt Lake City",
+    "lat": 40.7653048,
+    "lon": -111.9172633
+  },
+  {
+    "street": "200 West",
+    "housenumber": "677 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7544967,
+    "lon": -111.89644
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "326 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7620544,
+    "lon": -111.894441
+  },
+  {
+    "street": "State Street",
+    "housenumber": "342 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7617152,
+    "lon": -111.888539
+  },
+  {
+    "street": "State Street",
+    "housenumber": "328 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7618818,
+    "lon": -111.888547
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "331 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7619474,
+    "lon": -111.8908087
+  },
+  {
+    "street": "200 South",
+    "housenumber": "57 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647099,
+    "lon": -111.892715
+  },
+  {
+    "street": "200 South",
+    "housenumber": "1035",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7652137,
+    "lon": -111.8611791
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1028",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.72513,
+    "lon": -111.861732
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252167,
+    "lon": -111.8736425
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1200 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7429023,
+    "lon": -111.888524
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "1080",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.741457,
+    "lon": -111.8599218
+  },
+  {
+    "street": "West 600 South",
+    "housenumber": "307",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7557426,
+    "lon": -111.900063
+  },
+  {
+    "street": "West 600 South",
+    "housenumber": "311 W 600 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7558094,
+    "lon": -111.9001874
+  },
+  {
+    "street": "400 South",
+    "housenumber": "180 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7608845,
+    "lon": -111.8962037
+  },
+  {
+    "street": "300 West",
+    "housenumber": "569 N",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7821542,
+    "lon": -111.900007
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1704",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7722555,
+    "lon": -111.939854
+  },
+  {
+    "street": "400 South",
+    "housenumber": "612",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7598587,
+    "lon": -111.873503
+  },
+  {
+    "street": "Motor Avenue",
+    "housenumber": "1095",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7735016,
+    "lon": -111.9217468
+  },
+  {
+    "street": "400 South",
+    "housenumber": "820 E",
+    "city": "Salt Lake City",
+    "lat": 40.7604184,
+    "lon": -111.867314
+  },
+  {
+    "street": "400 South",
+    "housenumber": "210 East",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7595925,
+    "lon": -111.8837747
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7682852,
+    "lon": -111.892007
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "500 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7579997,
+    "lon": -111.891621
+  },
+  {
+    "street": "600 South",
+    "housenumber": "214",
+    "city": "Salt Lake City",
+    "lat": 40.7565353,
+    "lon": -111.897175
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "481",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7696781,
+    "lon": -111.8772977
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1206",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252201,
+    "lon": -111.8566086
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1358",
+    "city": "Salt Lake City",
+    "lat": 40.7400347,
+    "lon": -111.8269406
+  },
+  {
+    "street": "200 E",
+    "housenumber": "350 S",
+    "city": "Salt Lake City",
+    "postcode": "84121",
+    "lat": 40.7617721,
+    "lon": -111.885636
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1400",
+    "city": "Salt Lake City",
+    "lat": 40.7387274,
+    "lon": -111.8264938
+  },
+  {
+    "street": "200 South",
+    "housenumber": "165",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7652157,
+    "lon": -111.8860163
+  },
+  {
+    "street": "State Street",
+    "housenumber": "311",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.762485,
+    "lon": -111.888065
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "66 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7612853,
+    "lon": -111.888967
+  },
+  {
+    "street": "A Street",
+    "housenumber": "315",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7764436,
+    "lon": -111.8838152
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "35",
+    "city": "Salt Lake City",
+    "lat": 40.7626191,
+    "lon": -111.892363
+  },
+  {
+    "street": "300 West",
+    "housenumber": "511",
+    "city": "Salt Lake City",
+    "lat": 40.758155,
+    "lon": -111.899106
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "611",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7559746,
+    "lon": -111.893655
+  },
+  {
+    "street": "400 South",
+    "housenumber": "243 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7610649,
+    "lon": -111.883887
+  },
+  {
+    "street": "Gallivan Avenue",
+    "housenumber": "62 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.763547,
+    "lon": -111.889431
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1328 S.",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7406915,
+    "lon": -111.827415
+  },
+  {
+    "street": "900 South",
+    "housenumber": "906",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495835,
+    "lon": -111.865111
+  },
+  {
+    "street": "400 West",
+    "housenumber": "375",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7645733,
+    "lon": -111.90222
+  },
+  {
+    "street": "State Street",
+    "housenumber": "825 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7511682,
+    "lon": -111.88784
+  },
+  {
+    "street": "Amelia Earhart Drive",
+    "housenumber": "5575",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7758067,
+    "lon": -112.0239013
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "60",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7690728,
+    "lon": -111.8888142
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "60",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7690057,
+    "lon": -111.888666
+  },
+  {
+    "street": "State Street",
+    "housenumber": "36",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7689082,
+    "lon": -111.8885567
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "117",
+    "city": "Salt Lake City",
+    "lat": 40.7696131,
+    "lon": -111.887516
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7685299,
+    "lon": -111.892359
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7686295,
+    "lon": -111.8923985
+  },
+  {
+    "street": "900 East Suite 200",
+    "housenumber": "450 South",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7591314,
+    "lon": -111.865718
+  },
+  {
+    "street": "900 East",
+    "housenumber": "2148 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7243101,
+    "lon": -111.8656685
+  },
+  {
+    "street": "Gallivan Avenue",
+    "housenumber": "61 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7637946,
+    "lon": -111.889421
+  },
+  {
+    "street": "900 East",
+    "housenumber": "389 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7610862,
+    "lon": -111.864835
+  },
+  {
+    "street": "900 East",
+    "housenumber": "434 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7597846,
+    "lon": -111.8656403
+  },
+  {
+    "street": "West 300 South",
+    "housenumber": "423",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7625186,
+    "lon": -111.9031474
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "323 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7621385,
+    "lon": -111.89081
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "315 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7623268,
+    "lon": -111.8908112
+  },
+  {
+    "street": "300 West",
+    "housenumber": "282 S",
+    "city": "Salt Lake City",
+    "lat": 40.7631118,
+    "lon": -111.900018
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1868",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7296053,
+    "lon": -111.9000731
+  },
+  {
+    "street": "1830 South",
+    "housenumber": "335",
+    "city": "Salt Lake City",
+    "lat": 40.7301093,
+    "lon": -111.9007881
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2707 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252494,
+    "lon": -111.870578
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "2104 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7251972,
+    "lon": -111.872489
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1988",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.726953,
+    "lon": -111.859803
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1073",
+    "city": "Salt Lake City",
+    "lat": 40.725555,
+    "lon": -111.860113
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1067",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.725555,
+    "lon": -111.86028
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1962",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.727519,
+    "lon": -111.859874
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1075",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.725552,
+    "lon": -111.860017
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1010",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.724975,
+    "lon": -111.862305
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2110 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7250615,
+    "lon": -111.859842
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1057",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.72554,
+    "lon": -111.860645
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1170 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725193,
+    "lon": -111.857439
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1119",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255421,
+    "lon": -111.8590076
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2116",
+    "city": "Salt Lake City",
+    "lat": 40.7247999,
+    "lon": -111.8598062
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1115",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725536,
+    "lon": -111.859118
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1123",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725538,
+    "lon": -111.858797
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1160 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.724618,
+    "lon": -111.858041
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1170 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725241,
+    "lon": -111.857415
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1111",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255386,
+    "lon": -111.8592053
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1010",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725225,
+    "lon": -111.86231
+  },
+  {
+    "street": "McClelland Street",
+    "housenumber": "2121 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248928,
+    "lon": -111.861165
+  },
+  {
+    "street": "McClelland Street",
+    "housenumber": "2121 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.724771,
+    "lon": -111.861174
+  },
+  {
+    "street": "McClelland Street",
+    "housenumber": "2121 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248574,
+    "lon": -111.8611757
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2155 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7242669,
+    "lon": -111.8591596
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2165 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.723931,
+    "lon": -111.859164
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2130 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7242341,
+    "lon": -111.859843
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2118 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7247336,
+    "lon": -111.8598082
+  },
+  {
+    "street": "W Broadway",
+    "housenumber": "336",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.763034,
+    "lon": -111.900838
+  },
+  {
+    "street": "500 East",
+    "housenumber": "906 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7494726,
+    "lon": -111.877294
+  },
+  {
+    "street": "West 1300 South",
+    "housenumber": "135",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.741351,
+    "lon": -111.895027
+  },
+  {
+    "street": "900 South",
+    "housenumber": "234W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7499947,
+    "lon": -111.897893
+  },
+  {
+    "street": "900 South",
+    "housenumber": "278 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7494561,
+    "lon": -111.8828895
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2132 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7241238,
+    "lon": -111.859827
+  },
+  {
+    "street": "900 West",
+    "housenumber": "2025",
+    "city": "Salt Lake City",
+    "postcode": "84119",
+    "lat": 40.726476,
+    "lon": -111.915706
+  },
+  {
+    "street": "200 South",
+    "housenumber": "151 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647428,
+    "lon": -111.895938
+  },
+  {
+    "street": "Richmond Street",
+    "housenumber": "3292 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002484,
+    "lon": -111.854327
+  },
+  {
+    "street": "South 900 East",
+    "housenumber": "2030",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.72616,
+    "lon": -111.8659773
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2227 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7222306,
+    "lon": -111.8574325
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1201",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7234935,
+    "lon": -111.856817
+  },
+  {
+    "street": "200 West",
+    "housenumber": "677S",
+    "city": "Salt Lake City",
+    "lat": 40.7544684,
+    "lon": -111.896094
+  },
+  {
+    "street": "300 East",
+    "housenumber": "270 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7633489,
+    "lon": -111.882821
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "155",
+    "city": "Salt Lake City",
+    "lat": 40.7657223,
+    "lon": -111.890825
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841202,
+    "lon": -111.937251
+  },
+  {
+    "street": "Social Hall Avenue",
+    "housenumber": "143 East",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7683657,
+    "lon": -111.8865916
+  },
+  {
+    "street": "State Street",
+    "housenumber": "150 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7658951,
+    "lon": -111.8887863
+  },
+  {
+    "street": "300 South",
+    "housenumber": "35 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630248,
+    "lon": -111.8899573
+  },
+  {
+    "street": "1100 West",
+    "housenumber": "475",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7798965,
+    "lon": -111.9228464
+  },
+  {
+    "street": "1100 West",
+    "housenumber": "473",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7798182,
+    "lon": -111.9228458
+  },
+  {
+    "street": "600 North",
+    "housenumber": "1156 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7827301,
+    "lon": -111.9244141
+  },
+  {
+    "street": "West 600 North",
+    "housenumber": "1156",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7826499,
+    "lon": -111.9244087
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "158 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7658347,
+    "lon": -111.90425
+  },
+  {
+    "street": "400 West",
+    "housenumber": "190 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7652352,
+    "lon": -111.902944
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "171 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7657057,
+    "lon": -111.903423
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "9 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7689883,
+    "lon": -111.903856
+  },
+  {
+    "street": "400 South",
+    "housenumber": "175 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.760903,
+    "lon": -111.885813
+  },
+  {
+    "street": "400 South",
+    "housenumber": "613 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615715,
+    "lon": -111.873254
+  },
+  {
+    "street": "400 South",
+    "housenumber": "613 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615695,
+    "lon": -111.873359
+  },
+  {
+    "street": "400 South",
+    "housenumber": "480 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615658,
+    "lon": -111.8714841
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571548,
+    "lon": -111.872429
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7569707,
+    "lon": -111.87241
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7567818,
+    "lon": -111.8718273
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1324",
+    "city": "Salt Lake City",
+    "lat": 40.740778,
+    "lon": -111.8274105
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1400",
+    "city": "Salt Lake City",
+    "lat": 40.7393751,
+    "lon": -111.8268949
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1414",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7394543,
+    "lon": -111.8262728
+  },
+  {
+    "street": "South Foothill Drive",
+    "housenumber": "1440",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7388201,
+    "lon": -111.82534
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "672 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7546339,
+    "lon": -111.894485
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "675",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7260856,
+    "lon": -111.871516
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2075 S",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7271353,
+    "lon": -111.8709384
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "731",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725816,
+    "lon": -111.869927
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7244317,
+    "lon": -111.872394
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2107 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248597,
+    "lon": -111.8705957
+  },
+  {
+    "street": "300 South",
+    "housenumber": "457 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630399,
+    "lon": -111.877633
+  },
+  {
+    "street": "300 South",
+    "housenumber": "435 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630502,
+    "lon": -111.878357
+  },
+  {
+    "street": "Swaner Road",
+    "housenumber": "1320 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7406985,
+    "lon": -111.95224
+  },
+  {
+    "street": "Swaner Road",
+    "housenumber": "1320 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.741112,
+    "lon": -111.952232
+  },
+  {
+    "street": "Swaner Road",
+    "housenumber": "1320 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7408948,
+    "lon": -111.952196
+  },
+  {
+    "street": "400 West",
+    "housenumber": "1180 South",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7433487,
+    "lon": -111.9027467
+  },
+  {
+    "street": "800 East",
+    "housenumber": "2004",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7265416,
+    "lon": -111.868601
+  },
+  {
+    "street": "300 South",
+    "housenumber": "247 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.763046,
+    "lon": -111.883759
+  },
+  {
+    "street": "300 South",
+    "housenumber": "241 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630656,
+    "lon": -111.8840099
+  },
+  {
+    "street": "300 South",
+    "housenumber": "235 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630284,
+    "lon": -111.8841061
+  },
+  {
+    "street": "300 South",
+    "housenumber": "245 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.763168,
+    "lon": -111.886757
+  },
+  {
+    "street": "300 South",
+    "housenumber": "239 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630476,
+    "lon": -111.8840649
+  },
+  {
+    "street": "300 South",
+    "housenumber": "243 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.76305,
+    "lon": -111.883922
+  },
+  {
+    "street": "400 South",
+    "housenumber": "409",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7603489,
+    "lon": -111.9029625
+  },
+  {
+    "street": "200 South",
+    "housenumber": "565 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7646897,
+    "lon": -111.9074947
+  },
+  {
+    "street": "300 West",
+    "housenumber": "770 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7523977,
+    "lon": -111.899978
+  },
+  {
+    "street": "100 South",
+    "housenumber": "65 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7669238,
+    "lon": -111.89328
+  },
+  {
+    "street": "South 200 West",
+    "housenumber": "669",
+    "city": "Salt Lake City",
+    "lat": 40.7647632,
+    "lon": -111.911105
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "145E",
+    "city": "Salt Lake City",
+    "lat": 40.7419991,
+    "lon": -111.886113
+  },
+  {
+    "street": "N Ensign Vista Drive",
+    "housenumber": "1002",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7917727,
+    "lon": -111.8882339
+  },
+  {
+    "street": "South Redwood Road",
+    "housenumber": "1240",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7427346,
+    "lon": -111.9398388
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1234 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7429602,
+    "lon": -111.9398207
+  },
+  {
+    "street": "South Redwood Road",
+    "housenumber": "2104",
+    "city": "Salt Lake City",
+    "postcode": "84119-1320",
+    "lat": 40.7255853,
+    "lon": -111.9394937
+  },
+  {
+    "street": "800 South",
+    "housenumber": "175 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7515578,
+    "lon": -111.894336
+  },
+  {
+    "street": "800 South",
+    "housenumber": "175",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7525095,
+    "lon": -111.885777
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "836 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7719946,
+    "lon": -111.914953
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "780 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7717502,
+    "lon": -111.913687
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "832 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7719938,
+    "lon": -111.914739
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "156 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7659191,
+    "lon": -111.904252
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "170 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.76569,
+    "lon": -111.904225
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "49 North",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7700786,
+    "lon": -111.9032774
+  },
+  {
+    "street": "200 East",
+    "housenumber": "357 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7612105,
+    "lon": -111.885032
+  },
+  {
+    "street": "200 South",
+    "housenumber": "19",
+    "city": "Salt Lake City",
+    "lat": 40.7652561,
+    "lon": -111.890463
+  },
+  {
+    "street": "200 West",
+    "housenumber": "275S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7632846,
+    "lon": -111.896538
+  },
+  {
+    "street": "500 East",
+    "housenumber": "151",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.76588,
+    "lon": -111.8762846
+  },
+  {
+    "street": "Admiral Byrd Road",
+    "housenumber": "200",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7725544,
+    "lon": -112.021725
+  },
+  {
+    "street": "Admiral Byrd Road",
+    "housenumber": "230",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7733548,
+    "lon": -112.021817
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "500 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7578937,
+    "lon": -111.891563
+  },
+  {
+    "street": "300 South",
+    "housenumber": "454 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7625441,
+    "lon": -111.877855
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1126",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7246274,
+    "lon": -111.858588
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1133 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7242811,
+    "lon": -111.858599
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1126 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7246254,
+    "lon": -111.858451
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "505",
+    "city": "Salt Lake City",
+    "lat": 40.7698092,
+    "lon": -111.8766125
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "445",
+    "city": "Salt Lake City",
+    "lat": 40.7696027,
+    "lon": -111.878407
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "769",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7697196,
+    "lon": -111.8687307
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "529",
+    "city": "Salt Lake City",
+    "lat": 40.7695234,
+    "lon": -111.8750849
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "633",
+    "city": "Salt Lake City",
+    "lat": 40.7696404,
+    "lon": -111.8727546
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "559",
+    "city": "Salt Lake City",
+    "lat": 40.769686,
+    "lon": -111.8749131
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "303",
+    "city": "Salt Lake City",
+    "lat": 40.7696608,
+    "lon": -111.8823613
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "757",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7696242,
+    "lon": -111.8692117
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "747",
+    "city": "Salt Lake City",
+    "lat": 40.7696202,
+    "lon": -111.8695837
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "701",
+    "city": "Salt Lake City",
+    "lat": 40.7696717,
+    "lon": -111.8709246
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "617",
+    "city": "Salt Lake City",
+    "lat": 40.7697511,
+    "lon": -111.873526
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "455",
+    "city": "Salt Lake City",
+    "lat": 40.7697319,
+    "lon": -111.8778984
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "105",
+    "city": "Salt Lake City",
+    "lat": 40.7696255,
+    "lon": -111.8879673
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "255",
+    "city": "Salt Lake City",
+    "lat": 40.7638156,
+    "lon": -111.8935597
+  },
+  {
+    "street": "200 South",
+    "housenumber": "57",
+    "city": "Salt Lake City",
+    "lat": 40.7646925,
+    "lon": -111.8930569
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "201 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7647134,
+    "lon": -111.890564
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "lat": 40.7631295,
+    "lon": -111.8930779
+  },
+  {
+    "street": "200 South",
+    "housenumber": "160",
+    "city": "Salt Lake City",
+    "lat": 40.7647821,
+    "lon": -111.8862221
+  },
+  {
+    "street": "300 North",
+    "housenumber": "1300 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7757759,
+    "lon": -111.9273459
+  },
+  {
+    "street": "900 South",
+    "housenumber": "341 E",
+    "city": "Salt Lake City",
+    "lat": 40.750057,
+    "lon": -111.881306
+  },
+  {
+    "street": "900 South",
+    "housenumber": "272 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.749484,
+    "lon": -111.883252
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "401",
+    "city": "Salt Lake City",
+    "lat": 40.7499991,
+    "lon": -111.8793705
+  },
+  {
+    "street": "900 South",
+    "housenumber": "276 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7494631,
+    "lon": -111.8829647
+  },
+  {
+    "street": "900 South",
+    "housenumber": "401 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7499727,
+    "lon": -111.879274
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "143 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7661008,
+    "lon": -111.890792
+  },
+  {
+    "street": "1700 South",
+    "housenumber": "2416",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7333793,
+    "lon": -111.8216541
+  },
+  {
+    "street": "1400 West",
+    "housenumber": "144 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7660429,
+    "lon": -111.9310323
+  },
+  {
+    "street": "South 500 West",
+    "housenumber": "1340",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.740295,
+    "lon": -111.9066417
+  },
+  {
+    "street": "200 South",
+    "housenumber": "163 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7648007,
+    "lon": -111.896034
+  },
+  {
+    "street": "400 South",
+    "housenumber": "430 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7603594,
+    "lon": -111.878499
+  },
+  {
+    "street": "900 West",
+    "housenumber": "805 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7516735,
+    "lon": -111.9163022
+  },
+  {
+    "street": "Indiana Avenue",
+    "housenumber": "1353",
+    "city": "Salt Lake City",
+    "postcode": "84104-2754",
+    "lat": 40.7508506,
+    "lon": -111.929814
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "857",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7505505,
+    "lon": -111.890674
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "850 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7505337,
+    "lon": -111.891368
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "341 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7618114,
+    "lon": -111.8907812
+  },
+  {
+    "street": "400 South",
+    "housenumber": "435 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7609399,
+    "lon": -111.878483
+  },
+  {
+    "street": "300 South",
+    "housenumber": "777 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7631077,
+    "lon": -111.868674
+  },
+  {
+    "street": "900 East",
+    "housenumber": "305 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.762577,
+    "lon": -111.865043
+  },
+  {
+    "street": "900 East",
+    "housenumber": "307 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7625205,
+    "lon": -111.865044
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "15 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7690939,
+    "lon": -111.891658
+  },
+  {
+    "street": "200 South",
+    "housenumber": "307 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647725,
+    "lon": -111.900042
+  },
+  {
+    "street": "900 East",
+    "housenumber": "2030 S",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7259448,
+    "lon": -111.8659835
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1702",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7333154,
+    "lon": -111.891425
+  },
+  {
+    "street": "North State Street",
+    "housenumber": "225",
+    "city": "Salt Lake City",
+    "lat": 40.7739323,
+    "lon": -111.8885415
+  },
+  {
+    "street": "3200 West",
+    "housenumber": "1415 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7382212,
+    "lon": -111.966427
+  },
+  {
+    "street": "South 1500 East",
+    "housenumber": "270",
+    "city": "Salt Lake City",
+    "postcode": "84112",
+    "lat": 40.7637061,
+    "lon": -111.847521
+  },
+  {
+    "street": "8th Avenue",
+    "housenumber": "359",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7789469,
+    "lon": -111.8784712
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "662 East",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.741392,
+    "lon": -111.8716933
+  },
+  {
+    "street": "200 South",
+    "housenumber": "175 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647012,
+    "lon": -111.8963616
+  },
+  {
+    "street": "Jefferson Street",
+    "housenumber": "912",
+    "city": "Salt Lake City",
+    "lat": 40.7493851,
+    "lon": -111.895642
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "3775 W",
+    "city": "Salt Lake City",
+    "lat": 40.7405591,
+    "lon": -111.9819063
+  },
+  {
+    "street": "Jefferson Street",
+    "housenumber": "908",
+    "city": "Salt Lake City",
+    "lat": 40.749487,
+    "lon": -111.8956441
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "1906",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7287529,
+    "lon": -111.891472
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1465 S",
+    "city": "Salt Lake City",
+    "lat": 40.7378585,
+    "lon": -111.887649
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1465",
+    "city": "Salt Lake City",
+    "lat": 40.7376867,
+    "lon": -111.8876972
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1465 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7374993,
+    "lon": -111.887712
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1504 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7369526,
+    "lon": -111.888878
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "797 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7862657,
+    "lon": -111.9407743
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1645 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7843591,
+    "lon": -111.938039
+  },
+  {
+    "street": "300 South",
+    "housenumber": "12 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.76302,
+    "lon": -111.891767
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2299",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7209125,
+    "lon": -111.8575955
+  },
+  {
+    "street": "500 South",
+    "housenumber": "208",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7582619,
+    "lon": -111.884942
+  },
+  {
+    "street": "400 West",
+    "housenumber": "90 s",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7675109,
+    "lon": -111.9031012
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "302",
+    "city": "Salt Lake City",
+    "lat": 40.7495053,
+    "lon": -111.882281
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "341",
+    "city": "Salt Lake City",
+    "lat": 40.7636749,
+    "lon": -111.901183
+  },
+  {
+    "street": "E Street",
+    "housenumber": "82",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7714191,
+    "lon": -111.877373
+  },
+  {
+    "street": "North Warm Springs Road",
+    "housenumber": "2211",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7366242,
+    "lon": -111.897147
+  },
+  {
+    "street": "Wakara Way",
+    "housenumber": "419",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7592987,
+    "lon": -111.82813
+  },
+  {
+    "street": "900 East",
+    "housenumber": "216 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7644708,
+    "lon": -111.865727
+  },
+  {
+    "street": "900 East",
+    "housenumber": "218 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7644242,
+    "lon": -111.86563
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "55 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7706797,
+    "lon": -111.940338
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1659 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7705477,
+    "lon": -111.937916
+  },
+  {
+    "street": "State Street",
+    "housenumber": "28",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7687241,
+    "lon": -111.8887793
+  },
+  {
+    "street": "600",
+    "housenumber": "134",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7565473,
+    "lon": -111.89538
+  },
+  {
+    "street": "700 South",
+    "housenumber": "62 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7538395,
+    "lon": -111.888996
+  },
+  {
+    "street": "State Street",
+    "housenumber": "722S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7535705,
+    "lon": -111.888555
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2358",
+    "city": "Salt Lake City",
+    "lat": 40.7202475,
+    "lon": -111.8112018
+  },
+  {
+    "street": "800 South",
+    "housenumber": "320",
+    "city": "Salt Lake City",
+    "lat": 40.7521877,
+    "lon": -111.900487
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "206 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647156,
+    "lon": -111.89424
+  },
+  {
+    "street": "900 South",
+    "housenumber": "136",
+    "city": "Salt Lake City",
+    "lat": 40.7495863,
+    "lon": -111.8869553
+  },
+  {
+    "street": "West 500 South",
+    "housenumber": "3706",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7591601,
+    "lon": -111.9119506
+  },
+  {
+    "street": "Swaner Road",
+    "housenumber": "1211",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7432045,
+    "lon": -111.9504495
+  },
+  {
+    "street": "Swaner Road",
+    "housenumber": "1215",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7433333,
+    "lon": -111.9506841
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1215 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7234063,
+    "lon": -111.856572
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1400",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7386538,
+    "lon": -111.8260717
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "3142",
+    "city": "Salt Lake City",
+    "lat": 40.7026918,
+    "lon": -111.852426
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1155",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7259578,
+    "lon": -111.85749
+  },
+  {
+    "street": "1200 East",
+    "housenumber": "2033",
+    "city": "Salt Lake City",
+    "lat": 40.7259266,
+    "lon": -111.8564121
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1119",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255819,
+    "lon": -111.8590083
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7249743,
+    "lon": -111.872447
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1594 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.771968,
+    "lon": -111.936899
+  },
+  {
+    "street": "1500 East",
+    "housenumber": "1760",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7313793,
+    "lon": -111.8488914
+  },
+  {
+    "street": "View Street",
+    "housenumber": "1981",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7269717,
+    "lon": -111.8517698
+  },
+  {
+    "street": "Kensington Avenue",
+    "housenumber": "1532",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7360935,
+    "lon": -111.8469394
+  },
+  {
+    "street": "Harrison Avenue",
+    "housenumber": "1430",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7397765,
+    "lon": -111.8499216
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "2236",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7223955,
+    "lon": -111.8558758
+  },
+  {
+    "street": "Arapeen Drive",
+    "housenumber": "675",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7553002,
+    "lon": -111.8257112
+  },
+  {
+    "street": "Newberry Road",
+    "housenumber": "969",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7478771,
+    "lon": -111.8235371
+  },
+  {
+    "street": "11th Avenue",
+    "housenumber": "1001",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7807314,
+    "lon": -111.8594329
+  },
+  {
+    "street": "900 South",
+    "housenumber": "165E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7499845,
+    "lon": -111.886043
+  },
+  {
+    "street": "Gallivan Avenue",
+    "housenumber": "47E",
+    "city": "Salt Lake City",
+    "lat": 40.7637959,
+    "lon": -111.889561
+  },
+  {
+    "street": "Gallivan Avenue",
+    "housenumber": "57",
+    "city": "Salt Lake City",
+    "lat": 40.763803,
+    "lon": -111.889456
+  },
+  {
+    "street": "East 4th Avenue",
+    "housenumber": "382E",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7738558,
+    "lon": -111.877959
+  },
+  {
+    "street": "State Street",
+    "housenumber": "660",
+    "city": "Salt Lake City",
+    "lat": 40.7547936,
+    "lon": -111.888548
+  },
+  {
+    "street": "State Street",
+    "housenumber": "850 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7508071,
+    "lon": -111.888548
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "479 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256151,
+    "lon": -111.8770421
+  },
+  {
+    "street": "South State Street",
+    "housenumber": "1356",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7402719,
+    "lon": -111.8885449
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1370S",
+    "city": "Salt Lake City",
+    "lat": 40.7400511,
+    "lon": -111.888526
+  },
+  {
+    "street": "McClelland Street",
+    "housenumber": "2121",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.724706,
+    "lon": -111.861162
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1033 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7258995,
+    "lon": -111.86141
+  },
+  {
+    "street": "South 900 East",
+    "housenumber": "1301",
+    "city": "Salt Lake City",
+    "lat": 40.7415392,
+    "lon": -111.8650704
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1356 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7404705,
+    "lon": -111.888594
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1810",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7308383,
+    "lon": -111.891468
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1314",
+    "city": "Salt Lake City",
+    "lat": 40.7409929,
+    "lon": -111.8274088
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1945",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7279225,
+    "lon": -111.859439
+  },
+  {
+    "street": "300 South",
+    "housenumber": "414 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7626288,
+    "lon": -111.878963
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1618",
+    "city": "Salt Lake City",
+    "lat": 40.7343359,
+    "lon": -111.888506
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2350",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.720129,
+    "lon": -111.8119339
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2352",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.7200576,
+    "lon": -111.8119335
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2356",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.7198861,
+    "lon": -111.8119327
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2354",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.7199742,
+    "lon": -111.811933
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "2348",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.720222,
+    "lon": -111.8119343
+  },
+  {
+    "street": "200 South",
+    "housenumber": "425 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7652948,
+    "lon": -111.8786649
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "723 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7257883,
+    "lon": -111.870219
+  },
+  {
+    "street": "600 South",
+    "housenumber": "1263",
+    "city": "Salt Lake City",
+    "lat": 40.756512,
+    "lon": -111.8549216
+  },
+  {
+    "street": "Northhills Drive",
+    "housenumber": "568",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7861355,
+    "lon": -111.8723802
+  },
+  {
+    "street": "Edgehill Road",
+    "housenumber": "810",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7891518,
+    "lon": -111.8652835
+  },
+  {
+    "street": "18th Avenue",
+    "housenumber": "681",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.789328,
+    "lon": -111.8690125
+  },
+  {
+    "street": "Northhills Drive",
+    "housenumber": "558",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7862304,
+    "lon": -111.8726617
+  },
+  {
+    "street": "18th Avenue",
+    "housenumber": "825",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7885871,
+    "lon": -111.8648788
+  },
+  {
+    "street": "Sandhurst Drive",
+    "housenumber": "927",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7902641,
+    "lon": -111.8941719
+  },
+  {
+    "street": "West 300 North",
+    "housenumber": "1300",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7758422,
+    "lon": -111.9273311
+  },
+  {
+    "street": "1300 West",
+    "housenumber": "300 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7756304,
+    "lon": -111.9276022
+  },
+  {
+    "street": "700 East",
+    "housenumber": "212 South",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7643189,
+    "lon": -111.8717771
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1997",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7267678,
+    "lon": -111.8593578
+  },
+  {
+    "street": "Liberty Wells Place",
+    "housenumber": "1203",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7430483,
+    "lon": -111.881014
+  },
+  {
+    "street": "400 East",
+    "housenumber": "1178",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7433768,
+    "lon": -111.8804897
+  },
+  {
+    "street": "Liberty Wells Place",
+    "housenumber": "1195",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7430812,
+    "lon": -111.881384
+  },
+  {
+    "street": "Blair Street",
+    "housenumber": "1179",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7430909,
+    "lon": -111.8808164
+  },
+  {
+    "street": "Liberty Wells Place",
+    "housenumber": "1207",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7429197,
+    "lon": -111.8807949
+  },
+  {
+    "street": "400 East",
+    "housenumber": "1180",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7432059,
+    "lon": -111.8804897
+  },
+  {
+    "street": "Liberty Wells Place",
+    "housenumber": "1191",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7430814,
+    "lon": -111.8815798
+  },
+  {
+    "street": "Liberty Wells Place",
+    "housenumber": "1196",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7427907,
+    "lon": -111.8813665
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "3270 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7009089,
+    "lon": -111.855247
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "171 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7656576,
+    "lon": -111.9033213
+  },
+  {
+    "street": "South Rio Grande Street",
+    "housenumber": "188",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7652372,
+    "lon": -111.904272
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "140 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7664517,
+    "lon": -111.904413
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "51 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.768944,
+    "lon": -111.903919
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "657",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7548501,
+    "lon": -111.890787
+  },
+  {
+    "street": "S 1100 E",
+    "housenumber": "1387",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7395899,
+    "lon": -111.859372
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "623 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256991,
+    "lon": -111.873214
+  },
+  {
+    "street": "Komas Drive",
+    "housenumber": "630",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7535284,
+    "lon": -111.8316227
+  },
+  {
+    "street": "Komas Drive",
+    "housenumber": "630",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7536919,
+    "lon": -111.8317466
+  },
+  {
+    "street": "Komas Drive",
+    "housenumber": "770",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7526724,
+    "lon": -111.8303519
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1202 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7231161,
+    "lon": -111.857298
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7259797,
+    "lon": -111.872082
+  },
+  {
+    "street": "E 500 S",
+    "housenumber": "455",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.758818,
+    "lon": -111.8778711
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "1530",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7363239,
+    "lon": -111.8944344
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1615",
+    "city": "Salt Lake City",
+    "postcode": "84119",
+    "lat": 40.7254906,
+    "lon": -111.9371455
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1860S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7295986,
+    "lon": -111.9009054
+  },
+  {
+    "street": "Gallivan Avenue",
+    "housenumber": "53",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7638081,
+    "lon": -111.88951
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1492S",
+    "city": "Salt Lake City",
+    "lat": 40.7371022,
+    "lon": -111.88855
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2223S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7223598,
+    "lon": -111.858131
+  },
+  {
+    "street": "Simpson Avenue",
+    "housenumber": "673 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7224229,
+    "lon": -111.872193
+  },
+  {
+    "street": "1700 South",
+    "housenumber": "390E",
+    "city": "Salt Lake City",
+    "lat": 40.7331371,
+    "lon": -111.8799283
+  },
+  {
+    "street": "East South Temple",
+    "housenumber": "481",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7695878,
+    "lon": -111.8770806
+  },
+  {
+    "street": "400 South",
+    "housenumber": "532 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7604081,
+    "lon": -111.8757
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1291",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7417598,
+    "lon": -111.8593566
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "952",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495369,
+    "lon": -111.86367
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1201",
+    "city": "Salt Lake City",
+    "lat": 40.7236588,
+    "lon": -111.8568113
+  },
+  {
+    "street": "Windsor Street",
+    "housenumber": "2021 S",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7261413,
+    "lon": -111.866407
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "790 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252464,
+    "lon": -111.868772
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "54 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7256617,
+    "lon": -111.893001
+  },
+  {
+    "street": "900 South",
+    "housenumber": "878",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495236,
+    "lon": -111.8658278
+  },
+  {
+    "street": "900 South",
+    "housenumber": "850",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495102,
+    "lon": -111.866577
+  },
+  {
+    "street": "East 800 South",
+    "housenumber": "876",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7507721,
+    "lon": -111.866084
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "2051",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256707,
+    "lon": -111.8595189
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1063",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7255512,
+    "lon": -111.860542
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1025 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255691,
+    "lon": -111.8616465
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "951 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255904,
+    "lon": -111.8636961
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1010",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7250547,
+    "lon": -111.862301
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1010",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7251505,
+    "lon": -111.862297
+  },
+  {
+    "street": "300 South",
+    "housenumber": "509 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7630485,
+    "lon": -111.876357
+  },
+  {
+    "street": "300 South",
+    "housenumber": "536 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7625608,
+    "lon": -111.875463
+  },
+  {
+    "street": "300 South",
+    "housenumber": "516 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7625709,
+    "lon": -111.876114
+  },
+  {
+    "street": "300 South",
+    "housenumber": "507 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.763114,
+    "lon": -111.876378
+  },
+  {
+    "street": "300 South",
+    "housenumber": "473 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630447,
+    "lon": -111.877158
+  },
+  {
+    "street": "300 South",
+    "housenumber": "479 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630256,
+    "lon": -111.877063
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "790 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252417,
+    "lon": -111.8684309
+  },
+  {
+    "street": "South Temple Street",
+    "housenumber": "178",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7690931,
+    "lon": -111.8857101
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1270S",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7420719,
+    "lon": -111.860044
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2114 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248832,
+    "lon": -111.8598092
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2122 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7245319,
+    "lon": -111.859822
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2124 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7244406,
+    "lon": -111.859824
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2126 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7243363,
+    "lon": -111.85983
+  },
+  {
+    "street": "900 East",
+    "housenumber": "2030 S",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7260718,
+    "lon": -111.8659574
+  },
+  {
+    "street": "East 1300 South",
+    "housenumber": "1709",
+    "city": "Salt Lake City",
+    "lat": 40.7418182,
+    "lon": -111.842042
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "1709",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7417989,
+    "lon": -111.841781
+  },
+  {
+    "street": "East 1700 South",
+    "housenumber": "535",
+    "city": "Salt Lake City",
+    "postcode": "84105-2915",
+    "lat": 40.733897,
+    "lon": -111.8755714
+  },
+  {
+    "street": "700 South",
+    "housenumber": "608",
+    "city": "Salt Lake City",
+    "lat": 40.7543758,
+    "lon": -111.908568
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1048 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7251645,
+    "lon": -111.8609177
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "325",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.762072,
+    "lon": -111.890809
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "1419 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7907121,
+    "lon": -111.931687
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "1423 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7907172,
+    "lon": -111.931772
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "1437 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7907354,
+    "lon": -111.9319611
+  },
+  {
+    "street": "South 300 East",
+    "housenumber": "702",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7539134,
+    "lon": -111.882807
+  },
+  {
+    "street": "400 South",
+    "housenumber": "734 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7604524,
+    "lon": -111.869875
+  },
+  {
+    "street": "400 South",
+    "housenumber": "665 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7609975,
+    "lon": -111.871863
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615647,
+    "lon": -111.87182
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615651,
+    "lon": -111.8717099
+  },
+  {
+    "street": "400 South",
+    "housenumber": "655 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7611053,
+    "lon": -111.872071
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "41",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7698414,
+    "lon": -111.9043415
+  },
+  {
+    "street": "600 North",
+    "housenumber": "1174 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7833499,
+    "lon": -111.925271
+  },
+  {
+    "street": "600 North",
+    "housenumber": "1174 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.783321,
+    "lon": -111.924639
+  },
+  {
+    "street": "900 South",
+    "housenumber": "922",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495621,
+    "lon": -111.864683
+  },
+  {
+    "street": "900 South",
+    "housenumber": "925",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7500587,
+    "lon": -111.864402
+  },
+  {
+    "street": "900 South",
+    "housenumber": "932 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495907,
+    "lon": -111.864331
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1614",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7848147,
+    "lon": -111.9370927
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1736 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7850385,
+    "lon": -111.9407112
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841347,
+    "lon": -111.9370809
+  },
+  {
+    "street": "West 700 North",
+    "housenumber": "1645",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7843604,
+    "lon": -111.9378763
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841264,
+    "lon": -111.9368697
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841185,
+    "lon": -111.9373244
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "799 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7864354,
+    "lon": -111.9407542
+  },
+  {
+    "street": "West 700 North",
+    "housenumber": "1625",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841172,
+    "lon": -111.9371606
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1645 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7843598,
+    "lon": -111.937951
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841188,
+    "lon": -111.936938
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841177,
+    "lon": -111.9374469
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "799 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.786518,
+    "lon": -111.9407508
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1614",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7849442,
+    "lon": -111.9370894
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1645 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.784362,
+    "lon": -111.938125
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841181,
+    "lon": -111.93702
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1625 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7841382,
+    "lon": -111.9375512
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "799 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7866343,
+    "lon": -111.940754
+  },
+  {
+    "street": "300 South",
+    "housenumber": "204",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.762574,
+    "lon": -111.884965
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "231 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7259035,
+    "lon": -111.886339
+  },
+  {
+    "street": "900 East",
+    "housenumber": "2006 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7264335,
+    "lon": -111.8658055
+  },
+  {
+    "street": "300 West",
+    "housenumber": "962 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7481795,
+    "lon": -111.899965
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "950",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7913628,
+    "lon": -111.918846
+  },
+  {
+    "street": "South Weechquootee Place",
+    "housenumber": "281",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7632601,
+    "lon": -111.8901184
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "299 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630786,
+    "lon": -111.890471
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "146",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7660316,
+    "lon": -111.889931
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "115 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7666268,
+    "lon": -111.889636
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "115 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7668096,
+    "lon": -111.889634
+  },
+  {
+    "street": "West Temple",
+    "housenumber": "404 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7604021,
+    "lon": -111.894281
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1475 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7375138,
+    "lon": -111.890808
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "566",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7727233,
+    "lon": -111.8724023
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1394",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7803092,
+    "lon": -111.9307981
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1392",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7803095,
+    "lon": -111.9307071
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1390",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7803097,
+    "lon": -111.9306049
+  },
+  {
+    "street": "500 South",
+    "housenumber": "715 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7587741,
+    "lon": -111.870408
+  },
+  {
+    "street": "South 700 East",
+    "housenumber": "479",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7588093,
+    "lon": -111.8707115
+  },
+  {
+    "street": "700 East",
+    "housenumber": "515 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7579441,
+    "lon": -111.87072
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571089,
+    "lon": -111.8719984
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7569454,
+    "lon": -111.8720321
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571437,
+    "lon": -111.8722525
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.757008,
+    "lon": -111.8722234
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7565975,
+    "lon": -111.8718468
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7570939,
+    "lon": -111.8726506
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7569582,
+    "lon": -111.8726613
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571495,
+    "lon": -111.8730869
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7576551,
+    "lon": -111.873507
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7574253,
+    "lon": -111.873507
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7569683,
+    "lon": -111.8728118
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7571101,
+    "lon": -111.8728534
+  },
+  {
+    "street": "500 South",
+    "housenumber": "602",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.758033,
+    "lon": -111.8728959
+  },
+  {
+    "street": "600 East",
+    "housenumber": "464 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7588837,
+    "lon": -111.874446
+  },
+  {
+    "street": "600 East",
+    "housenumber": "464 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7590844,
+    "lon": -111.874375
+  },
+  {
+    "street": "400 South",
+    "housenumber": "616 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7598595,
+    "lon": -111.873217
+  },
+  {
+    "street": "400 South",
+    "housenumber": "645 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615507,
+    "lon": -111.87222
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "729 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7853317,
+    "lon": -111.9407955
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1308 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7803173,
+    "lon": -111.9287739
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1306 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7803178,
+    "lon": -111.9286858
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "122",
+    "city": "Salt Lake City",
+    "lat": 40.7640859,
+    "lon": -111.8948643
+  },
+  {
+    "street": "400 South",
+    "housenumber": "202 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7609146,
+    "lon": -111.897126
+  },
+  {
+    "street": "400 South",
+    "housenumber": "243 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7603077,
+    "lon": -111.898411
+  },
+  {
+    "street": "300 West",
+    "housenumber": "434 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7603109,
+    "lon": -111.900588
+  },
+  {
+    "street": "400 West",
+    "housenumber": "190 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7655945,
+    "lon": -111.903168
+  },
+  {
+    "street": "South 1500 East",
+    "housenumber": "270",
+    "city": "Salt Lake City",
+    "postcode": "84112",
+    "lat": 40.7634137,
+    "lon": -111.847408
+  },
+  {
+    "street": "200 South",
+    "housenumber": "77 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7646911,
+    "lon": -111.893451
+  },
+  {
+    "street": "200 South",
+    "housenumber": "155 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647997,
+    "lon": -111.895881
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "651",
+    "city": "Salt Lake City",
+    "lat": 40.7550544,
+    "lon": -111.890563
+  },
+  {
+    "street": "700 South",
+    "housenumber": "183 W",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7539325,
+    "lon": -111.896507
+  },
+  {
+    "street": "400 South",
+    "housenumber": "376 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7603574,
+    "lon": -111.880123
+  },
+  {
+    "street": "Central Campus Drive",
+    "housenumber": "200",
+    "city": "Salt Lake City",
+    "postcode": "84112",
+    "lat": 40.7650392,
+    "lon": -111.845839
+  },
+  {
+    "street": "400 South",
+    "housenumber": "555 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7609342,
+    "lon": -111.875024
+  },
+  {
+    "street": "400 South",
+    "housenumber": "555 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7609351,
+    "lon": -111.8749557
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "222 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7642073,
+    "lon": -111.891475
+  },
+  {
+    "street": "400 South",
+    "housenumber": "510",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7603009,
+    "lon": -111.876143
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7632511,
+    "lon": -111.893045
+  },
+  {
+    "street": "South 500 East",
+    "housenumber": "455",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7591317,
+    "lon": -111.875537
+  },
+  {
+    "street": "East 200 South",
+    "housenumber": "166",
+    "city": "Salt Lake City",
+    "lat": 40.7647923,
+    "lon": -111.8860552
+  },
+  {
+    "street": "Edison Street",
+    "housenumber": "228",
+    "city": "Salt Lake City",
+    "lat": 40.7641644,
+    "lon": -111.8866767
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "80",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7673965,
+    "lon": -111.8914
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680006,
+    "lon": -111.8919219
+  },
+  {
+    "street": "900 South",
+    "housenumber": "169 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7499796,
+    "lon": -111.885889
+  },
+  {
+    "street": "400 South",
+    "housenumber": "5 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7608508,
+    "lon": -111.890685
+  },
+  {
+    "street": "900 West",
+    "housenumber": "2025",
+    "city": "Salt Lake City",
+    "postcode": "84119",
+    "lat": 40.7265831,
+    "lon": -111.9154764
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "1953",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.740007,
+    "lon": -111.9463801
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "1953",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7400106,
+    "lon": -111.9462306
+  },
+  {
+    "street": "900 South",
+    "housenumber": "282",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.749479,
+    "lon": -111.882735
+  },
+  {
+    "street": "900 South",
+    "housenumber": "155 E",
+    "city": "Salt Lake City",
+    "lat": 40.7500149,
+    "lon": -111.886415
+  },
+  {
+    "street": "900 South",
+    "housenumber": "177 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7499957,
+    "lon": -111.885784
+  },
+  {
+    "street": "900 South",
+    "housenumber": "167 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7499841,
+    "lon": -111.885967
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "124",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7495824,
+    "lon": -111.887342
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1600",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7346177,
+    "lon": -111.8885157
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "66 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.761211,
+    "lon": -111.888932
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "925",
+    "city": "Salt Lake City",
+    "lat": 40.7500603,
+    "lon": -111.864358
+  },
+  {
+    "street": "900 South",
+    "housenumber": "928 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495817,
+    "lon": -111.864413
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "926",
+    "city": "Salt Lake City",
+    "postcode": "84107",
+    "lat": 40.7495751,
+    "lon": -111.864518
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1285 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799465,
+    "lon": -111.9282249
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1752 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7850383,
+    "lon": -111.9411624
+  },
+  {
+    "street": "West 500 North",
+    "housenumber": "1285",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799486,
+    "lon": -111.9281215
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1269 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799209,
+    "lon": -111.9276972
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1748 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7850355,
+    "lon": -111.9410817
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1273 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799384,
+    "lon": -111.9278835
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1265 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799209,
+    "lon": -111.9276365
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1744 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7850349,
+    "lon": -111.9409699
+  },
+  {
+    "street": "700 North",
+    "housenumber": "1740 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7850363,
+    "lon": -111.9408473
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "307",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7766446,
+    "lon": -111.9396852
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "309",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7766907,
+    "lon": -111.9396859
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "315",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7768231,
+    "lon": -111.9396804
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "317",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7768676,
+    "lon": -111.9396811
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "323",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7769927,
+    "lon": -111.9396807
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "325",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7770396,
+    "lon": -111.9396798
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "331",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7771784,
+    "lon": -111.9396785
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "333",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7772336,
+    "lon": -111.9396778
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "365",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.777535,
+    "lon": -111.9396694
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "367",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7775769,
+    "lon": -111.9396692
+  },
+  {
+    "street": "900 South",
+    "housenumber": "868",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7495362,
+    "lon": -111.866312
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "375 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.76094,
+    "lon": -111.890858
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "321 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7621957,
+    "lon": -111.8908103
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "327 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7620109,
+    "lon": -111.8908091
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1261 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799248,
+    "lon": -111.9274175
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "565 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256563,
+    "lon": -111.874807
+  },
+  {
+    "street": "300 West",
+    "housenumber": "401 N",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7782805,
+    "lon": -111.900006
+  },
+  {
+    "street": "600 North",
+    "housenumber": "1215",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7821866,
+    "lon": -111.9261671
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1094 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7453988,
+    "lon": -111.901822
+  },
+  {
+    "street": "South 600 West",
+    "housenumber": "330",
+    "city": "Salt Lake City",
+    "lat": 40.7621224,
+    "lon": -111.9083037
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "2333",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7710167,
+    "lon": -111.9572139
+  },
+  {
+    "street": "Jackson Avenue",
+    "housenumber": "745",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7725615,
+    "lon": -111.9127676
+  },
+  {
+    "street": "Jackson Avenue",
+    "housenumber": "760",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7726472,
+    "lon": -111.9130908
+  },
+  {
+    "street": "Jackson Avenue",
+    "housenumber": "758",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7726473,
+    "lon": -111.9130234
+  },
+  {
+    "street": "Jackson Avenue",
+    "housenumber": "720",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7726595,
+    "lon": -111.9120148
+  },
+  {
+    "street": "Jackson Avenue",
+    "housenumber": "722",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7726604,
+    "lon": -111.9120703
+  },
+  {
+    "street": "300 North",
+    "housenumber": "740",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7760969,
+    "lon": -111.9125351
+  },
+  {
+    "street": "300 North",
+    "housenumber": "736",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7760965,
+    "lon": -111.9124426
+  },
+  {
+    "street": "John Glenn Road",
+    "housenumber": "350",
+    "city": "Salt Lake City",
+    "lat": 40.7722321,
+    "lon": -112.0341084
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1252 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7806167,
+    "lon": -111.9272608
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1260 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.78062,
+    "lon": -111.9274063
+  },
+  {
+    "street": "State Street",
+    "housenumber": "350 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7615454,
+    "lon": -111.888534
+  },
+  {
+    "street": "2100 West",
+    "housenumber": "208",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7748869,
+    "lon": -111.950202
+  },
+  {
+    "street": "2100 West",
+    "housenumber": "206",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7746269,
+    "lon": -111.950238
+  },
+  {
+    "street": "South 1300 East",
+    "housenumber": "2254",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7218031,
+    "lon": -111.8543863
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "729 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7854131,
+    "lon": -111.940792
+  },
+  {
+    "street": "Featherstone Drive",
+    "housenumber": "1001",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7909154,
+    "lon": -111.9412152
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1005",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799728,
+    "lon": -111.920111
+  },
+  {
+    "street": "500 North",
+    "housenumber": "1011",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7799731,
+    "lon": -111.9201782
+  },
+  {
+    "street": "900 South",
+    "housenumber": "925 East",
+    "city": "Salt Lake City",
+    "lat": 40.750195,
+    "lon": -111.864408
+  },
+  {
+    "street": "900 South",
+    "housenumber": "902 E",
+    "city": "Salt Lake City",
+    "lat": 40.7500523,
+    "lon": -111.864811
+  },
+  {
+    "street": "800 West",
+    "housenumber": "147",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7727875,
+    "lon": -111.9142733
+  },
+  {
+    "street": "800 West",
+    "housenumber": "149",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7728078,
+    "lon": -111.9142734
+  },
+  {
+    "street": "200 North",
+    "housenumber": "878",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.773924,
+    "lon": -111.9165182
+  },
+  {
+    "street": "200 North",
+    "housenumber": "880",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7738601,
+    "lon": -111.9165813
+  },
+  {
+    "street": "Wakara Way",
+    "housenumber": "301",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7642492,
+    "lon": -111.823051
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7684648,
+    "lon": -111.892316
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7683654,
+    "lon": -111.892254
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7683102,
+    "lon": -111.892137
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7682614,
+    "lon": -111.8917396
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7682493,
+    "lon": -111.8915942
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7682401,
+    "lon": -111.891468
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7684294,
+    "lon": -111.8914073
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "15 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7691058,
+    "lon": -111.891804
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "15 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7690916,
+    "lon": -111.891442
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7686122,
+    "lon": -111.8927323
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680983,
+    "lon": -111.892289
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7680109,
+    "lon": -111.891619
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7683339,
+    "lon": -111.8908279
+  },
+  {
+    "street": "Directors Row",
+    "housenumber": "2206 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7461102,
+    "lon": -111.9506982
+  },
+  {
+    "street": "900 South",
+    "housenumber": "280",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7495076,
+    "lon": -111.882812
+  },
+  {
+    "street": "300 South",
+    "housenumber": "168 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7625666,
+    "lon": -111.895706
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "258",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.763499,
+    "lon": -111.854378
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "273 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7632737,
+    "lon": -111.85342
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7256792,
+    "lon": -111.897978
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7262159,
+    "lon": -111.897998
+  },
+  {
+    "street": "Foothill Drive",
+    "housenumber": "1332",
+    "city": "Salt Lake City",
+    "lat": 40.7405201,
+    "lon": -111.827374
+  },
+  {
+    "street": "700 East",
+    "housenumber": "575",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7567438,
+    "lon": -111.8707681
+  },
+  {
+    "street": "Paxton Avenue",
+    "housenumber": "249",
+    "city": "Salt Lake City",
+    "lat": 40.743363,
+    "lon": -111.8979802
+  },
+  {
+    "street": "1300 S",
+    "housenumber": "342 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7418228,
+    "lon": -111.901868
+  },
+  {
+    "street": "500 West",
+    "housenumber": "1268 South",
+    "city": "Salt Lake City",
+    "lat": 40.7423894,
+    "lon": -111.9058892
+  },
+  {
+    "street": "700 West",
+    "housenumber": "1025 South",
+    "city": "Salt Lake City",
+    "lat": 40.7469413,
+    "lon": -111.9107225
+  },
+  {
+    "street": "900 South",
+    "housenumber": "680 West",
+    "city": "Salt Lake City",
+    "lat": 40.7500259,
+    "lon": -111.911017
+  },
+  {
+    "street": "500 West",
+    "housenumber": "920 South",
+    "city": "Salt Lake City",
+    "lat": 40.7488606,
+    "lon": -111.9062982
+  },
+  {
+    "street": "West 900 South",
+    "housenumber": "117",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7495108,
+    "lon": -111.894555
+  },
+  {
+    "street": "West 900 South",
+    "housenumber": "251",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7495344,
+    "lon": -111.8985315
+  },
+  {
+    "street": "900 South",
+    "housenumber": "422A",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7500021,
+    "lon": -111.903442
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1522 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7364559,
+    "lon": -111.888571
+  },
+  {
+    "street": "500 West",
+    "housenumber": "355 North",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7771354,
+    "lon": -111.9056707
+  },
+  {
+    "street": "200 South",
+    "housenumber": "152 East",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7647652,
+    "lon": -111.886451
+  },
+  {
+    "street": "200 South",
+    "housenumber": "241 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647502,
+    "lon": -111.898272
+  },
+  {
+    "street": "800 East",
+    "housenumber": "801 S",
+    "city": "Salt Lake City",
+    "lat": 40.7517487,
+    "lon": -111.867918
+  },
+  {
+    "street": "South 1300 East",
+    "housenumber": "201",
+    "city": "Salt Lake City",
+    "lat": 40.7647983,
+    "lon": -111.853622
+  },
+  {
+    "street": "500 South",
+    "housenumber": "102 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7586821,
+    "lon": -111.89469
+  },
+  {
+    "street": "West 200 South",
+    "housenumber": "241",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647494,
+    "lon": -111.898445
+  },
+  {
+    "street": "West Broadway",
+    "housenumber": "35",
+    "city": "Salt Lake City",
+    "lat": 40.7626303,
+    "lon": -111.8924874
+  },
+  {
+    "street": "300 South",
+    "housenumber": "65 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630541,
+    "lon": -111.88923
+  },
+  {
+    "street": "East 200 South",
+    "housenumber": "812",
+    "city": "Salt Lake City",
+    "lat": 40.7646592,
+    "lon": -111.867547
+  },
+  {
+    "street": "900 South",
+    "housenumber": "1059 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7500448,
+    "lon": -111.860576
+  },
+  {
+    "street": "East 700 South",
+    "housenumber": "1085",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7544113,
+    "lon": -111.8606379
+  },
+  {
+    "street": "East 700 South",
+    "housenumber": "1065",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7544032,
+    "lon": -111.8609839
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "1105",
+    "city": "Salt Lake City",
+    "lat": 40.7501423,
+    "lon": -111.8593075
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "1105",
+    "city": "Salt Lake City",
+    "lat": 40.7501159,
+    "lon": -111.8592619
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "1105",
+    "city": "Salt Lake City",
+    "lat": 40.7500997,
+    "lon": -111.859219
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "1085",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7501247,
+    "lon": -111.859761
+  },
+  {
+    "street": "900 South",
+    "housenumber": "1071 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7500719,
+    "lon": -111.860056
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "1058",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7500983,
+    "lon": -111.860209
+  },
+  {
+    "street": "South 700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7247305,
+    "lon": -111.872424
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2200 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7230746,
+    "lon": -111.871581
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "660",
+    "city": "Salt Lake City",
+    "lat": 40.7228384,
+    "lon": -111.8724153
+  },
+  {
+    "street": "900 South",
+    "housenumber": "1043 E",
+    "city": "Salt Lake City",
+    "lat": 40.7500443,
+    "lon": -111.860963
+  },
+  {
+    "street": "South 1100 East",
+    "housenumber": "1646",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.733698,
+    "lon": -111.859882
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1235 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256586,
+    "lon": -111.8558897
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7246525,
+    "lon": -111.8545497
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1134 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252226,
+    "lon": -111.858533
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1152 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252328,
+    "lon": -111.857956
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1137",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7256068,
+    "lon": -111.8583509
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1117",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255479,
+    "lon": -111.8590724
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1511",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7261063,
+    "lon": -111.847776
+  },
+  {
+    "street": "East 2100 South",
+    "housenumber": "1053",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725541,
+    "lon": -111.860735
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1033 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7258083,
+    "lon": -111.861533
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "973 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7255776,
+    "lon": -111.8630444
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "904 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7252432,
+    "lon": -111.8651674
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1135 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7242899,
+    "lon": -111.858487
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1479 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7374462,
+    "lon": -111.890657
+  },
+  {
+    "street": "Kensington Avenue",
+    "housenumber": "30 E",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7365093,
+    "lon": -111.890115
+  },
+  {
+    "street": "West 100 South",
+    "housenumber": "663",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7668049,
+    "lon": -111.910492
+  },
+  {
+    "street": "Main St",
+    "housenumber": "1588",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7350226,
+    "lon": -111.891517
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7256231,
+    "lon": -111.8979782
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7257308,
+    "lon": -111.8979808
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7257878,
+    "lon": -111.8979835
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "169",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7654661,
+    "lon": -111.8907261
+  },
+  {
+    "street": "900 West",
+    "housenumber": "910",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7889658,
+    "lon": -111.916284
+  },
+  {
+    "street": "900 West",
+    "housenumber": "910 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.789055,
+    "lon": -111.9162764
+  },
+  {
+    "street": "West Terminal Drive",
+    "housenumber": "3920",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7852907,
+    "lon": -111.9847675
+  },
+  {
+    "street": "North Terminal Drive",
+    "housenumber": "776",
+    "city": "Salt Lake City",
+    "postcode": "84122",
+    "lat": 40.7851671,
+    "lon": -111.9852488
+  },
+  {
+    "street": "West Terminal Drive",
+    "housenumber": "3920",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7858164,
+    "lon": -111.9866109
+  },
+  {
+    "street": "West Terminal Drive",
+    "housenumber": "3920",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7854482,
+    "lon": -111.9899253
+  },
+  {
+    "street": "900 South",
+    "housenumber": "937 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7500304,
+    "lon": -111.864127
+  },
+  {
+    "street": "1100 East",
+    "housenumber": "1790",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7313652,
+    "lon": -111.8598806
+  },
+  {
+    "street": "East Popperton Park Way",
+    "housenumber": "1403",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7776056,
+    "lon": -111.8476585
+  },
+  {
+    "street": "600 South",
+    "housenumber": "680 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7560312,
+    "lon": -111.871403
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1094D",
+    "city": "Salt Lake City",
+    "lat": 40.7452709,
+    "lon": -111.9018252
+  },
+  {
+    "street": "East 900 South",
+    "housenumber": "872",
+    "city": "Salt Lake City",
+    "lat": 40.7495612,
+    "lon": -111.8661202
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "1078 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248532,
+    "lon": -111.860347
+  },
+  {
+    "street": "Hollywood Avenue",
+    "housenumber": "1075 E",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.727527,
+    "lon": -111.8601577
+  },
+  {
+    "street": "State Street",
+    "housenumber": "666",
+    "city": "Salt Lake City",
+    "lat": 40.7546248,
+    "lon": -111.8887406
+  },
+  {
+    "street": "400 South",
+    "housenumber": "175 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7609694,
+    "lon": -111.886465
+  },
+  {
+    "street": "State Street",
+    "housenumber": "662",
+    "city": "Salt Lake City",
+    "lat": 40.7547097,
+    "lon": -111.888528
+  },
+  {
+    "street": "Custer Road",
+    "housenumber": "2554",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7316138,
+    "lon": -111.955877
+  },
+  {
+    "street": "Custer Road",
+    "housenumber": "2492",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7315691,
+    "lon": -111.955175
+  },
+  {
+    "street": "Custer Road",
+    "housenumber": "2488",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7315691,
+    "lon": -111.955012
+  },
+  {
+    "street": "City Creek Center",
+    "housenumber": "51",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.768148,
+    "lon": -111.88928
+  },
+  {
+    "street": "900 South",
+    "housenumber": "161",
+    "city": "Salt Lake City",
+    "lat": 40.7495477,
+    "lon": -111.895608
+  },
+  {
+    "street": "Pioneer Road",
+    "housenumber": "1507",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7375443,
+    "lon": -111.957601
+  },
+  {
+    "street": "State Street",
+    "housenumber": "311 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7625861,
+    "lon": -111.88793
+  },
+  {
+    "street": "400 South",
+    "housenumber": "680 E",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7603701,
+    "lon": -111.871692
+  },
+  {
+    "street": "North Morton Drive",
+    "housenumber": "497",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.780306,
+    "lon": -111.9466148
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7259827,
+    "lon": -111.872187
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7260184,
+    "lon": -111.871549
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.725991,
+    "lon": -111.87173
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2226 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7224987,
+    "lon": -111.871626
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2230 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7223544,
+    "lon": -111.871593
+  },
+  {
+    "street": "400 South",
+    "housenumber": "29 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7608874,
+    "lon": -111.88999
+  },
+  {
+    "street": "South 2300 East",
+    "housenumber": "2040",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7258078,
+    "lon": -111.8260099
+  },
+  {
+    "street": "East 400 South",
+    "housenumber": "618",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7598604,
+    "lon": -111.872907
+  },
+  {
+    "street": "South Richmond Street",
+    "housenumber": "3292",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002507,
+    "lon": -111.8546
+  },
+  {
+    "street": "South Richmond Street",
+    "housenumber": "3292",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002527,
+    "lon": -111.854441
+  },
+  {
+    "street": "South Richmond Street",
+    "housenumber": "3292",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7002522,
+    "lon": -111.854395
+  },
+  {
+    "street": "900 West",
+    "housenumber": "122 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7721014,
+    "lon": -111.915677
+  },
+  {
+    "street": "900 West",
+    "housenumber": "120 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7719877,
+    "lon": -111.915685
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1435",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7389218,
+    "lon": -111.8877718
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1125 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7442403,
+    "lon": -111.899306
+  },
+  {
+    "street": "South 300 West",
+    "housenumber": "1154",
+    "city": "Salt Lake City",
+    "lat": 40.7438776,
+    "lon": -111.8999861
+  },
+  {
+    "street": "300 West",
+    "housenumber": "1174 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7431165,
+    "lon": -111.899966
+  },
+  {
+    "street": "1700 South",
+    "housenumber": "301",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7336684,
+    "lon": -111.8823465
+  },
+  {
+    "street": "900 South",
+    "housenumber": "317 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7500771,
+    "lon": -111.881738
+  },
+  {
+    "street": "400 South",
+    "housenumber": "350 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7602534,
+    "lon": -111.881029
+  },
+  {
+    "street": "400 South",
+    "housenumber": "376 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7603631,
+    "lon": -111.88038
+  },
+  {
+    "street": "400 South",
+    "housenumber": "376 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.760359,
+    "lon": -111.880621
+  },
+  {
+    "street": "900 South",
+    "housenumber": "274 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7494887,
+    "lon": -111.883049
+  },
+  {
+    "street": "400 East",
+    "housenumber": "1224",
+    "city": "Salt Lake City",
+    "lat": 40.7422893,
+    "lon": -111.8799167
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "309 E",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7418074,
+    "lon": -111.882227
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1207 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.74254,
+    "lon": -111.887916
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1147 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7440151,
+    "lon": -111.887927
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1212 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7426891,
+    "lon": -111.888531
+  },
+  {
+    "street": "Kelsey Avenue",
+    "housenumber": "21",
+    "city": "Salt Lake City",
+    "lat": 40.7433869,
+    "lon": -111.890164
+  },
+  {
+    "street": "Kelsey Avenue",
+    "housenumber": "19",
+    "city": "Salt Lake City",
+    "lat": 40.743391,
+    "lon": -111.8902297
+  },
+  {
+    "street": "900 East",
+    "housenumber": "1638",
+    "city": "Salt Lake City",
+    "postcode": "84105",
+    "lat": 40.7340148,
+    "lon": -111.86688
+  },
+  {
+    "street": "200 South",
+    "housenumber": "353",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7653307,
+    "lon": -111.8807318
+  },
+  {
+    "street": "200 South",
+    "housenumber": "353",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.765444,
+    "lon": -111.8806956
+  },
+  {
+    "street": "1820 South",
+    "housenumber": "3455 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.730623,
+    "lon": -111.9733294
+  },
+  {
+    "street": "Empire Road",
+    "housenumber": "1620",
+    "city": "Salt Lake City",
+    "lat": 40.734729,
+    "lon": -111.9433553
+  },
+  {
+    "street": "Fremont Drive",
+    "housenumber": "1722",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7329094,
+    "lon": -111.9541207
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "3060",
+    "city": "Salt Lake City",
+    "lat": 40.740903,
+    "lon": -111.9638171
+  },
+  {
+    "street": "West California Avenue",
+    "housenumber": "3120",
+    "city": "Salt Lake City",
+    "lat": 40.7408888,
+    "lon": -111.966064
+  },
+  {
+    "street": "Gladiola Street",
+    "housenumber": "1414",
+    "city": "Salt Lake City",
+    "lat": 40.7393321,
+    "lon": -111.9726979
+  },
+  {
+    "street": "State Street",
+    "housenumber": "366 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7612084,
+    "lon": -111.8885755
+  },
+  {
+    "street": "State Street",
+    "housenumber": "364 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7611414,
+    "lon": -111.88853
+  },
+  {
+    "street": "State Street",
+    "housenumber": "372 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7610662,
+    "lon": -111.888533
+  },
+  {
+    "street": "300 South",
+    "housenumber": "315 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7630619,
+    "lon": -111.88185
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "702",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.77268,
+    "lon": -111.8683728
+  },
+  {
+    "street": "K Street",
+    "housenumber": "140",
+    "city": "Salt Lake City",
+    "postcode": "84103",
+    "lat": 40.7726506,
+    "lon": -111.8683714
+  },
+  {
+    "street": "300 West",
+    "housenumber": "774 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7523073,
+    "lon": -111.900023
+  },
+  {
+    "street": "400 South",
+    "housenumber": "202 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7609245,
+    "lon": -111.89737
+  },
+  {
+    "street": "200 South",
+    "housenumber": "353 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647456,
+    "lon": -111.900995
+  },
+  {
+    "street": "200 South",
+    "housenumber": "353 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7647486,
+    "lon": -111.901286
+  },
+  {
+    "street": "200 South",
+    "housenumber": "380 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7652392,
+    "lon": -111.902226
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "1105 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7907502,
+    "lon": -111.922268
+  },
+  {
+    "street": "1000 North",
+    "housenumber": "1105 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7906873,
+    "lon": -111.922255
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "3142",
+    "city": "Salt Lake City",
+    "lat": 40.7022783,
+    "lon": -111.8524814
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "3142",
+    "city": "Salt Lake City",
+    "lat": 40.7021847,
+    "lon": -111.8521603
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "3142",
+    "city": "Salt Lake City",
+    "lat": 40.702173,
+    "lon": -111.8518355
+  },
+  {
+    "street": "400 South",
+    "housenumber": "361 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7603951,
+    "lon": -111.901731
+  },
+  {
+    "street": "400 South",
+    "housenumber": "355 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7600965,
+    "lon": -111.901596
+  },
+  {
+    "street": "400 South",
+    "housenumber": "351 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.760389,
+    "lon": -111.90146
+  },
+  {
+    "street": "100 South",
+    "housenumber": "63 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7669265,
+    "lon": -111.893107
+  },
+  {
+    "street": "South West Temple",
+    "housenumber": "107",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7667985,
+    "lon": -111.893641
+  },
+  {
+    "street": "300 S",
+    "housenumber": "1052 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7630858,
+    "lon": -111.921489
+  },
+  {
+    "street": "100 South",
+    "housenumber": "24 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7674043,
+    "lon": -111.89176
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "74 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7674775,
+    "lon": -111.891412
+  },
+  {
+    "street": "200 East",
+    "housenumber": "50 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7680128,
+    "lon": -111.885763
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "51 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7679039,
+    "lon": -111.889786
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "432",
+    "city": "Salt Lake City",
+    "lat": 40.7691107,
+    "lon": -111.878416
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "430",
+    "city": "Salt Lake City",
+    "lat": 40.7691534,
+    "lon": -111.8785112
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "430",
+    "city": "Salt Lake City",
+    "lat": 40.7691574,
+    "lon": -111.8785501
+  },
+  {
+    "street": "South Temple",
+    "housenumber": "430",
+    "city": "Salt Lake City",
+    "lat": 40.7691625,
+    "lon": -111.8786158
+  },
+  {
+    "street": "State Street",
+    "housenumber": "666",
+    "city": "Salt Lake City",
+    "lat": 40.7546221,
+    "lon": -111.888554
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1202",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.722879,
+    "lon": -111.8573142
+  },
+  {
+    "street": "1150 East",
+    "housenumber": "2236",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7223352,
+    "lon": -111.8572702
+  },
+  {
+    "street": "Lakeline Drive",
+    "housenumber": "2077",
+    "city": "Salt Lake City",
+    "lat": 40.7272291,
+    "lon": -111.805962
+  },
+  {
+    "street": "400 South",
+    "housenumber": "249 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7608832,
+    "lon": -111.8837131
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "157 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7659212,
+    "lon": -111.903201
+  },
+  {
+    "street": "400 West",
+    "housenumber": "159 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7658582,
+    "lon": -111.903064
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "150",
+    "city": "Salt Lake City",
+    "lat": 40.7661284,
+    "lon": -111.90425
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "136 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7663016,
+    "lon": -111.904249
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "130 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.766571,
+    "lon": -111.904303
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "116 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7666919,
+    "lon": -111.904248
+  },
+  {
+    "street": "Rio Grande Street",
+    "housenumber": "90 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7673953,
+    "lon": -111.904338
+  },
+  {
+    "street": "900 South",
+    "housenumber": "161 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7495537,
+    "lon": -111.8956441
+  },
+  {
+    "street": "900 South",
+    "housenumber": "155",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7503051,
+    "lon": -111.8865592
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "337",
+    "city": "Salt Lake City",
+    "lat": 40.7636805,
+    "lon": -111.900992
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "329",
+    "city": "Salt Lake City",
+    "lat": 40.763712,
+    "lon": -111.9007227
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "333",
+    "city": "Salt Lake City",
+    "lat": 40.76371,
+    "lon": -111.900809
+  },
+  {
+    "street": "100 South",
+    "housenumber": "623",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7674995,
+    "lon": -111.873018
+  },
+  {
+    "street": "700 South",
+    "housenumber": "16 W",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7544595,
+    "lon": -111.891824
+  },
+  {
+    "street": "1300 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7246562,
+    "lon": -111.8540812
+  },
+  {
+    "street": "State Street",
+    "housenumber": "810 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7516371,
+    "lon": -111.8891953
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "2066",
+    "city": "Salt Lake City",
+    "postcode": "84109",
+    "lat": 40.7256818,
+    "lon": -111.8311746
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "2066",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7258943,
+    "lon": -111.831169
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1328",
+    "city": "Salt Lake City",
+    "lat": 40.7411731,
+    "lon": -111.8310775
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1330",
+    "city": "Salt Lake City",
+    "lat": 40.7411029,
+    "lon": -111.8310735
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1332",
+    "city": "Salt Lake City",
+    "lat": 40.7410471,
+    "lon": -111.8310735
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1370",
+    "city": "Salt Lake City",
+    "lat": 40.7401026,
+    "lon": -111.8310061
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1346",
+    "city": "Salt Lake City",
+    "lat": 40.7403454,
+    "lon": -111.8309753
+  },
+  {
+    "street": "2100 East",
+    "housenumber": "1356",
+    "city": "Salt Lake City",
+    "lat": 40.7402845,
+    "lon": -111.8309766
+  },
+  {
+    "street": "1700 South",
+    "housenumber": "335",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7331263,
+    "lon": -111.9008796
+  },
+  {
+    "street": "State Street",
+    "housenumber": "1816 S",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.7309659,
+    "lon": -111.8885933
+  },
+  {
+    "street": "Indiana Avenue",
+    "housenumber": "1720 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7515778,
+    "lon": -111.9402112
+  },
+  {
+    "street": "Redwood Depot Lane",
+    "housenumber": "1760 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7486799,
+    "lon": -111.9402075
+  },
+  {
+    "street": "Redwood Depot Lane",
+    "housenumber": "1760 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7486848,
+    "lon": -111.9410959
+  },
+  {
+    "street": "Redwood Depot Lane",
+    "housenumber": "1810 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.748558,
+    "lon": -111.941613
+  },
+  {
+    "street": "Redwood Depot Lane",
+    "housenumber": "1830 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7485901,
+    "lon": -111.9420295
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "996 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.747511,
+    "lon": -111.9393738
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1151 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7444658,
+    "lon": -111.9385365
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1151 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.744053,
+    "lon": -111.9385293
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1151 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7438137,
+    "lon": -111.9385329
+  },
+  {
+    "street": "3230 West",
+    "housenumber": "1897",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7291679,
+    "lon": -111.967745
+  },
+  {
+    "street": "3230 West",
+    "housenumber": "1887",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7293265,
+    "lon": -111.967748
+  },
+  {
+    "street": "3230 West",
+    "housenumber": "1877",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7294586,
+    "lon": -111.967759
+  },
+  {
+    "street": "3230 West",
+    "housenumber": "1867",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7295833,
+    "lon": -111.9677656
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7257241,
+    "lon": -111.872797
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7259787,
+    "lon": -111.872331
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7259812,
+    "lon": -111.872263
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "675 E",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7258662,
+    "lon": -111.872701
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7244875,
+    "lon": -111.872399
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7246607,
+    "lon": -111.872409
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7248913,
+    "lon": -111.872428
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7245939,
+    "lon": -111.8724
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2120 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7245476,
+    "lon": -111.872403
+  },
+  {
+    "street": "Edison Street",
+    "housenumber": "238",
+    "city": "Salt Lake City",
+    "lat": 40.7639604,
+    "lon": -111.886687
+  },
+  {
+    "street": "Edison Street",
+    "housenumber": "248 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7637492,
+    "lon": -111.886678
+  },
+  {
+    "street": "100 South",
+    "housenumber": "40 E",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7669777,
+    "lon": -111.88963
+  },
+  {
+    "street": "South 700 East",
+    "housenumber": "220",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7640994,
+    "lon": -111.8727144
+  },
+  {
+    "street": "700 East",
+    "housenumber": "358 S",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7615642,
+    "lon": -111.87199
+  },
+  {
+    "street": "South 800 East",
+    "housenumber": "807",
+    "city": "Salt Lake City",
+    "lat": 40.7516587,
+    "lon": -111.867874
+  },
+  {
+    "street": "2100 South",
+    "housenumber": "250 W",
+    "city": "Salt Lake City",
+    "postcode": "84115",
+    "lat": 40.725977,
+    "lon": -111.8979682
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "120",
+    "city": "Salt Lake City",
+    "lat": 40.766551,
+    "lon": -111.891393
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "68 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7676235,
+    "lon": -111.891409
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "102 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.766941,
+    "lon": -111.891428
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "122",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7665144,
+    "lon": -111.8913965
+  },
+  {
+    "street": "300 South",
+    "housenumber": "50",
+    "city": "Salt Lake City",
+    "lat": 40.7631665,
+    "lon": -111.8930139
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "252 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7635118,
+    "lon": -111.891431
+  },
+  {
+    "street": "700 East",
+    "housenumber": "216 South",
+    "city": "Salt Lake City",
+    "postcode": "84102",
+    "lat": 40.7645674,
+    "lon": -111.8727082
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "999",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7480395,
+    "lon": -111.8905816
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "327",
+    "city": "Salt Lake City",
+    "lat": 40.7637065,
+    "lon": -111.9005933
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "325",
+    "city": "Salt Lake City",
+    "lat": 40.7637146,
+    "lon": -111.9005156
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "329",
+    "city": "Salt Lake City",
+    "lat": 40.7636649,
+    "lon": -111.9007181
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "339",
+    "city": "Salt Lake City",
+    "lat": 40.7636953,
+    "lon": -111.9010694
+  },
+  {
+    "street": "Pierpont Avenue",
+    "housenumber": "345",
+    "city": "Salt Lake City",
+    "lat": 40.7636913,
+    "lon": -111.9013645
+  },
+  {
+    "street": "East 200 South",
+    "housenumber": "152",
+    "city": "Salt Lake City",
+    "lat": 40.7646435,
+    "lon": -111.886443
+  },
+  {
+    "street": "400 West",
+    "housenumber": "660",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7548909,
+    "lon": -111.9032487
+  },
+  {
+    "street": "Jefferson Street",
+    "housenumber": "908",
+    "city": "Salt Lake City",
+    "lat": 40.749459,
+    "lon": -111.8956449
+  },
+  {
+    "street": "Jefferson Street",
+    "housenumber": "916",
+    "city": "Salt Lake City",
+    "lat": 40.7492842,
+    "lon": -111.8956289
+  },
+  {
+    "street": "Jefferson Street",
+    "housenumber": "916",
+    "city": "Salt Lake City",
+    "lat": 40.7492182,
+    "lon": -111.895631
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1201",
+    "city": "Salt Lake City",
+    "lat": 40.723592,
+    "lon": -111.8568045
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1201",
+    "city": "Salt Lake City",
+    "lat": 40.7237587,
+    "lon": -111.8568018
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1201",
+    "city": "Salt Lake City",
+    "lat": 40.723838,
+    "lon": -111.8567428
+  },
+  {
+    "street": "Wilmington Avenue",
+    "housenumber": "1215",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.723529,
+    "lon": -111.856466
+  },
+  {
+    "street": "South 1100 East",
+    "housenumber": "2008",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7265032,
+    "lon": -111.859859
+  },
+  {
+    "street": "State Street",
+    "housenumber": "711 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7537401,
+    "lon": -111.8876346
+  },
+  {
+    "street": "800 South",
+    "housenumber": "285",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7517345,
+    "lon": -111.8993273
+  },
+  {
+    "street": "800 South",
+    "housenumber": "423",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7516802,
+    "lon": -111.9037862
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "135 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7663079,
+    "lon": -111.889655
+  },
+  {
+    "street": "State Street",
+    "housenumber": "939 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7488338,
+    "lon": -111.8878213
+  },
+  {
+    "street": "State Street",
+    "housenumber": "961 S",
+    "city": "Salt Lake City",
+    "postcode": "84111",
+    "lat": 40.7481845,
+    "lon": -111.887854
+  },
+  {
+    "street": "700 East",
+    "housenumber": "2207 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7228965,
+    "lon": -111.870897
+  },
+  {
+    "street": "300 West",
+    "housenumber": "945",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7484912,
+    "lon": -111.8994324
+  },
+  {
+    "street": "300 West",
+    "housenumber": "945",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7483911,
+    "lon": -111.899431
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1075 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7699899,
+    "lon": -111.9227857
+  },
+  {
+    "street": "North Temple",
+    "housenumber": "1075 W",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7710992,
+    "lon": -111.9219538
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1720 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7325026,
+    "lon": -111.939562
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1744 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7320287,
+    "lon": -111.9395371
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1756 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7317683,
+    "lon": -111.939545
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1760 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7316794,
+    "lon": -111.9395396
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1842 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7300072,
+    "lon": -111.9396171
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1890 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7293723,
+    "lon": -111.9397267
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1878",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7295254,
+    "lon": -111.939715
+  },
+  {
+    "street": "South 500 West",
+    "housenumber": "684",
+    "city": "Salt Lake City",
+    "lat": 40.7544968,
+    "lon": -111.905738
+  },
+  {
+    "street": "West 700 South",
+    "housenumber": "545",
+    "city": "Salt Lake City",
+    "lat": 40.7537649,
+    "lon": -111.9068432
+  },
+  {
+    "street": "1300 South",
+    "housenumber": "1676",
+    "city": "Salt Lake City",
+    "postcode": "84108",
+    "lat": 40.7415167,
+    "lon": -111.8427612
+  },
+  {
+    "street": "900 West",
+    "housenumber": "805 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7515308,
+    "lon": -111.9163002
+  },
+  {
+    "street": "900 West",
+    "housenumber": "802 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7517179,
+    "lon": -111.9173716
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "2740 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7408652,
+    "lon": -111.95855
+  },
+  {
+    "street": "California Avenue",
+    "housenumber": "2740 W",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.740875,
+    "lon": -111.9589921
+  },
+  {
+    "street": "4130 West",
+    "housenumber": "1775 S",
+    "city": "Salt Lake City",
+    "postcode": "84104",
+    "lat": 40.7316842,
+    "lon": -111.989462
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2223 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7225295,
+    "lon": -111.8581592
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2209",
+    "city": "Salt Lake City",
+    "lat": 40.7228405,
+    "lon": -111.8582853
+  },
+  {
+    "street": "Highland Drive",
+    "housenumber": "2209 S",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7229036,
+    "lon": -111.8583014
+  },
+  {
+    "street": "900 West",
+    "housenumber": "910",
+    "city": "Salt Lake City",
+    "lat": 40.7883476,
+    "lon": -111.9162643
+  },
+  {
+    "street": "900 West",
+    "housenumber": "1017",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7915743,
+    "lon": -111.917457
+  },
+  {
+    "street": "900 West",
+    "housenumber": "1013",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7914731,
+    "lon": -111.917454
+  },
+  {
+    "street": "900 West",
+    "housenumber": "1013",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.791408,
+    "lon": -111.917457
+  },
+  {
+    "street": "900 West",
+    "housenumber": "1003",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7913203,
+    "lon": -111.917462
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "690 S",
+    "city": "Salt Lake City",
+    "postcode": "84101",
+    "lat": 40.7545722,
+    "lon": -111.89147
+  },
+  {
+    "street": "Ace Yeager Court",
+    "housenumber": "260 N",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7753429,
+    "lon": -112.029928
+  },
+  {
+    "street": "Ace Yeager Court",
+    "housenumber": "260 North",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7752721,
+    "lon": -112.0328881
+  },
+  {
+    "street": "Ace Yeager Court",
+    "housenumber": "260",
+    "city": "Salt Lake City",
+    "postcode": "84116",
+    "lat": 40.7752573,
+    "lon": -112.03151
+  },
+  {
+    "street": "Redwood Road",
+    "housenumber": "1422 South",
+    "city": "Salt Lake City",
+    "lat": 40.7385801,
+    "lon": -111.9395336
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1122",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7031539,
+    "lon": -111.8588708
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1122",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7029856,
+    "lon": -111.8591846
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1130",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.702828,
+    "lon": -111.8593811
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7027332,
+    "lon": -111.859339
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7025997,
+    "lon": -111.8592229
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7024266,
+    "lon": -111.8590826
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7023182,
+    "lon": -111.8589665
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7022844,
+    "lon": -111.8589295
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.702235,
+    "lon": -111.8588733
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7021596,
+    "lon": -111.8588491
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1140",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7020677,
+    "lon": -111.8588146
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1172",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7015986,
+    "lon": -111.8576919
+  },
+  {
+    "street": "Brickyard Road",
+    "housenumber": "1172",
+    "city": "Salt Lake City",
+    "postcode": "84106",
+    "lat": 40.7015009,
+    "lon": -111.8575426
+  }
+]

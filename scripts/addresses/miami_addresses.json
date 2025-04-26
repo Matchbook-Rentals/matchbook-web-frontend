@@ -1,0 +1,7970 @@
+[
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "5200",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8237323,
+    "lon": -80.19296
+  },
+  {
+    "street": "Northwest 7th Avenue",
+    "housenumber": "2200",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7984347,
+    "lon": -80.2078631
+  },
+  {
+    "street": "Southwest 3rd Street",
+    "housenumber": "2705",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7698087,
+    "lon": -80.2396618
+  },
+  {
+    "street": "Europe Way",
+    "housenumber": "641",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7748819,
+    "lon": -80.169651
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5995",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7708333,
+    "lon": -80.2938889
+  },
+  {
+    "street": "Caribbean Way",
+    "housenumber": "1080",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7765469,
+    "lon": -80.1781364
+  },
+  {
+    "street": "Northwest 13th Street",
+    "housenumber": "350",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7863162,
+    "lon": -80.2012591
+  },
+  {
+    "street": "Northwest 35th Street",
+    "housenumber": "1799",
+    "city": "Miami",
+    "postcode": "33142",
+    "lat": 25.808751,
+    "lon": -80.2256375
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5050",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7709771,
+    "lon": -80.2774048
+  },
+  {
+    "street": "Northwest 5th Street",
+    "housenumber": "351",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7791208,
+    "lon": -80.2005796
+  },
+  {
+    "street": "MacArthur Causeway",
+    "housenumber": "190",
+    "city": "Miami Beach",
+    "postcode": "33139",
+    "lat": 25.771664,
+    "lon": -80.1511513
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "5799",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7783236,
+    "lon": -80.2903704
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "174",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7741039,
+    "lon": -80.1904762
+  },
+  {
+    "street": "Southeast 3rd Avenue",
+    "housenumber": "165",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7728693,
+    "lon": -80.1887822
+  },
+  {
+    "street": "Southeast 3rd Avenue",
+    "housenumber": "110",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7733161,
+    "lon": -80.1891993
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "129",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7727393,
+    "lon": -80.1916754
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "3555",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7649886,
+    "lon": -80.2527677
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "1800",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7938833,
+    "lon": -80.1891917
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "626",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7677944,
+    "lon": -80.1934304
+  },
+  {
+    "street": "North Bayshore Drive",
+    "housenumber": "1800",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7942149,
+    "lon": -80.1866129
+  },
+  {
+    "street": "South Bayshore Drive",
+    "housenumber": "2550",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7321159,
+    "lon": -80.2324358
+  },
+  {
+    "street": "North Biscayne Boulevard",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7753719,
+    "lon": -80.188012
+  },
+  {
+    "street": "North Biscayne Boulevard",
+    "housenumber": "200",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7763415,
+    "lon": -80.1881589
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "7895",
+    "city": "miami",
+    "postcode": "33138",
+    "lat": 25.8423543,
+    "lon": -80.1841066
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "6815",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8386101,
+    "lon": -80.1840387
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "6815",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8385401,
+    "lon": -80.1840837
+  },
+  {
+    "street": "NE 1st St",
+    "housenumber": "58",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750632,
+    "lon": -80.1925459
+  },
+  {
+    "street": "Pan American Drive",
+    "housenumber": "3381",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.728742,
+    "lon": -80.2333947
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3190",
+    "city": "Coconut Grove",
+    "postcode": "33133",
+    "lat": 25.7277588,
+    "lon": -80.2450623
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3111",
+    "city": "Coconut Grove",
+    "postcode": "33133",
+    "lat": 25.7282289,
+    "lon": -80.2437628
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5545",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7639185,
+    "lon": -80.2854811
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3015",
+    "city": "Coconut Grove",
+    "postcode": "33133",
+    "lat": 25.7286438,
+    "lon": -80.2420384
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "28",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7741517,
+    "lon": -80.1930339
+  },
+  {
+    "street": "Bird Rd.",
+    "housenumber": "3850",
+    "city": "Coral Gables",
+    "postcode": "33146",
+    "lat": 25.7341594,
+    "lon": -80.2568944
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "1575",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7658937,
+    "lon": -80.2209448
+  },
+  {
+    "street": "Southwest 27th Avenue",
+    "housenumber": "2542",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.744414,
+    "lon": -80.238208
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3210",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7278607,
+    "lon": -80.2455368
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "990",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7836621,
+    "lon": -80.1898421
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "4746",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7710807,
+    "lon": -80.2733076
+  },
+  {
+    "street": "Main Hwy",
+    "housenumber": "3444",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.727493,
+    "lon": -80.243396
+  },
+  {
+    "street": "SW 17th Ave",
+    "housenumber": "2490",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.746372,
+    "lon": -80.2219991
+  },
+  {
+    "street": "NE 46th St",
+    "housenumber": "190",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8177356,
+    "lon": -80.1917201
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2003",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.795788,
+    "lon": -80.1947028
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2390",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.799897,
+    "lon": -80.1992545
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "1199",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7737038,
+    "lon": -80.21447
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "7300",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.842294,
+    "lon": -80.1846303
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "3700",
+    "city": "Miami",
+    "lat": 25.7716139,
+    "lon": -80.2558582
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "97",
+    "city": "Miami",
+    "lat": 25.7664378,
+    "lon": -80.1951584
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "401",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7769151,
+    "lon": -80.1850705
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "2336",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8000129,
+    "lon": -80.1893567
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "5128",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8235576,
+    "lon": -80.1873359
+  },
+  {
+    "street": "Northeast 81st Street",
+    "housenumber": "541",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8490498,
+    "lon": -80.1860765
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "900",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7650538,
+    "lon": -80.1976261
+  },
+  {
+    "street": "Northeast 79th Street",
+    "housenumber": "284",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8474203,
+    "lon": -80.190941
+  },
+  {
+    "street": "Northeast 5th Court",
+    "housenumber": "8000",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8482005,
+    "lon": -80.1870647
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "901",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7651905,
+    "lon": -80.1930941
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "6730",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8377136,
+    "lon": -80.1844076
+  },
+  {
+    "street": "Northeast 81st Street",
+    "housenumber": "561",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8493618,
+    "lon": -80.1858
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "405",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8014809,
+    "lon": -80.2020516
+  },
+  {
+    "street": "Northwest 3rd Avenue",
+    "housenumber": "2750",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.802275,
+    "lon": -80.2012607
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "450",
+    "city": "Miami",
+    "lat": 25.801613,
+    "lon": -80.2025916
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "6901",
+    "city": "Miami",
+    "lat": 25.8388943,
+    "lon": -80.1841088
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "3918",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8128608,
+    "lon": -80.1955536
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2300",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7996042,
+    "lon": -80.1992366
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "3401",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8101674,
+    "lon": -80.1940194
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "401",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.801482,
+    "lon": -80.2019861
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "3201",
+    "city": "Miami",
+    "lat": 25.8080686,
+    "lon": -80.1939587
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "5919",
+    "city": "Miami",
+    "lat": 25.8301759,
+    "lon": -80.1919272
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "3101",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8059936,
+    "lon": -80.1949421
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "3401",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8100708,
+    "lon": -80.1949206
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "7283",
+    "city": "Miami",
+    "lat": 25.8421153,
+    "lon": -80.1841039
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "6075",
+    "city": "Miami",
+    "lat": 25.8324686,
+    "lon": -80.183645
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2519",
+    "city": "Miami",
+    "lat": 25.8011749,
+    "lon": -80.198977
+  },
+  {
+    "street": "Southeast 14th Terrace",
+    "housenumber": "185",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7596332,
+    "lon": -80.1905009
+  },
+  {
+    "street": "Southwest 12th Avenue",
+    "housenumber": "541",
+    "city": "Miami",
+    "lat": 25.767872,
+    "lon": -80.214368
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2825",
+    "city": "Miami",
+    "lat": 25.8037089,
+    "lon": -80.199074
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "1503",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7658359,
+    "lon": -80.2196546
+  },
+  {
+    "street": "Northeast 2nd Street",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7763035,
+    "lon": -80.1929913
+  },
+  {
+    "street": "Northeast 3rd Avenue",
+    "housenumber": "105",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7754409,
+    "lon": -80.1884655
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "3622",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7717285,
+    "lon": -80.2539916
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "3801",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7722489,
+    "lon": -80.257724
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "259",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7744246,
+    "lon": -80.1888048
+  },
+  {
+    "street": "Northwest 37th Avenue",
+    "housenumber": "771",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7796054,
+    "lon": -80.2549666
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "2994",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7791059,
+    "lon": -80.2432485
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "4259",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.771773,
+    "lon": -80.2649325
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "3026",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7790606,
+    "lon": -80.2440132
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "3701",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7814093,
+    "lon": -80.2561701
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "3709",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7813658,
+    "lon": -80.2570203
+  },
+  {
+    "street": "NW 12th Ave",
+    "housenumber": "1611",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7911634,
+    "lon": -80.2121009
+  },
+  {
+    "street": "Northwest 17th Street",
+    "housenumber": "901",
+    "city": "Miami",
+    "lat": 25.7916534,
+    "lon": -80.2110329
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "147",
+    "city": "Miami",
+    "postcode": "85539",
+    "lat": 33.4004246,
+    "lon": -110.8692753
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2237",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8010346,
+    "lon": -80.1992294
+  },
+  {
+    "street": "Northeast 20th Street",
+    "housenumber": "137",
+    "city": "Miami",
+    "lat": 25.7958624,
+    "lon": -80.1918557
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2700",
+    "city": "Miami",
+    "lat": 25.8028275,
+    "lon": -80.1953601
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2800",
+    "city": "Miami",
+    "lat": 25.8031515,
+    "lon": -80.1952413
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "187",
+    "city": "Miami",
+    "lat": 25.802032,
+    "lon": -80.1986827
+  },
+  {
+    "street": "Southwest 37th Avenue",
+    "housenumber": "2209",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7495937,
+    "lon": -80.2543951
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "33",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.767627,
+    "lon": -80.1919656
+  },
+  {
+    "street": "Northwest 14th Street",
+    "housenumber": "1051",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7884242,
+    "lon": -80.2121473
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "7941",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8485801,
+    "lon": -80.1844855
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "421",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8014742,
+    "lon": -80.2022964
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "331",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8014956,
+    "lon": -80.2018034
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "310",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8013196,
+    "lon": -80.201448
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "310",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8013169,
+    "lon": -80.2015166
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "2600",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8011439,
+    "lon": -80.2034596
+  },
+  {
+    "street": "Bayshore Villas Drive",
+    "housenumber": "3521",
+    "city": "Miami",
+    "lat": 25.7372535,
+    "lon": -80.2259341
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "2503",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8007995,
+    "lon": -80.202969
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "2505",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8008712,
+    "lon": -80.2029711
+  },
+  {
+    "street": "Northwest 5th Avenue",
+    "housenumber": "2501",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8007089,
+    "lon": -80.2029586
+  },
+  {
+    "street": "Southwest 27th Avenue",
+    "housenumber": "2650",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7424003,
+    "lon": -80.2381818
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "390",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8017495,
+    "lon": -80.2021738
+  },
+  {
+    "street": "Northeast 79th Street",
+    "housenumber": "860 NE",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8477794,
+    "lon": -80.1788936
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "388",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8018751,
+    "lon": -80.202175
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "380",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8019181,
+    "lon": -80.2021791
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "220",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8020828,
+    "lon": -80.1997038
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "248",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7770775,
+    "lon": -80.1884698
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2628",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8019811,
+    "lon": -80.1992441
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2626",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8019208,
+    "lon": -80.1992393
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2620",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8018619,
+    "lon": -80.1992361
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2630",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8020752,
+    "lon": -80.1992601
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "133",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.77697,
+    "lon": -80.190611
+  },
+  {
+    "street": "Northeast 3rd Street",
+    "housenumber": "234",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.777004,
+    "lon": -80.1895199
+  },
+  {
+    "street": "Northeast 3rd Street",
+    "housenumber": "276",
+    "city": "Miami",
+    "lat": 25.7770983,
+    "lon": -80.1885293
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2612",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8018063,
+    "lon": -80.1992321
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2699",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8020328,
+    "lon": -80.199027
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2679",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8020118,
+    "lon": -80.1990265
+  },
+  {
+    "street": "Northwest 36th Street",
+    "housenumber": "3100",
+    "city": "Miami",
+    "postcode": "33142",
+    "lat": 25.8087389,
+    "lon": -80.2468554
+  },
+  {
+    "street": "Northwest 16th Street",
+    "housenumber": "2415",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7895639,
+    "lon": -80.2370306
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "199",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7744241,
+    "lon": -80.1904699
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "619",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7646003,
+    "lon": -80.2876372
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "1800",
+    "city": "Miami",
+    "lat": 25.7940154,
+    "lon": -80.1891304
+  },
+  {
+    "street": "Live Oak Street",
+    "housenumber": "317",
+    "city": "Miami",
+    "postcode": "85539",
+    "lat": 33.3995035,
+    "lon": -110.8686947
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "6747",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7633339,
+    "lon": -80.3048146
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "66",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7739775,
+    "lon": -80.1951206
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "2300",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.7994099,
+    "lon": -80.1893725
+  },
+  {
+    "street": "North Bayshore Drive",
+    "housenumber": "1A-103",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7944974,
+    "lon": -80.1872553
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2929",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7532788,
+    "lon": -80.2107619
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2933",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7531803,
+    "lon": -80.2108852
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "3641",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7413155,
+    "lon": -80.2142109
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "3657",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7404344,
+    "lon": -80.2136194
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "3659",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7403142,
+    "lon": -80.2138076
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "3661",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7401554,
+    "lon": -80.2140497
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "3663",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7421123,
+    "lon": -80.2148956
+  },
+  {
+    "street": "Brickell Key Drive",
+    "housenumber": "615",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672902,
+    "lon": -80.1856055
+  },
+  {
+    "street": "Brickell Key Drive",
+    "housenumber": "625",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7674787,
+    "lon": -80.1856465
+  },
+  {
+    "street": "Brickell Key Drive",
+    "housenumber": "635",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676795,
+    "lon": -80.1857653
+  },
+  {
+    "street": "Brickell Key Boulevard",
+    "housenumber": "901",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7693202,
+    "lon": -80.1868746
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "465",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7689563,
+    "lon": -80.1888989
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "475",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7690835,
+    "lon": -80.1886046
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "495",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683088,
+    "lon": -80.1885298
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "501",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7681916,
+    "lon": -80.1886718
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "701",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7670363,
+    "lon": -80.1890751
+  },
+  {
+    "street": "Hiawatha Avenue",
+    "housenumber": "3535",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7399347,
+    "lon": -80.2190156
+  },
+  {
+    "street": "Northwest 6th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7800557,
+    "lon": -80.1941574
+  },
+  {
+    "street": "Northeast 4th Street",
+    "housenumber": "33",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7782602,
+    "lon": -80.1930779
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "401",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7784566,
+    "lon": -80.1936414
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "73",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7746555,
+    "lon": -80.19515
+  },
+  {
+    "street": "Northeast 4th Street",
+    "housenumber": "99",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7782477,
+    "lon": -80.1923683
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "1500",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7897759,
+    "lon": -80.1895104
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "1501",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7897731,
+    "lon": -80.1904437
+  },
+  {
+    "street": "Northeast Miami Court",
+    "housenumber": "1523",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7898502,
+    "lon": -80.1936707
+  },
+  {
+    "street": "Northeast Miami Court",
+    "housenumber": "1529",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7899891,
+    "lon": -80.1936734
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1601",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7907833,
+    "lon": -80.194461
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "1601",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.790599,
+    "lon": -80.1905391
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "1607",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7907459,
+    "lon": -80.1905455
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1625",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.790982,
+    "lon": -80.1944791
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1635",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7911512,
+    "lon": -80.1944842
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "1801",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7937328,
+    "lon": -80.1905942
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "1803",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.793859,
+    "lon": -80.1906022
+  },
+  {
+    "street": "Northeast 15th Street",
+    "housenumber": "47",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7896632,
+    "lon": -80.1936671
+  },
+  {
+    "street": "Southwest 27th Avenue",
+    "housenumber": "2522",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7448411,
+    "lon": -80.2383607
+  },
+  {
+    "street": "Southwest 27th Avenue",
+    "housenumber": "2530",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7445854,
+    "lon": -80.2383499
+  },
+  {
+    "street": "Southwest 27th Avenue",
+    "housenumber": "2526",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7447144,
+    "lon": -80.2383554
+  },
+  {
+    "street": "North Bayshore Drive",
+    "housenumber": "1717",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7914625,
+    "lon": -80.1866764
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "292",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7748833,
+    "lon": -80.264278
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "4751",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7716694,
+    "lon": -80.2730814
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "982",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657744,
+    "lon": -80.2108923
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "2742",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7645411,
+    "lon": -80.2395808
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "120",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7736045,
+    "lon": -80.264003
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "234",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7729326,
+    "lon": -80.187885
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "103",
+    "city": "Miami",
+    "lat": 36.8765153,
+    "lon": -94.8779352
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4749",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7643641,
+    "lon": -80.2726328
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2475",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7505119,
+    "lon": -80.202113
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "780",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7792576,
+    "lon": -80.2652604
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "803",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7655523,
+    "lon": -80.1898541
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "950",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7650099,
+    "lon": -80.1901684
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "951",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7645988,
+    "lon": -80.1907108
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "999",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7639532,
+    "lon": -80.190615
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "1155",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7621081,
+    "lon": -80.1891076
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1161",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7624131,
+    "lon": -80.1906683
+  },
+  {
+    "street": "South Bayshore Drive",
+    "housenumber": "1198",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7621684,
+    "lon": -80.1901217
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "701",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7670128,
+    "lon": -80.1899122
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3401",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7439262,
+    "lon": -80.1725805
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3201",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7479256,
+    "lon": -80.1756719
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "80",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750028,
+    "lon": -80.1904505
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "1663",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7730703,
+    "lon": -80.2231949
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1617",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7559592,
+    "lon": -80.1941873
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1627",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7558087,
+    "lon": -80.194059
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1541",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7568739,
+    "lon": -80.1924808
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "1408",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7590045,
+    "lon": -80.1893498
+  },
+  {
+    "street": "Macarthur Causeway",
+    "housenumber": "980",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7847107,
+    "lon": -80.1765321
+  },
+  {
+    "street": "North America Way",
+    "housenumber": "1001",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7788159,
+    "lon": -80.1778708
+  },
+  {
+    "street": "Swanson Avenue",
+    "housenumber": "2500",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7368399,
+    "lon": -80.2347372
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1428",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7597579,
+    "lon": -80.1928035
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1490",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.759096,
+    "lon": -80.1941828
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1492",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7591667,
+    "lon": -80.1940861
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1450",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7594373,
+    "lon": -80.194141
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1450",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7586436,
+    "lon": -80.1931886
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1432",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7588438,
+    "lon": -80.1930679
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1451",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7593293,
+    "lon": -80.1934707
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "909",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7650824,
+    "lon": -80.1920077
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "800",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7659326,
+    "lon": -80.1914856
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "848",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7650129,
+    "lon": -80.1914276
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "830",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7658867,
+    "lon": -80.1925074
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1110",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7626826,
+    "lon": -80.1921555
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "1051",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7635163,
+    "lon": -80.1925915
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1060",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7631534,
+    "lon": -80.1919711
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "1025",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7640595,
+    "lon": -80.1922547
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "1053",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.763906,
+    "lon": -80.1923528
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "134",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7611548,
+    "lon": -80.1964438
+  },
+  {
+    "street": "Northwest 13th Street",
+    "housenumber": "17",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7872056,
+    "lon": -80.1945029
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1300",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7871488,
+    "lon": -80.1943228
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1320",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7873948,
+    "lon": -80.1943765
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1330",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.787483,
+    "lon": -80.1943794
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "1334",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7876794,
+    "lon": -80.1943867
+  },
+  {
+    "street": "Northwest 1st Court",
+    "housenumber": "1540",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7901393,
+    "lon": -80.1977969
+  },
+  {
+    "street": "Northwest 16th Street",
+    "housenumber": "190",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7902621,
+    "lon": -80.1985733
+  },
+  {
+    "street": "Northwest 1st Place",
+    "housenumber": "1541",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7902775,
+    "lon": -80.1981257
+  },
+  {
+    "street": "Northwest 1st Court",
+    "housenumber": "1731",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.79222,
+    "lon": -80.1973514
+  },
+  {
+    "street": "Northwest 1st Avenue",
+    "housenumber": "1740",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7923962,
+    "lon": -80.196938
+  },
+  {
+    "street": "Northwest 1st Court",
+    "housenumber": "1741",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7923852,
+    "lon": -80.1973541
+  },
+  {
+    "street": "Northwest 1st Court",
+    "housenumber": "1744",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7923665,
+    "lon": -80.1978611
+  },
+  {
+    "street": "Northwest 1st Place",
+    "housenumber": "1760",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7925979,
+    "lon": -80.1986347
+  },
+  {
+    "street": "Northwest 1st Place",
+    "housenumber": "1745",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.792358,
+    "lon": -80.1981896
+  },
+  {
+    "street": "Northwest 18th Street",
+    "housenumber": "160",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.792617,
+    "lon": -80.1981979
+  },
+  {
+    "street": "Northwest 18th Street",
+    "housenumber": "123",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7930188,
+    "lon": -80.1973714
+  },
+  {
+    "street": "Northwest 1st Place",
+    "housenumber": "1731",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7921958,
+    "lon": -80.1981842
+  },
+  {
+    "street": "Northwest 1st Avenue",
+    "housenumber": "1760",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7927322,
+    "lon": -80.1969445
+  },
+  {
+    "street": "Northeast 20th Street",
+    "housenumber": "167",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.7959592,
+    "lon": -80.1912777
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "2626",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8020327,
+    "lon": -80.1913107
+  },
+  {
+    "street": "Northeast 29th Street",
+    "housenumber": "170",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8037944,
+    "lon": -80.1917926
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "2902",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8045385,
+    "lon": -80.1896211
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "2875",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8040349,
+    "lon": -80.1907947
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "3300",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8080087,
+    "lon": -80.1898857
+  },
+  {
+    "street": "Northwest 19th Street",
+    "housenumber": "1631",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7931751,
+    "lon": -80.2224477
+  },
+  {
+    "street": "Northwest 13th Avenue",
+    "housenumber": "1290",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7863126,
+    "lon": -80.2168206
+  },
+  {
+    "street": "Northwest 14th Street",
+    "housenumber": "1320",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.787266,
+    "lon": -80.2167813
+  },
+  {
+    "street": "Northwest 13th Street",
+    "housenumber": "1321",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7866303,
+    "lon": -80.2166905
+  },
+  {
+    "street": "Northwest 2nd Court",
+    "housenumber": "1817",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7931153,
+    "lon": -80.1991631
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2500",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7561599,
+    "lon": -80.2078163
+  },
+  {
+    "street": "Southeast 2nd Avenue",
+    "housenumber": "400",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7710086,
+    "lon": -80.1911014
+  },
+  {
+    "street": "Southeast 2nd Avenue",
+    "housenumber": "300",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7706492,
+    "lon": -80.1904711
+  },
+  {
+    "street": "Southeast 4th Street",
+    "housenumber": "114",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.771014,
+    "lon": -80.1917814
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "40",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7749589,
+    "lon": -80.1920658
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "39'",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7747315,
+    "lon": -80.1920682
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "33",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743138,
+    "lon": -80.1929804
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "2",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750332,
+    "lon": -80.1935113
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "26",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7746072,
+    "lon": -80.1920935
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "14",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7744853,
+    "lon": -80.1920912
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "56",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750277,
+    "lon": -80.192617
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "41",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.774322,
+    "lon": -80.1927168
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "28",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750119,
+    "lon": -80.1929882
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "36",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7748866,
+    "lon": -80.1920616
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750413,
+    "lon": -80.1931016
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "12",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750426,
+    "lon": -80.1933193
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "10",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750368,
+    "lon": -80.1933905
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "63",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743238,
+    "lon": -80.1926491
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "1",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743003,
+    "lon": -80.1934807
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "66",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750388,
+    "lon": -80.1922816
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "58",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750355,
+    "lon": -80.1925488
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "36",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750079,
+    "lon": -80.192843
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "31",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.774813,
+    "lon": -80.193486
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7747875,
+    "lon": -80.1920704
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "35",
+    "city": "North Miami",
+    "postcode": "33128",
+    "lat": 25.7749353,
+    "lon": -80.1935127
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "27",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743015,
+    "lon": -80.1931042
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7746745,
+    "lon": -80.1920965
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "44",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750154,
+    "lon": -80.1927462
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "19",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7742886,
+    "lon": -80.1932473
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "24",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750415,
+    "lon": -80.1931526
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "79",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743265,
+    "lon": -80.1923582
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "8",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750371,
+    "lon": -80.1934541
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "12",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7744099,
+    "lon": -80.1920873
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "65",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743277,
+    "lon": -80.1925631
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "73",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.774327,
+    "lon": -80.1924129
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750397,
+    "lon": -80.192434
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "29",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7743028,
+    "lon": -80.1930486
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7742897,
+    "lon": -80.1931746
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "17",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7742854,
+    "lon": -80.1933008
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "71",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.774331,
+    "lon": -80.1924872
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "22",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750405,
+    "lon": -80.1932107
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7742813,
+    "lon": -80.1933394
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "62",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750392,
+    "lon": -80.1923497
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "46",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7750331,
+    "lon": -80.1920653
+  },
+  {
+    "street": "Southeast 1st Street",
+    "housenumber": "139",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7736875,
+    "lon": -80.191032
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "156",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.77407,
+    "lon": -80.1907653
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "134",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740579,
+    "lon": -80.1911703
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "176",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740863,
+    "lon": -80.1904182
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "144",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740646,
+    "lon": -80.1909286
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "174",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7741562,
+    "lon": -80.1904841
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "27",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7738139,
+    "lon": -80.1917899
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "148",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740676,
+    "lon": -80.1908372
+  },
+  {
+    "street": "Southeast 1st Street",
+    "housenumber": "131",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7736674,
+    "lon": -80.19123
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "118",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740603,
+    "lon": -80.1914397
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "160",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740728,
+    "lon": -80.190675
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "124",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740521,
+    "lon": -80.1913599
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "130",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740543,
+    "lon": -80.1912869
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "110",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7738286,
+    "lon": -80.1916169
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740265,
+    "lon": -80.1917957
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "138",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.774059,
+    "lon": -80.191131
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "114",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740611,
+    "lon": -80.1915008
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "158",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740708,
+    "lon": -80.1907392
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "166",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740752,
+    "lon": -80.1906025
+  },
+  {
+    "street": "Southeast 1st Street",
+    "housenumber": "113",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7735317,
+    "lon": -80.1914283
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "146",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740659,
+    "lon": -80.1908829
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "41",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752585,
+    "lon": -80.1928229
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752571,
+    "lon": -80.1928867
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752677,
+    "lon": -80.1926683
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752757,
+    "lon": -80.1924602
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "127",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7756432,
+    "lon": -80.1935529
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7753948,
+    "lon": -80.1921276
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "1",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752661,
+    "lon": -80.1932349
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "140",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7759279,
+    "lon": -80.1921091
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "138",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7758581,
+    "lon": -80.1921096
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "129",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7757469,
+    "lon": -80.1935583
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "128",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7757248,
+    "lon": -80.1921103
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "137",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7759002,
+    "lon": -80.1935809
+  },
+  {
+    "street": "Northeast 2nd Street",
+    "housenumber": "36",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7758419,
+    "lon": -80.1929625
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "43",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752617,
+    "lon": -80.1927616
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "144",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7759993,
+    "lon": -80.1921122
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "65",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7752711,
+    "lon": -80.1923599
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "33",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.77526,
+    "lon": -80.192939
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "136",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7758903,
+    "lon": -80.1880632
+  },
+  {
+    "street": "Northeast 3rd Avenue",
+    "housenumber": "115",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7755442,
+    "lon": -80.188525
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "130",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7758191,
+    "lon": -80.1880646
+  },
+  {
+    "street": "Northeast 3rd Avenue",
+    "housenumber": "137",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7756675,
+    "lon": -80.1885299
+  },
+  {
+    "street": "Northeast 1st Street",
+    "housenumber": "307",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7753754,
+    "lon": -80.1883386
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7755388,
+    "lon": -80.1880561
+  },
+  {
+    "street": "Northeast 3rd Avenue",
+    "housenumber": "105",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7754083,
+    "lon": -80.1885086
+  },
+  {
+    "street": "Northeast 2nd Street",
+    "housenumber": "206",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7760748,
+    "lon": -80.1901222
+  },
+  {
+    "street": "Mcfarlane Road",
+    "housenumber": "2875",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7267826,
+    "lon": -80.24034
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3109",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7282796,
+    "lon": -80.2437631
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3111",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.728274,
+    "lon": -80.243825
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3105",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7282445,
+    "lon": -80.2436748
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3101",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7282877,
+    "lon": -80.2436263
+  },
+  {
+    "street": "Fuller Street",
+    "housenumber": "3098",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7276709,
+    "lon": -80.2434363
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3015",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7287647,
+    "lon": -80.2420289
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3047",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.728654,
+    "lon": -80.2425367
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3338",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7292931,
+    "lon": -80.2418855
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3342",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7292562,
+    "lon": -80.241862
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3332",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7293927,
+    "lon": -80.2418604
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3326",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7293943,
+    "lon": -80.2417609
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3314",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7294465,
+    "lon": -80.2418073
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3322",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.729393,
+    "lon": -80.2416539
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3324",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7293892,
+    "lon": -80.2417235
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3334",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7293576,
+    "lon": -80.2418966
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3312",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7294482,
+    "lon": -80.2417445
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3310",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7294561,
+    "lon": -80.241668
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3330",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7293931,
+    "lon": -80.2418114
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3336",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.729325,
+    "lon": -80.2418906
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3316",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.729442,
+    "lon": -80.2418738
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3318",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7294381,
+    "lon": -80.2419305
+  },
+  {
+    "street": "Virginia Street",
+    "housenumber": "3340",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7292555,
+    "lon": -80.241722
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3120",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7271268,
+    "lon": -80.2446614
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3168",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7274293,
+    "lon": -80.2449206
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3166",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.727345,
+    "lon": -80.2449718
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3112",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7269645,
+    "lon": -80.2444491
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3110",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7269219,
+    "lon": -80.2443881
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3190",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7276232,
+    "lon": -80.2451448
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3138",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7270391,
+    "lon": -80.2445534
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3194",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7277708,
+    "lon": -80.2451509
+  },
+  {
+    "street": "Commodore Plaza",
+    "housenumber": "3180",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7275605,
+    "lon": -80.2450737
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3206",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7277395,
+    "lon": -80.2454111
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3208",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7277402,
+    "lon": -80.245538
+  },
+  {
+    "street": "South Bayshore Drive",
+    "housenumber": "2651",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.731476,
+    "lon": -80.2360103
+  },
+  {
+    "street": "South Bayshore Drive",
+    "housenumber": "2560",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7322695,
+    "lon": -80.2324167
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "132",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740567,
+    "lon": -80.1912095
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "135",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7743472,
+    "lon": -80.1911771
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "168",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7740763,
+    "lon": -80.1905681
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "223",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.774407,
+    "lon": -80.1897803
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "248",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.774185,
+    "lon": -80.1894696
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "252",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7741867,
+    "lon": -80.1894114
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "264",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.774188,
+    "lon": -80.1893515
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "266",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7741901,
+    "lon": -80.1892805
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "270",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7741921,
+    "lon": -80.1892167
+  },
+  {
+    "street": "Southeast 3rd Avenue",
+    "housenumber": "299",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7722816,
+    "lon": -80.1895294
+  },
+  {
+    "street": "Northwest 23rd Street",
+    "housenumber": "143",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7993233,
+    "lon": -80.1979686
+  },
+  {
+    "street": "Northwest 23rd Street",
+    "housenumber": "165",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7993362,
+    "lon": -80.1981445
+  },
+  {
+    "street": "Northwest 24th Street",
+    "housenumber": "176",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7996178,
+    "lon": -80.1983264
+  },
+  {
+    "street": "Northwest 24th Street",
+    "housenumber": "170",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7996227,
+    "lon": -80.1981732
+  },
+  {
+    "street": "Northwest 28th Street",
+    "housenumber": "148",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8027391,
+    "lon": -80.1980981
+  },
+  {
+    "street": "Northwest 28th Street",
+    "housenumber": "112",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8027622,
+    "lon": -80.1974793
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "97",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8024679,
+    "lon": -80.1970044
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8025139,
+    "lon": -80.1956208
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "23",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.802512,
+    "lon": -80.1956716
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2609",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.801879,
+    "lon": -80.1949007
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2601",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8017482,
+    "lon": -80.1948897
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2615",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8020438,
+    "lon": -80.1949002
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2603",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8017883,
+    "lon": -80.194898
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2605",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8018313,
+    "lon": -80.194901
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2613",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.802005,
+    "lon": -80.1949005
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2607",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8019226,
+    "lon": -80.1949004
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2611",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.801965,
+    "lon": -80.1949021
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2617",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.802082,
+    "lon": -80.1949019
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2511",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8011217,
+    "lon": -80.1989036
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2043",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7966299,
+    "lon": -80.1945881
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2101",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7971058,
+    "lon": -80.1945718
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2049",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7968915,
+    "lon": -80.1945928
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2115",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7973856,
+    "lon": -80.1945139
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2127",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7975883,
+    "lon": -80.1945991
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2501",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8009089,
+    "lon": -80.1988112
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2621",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8018475,
+    "lon": -80.1987148
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "169",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8016958,
+    "lon": -80.1984586
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "171",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8016933,
+    "lon": -80.1985272
+  },
+  {
+    "street": "Northwest 27th Street",
+    "housenumber": "142",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8019937,
+    "lon": -80.1979846
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "163",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.801699,
+    "lon": -80.19837
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "161",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8017004,
+    "lon": -80.1983228
+  },
+  {
+    "street": "Northwest 26th Street",
+    "housenumber": "121",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8017254,
+    "lon": -80.1975932
+  },
+  {
+    "street": "Northwest 25th Street",
+    "housenumber": "167",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8009903,
+    "lon": -80.198281
+  },
+  {
+    "street": "Northwest 20th Street",
+    "housenumber": "127",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7956256,
+    "lon": -80.1974561
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2405",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7999487,
+    "lon": -80.1989047
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "2407",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8000502,
+    "lon": -80.1989098
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2003",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7959662,
+    "lon": -80.1946887
+  },
+  {
+    "street": "Northwest 21st Street",
+    "housenumber": "150",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7966106,
+    "lon": -80.1979718
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2010",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7961389,
+    "lon": -80.1951624
+  },
+  {
+    "street": "Northwest 1st Court",
+    "housenumber": "2031",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7962764,
+    "lon": -80.197471
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2050",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7965263,
+    "lon": -80.1951524
+  },
+  {
+    "street": "North Miami Avenue",
+    "housenumber": "2090",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7966817,
+    "lon": -80.1951564
+  },
+  {
+    "street": "Southeast 2nd Street",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7721727,
+    "lon": -80.1916397
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "4860",
+    "city": "Miami",
+    "lat": 25.7783876,
+    "lon": -80.2753877
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "4545",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7792368,
+    "lon": -80.2704952
+  },
+  {
+    "street": "North America Way",
+    "housenumber": "1007",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7788125,
+    "lon": -80.1780553
+  },
+  {
+    "street": "Northeast 29th Street",
+    "housenumber": "186",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8039375,
+    "lon": -80.1914529
+  },
+  {
+    "street": "Northwest 29th Street",
+    "housenumber": "56",
+    "city": "Miami",
+    "lat": 25.8037293,
+    "lon": -80.1963579
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "1199",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7830931,
+    "lon": -80.2636926
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4897",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7645617,
+    "lon": -80.2753826
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4801",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7642802,
+    "lon": -80.2739997
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4819",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646002,
+    "lon": -80.2749285
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "3501",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7649146,
+    "lon": -80.252406
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "270",
+    "city": "Miami",
+    "lat": 25.7705635,
+    "lon": -80.1892533
+  },
+  {
+    "street": "Northwest 7th Street",
+    "housenumber": "5737",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7796288,
+    "lon": -80.290008
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "401",
+    "city": "Miami",
+    "postcode": "33132",
+    "lat": 25.7784265,
+    "lon": -80.1867486
+  },
+  {
+    "street": "Northwest 9th Street",
+    "housenumber": "4351 NW",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7810449,
+    "lon": -80.2665529
+  },
+  {
+    "street": "Southeast 2nd Street",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7722518,
+    "lon": -80.1914324
+  },
+  {
+    "street": "Northwest 20th Street",
+    "housenumber": "1200",
+    "city": "Miami",
+    "lat": 25.7947958,
+    "lon": -80.2154557
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "444",
+    "city": "Miami",
+    "lat": 25.7694809,
+    "lon": -80.190271
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "444",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7703163,
+    "lon": -80.1982289
+  },
+  {
+    "street": "Northwest 5th Street",
+    "housenumber": "668",
+    "city": "Miami",
+    "lat": 25.7783211,
+    "lon": -80.2059324
+  },
+  {
+    "street": "Northwest 7th Avenue",
+    "housenumber": "1951",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7949219,
+    "lon": -80.2065947
+  },
+  {
+    "street": "Northwest 7th Avenue",
+    "housenumber": "1951",
+    "city": "Miami",
+    "postcode": "33136",
+    "lat": 25.7945875,
+    "lon": -80.2062432
+  },
+  {
+    "street": "Northeast 79th Street",
+    "housenumber": "1099",
+    "city": "Miami",
+    "lat": 25.8483675,
+    "lon": -80.1743866
+  },
+  {
+    "street": "McFarlane Road",
+    "housenumber": "2996",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7277948,
+    "lon": -80.2422514
+  },
+  {
+    "street": "Northwest 11th Street",
+    "housenumber": "750",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.7831224,
+    "lon": -80.2303168
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3201",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.748009,
+    "lon": -80.1754454
+  },
+  {
+    "street": "Biscayne Boulevard Way",
+    "housenumber": "270",
+    "city": "Miami",
+    "lat": 25.7707606,
+    "lon": -80.1893394
+  },
+  {
+    "street": "East Flagler Street",
+    "housenumber": "270",
+    "city": "Miami",
+    "lat": 25.77328,
+    "lon": -80.1892196
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "80",
+    "city": "Miami",
+    "lat": 25.7758169,
+    "lon": -80.190464
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "19",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.774314,
+    "lon": -80.193995
+  },
+  {
+    "street": "Northwest 37th Avenue",
+    "housenumber": "1521",
+    "city": "Miami",
+    "postcode": "33125",
+    "lat": 25.7882943,
+    "lon": -80.2556877
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "175",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7674868,
+    "lon": -80.1968453
+  },
+  {
+    "street": "Grand Avenue",
+    "housenumber": "3030",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7280228,
+    "lon": -80.2415728
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "2519",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8013479,
+    "lon": -80.1908344
+  },
+  {
+    "street": "North West 4th Street",
+    "housenumber": "350",
+    "city": "Miami",
+    "postcode": "33128",
+    "lat": 25.7776076,
+    "lon": -80.2004934
+  },
+  {
+    "street": "Northwest 2nd Avenue",
+    "housenumber": "6101",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.831652,
+    "lon": -80.1998403
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "3701",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7722314,
+    "lon": -80.2556633
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1428",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7597489,
+    "lon": -80.1928278
+  },
+  {
+    "street": "Northwest 36th Street",
+    "housenumber": "200",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.8100172,
+    "lon": -80.1996652
+  },
+  {
+    "street": "Biscayne Boulevard",
+    "housenumber": "2800",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8034697,
+    "lon": -80.1930572
+  },
+  {
+    "street": "Northeast 40th Street",
+    "housenumber": "172",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8133975,
+    "lon": -80.192102
+  },
+  {
+    "street": "Northeast 39th Street",
+    "housenumber": "140",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.8127937,
+    "lon": -80.1923326
+  },
+  {
+    "street": "Northwest 31 Street",
+    "housenumber": "2614",
+    "city": "Miami",
+    "postcode": "33142",
+    "lat": 25.8041931,
+    "lon": -80.2394322
+  },
+  {
+    "street": "Northwest 24th Street",
+    "housenumber": "320",
+    "city": "Miami",
+    "postcode": "33127",
+    "lat": 25.7998148,
+    "lon": -80.2012485
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3301",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7451778,
+    "lon": -80.1740515
+  },
+  {
+    "street": "SW North River Dr",
+    "housenumber": "114",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7722969,
+    "lon": -80.1995909
+  },
+  {
+    "street": "Northeast 1st Avenue",
+    "housenumber": "3250",
+    "city": "Miami",
+    "postcode": "33137",
+    "lat": 25.7754676,
+    "lon": -80.1918986
+  },
+  {
+    "street": "NE 4th Ave Bay 2",
+    "housenumber": "6454",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8355859,
+    "lon": -80.1895908
+  },
+  {
+    "street": "Southwest 22nd Street",
+    "housenumber": "2250",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7503511,
+    "lon": -80.2311659
+  },
+  {
+    "street": "Northwest 23rd Street",
+    "housenumber": "50",
+    "city": "Miami",
+    "lat": 25.7993913,
+    "lon": -80.1962949
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "1465",
+    "city": "Miami",
+    "postcode": "33135",
+    "lat": 25.7659209,
+    "lon": -80.2188683
+  },
+  {
+    "street": "Main Highway",
+    "housenumber": "3415",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7275754,
+    "lon": -80.2426464
+  },
+  {
+    "street": "Main Highway",
+    "housenumber": "3444",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7272859,
+    "lon": -80.2435747
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684619,
+    "lon": -80.1914214
+  },
+  {
+    "street": "Coral Way",
+    "housenumber": "3301",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7504642,
+    "lon": -80.2501864
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "545",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7775718,
+    "lon": -80.2637123
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "535",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.777704,
+    "lon": -80.2637225
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "545",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7778372,
+    "lon": -80.2637328
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "246",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7740443,
+    "lon": -80.2639902
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "278",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7747858,
+    "lon": -80.2641496
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "260",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7746685,
+    "lon": -80.2641428
+  },
+  {
+    "street": "Northwest 42nd Avenue",
+    "housenumber": "298",
+    "city": "Miami",
+    "postcode": "33126",
+    "lat": 25.7750694,
+    "lon": -80.2642783
+  },
+  {
+    "street": "Northeast 2nd Avenue",
+    "housenumber": "8272",
+    "city": "Miami",
+    "postcode": "33138",
+    "lat": 25.8508732,
+    "lon": -80.1947004
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "103",
+    "city": "Miami",
+    "lat": 36.876475,
+    "lon": -94.8778958
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "128",
+    "city": "Miami",
+    "postcode": "74354",
+    "lat": 36.8722799,
+    "lon": -94.8776822
+  },
+  {
+    "street": "Hardie Ave",
+    "housenumber": "4131",
+    "city": "Miami",
+    "postcode": "33133",
+    "lat": 25.7129142,
+    "lon": -80.2602264
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "1100",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7630472,
+    "lon": -80.1904475
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "905",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7643451,
+    "lon": -80.1894982
+  },
+  {
+    "street": "Brickell Bay Drive",
+    "housenumber": "1102",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7628651,
+    "lon": -80.1905501
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "931",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7651067,
+    "lon": -80.190706
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "915",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7651999,
+    "lon": -80.1906811
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "945",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7645877,
+    "lon": -80.1902231
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "941",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7645773,
+    "lon": -80.1901247
+  },
+  {
+    "street": "Bayshore Drive",
+    "housenumber": "999",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.764581,
+    "lon": -80.1889373
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3989",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7482452,
+    "lon": -80.1506439
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3305",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7597647,
+    "lon": -80.165625
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3501",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7404089,
+    "lon": -80.1673718
+  },
+  {
+    "street": "Virginia Beach Drive",
+    "housenumber": "4000",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7356913,
+    "lon": -80.1557189
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3965",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7439338,
+    "lon": -80.1529065
+  },
+  {
+    "street": "Rickenbacker Causeway",
+    "housenumber": "3691",
+    "city": "Miami",
+    "postcode": "33149",
+    "lat": 25.7596082,
+    "lon": -80.1512397
+  },
+  {
+    "street": "Southwest 26th Terrace",
+    "housenumber": "3711",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7423161,
+    "lon": -80.2546124
+  },
+  {
+    "street": "Southwest 37th Avenue",
+    "housenumber": "2600",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.742322,
+    "lon": -80.2544264
+  },
+  {
+    "street": "Southwest 37th Avenue",
+    "housenumber": "2650",
+    "city": "Coconut Grove",
+    "postcode": "33134",
+    "lat": 25.742309,
+    "lon": -80.2545044
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1765",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7587752,
+    "lon": -80.1991558
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1751",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7588575,
+    "lon": -80.1990335
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1610",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7602244,
+    "lon": -80.1980663
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "84",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7613256,
+    "lon": -80.194802
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "99",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7684451,
+    "lon": -80.194806
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1550",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7570992,
+    "lon": -80.1947844
+  },
+  {
+    "street": "Southwest 11th Street",
+    "housenumber": "75",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7636999,
+    "lon": -80.1947376
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "9",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7686085,
+    "lon": -80.1928489
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "18",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7687239,
+    "lon": -80.1927641
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "17",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7677017,
+    "lon": -80.1926483
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "57",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683831,
+    "lon": -80.1910809
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "77",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.769262,
+    "lon": -80.1910809
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "75",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.768286,
+    "lon": -80.1907498
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "550",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683134,
+    "lon": -80.1905278
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "39",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7685562,
+    "lon": -80.1917625
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "108",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7671805,
+    "lon": -80.1916872
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "51",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684558,
+    "lon": -80.1913854
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "40",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7685565,
+    "lon": -80.1913909
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "444",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7691473,
+    "lon": -80.1905064
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "80",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.765994,
+    "lon": -80.1944732
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "86",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7661072,
+    "lon": -80.1944715
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "58",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642885,
+    "lon": -80.1944242
+  },
+  {
+    "street": "Southwest 9th Street",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657112,
+    "lon": -80.1943686
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7676055,
+    "lon": -80.1943679
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1024",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7640517,
+    "lon": -80.1941901
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "44",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7670967,
+    "lon": -80.1941862
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "38",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660748,
+    "lon": -80.1941449
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7671068,
+    "lon": -80.1941379
+  },
+  {
+    "street": "Southwest Miami Avenue Road",
+    "housenumber": "39",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7686887,
+    "lon": -80.1941405
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "614",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7681226,
+    "lon": -80.1941225
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1434",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7599084,
+    "lon": -80.1940186
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660707,
+    "lon": -80.1940177
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "26",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660765,
+    "lon": -80.1939457
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7671628,
+    "lon": -80.1938323
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1340",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7608464,
+    "lon": -80.1937681
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "20",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660753,
+    "lon": -80.1937229
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1300",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.761289,
+    "lon": -80.1936874
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1200",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7617972,
+    "lon": -80.1936878
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "16",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660788,
+    "lon": -80.1936721
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "722",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7669606,
+    "lon": -80.1936702
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "14",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660794,
+    "lon": -80.1936269
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "850",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7656548,
+    "lon": -80.1936052
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "13",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7674662,
+    "lon": -80.1936107
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "1",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.766635,
+    "lon": -80.1935828
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "640",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.767532,
+    "lon": -80.1934964
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "650",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7674747,
+    "lon": -80.1934841
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1010",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7639513,
+    "lon": -80.193445
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1500",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7580238,
+    "lon": -80.1934368
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "421",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.769053,
+    "lon": -80.1932935
+  },
+  {
+    "street": "South Dixie Highway",
+    "housenumber": "2640",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7507208,
+    "lon": -80.2048782
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2411",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.751672,
+    "lon": -80.20321
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "252",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7582329,
+    "lon": -80.2029764
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1917",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7588982,
+    "lon": -80.2025035
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1859",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7593852,
+    "lon": -80.201731
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1835",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7596379,
+    "lon": -80.2013622
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2100",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7544167,
+    "lon": -80.2009669
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2020",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7548258,
+    "lon": -80.2003934
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1793",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7600297,
+    "lon": -80.2004067
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1797",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7598669,
+    "lon": -80.2002714
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "5",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684643,
+    "lon": -80.1931409
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "2",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672379,
+    "lon": -80.1931354
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "629",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676826,
+    "lon": -80.1931153
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "625",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.767763,
+    "lon": -80.1931219
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "601",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7681565,
+    "lon": -80.1931214
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "955",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7647198,
+    "lon": -80.1930967
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "1",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7666652,
+    "lon": -80.1930835
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "717",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7669859,
+    "lon": -80.1930219
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1023",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7638098,
+    "lon": -80.1929647
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "10",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7671924,
+    "lon": -80.192961
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "10",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7680938,
+    "lon": -80.1929133
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "24",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7687225,
+    "lon": -80.1928463
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672271,
+    "lon": -80.1925585
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "18",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7680975,
+    "lon": -80.192629
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "16",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7661736,
+    "lon": -80.1925878
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "35",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7667607,
+    "lon": -80.1925827
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "451",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7693302,
+    "lon": -80.1925347
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "18",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7661778,
+    "lon": -80.1924831
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7667843,
+    "lon": -80.1924805
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7661863,
+    "lon": -80.1922943
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676968,
+    "lon": -80.1922951
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "36",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7671602,
+    "lon": -80.1920025
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "33",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.767686,
+    "lon": -80.1919683
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1841",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7595537,
+    "lon": -80.2014819
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2250",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7525906,
+    "lon": -80.201467
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1753",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7605795,
+    "lon": -80.2002263
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7561344,
+    "lon": -80.1998835
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1705",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7610444,
+    "lon": -80.1994973
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1742",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7593354,
+    "lon": -80.1992443
+  },
+  {
+    "street": "Southwest 18th Terrace",
+    "housenumber": "73",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7573914,
+    "lon": -80.1987424
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1744",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7586034,
+    "lon": -80.1986391
+  },
+  {
+    "street": "Southwest 17th Road",
+    "housenumber": "123",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7596439,
+    "lon": -80.1980499
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1834",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7553656,
+    "lon": -80.197325
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1600",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7597241,
+    "lon": -80.1972692
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1650",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7563685,
+    "lon": -80.1958634
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "98",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.768254,
+    "lon": -80.1953081
+  },
+  {
+    "street": "Southwest Miami Avenue Road",
+    "housenumber": "75",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7684004,
+    "lon": -80.1953099
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "95",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7666443,
+    "lon": -80.1950806
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "83",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7666699,
+    "lon": -80.1950813
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "78",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7670743,
+    "lon": -80.1948704
+  },
+  {
+    "street": "Southwest 12th Street",
+    "housenumber": "79",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.762768,
+    "lon": -80.1947291
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "74",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642984,
+    "lon": -80.1947262
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1111",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7632208,
+    "lon": -80.194567
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7670633,
+    "lon": -80.1945467
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "75",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7667118,
+    "lon": -80.1945269
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1555",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7580128,
+    "lon": -80.1944847
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7678524,
+    "lon": -80.1944833
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "44",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7603331,
+    "lon": -80.1944641
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7610924,
+    "lon": -80.1944602
+  },
+  {
+    "street": "Southwest 15th Road",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7593048,
+    "lon": -80.1944416
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7667056,
+    "lon": -80.1942917
+  },
+  {
+    "street": "Southwest 12th Street",
+    "housenumber": "49",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7628269,
+    "lon": -80.1942583
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7612002,
+    "lon": -80.1942372
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "50",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642927,
+    "lon": -80.194343
+  },
+  {
+    "street": "Southwest 12th Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7628315,
+    "lon": -80.1941047
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "17",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7671039,
+    "lon": -80.1941058
+  },
+  {
+    "street": "Southwest 9th Street",
+    "housenumber": "35",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657195,
+    "lon": -80.1940711
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7613057,
+    "lon": -80.194047
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7609095,
+    "lon": -80.1940349
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "520",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7684446,
+    "lon": -80.1940144
+  },
+  {
+    "street": "Southwest 12th Street",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.762836,
+    "lon": -80.193952
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "20",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7613613,
+    "lon": -80.1938989
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "19",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7685222,
+    "lon": -80.1938606
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "700",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7668749,
+    "lon": -80.1938528
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "19",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7667193,
+    "lon": -80.1938171
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "622",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7678968,
+    "lon": -80.1937433
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "726",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7667786,
+    "lon": -80.1936563
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "824",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7658406,
+    "lon": -80.1936125
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "10",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660819,
+    "lon": -80.1935086
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1100",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.763254,
+    "lon": -80.1934355
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "827",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.765752,
+    "lon": -80.1931721
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "809",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7659737,
+    "lon": -80.1931757
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1121",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7631483,
+    "lon": -80.1930326
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "431",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7692683,
+    "lon": -80.1929852
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "701",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7667455,
+    "lon": -80.1931457
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7667525,
+    "lon": -80.1928307
+  },
+  {
+    "street": "Southeast 10th Street",
+    "housenumber": "20",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7643622,
+    "lon": -80.1927762
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "14",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7680907,
+    "lon": -80.1927768
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7685384,
+    "lon": -80.1927727
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "8",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7663003,
+    "lon": -80.1926692
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "11",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676884,
+    "lon": -80.1926687
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "17",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7685526,
+    "lon": -80.1925751
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "842",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.765748,
+    "lon": -80.1925219
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "24",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7681055,
+    "lon": -80.1924554
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "77",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7678465,
+    "lon": -80.1924337
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1010",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7641395,
+    "lon": -80.1923265
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "38",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7680932,
+    "lon": -80.1920077
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "31",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7686081,
+    "lon": -80.1920016
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "31",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7696732,
+    "lon": -80.1920025
+  },
+  {
+    "street": "Southeast 1st Avenue",
+    "housenumber": "845",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.765577,
+    "lon": -80.1919251
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "40",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683039,
+    "lon": -80.1922274
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3051",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7523328,
+    "lon": -80.2119902
+  },
+  {
+    "street": "Southwest 31st Road",
+    "housenumber": "235",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7518991,
+    "lon": -80.2117241
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2933",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7510975,
+    "lon": -80.2092977
+  },
+  {
+    "street": "Southwest 27th Road",
+    "housenumber": "28",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7509319,
+    "lon": -80.2065622
+  },
+  {
+    "street": "Southwest 17th Road",
+    "housenumber": "221",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7600751,
+    "lon": -80.1984029
+  },
+  {
+    "street": "Southwest 18th Road",
+    "housenumber": "80",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7576324,
+    "lon": -80.1983973
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1900",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7547411,
+    "lon": -80.1983299
+  },
+  {
+    "street": "Southwest 17th Road",
+    "housenumber": "201",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7599092,
+    "lon": -80.1982384
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1620",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7601328,
+    "lon": -80.198198
+  },
+  {
+    "street": "Southwest 18th Terrace",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7566651,
+    "lon": -80.1981351
+  },
+  {
+    "street": "Southwest 15th Road",
+    "housenumber": "240",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7606885,
+    "lon": -80.1980154
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1884",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7551447,
+    "lon": -80.1979286
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1882",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7551597,
+    "lon": -80.1978715
+  },
+  {
+    "street": "SR 5 Avenue",
+    "housenumber": "1880",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7549543,
+    "lon": -80.1976999
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1835",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7557022,
+    "lon": -80.1976825
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1870",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.755233,
+    "lon": -80.1975957
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1825",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7558786,
+    "lon": -80.1975219
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1815",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.756005,
+    "lon": -80.1973363
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1501",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7600943,
+    "lon": -80.1971761
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1805",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7561328,
+    "lon": -80.1971518
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1803",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7562446,
+    "lon": -80.1970025
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1801",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7563287,
+    "lon": -80.1968816
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1648",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7565228,
+    "lon": -80.1957045
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1642",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7566055,
+    "lon": -80.1955859
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1625",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7572648,
+    "lon": -80.1955613
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1565",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7576424,
+    "lon": -80.1949619
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "88",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642922,
+    "lon": -80.1950354
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "90",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7661037,
+    "lon": -80.1949812
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "82",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.761327,
+    "lon": -80.194951
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1401",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.760384,
+    "lon": -80.1949243
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1013",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7641555,
+    "lon": -80.1949058
+  },
+  {
+    "street": "Southwest 14th Terrace",
+    "housenumber": "65",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7598314,
+    "lon": -80.1948989
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "78",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642951,
+    "lon": -80.194891
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "829",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7656721,
+    "lon": -80.1948887
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1563",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7577636,
+    "lon": -80.1948372
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "84",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642969,
+    "lon": -80.1948001
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "54",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7603883,
+    "lon": -80.1947702
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1429",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7601094,
+    "lon": -80.1947603
+  },
+  {
+    "street": "Southwest 14th Terrace",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7598371,
+    "lon": -80.1947449
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1561",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7578446,
+    "lon": -80.194713
+  },
+  {
+    "street": "Southwest 15th Road",
+    "housenumber": "41",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7593533,
+    "lon": -80.1946525
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "68",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.761348,
+    "lon": -80.194654
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "50",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7603926,
+    "lon": -80.1946183
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "70",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7670871,
+    "lon": -80.1946188
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "64",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642983,
+    "lon": -80.1945886
+  },
+  {
+    "street": "Southwest 9th Street",
+    "housenumber": "59",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657068,
+    "lon": -80.1945268
+  },
+  {
+    "street": "Southwest 14th Terrace",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7598216,
+    "lon": -80.1945181
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7674855,
+    "lon": -80.1945129
+  },
+  {
+    "street": "Southwest 10th Street",
+    "housenumber": "60",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7642822,
+    "lon": -80.1944733
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7610372,
+    "lon": -80.1943991
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7609103,
+    "lon": -80.1943817
+  },
+  {
+    "street": "Southwest 13th Street",
+    "housenumber": "40",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7613524,
+    "lon": -80.1943818
+  },
+  {
+    "street": "Southwest 14th Terrace",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7599305,
+    "lon": -80.1942986
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "52",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7670937,
+    "lon": -80.1943009
+  },
+  {
+    "street": "Southwest 26th Road",
+    "housenumber": "125",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7535263,
+    "lon": -80.2062832
+  },
+  {
+    "street": "Southwest 23rd Road",
+    "housenumber": "239",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7567336,
+    "lon": -80.204786
+  },
+  {
+    "street": "Southwest 22nd Road",
+    "housenumber": "217",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7570203,
+    "lon": -80.2037184
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2401",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7520571,
+    "lon": -80.2026828
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "225",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7581155,
+    "lon": -80.2020469
+  },
+  {
+    "street": "Brickell Plaza",
+    "housenumber": "799",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7667251,
+    "lon": -80.1917719
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "41",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684976,
+    "lon": -80.1915702
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "57",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7678678,
+    "lon": -80.1914807
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3563",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7483509,
+    "lon": -80.2164563
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3506",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.749064,
+    "lon": -80.2156667
+  },
+  {
+    "street": "Southwest 23rd Street",
+    "housenumber": "1252",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7492248,
+    "lon": -80.2153731
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3437",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.748953,
+    "lon": -80.2148206
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1198",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7499541,
+    "lon": -80.2140368
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1196",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7500301,
+    "lon": -80.2140363
+  },
+  {
+    "street": "Southwest 22nd Street",
+    "housenumber": "1150",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.750872,
+    "lon": -80.2140005
+  },
+  {
+    "street": "Southwest 22nd Street",
+    "housenumber": "1136",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7508791,
+    "lon": -80.2136265
+  },
+  {
+    "street": "Southwest 22nd Street",
+    "housenumber": "1101",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7514042,
+    "lon": -80.2133993
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1785",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7601679,
+    "lon": -80.2005086
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2180",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7532242,
+    "lon": -80.2002135
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1741",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7589367,
+    "lon": -80.1989189
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1886",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7550146,
+    "lon": -80.1978936
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1888",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7549745,
+    "lon": -80.1978833
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1744",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7570264,
+    "lon": -80.1972177
+  },
+  {
+    "street": "US 1 Avenue",
+    "housenumber": "1824",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7554999,
+    "lon": -80.1971408
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "999",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7648663,
+    "lon": -80.1949659
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "29",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.767094,
+    "lon": -80.1942185
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7676464,
+    "lon": -80.1942192
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "12",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7661704,
+    "lon": -80.1926947
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3723",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7471384,
+    "lon": -80.2193585
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3721",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7472734,
+    "lon": -80.2193199
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3567",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7482954,
+    "lon": -80.2165973
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3565",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7483178,
+    "lon": -80.2165427
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3542",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7489504,
+    "lon": -80.2164135
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3561",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7483683,
+    "lon": -80.2163951
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3547",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7483976,
+    "lon": -80.2163186
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3545",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7484219,
+    "lon": -80.2162552
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3543",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7484511,
+    "lon": -80.2161765
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3541",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7484725,
+    "lon": -80.2161197
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3471",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7499111,
+    "lon": -80.2156752
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3473",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7498559,
+    "lon": -80.2156319
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1270",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7500571,
+    "lon": -80.2152853
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1272",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7500288,
+    "lon": -80.2152123
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3399",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7503564,
+    "lon": -80.2151603
+  },
+  {
+    "street": "Southwest 23rd Street",
+    "housenumber": "1240",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7492797,
+    "lon": -80.2150713
+  },
+  {
+    "street": "Southwest 23rd Street",
+    "housenumber": "1249",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7497513,
+    "lon": -80.2150721
+  },
+  {
+    "street": "Southwest 23rd Street",
+    "housenumber": "1247",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7495931,
+    "lon": -80.2150948
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3375",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7504605,
+    "lon": -80.2149726
+  },
+  {
+    "street": "Southwest 23rd Street",
+    "housenumber": "1228",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7492906,
+    "lon": -80.2149479
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3361",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7505902,
+    "lon": -80.2147657
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "3387",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7490804,
+    "lon": -80.2143454
+  },
+  {
+    "street": "Southwest 22nd Street",
+    "housenumber": "1200",
+    "city": "Miami",
+    "postcode": "33145",
+    "lat": 25.7508192,
+    "lon": -80.2143373
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1178",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7500769,
+    "lon": -80.2137342
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1180",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7499958,
+    "lon": -80.2136954
+  },
+  {
+    "street": "Southwest 22nd Terrace",
+    "housenumber": "1147",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7504677,
+    "lon": -80.2133422
+  },
+  {
+    "street": "Southwest 32nd Road",
+    "housenumber": "200",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7506038,
+    "lon": -80.2127498
+  },
+  {
+    "street": "Southwest 32nd Road",
+    "housenumber": "150",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.750459,
+    "lon": -80.2126852
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "3105",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7520273,
+    "lon": -80.2125209
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2837",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7536134,
+    "lon": -80.2103793
+  },
+  {
+    "street": "Southwest Vizcaya Station Avenue",
+    "housenumber": "3001",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7507919,
+    "lon": -80.2099159
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2941",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7509948,
+    "lon": -80.2096247
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2701",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7543859,
+    "lon": -80.2090482
+  },
+  {
+    "street": "Southwest 27th Road",
+    "housenumber": "262",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7543867,
+    "lon": -80.2088985
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2821",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.751509,
+    "lon": -80.2086653
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "2815",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.751725,
+    "lon": -80.2083207
+  },
+  {
+    "street": "Southwest 28th Road",
+    "housenumber": "84",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7518229,
+    "lon": -80.2082046
+  },
+  {
+    "street": "Southwest 27th Road",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7511813,
+    "lon": -80.2067813
+  },
+  {
+    "street": "Southwest 26th Road",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7530951,
+    "lon": -80.2065081
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2805",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7504411,
+    "lon": -80.2055915
+  },
+  {
+    "street": "Southwest 23rd Road",
+    "housenumber": "236",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7563917,
+    "lon": -80.2052973
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2651",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7504702,
+    "lon": -80.2052902
+  },
+  {
+    "street": "Southwest 22nd Road",
+    "housenumber": "244",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7569938,
+    "lon": -80.2045024
+  },
+  {
+    "street": "Southwest 23rd Road",
+    "housenumber": "205",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7562985,
+    "lon": -80.2044224
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "2121",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.757656,
+    "lon": -80.204354
+  },
+  {
+    "street": "Southwest 21st Road",
+    "housenumber": "200",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7570455,
+    "lon": -80.2032325
+  },
+  {
+    "street": "Southwest 24th Road",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7532818,
+    "lon": -80.203194
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2405",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7518429,
+    "lon": -80.203077
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2407",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7522379,
+    "lon": -80.2029865
+  },
+  {
+    "street": "US 1 Avenue",
+    "housenumber": "2430",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7514815,
+    "lon": -80.2029476
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2403",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7519463,
+    "lon": -80.202884
+  },
+  {
+    "street": "Southwest 21st Road",
+    "housenumber": "154",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7565717,
+    "lon": -80.2028834
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "236",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7580675,
+    "lon": -80.2027635
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1931",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7587763,
+    "lon": -80.2027618
+  },
+  {
+    "street": "US 1 Avenue",
+    "housenumber": "2420",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7517482,
+    "lon": -80.2025942
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1919",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7589438,
+    "lon": -80.2025979
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "253",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7585268,
+    "lon": -80.2025603
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2410",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7519923,
+    "lon": -80.2021915
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2400",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7522593,
+    "lon": -80.201788
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1853",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.759472,
+    "lon": -80.2016041
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "269",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7590929,
+    "lon": -80.2015742
+  },
+  {
+    "street": "Southwest 22nd Road",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7543597,
+    "lon": -80.2014948
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2223",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7532536,
+    "lon": -80.2013198
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1833",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7597216,
+    "lon": -80.2012409
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1815",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7598029,
+    "lon": -80.2011213
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "144",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7575401,
+    "lon": -80.2010725
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2222",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7528269,
+    "lon": -80.2010097
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1801",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7598982,
+    "lon": -80.2009249
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2200",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7529662,
+    "lon": -80.2006353
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1775",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7602779,
+    "lon": -80.200613
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "2050",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7547306,
+    "lon": -80.2005432
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1781",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7602147,
+    "lon": -80.200553
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "40",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7553663,
+    "lon": -80.2005415
+  },
+  {
+    "street": "Southwest 2nd Court",
+    "housenumber": "1823",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7590993,
+    "lon": -80.2005416
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1787",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7601027,
+    "lon": -80.2004353
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "26",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7551498,
+    "lon": -80.200357
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1795",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7599604,
+    "lon": -80.2003378
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1755",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7604869,
+    "lon": -80.2003343
+  },
+  {
+    "street": "Southwest 18th Road",
+    "housenumber": "220",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7592362,
+    "lon": -80.2003114
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "111",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7574147,
+    "lon": -80.2003071
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1868",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7572687,
+    "lon": -80.2002946
+  },
+  {
+    "street": "Southwest 18th Road",
+    "housenumber": "230",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7591764,
+    "lon": -80.2002445
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1799",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7597998,
+    "lon": -80.200207
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1841",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7581857,
+    "lon": -80.2001979
+  },
+  {
+    "street": "Southwest 20th Road",
+    "housenumber": "55",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7559082,
+    "lon": -80.2001934
+  },
+  {
+    "street": "Southwest 18th Road",
+    "housenumber": "245",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.75949,
+    "lon": -80.2001066
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1749",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.76067,
+    "lon": -80.2001094
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2110",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7535494,
+    "lon": -80.2000523
+  },
+  {
+    "street": "Southwest 2nd Court",
+    "housenumber": "1740",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7601549,
+    "lon": -80.2000574
+  },
+  {
+    "street": "Southwest 3rd Avenue",
+    "housenumber": "1745",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7607168,
+    "lon": -80.2000374
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2120",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7536306,
+    "lon": -80.1999221
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "68",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7561908,
+    "lon": -80.1999057
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2100",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7537119,
+    "lon": -80.1997548
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "2000",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7539047,
+    "lon": -80.1995449
+  },
+  {
+    "street": "Southwest 19th Road",
+    "housenumber": "73",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7567173,
+    "lon": -80.1995427
+  },
+  {
+    "street": "Southwest 2nd Court",
+    "housenumber": "1745",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7596001,
+    "lon": -80.1994218
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1744",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7591832,
+    "lon": -80.1993982
+  },
+  {
+    "street": "Southwest 2nd Court",
+    "housenumber": "1737",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7596702,
+    "lon": -80.1993399
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1990",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7539831,
+    "lon": -80.1993204
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1800",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7581564,
+    "lon": -80.1993221
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1734",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7594615,
+    "lon": -80.1991637
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1818",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7582491,
+    "lon": -80.1991004
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1726",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7595342,
+    "lon": -80.199012
+  },
+  {
+    "street": "Southwest 2nd Avenue",
+    "housenumber": "1712",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7595918,
+    "lon": -80.1988956
+  },
+  {
+    "street": "Southwest 1st Avenue",
+    "housenumber": "1760",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7584424,
+    "lon": -80.1988764
+  },
+  {
+    "street": "Southwest 15th Road",
+    "housenumber": "298",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7610586,
+    "lon": -80.1988233
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1950",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7543529,
+    "lon": -80.1988137
+  },
+  {
+    "street": "Southwest 17th Road",
+    "housenumber": "220",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7598488,
+    "lon": -80.1987791
+  },
+  {
+    "street": "Southwest 18th Terrace",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7563259,
+    "lon": -80.1986502
+  },
+  {
+    "street": "Southwest 17th Road",
+    "housenumber": "231",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7602893,
+    "lon": -80.1985853
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1918",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7544543,
+    "lon": -80.1985008
+  },
+  {
+    "street": "Southwest 2nd Court",
+    "housenumber": "1611",
+    "city": "Miami",
+    "postcode": "33129",
+    "lat": 25.7604147,
+    "lon": -80.1984458
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "42",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7681745,
+    "lon": -80.1943016
+  },
+  {
+    "street": "Southwest 11th Street",
+    "housenumber": "51",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7636513,
+    "lon": -80.1942653
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "22",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.767092,
+    "lon": -80.1942605
+  },
+  {
+    "street": "Southwest 9th Street",
+    "housenumber": "37",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657154,
+    "lon": -80.1942187
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.766077,
+    "lon": -80.1940736
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "31",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.76765,
+    "lon": -80.1940729
+  },
+  {
+    "street": "Southwest 14th Street",
+    "housenumber": "26",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7603475,
+    "lon": -80.1940436
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1438",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7597785,
+    "lon": -80.1940328
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1430",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.760046,
+    "lon": -80.1940037
+  },
+  {
+    "street": "Southwest 11th Street",
+    "housenumber": "34",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7632396,
+    "lon": -80.1939548
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7675698,
+    "lon": -80.1939261
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1420",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7601487,
+    "lon": -80.1939109
+  },
+  {
+    "street": "Southwest 9th Street",
+    "housenumber": "29",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7657238,
+    "lon": -80.1939137
+  },
+  {
+    "street": "Southwest 11th Street",
+    "housenumber": "28",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7632434,
+    "lon": -80.1938167
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "22",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7660742,
+    "lon": -80.1938
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "500",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7686986,
+    "lon": -80.1937253
+  },
+  {
+    "street": "Southwest 11th Street",
+    "housenumber": "20",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7632477,
+    "lon": -80.1936623
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "11",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.767504,
+    "lon": -80.1936438
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1250",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7620994,
+    "lon": -80.1935558
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "630",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7677177,
+    "lon": -80.1935204
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "632",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7676351,
+    "lon": -80.1935008
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "801",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7661608,
+    "lon": -80.1931866
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "515",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7687164,
+    "lon": -80.193178
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "615",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.76794,
+    "lon": -80.1931234
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "637",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676021,
+    "lon": -80.1931143
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "729",
+    "city": "Miami",
+    "postcode": "33130",
+    "lat": 25.7668661,
+    "lon": -80.1930898
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "6",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672263,
+    "lon": -80.1930642
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1001",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7643527,
+    "lon": -80.1930513
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "529",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7687555,
+    "lon": -80.1930527
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "4",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.767389,
+    "lon": -80.1910767
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "6",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7686987,
+    "lon": -80.1930145
+  },
+  {
+    "street": "South Miami Avenue",
+    "housenumber": "1015",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.764062,
+    "lon": -80.1929982
+  },
+  {
+    "street": "Southeast 10th Street",
+    "housenumber": "15",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7647181,
+    "lon": -80.192924
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "14",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7671898,
+    "lon": -80.1929189
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "18",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672195,
+    "lon": -80.1926764
+  },
+  {
+    "street": "Southeast 9th Street",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7657642,
+    "lon": -80.1928351
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "22",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672203,
+    "lon": -80.1926306
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "5",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676816,
+    "lon": -80.1927431
+  },
+  {
+    "street": "Southeast 10th Street",
+    "housenumber": "25",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7647195,
+    "lon": -80.1926957
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1080",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7627119,
+    "lon": -80.1926786
+  },
+  {
+    "street": "Southeast 8th Street",
+    "housenumber": "29",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7667613,
+    "lon": -80.1926777
+  },
+  {
+    "street": "Southeast 14th Street",
+    "housenumber": "75",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7606837,
+    "lon": -80.1926503
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "23",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684754,
+    "lon": -80.1925658
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "27",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7685988,
+    "lon": -80.1924738
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "98",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7672135,
+    "lon": -80.192465
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "21",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676931,
+    "lon": -80.1924476
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1300",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7611448,
+    "lon": -80.1923615
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "1240",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7614926,
+    "lon": -80.1923149
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.769883,
+    "lon": -80.1922305
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "45",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7676408,
+    "lon": -80.1917835
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "41",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7691115,
+    "lon": -80.1917854
+  },
+  {
+    "street": "Southeast 7th Street",
+    "housenumber": "48",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7668547,
+    "lon": -80.1917367
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "42",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7680192,
+    "lon": -80.1916919
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "47",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684934,
+    "lon": -80.1914629
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "800",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7656854,
+    "lon": -80.1911884
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "35",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7682532,
+    "lon": -80.1911326
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "700",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7669033,
+    "lon": -80.1910193
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "59",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7682781,
+    "lon": -80.1909909
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "502",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683704,
+    "lon": -80.1908886
+  },
+  {
+    "street": "Southeast 6th Street",
+    "housenumber": "65",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683409,
+    "lon": -80.1908047
+  },
+  {
+    "street": "Southeast 5th Street",
+    "housenumber": "70",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7684417,
+    "lon": -80.1907873
+  },
+  {
+    "street": "Brickell Avenue",
+    "housenumber": "500",
+    "city": "Miami",
+    "postcode": "33131",
+    "lat": 25.7683157,
+    "lon": -80.1906691
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5325",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7639635,
+    "lon": -80.2822221
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4823",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646396,
+    "lon": -80.2750576
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5828",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.770542,
+    "lon": -80.2903367
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5744",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705717,
+    "lon": -80.2887793
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "122",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7697482,
+    "lon": -80.288318
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5695",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7637774,
+    "lon": -80.2875818
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5584",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7706062,
+    "lon": -80.2857507
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5518",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7706842,
+    "lon": -80.284957
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5171",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7640476,
+    "lon": -80.2788261
+  },
+  {
+    "street": "Southwest 7th Street",
+    "housenumber": "5160",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.764516,
+    "lon": -80.2787563
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4901",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7642568,
+    "lon": -80.2759277
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5355",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7639499,
+    "lon": -80.2826269
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5319",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7639666,
+    "lon": -80.2821077
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "4722",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7712415,
+    "lon": -80.2722126
+  },
+  {
+    "street": "Southwest 5th Street",
+    "housenumber": "5705",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7664175,
+    "lon": -80.2883214
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "124",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7696765,
+    "lon": -80.2883199
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "120",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.76982,
+    "lon": -80.2883206
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5650",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7706085,
+    "lon": -80.2870748
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5591",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7639918,
+    "lon": -80.2854752
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5165",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7640535,
+    "lon": -80.2786665
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5160",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7709727,
+    "lon": -80.2787381
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4813",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646513,
+    "lon": -80.2745997
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5870",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705682,
+    "lon": -80.2911487
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5854",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.770535,
+    "lon": -80.2909055
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5840",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705388,
+    "lon": -80.2905443
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5788",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705287,
+    "lon": -80.289648
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5782",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.770531,
+    "lon": -80.2895138
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5770",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.770549,
+    "lon": -80.2893768
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5758",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705275,
+    "lon": -80.2891648
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5750",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705317,
+    "lon": -80.2890828
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5718",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705771,
+    "lon": -80.2885821
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "20",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7703403,
+    "lon": -80.2883546
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "30",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7702815,
+    "lon": -80.2883529
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "100",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7700073,
+    "lon": -80.288345
+  },
+  {
+    "street": "Southwest 5th Street",
+    "housenumber": "5701",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7664227,
+    "lon": -80.2881677
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "155",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.769275,
+    "lon": -80.2877995
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "149",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7693379,
+    "lon": -80.2877995
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "601",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7649011,
+    "lon": -80.2876307
+  },
+  {
+    "street": "Southwest 2nd Street",
+    "housenumber": "5673",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.769189,
+    "lon": -80.2875295
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5675",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7638139,
+    "lon": -80.2873715
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5892",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705687,
+    "lon": -80.2914751
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "619",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7647886,
+    "lon": -80.2876147
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5347",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7639614,
+    "lon": -80.2824468
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5333",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7639618,
+    "lon": -80.2823167
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5712",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705809,
+    "lon": -80.2884352
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5572",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7706218,
+    "lon": -80.2855285
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5860",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705287,
+    "lon": -80.2910628
+  },
+  {
+    "street": "Southwest 5th Street",
+    "housenumber": "5707",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7664165,
+    "lon": -80.2883715
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "101",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7697447,
+    "lon": -80.2878265
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "621",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7647317,
+    "lon": -80.2876159
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5600",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7706315,
+    "lon": -80.2865229
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4827",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646405,
+    "lon": -80.2752458
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5742",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705733,
+    "lon": -80.2887481
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5748",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705708,
+    "lon": -80.2888238
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4817",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646521,
+    "lon": -80.2747568
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4803",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7645341,
+    "lon": -80.274173
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5426",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7707789,
+    "lon": -80.2838517
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5424",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7707862,
+    "lon": -80.2837841
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5520",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7706243,
+    "lon": -80.2849569
+  },
+  {
+    "street": "Southwest 6th Street",
+    "housenumber": "5146",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.765233,
+    "lon": -80.2781511
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "5145",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7640801,
+    "lon": -80.2778585
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4709",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.764311,
+    "lon": -80.271807
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5898",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705743,
+    "lon": -80.2915661
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5890",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705745,
+    "lon": -80.2913977
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5880",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705668,
+    "lon": -80.2912852
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4821",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7646495,
+    "lon": -80.2749295
+  },
+  {
+    "street": "Southwest 8th Street",
+    "housenumber": "4811",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7646526,
+    "lon": -80.2745007
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5856",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.77053,
+    "lon": -80.2909825
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5850",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705313,
+    "lon": -80.2908594
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5830",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705407,
+    "lon": -80.2904206
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5784",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705307,
+    "lon": -80.2895755
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5780",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.770533,
+    "lon": -80.2894604
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5762",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705262,
+    "lon": -80.289257
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5752",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705291,
+    "lon": -80.2891254
+  },
+  {
+    "street": "Southwest 4th Street",
+    "housenumber": "5735",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7672197,
+    "lon": -80.2887536
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5710",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705823,
+    "lon": -80.2883596
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "110",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7699381,
+    "lon": -80.288343
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5700",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7705842,
+    "lon": -80.2882833
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "157",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7692322,
+    "lon": -80.2877997
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "151",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7693123,
+    "lon": -80.2877992
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "145",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.769391,
+    "lon": -80.2877988
+  },
+  {
+    "street": "Southwest 57th Avenue",
+    "housenumber": "625",
+    "city": "Miami",
+    "postcode": "33144",
+    "lat": 25.7646707,
+    "lon": -80.2876093
+  },
+  {
+    "street": "Southwest 2nd Street",
+    "housenumber": "5671",
+    "city": "Coral Gables",
+    "postcode": "33134",
+    "lat": 25.7692948,
+    "lon": -80.2874837
+  },
+  {
+    "street": "West Flagler Street",
+    "housenumber": "5664",
+    "city": "Miami",
+    "postcode": "33134",
+    "lat": 25.7705966,
+    "lon": -80.2873432
+  }
+]

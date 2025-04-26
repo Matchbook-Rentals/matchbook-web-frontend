@@ -1,0 +1,7626 @@
+[
+  {
+    "street": "Peerless Road Northwest",
+    "housenumber": "2910",
+    "city": "Cleveland",
+    "postcode": "37312",
+    "lat": 35.1904301,
+    "lon": -84.8722838
+  },
+  {
+    "street": "South Fenner Avenue",
+    "housenumber": "118",
+    "city": "Cleveland",
+    "postcode": "77327",
+    "lat": 30.3375908,
+    "lon": -95.082559
+  },
+  {
+    "street": "Dooley Street Southeast",
+    "housenumber": "201",
+    "city": "Cleveland",
+    "postcode": "37311",
+    "lat": 35.1542603,
+    "lon": -84.867805
+  },
+  {
+    "street": "Westside Drive Northwest",
+    "housenumber": "2800",
+    "city": "Cleveland",
+    "postcode": "37312",
+    "lat": 35.1942994,
+    "lon": -84.8813308
+  },
+  {
+    "street": "East 123rd Street",
+    "housenumber": "1264",
+    "city": "Cleveland",
+    "lat": 41.5238435,
+    "lon": -81.6012356
+  },
+  {
+    "street": "Lakeview Road",
+    "housenumber": "640",
+    "city": "Cleveland",
+    "postcode": "44108",
+    "lat": 41.5397028,
+    "lon": -81.6090557
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "16210",
+    "city": "Cleveland",
+    "lat": 41.4515425,
+    "lon": -81.8123259
+  },
+  {
+    "street": "West 159 Street",
+    "housenumber": "3690",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4531046,
+    "lon": -81.8120798
+  },
+  {
+    "street": "Terminal Avenue",
+    "housenumber": "13501",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.4386962,
+    "lon": -81.784977
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4940",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4222722,
+    "lon": -81.6983993
+  },
+  {
+    "street": "Miles Avenue",
+    "housenumber": "11200",
+    "city": "Cleveland",
+    "lat": 41.4448852,
+    "lon": -81.6066131
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "12826",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4593581,
+    "lon": -81.7776572
+  },
+  {
+    "street": "Madison Avenue",
+    "housenumber": "8809",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4769851,
+    "lon": -81.7450457
+  },
+  {
+    "street": "East 105th Street",
+    "housenumber": "1117",
+    "city": "Cleveland",
+    "lat": 41.5264991,
+    "lon": -81.6151798
+  },
+  {
+    "street": "East 93rd Street",
+    "housenumber": "2648",
+    "city": "Cleveland",
+    "lat": 41.4869964,
+    "lon": -81.6217938
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "9400",
+    "city": "Cleveland",
+    "lat": 41.4804985,
+    "lon": -81.747796
+  },
+  {
+    "street": "Valleyview Ave.",
+    "housenumber": "17200",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.441438,
+    "lon": -81.8176355
+  },
+  {
+    "street": "Clark Avenue",
+    "housenumber": "5706",
+    "city": "Cleveland",
+    "lat": 41.4697733,
+    "lon": -81.7256875
+  },
+  {
+    "street": "Bridge Avenue",
+    "housenumber": "3610",
+    "city": "Cleveland",
+    "lat": 41.4825811,
+    "lon": -81.7125699
+  },
+  {
+    "street": "East 114th Street",
+    "housenumber": "4105",
+    "city": "Cleveland",
+    "lat": 41.4473577,
+    "lon": -81.6038375
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "4906",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4556076,
+    "lon": -81.6562394
+  },
+  {
+    "street": "East 150th Street",
+    "housenumber": "863",
+    "city": "Cleveland",
+    "lat": 41.5561649,
+    "lon": -81.576477
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11228",
+    "city": "Cleveland",
+    "lat": 41.4830604,
+    "lon": -81.7657554
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7719",
+    "city": "Cleveland",
+    "lat": 41.481682,
+    "lon": -81.7381883
+  },
+  {
+    "street": "East 185th Street",
+    "housenumber": "891",
+    "city": "Cleveland",
+    "postcode": "44119",
+    "lat": 41.5833827,
+    "lon": -81.5495665
+  },
+  {
+    "street": "East 159th Street",
+    "housenumber": "707",
+    "city": "Cleveland",
+    "lat": 41.5614498,
+    "lon": -81.569657
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4505",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4331295,
+    "lon": -81.6969725
+  },
+  {
+    "street": "West Schaaf Road",
+    "housenumber": "2002",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.428861,
+    "lon": -81.6964041
+  },
+  {
+    "street": "Cypress Avenue",
+    "housenumber": "4004",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4308226,
+    "lon": -81.6966372
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4542",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4319961,
+    "lon": -81.7131863
+  },
+  {
+    "street": "West Kytle Street",
+    "housenumber": "342",
+    "city": "Cleveland",
+    "postcode": "30528",
+    "lat": 34.5980672,
+    "lon": -83.7699059
+  },
+  {
+    "street": "Kinsman Road",
+    "housenumber": "14000",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4641667,
+    "lon": -81.5844444
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7801",
+    "city": "Cleveland",
+    "lat": 41.4815446,
+    "lon": -81.7392341
+  },
+  {
+    "street": "Neff Road",
+    "housenumber": "18621",
+    "city": "Cleveland",
+    "postcode": "44119",
+    "lat": 41.5811368,
+    "lon": -81.5478605
+  },
+  {
+    "street": "Shaker Square",
+    "housenumber": "13116",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4832627,
+    "lon": -81.5913782
+  },
+  {
+    "street": "West Huron Road",
+    "housenumber": "230",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4969221,
+    "lon": -81.6934307
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2038",
+    "city": "Cleveland",
+    "lat": 41.4990871,
+    "lon": -81.6902823
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "17125",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4497469,
+    "lon": -81.8164547
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "17007",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4501058,
+    "lon": -81.8158209
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "17015",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4500817,
+    "lon": -81.8159662
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "17119",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4499805,
+    "lon": -81.8163449
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "3766",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4518489,
+    "lon": -81.8175689
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "4080",
+    "city": "Cleveland",
+    "lat": 41.4440003,
+    "lon": -81.8189068
+  },
+  {
+    "street": "West 150th Street",
+    "housenumber": "4280",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.4376293,
+    "lon": -81.8016579
+  },
+  {
+    "street": "East 115th Street",
+    "housenumber": "1677",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5124201,
+    "lon": -81.6045163
+  },
+  {
+    "street": "East 115th Street",
+    "housenumber": "1689",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5120859,
+    "lon": -81.6042938
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "3312",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4409743,
+    "lon": -81.7035152
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4703",
+    "city": "Cleveland",
+    "lat": 41.4283642,
+    "lon": -81.716603
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4370",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4368408,
+    "lon": -81.7089011
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "2529",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4772984,
+    "lon": -81.6873066
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4256",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4397823,
+    "lon": -81.706572
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "4227",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4415278,
+    "lon": -81.722893
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4896",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4247068,
+    "lon": -81.7214942
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1848",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4859624,
+    "lon": -81.7050191
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1836",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4860761,
+    "lon": -81.7050999
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1352",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4993538,
+    "lon": -81.6986116
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "700",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4996691,
+    "lon": -81.6989344
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1378",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4990713,
+    "lon": -81.6983849
+  },
+  {
+    "street": "Sycamore St",
+    "housenumber": "2000",
+    "city": "Cleveland",
+    "lat": 41.4967468,
+    "lon": -81.7038232
+  },
+  {
+    "street": "Munn Road",
+    "housenumber": "15520",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4590804,
+    "lon": -81.8051474
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "8324",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4810523,
+    "lon": -81.7422744
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1615",
+    "city": "Cleveland",
+    "lat": 41.5015003,
+    "lon": -81.680404
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1511",
+    "city": "Cleveland",
+    "lat": 41.5015866,
+    "lon": -81.6811718
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1519",
+    "city": "Cleveland",
+    "lat": 41.5014734,
+    "lon": -81.6808235
+  },
+  {
+    "street": "West 65th Street",
+    "housenumber": "1390",
+    "city": "Cleveland",
+    "lat": 41.4843154,
+    "lon": -81.730446
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6425",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4839919,
+    "lon": -81.7300947
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "323",
+    "city": "Cleveland",
+    "lat": 41.4984762,
+    "lon": -81.6901495
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2079",
+    "city": "Cleveland",
+    "lat": 41.4984729,
+    "lon": -81.6898494
+  },
+  {
+    "street": "Kinsman",
+    "housenumber": "10815",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4697388,
+    "lon": -81.6083491
+  },
+  {
+    "street": "West 14th Street",
+    "housenumber": "2661",
+    "city": "Cleveland",
+    "lat": 41.4759233,
+    "lon": -81.6909966
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4457",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4345088,
+    "lon": -81.6968691
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2202",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4385975,
+    "lon": -81.6997628
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1947",
+    "city": "Cleveland",
+    "lat": 41.4848964,
+    "lon": -81.7036495
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11446",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5096603,
+    "lon": -81.6040725
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11490",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5098436,
+    "lon": -81.6037784
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11452",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.509756,
+    "lon": -81.6038819
+  },
+  {
+    "street": "Engel",
+    "housenumber": "5920",
+    "city": "Cleveland",
+    "postcode": "44127",
+    "lat": 41.4653441,
+    "lon": -81.6481167
+  },
+  {
+    "street": "Broadway Ave",
+    "housenumber": "5841",
+    "city": "Cleveland",
+    "postcode": "44127",
+    "lat": 41.4660646,
+    "lon": -81.6491083
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "18200",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4512901,
+    "lon": -81.8231917
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3059",
+    "city": "Cleveland",
+    "lat": 45.6633203,
+    "lon": -61.258926
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3060",
+    "city": "Cleveland",
+    "lat": 45.6631296,
+    "lon": -61.2586612
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3103",
+    "city": "Cleveland",
+    "lat": 45.6644961,
+    "lon": -61.257228
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3103",
+    "city": "Cleveland",
+    "lat": 45.6645583,
+    "lon": -61.2571378
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3104",
+    "city": "Cleveland",
+    "lat": 45.6642491,
+    "lon": -61.2570479
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3104",
+    "city": "Cleveland",
+    "lat": 45.664436,
+    "lon": -61.2567774
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3245",
+    "city": "Cleveland",
+    "lat": 45.6677586,
+    "lon": -61.2505356
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3245",
+    "city": "Cleveland",
+    "lat": 45.6678026,
+    "lon": -61.2504257
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3248",
+    "city": "Cleveland",
+    "lat": 45.6675275,
+    "lon": -61.2503474
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3248",
+    "city": "Cleveland",
+    "lat": 45.6675714,
+    "lon": -61.2502375
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "361",
+    "city": "Cleveland",
+    "lat": 45.6770202,
+    "lon": -61.2519657
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "362",
+    "city": "Cleveland",
+    "lat": 45.6771777,
+    "lon": -61.251824
+  },
+  {
+    "street": "Basin Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.660641,
+    "lon": -61.2013702
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6681432,
+    "lon": -61.2322355
+  },
+  {
+    "street": "Dorothy Robinson Drive",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6399906,
+    "lon": -61.2229228
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6679574,
+    "lon": -61.2371522
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6637184,
+    "lon": -61.2194924
+  },
+  {
+    "street": "Ferguson Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6575642,
+    "lon": -61.2198935
+  },
+  {
+    "street": "Helmuts Lane",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6541001,
+    "lon": -61.2339184
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6677034,
+    "lon": -61.2360944
+  },
+  {
+    "street": "MacKichan Lane",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6753896,
+    "lon": -61.2352893
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 45.6837134,
+    "lon": -61.2063954
+  },
+  {
+    "street": "MacKichan Lane",
+    "housenumber": "100",
+    "city": "Cleveland",
+    "lat": 45.6775808,
+    "lon": -61.2320634
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "100",
+    "city": "Cleveland",
+    "lat": 45.687229,
+    "lon": -61.2093837
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "143",
+    "city": "Cleveland",
+    "lat": 45.671393,
+    "lon": -61.2426134
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "143",
+    "city": "Cleveland",
+    "lat": 45.6714042,
+    "lon": -61.2424886
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "144",
+    "city": "Cleveland",
+    "lat": 45.6715709,
+    "lon": -61.2426457
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "144",
+    "city": "Cleveland",
+    "lat": 45.6715821,
+    "lon": -61.2425214
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "149",
+    "city": "Cleveland",
+    "lat": 45.6576441,
+    "lon": -61.2199293
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "150",
+    "city": "Cleveland",
+    "lat": 45.6576164,
+    "lon": -61.2201836
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "151",
+    "city": "Cleveland",
+    "lat": 45.6572529,
+    "lon": -61.2199242
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "152",
+    "city": "Cleveland",
+    "lat": 45.6575277,
+    "lon": -61.2201844
+  },
+  {
+    "street": "Basin Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6606979,
+    "lon": -61.2016099
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6681525,
+    "lon": -61.2319825
+  },
+  {
+    "street": "Dorothy Robinson Drive",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6401666,
+    "lon": -61.2229573
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6679844,
+    "lon": -61.2369017
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6637346,
+    "lon": -61.2197968
+  },
+  {
+    "street": "Ferguson Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6572617,
+    "lon": -61.2198876
+  },
+  {
+    "street": "Helmuts Lane",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6539348,
+    "lon": -61.2340151
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6676828,
+    "lon": -61.2363528
+  },
+  {
+    "street": "MacKichan Lane",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.67521,
+    "lon": -61.2352535
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "2",
+    "city": "Cleveland",
+    "lat": 45.6837931,
+    "lon": -61.206169
+  },
+  {
+    "street": "Ferguson Road",
+    "housenumber": "223",
+    "city": "Cleveland",
+    "lat": 45.6574124,
+    "lon": -61.204418
+  },
+  {
+    "street": "Ferguson Road",
+    "housenumber": "224",
+    "city": "Cleveland",
+    "lat": 45.6571601,
+    "lon": -61.2045482
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "227",
+    "city": "Cleveland",
+    "lat": 45.6541534,
+    "lon": -61.2339569
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "228",
+    "city": "Cleveland",
+    "lat": 45.6541276,
+    "lon": -61.2342427
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "229",
+    "city": "Cleveland",
+    "lat": 45.6539064,
+    "lon": -61.2341028
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "230",
+    "city": "Cleveland",
+    "lat": 45.6540456,
+    "lon": -61.2342912
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2635",
+    "city": "Cleveland",
+    "lat": 45.6849171,
+    "lon": -61.2483472
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2636",
+    "city": "Cleveland",
+    "lat": 45.6848243,
+    "lon": -61.2485629
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "273",
+    "city": "Cleveland",
+    "lat": 45.6738407,
+    "lon": -61.2495631
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "273",
+    "city": "Cleveland",
+    "lat": 45.6739451,
+    "lon": -61.2496431
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "276",
+    "city": "Cleveland",
+    "lat": 45.6739439,
+    "lon": -61.2493439
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "276",
+    "city": "Cleveland",
+    "lat": 45.6740161,
+    "lon": -61.2494
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2939",
+    "city": "Cleveland",
+    "lat": 45.6754185,
+    "lon": -61.2353579
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2940",
+    "city": "Cleveland",
+    "lat": 45.675286,
+    "lon": -61.2355862
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2941",
+    "city": "Cleveland",
+    "lat": 45.675151,
+    "lon": -61.2353048
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "2942",
+    "city": "Cleveland",
+    "lat": 45.6751981,
+    "lon": -61.2355688
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3003",
+    "city": "Cleveland",
+    "lat": 45.6718985,
+    "lon": -61.2340536
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3004",
+    "city": "Cleveland",
+    "lat": 45.6718599,
+    "lon": -61.2343006
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3005",
+    "city": "Cleveland",
+    "lat": 45.671812,
+    "lon": -61.234026
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3006",
+    "city": "Cleveland",
+    "lat": 45.6717733,
+    "lon": -61.234273
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3069",
+    "city": "Cleveland",
+    "lat": 45.6695301,
+    "lon": -61.2329886
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3069",
+    "city": "Cleveland",
+    "lat": 45.6696077,
+    "lon": -61.2330499
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3070",
+    "city": "Cleveland",
+    "lat": 45.6694441,
+    "lon": -61.23321
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3070",
+    "city": "Cleveland",
+    "lat": 45.6695217,
+    "lon": -61.2332713
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3107",
+    "city": "Cleveland",
+    "lat": 45.6684739,
+    "lon": -61.2321681
+  },
+  {
+    "street": "Riverside Road",
+    "housenumber": "3108",
+    "city": "Cleveland",
+    "lat": 45.6682642,
+    "lon": -61.2322711
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3397",
+    "city": "Cleveland",
+    "lat": 45.6674651,
+    "lon": -61.2423518
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3398",
+    "city": "Cleveland",
+    "lat": 45.6672025,
+    "lon": -61.2424127
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3399",
+    "city": "Cleveland",
+    "lat": 45.6674509,
+    "lon": -61.2422269
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3400",
+    "city": "Cleveland",
+    "lat": 45.6671882,
+    "lon": -61.2422878
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3465",
+    "city": "Cleveland",
+    "lat": 45.6679069,
+    "lon": -61.2372016
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3466",
+    "city": "Cleveland",
+    "lat": 45.6676593,
+    "lon": -61.2370088
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3467",
+    "city": "Cleveland",
+    "lat": 45.6679473,
+    "lon": -61.2368261
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3468",
+    "city": "Cleveland",
+    "lat": 45.6676727,
+    "lon": -61.2368837
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3481",
+    "city": "Cleveland",
+    "lat": 45.6680029,
+    "lon": -61.2362732
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3482",
+    "city": "Cleveland",
+    "lat": 45.6677205,
+    "lon": -61.2364079
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3483",
+    "city": "Cleveland",
+    "lat": 45.6680116,
+    "lon": -61.2361474
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3484",
+    "city": "Cleveland",
+    "lat": 45.6677498,
+    "lon": -61.2360237
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "35",
+    "city": "Cleveland",
+    "lat": 45.6694566,
+    "lon": -61.2315108
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "35",
+    "city": "Cleveland",
+    "lat": 45.6695363,
+    "lon": -61.2314556
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3563",
+    "city": "Cleveland",
+    "lat": 45.6681093,
+    "lon": -61.2322983
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3564",
+    "city": "Cleveland",
+    "lat": 45.6678541,
+    "lon": -61.2321586
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3565",
+    "city": "Cleveland",
+    "lat": 45.6681226,
+    "lon": -61.2319193
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3566",
+    "city": "Cleveland",
+    "lat": 45.6678599,
+    "lon": -61.2320327
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "36",
+    "city": "Cleveland",
+    "lat": 45.669379,
+    "lon": -61.231283
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "36",
+    "city": "Cleveland",
+    "lat": 45.6694587,
+    "lon": -61.2312278
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "367",
+    "city": "Cleveland",
+    "lat": 45.6508443,
+    "lon": -61.236208
+  },
+  {
+    "street": "Lower River Road",
+    "housenumber": "368",
+    "city": "Cleveland",
+    "lat": 45.6509969,
+    "lon": -61.2363525
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3777",
+    "city": "Cleveland",
+    "lat": 45.664023,
+    "lon": -61.219513
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3778",
+    "city": "Cleveland",
+    "lat": 45.6637734,
+    "lon": -61.2198205
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3779",
+    "city": "Cleveland",
+    "lat": 45.6640166,
+    "lon": -61.2193868
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "3780",
+    "city": "Cleveland",
+    "lat": 45.66375,
+    "lon": -61.2193901
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4001",
+    "city": "Cleveland",
+    "lat": 45.6625133,
+    "lon": -61.2055312
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4001",
+    "city": "Cleveland",
+    "lat": 45.6625699,
+    "lon": -61.2056285
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4004",
+    "city": "Cleveland",
+    "lat": 45.6623085,
+    "lon": -61.2057737
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4004",
+    "city": "Cleveland",
+    "lat": 45.6623652,
+    "lon": -61.205871
+  },
+  {
+    "street": "Helmuts Lane",
+    "housenumber": "403",
+    "city": "Cleveland",
+    "lat": 45.6505276,
+    "lon": -61.2321679
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4037",
+    "city": "Cleveland",
+    "lat": 45.6616078,
+    "lon": -61.2038027
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4037",
+    "city": "Cleveland",
+    "lat": 45.661649,
+    "lon": -61.2039146
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4038",
+    "city": "Cleveland",
+    "lat": 45.6613714,
+    "lon": -61.2039776
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4038",
+    "city": "Cleveland",
+    "lat": 45.6614125,
+    "lon": -61.2040895
+  },
+  {
+    "street": "Helmuts Lane",
+    "housenumber": "404",
+    "city": "Cleveland",
+    "lat": 45.6507004,
+    "lon": -61.2321104
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4079",
+    "city": "Cleveland",
+    "lat": 45.6609768,
+    "lon": -61.2014081
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4080",
+    "city": "Cleveland",
+    "lat": 45.660755,
+    "lon": -61.201649
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4081",
+    "city": "Cleveland",
+    "lat": 45.6609484,
+    "lon": -61.2012883
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4082",
+    "city": "Cleveland",
+    "lat": 45.6606714,
+    "lon": -61.2012969
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4088",
+    "city": "Cleveland",
+    "lat": 45.6606483,
+    "lon": -61.2011909
+  },
+  {
+    "street": "Highway 4",
+    "housenumber": "4090",
+    "city": "Kempt Road",
+    "lat": 45.6606253,
+    "lon": -61.2010769
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "41",
+    "city": "Cleveland",
+    "lat": 45.669751,
+    "lon": -61.2378768
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "42",
+    "city": "Cleveland",
+    "lat": 45.6698299,
+    "lon": -61.2376501
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "43",
+    "city": "Cleveland",
+    "lat": 45.6698304,
+    "lon": -61.2379331
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "44",
+    "city": "Cleveland",
+    "lat": 45.6699093,
+    "lon": -61.2377064
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "483",
+    "city": "Cleveland",
+    "lat": 45.6802603,
+    "lon": -61.2090608
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "483",
+    "city": "Cleveland",
+    "lat": 45.6802914,
+    "lon": -61.2089423
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "486",
+    "city": "Cleveland",
+    "lat": 45.6800941,
+    "lon": -61.2089721
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "486",
+    "city": "Cleveland",
+    "lat": 45.6801252,
+    "lon": -61.2088535
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "5",
+    "city": "Cleveland",
+    "lat": 45.6681994,
+    "lon": -61.2322356
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "573",
+    "city": "Cleveland",
+    "lat": 45.6836524,
+    "lon": -61.2064194
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "574",
+    "city": "Cleveland",
+    "lat": 45.6835375,
+    "lon": -61.2061967
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "575",
+    "city": "Cleveland",
+    "lat": 45.6837741,
+    "lon": -61.2060815
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "576",
+    "city": "Cleveland",
+    "lat": 45.683573,
+    "lon": -61.2060814
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "595",
+    "city": "Cleveland",
+    "lat": 45.6401608,
+    "lon": -61.2226368
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "596",
+    "city": "Cleveland",
+    "lat": 45.640219,
+    "lon": -61.2229041
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "597",
+    "city": "Cleveland",
+    "lat": 45.640073,
+    "lon": -61.222619
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "598",
+    "city": "Cleveland",
+    "lat": 45.6399549,
+    "lon": -61.2228544
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "6",
+    "city": "Cleveland",
+    "lat": 45.6682082,
+    "lon": -61.2319825
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "63",
+    "city": "Cleveland",
+    "lat": 45.685738,
+    "lon": -61.2089693
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "64",
+    "city": "Cleveland",
+    "lat": 45.6857974,
+    "lon": -61.2087308
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "65",
+    "city": "Cleveland",
+    "lat": 45.6858216,
+    "lon": -61.2090117
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "66",
+    "city": "Cleveland",
+    "lat": 45.685881,
+    "lon": -61.2087731
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "661",
+    "city": "Cleveland",
+    "lat": 45.6342123,
+    "lon": -61.2214487
+  },
+  {
+    "street": "Evanston Road",
+    "housenumber": "662",
+    "city": "Cleveland",
+    "lat": 45.6341586,
+    "lon": -61.2216899
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "669",
+    "city": "Cleveland",
+    "lat": 45.6902905,
+    "lon": -61.2009173
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "670",
+    "city": "Cleveland",
+    "lat": 45.6901952,
+    "lon": -61.2007037
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "671",
+    "city": "Cleveland",
+    "lat": 45.6903653,
+    "lon": -61.2008494
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "672",
+    "city": "Cleveland",
+    "lat": 45.69027,
+    "lon": -61.2006357
+  },
+  {
+    "street": "Dorothy Robinson Drive",
+    "housenumber": "69",
+    "city": "Cleveland",
+    "lat": 45.6411833,
+    "lon": -61.2262541
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "7",
+    "city": "Cleveland",
+    "lat": 45.6684778,
+    "lon": -61.2321071
+  },
+  {
+    "street": "Dorothy Robinson Drive",
+    "housenumber": "70",
+    "city": "Cleveland",
+    "lat": 45.6412353,
+    "lon": -61.2260123
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "757",
+    "city": "Cleveland",
+    "lat": 45.6932989,
+    "lon": -61.1966675
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "757",
+    "city": "Cleveland",
+    "lat": 45.6933425,
+    "lon": -61.1965573
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "758",
+    "city": "Cleveland",
+    "lat": 45.6931444,
+    "lon": -61.1965429
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "758",
+    "city": "Cleveland",
+    "lat": 45.6931835,
+    "lon": -61.1964446
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "761",
+    "city": "Cleveland",
+    "lat": 45.693418,
+    "lon": -61.1963563
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "761",
+    "city": "Cleveland",
+    "lat": 45.6934585,
+    "lon": -61.1962437
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "764",
+    "city": "Cleveland",
+    "lat": 45.6932165,
+    "lon": -61.1963569
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "764",
+    "city": "Cleveland",
+    "lat": 45.6933356,
+    "lon": -61.1960265
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "8",
+    "city": "Cleveland",
+    "lat": 45.6682766,
+    "lon": -61.231957
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "811",
+    "city": "Cleveland",
+    "lat": 45.6945267,
+    "lon": -61.193301
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "812",
+    "city": "Cleveland",
+    "lat": 45.6943699,
+    "lon": -61.1931824
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "813",
+    "city": "Cleveland",
+    "lat": 45.6945683,
+    "lon": -61.1931892
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "814",
+    "city": "Cleveland",
+    "lat": 45.6944115,
+    "lon": -61.1930706
+  },
+  {
+    "street": "Basin Road",
+    "housenumber": "89",
+    "city": "Cleveland",
+    "lat": 45.6573642,
+    "lon": -61.2041297
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "897",
+    "city": "Cleveland",
+    "lat": 45.6968201,
+    "lon": -61.1890724
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "898",
+    "city": "Cleveland",
+    "lat": 45.6967361,
+    "lon": -61.1888494
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "899",
+    "city": "Cleveland",
+    "lat": 45.6968982,
+    "lon": -61.1890125
+  },
+  {
+    "street": "Basin Road",
+    "housenumber": "90",
+    "city": "Cleveland",
+    "lat": 45.6574741,
+    "lon": -61.2043365
+  },
+  {
+    "street": "County Line Road",
+    "housenumber": "900",
+    "city": "Cleveland",
+    "lat": 45.6968142,
+    "lon": -61.1887895
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "93",
+    "city": "Cleveland",
+    "lat": 45.6713531,
+    "lon": -61.2398651
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "93",
+    "city": "Cleveland",
+    "lat": 45.6714154,
+    "lon": -61.2399551
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "96",
+    "city": "Cleveland",
+    "lat": 45.6714795,
+    "lon": -61.2396873
+  },
+  {
+    "street": "Dowling Road",
+    "housenumber": "96",
+    "city": "Cleveland",
+    "lat": 45.6715418,
+    "lon": -61.2397773
+  },
+  {
+    "street": "MacKichan Lane",
+    "housenumber": "99",
+    "city": "Cleveland",
+    "lat": 45.677686,
+    "lon": -61.2322774
+  },
+  {
+    "street": "Matthews Road",
+    "housenumber": "99",
+    "city": "Cleveland",
+    "lat": 45.6872826,
+    "lon": -61.2096251
+  },
+  {
+    "street": "West 117th Street",
+    "housenumber": "3038",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.468969,
+    "lon": -81.7713985
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "1801",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5020189,
+    "lon": -81.684761
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1281",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995197,
+    "lon": -81.7006758
+  },
+  {
+    "street": "Woodbine Avenue",
+    "housenumber": "4016",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4845272,
+    "lon": -81.7153049
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2044",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4360975,
+    "lon": -81.6976945
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "3034",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4706758,
+    "lon": -81.7001366
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4207",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408966,
+    "lon": -81.7051694
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "3434",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408616,
+    "lon": -81.7062468
+  },
+  {
+    "street": "Frankfort Avenue",
+    "housenumber": "614",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4986499,
+    "lon": -81.6983157
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1230",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5015871,
+    "lon": -81.698299
+  },
+  {
+    "street": "West St Clair Avenue",
+    "housenumber": "408",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001197,
+    "lon": -81.6979684
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1229",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5009754,
+    "lon": -81.6994404
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "500",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4998806,
+    "lon": -81.6984737
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3273",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4644913,
+    "lon": -81.6871444
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3465",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4600861,
+    "lon": -81.6904415
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3485",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4597706,
+    "lon": -81.6885021
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3257",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4647065,
+    "lon": -81.6869854
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3443",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4599934,
+    "lon": -81.6886769
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3535",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4582224,
+    "lon": -81.6887876
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3553",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4576021,
+    "lon": -81.6893434
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4478",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4339905,
+    "lon": -81.6973365
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4848",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4241269,
+    "lon": -81.6973336
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4661",
+    "city": "Cleveland",
+    "lat": 41.4292329,
+    "lon": -81.697053
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2141",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.437664,
+    "lon": -81.6992764
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4199",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4409876,
+    "lon": -81.7051115
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "3327",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4411196,
+    "lon": -81.7042845
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4123",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4430379,
+    "lon": -81.7034048
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "3085",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4701844,
+    "lon": -81.6995389
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "116254",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5111417,
+    "lon": -81.6027461
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4987336,
+    "lon": -81.7006491
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3425",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4601612,
+    "lon": -81.6886371
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3435",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4601011,
+    "lon": -81.6886478
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3521",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4589634,
+    "lon": -81.6888744
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3555",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4575519,
+    "lon": -81.6893521
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3573",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4574684,
+    "lon": -81.6893416
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2090",
+    "city": "Cleveland",
+    "lat": 41.4831476,
+    "lon": -81.702761
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11302",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5081901,
+    "lon": -81.6059449
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11324",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.508454,
+    "lon": -81.6054063
+  },
+  {
+    "street": "Euclid Ave",
+    "housenumber": "11302",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5081621,
+    "lon": -81.6059739
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11332",
+    "city": "Cleveland",
+    "lat": 41.5084821,
+    "lon": -81.6051324
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "15711",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5712802,
+    "lon": -81.5704543
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2118",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.437401,
+    "lon": -81.6986097
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4960",
+    "city": "Cleveland",
+    "lat": 41.4230914,
+    "lon": -81.7235571
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4603",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4301905,
+    "lon": -81.7144809
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11309",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.508647,
+    "lon": -81.605952
+  },
+  {
+    "street": "Shaker Square",
+    "housenumber": "13130",
+    "city": "Cleveland",
+    "lat": 41.4830725,
+    "lon": -81.5911706
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4250",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4400079,
+    "lon": -81.7064887
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6711",
+    "city": "Cleveland",
+    "lat": 41.4621797,
+    "lon": -81.6412877
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6551",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4622486,
+    "lon": -81.6435666
+  },
+  {
+    "street": "Denison Avenue",
+    "housenumber": "2500",
+    "city": "Cleveland",
+    "postcode": "44109-2600",
+    "lat": 41.4509955,
+    "lon": -81.70234
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "3850",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4501673,
+    "lon": -81.7021307
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4334",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4378151,
+    "lon": -81.7083183
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4348",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4372459,
+    "lon": -81.7085603
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4873",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4233864,
+    "lon": -81.6962373
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2023",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4355366,
+    "lon": -81.6978003
+  },
+  {
+    "street": "Bridge Avenue",
+    "housenumber": "2801",
+    "city": "Cleveland",
+    "lat": 41.4849316,
+    "lon": -81.706704
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1859",
+    "city": "Cleveland",
+    "lat": 41.486036,
+    "lon": -81.7045958
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1834",
+    "city": "Cleveland",
+    "lat": 41.4861267,
+    "lon": -81.7051322
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2700",
+    "city": "Cleveland",
+    "lat": 41.475161,
+    "lon": -81.699616
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2075",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4835222,
+    "lon": -81.7023742
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1958",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4846456,
+    "lon": -81.703971
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1921",
+    "city": "Cleveland",
+    "lat": 41.4852608,
+    "lon": -81.7040166
+  },
+  {
+    "street": "East 185th Street",
+    "housenumber": "882",
+    "city": "Cleveland",
+    "postcode": "44119",
+    "lat": 41.5834217,
+    "lon": -81.5500327
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "4261",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4407827,
+    "lon": -81.7228918
+  },
+  {
+    "street": "Brookpark Road",
+    "housenumber": "7250",
+    "city": "Cleveland",
+    "postcode": "44129",
+    "lat": 41.4192224,
+    "lon": -81.733774
+  },
+  {
+    "street": "Ridge Road",
+    "housenumber": "4951",
+    "city": "Cleveland",
+    "postcode": "44136",
+    "lat": 41.4194912,
+    "lon": -81.7335156
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "15710",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5709856,
+    "lon": -81.5704299
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "15801",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5712388,
+    "lon": -81.5699406
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "15601",
+    "city": "Cleveland",
+    "lat": 41.5712523,
+    "lon": -81.5717833
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2079",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984506,
+    "lon": -81.6899108
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1515",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4972635,
+    "lon": -81.6946924
+  },
+  {
+    "street": "West 29th Street",
+    "housenumber": "1455",
+    "city": "Cleveland",
+    "postcode": "44113-2960",
+    "lat": 41.4892131,
+    "lon": -81.7103921
+  },
+  {
+    "street": "St. Clair",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "lat": 41.5019127,
+    "lon": -81.6944785
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "1091",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5007471,
+    "lon": -81.7042386
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "1051",
+    "city": "Cleveland",
+    "lat": 41.5010189,
+    "lon": -81.7043358
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "5393",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5219864,
+    "lon": -81.6530398
+  },
+  {
+    "street": "Harvard Avenue",
+    "housenumber": "17426",
+    "city": "Cleveland",
+    "lat": 41.4496229,
+    "lon": -81.5573133
+  },
+  {
+    "street": "Lee Road",
+    "housenumber": "4140",
+    "city": "Cleveland",
+    "postcode": "44128",
+    "lat": 41.447297,
+    "lon": -81.565272
+  },
+  {
+    "street": "Lakeside Ave",
+    "housenumber": "1001",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5070127,
+    "lon": -81.6910207
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2058",
+    "city": "Cleveland",
+    "lat": 41.4987938,
+    "lon": -81.6902162
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1417",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5029352,
+    "lon": -81.688794
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "812",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4981748,
+    "lon": -81.6860353
+  },
+  {
+    "street": "Shaker Square",
+    "housenumber": "13225",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4841342,
+    "lon": -81.589504
+  },
+  {
+    "street": "Superior Avenue",
+    "housenumber": "4890",
+    "city": "Cleveland",
+    "lat": 41.5157305,
+    "lon": -81.6562274
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1540",
+    "city": "Cleveland",
+    "postcode": "44103-1347",
+    "lat": 41.5167813,
+    "lon": -81.6524343
+  },
+  {
+    "street": "East 55 Street",
+    "housenumber": "1549",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5167842,
+    "lon": -81.6514576
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2053",
+    "city": "Cleveland",
+    "lat": 41.4984533,
+    "lon": -81.6923122
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11305",
+    "city": "Cleveland",
+    "lat": 41.4816435,
+    "lon": -81.6060979
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11301",
+    "city": "Cleveland",
+    "lat": 41.4815433,
+    "lon": -81.60611
+  },
+  {
+    "street": "Kinsman Avenue",
+    "housenumber": "9101",
+    "city": "Cleveland",
+    "postcode": "44104-5141",
+    "lat": 41.4726969,
+    "lon": -81.6226608
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2013",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986021,
+    "lon": -81.6924722
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "840",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4987246,
+    "lon": -81.68566
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "748",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985869,
+    "lon": -81.687168
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "2217",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4978625,
+    "lon": -81.6842764
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "5815",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5229748,
+    "lon": -81.6510123
+  },
+  {
+    "street": "Literary Road",
+    "housenumber": "900",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4816614,
+    "lon": -81.6870145
+  },
+  {
+    "street": "Van Aken Boulevard",
+    "housenumber": "2720",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4833665,
+    "lon": -81.5888568
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "4830",
+    "city": "Cleveland",
+    "postcode": "44144",
+    "lat": 41.4400603,
+    "lon": -81.7200348
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4795",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4258335,
+    "lon": -81.6966237
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "4280",
+    "city": "Cleveland",
+    "postcode": "44144",
+    "lat": 41.4402127,
+    "lon": -81.7238035
+  },
+  {
+    "street": "Kinsman Road",
+    "housenumber": "7201",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4798381,
+    "lon": -81.6378644
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "5000",
+    "city": "Cleveland",
+    "lat": 41.5038095,
+    "lon": -81.6538212
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "2310",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5079187,
+    "lon": -81.6756764
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "2310",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5081501,
+    "lon": -81.6757756
+  },
+  {
+    "street": "Professor Avenue",
+    "housenumber": "2247",
+    "city": "Cleveland",
+    "postcode": "44113-4466",
+    "lat": 41.4815536,
+    "lon": -81.6861762
+  },
+  {
+    "street": "Market Avenue",
+    "housenumber": "2523",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4841506,
+    "lon": -81.7043068
+  },
+  {
+    "street": "College Avenue",
+    "housenumber": "906",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4805638,
+    "lon": -81.6860309
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11434",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5093261,
+    "lon": -81.6038055
+  },
+  {
+    "street": "East 152nd Street",
+    "housenumber": "552",
+    "city": "cleveland",
+    "postcode": "44110",
+    "lat": 41.5664214,
+    "lon": -81.5758937
+  },
+  {
+    "street": "Lee Road",
+    "housenumber": "3969",
+    "city": "Cleveland",
+    "lat": 41.4510937,
+    "lon": -81.5645013
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "3494",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4592804,
+    "lon": -81.7010101
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "3764",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4525477,
+    "lon": -81.701683
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "16001",
+    "city": "Cleveland",
+    "lat": 41.5712752,
+    "lon": -81.5691594
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2120",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4978055,
+    "lon": -81.6899418
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1212;1214",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5009429,
+    "lon": -81.7000337
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1912",
+    "city": "Cleveland",
+    "lat": 41.5005799,
+    "lon": -81.6897285
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "612",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4983696,
+    "lon": -81.6885627
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2063",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4988059,
+    "lon": -81.6899593
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "811",
+    "city": "Cleveland",
+    "lat": 41.4985215,
+    "lon": -81.6869128
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "lat": 41.4852907,
+    "lon": -81.7044798
+  },
+  {
+    "street": "Saint Clair Avenue Northeast",
+    "housenumber": "3840",
+    "city": "Cleveland",
+    "lat": 41.5154744,
+    "lon": -81.6658383
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11609",
+    "city": "Cleveland",
+    "lat": 41.4832772,
+    "lon": -81.7677936
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "10427",
+    "city": "Cleveland",
+    "postcode": "44012",
+    "lat": 41.4851425,
+    "lon": -81.7572794
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5801",
+    "city": "Cleveland",
+    "lat": 41.4849164,
+    "lon": -81.7265
+  },
+  {
+    "street": "Murray Hill Road",
+    "housenumber": "2161",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5045684,
+    "lon": -81.5999544
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1280",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001362,
+    "lon": -81.6993488
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "11526",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4874216,
+    "lon": -81.7670804
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "4504",
+    "city": "Cleveland",
+    "lat": 41.517832,
+    "lon": -81.660761
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11311",
+    "city": "Cleveland",
+    "lat": 41.4818682,
+    "lon": -81.6060932
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11351",
+    "city": "Cleveland",
+    "lat": 41.4822309,
+    "lon": -81.6060613
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4512",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4331119,
+    "lon": -81.697492
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2140",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4379466,
+    "lon": -81.699096
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1328",
+    "city": "Cleveland",
+    "lat": 41.522807,
+    "lon": -81.6522503
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5031422,
+    "lon": -81.6895996
+  },
+  {
+    "street": "Huron Road",
+    "housenumber": "1240",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5004657,
+    "lon": -81.6822859
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1406",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4987425,
+    "lon": -81.6980667
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "1835",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.48403,
+    "lon": -81.7098074
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2000",
+    "city": "Cleveland",
+    "lat": 41.4839516,
+    "lon": -81.7034212
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "2537",
+    "city": "Cleveland",
+    "lat": 41.4838679,
+    "lon": -81.7036543
+  },
+  {
+    "street": "East 93rd Street",
+    "housenumber": "3993",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.449958,
+    "lon": -81.621025
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5900",
+    "city": "Cleveland",
+    "lat": 41.4849404,
+    "lon": -81.7274394
+  },
+  {
+    "street": "West 65th Street",
+    "housenumber": "1388",
+    "city": "Cleveland",
+    "lat": 41.4844042,
+    "lon": -81.7304442
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6419",
+    "city": "Cleveland",
+    "lat": 41.4840645,
+    "lon": -81.7298419
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6500",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.484131,
+    "lon": -81.7304466
+  },
+  {
+    "street": "Literary Road",
+    "housenumber": "806",
+    "city": "Cleveland",
+    "lat": 41.4820485,
+    "lon": -81.6863051
+  },
+  {
+    "street": "Literary Road",
+    "housenumber": "1031",
+    "city": "Cleveland",
+    "lat": 41.480307,
+    "lon": -81.6884751
+  },
+  {
+    "street": "Professor Avenue",
+    "housenumber": "2362",
+    "city": "Cleveland",
+    "lat": 41.4798452,
+    "lon": -81.6852539
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "5002",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4556839,
+    "lon": -81.6553499
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "4901",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4560789,
+    "lon": -81.6557563
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "6501",
+    "city": "cleveland",
+    "postcode": "44105",
+    "lat": 41.4563043,
+    "lon": -81.6447967
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "6405",
+    "city": "cleveland",
+    "postcode": "44105",
+    "lat": 41.4562116,
+    "lon": -81.6452616
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "3619",
+    "city": "Cleveland",
+    "lat": 41.4396671,
+    "lon": -81.7086757
+  },
+  {
+    "street": "South Davis Ave",
+    "housenumber": "724",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7367021,
+    "lon": -90.7162411
+  },
+  {
+    "street": "South Street",
+    "housenumber": "406",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7421087,
+    "lon": -90.7181078
+  },
+  {
+    "street": "North Street",
+    "housenumber": "122",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7446223,
+    "lon": -90.7206143
+  },
+  {
+    "street": "South Court Street",
+    "housenumber": "111",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7440558,
+    "lon": -90.7230162
+  },
+  {
+    "street": "South Fifth Ave",
+    "housenumber": "101",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7434937,
+    "lon": -90.7332651
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6557",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.462364,
+    "lon": -81.6439172
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6567",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4621884,
+    "lon": -81.6434179
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6210",
+    "city": "Cleveland",
+    "postcode": "44127",
+    "lat": 41.4633504,
+    "lon": -81.6471944
+  },
+  {
+    "street": "Broadway Avenue",
+    "housenumber": "6140",
+    "city": "Cleveland",
+    "postcode": "44127",
+    "lat": 41.4637122,
+    "lon": -81.647586
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "15149",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4523085,
+    "lon": -81.8030241
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "347",
+    "city": "Cleveland",
+    "lat": 41.4999456,
+    "lon": -81.6904344
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "668",
+    "city": "Cleveland",
+    "lat": 41.4993605,
+    "lon": -81.688616
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "402",
+    "city": "Cleveland",
+    "lat": 41.4995876,
+    "lon": -81.6901372
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "21",
+    "city": "Cleveland",
+    "lat": 41.4981548,
+    "lon": -81.6919647
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1374",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.499123,
+    "lon": -81.6984194
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1948",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4848135,
+    "lon": -81.7040597
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "3800",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4809296,
+    "lon": -81.7123335
+  },
+  {
+    "street": "West 14th Street",
+    "housenumber": "2621",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4765282,
+    "lon": -81.6910271
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "1879",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4833211,
+    "lon": -81.7101815
+  },
+  {
+    "street": "West 11th Street",
+    "housenumber": "2179",
+    "city": "Cleveland",
+    "lat": 41.4824052,
+    "lon": -81.6891247
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1948",
+    "city": "Cleveland",
+    "lat": 41.4847334,
+    "lon": -81.7042216
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "3500",
+    "city": "Cleveland",
+    "lat": 41.481418,
+    "lon": -81.7108385
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7427",
+    "city": "Cleveland",
+    "lat": 41.4823325,
+    "lon": -81.7363828
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "3115",
+    "city": "Cleveland",
+    "lat": 41.469421,
+    "lon": -81.6995891
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6800",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4837525,
+    "lon": -81.7319321
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "8302",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4811846,
+    "lon": -81.7417343
+  },
+  {
+    "street": "Drexel Avenue",
+    "housenumber": "10510",
+    "city": "Cleveland",
+    "lat": 41.5268094,
+    "lon": -81.6149625
+  },
+  {
+    "street": "East 82nd Street",
+    "housenumber": "799",
+    "city": "Cleveland",
+    "lat": 41.5323458,
+    "lon": -81.6316151
+  },
+  {
+    "street": "Cedar Avenue",
+    "housenumber": "7120",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5001193,
+    "lon": -81.6388937
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "7710",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.503554,
+    "lon": -81.6350052
+  },
+  {
+    "street": "Woodland Avenue",
+    "housenumber": "7510",
+    "city": "Cleveland",
+    "lat": 41.4878249,
+    "lon": -81.6359347
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "10411",
+    "city": "Cleveland",
+    "postcode": "44108-1956",
+    "lat": 41.5388858,
+    "lon": -81.6162552
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "308",
+    "city": "Cleveland",
+    "postcode": "74020",
+    "lat": 36.3117666,
+    "lon": -96.4646271
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "11327",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4850258,
+    "lon": -81.6051378
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "11327",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4852016,
+    "lon": -81.6050745
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5007647,
+    "lon": -81.6815112
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1867",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4857785,
+    "lon": -81.7043989
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1870",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4856793,
+    "lon": -81.7047846
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2044",
+    "city": "Cleveland",
+    "lat": 41.4990134,
+    "lon": -81.6902712
+  },
+  {
+    "street": "25th Street Northwest",
+    "housenumber": "1340",
+    "city": "Cleveland",
+    "postcode": "37311",
+    "lat": 35.189485,
+    "lon": -84.8798801
+  },
+  {
+    "street": "25th Street",
+    "housenumber": "1445",
+    "city": "Cleveland",
+    "postcode": "37311-3608",
+    "lat": 35.1889874,
+    "lon": -84.8806789
+  },
+  {
+    "street": "25th Street Northwest",
+    "housenumber": "1350",
+    "city": "Cleveland",
+    "postcode": "37312",
+    "lat": 35.1897549,
+    "lon": -84.8802755
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "224",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4993652,
+    "lon": -81.6916601
+  },
+  {
+    "street": "Euclid Ave",
+    "housenumber": "226",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994083,
+    "lon": -81.6915535
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "410",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5005684,
+    "lon": -81.6909269
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "420",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5007579,
+    "lon": -81.6907516
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1405",
+    "city": "Cleveland",
+    "lat": 41.5031164,
+    "lon": -81.688947
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "3006",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4403772,
+    "lon": -81.7023778
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "6220",
+    "city": "Cleveland",
+    "postcode": "44144",
+    "lat": 41.4402564,
+    "lon": -81.7305127
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4728",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4281268,
+    "lon": -81.7175202
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "2422",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4399633,
+    "lon": -81.7019861
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "4824",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4400624,
+    "lon": -81.7198978
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4180",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4416419,
+    "lon": -81.7051564
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4163",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4420203,
+    "lon": -81.7044251
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "4116",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4802981,
+    "lon": -81.7139481
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "234",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994277,
+    "lon": -81.6913774
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "2814",
+    "city": "Cleveland",
+    "lat": 41.4906311,
+    "lon": -81.7098988
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "530",
+    "city": "Cleveland",
+    "lat": 41.4997398,
+    "lon": -81.6890925
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "816",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984921,
+    "lon": -81.6861643
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1700",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5015049,
+    "lon": -81.6881942
+  },
+  {
+    "street": "Saint Clair Avenue Northeast",
+    "housenumber": "777",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5032894,
+    "lon": -81.6917083
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4990563,
+    "lon": -81.7009134
+  },
+  {
+    "street": "Walton Ave.",
+    "housenumber": "3409",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4707908,
+    "lon": -81.7059473
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "2124",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5031447,
+    "lon": -81.6758457
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2148",
+    "city": "Cleveland",
+    "lat": 41.4975312,
+    "lon": -81.6897441
+  },
+  {
+    "street": "Helmut's Lane",
+    "housenumber": "351",
+    "city": "Cleveland",
+    "postcode": "B0E 1J0",
+    "lat": 45.6492731,
+    "lon": -61.2292338
+  },
+  {
+    "street": "25th Street NW",
+    "housenumber": "920",
+    "city": "Cleveland",
+    "postcode": "37311",
+    "lat": 35.1848011,
+    "lon": -84.8744306
+  },
+  {
+    "street": "St. Clair Avenue",
+    "housenumber": "6125",
+    "city": "Cleveland",
+    "lat": 41.5239917,
+    "lon": -81.6485192
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "410",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006887,
+    "lon": -81.6909172
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1301",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5045535,
+    "lon": -81.6901671
+  },
+  {
+    "street": "Lakeside Avenue East",
+    "housenumber": "2100",
+    "city": "Cleveland",
+    "lat": 41.5110708,
+    "lon": -81.6797137
+  },
+  {
+    "street": "West 117th Street",
+    "housenumber": "3447",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4587169,
+    "lon": -81.7686592
+  },
+  {
+    "street": "East 152nd Street",
+    "housenumber": "552",
+    "city": "cleveland",
+    "postcode": "44110",
+    "lat": 41.5661825,
+    "lon": -81.5758965
+  },
+  {
+    "street": "Helen Highway",
+    "housenumber": "123",
+    "city": "Cleveland",
+    "postcode": "30528-7803",
+    "lat": 34.6036165,
+    "lon": -83.7639339
+  },
+  {
+    "street": "Helen Highway",
+    "housenumber": "55",
+    "city": "Cleveland",
+    "postcode": "30528",
+    "lat": 34.6035901,
+    "lon": -83.7648769
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "1",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5018165,
+    "lon": -81.6946183
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "123",
+    "city": "Cleveland",
+    "lat": 41.4974338,
+    "lon": -81.6929358
+  },
+  {
+    "street": "Croton Avenue",
+    "housenumber": "3403",
+    "city": "Cleveland",
+    "lat": 41.4881702,
+    "lon": -81.6660919
+  },
+  {
+    "street": "West Southline Street",
+    "housenumber": "601",
+    "city": "Cleveland",
+    "postcode": "77328-5098",
+    "lat": 30.3359539,
+    "lon": -95.1010743
+  },
+  {
+    "street": "South Washington Avenue",
+    "housenumber": "502",
+    "city": "Cleveland",
+    "postcode": "77327",
+    "lat": 30.3376717,
+    "lon": -95.0935773
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "230",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994218,
+    "lon": -81.69146
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4175",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408727,
+    "lon": -81.6820008
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4177",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408074,
+    "lon": -81.6818906
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4179",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408086,
+    "lon": -81.6818205
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4181",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408091,
+    "lon": -81.6817651
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4183",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408097,
+    "lon": -81.6816942
+  },
+  {
+    "street": "River Ridge Drive",
+    "housenumber": "4185",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4408351,
+    "lon": -81.6816187
+  },
+  {
+    "street": "Superior Ave East",
+    "housenumber": "815",
+    "city": "Cleveland",
+    "lat": 41.502641,
+    "lon": -81.6894841
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "850",
+    "city": "Cleveland",
+    "lat": 41.5000608,
+    "lon": -81.6869202
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "1111",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5034751,
+    "lon": -81.6869303
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "6304",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4751379,
+    "lon": -81.7291081
+  },
+  {
+    "street": "Merwin Avenue",
+    "housenumber": "1600",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4940562,
+    "lon": -81.7025789
+  },
+  {
+    "street": "Starkweather Avenue",
+    "housenumber": "761",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4774455,
+    "lon": -81.6824075
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "900",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5001439,
+    "lon": -81.6861379
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "170",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4992691,
+    "lon": -81.6922185
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "170",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991983,
+    "lon": -81.6923111
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1800",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5010875,
+    "lon": -81.6785679
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "1701",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5060458,
+    "lon": -81.6816828
+  },
+  {
+    "street": "Public Square",
+    "housenumber": "200",
+    "city": "Cleveland",
+    "lat": 41.4997752,
+    "lon": -81.6916515
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "11623",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4871961,
+    "lon": -81.7681232
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "3501",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4578885,
+    "lon": -81.8140079
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "3430",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4598216,
+    "lon": -81.818089
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "3644",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4541694,
+    "lon": -81.8170819
+  },
+  {
+    "street": "Rocky River Drive",
+    "housenumber": "3730",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4517925,
+    "lon": -81.8166507
+  },
+  {
+    "street": "Prospect Avenue",
+    "housenumber": "503",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4985779,
+    "lon": -81.6893268
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "401",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4999071,
+    "lon": -81.6902734
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "3301",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5037499,
+    "lon": -81.6640758
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "200",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4977913,
+    "lon": -81.6932889
+  },
+  {
+    "street": "Shaker Square",
+    "housenumber": "13101",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4842322,
+    "lon": -81.5914224
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13113",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4844553,
+    "lon": -81.5913856
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13900",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4830421,
+    "lon": -81.5850483
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13800",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4831061,
+    "lon": -81.5855431
+  },
+  {
+    "street": "Shaker Square",
+    "housenumber": "13201",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4846083,
+    "lon": -81.5901199
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "3307",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4407045,
+    "lon": -81.7036366
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "4241",
+    "city": "Cleveland",
+    "postcode": "44144",
+    "lat": 41.4412789,
+    "lon": -81.7228988
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "4221",
+    "city": "Cleveland",
+    "postcode": "44144",
+    "lat": 41.441674,
+    "lon": -81.7228898
+  },
+  {
+    "street": "Van Aken Boulevard",
+    "housenumber": "2901",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4804416,
+    "lon": -81.5856962
+  },
+  {
+    "street": "Van Aken Boulevard",
+    "housenumber": "2895",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4805079,
+    "lon": -81.5857599
+  },
+  {
+    "street": "Van Aken Boulevard",
+    "housenumber": "2911",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4801798,
+    "lon": -81.5853691
+  },
+  {
+    "street": "Van Aken Boulevard",
+    "housenumber": "2917",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4801124,
+    "lon": -81.5852942
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13415",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4841574,
+    "lon": -81.588155
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13301",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4841421,
+    "lon": -81.5890442
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13515",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4839769,
+    "lon": -81.5873728
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13605",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4840695,
+    "lon": -81.5870297
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13609",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4840422,
+    "lon": -81.5868051
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13615",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4840131,
+    "lon": -81.5865791
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13705",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4838318,
+    "lon": -81.586293
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13801",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4837579,
+    "lon": -81.5857556
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13815",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4837308,
+    "lon": -81.5855316
+  },
+  {
+    "street": "Shaker Boulevard",
+    "housenumber": "13915",
+    "city": "Shaker Heights",
+    "postcode": "44120",
+    "lat": 41.4837182,
+    "lon": -81.5849314
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4394",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.436186,
+    "lon": -81.7094467
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11308",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5082642,
+    "lon": -81.6058665
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "631",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.498008,
+    "lon": -81.68791
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "25",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4975822,
+    "lon": -81.6924044
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "45",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4975516,
+    "lon": -81.6924654
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "101",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4975169,
+    "lon": -81.6925338
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "123",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4974663,
+    "lon": -81.6927251
+  },
+  {
+    "street": "West 2nd Street",
+    "housenumber": "1660",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.497152,
+    "lon": -81.6933239
+  },
+  {
+    "street": "Old Cold Spring Road",
+    "housenumber": "107",
+    "city": "Cleveland",
+    "lat": 30.3542645,
+    "lon": -95.0912539
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1361",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5214479,
+    "lon": -81.6516143
+  },
+  {
+    "street": "Columbus Road",
+    "housenumber": "1840",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.489825,
+    "lon": -81.7008245
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1810",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4863909,
+    "lon": -81.7053838
+  },
+  {
+    "street": "West 29th Street",
+    "housenumber": "1393",
+    "city": "Cleveland",
+    "postcode": "44113-2960",
+    "lat": 41.4894645,
+    "lon": -81.7109624
+  },
+  {
+    "street": "West 29th Street",
+    "housenumber": "1404",
+    "city": "Cleveland",
+    "postcode": "44113-2960",
+    "lat": 41.4896041,
+    "lon": -81.7110804
+  },
+  {
+    "street": "West 29th Street",
+    "housenumber": "1434",
+    "city": "Cleveland",
+    "postcode": "44113-2960",
+    "lat": 41.4893462,
+    "lon": -81.7108832
+  },
+  {
+    "street": "Brookpark Road",
+    "housenumber": "3500",
+    "city": "Cleveland",
+    "postcode": "44134",
+    "lat": 41.4191775,
+    "lon": -81.7105782
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "603",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986689,
+    "lon": -81.6887944
+  },
+  {
+    "street": "East 140th Street",
+    "housenumber": "557",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5658497,
+    "lon": -81.5850038
+  },
+  {
+    "street": "Lake Shore Boulevard",
+    "housenumber": "14002",
+    "city": "Bratenahl",
+    "postcode": "44110",
+    "lat": 41.5689568,
+    "lon": -81.584936
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "2211",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5040481,
+    "lon": -81.6745053
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1898",
+    "city": "Cleveland",
+    "lat": 41.4854651,
+    "lon": -81.7046336
+  },
+  {
+    "street": "Saint Clair Avenue Northeast",
+    "housenumber": "2450",
+    "city": "Cleveland",
+    "lat": 41.5108584,
+    "lon": -81.6756101
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "3223",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4816805,
+    "lon": -81.7093118
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "13719",
+    "city": "Cleveland",
+    "lat": 41.4554753,
+    "lon": -81.7866284
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1515",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4972531,
+    "lon": -81.6947379
+  },
+  {
+    "street": "Frankfort Avenue",
+    "housenumber": "614",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4985886,
+    "lon": -81.6982161
+  },
+  {
+    "street": "Frankfort Avenue",
+    "housenumber": "620",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4985094,
+    "lon": -81.6983784
+  },
+  {
+    "street": "Frankfort Avenue",
+    "housenumber": "620",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4986027,
+    "lon": -81.6984253
+  },
+  {
+    "street": "West Superior Avenue",
+    "housenumber": "740",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4974626,
+    "lon": -81.6984205
+  },
+  {
+    "street": "West Superior Avenue",
+    "housenumber": "820",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.497317,
+    "lon": -81.6987043
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1406",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.498807,
+    "lon": -81.6980125
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4988554,
+    "lon": -81.6980635
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1396",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4989232,
+    "lon": -81.6981226
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1392",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.498924,
+    "lon": -81.6982513
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1392",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4989662,
+    "lon": -81.6981598
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4988248,
+    "lon": -81.6981464
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1388",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4989704,
+    "lon": -81.69828
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1388",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4990091,
+    "lon": -81.6981981
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1384",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4990587,
+    "lon": -81.6982424
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1378",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991133,
+    "lon": -81.6982902
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1374",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991486,
+    "lon": -81.6983223
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1370",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991793,
+    "lon": -81.6983498
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1352",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994047,
+    "lon": -81.6985556
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1415",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4980637,
+    "lon": -81.6994874
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1419",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4979997,
+    "lon": -81.6994294
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1350",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5000778,
+    "lon": -81.6968422
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "408",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5000344,
+    "lon": -81.6980365
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "410",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4999596,
+    "lon": -81.6982635
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "500",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.49981,
+    "lon": -81.6984885
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1313",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.500015,
+    "lon": -81.6986721
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1303",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001359,
+    "lon": -81.698703
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1303",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001143,
+    "lon": -81.6987605
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1277",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5004346,
+    "lon": -81.6990436
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1281",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5003728,
+    "lon": -81.6989885
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1265",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5005101,
+    "lon": -81.6990429
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1265",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5004885,
+    "lon": -81.6990916
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1261",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5005947,
+    "lon": -81.6991515
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1261",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5005839,
+    "lon": -81.699196
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1235",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.500883,
+    "lon": -81.6994518
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1237",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5008342,
+    "lon": -81.6994069
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1229",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.500945,
+    "lon": -81.6995076
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1223",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.501,
+    "lon": -81.6995567
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1223",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5010256,
+    "lon": -81.6994766
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1213",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5011798,
+    "lon": -81.6997203
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1213",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5012113,
+    "lon": -81.699649
+  },
+  {
+    "street": "West Lakeside Avenue",
+    "housenumber": "425",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5013676,
+    "lon": -81.6994736
+  },
+  {
+    "street": "West 4th Street",
+    "housenumber": "1260",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5009806,
+    "lon": -81.6986581
+  },
+  {
+    "street": "West 4th Street",
+    "housenumber": "1278",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5008023,
+    "lon": -81.6984962
+  },
+  {
+    "street": "West Lakeside Avenue",
+    "housenumber": "323",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5017357,
+    "lon": -81.6987255
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1200",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5018563,
+    "lon": -81.6984049
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1230",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5016198,
+    "lon": -81.698191
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1264",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5012247,
+    "lon": -81.6979765
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1264",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5012519,
+    "lon": -81.6978828
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1276",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5010968,
+    "lon": -81.6977246
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1280",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5010274,
+    "lon": -81.6977103
+  },
+  {
+    "street": "West Lakeside Avenue",
+    "housenumber": "310",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5020129,
+    "lon": -81.698819
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "1150",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5025702,
+    "lon": -81.6990502
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "700",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995892,
+    "lon": -81.6989169
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1296",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4999926,
+    "lon": -81.6992267
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1296",
+    "city": "Cleveland",
+    "lat": 41.5000425,
+    "lon": -81.6991314
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1290",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5000639,
+    "lon": -81.699279
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1290",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001155,
+    "lon": -81.6991958
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1280",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001966,
+    "lon": -81.699266
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1276",
+    "city": "Cleveland",
+    "lat": 41.5002633,
+    "lon": -81.6993243
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1266",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.500324,
+    "lon": -81.6995258
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1266",
+    "city": "Cleveland",
+    "lat": 41.5004025,
+    "lon": -81.6994458
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1265",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4996764,
+    "lon": -81.7009304
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1267",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4996131,
+    "lon": -81.7008729
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1273",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995808,
+    "lon": -81.7008439
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1273",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995727,
+    "lon": -81.7007107
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1275",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995177,
+    "lon": -81.7007872
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1273",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4996177,
+    "lon": -81.7007479
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1281",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994822,
+    "lon": -81.7007557
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1283",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994634,
+    "lon": -81.7007385
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1279",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994986,
+    "lon": -81.7007704
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1285",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994659,
+    "lon": -81.7006434
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1285",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4994182,
+    "lon": -81.7006968
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1291",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4993734,
+    "lon": -81.7006547
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1299",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4993349,
+    "lon": -81.7005304
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "850",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4992224,
+    "lon": -81.699837
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "850",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991549,
+    "lon": -81.6997741
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "844",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4991998,
+    "lon": -81.6996873
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1211",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5001959,
+    "lon": -81.7014037
+  },
+  {
+    "street": "West Lakeside Avenue",
+    "housenumber": "701",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5006252,
+    "lon": -81.700963
+  },
+  {
+    "street": "West Lakeside Avenue",
+    "housenumber": "635",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5008035,
+    "lon": -81.7005721
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "1220",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5009668,
+    "lon": -81.6999472
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "527",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986443,
+    "lon": -81.6889612
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "530",
+    "city": "Cleveland",
+    "lat": 41.4993312,
+    "lon": -81.6891135
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2077",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986005,
+    "lon": -81.6899531
+  },
+  {
+    "street": "Front Avenue",
+    "housenumber": "1163",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.500099,
+    "lon": -81.7062096
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1278",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.499297,
+    "lon": -81.7010298
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4989251,
+    "lon": -81.7006877
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.498952,
+    "lon": -81.7008162
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4990017,
+    "lon": -81.7008692
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1360",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4984247,
+    "lon": -81.7003132
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1360",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4984943,
+    "lon": -81.7002995
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1370",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4983795,
+    "lon": -81.7002529
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1370",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4984063,
+    "lon": -81.7002197
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1374",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4983659,
+    "lon": -81.7001824
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1390",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4981624,
+    "lon": -81.7000917
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1390",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4981962,
+    "lon": -81.7000299
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1380",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4982531,
+    "lon": -81.7000807
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "1468",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.497503,
+    "lon": -81.6994127
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "959",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4981096,
+    "lon": -81.7014189
+  },
+  {
+    "street": "West Saint Clair Avenue",
+    "housenumber": "955",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4980856,
+    "lon": -81.7010664
+  },
+  {
+    "street": "West Caddo",
+    "housenumber": "209",
+    "city": "Cleveland",
+    "postcode": "74020",
+    "lat": 36.3059174,
+    "lon": -96.4660748
+  },
+  {
+    "street": "Public Square",
+    "housenumber": "200",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4997123,
+    "lon": -81.6920859
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "150",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4992066,
+    "lon": -81.6923941
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "180",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4992612,
+    "lon": -81.6921151
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "224",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994359,
+    "lon": -81.6916956
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "230",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994555,
+    "lon": -81.691545
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "180",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4993112,
+    "lon": -81.6921007
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "240",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994919,
+    "lon": -81.6912837
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "234",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994725,
+    "lon": -81.6914226
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "248",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994968,
+    "lon": -81.6912475
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "226",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994486,
+    "lon": -81.6915977
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2047",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984015,
+    "lon": -81.692253
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2047",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4983765,
+    "lon": -81.6923056
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2013",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4988116,
+    "lon": -81.6927004
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2033",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.498797,
+    "lon": -81.6926535
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2033",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.49887,
+    "lon": -81.692709
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2033",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985642,
+    "lon": -81.6924757
+  },
+  {
+    "street": "Ontario Street",
+    "housenumber": "2025",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985935,
+    "lon": -81.6925025
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2061",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4988958,
+    "lon": -81.6899816
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2061",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4988489,
+    "lon": -81.6900201
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2043",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4991445,
+    "lon": -81.6901004
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "828",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986327,
+    "lon": -81.685894
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "236",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994412,
+    "lon": -81.691301
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "236",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4994792,
+    "lon": -81.6913747
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "512",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4997004,
+    "lon": -81.689413
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "530",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4997122,
+    "lon": -81.6893003
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006403,
+    "lon": -81.6897881
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006601,
+    "lon": -81.6897646
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1906",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006064,
+    "lon": -81.6897594
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1906",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006279,
+    "lon": -81.6897318
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1940",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003855,
+    "lon": -81.6895054
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1852",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5008464,
+    "lon": -81.6899228
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "629",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5001109,
+    "lon": -81.6887151
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "629",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5001502,
+    "lon": -81.688723
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "601",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5000619,
+    "lon": -81.6891115
+  },
+  {
+    "street": "Vincent Avenue",
+    "housenumber": "680",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5009199,
+    "lon": -81.6883317
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.500782,
+    "lon": -81.6875317
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "600",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5014347,
+    "lon": -81.6897566
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "800",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5018598,
+    "lon": -81.6888529
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1015",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5005276,
+    "lon": -81.685707
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1021",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5005616,
+    "lon": -81.6854727
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1110",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003246,
+    "lon": -81.6851514
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1104",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003107,
+    "lon": -81.6852618
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1106",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003134,
+    "lon": -81.6852402
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1112",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003349,
+    "lon": -81.685077
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1148",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5004214,
+    "lon": -81.6844724
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1140",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5004153,
+    "lon": -81.6845138
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1122",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5003626,
+    "lon": -81.6848748
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1260",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5005658,
+    "lon": -81.6834171
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1228",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5004573,
+    "lon": -81.6842105
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "1001",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4995451,
+    "lon": -81.6848406
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "921",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4995055,
+    "lon": -81.6849221
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1275",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5009168,
+    "lon": -81.6832551
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1275",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5008433,
+    "lon": -81.6833842
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1255",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5008008,
+    "lon": -81.6836956
+  },
+  {
+    "street": "East 13th Street",
+    "housenumber": "1901",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5018157,
+    "lon": -81.683154
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1305",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5009633,
+    "lon": -81.6828884
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1305",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5009189,
+    "lon": -81.6828363
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1307",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5009334,
+    "lon": -81.6827241
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1317",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5009584,
+    "lon": -81.6825343
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1331",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.501,
+    "lon": -81.6822332
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1361",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5010143,
+    "lon": -81.6821188
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1375",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.501182,
+    "lon": -81.6818417
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1375",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5010458,
+    "lon": -81.6818122
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1501",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5014061,
+    "lon": -81.6811352
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1401",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5011826,
+    "lon": -81.6815524
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1415",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012028,
+    "lon": -81.6812826
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1425",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012118,
+    "lon": -81.6811748
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1501",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5011372,
+    "lon": -81.6810711
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1505",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012253,
+    "lon": -81.6810489
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1507",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012343,
+    "lon": -81.680971
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1511",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5011599,
+    "lon": -81.6808592
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1519",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5011803,
+    "lon": -81.6806696
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1615",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012125,
+    "lon": -81.6803696
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1631",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5012307,
+    "lon": -81.6801997
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1438",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5008506,
+    "lon": -81.6809737
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5007906,
+    "lon": -81.6815785
+  },
+  {
+    "street": "East 14th Street",
+    "housenumber": "2033",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5004077,
+    "lon": -81.681231
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1350",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5005996,
+    "lon": -81.6820947
+  },
+  {
+    "street": "Murray Hill Road",
+    "housenumber": "2188",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5040984,
+    "lon": -81.6007495
+  },
+  {
+    "street": "Mayfield Road",
+    "housenumber": "12200",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5085451,
+    "lon": -81.5977622
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "1226",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5003601,
+    "lon": -81.6826008
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "1220",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.500197,
+    "lon": -81.6829443
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1100",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4991864,
+    "lon": -81.6836151
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1104",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4992091,
+    "lon": -81.6834505
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1122",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4992022,
+    "lon": -81.6830821
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1148",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4993151,
+    "lon": -81.682682
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1222",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4993905,
+    "lon": -81.6821647
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1213",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4995841,
+    "lon": -81.6823868
+  },
+  {
+    "street": "West 117th Street",
+    "housenumber": "2150",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4733205,
+    "lon": -81.7694142
+  },
+  {
+    "street": "West 117th Street",
+    "housenumber": "3100",
+    "city": "Cleveland",
+    "postcode": "44111-1747",
+    "lat": 41.4678153,
+    "lon": -81.7713672
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "1120",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5018804,
+    "lon": -81.6854306
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "1124",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5018474,
+    "lon": -81.6853358
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "1124",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5019058,
+    "lon": -81.6853799
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "1100",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5016015,
+    "lon": -81.6859838
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "1111",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5017946,
+    "lon": -81.6861147
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1717",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5020457,
+    "lon": -81.6881399
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "1701",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.502934,
+    "lon": -81.6855561
+  },
+  {
+    "street": "East 13th Street",
+    "housenumber": "1802",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.502561,
+    "lon": -81.6835858
+  },
+  {
+    "street": "Old River Road",
+    "housenumber": "1085",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995265,
+    "lon": -81.7059592
+  },
+  {
+    "street": "Old River Road",
+    "housenumber": "1059",
+    "city": "Cleveland",
+    "lat": 41.4996853,
+    "lon": -81.706442
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "618",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4983539,
+    "lon": -81.6884683
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "624",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4983943,
+    "lon": -81.6883963
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "624",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984437,
+    "lon": -81.6883863
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "618",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984268,
+    "lon": -81.6884866
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "612",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4984129,
+    "lon": -81.6885685
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "700",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985405,
+    "lon": -81.687882
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "724",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985906,
+    "lon": -81.6874897
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "728",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986127,
+    "lon": -81.6873754
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "750",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4986591,
+    "lon": -81.6870936
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "740",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4985753,
+    "lon": -81.6872552
+  },
+  {
+    "street": "Huron Road",
+    "housenumber": "651",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4981743,
+    "lon": -81.6876063
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "631",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4979792,
+    "lon": -81.6878749
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "651",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4981331,
+    "lon": -81.6875744
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "700",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4980529,
+    "lon": -81.6871047
+  },
+  {
+    "street": "Carnegie Avenue",
+    "housenumber": "1301",
+    "city": "Cleveland",
+    "lat": 41.4971909,
+    "lon": -81.6803488
+  },
+  {
+    "street": "Bolivar Road",
+    "housenumber": "727",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4973411,
+    "lon": -81.6859178
+  },
+  {
+    "street": "Bolivar Road",
+    "housenumber": "737",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4974536,
+    "lon": -81.6856971
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2056",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4988746,
+    "lon": -81.6901839
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2120",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4978231,
+    "lon": -81.6898767
+  },
+  {
+    "street": "High Street",
+    "housenumber": "211",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4976296,
+    "lon": -81.6903802
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "2121",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4977804,
+    "lon": -81.6906378
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "2121",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.4977602,
+    "lon": -81.6906912
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "2217",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4978522,
+    "lon": -81.6843854
+  },
+  {
+    "street": "Bolivar Road",
+    "housenumber": "1234",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4991698,
+    "lon": -81.6818973
+  },
+  {
+    "street": "Public Square",
+    "housenumber": "100",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4981227,
+    "lon": -81.6926485
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1301",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5043594,
+    "lon": -81.690177
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "2233",
+    "city": "Cleveland",
+    "lat": 41.4859355,
+    "lon": -81.6831149
+  },
+  {
+    "street": "North Marginal Road",
+    "housenumber": "1501",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5113986,
+    "lon": -81.6902994
+  },
+  {
+    "street": "Professor Avenue",
+    "housenumber": "2358",
+    "city": "Cleveland",
+    "lat": 41.4800922,
+    "lon": -81.6854104
+  },
+  {
+    "street": "Davinwood Drive",
+    "housenumber": "19215",
+    "city": "Cleveland",
+    "lat": 41.437847,
+    "lon": -81.8340648
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1309",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5009396,
+    "lon": -81.6826757
+  },
+  {
+    "street": "West 11th Street",
+    "housenumber": "1156",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4995136,
+    "lon": -81.7052343
+  },
+  {
+    "street": "West 11th Street",
+    "housenumber": "1086",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5000589,
+    "lon": -81.7057454
+  },
+  {
+    "street": "Kinsman Road",
+    "housenumber": "13815",
+    "city": "Cleveland",
+    "lat": 41.4648285,
+    "lon": -81.5864939
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "1440",
+    "city": "Cleveland",
+    "lat": 41.5196406,
+    "lon": -81.6522145
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3350",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4635111,
+    "lon": -81.6920285
+  },
+  {
+    "street": "North Marginal Road",
+    "housenumber": "1151",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5106233,
+    "lon": -81.6917339
+  },
+  {
+    "street": "North Marginal Road",
+    "housenumber": "1151",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5106505,
+    "lon": -81.691786
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "2203",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5040149,
+    "lon": -81.6747985
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "4150",
+    "city": "Cleveland",
+    "lat": 41.4801027,
+    "lon": -81.7145305
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "4125",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4799605,
+    "lon": -81.7140045
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6902",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4837236,
+    "lon": -81.7325526
+  },
+  {
+    "street": "East 131st Street",
+    "housenumber": "3789",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4557369,
+    "lon": -81.5909926
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "412",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5006652,
+    "lon": -81.6910994
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6605",
+    "city": "Cleveland",
+    "lat": 41.4837421,
+    "lon": -81.7310593
+  },
+  {
+    "street": "Clark Avenue",
+    "housenumber": "7301",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4694483,
+    "lon": -81.7364944
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4276",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4392184,
+    "lon": -81.7070346
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4284",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4391017,
+    "lon": -81.707116
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3415",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4602314,
+    "lon": -81.6886231
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3505",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4591472,
+    "lon": -81.688812
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "3376",
+    "city": "Cleveland",
+    "lat": 41.4666436,
+    "lon": -81.6518119
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "4007",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5166656,
+    "lon": -81.6641949
+  },
+  {
+    "street": "Professor Avenue",
+    "housenumber": "2505",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4779136,
+    "lon": -81.6826931
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7320",
+    "city": "Cleveland",
+    "lat": 41.4828354,
+    "lon": -81.7353913
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6610",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4839273,
+    "lon": -81.7312553
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6600",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4839564,
+    "lon": -81.7311302
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7320",
+    "city": "Cleveland",
+    "lat": 41.482827,
+    "lon": -81.7354087
+  },
+  {
+    "street": "West 65th Street",
+    "housenumber": "1408",
+    "city": "Cleveland",
+    "lat": 41.4834842,
+    "lon": -81.7304349
+  },
+  {
+    "street": "West 65th Street",
+    "housenumber": "1408 N",
+    "city": "Cleveland",
+    "lat": 41.4836966,
+    "lon": -81.7304384
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11616",
+    "city": "Lakewood",
+    "postcode": "44107",
+    "lat": 41.4835416,
+    "lon": -81.7679437
+  },
+  {
+    "street": "West 117th Street",
+    "housenumber": "3650",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4537605,
+    "lon": -81.7693239
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "7917",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5042134,
+    "lon": -81.6329755
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "11534",
+    "city": "Cleveland",
+    "lat": 41.487447,
+    "lon": -81.7672181
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11217",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4826979,
+    "lon": -81.7656912
+  },
+  {
+    "street": "Waterloo Road",
+    "housenumber": "15335",
+    "city": "Cleveland",
+    "lat": 41.5703181,
+    "lon": -81.573186
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11330",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5084745,
+    "lon": -81.6052887
+  },
+  {
+    "street": "East 55th Street",
+    "housenumber": "2765",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4831398,
+    "lon": -81.650831
+  },
+  {
+    "street": "Payne Avenue",
+    "housenumber": "3407",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5095788,
+    "lon": -81.6642028
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1948",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4847641,
+    "lon": -81.7040758
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "2626",
+    "city": "Cleveland",
+    "lat": 41.4836456,
+    "lon": -81.704885
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1947",
+    "city": "Cleveland",
+    "lat": 41.4849303,
+    "lon": -81.7037696
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1939",
+    "city": "Cleveland",
+    "lat": 41.4850117,
+    "lon": -81.7038385
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5800",
+    "city": "Cleveland",
+    "lat": 41.4851811,
+    "lon": -81.7264655
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "2000",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.499915,
+    "lon": -81.6867041
+  },
+  {
+    "street": "Clark Avenue",
+    "housenumber": "3300",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4702244,
+    "lon": -81.7053288
+  },
+  {
+    "street": "Riverside Drive",
+    "housenumber": "5300",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.4106032,
+    "lon": -81.8387945
+  },
+  {
+    "street": "Riverside Drive",
+    "housenumber": "5300",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.4074635,
+    "lon": -81.8419801
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5304",
+    "city": "Cleveland",
+    "lat": 41.4859893,
+    "lon": -81.7234791
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5506",
+    "city": "Cleveland",
+    "lat": 41.4855094,
+    "lon": -81.7252132
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "8004",
+    "city": "Cleveland",
+    "lat": 41.4816413,
+    "lon": -81.7404352
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11610",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5098384,
+    "lon": -81.6022082
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11610",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5105259,
+    "lon": -81.6025265
+  },
+  {
+    "street": "Denison Avenue",
+    "housenumber": "7050",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4620353,
+    "lon": -81.7366564
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1020",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5002811,
+    "lon": -81.685492
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1020",
+    "city": "Cleveland",
+    "lat": 41.500234,
+    "lon": -81.685479
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11205",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.507975,
+    "lon": -81.6072269
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1923",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4852293,
+    "lon": -81.703994
+  },
+  {
+    "street": "Denison Avenue",
+    "housenumber": "7134",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.462464,
+    "lon": -81.7373289
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1859",
+    "city": "Cleveland",
+    "lat": 41.4860078,
+    "lon": -81.7046509
+  },
+  {
+    "street": "East 4th Street",
+    "housenumber": "2050",
+    "city": "Cleveland",
+    "lat": 41.4989289,
+    "lon": -81.6902547
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "11630",
+    "city": "Cleveland",
+    "lat": 41.462228,
+    "lon": -81.7684281
+  },
+  {
+    "street": "FM 2025",
+    "housenumber": "107",
+    "city": "Cleveland",
+    "postcode": "77328",
+    "lat": 30.3548116,
+    "lon": -95.0912815
+  },
+  {
+    "street": "West St Clair Avenue",
+    "housenumber": "836",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4992719,
+    "lon": -81.699609
+  },
+  {
+    "street": "South Main",
+    "housenumber": "1004",
+    "city": "Cleveland",
+    "postcode": "30528",
+    "lat": 34.5834406,
+    "lon": -83.7623226
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "8302",
+    "city": "Cleveland",
+    "lat": 41.4811558,
+    "lon": -81.7417608
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1404",
+    "city": "Cleveland",
+    "lat": 41.5030887,
+    "lon": -81.6895001
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1413",
+    "city": "Cleveland",
+    "lat": 41.5029971,
+    "lon": -81.6888403
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1948",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4847866,
+    "lon": -81.7040366
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "lat": 41.4853397,
+    "lon": -81.7044782
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1844",
+    "city": "Cleveland",
+    "lat": 41.4860455,
+    "lon": -81.7050657
+  },
+  {
+    "street": "West Prospect Avenue",
+    "housenumber": "101",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4970498,
+    "lon": -81.6930651
+  },
+  {
+    "street": "Main Avenue",
+    "housenumber": "1148",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4982697,
+    "lon": -81.7063013
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6814",
+    "city": "Cleveland",
+    "lat": 41.4837056,
+    "lon": -81.732124
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7006",
+    "city": "Cleveland",
+    "lat": 41.4832734,
+    "lon": -81.7338078
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7310",
+    "city": "Cleveland",
+    "lat": 41.4828824,
+    "lon": -81.7351407
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7312",
+    "city": "Cleveland",
+    "lat": 41.482869,
+    "lon": -81.7351925
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7314",
+    "city": "Cleveland",
+    "lat": 41.4828583,
+    "lon": -81.735234
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7316",
+    "city": "Cleveland",
+    "lat": 41.4828476,
+    "lon": -81.7352753
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7318",
+    "city": "Cleveland",
+    "lat": 41.4828333,
+    "lon": -81.7353302
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6800",
+    "city": "Cleveland",
+    "lat": 41.483733,
+    "lon": -81.7319011
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "1530",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5069119,
+    "lon": -81.6838545
+  },
+  {
+    "street": "East 130th Street",
+    "housenumber": "216",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4710024,
+    "lon": -81.5918082
+  },
+  {
+    "street": "Bridge Avenue",
+    "housenumber": "3000",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4841884,
+    "lon": -81.7089063
+  },
+  {
+    "street": "East 140th Street",
+    "housenumber": "557",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5663157,
+    "lon": -81.5850087
+  },
+  {
+    "street": "West 43rd Place",
+    "housenumber": "3296",
+    "city": "cleveland",
+    "lat": 41.464998,
+    "lon": -81.7149537
+  },
+  {
+    "street": "Camden Avenue",
+    "housenumber": "3153",
+    "city": "Cleveland",
+    "lat": 41.4680502,
+    "lon": -81.7364317
+  },
+  {
+    "street": "Erieside Avenue",
+    "housenumber": "601",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.5076358,
+    "lon": -81.6969554
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "6301",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.474402,
+    "lon": -81.7288874
+  },
+  {
+    "street": "Superior Avenue",
+    "housenumber": "6103",
+    "city": "Cleveland",
+    "lat": 41.5186696,
+    "lon": -81.6471761
+  },
+  {
+    "street": "East 185th Street",
+    "housenumber": "772",
+    "city": "Cleveland",
+    "postcode": "44119",
+    "lat": 41.5866659,
+    "lon": -81.5500899
+  },
+  {
+    "street": "Turney Road",
+    "housenumber": "4525",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4364751,
+    "lon": -81.6197689
+  },
+  {
+    "street": "Quincy Avenue",
+    "housenumber": "8111",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4937396,
+    "lon": -81.631774
+  },
+  {
+    "street": "Turney Road",
+    "housenumber": "4500",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4368544,
+    "lon": -81.6209439
+  },
+  {
+    "street": "Green Road",
+    "housenumber": "2045",
+    "city": "Cleveland",
+    "lat": 41.5525516,
+    "lon": -81.5441439
+  },
+  {
+    "street": "Lake Shore Boulevard",
+    "housenumber": "17585",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5834063,
+    "lon": -81.5578115
+  },
+  {
+    "street": "East 40th Street",
+    "housenumber": "2504",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4920879,
+    "lon": -81.6584423
+  },
+  {
+    "street": "East 185th Street",
+    "housenumber": "808",
+    "city": "Cleveland",
+    "postcode": "44119",
+    "lat": 41.5853152,
+    "lon": -81.5500643
+  },
+  {
+    "street": "East 113th Street",
+    "housenumber": "680",
+    "city": "Cleveland",
+    "lat": 41.5378854,
+    "lon": -81.6062607
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "13531",
+    "city": "Cleveland",
+    "lat": 41.4563619,
+    "lon": -81.7853937
+  },
+  {
+    "street": "Lorain Road",
+    "housenumber": "13705",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4553306,
+    "lon": -81.786998
+  },
+  {
+    "street": "Warren Road",
+    "housenumber": "3354",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4626125,
+    "lon": -81.8028812
+  },
+  {
+    "street": "Warren Road",
+    "housenumber": "3352",
+    "city": "Cleveland",
+    "lat": 41.462673,
+    "lon": -81.8027754
+  },
+  {
+    "street": "Fleet Avenue",
+    "housenumber": "5614",
+    "city": "Cleveland",
+    "postcode": "44105",
+    "lat": 41.4556604,
+    "lon": -81.6497995
+  },
+  {
+    "street": "North Davis Avenue",
+    "housenumber": "721",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7582281,
+    "lon": -90.7164892
+  },
+  {
+    "street": "South Bayou Avenue",
+    "housenumber": "115",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7432384,
+    "lon": -90.7226115
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "14959",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.553102,
+    "lon": -81.5768752
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "14909",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5529226,
+    "lon": -81.5776186
+  },
+  {
+    "street": "Larchmere Boulevard",
+    "housenumber": "12721",
+    "city": "Cleveland",
+    "postcode": "44120",
+    "lat": 41.4877383,
+    "lon": -81.5936186
+  },
+  {
+    "street": "North Marginal Road",
+    "housenumber": "1501",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5115797,
+    "lon": -81.6901205
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "3463",
+    "city": "Cleveland",
+    "lat": 41.4600691,
+    "lon": -81.7115706
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1795",
+    "city": "Cleveland",
+    "lat": 41.486651,
+    "lon": -81.7046091
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1745",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4873778,
+    "lon": -81.7054551
+  },
+  {
+    "street": "East Boulevard",
+    "housenumber": "1575",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5137259,
+    "lon": -81.6166535
+  },
+  {
+    "street": "East Boulevard",
+    "housenumber": "10701",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5127593,
+    "lon": -81.6132225
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1938",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5013151,
+    "lon": -81.6767191
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2011",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4840827,
+    "lon": -81.7029632
+  },
+  {
+    "street": "Chester Avenue",
+    "housenumber": "2215",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5040683,
+    "lon": -81.6744108
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1938",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5013064,
+    "lon": -81.6768181
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "1400",
+    "city": "Cleveland",
+    "lat": 41.4912067,
+    "lon": -81.7074841
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10614",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4653847,
+    "lon": -81.7603391
+  },
+  {
+    "street": "Broadview Road",
+    "housenumber": "4457",
+    "city": "Cleveland",
+    "lat": 41.4345062,
+    "lon": -81.6969217
+  },
+  {
+    "street": "Keith Street Northwest",
+    "housenumber": "2499",
+    "city": "Cleveland",
+    "postcode": "37311-1350",
+    "lat": 35.182381,
+    "lon": -84.8738768
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11607",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5107462,
+    "lon": -81.6032508
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6604",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4840087,
+    "lon": -81.7309315
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5209",
+    "city": "Cleveland",
+    "lat": 41.4857677,
+    "lon": -81.7230201
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "13405",
+    "city": "Cleveland",
+    "lat": 41.5458672,
+    "lon": -81.5898553
+  },
+  {
+    "street": "Front Avenue",
+    "housenumber": "983",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.5014368,
+    "lon": -81.7032126
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "868",
+    "city": "Cleveland",
+    "postcode": "30528",
+    "lat": 34.5841565,
+    "lon": -83.7625453
+  },
+  {
+    "street": "US 59",
+    "housenumber": "831",
+    "city": "Cleveland",
+    "lat": 30.3339952,
+    "lon": -95.098424
+  },
+  {
+    "street": "Brookpark Road",
+    "housenumber": "19000",
+    "city": "Cleveland",
+    "postcode": "44135",
+    "lat": 41.4191824,
+    "lon": -81.8326392
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "14747",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4530179,
+    "lon": -81.7995779
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6416",
+    "city": "Cleveland",
+    "lat": 41.4842512,
+    "lon": -81.7299852
+  },
+  {
+    "street": "Columbus Road",
+    "housenumber": "2135",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4833504,
+    "lon": -81.7002245
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1940",
+    "city": "Cleveland",
+    "lat": 41.500541,
+    "lon": -81.6896897
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "7121",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.5282771,
+    "lon": -81.6390851
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "6129",
+    "city": "Cleveland",
+    "lat": 41.5240738,
+    "lon": -81.6483271
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "6131",
+    "city": "Cleveland",
+    "lat": 41.5241104,
+    "lon": -81.6482418
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "811",
+    "city": "Cleveland",
+    "lat": 41.4989615,
+    "lon": -81.6870015
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "3329",
+    "city": "Cleveland",
+    "lat": 41.4634763,
+    "lon": -81.7095129
+  },
+  {
+    "street": "Fulton Road",
+    "housenumber": "3569",
+    "city": "Cleveland",
+    "lat": 41.4572998,
+    "lon": -81.713339
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "11621",
+    "city": "Cleveland",
+    "lat": 41.4618966,
+    "lon": -81.7682823
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10034",
+    "city": "Cleveland",
+    "lat": 41.4669794,
+    "lon": -81.7537948
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "9701",
+    "city": "Cleveland",
+    "lat": 41.4679587,
+    "lon": -81.7500136
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10106",
+    "city": "Cleveland",
+    "lat": 41.4667594,
+    "lon": -81.7544664
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "800",
+    "city": "Cleveland",
+    "lat": 41.4983828,
+    "lon": -81.6863973
+  },
+  {
+    "street": "Henninger Road",
+    "housenumber": "2700",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4416041,
+    "lon": -81.7019251
+  },
+  {
+    "street": "East 40th Street",
+    "housenumber": "2480",
+    "city": "Cleveland",
+    "lat": 41.4923452,
+    "lon": -81.6588089
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "3636",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.503068,
+    "lon": -81.6608903
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11321",
+    "city": "Cleveland",
+    "lat": 41.4819697,
+    "lon": -81.6060967
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "11309",
+    "city": "Cleveland",
+    "lat": 41.4817448,
+    "lon": -81.6060785
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "3604",
+    "city": "Cleveland",
+    "lat": 41.5123228,
+    "lon": -81.6654633
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "10908",
+    "city": "Cleveland",
+    "lat": 41.4863188,
+    "lon": -81.760731
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "7911",
+    "city": "Cleveland",
+    "lat": 41.4814295,
+    "lon": -81.7395043
+  },
+  {
+    "street": "Saint Clair Avenue",
+    "housenumber": "10334",
+    "city": "Cleveland",
+    "postcode": "44108",
+    "lat": 41.5373677,
+    "lon": -81.6164211
+  },
+  {
+    "street": "East 152 Street",
+    "housenumber": "944",
+    "city": "Cleveland",
+    "postcode": "44110",
+    "lat": 41.5537751,
+    "lon": -81.5759892
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6514",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.484047,
+    "lon": -81.730815
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6512",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4840637,
+    "lon": -81.7307479
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6508",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4840804,
+    "lon": -81.7306846
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6515",
+    "city": "Cleveland",
+    "lat": 41.4837833,
+    "lon": -81.7308932
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6505",
+    "city": "Cleveland",
+    "lat": 41.4838319,
+    "lon": -81.730719
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "12201",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5141406,
+    "lon": -81.5990607
+  },
+  {
+    "street": "East 9th Street",
+    "housenumber": "1300",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5041341,
+    "lon": -81.6906312
+  },
+  {
+    "street": "Huron Road East",
+    "housenumber": "1001",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.4996375,
+    "lon": -81.6847712
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "4621",
+    "city": "Cleveland",
+    "lat": 41.4964501,
+    "lon": -81.6535104
+  },
+  {
+    "street": "Quebec Avenue",
+    "housenumber": "9803",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.4945503,
+    "lon": -81.6191092
+  },
+  {
+    "street": "East 100th Street",
+    "housenumber": "2306",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.4952339,
+    "lon": -81.6184421
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6416",
+    "city": "Cleveland",
+    "lat": 41.484234,
+    "lon": -81.7300704
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "11508",
+    "city": "Cleveland",
+    "lat": 41.4626988,
+    "lon": -81.7669928
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "11633",
+    "city": "Cleveland",
+    "lat": 41.4618321,
+    "lon": -81.7685868
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "4201",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4874656,
+    "lon": -81.7163649
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "10426",
+    "city": "Cleveland",
+    "lat": 41.4814488,
+    "lon": -81.7587757
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11117",
+    "city": "Cleveland",
+    "lat": 41.4824545,
+    "lon": -81.7647275
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11600",
+    "city": "Cleveland",
+    "lat": 41.4834608,
+    "lon": -81.767569
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11602",
+    "city": "Cleveland",
+    "postcode": "44107",
+    "lat": 41.4834641,
+    "lon": -81.7676254
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "2817",
+    "city": "Cleveland",
+    "lat": 41.4903486,
+    "lon": -81.7095171
+  },
+  {
+    "street": "Memphis Avenue",
+    "housenumber": "5203",
+    "city": "Cleveland",
+    "lat": 41.4400939,
+    "lon": -81.72234
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11500",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5101312,
+    "lon": -81.6032904
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "11472",
+    "city": "Cleveland",
+    "postcode": "44106",
+    "lat": 41.5100331,
+    "lon": -81.6035367
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5107",
+    "city": "Cleveland",
+    "lat": 41.4860094,
+    "lon": -81.7223234
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1900",
+    "city": "Cleveland",
+    "lat": 41.5012205,
+    "lon": -81.677522
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6706",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4838245,
+    "lon": -81.7316134
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11121",
+    "city": "Cleveland",
+    "lat": 41.4827139,
+    "lon": -81.765777
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11009",
+    "city": "Cleveland",
+    "lat": 41.4820715,
+    "lon": -81.7632396
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5701",
+    "city": "Cleveland",
+    "lat": 41.4851274,
+    "lon": -81.7257403
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5507",
+    "city": "Cleveland",
+    "lat": 41.485255,
+    "lon": -81.7250604
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5400",
+    "city": "Cleveland",
+    "lat": 41.4857867,
+    "lon": -81.7240932
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6421",
+    "city": "Cleveland",
+    "lat": 41.4840463,
+    "lon": -81.7299446
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5605",
+    "city": "Cleveland",
+    "lat": 41.4851879,
+    "lon": -81.7254606
+  },
+  {
+    "street": "Steelyard Drive",
+    "housenumber": "3344",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4628581,
+    "lon": -81.6919604
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "8001",
+    "city": "Cleveland",
+    "lat": 41.4814127,
+    "lon": -81.7400373
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1228",
+    "city": "Cleveland",
+    "lat": 41.500469,
+    "lon": -81.6838174
+  },
+  {
+    "street": "Prospect Avenue East",
+    "housenumber": "1144",
+    "city": "Cleveland",
+    "postcode": "44103",
+    "lat": 41.4992517,
+    "lon": -81.6829394
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "2519",
+    "city": "Cleveland",
+    "lat": 41.4911996,
+    "lon": -81.7076173
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5712",
+    "city": "Cleveland",
+    "lat": 41.4852684,
+    "lon": -81.7261598
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "5712",
+    "city": "Cleveland",
+    "lat": 41.4852392,
+    "lon": -81.7261816
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6519",
+    "city": "Cleveland",
+    "lat": 41.4837723,
+    "lon": -81.7309446
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "2605",
+    "city": "Cleveland",
+    "postcode": "44113",
+    "lat": 41.4907735,
+    "lon": -81.7084968
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10240",
+    "city": "Cleveland",
+    "lat": 41.4662165,
+    "lon": -81.7561312
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10616",
+    "city": "Cleveland",
+    "postcode": "44111",
+    "lat": 41.4654738,
+    "lon": -81.7603328
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10756",
+    "city": "Cleveland",
+    "lat": 41.466511,
+    "lon": -81.76077
+  },
+  {
+    "street": "Pearl Road",
+    "housenumber": "4138",
+    "city": "Cleveland",
+    "postcode": "44109",
+    "lat": 41.4426947,
+    "lon": -81.7044953
+  },
+  {
+    "street": "Payne Avenue",
+    "housenumber": "3009",
+    "city": "Cleveland",
+    "lat": 41.5081512,
+    "lon": -81.6683951
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1260",
+    "city": "Cleveland",
+    "postcode": "44115",
+    "lat": 41.5005104,
+    "lon": -81.683382
+  },
+  {
+    "street": "Payne Avenue",
+    "housenumber": "3004",
+    "city": "Cleveland",
+    "lat": 41.5078867,
+    "lon": -81.6682862
+  },
+  {
+    "street": "Clifton Boulevard",
+    "housenumber": "11508-11510",
+    "city": "Cleveland",
+    "lat": 41.4873306,
+    "lon": -81.7665962
+  },
+  {
+    "street": "North Davis Avenue",
+    "housenumber": "400",
+    "city": "Cleveland",
+    "postcode": "38732",
+    "lat": 33.7495289,
+    "lon": -90.7154493
+  },
+  {
+    "street": "Superior Avenue East",
+    "housenumber": "1261",
+    "city": "Cleveland",
+    "postcode": "44114",
+    "lat": 41.5041432,
+    "lon": -81.6853889
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "3350",
+    "city": "Cleveland",
+    "lat": 41.4629312,
+    "lon": -81.7006121
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "11100",
+    "city": "Cleveland",
+    "lat": 41.4825671,
+    "lon": -81.764003
+  },
+  {
+    "street": "Detroit Avenue",
+    "housenumber": "6602",
+    "city": "Cleveland",
+    "postcode": "44102",
+    "lat": 41.4840267,
+    "lon": -81.7308733
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10648",
+    "city": "Cleveland",
+    "lat": 41.4659,
+    "lon": -81.7603065
+  },
+  {
+    "street": "Lorain Avenue",
+    "housenumber": "10038",
+    "city": "Cleveland",
+    "lat": 41.4669194,
+    "lon": -81.753965
+  },
+  {
+    "street": "Georgetown Road Northwest",
+    "housenumber": "3775",
+    "city": "Cleveland",
+    "postcode": "37312",
+    "lat": 35.2072199,
+    "lon": -84.8872098
+  },
+  {
+    "street": "Buckeye Road",
+    "housenumber": "9511",
+    "city": "Cleveland",
+    "postcode": "44104",
+    "lat": 41.4838367,
+    "lon": -81.6194135
+  },
+  {
+    "street": "West 25th Street",
+    "housenumber": "2084",
+    "city": "Cleveland",
+    "lat": 41.4832056,
+    "lon": -81.7027935
+  },
+  {
+    "street": "West 110th Street",
+    "housenumber": "2110",
+    "city": "Cleveland",
+    "lat": 41.4742217,
+    "lon": -81.7632992
+  },
+  {
+    "street": "East 12th Street",
+    "housenumber": "1803",
+    "city": "Cleveland",
+    "lat": 41.5017207,
+    "lon": -81.6846646
+  }
+]

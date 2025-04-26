@@ -1,0 +1,7738 @@
+[
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "613",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7306714,
+    "lon": -74.034875
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "1830",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7021916,
+    "lon": -74.0908757
+  },
+  {
+    "street": "Beacon Way",
+    "housenumber": "4",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.722602,
+    "lon": -74.0631968
+  },
+  {
+    "street": "Stegman Street",
+    "housenumber": "271",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7068615,
+    "lon": -74.0879859
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2811",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7318917,
+    "lon": -74.0675996
+  },
+  {
+    "street": "York Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "lat": 40.7159209,
+    "lon": -74.0394451
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "440",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7349897,
+    "lon": -74.0582761
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2932",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.733259,
+    "lon": -74.0625585
+  },
+  {
+    "street": "Martin Luther King Drive",
+    "housenumber": "360",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7104052,
+    "lon": -74.077189
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "708",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7289956,
+    "lon": -74.0446947
+  },
+  {
+    "street": "8th St",
+    "housenumber": "235",
+    "city": "Jersey City",
+    "lat": 40.7266477,
+    "lon": -74.0436947
+  },
+  {
+    "street": "Warren St.",
+    "housenumber": "199",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7141658,
+    "lon": -74.0397517
+  },
+  {
+    "street": "Warren St.",
+    "housenumber": "189",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7139448,
+    "lon": -74.0398626
+  },
+  {
+    "street": "Washington St.",
+    "housenumber": "199",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7139795,
+    "lon": -74.0381392
+  },
+  {
+    "street": "Erie Street",
+    "housenumber": "20",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7216894,
+    "lon": -74.0441678
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "236",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7162315,
+    "lon": -74.0446403
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "611",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7249319,
+    "lon": -74.0457092
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "99",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7159794,
+    "lon": -74.0360105
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "631",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7164597,
+    "lon": -74.063261
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "595",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7325654,
+    "lon": -74.0578759
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "438",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7301701,
+    "lon": -74.0610751
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "365",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7285237,
+    "lon": -74.0631135
+  },
+  {
+    "street": "Route 440",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7106029,
+    "lon": -74.1018059
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "282",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7444375,
+    "lon": -74.0502412
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "375",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7476149,
+    "lon": -74.0480551
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "312",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7191452,
+    "lon": -74.0430233
+  },
+  {
+    "street": "Town Square Place",
+    "housenumber": "111",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7263081,
+    "lon": -74.0331745
+  },
+  {
+    "street": "Westside Avenue",
+    "housenumber": "513",
+    "city": "Jersey City",
+    "postcode": "07304-1517",
+    "lat": 40.7185523,
+    "lon": -74.0836861
+  },
+  {
+    "street": "Route 440",
+    "housenumber": "727",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7231242,
+    "lon": -74.0943375
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "540",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7275749,
+    "lon": -74.0338735
+  },
+  {
+    "street": "Harborside Place",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07311",
+    "lat": 40.7195943,
+    "lon": -74.0321097
+  },
+  {
+    "street": "Harborside Fin Center",
+    "housenumber": "1620 Plaza 5",
+    "city": "Jersey City",
+    "postcode": "07311",
+    "lat": 40.7186765,
+    "lon": -74.0345928
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2815",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7320972,
+    "lon": -74.0669572
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2866",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7314306,
+    "lon": -74.0646773
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2814",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7316928,
+    "lon": -74.0668713
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2873",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7317213,
+    "lon": -74.0646538
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2844",
+    "city": "Jersey City",
+    "lat": 40.7315889,
+    "lon": -74.0658985
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "520",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7316152,
+    "lon": -74.060001
+  },
+  {
+    "street": "Van Horne Street",
+    "housenumber": "202",
+    "city": "Jersey City",
+    "lat": 40.7121466,
+    "lon": -74.064211
+  },
+  {
+    "street": "Morris Street",
+    "housenumber": "112",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7140963,
+    "lon": -74.0390342
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "212",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7143807,
+    "lon": -74.0376094
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "772",
+    "city": "Jersey City",
+    "lat": 40.7267936,
+    "lon": -74.0763927
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2821",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319737,
+    "lon": -74.0667144
+  },
+  {
+    "street": "2nd Street #C",
+    "housenumber": "428",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7236171,
+    "lon": -74.0523999
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "365",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7284214,
+    "lon": -74.0630906
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "183",
+    "city": "Jersey City",
+    "lat": 40.7172605,
+    "lon": -74.0429425
+  },
+  {
+    "street": "Trenton Street",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7266672,
+    "lon": -74.0582135
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "512A",
+    "city": "Jersey City",
+    "lat": 40.7202441,
+    "lon": -74.0468575
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.6848654,
+    "lon": -74.0987034
+  },
+  {
+    "street": "Amity Street",
+    "housenumber": "65",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7207523,
+    "lon": -74.0619621
+  },
+  {
+    "street": "River Drive South",
+    "housenumber": "29",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7271168,
+    "lon": -74.0323385
+  },
+  {
+    "street": "US Route 440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7197757,
+    "lon": -74.096101
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7447369,
+    "lon": -74.0634521
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "341",
+    "city": "Jersey City",
+    "lat": 40.7404653,
+    "lon": -74.0467127
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "536",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7188558,
+    "lon": -74.0828047
+  },
+  {
+    "street": "Morris Street",
+    "housenumber": "85",
+    "city": "Jersey City",
+    "lat": 40.7136927,
+    "lon": -74.0376575
+  },
+  {
+    "street": "Baldwin Avenue",
+    "housenumber": "456",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7363908,
+    "lon": -74.0514788
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "342",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7110797,
+    "lon": -74.0619419
+  },
+  {
+    "street": "Pacific Avenue",
+    "housenumber": "336",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7121249,
+    "lon": -74.0614035
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "560",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7199498,
+    "lon": -74.0818493
+  },
+  {
+    "street": "Webster Ave",
+    "housenumber": "98",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7418967,
+    "lon": -74.0474859
+  },
+  {
+    "street": "16th Street",
+    "housenumber": "234",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7328279,
+    "lon": -74.0427908
+  },
+  {
+    "street": "Journal Square",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "lat": 40.7305798,
+    "lon": -74.0649049
+  },
+  {
+    "street": "1st Street",
+    "housenumber": "172",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7216573,
+    "lon": -74.0408424
+  },
+  {
+    "street": "Brunswick Street",
+    "housenumber": "255",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7292912,
+    "lon": -74.0504367
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "15",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7160533,
+    "lon": -74.0332033
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "276",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7173589,
+    "lon": -74.0439681
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "922",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306956,
+    "lon": -74.0642995
+  },
+  {
+    "street": "7th Street",
+    "housenumber": "207",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7258859,
+    "lon": -74.0427001
+  },
+  {
+    "street": "Bay Street",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720768,
+    "lon": -74.0392736
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.685371,
+    "lon": -74.0986896
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "239",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7105038,
+    "lon": -74.0847252
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2078",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7095189,
+    "lon": -74.0853362
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "209",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7095934,
+    "lon": -74.0845792
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "1768",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7010356,
+    "lon": -74.0936647
+  },
+  {
+    "street": "State Route 440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.721054,
+    "lon": -74.0950233
+  },
+  {
+    "street": "State Route 440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.720737,
+    "lon": -74.0934833
+  },
+  {
+    "street": "State Route 440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7217152,
+    "lon": -74.0932961
+  },
+  {
+    "street": "State Route 440",
+    "housenumber": "725",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7228521,
+    "lon": -74.0919125
+  },
+  {
+    "street": "NJ 440",
+    "housenumber": "685",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7200922,
+    "lon": -74.0936868
+  },
+  {
+    "street": "Kennedy Boulevard",
+    "housenumber": "2823",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319596,
+    "lon": -74.0666526
+  },
+  {
+    "street": "Journal Square",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7310353,
+    "lon": -74.0645907
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "lat": 40.7313689,
+    "lon": -74.0645104
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2833",
+    "city": "Jersey City",
+    "lat": 40.73192,
+    "lon": -74.0663008
+  },
+  {
+    "street": "Path Plaza",
+    "housenumber": "3",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7323956,
+    "lon": -74.0629413
+  },
+  {
+    "street": "Christopher Columbus Drive",
+    "housenumber": "98",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7193798,
+    "lon": -74.0416979
+  },
+  {
+    "street": "7th St",
+    "housenumber": "227",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7259869,
+    "lon": -74.0437923
+  },
+  {
+    "street": "Erie Street",
+    "housenumber": "131",
+    "city": "Jersey City",
+    "lat": 40.7265556,
+    "lon": -74.0437045
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "1212",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7562906,
+    "lon": -74.044058
+  },
+  {
+    "street": "Secaucus Road",
+    "housenumber": "745",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7565291,
+    "lon": -74.0448679
+  },
+  {
+    "street": "Secaucus Road",
+    "housenumber": "737",
+    "city": "Jersey City",
+    "postcode": "07047",
+    "lat": 40.756444,
+    "lon": -74.0446081
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "1212",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7564016,
+    "lon": -74.0444843
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "492",
+    "city": "Jersey City",
+    "lat": 40.7195035,
+    "lon": -74.0471617
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "500",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7197477,
+    "lon": -74.0470279
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "610",
+    "city": "Jersey City",
+    "lat": 40.7302988,
+    "lon": -74.0340433
+  },
+  {
+    "street": "River Drive",
+    "housenumber": "105",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.729639,
+    "lon": -74.0322691
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "164",
+    "city": "Jersey City",
+    "lat": 40.7209917,
+    "lon": -74.0446291
+  },
+  {
+    "street": "State Rt 440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7220398,
+    "lon": -74.0954939
+  },
+  {
+    "street": "Harbor Drive",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "lat": 40.6811782,
+    "lon": -74.090784
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "320",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7327984,
+    "lon": -74.0534335
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "615",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7324626,
+    "lon": -74.0608869
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "514",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752082,
+    "lon": -74.0450009
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "518",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521843,
+    "lon": -74.0449419
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "837",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7346049,
+    "lon": -74.044525
+  },
+  {
+    "street": "Journal Square",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.730589,
+    "lon": -74.0649732
+  },
+  {
+    "street": "Liberty View Drive",
+    "housenumber": "88",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.715127,
+    "lon": -74.0466854
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "187",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7212827,
+    "lon": -74.0457742
+  },
+  {
+    "street": "Journal Square",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7304487,
+    "lon": -74.0637771
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2881",
+    "city": "Jersey City",
+    "lat": 40.7319706,
+    "lon": -74.0643069
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "46",
+    "city": "Jersey City",
+    "lat": 40.7317816,
+    "lon": -74.0644058
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "909",
+    "city": "Jersey City",
+    "lat": 40.730212,
+    "lon": -74.0652467
+  },
+  {
+    "street": "Path Plaza",
+    "housenumber": "9",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7318008,
+    "lon": -74.063089
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "2974",
+    "city": "Jersey City",
+    "lat": 40.7346747,
+    "lon": -74.0629839
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2983",
+    "city": "Jersey City",
+    "lat": 40.7351129,
+    "lon": -74.0634198
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "899",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7300561,
+    "lon": -74.0654826
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "885",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7297017,
+    "lon": -74.0661307
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "895",
+    "city": "Jersey City",
+    "lat": 40.7298785,
+    "lon": -74.0656265
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "531",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306054,
+    "lon": -74.0559473
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "527",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7304821,
+    "lon": -74.0558364
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "523",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.73037,
+    "lon": -74.0557462
+  },
+  {
+    "street": "Senate Place",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7373652,
+    "lon": -74.0674702
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "288",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7447071,
+    "lon": -74.0499627
+  },
+  {
+    "street": "Senate Place",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7368301,
+    "lon": -74.0676889
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "410",
+    "city": "Jersey City",
+    "lat": 40.7474949,
+    "lon": -74.0402645
+  },
+  {
+    "street": "Armstrong Ave",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7033533,
+    "lon": -74.0882328
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "lat": 40.7353185,
+    "lon": -74.0541317
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "319",
+    "city": "Jersey City",
+    "lat": 40.7193943,
+    "lon": -74.0433775
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306018,
+    "lon": -74.0636029
+  },
+  {
+    "street": "Duncan Avenue",
+    "housenumber": "240",
+    "city": "Jersey City",
+    "lat": 40.7281723,
+    "lon": -74.0796628
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "880",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7291247,
+    "lon": -74.0657882
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "351",
+    "city": "Jersey City",
+    "lat": 40.7277641,
+    "lon": -74.0637724
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "700",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7250739,
+    "lon": -74.0672541
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "506",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200542,
+    "lon": -74.0468324
+  },
+  {
+    "street": "Dey Street",
+    "housenumber": "50",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7377929,
+    "lon": -74.0664786
+  },
+  {
+    "street": "Monmouth Street",
+    "housenumber": "237",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7178,
+    "lon": -74.0524
+  },
+  {
+    "street": "River Court",
+    "housenumber": "20",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7274426,
+    "lon": -74.031694
+  },
+  {
+    "street": "Monmouth Street",
+    "housenumber": "383",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.722652,
+    "lon": -74.0493641
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "340",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7464963,
+    "lon": -74.0487918
+  },
+  {
+    "street": "John F. Kennedy Blvd",
+    "housenumber": "2681",
+    "city": "Jersey City",
+    "lat": 40.7281222,
+    "lon": -74.0705956
+  },
+  {
+    "street": "River Drive South",
+    "housenumber": "55",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7275647,
+    "lon": -74.0323223
+  },
+  {
+    "street": "Town Square Pl",
+    "housenumber": "99",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7263682,
+    "lon": -74.0331984
+  },
+  {
+    "street": "Tonnele Avenue",
+    "housenumber": "463",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7468637,
+    "lon": -74.0621938
+  },
+  {
+    "street": "Washington Blvd",
+    "housenumber": "525",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7271856,
+    "lon": -74.0351633
+  },
+  {
+    "street": "Washington Boulevard G",
+    "housenumber": "525",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7267768,
+    "lon": -74.0352381
+  },
+  {
+    "street": "Washington Blvd",
+    "housenumber": "564",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7285546,
+    "lon": -74.0342317
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3000",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7359194,
+    "lon": -74.0628182
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "814",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7357763,
+    "lon": -74.0655509
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "275",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7177283,
+    "lon": -74.044202
+  },
+  {
+    "street": "NJ-440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7212011,
+    "lon": -74.0954223
+  },
+  {
+    "street": "NJ-440",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7210847,
+    "lon": -74.0954451
+  },
+  {
+    "street": "Mall Drive",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7272065,
+    "lon": -74.0384186
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "525",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7268882,
+    "lon": -74.0357064
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "525",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7265177,
+    "lon": -74.035335
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2815",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319915,
+    "lon": -74.0668509
+  },
+  {
+    "street": "1st Street",
+    "housenumber": "280",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.722128,
+    "lon": -74.0465781
+  },
+  {
+    "street": "River Drive South",
+    "housenumber": "10",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7267158,
+    "lon": -74.0320126
+  },
+  {
+    "street": "River Drive South",
+    "housenumber": "126",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7305031,
+    "lon": -74.0317088
+  },
+  {
+    "street": "Town Square Place",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7268426,
+    "lon": -74.0335143
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "558",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7283574,
+    "lon": -74.034243
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "499",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.726207,
+    "lon": -74.0358573
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "479",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7251666,
+    "lon": -74.0360587
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "870",
+    "city": "Jersey City",
+    "lat": 40.7298689,
+    "lon": -74.0741688
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "101",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7158158,
+    "lon": -74.0344529
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2708",
+    "city": "Jersey City",
+    "lat": 40.7287778,
+    "lon": -74.0696033
+  },
+  {
+    "street": "Journal Square Plaza, Jersey City, NJ 07306",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7333259,
+    "lon": -74.0632676
+  },
+  {
+    "street": "1st Street",
+    "housenumber": "293",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7219544,
+    "lon": -74.0471722
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7213659,
+    "lon": -74.0458874
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "260",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.723136,
+    "lon": -74.0488334
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "222",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7212428,
+    "lon": -74.05266
+  },
+  {
+    "street": "Christopher Columbus Drive",
+    "housenumber": "50",
+    "city": "Jersey City",
+    "lat": 40.718593,
+    "lon": -74.0393123
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "200",
+    "city": "Jersey City",
+    "lat": 40.7183594,
+    "lon": -74.0338841
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "15",
+    "city": "Jersey City",
+    "lat": 40.7160957,
+    "lon": -74.0333967
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "239",
+    "city": "Jersey City",
+    "lat": 40.7157723,
+    "lon": -74.0377549
+  },
+  {
+    "street": "Monmouth Street",
+    "housenumber": "492",
+    "city": "Jersey City",
+    "lat": 40.7274606,
+    "lon": -74.0484185
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "746",
+    "city": "Jersey City",
+    "lat": 40.7255819,
+    "lon": -74.0684428
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "787",
+    "city": "Jersey City",
+    "lat": 40.7261173,
+    "lon": -74.0678008
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "790",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7259204,
+    "lon": -74.0668745
+  },
+  {
+    "street": "Central Ave, Jersey City, NJ 07307",
+    "housenumber": "210",
+    "city": "Jersey City",
+    "lat": 40.741778,
+    "lon": -74.0520542
+  },
+  {
+    "street": "Central Ave, Jersey City, NJ 07307",
+    "housenumber": "206",
+    "city": "Jersey City",
+    "lat": 40.7415327,
+    "lon": -74.0521245
+  },
+  {
+    "street": "Reservoir Ave",
+    "housenumber": "83",
+    "city": "Jersey City",
+    "lat": 40.7397984,
+    "lon": -74.051525
+  },
+  {
+    "street": "Summit Ave, Jersey City, NJ 07306",
+    "housenumber": "694",
+    "city": "Jersey City",
+    "lat": 40.7386694,
+    "lon": -74.0582002
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "341",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205078,
+    "lon": -74.0429382
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "194",
+    "city": "Jersey City",
+    "lat": 40.7316214,
+    "lon": -74.0684813
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "205",
+    "city": "Jersey City",
+    "lat": 40.7316088,
+    "lon": -74.0693104
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "240",
+    "city": "Jersey City",
+    "lat": 40.7321979,
+    "lon": -74.0712227
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "582",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7172237,
+    "lon": -74.0719074
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "234",
+    "city": "Jersey CITY",
+    "postcode": "07305",
+    "lat": 40.7112795,
+    "lon": -74.0927652
+  },
+  {
+    "street": "Amity Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7179475,
+    "lon": -74.0613133
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "475",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7241613,
+    "lon": -74.0361876
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "97",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7289866,
+    "lon": -74.0633823
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "772",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7355456,
+    "lon": -74.0637956
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2808",
+    "city": "Jersey City",
+    "lat": 40.7316841,
+    "lon": -74.0670883
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "2860",
+    "city": "Jersey City",
+    "lat": 40.7314812,
+    "lon": -74.0647908
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2839",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7320289,
+    "lon": -74.0660062
+  },
+  {
+    "street": "Manila Avenue",
+    "housenumber": "418",
+    "city": "Jersey City",
+    "lat": 40.7240101,
+    "lon": -74.0421069
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "9",
+    "city": "Jersey City",
+    "lat": 40.7151767,
+    "lon": -74.0461596
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2854",
+    "city": "Jersey City",
+    "lat": 40.731501,
+    "lon": -74.0651235
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "924",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7305329,
+    "lon": -74.0644488
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "335-337",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7250059,
+    "lon": -74.0515395
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "1841",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7030407,
+    "lon": -74.0913269
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "591",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7346862,
+    "lon": -74.0594023
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "315",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7193308,
+    "lon": -74.0433677
+  },
+  {
+    "street": "NJ 440",
+    "housenumber": "685",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7199006,
+    "lon": -74.0938934
+  },
+  {
+    "street": "Bay Street",
+    "housenumber": "246",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7212337,
+    "lon": -74.0447229
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "364",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7214215,
+    "lon": -74.0425579
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "753",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7253828,
+    "lon": -74.0686029
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "564-566",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7317868,
+    "lon": -74.0566062
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "542",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731019,
+    "lon": -74.0559644
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "530D",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7311188,
+    "lon": -74.0555476
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "530C",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7311033,
+    "lon": -74.0555614
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "530B",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7310756,
+    "lon": -74.0555884
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "530B",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7310632,
+    "lon": -74.055557
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "515",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7302064,
+    "lon": -74.0555868
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "515",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7301096,
+    "lon": -74.0555047
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "553 1/2",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7312723,
+    "lon": -74.0564683
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "555",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7312979,
+    "lon": -74.0564923
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "543",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7309562,
+    "lon": -74.056221
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "586",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7323295,
+    "lon": -74.0570459
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "586",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7322877,
+    "lon": -74.057015
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "570",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7318759,
+    "lon": -74.0566822
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "631",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7334804,
+    "lon": -74.0582961
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "640",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7338498,
+    "lon": -74.0583182
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "644",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.733974,
+    "lon": -74.058422
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "644",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7339893,
+    "lon": -74.0584107
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "584",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7341677,
+    "lon": -74.059197
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "665",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7343379,
+    "lon": -74.0591007
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "741",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7351995,
+    "lon": -74.0625122
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "687",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7349021,
+    "lon": -74.060132
+  },
+  {
+    "street": "Cambridge Avenue",
+    "housenumber": "110",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7465754,
+    "lon": -74.0475581
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3515",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520643,
+    "lon": -74.0535867
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "905",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7301686,
+    "lon": -74.065349
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "60",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306308,
+    "lon": -74.0618303
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "763",
+    "city": "Jersey City",
+    "lat": 40.7256241,
+    "lon": -74.0681098
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "260",
+    "city": "Jersey City",
+    "lat": 40.7166151,
+    "lon": -74.0390311
+  },
+  {
+    "street": "Van Vorst Street",
+    "housenumber": "197",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7141802,
+    "lon": -74.0418829
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "150",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.712252,
+    "lon": -74.0398442
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "33",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7133812,
+    "lon": -74.0350341
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7132002,
+    "lon": -74.0345129
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07311",
+    "lat": 40.7179153,
+    "lon": -74.0369334
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "105",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7164297,
+    "lon": -74.0358766
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7157166,
+    "lon": -74.033909
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7157369,
+    "lon": -74.0340431
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7167201,
+    "lon": -74.0352085
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "516",
+    "city": "Jersey City",
+    "lat": 40.7204218,
+    "lon": -74.0466428
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "264",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7232081,
+    "lon": -74.048974
+  },
+  {
+    "street": "River Drive",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7311258,
+    "lon": -74.0315847
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3495",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7514579,
+    "lon": -74.0541279
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "722",
+    "city": "Jersey City",
+    "lat": 40.7251418,
+    "lon": -74.077581
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2823",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319493,
+    "lon": -74.0665508
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "281",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7233926,
+    "lon": -74.0497944
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "195",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7212975,
+    "lon": -74.0460276
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "508",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.718159,
+    "lon": -74.0837376
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "363",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7214382,
+    "lon": -74.0428557
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "48",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731914,
+    "lon": -74.0643116
+  },
+  {
+    "street": "35 Journal Square Plaza",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306976,
+    "lon": -74.0648761
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "116",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7201147,
+    "lon": -74.0427213
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "739",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7250228,
+    "lon": -74.0689322
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "713",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7244841,
+    "lon": -74.0699319
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "451",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7441317,
+    "lon": -74.0443673
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "479",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7449976,
+    "lon": -74.0438198
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "238",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.744273,
+    "lon": -74.0450445
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "170",
+    "city": "Jersey City",
+    "lat": 40.7212368,
+    "lon": -74.0448581
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "154",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7207263,
+    "lon": -74.0441188
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "152",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720676,
+    "lon": -74.0440314
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "148",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205966,
+    "lon": -74.0438777
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "146",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720563,
+    "lon": -74.0438164
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204588,
+    "lon": -74.0436111
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "138",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204255,
+    "lon": -74.0435364
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7203399,
+    "lon": -74.0433592
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "333",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7202748,
+    "lon": -74.0429671
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "325",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7198283,
+    "lon": -74.0430358
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200208,
+    "lon": -74.0432217
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "127",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200975,
+    "lon": -74.0433627
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "129",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7201541,
+    "lon": -74.0434695
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "133",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7202096,
+    "lon": -74.0435888
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720246,
+    "lon": -74.0436587
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "137",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7202789,
+    "lon": -74.0437398
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "145",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204578,
+    "lon": -74.0440744
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "151-53",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205758,
+    "lon": -74.0443094
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "155",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206333,
+    "lon": -74.0444127
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "157",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206688,
+    "lon": -74.0444893
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "101",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7161217,
+    "lon": -74.0360171
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2347",
+    "city": "Jersey City",
+    "lat": 40.7182505,
+    "lon": -74.0794393
+  },
+  {
+    "street": "Pacific Avenue",
+    "housenumber": "303",
+    "city": "Jersey City",
+    "lat": 40.7116545,
+    "lon": -74.0626805
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "31",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7161992,
+    "lon": -74.0355009
+  },
+  {
+    "street": "Martin Luther King Drive",
+    "housenumber": "360",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7108987,
+    "lon": -74.0768792
+  },
+  {
+    "street": "Randolph Street",
+    "housenumber": "237",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7115521,
+    "lon": -74.0708506
+  },
+  {
+    "street": "Carteret Avenue",
+    "housenumber": "131",
+    "city": "Jersey City",
+    "lat": 40.7087188,
+    "lon": -74.0735322
+  },
+  {
+    "street": "Ocean Avenue",
+    "housenumber": "804",
+    "city": "Jersey City",
+    "lat": 40.7131226,
+    "lon": -74.0738495
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "1710",
+    "city": "Jersey City",
+    "lat": 40.6992982,
+    "lon": -74.0951398
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "590",
+    "city": "Jersey City",
+    "lat": 40.7174036,
+    "lon": -74.0615335
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "402",
+    "city": "Jersey City",
+    "lat": 40.713026,
+    "lon": -74.0643674
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "372",
+    "city": "Jersey City",
+    "lat": 40.71216,
+    "lon": -74.0632849
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "390",
+    "city": "Jersey City",
+    "lat": 40.7127516,
+    "lon": -74.0640498
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "360",
+    "city": "Jersey City",
+    "lat": 40.71173,
+    "lon": -74.0627882
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "451",
+    "city": "Jersey City",
+    "lat": 40.714105,
+    "lon": -74.0664644
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "lat": 40.7103866,
+    "lon": -74.0611253
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "339",
+    "city": "Jersey City",
+    "lat": 40.7109141,
+    "lon": -74.0621828
+  },
+  {
+    "street": "Pacific Avenue",
+    "housenumber": "322",
+    "city": "Jersey City",
+    "lat": 40.7118119,
+    "lon": -74.0618641
+  },
+  {
+    "street": "Maple Street",
+    "housenumber": "74",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.711749,
+    "lon": -74.0582868
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "392",
+    "city": "Jersey City",
+    "lat": 40.7128392,
+    "lon": -74.0641819
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "396",
+    "city": "Jersey City",
+    "lat": 40.7129212,
+    "lon": -74.064256
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "350",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.711408,
+    "lon": -74.0623807
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "338",
+    "city": "Jersey City",
+    "lat": 40.7109109,
+    "lon": -74.0617757
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "389",
+    "city": "Jersey City",
+    "lat": 40.7124945,
+    "lon": -74.0641564
+  },
+  {
+    "street": "Baldwin Avenue",
+    "housenumber": "457",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7366479,
+    "lon": -74.051574
+  },
+  {
+    "street": "First Street",
+    "housenumber": "110",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7218667,
+    "lon": -74.0378986
+  },
+  {
+    "street": "McWilliams Place",
+    "housenumber": "29",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7281788,
+    "lon": -74.0438658
+  },
+  {
+    "street": "Monticello Avenue",
+    "housenumber": "153",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.719952,
+    "lon": -74.07115
+  },
+  {
+    "street": "Belmont Avenue",
+    "housenumber": "157",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7200691,
+    "lon": -74.0710685
+  },
+  {
+    "street": "NJ-440",
+    "housenumber": "698",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7203004,
+    "lon": -74.0922624
+  },
+  {
+    "street": "Erie Street",
+    "housenumber": "86",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7245502,
+    "lon": -74.0437358
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "189",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7213146,
+    "lon": -74.0458073
+  },
+  {
+    "street": "McWilliams Place",
+    "housenumber": "19",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7279562,
+    "lon": -74.0439121
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "171",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7209348,
+    "lon": -74.04523
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7202266,
+    "lon": -74.043616
+  },
+  {
+    "street": "Erie Street",
+    "housenumber": "118",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7259664,
+    "lon": -74.0435223
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "231",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7274355,
+    "lon": -74.0435885
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "926",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7370885,
+    "lon": -74.0704078
+  },
+  {
+    "street": "8th Street",
+    "housenumber": "326",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7273068,
+    "lon": -74.0479481
+  },
+  {
+    "street": "NJ-440",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7095798,
+    "lon": -74.1019754
+  },
+  {
+    "street": "Danforth Avenue",
+    "housenumber": "431",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7054479,
+    "lon": -74.099131
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "337",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7137081,
+    "lon": -74.0895015
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "1697",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.699189,
+    "lon": -74.0958368
+  },
+  {
+    "street": "Pacific Avenue",
+    "housenumber": "101",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7068658,
+    "lon": -74.0694719
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "107",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7080695,
+    "lon": -74.0967294
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "641",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7237175,
+    "lon": -74.0644208
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "667",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7240758,
+    "lon": -74.0655014
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "729",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7249256,
+    "lon": -74.0676384
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "683",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7243901,
+    "lon": -74.0664189
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "725",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7248085,
+    "lon": -74.0676384
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "507",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7459569,
+    "lon": -74.0432657
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "lat": 40.7212303,
+    "lon": -74.0459834
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "520",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7207946,
+    "lon": -74.0464334
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "lat": 40.7212685,
+    "lon": -74.0459609
+  },
+  {
+    "street": "2nd Street",
+    "housenumber": "342",
+    "city": "Jersey City",
+    "lat": 40.7230389,
+    "lon": -74.0484285
+  },
+  {
+    "street": "6th Street",
+    "housenumber": "383",
+    "city": "Jersey City",
+    "lat": 40.725947,
+    "lon": -74.0517456
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "292",
+    "city": "Jersey City",
+    "lat": 40.7251773,
+    "lon": -74.0644409
+  },
+  {
+    "street": "Monticello Avenue",
+    "housenumber": "266",
+    "city": "Jersey City",
+    "lat": 40.7235894,
+    "lon": -74.068027
+  },
+  {
+    "street": "Coles Street",
+    "housenumber": "32",
+    "city": "Jersey City",
+    "lat": 40.7225702,
+    "lon": -74.0474731
+  },
+  {
+    "street": "Jewett Avenue",
+    "housenumber": "17",
+    "city": "Jersey City",
+    "lat": 40.7202359,
+    "lon": -74.0676902
+  },
+  {
+    "street": "Monticello Avenue",
+    "housenumber": "194",
+    "city": "Jersey City",
+    "lat": 40.7212467,
+    "lon": -74.0699794
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "799",
+    "city": "Jersey City",
+    "lat": 40.7275124,
+    "lon": -74.0762102
+  },
+  {
+    "street": "Wallis Ave",
+    "housenumber": "28",
+    "city": "Jersey City",
+    "lat": 40.73489,
+    "lon": -74.07547
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "594",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7486855,
+    "lon": -74.0411483
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "143",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7203987,
+    "lon": -74.043961
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "116",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200084,
+    "lon": -74.0426916
+  },
+  {
+    "street": "PATH Plaza",
+    "housenumber": "24",
+    "city": "Jersey City",
+    "lat": 40.7319445,
+    "lon": -74.0627847
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "183",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7212091,
+    "lon": -74.0455601
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "179",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7211619,
+    "lon": -74.045467
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "333",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7249064,
+    "lon": -74.0514156
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "75",
+    "city": "Jersey City",
+    "lat": 40.7166895,
+    "lon": -74.0377092
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "755",
+    "city": "Jersey City",
+    "lat": 40.7254627,
+    "lon": -74.0687021
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "340",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7272147,
+    "lon": -74.0636144
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "364",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7213804,
+    "lon": -74.0425001
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "785",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7260588,
+    "lon": -74.0678129
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "736",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7248698,
+    "lon": -74.0687121
+  },
+  {
+    "street": "State Rt 400",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7099661,
+    "lon": -74.1020748
+  },
+  {
+    "street": "NJ-400 S",
+    "housenumber": "381",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7093891,
+    "lon": -74.1019019
+  },
+  {
+    "street": "NJ-400 S",
+    "housenumber": "401",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7096681,
+    "lon": -74.1019858
+  },
+  {
+    "street": "RT 400 S",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7101757,
+    "lon": -74.1019762
+  },
+  {
+    "street": "West Side Avenue",
+    "housenumber": "793",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7274461,
+    "lon": -74.0762491
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "352",
+    "city": "East Orange",
+    "postcode": "07018",
+    "lat": 40.7451195,
+    "lon": -74.0498123
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7322044,
+    "lon": -74.0376889
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "504",
+    "city": "Jersey City",
+    "postcode": "07304-2402",
+    "lat": 40.718046,
+    "lon": -74.075744
+  },
+  {
+    "street": "Cator Avenue",
+    "housenumber": "156",
+    "city": "Jersey City",
+    "lat": 40.6980611,
+    "lon": -74.0913485
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7337447,
+    "lon": -74.0632589
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "605",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7320631,
+    "lon": -74.0609047
+  },
+  {
+    "street": "Homestead Place",
+    "housenumber": "9",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7332062,
+    "lon": -74.0609226
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "885",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7296098,
+    "lon": -74.0660809
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "899",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7300381,
+    "lon": -74.0654114
+  },
+  {
+    "street": "Path Plaza",
+    "housenumber": "3",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.732389,
+    "lon": -74.0628486
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "2932",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7332726,
+    "lon": -74.0626551
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "914",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7344935,
+    "lon": -74.0711379
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "274",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7454403,
+    "lon": -74.0442449
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "274 1/2",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7454791,
+    "lon": -74.0442156
+  },
+  {
+    "street": "Jewett Ave",
+    "housenumber": "247",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7244066,
+    "lon": -74.0770713
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "595",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319773,
+    "lon": -74.0585486
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "136",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7203824,
+    "lon": -74.0434455
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "328",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7399332,
+    "lon": -74.0467202
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7346786,
+    "lon": -74.0627304
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "850",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7361039,
+    "lon": -74.0673545
+  },
+  {
+    "street": "Ocean Avenue",
+    "housenumber": "415",
+    "city": "Jersey City",
+    "lat": 40.7009362,
+    "lon": -74.0833389
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "41",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.735795,
+    "lon": -74.056629
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "417",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7342367,
+    "lon": -74.0572111
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "440",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7348022,
+    "lon": -74.0583527
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "781",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7354,
+    "lon": -74.0642257
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3498",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7514618,
+    "lon": -74.053351
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "615",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7250663,
+    "lon": -74.0456626
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "609",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7247058,
+    "lon": -74.0457308
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "598",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7241711,
+    "lon": -74.0453104
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "283",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7234521,
+    "lon": -74.0498489
+  },
+  {
+    "street": "Chapel Avenue",
+    "housenumber": "6",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.6857764,
+    "lon": -74.0711642
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "575",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7284861,
+    "lon": -74.0351992
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "575",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7284707,
+    "lon": -74.0354258
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "891",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7221469,
+    "lon": -74.0850449
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "157",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7361875,
+    "lon": -74.0666785
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "159",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.736231,
+    "lon": -74.0666419
+  },
+  {
+    "street": "Herbert Place",
+    "housenumber": "789",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7354423,
+    "lon": -74.0647289
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "615",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7325942,
+    "lon": -74.061024
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "605",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7323376,
+    "lon": -74.0606651
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "595",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7325342,
+    "lon": -74.0601479
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "54",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7321025,
+    "lon": -74.0641381
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7292522,
+    "lon": -74.0633694
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "532",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.732137,
+    "lon": -74.0596756
+  },
+  {
+    "street": "Jones Street",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7299241,
+    "lon": -74.0625775
+  },
+  {
+    "street": "Jones Street",
+    "housenumber": "46",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7300396,
+    "lon": -74.0624952
+  },
+  {
+    "street": "Jones Street",
+    "housenumber": "50",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7301572,
+    "lon": -74.0624121
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "595",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7324929,
+    "lon": -74.0602735
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "71",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7305168,
+    "lon": -74.0627697
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "425",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7302108,
+    "lon": -74.0615575
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7358331,
+    "lon": -74.0553427
+  },
+  {
+    "street": "Laidlaw Avenue",
+    "housenumber": "222",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7402831,
+    "lon": -74.0590675
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3075",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7382252,
+    "lon": -74.0627545
+  },
+  {
+    "street": "Skillman Avenue",
+    "housenumber": "59",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7383573,
+    "lon": -74.0633883
+  },
+  {
+    "street": "Liberty Avenue",
+    "housenumber": "75",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7386557,
+    "lon": -74.0646965
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "201",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7377484,
+    "lon": -74.0659692
+  },
+  {
+    "street": "NJ 139 Upper Level",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7360269,
+    "lon": -74.0571537
+  },
+  {
+    "street": "Oakland Avenue",
+    "housenumber": "136-138",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7373633,
+    "lon": -74.0527977
+  },
+  {
+    "street": "Baldwin Avenue",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7268695,
+    "lon": -74.0616906
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "97",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7291031,
+    "lon": -74.0635335
+  },
+  {
+    "street": "Academy Street",
+    "housenumber": "298",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7299003,
+    "lon": -74.0664736
+  },
+  {
+    "street": "Academy Street",
+    "housenumber": "190",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7272943,
+    "lon": -74.0628278
+  },
+  {
+    "street": "Academy Street",
+    "housenumber": "198",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.727402,
+    "lon": -74.0629784
+  },
+  {
+    "street": "Rock Street",
+    "housenumber": "19",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7274985,
+    "lon": -74.0620839
+  },
+  {
+    "street": "Rock Street",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7276643,
+    "lon": -74.0624013
+  },
+  {
+    "street": "Baldwin Avenue",
+    "housenumber": "211",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7292239,
+    "lon": -74.0601309
+  },
+  {
+    "street": "Baldwin Avenue",
+    "housenumber": "190",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7284216,
+    "lon": -74.0604515
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "773",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7410313,
+    "lon": -74.0559951
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "167",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7372524,
+    "lon": -74.0587018
+  },
+  {
+    "street": "Monmouth Street",
+    "housenumber": "675",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.735104,
+    "lon": -74.0475033
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7355748,
+    "lon": -74.0470045
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "110",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7354452,
+    "lon": -74.047374
+  },
+  {
+    "street": "Jordan Avenue",
+    "housenumber": "55",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7254695,
+    "lon": -74.06571
+  },
+  {
+    "street": "Orchard Street",
+    "housenumber": "55",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.724433,
+    "lon": -74.0668671
+  },
+  {
+    "street": "Jordan Avenue",
+    "housenumber": "75",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7263925,
+    "lon": -74.0651412
+  },
+  {
+    "street": "Jordan Avenue",
+    "housenumber": "89",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7267437,
+    "lon": -74.0649407
+  },
+  {
+    "street": "Rock Street",
+    "housenumber": "12",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7275567,
+    "lon": -74.0619089
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "730",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7354276,
+    "lon": -74.0622092
+  },
+  {
+    "street": "Skillman Avenue",
+    "housenumber": "55",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.738338,
+    "lon": -74.0639793
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "413",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7296179,
+    "lon": -74.0619967
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "634",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7365061,
+    "lon": -74.0585979
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "634",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7364986,
+    "lon": -74.0587033
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "591",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7347196,
+    "lon": -74.0593846
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "587",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7344788,
+    "lon": -74.0594129
+  },
+  {
+    "street": "Vroom Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7263433,
+    "lon": -74.0631037
+  },
+  {
+    "street": "Vroom Street",
+    "housenumber": "28",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7262657,
+    "lon": -74.0629483
+  },
+  {
+    "street": "Van Reipen Avenue",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7336688,
+    "lon": -74.0607856
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "28",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7343657,
+    "lon": -74.0606705
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "56",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7345514,
+    "lon": -74.0618587
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "60",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7345894,
+    "lon": -74.0620891
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.734678,
+    "lon": -74.0627759
+  },
+  {
+    "street": "Cottage Street",
+    "housenumber": "78",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7346856,
+    "lon": -74.0628387
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "654",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7225313,
+    "lon": -74.0711151
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "600",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7328026,
+    "lon": -74.0604667
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "65",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7284093,
+    "lon": -74.0624342
+  },
+  {
+    "street": "Clifton Place",
+    "housenumber": "65",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7195325,
+    "lon": -74.066453
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.737136,
+    "lon": -74.0552721
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "74",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319229,
+    "lon": -74.052419
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "78",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319819,
+    "lon": -74.0523416
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "272",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7316785,
+    "lon": -74.0520928
+  },
+  {
+    "street": "High Street",
+    "housenumber": "39",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7286596,
+    "lon": -74.061433
+  },
+  {
+    "street": "High Street",
+    "housenumber": "53",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7288695,
+    "lon": -74.0619131
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "725",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7248031,
+    "lon": -74.0697468
+  },
+  {
+    "street": "Fairmount Avenue",
+    "housenumber": "293",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7246944,
+    "lon": -74.0694971
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "669",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7233026,
+    "lon": -74.0707696
+  },
+  {
+    "street": "Fairview Avenue",
+    "housenumber": "43",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7224502,
+    "lon": -74.0702704
+  },
+  {
+    "street": "Storms Avenue",
+    "housenumber": "99",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7237347,
+    "lon": -74.0682928
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "697",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7240295,
+    "lon": -74.0702045
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "645",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.733862,
+    "lon": -74.0586034
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "645",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.733885,
+    "lon": -74.0586143
+  },
+  {
+    "street": "Academy Street",
+    "housenumber": "253",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.728398,
+    "lon": -74.0652288
+  },
+  {
+    "street": "Tuers Avenue",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.728257,
+    "lon": -74.0651669
+  },
+  {
+    "street": "Fairmount Avenue",
+    "housenumber": "280",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7243838,
+    "lon": -74.0693032
+  },
+  {
+    "street": "Jones Street",
+    "housenumber": "32",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7297256,
+    "lon": -74.0627388
+  },
+  {
+    "street": "Jones Street",
+    "housenumber": "36",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7297764,
+    "lon": -74.0627026
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7306385,
+    "lon": -74.0636758
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.730354,
+    "lon": -74.0635903
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "91",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.730228,
+    "lon": -74.0634309
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7336992,
+    "lon": -74.0631719
+  },
+  {
+    "street": "Van Wagenen Avenue",
+    "housenumber": "161",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7358749,
+    "lon": -74.0684241
+  },
+  {
+    "street": "McWilliams Place",
+    "housenumber": "17",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7277879,
+    "lon": -74.0439586
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "230",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7276233,
+    "lon": -74.04354
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "235",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7274942,
+    "lon": -74.0439771
+  },
+  {
+    "street": "River Drive",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.73196,
+    "lon": -74.0314821
+  },
+  {
+    "street": "River Drive",
+    "housenumber": "166",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7319285,
+    "lon": -74.0310737
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7326248,
+    "lon": -74.0377162
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7324925,
+    "lon": -74.0377294
+  },
+  {
+    "street": "Park Lane North",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7321927,
+    "lon": -74.0321533
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "116",
+    "city": "Jersey City",
+    "lat": 40.7200623,
+    "lon": -74.04274
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "586",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7341896,
+    "lon": -74.0591951
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "583",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731627,
+    "lon": -74.0574952
+  },
+  {
+    "street": "Mall Drive East",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7275386,
+    "lon": -74.0369398
+  },
+  {
+    "street": "14th Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07310-1202",
+    "lat": 40.7328307,
+    "lon": -74.035759
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "540",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7275595,
+    "lon": -74.033917
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "455",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7235791,
+    "lon": -74.0367563
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "479",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7249569,
+    "lon": -74.0363256
+  },
+  {
+    "street": "Marin Boulevard",
+    "housenumber": "396",
+    "city": "Jersey City",
+    "lat": 40.7226166,
+    "lon": -74.0386862
+  },
+  {
+    "street": "Marin Boulevard",
+    "housenumber": "400",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7227896,
+    "lon": -74.0400555
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "474",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7242812,
+    "lon": -74.0377979
+  },
+  {
+    "street": "Twelfth Street",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7308035,
+    "lon": -74.0403655
+  },
+  {
+    "street": "Caven Point Road",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.6939989,
+    "lon": -74.0744617
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "444",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7235107,
+    "lon": -74.0347708
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "444",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7223998,
+    "lon": -74.0349475
+  },
+  {
+    "street": "County Road",
+    "housenumber": "350",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7600096,
+    "lon": -74.0651775
+  },
+  {
+    "street": "Jersey City Boulevard",
+    "housenumber": "222",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7081786,
+    "lon": -74.054603
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "lat": 40.717164,
+    "lon": -74.0378506
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "185",
+    "city": "Jersey City",
+    "lat": 40.7186073,
+    "lon": -74.0348456
+  },
+  {
+    "street": "Duncan Avenue",
+    "housenumber": "22",
+    "city": "Jersey City",
+    "lat": 40.7245056,
+    "lon": -74.0709282
+  },
+  {
+    "street": "York Street",
+    "housenumber": "167",
+    "city": "Jersey City",
+    "lat": 40.7163268,
+    "lon": -74.0415085
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "lat": 40.7160293,
+    "lon": -74.0418959
+  },
+  {
+    "street": "York Street",
+    "housenumber": "165",
+    "city": "Jersey City",
+    "lat": 40.7162875,
+    "lon": -74.0414361
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "184",
+    "city": "Jersey City",
+    "lat": 40.7160746,
+    "lon": -74.0421319
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "162",
+    "city": "Jersey City",
+    "lat": 40.715877,
+    "lon": -74.041209
+  },
+  {
+    "street": "York Street",
+    "housenumber": "177",
+    "city": "Jersey City",
+    "lat": 40.7163695,
+    "lon": -74.0419585
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "lat": 40.7167878,
+    "lon": -74.0406756
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "280",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7177548,
+    "lon": -74.0431011
+  },
+  {
+    "street": "Gregory Park Plz",
+    "housenumber": "280",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7181556,
+    "lon": -74.0414502
+  },
+  {
+    "street": "Gregory Park Plaza",
+    "housenumber": "270",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7177472,
+    "lon": -74.0402323
+  },
+  {
+    "street": "Martin Luther King Jr Drive",
+    "housenumber": "369",
+    "city": "Jersey City",
+    "postcode": "07305-9997",
+    "lat": 40.7115334,
+    "lon": -74.0790364
+  },
+  {
+    "street": "Route 440",
+    "housenumber": "401",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7095404,
+    "lon": -74.1005078
+  },
+  {
+    "street": "Morris Pesin Drive",
+    "housenumber": "200",
+    "city": "Jersey City",
+    "lat": 40.6931094,
+    "lon": -74.0572157
+  },
+  {
+    "street": "Audrey Zapp Drive",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.707205,
+    "lon": -74.0351873
+  },
+  {
+    "street": "Christopher Columbus Drive",
+    "housenumber": "100-102",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7197174,
+    "lon": -74.0419753
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7199184,
+    "lon": -74.0433053
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "127",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7199785,
+    "lon": -74.0434658
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "129",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200323,
+    "lon": -74.0435882
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "133",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7201518,
+    "lon": -74.0436343
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200942,
+    "lon": -74.0437895
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "137",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7201371,
+    "lon": -74.0438627
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "145",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7202825,
+    "lon": -74.0442218
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "151-53",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204829,
+    "lon": -74.0443814
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "155",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205787,
+    "lon": -74.0444562
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "157",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206086,
+    "lon": -74.0445323
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "158",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720888,
+    "lon": -74.0442769
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "154",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720838,
+    "lon": -74.0440996
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "152",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7208101,
+    "lon": -74.044012
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "150",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206982,
+    "lon": -74.0439358
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "148",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206738,
+    "lon": -74.0438435
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "146",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7206269,
+    "lon": -74.0437816
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205322,
+    "lon": -74.0435965
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "138",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204942,
+    "lon": -74.0435151
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "136",
+    "city": "Jersey City",
+    "lat": 40.7204939,
+    "lon": -74.0434279
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7204696,
+    "lon": -74.0433367
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "132",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720374,
+    "lon": -74.0432654
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "130",
+    "city": "Jersey City",
+    "lat": 40.7202973,
+    "lon": -74.0431811
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "341",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7205167,
+    "lon": -74.0431003
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "333",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720281,
+    "lon": -74.043033
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "347",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7207206,
+    "lon": -74.0429918
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "349",
+    "city": "Jersey City",
+    "lat": 40.7207901,
+    "lon": -74.0429905
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "351",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720862,
+    "lon": -74.0429507
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "116",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.720023,
+    "lon": -74.0426005
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "163",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7207971,
+    "lon": -74.0449982
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "321",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7197481,
+    "lon": -74.0431511
+  },
+  {
+    "street": "Grove Street",
+    "housenumber": "325",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7198335,
+    "lon": -74.0431161
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "123",
+    "city": "Jersey City",
+    "lat": 40.7199165,
+    "lon": -74.0430879
+  },
+  {
+    "street": "Garfield Avenue",
+    "housenumber": "2-30",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.6861788,
+    "lon": -74.0988659
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "232",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7427354,
+    "lon": -74.0511546
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "lat": 40.7130537,
+    "lon": -74.0339991
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "90",
+    "city": "Jersey City",
+    "lat": 40.7152343,
+    "lon": -74.0337062
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7144942,
+    "lon": -74.0338555
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "lat": 40.7126166,
+    "lon": -74.0355644
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "77",
+    "city": "Jersey City",
+    "lat": 40.7146377,
+    "lon": -74.0353045
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "lat": 40.7146625,
+    "lon": -74.0357289
+  },
+  {
+    "street": "Hudson Street",
+    "housenumber": "77",
+    "city": "Jersey City",
+    "lat": 40.7146186,
+    "lon": -74.0349794
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "10",
+    "city": "Jersey City",
+    "lat": 40.7166694,
+    "lon": -74.0333184
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "lat": 40.7169264,
+    "lon": -74.0352834
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "lat": 40.7168278,
+    "lon": -74.0345511
+  },
+  {
+    "street": "Exchange Place",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07032",
+    "lat": 40.7170953,
+    "lon": -74.0316024
+  },
+  {
+    "street": "2nd Street",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7213291,
+    "lon": -74.0351521
+  },
+  {
+    "street": "Christopher Columbus Drive",
+    "housenumber": "50",
+    "city": "Jersey City",
+    "lat": 40.718899,
+    "lon": -74.0395347
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "72",
+    "city": "Jersey City",
+    "lat": 40.7170469,
+    "lon": -74.0366485
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "105",
+    "city": "Jersey City",
+    "lat": 40.7163832,
+    "lon": -74.0360472
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "426",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7167439,
+    "lon": -74.048556
+  },
+  {
+    "street": "Barrow Street",
+    "housenumber": "239",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7167401,
+    "lon": -74.0472354
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "53",
+    "city": "Jersey City",
+    "lat": 40.716764,
+    "lon": -74.0473953
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "75",
+    "city": "Jersey City",
+    "lat": 40.7171022,
+    "lon": -74.0483885
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "73",
+    "city": "Jersey City",
+    "lat": 40.7170356,
+    "lon": -74.0482405
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7330355,
+    "lon": -74.037343
+  },
+  {
+    "street": "Coles Street",
+    "housenumber": "95",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7252896,
+    "lon": -74.0474614
+  },
+  {
+    "street": "Freedom Way",
+    "housenumber": "535",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7052136,
+    "lon": -74.0458636
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "183",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7211196,
+    "lon": -74.0456243
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "179",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7210721,
+    "lon": -74.0455453
+  },
+  {
+    "street": "12th Street",
+    "housenumber": "175",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7297102,
+    "lon": -74.0401902
+  },
+  {
+    "street": "Bay Street",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7208806,
+    "lon": -74.0391196
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "678",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7248002,
+    "lon": -74.065423
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7318961,
+    "lon": -74.0381805
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "511",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7305232,
+    "lon": -74.0574339
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7308276,
+    "lon": -74.0623662
+  },
+  {
+    "street": "Journal Square",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7310801,
+    "lon": -74.0627652
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "162",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7313657,
+    "lon": -74.0666339
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "168",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7314013,
+    "lon": -74.0668967
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "161",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7307427,
+    "lon": -74.0659347
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "870",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7287824,
+    "lon": -74.0659304
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "81",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7304151,
+    "lon": -74.0630502
+  },
+  {
+    "street": "Newkirk Street",
+    "housenumber": "119",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7296733,
+    "lon": -74.064445
+  },
+  {
+    "street": "Enos Place",
+    "housenumber": "2",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7296342,
+    "lon": -74.0636976
+  },
+  {
+    "street": "Enos Place",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.730462,
+    "lon": -74.0637142
+  },
+  {
+    "street": "Sip Avenue",
+    "housenumber": "130",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7329354,
+    "lon": -74.0650967
+  },
+  {
+    "street": "Journal Square Plaza",
+    "housenumber": "54",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7323466,
+    "lon": -74.0645327
+  },
+  {
+    "street": "Enos Place",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7304284,
+    "lon": -74.063974
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "425",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7227896,
+    "lon": -74.0367624
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "296",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7165639,
+    "lon": -74.0469097
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "294",
+    "city": "Jersey City",
+    "lat": 40.7164969,
+    "lon": -74.0467904
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "160",
+    "city": "Jersey City",
+    "lat": 40.7209858,
+    "lon": -74.0446333
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "520",
+    "city": "Jersey City",
+    "lat": 40.7207626,
+    "lon": -74.0463337
+  },
+  {
+    "street": "Jersey Avenue",
+    "housenumber": "522",
+    "city": "Jersey City",
+    "lat": 40.7208311,
+    "lon": -74.0463684
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "191",
+    "city": "Jersey City",
+    "lat": 40.7212704,
+    "lon": -74.0458876
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "186",
+    "city": "Jersey City",
+    "lat": 40.7216682,
+    "lon": -74.0456512
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "lat": 40.7214527,
+    "lon": -74.0454109
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7126454,
+    "lon": -74.0368088
+  },
+  {
+    "street": "Greene Street",
+    "housenumber": "95",
+    "city": "Jersey City",
+    "lat": 40.7155458,
+    "lon": -74.0364661
+  },
+  {
+    "street": "Bay Street",
+    "housenumber": "150",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7210381,
+    "lon": -74.0398881
+  },
+  {
+    "street": "Newark Avenue",
+    "housenumber": "295",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7239423,
+    "lon": -74.050405
+  },
+  {
+    "street": "Communipaw Avenue",
+    "housenumber": "977",
+    "city": "Jersey City",
+    "postcode": "07304",
+    "lat": 40.7234263,
+    "lon": -74.0889148
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "715",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7401837,
+    "lon": -74.057362
+  },
+  {
+    "street": "Laidlaw Avenue",
+    "housenumber": "222",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7404966,
+    "lon": -74.059131
+  },
+  {
+    "street": "Morris Pesin Drive",
+    "housenumber": "200",
+    "city": "Jersey City",
+    "lat": 40.6940795,
+    "lon": -74.0581094
+  },
+  {
+    "street": "Marin Boulevard",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.711558,
+    "lon": -74.0429085
+  },
+  {
+    "street": "Bergen Avenue",
+    "housenumber": "800",
+    "city": "Jersey City",
+    "lat": 40.7266069,
+    "lon": -74.0668549
+  },
+  {
+    "street": "Van Horne Street",
+    "housenumber": "303",
+    "city": "Jersey City",
+    "postcode": "07305",
+    "lat": 40.7148621,
+    "lon": -74.0612981
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "502",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7254315,
+    "lon": -74.0324636
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "507",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731528,
+    "lon": -74.0605027
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "510",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7312394,
+    "lon": -74.0602323
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "524",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731882,
+    "lon": -74.0596798
+  },
+  {
+    "street": "Pavonia Avenue",
+    "housenumber": "625",
+    "city": "Jersey City",
+    "lat": 40.7325998,
+    "lon": -74.0615325
+  },
+  {
+    "street": "Homestead Place",
+    "housenumber": "9",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7331991,
+    "lon": -74.0610351
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "428",
+    "city": "Jersey City",
+    "postcode": "07303",
+    "lat": 40.7174052,
+    "lon": -74.053314
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "402",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.717339,
+    "lon": -74.0525112
+  },
+  {
+    "street": "Coles Street",
+    "housenumber": "123",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7267622,
+    "lon": -74.0473968
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "495",
+    "city": "Jersey City",
+    "lat": 40.745496,
+    "lon": -74.0436002
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "491-493",
+    "city": "Jersey City",
+    "lat": 40.7454199,
+    "lon": -74.043673
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "489",
+    "city": "Jersey City",
+    "lat": 40.7453325,
+    "lon": -74.0437037
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "487",
+    "city": "Jersey City",
+    "lat": 40.7452855,
+    "lon": -74.0437589
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "485",
+    "city": "Jersey City",
+    "lat": 40.7452082,
+    "lon": -74.0437681
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "483",
+    "city": "Jersey City",
+    "lat": 40.7451498,
+    "lon": -74.0438075
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "481",
+    "city": "Jersey City",
+    "lat": 40.74511,
+    "lon": -74.0439186
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "479",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7450247,
+    "lon": -74.0439028
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "477",
+    "city": "Jersey City",
+    "lat": 40.744965,
+    "lon": -74.043933
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "475",
+    "city": "Jersey City",
+    "lat": 40.7449001,
+    "lon": -74.0439707
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "467",
+    "city": "Jersey City",
+    "lat": 40.7446621,
+    "lon": -74.0441507
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "465",
+    "city": "Jersey City",
+    "lat": 40.7445899,
+    "lon": -74.044173
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "463",
+    "city": "Jersey City",
+    "lat": 40.7445213,
+    "lon": -74.0441586
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "459",
+    "city": "Jersey City",
+    "lat": 40.7444019,
+    "lon": -74.0442982
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "457",
+    "city": "Jersey City",
+    "lat": 40.7443472,
+    "lon": -74.0443106
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "455",
+    "city": "Jersey City",
+    "lat": 40.7442788,
+    "lon": -74.0443404
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "453",
+    "city": "Jersey City",
+    "lat": 40.7442142,
+    "lon": -74.044378
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "449",
+    "city": "Jersey City",
+    "lat": 40.7440948,
+    "lon": -74.044494
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "451",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7441659,
+    "lon": -74.0444827
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "473",
+    "city": "Jersey City",
+    "lat": 40.7448633,
+    "lon": -74.0440751
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "282",
+    "city": "Jersey City",
+    "lat": 40.7456543,
+    "lon": -74.0440804
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "272",
+    "city": "Jersey City",
+    "lat": 40.745322,
+    "lon": -74.044266
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "268",
+    "city": "Jersey City",
+    "lat": 40.7452056,
+    "lon": -74.0442689
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "268",
+    "city": "Jersey City",
+    "lat": 40.745112,
+    "lon": -74.0443336
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "260",
+    "city": "Jersey City",
+    "lat": 40.7449538,
+    "lon": -74.0444584
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "258",
+    "city": "Jersey City",
+    "lat": 40.7448799,
+    "lon": -74.0445086
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "256",
+    "city": "Jersey City",
+    "lat": 40.7448133,
+    "lon": -74.0445565
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "252",
+    "city": "Jersey City",
+    "lat": 40.7447007,
+    "lon": -74.0446563
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "250",
+    "city": "Jersey City",
+    "lat": 40.7446452,
+    "lon": -74.0447162
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "248",
+    "city": "Jersey City",
+    "lat": 40.7445851,
+    "lon": -74.0447491
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "246",
+    "city": "Jersey City",
+    "lat": 40.7445073,
+    "lon": -74.0447114
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "242",
+    "city": "Jersey City",
+    "lat": 40.7443767,
+    "lon": -74.0448217
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "469",
+    "city": "Jersey City",
+    "lat": 40.7447205,
+    "lon": -74.0440936
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "461",
+    "city": "Jersey City",
+    "lat": 40.744462,
+    "lon": -74.0442254
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "471",
+    "city": "Jersey City",
+    "lat": 40.744772,
+    "lon": -74.0440411
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "502",
+    "city": "Jersey City",
+    "lat": 40.7455937,
+    "lon": -74.042953
+  },
+  {
+    "street": "Park View Avenue",
+    "housenumber": "18",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7140876,
+    "lon": -74.0439263
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "37",
+    "city": "Jersey City",
+    "lat": 40.745593,
+    "lon": -74.043951
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "lat": 40.7455649,
+    "lon": -74.0438796
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "238",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7442772,
+    "lon": -74.0449825
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "54",
+    "city": "Jersey City",
+    "lat": 40.7442433,
+    "lon": -74.0448837
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "52",
+    "city": "Jersey City",
+    "lat": 40.7442193,
+    "lon": -74.0448174
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "50",
+    "city": "Jersey City",
+    "lat": 40.7441946,
+    "lon": -74.0447513
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "48",
+    "city": "Jersey City",
+    "lat": 40.7441589,
+    "lon": -74.0446537
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "244",
+    "city": "Jersey City",
+    "lat": 40.7444496,
+    "lon": -74.0448081
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "350",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7200411,
+    "lon": -74.0377997
+  },
+  {
+    "street": "Christopher Columbus Drive",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.719162,
+    "lon": -74.0404416
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "92",
+    "city": "Jersey City",
+    "lat": 40.7176902,
+    "lon": -74.0491121
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "591",
+    "city": "Jersey City",
+    "lat": 40.7228973,
+    "lon": -74.0621962
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "661",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7238075,
+    "lon": -74.0650819
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "620",
+    "city": "Jersey City",
+    "lat": 40.7238273,
+    "lon": -74.0633228
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "544",
+    "city": "Jersey City",
+    "lat": 40.7468631,
+    "lon": -74.0421393
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "379",
+    "city": "Jersey City",
+    "lat": 40.7466829,
+    "lon": -74.041815
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "381",
+    "city": "Jersey City",
+    "lat": 40.746718,
+    "lon": -74.041784
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "395",
+    "city": "Jersey City",
+    "lat": 40.7471196,
+    "lon": -74.0414976
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "393",
+    "city": "Jersey City",
+    "lat": 40.7470708,
+    "lon": -74.0415652
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "391",
+    "city": "Jersey City",
+    "lat": 40.7470101,
+    "lon": -74.0415838
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "389",
+    "city": "Jersey City",
+    "lat": 40.7469308,
+    "lon": -74.0416247
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "277-279",
+    "city": "Jersey City",
+    "lat": 40.7434889,
+    "lon": -74.0438351
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "283",
+    "city": "Jersey City",
+    "lat": 40.7435702,
+    "lon": -74.0437428
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "520",
+    "city": "Jersey City",
+    "lat": 40.7462078,
+    "lon": -74.0425791
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "555",
+    "city": "Jersey City",
+    "lat": 40.747437,
+    "lon": -74.0423555
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "430",
+    "city": "Jersey City",
+    "lat": 40.7430545,
+    "lon": -74.0445828
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "52",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7461021,
+    "lon": -74.04454
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "401",
+    "city": "Jersey City",
+    "lat": 40.7473637,
+    "lon": -74.0413839
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "405",
+    "city": "Jersey City",
+    "lat": 40.7474553,
+    "lon": -74.0413407
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "407",
+    "city": "Jersey City",
+    "lat": 40.7475171,
+    "lon": -74.0412987
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "409",
+    "city": "Jersey City",
+    "lat": 40.7475677,
+    "lon": -74.041218
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "411",
+    "city": "Jersey City",
+    "lat": 40.7476304,
+    "lon": -74.0412056
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "413",
+    "city": "Jersey City",
+    "lat": 40.7477004,
+    "lon": -74.0411791
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "417",
+    "city": "Jersey City",
+    "lat": 40.7478208,
+    "lon": -74.0410959
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "410",
+    "city": "Jersey City",
+    "postcode": "07030",
+    "lat": 40.7476638,
+    "lon": -74.0401635
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "394",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.742087,
+    "lon": -74.0452868
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "392",
+    "city": "Jersey City",
+    "lat": 40.742033,
+    "lon": -74.0453212
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "419",
+    "city": "Jersey City",
+    "lat": 40.7478914,
+    "lon": -74.041064
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "421",
+    "city": "Jersey City",
+    "lat": 40.7479378,
+    "lon": -74.0409878
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "423",
+    "city": "Jersey City",
+    "lat": 40.7479986,
+    "lon": -74.040935
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "425",
+    "city": "Jersey City",
+    "lat": 40.748052,
+    "lon": -74.0409016
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "427",
+    "city": "Jersey City",
+    "lat": 40.7481008,
+    "lon": -74.0408251
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "437",
+    "city": "Jersey City",
+    "lat": 40.7483813,
+    "lon": -74.0406981
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "445",
+    "city": "Jersey City",
+    "lat": 40.7486642,
+    "lon": -74.0405581
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "443",
+    "city": "Jersey City",
+    "lat": 40.7485592,
+    "lon": -74.0405583
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "441",
+    "city": "Jersey City",
+    "lat": 40.7484787,
+    "lon": -74.0406033
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "594",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7486674,
+    "lon": -74.0410912
+  },
+  {
+    "street": "Manhattan Avenue",
+    "housenumber": "100",
+    "city": "Union City",
+    "postcode": "07030",
+    "lat": 40.751131,
+    "lon": -74.0381007
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "178-198",
+    "city": "Jersey City",
+    "lat": 40.7405173,
+    "lon": -74.0452263
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "154",
+    "city": "Jersey City",
+    "lat": 40.739622,
+    "lon": -74.045744
+  },
+  {
+    "street": "Ogden Avenue",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "lat": 40.7408867,
+    "lon": -74.0454978
+  },
+  {
+    "street": "Franklin Street",
+    "housenumber": "29",
+    "city": "Jersey City",
+    "lat": 40.740972,
+    "lon": -74.0456547
+  },
+  {
+    "street": "Paterson Plank Road",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7411681,
+    "lon": -74.0437492
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "330",
+    "city": "Jersey City",
+    "postcode": "07307-2918",
+    "lat": 40.7461952,
+    "lon": -74.0489733
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "201",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7417937,
+    "lon": -74.0543827
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "126",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7450548,
+    "lon": -74.0464154
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "120",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7449069,
+    "lon": -74.0464628
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "84",
+    "city": "Jersey City",
+    "lat": 40.7447696,
+    "lon": -74.0462402
+  },
+  {
+    "street": "Griffith Street",
+    "housenumber": "86",
+    "city": "Jersey City",
+    "lat": 40.7447849,
+    "lon": -74.0462974
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "136A",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7453852,
+    "lon": -74.0462129
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "136",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7453361,
+    "lon": -74.0462497
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7452866,
+    "lon": -74.0462811
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "132",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7452466,
+    "lon": -74.0463075
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "127",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7452543,
+    "lon": -74.0468052
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "129",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7453147,
+    "lon": -74.0467493
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "125",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7451783,
+    "lon": -74.0468179
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "123",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7451125,
+    "lon": -74.0468238
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "121",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7450556,
+    "lon": -74.0468803
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "131",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7453796,
+    "lon": -74.0467169
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "249",
+    "city": "Jersey City",
+    "lat": 40.7477598,
+    "lon": -74.0478835
+  },
+  {
+    "street": "Hancock Avenue",
+    "housenumber": "167",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7482855,
+    "lon": -74.046141
+  },
+  {
+    "street": "Franklin Street",
+    "housenumber": "96",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7427737,
+    "lon": -74.0486575
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "110",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.744385,
+    "lon": -74.0468212
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "106",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.744295,
+    "lon": -74.0469564
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "118",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7446217,
+    "lon": -74.0467349
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "114",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7445147,
+    "lon": -74.046745
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "318",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7455299,
+    "lon": -74.0494045
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "117",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.744771,
+    "lon": -74.0470452
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "112",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7444443,
+    "lon": -74.0467651
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "108",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7443509,
+    "lon": -74.0468925
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "115",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7447225,
+    "lon": -74.0471056
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "111",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7445883,
+    "lon": -74.047146
+  },
+  {
+    "street": "Sherman Avenue",
+    "housenumber": "113",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7446575,
+    "lon": -74.0471184
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "510",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519959,
+    "lon": -74.0449888
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "317",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7459478,
+    "lon": -74.0496491
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7472995,
+    "lon": -74.0490698
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7476882,
+    "lon": -74.0489525
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "142",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7477107,
+    "lon": -74.0490455
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.747672,
+    "lon": -74.0488147
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "148",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7478225,
+    "lon": -74.0492686
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "144",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7477566,
+    "lon": -74.049125
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "150",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7478598,
+    "lon": -74.0493345
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "249",
+    "city": "Jersey City",
+    "lat": 40.7435869,
+    "lon": -74.0512881
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "231-233",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7430366,
+    "lon": -74.0516577
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "152",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.747885,
+    "lon": -74.049441
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "160",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7479541,
+    "lon": -74.0496376
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "877",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7439928,
+    "lon": -74.054117
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "200",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525197,
+    "lon": -74.0493538
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "228",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7529546,
+    "lon": -74.0505243
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "218",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7528449,
+    "lon": -74.0500888
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "206",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525941,
+    "lon": -74.0496601
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "212",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7526996,
+    "lon": -74.0498787
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "220",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.75286,
+    "lon": -74.0501793
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "196",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524523,
+    "lon": -74.0491961
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "184",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752229,
+    "lon": -74.0487422
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "214",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527247,
+    "lon": -74.0499672
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "198",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524369,
+    "lon": -74.0493015
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "222",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7528815,
+    "lon": -74.0502708
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "224",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752944,
+    "lon": -74.0503817
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "202",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525291,
+    "lon": -74.0494492
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "210",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7526789,
+    "lon": -74.0498032
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "194",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524235,
+    "lon": -74.0491188
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "208",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7526223,
+    "lon": -74.0497342
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "186",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752278,
+    "lon": -74.048817
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "188",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523116,
+    "lon": -74.048896
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "192",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523652,
+    "lon": -74.0490573
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "216",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527602,
+    "lon": -74.0500441
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "182",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522056,
+    "lon": -74.048654
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "190",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523661,
+    "lon": -74.048957
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "204",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525873,
+    "lon": -74.0495352
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "175",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7518914,
+    "lon": -74.0487625
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "44",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521437,
+    "lon": -74.0495938
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "195",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522659,
+    "lon": -74.0495342
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "177",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519564,
+    "lon": -74.0488238
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522293,
+    "lon": -74.0494425
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "189",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521291,
+    "lon": -74.0493175
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "191",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521549,
+    "lon": -74.0493882
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7518817,
+    "lon": -74.0497916
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "183",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520035,
+    "lon": -74.0491044
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "185",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520334,
+    "lon": -74.0491837
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "42",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520718,
+    "lon": -74.0495726
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "46",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521965,
+    "lon": -74.0495508
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "181",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519997,
+    "lon": -74.0489932
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519875,
+    "lon": -74.0496361
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "179",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519806,
+    "lon": -74.0489117
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "173",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7518745,
+    "lon": -74.048663
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "187",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520813,
+    "lon": -74.0492547
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "104",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752447,
+    "lon": -74.0510852
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "217",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7526269,
+    "lon": -74.0506504
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "90",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521883,
+    "lon": -74.0505457
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "88",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521869,
+    "lon": -74.0504462
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "94",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522465,
+    "lon": -74.0507136
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "221",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527117,
+    "lon": -74.0507966
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "207",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524777,
+    "lon": -74.0502432
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523822,
+    "lon": -74.0509206
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "90",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522204,
+    "lon": -74.0506264
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "223",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527321,
+    "lon": -74.0508833
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "78",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520143,
+    "lon": -74.0500504
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "98",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523414,
+    "lon": -74.0508455
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "227",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527934,
+    "lon": -74.0510383
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "102",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752414,
+    "lon": -74.0510013
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "197",
+    "city": "Jersey City",
+    "lat": 40.7523487,
+    "lon": -74.0498119
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "199",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523906,
+    "lon": -74.049897
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "203",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752433,
+    "lon": -74.0500742
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "96",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522613,
+    "lon": -74.0508076
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "86",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521469,
+    "lon": -74.0503698
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "205",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524476,
+    "lon": -74.0501617
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "225",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7527767,
+    "lon": -74.0509491
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "215",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7526288,
+    "lon": -74.0505448
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "110",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524877,
+    "lon": -74.0513577
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "209",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525103,
+    "lon": -74.0503208
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "80",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520264,
+    "lon": -74.0501456
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "108",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525234,
+    "lon": -74.0512334
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "219",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.752659,
+    "lon": -74.0507324
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "201",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523711,
+    "lon": -74.0500052
+  },
+  {
+    "street": "Congress Street",
+    "housenumber": "213",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7525586,
+    "lon": -74.0504262
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "106",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524522,
+    "lon": -74.0511825
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "115",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523073,
+    "lon": -74.0517779
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "21A",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7515113,
+    "lon": -74.0504424
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "121",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524307,
+    "lon": -74.0519261
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "81",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7518366,
+    "lon": -74.0504323
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "21",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7514655,
+    "lon": -74.0504762
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "27",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7516868,
+    "lon": -74.0503381
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7516407,
+    "lon": -74.0498401
+  },
+  {
+    "street": "Bleecker Street",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7512926,
+    "lon": -74.0502078
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "28",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7515789,
+    "lon": -74.0498815
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "25",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7516033,
+    "lon": -74.0503796
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "85",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.751846,
+    "lon": -74.0505754
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "79",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7517739,
+    "lon": -74.0502646
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "119",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7524224,
+    "lon": -74.0518653
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "24",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7514559,
+    "lon": -74.0499639
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "19",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7514121,
+    "lon": -74.0504921
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "117",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7523886,
+    "lon": -74.0518194
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "26",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7515181,
+    "lon": -74.0499224
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "105",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7521662,
+    "lon": -74.0513503
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "111",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522614,
+    "lon": -74.0516073
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "113",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7522976,
+    "lon": -74.0516815
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "23",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7515532,
+    "lon": -74.0504088
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "101",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520926,
+    "lon": -74.0511747
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "87",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7518731,
+    "lon": -74.0506538
+  },
+  {
+    "street": "Paterson Street",
+    "housenumber": "89",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7519299,
+    "lon": -74.050721
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "17",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7513767,
+    "lon": -74.0505616
+  },
+  {
+    "street": "South Street",
+    "housenumber": "174",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.750461,
+    "lon": -74.0499887
+  },
+  {
+    "street": "South Street",
+    "housenumber": "186",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7506357,
+    "lon": -74.0504525
+  },
+  {
+    "street": "Bleecker Street",
+    "housenumber": "75",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7510452,
+    "lon": -74.0503783
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "8",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7508186,
+    "lon": -74.0504595
+  },
+  {
+    "street": "South Street",
+    "housenumber": "172",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7504348,
+    "lon": -74.0498813
+  },
+  {
+    "street": "South Street",
+    "housenumber": "188",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7506687,
+    "lon": -74.050534
+  },
+  {
+    "street": "South Street",
+    "housenumber": "190",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7506997,
+    "lon": -74.0506204
+  },
+  {
+    "street": "South Street",
+    "housenumber": "168",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.750357,
+    "lon": -74.0497343
+  },
+  {
+    "street": "South Street",
+    "housenumber": "184",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7506068,
+    "lon": -74.0503813
+  },
+  {
+    "street": "South Street",
+    "housenumber": "178",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.750522,
+    "lon": -74.0501322
+  },
+  {
+    "street": "South Street",
+    "housenumber": "176",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.750489,
+    "lon": -74.0500682
+  },
+  {
+    "street": "South Street",
+    "housenumber": "170",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7503972,
+    "lon": -74.0498028
+  },
+  {
+    "street": "South Street",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7505299,
+    "lon": -74.0502107
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "11",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7510648,
+    "lon": -74.0507264
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "11A",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7511182,
+    "lon": -74.0506776
+  },
+  {
+    "street": "Pierce Avenue",
+    "housenumber": "15",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7511995,
+    "lon": -74.0506663
+  },
+  {
+    "street": "South Street",
+    "housenumber": "175",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7501853,
+    "lon": -74.0502561
+  },
+  {
+    "street": "South Street",
+    "housenumber": "193",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7504827,
+    "lon": -74.0509962
+  },
+  {
+    "street": "South Street",
+    "housenumber": "179",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7502674,
+    "lon": -74.0504074
+  },
+  {
+    "street": "South Street",
+    "housenumber": "185",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7503666,
+    "lon": -74.0506379
+  },
+  {
+    "street": "South Street",
+    "housenumber": "187",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7504022,
+    "lon": -74.0507122
+  },
+  {
+    "street": "South Street",
+    "housenumber": "189",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7504352,
+    "lon": -74.0507913
+  },
+  {
+    "street": "South Street",
+    "housenumber": "177",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.750243,
+    "lon": -74.0503254
+  },
+  {
+    "street": "South Street",
+    "housenumber": "173",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7501826,
+    "lon": -74.0501419
+  },
+  {
+    "street": "South Street",
+    "housenumber": "171",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7501762,
+    "lon": -74.0500704
+  },
+  {
+    "street": "South Street",
+    "housenumber": "183",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7503176,
+    "lon": -74.0505727
+  },
+  {
+    "street": "South Street",
+    "housenumber": "181",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7502866,
+    "lon": -74.0504956
+  },
+  {
+    "street": "South Street",
+    "housenumber": "191",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7504467,
+    "lon": -74.0509028
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "3",
+    "city": "Jersey City",
+    "postcode": "07030",
+    "lat": 40.7374397,
+    "lon": -74.0451429
+  },
+  {
+    "street": "County Road",
+    "housenumber": "80",
+    "city": "Jersey City",
+    "postcode": "07097",
+    "lat": 40.7563115,
+    "lon": -74.0601918
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "750",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7558204,
+    "lon": -74.0547016
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "700",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7538434,
+    "lon": -74.0561421
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3515",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7520735,
+    "lon": -74.053625
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "746",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7554475,
+    "lon": -74.0548676
+  },
+  {
+    "street": "Tonnele Avenue",
+    "housenumber": "470",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7470665,
+    "lon": -74.0615461
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "459",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.746663,
+    "lon": -74.0625034
+  },
+  {
+    "street": "Tonnelle Avenue",
+    "housenumber": "881",
+    "city": "Jersey City",
+    "lat": 40.7589238,
+    "lon": -74.0527007
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3143",
+    "city": "Jersey City",
+    "lat": 40.7406314,
+    "lon": -74.0615472
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3140",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7400369,
+    "lon": -74.0611984
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "773",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.741117,
+    "lon": -74.0562341
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3130",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.739687,
+    "lon": -74.0615011
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "701",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7391011,
+    "lon": -74.0581123
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "679",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.738178,
+    "lon": -74.0589609
+  },
+  {
+    "street": "Reservoir Avenue",
+    "housenumber": "73",
+    "city": "Jersey City",
+    "lat": 40.7395543,
+    "lon": -74.0512161
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "112",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7328295,
+    "lon": -74.0510234
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "108",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7326705,
+    "lon": -74.0511565
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7324686,
+    "lon": -74.0514488
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "106",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7325682,
+    "lon": -74.0512698
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "102",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7325176,
+    "lon": -74.0513964
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "78",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7319319,
+    "lon": -74.0522656
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "76",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7318099,
+    "lon": -74.0518857
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "84",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7321266,
+    "lon": -74.0519465
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "272",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7316841,
+    "lon": -74.0520269
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "86",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7321656,
+    "lon": -74.0519034
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "74",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.731854,
+    "lon": -74.0523151
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "82",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7320874,
+    "lon": -74.0519896
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "80",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7320222,
+    "lon": -74.0520775
+  },
+  {
+    "street": "Palisade Avenue",
+    "housenumber": "88",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7322053,
+    "lon": -74.0518599
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "165-169",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7371363,
+    "lon": -74.0584671
+  },
+  {
+    "street": "Laidlaw Avenue",
+    "housenumber": "163",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7387882,
+    "lon": -74.0568639
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "41",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7358536,
+    "lon": -74.0566325
+  },
+  {
+    "street": "NJ 139 Upper Level",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7359981,
+    "lon": -74.0570082
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "175",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7372957,
+    "lon": -74.058576
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7360923,
+    "lon": -74.0551234
+  },
+  {
+    "street": "Oakland Avenue",
+    "housenumber": "136",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7372543,
+    "lon": -74.0525574
+  },
+  {
+    "street": "Hopkins Avenue",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7382178,
+    "lon": -74.0580731
+  },
+  {
+    "street": "Oakland Avenue",
+    "housenumber": "160",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7378805,
+    "lon": -74.052169
+  },
+  {
+    "street": "Jefferson Avenue",
+    "housenumber": "72",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7376912,
+    "lon": -74.0519803
+  },
+  {
+    "street": "Jefferson Avenue",
+    "housenumber": "74",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7377161,
+    "lon": -74.0520741
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "666",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.737663,
+    "lon": -74.0585844
+  },
+  {
+    "street": "Hopkins Avenue",
+    "housenumber": "179",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7379039,
+    "lon": -74.0582387
+  },
+  {
+    "street": "Summit Avenue",
+    "housenumber": "672",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7377534,
+    "lon": -74.0583892
+  },
+  {
+    "street": "Saint Pauls Avenue",
+    "housenumber": "140",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7367745,
+    "lon": -74.0570106
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "70",
+    "city": "Jersey City",
+    "postcode": "07306",
+    "lat": 40.7368818,
+    "lon": -74.0552788
+  },
+  {
+    "street": "Hoboken Avenue",
+    "housenumber": "274",
+    "city": "Jersey City",
+    "lat": 40.7321695,
+    "lon": -74.0527355
+  },
+  {
+    "street": "John F. Kennedy Boulevard",
+    "housenumber": "3668",
+    "city": "Jersey City",
+    "lat": 40.7555797,
+    "lon": -74.0467654
+  },
+  {
+    "street": "New York Avenue",
+    "housenumber": "254",
+    "city": "Jersey City",
+    "lat": 40.7447648,
+    "lon": -74.0446393
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "33",
+    "city": "Jersey City",
+    "lat": 40.745565,
+    "lon": -74.0437745
+  },
+  {
+    "street": "Bowers Street",
+    "housenumber": "146",
+    "city": "Jersey City",
+    "postcode": "07307",
+    "lat": 40.7477921,
+    "lon": -74.0491988
+  },
+  {
+    "street": "Newport Parkway",
+    "housenumber": "40",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7303066,
+    "lon": -74.0339278
+  },
+  {
+    "street": "Newport Parkway",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.729755,
+    "lon": -74.0334923
+  },
+  {
+    "street": "Shore Lane",
+    "housenumber": "1",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7304654,
+    "lon": -74.0323081
+  },
+  {
+    "street": "Newport Parkway",
+    "housenumber": "20",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7293458,
+    "lon": -74.0325232
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "575",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7287873,
+    "lon": -74.0352948
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "475",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7241392,
+    "lon": -74.0365705
+  },
+  {
+    "street": "Dudley Street",
+    "housenumber": "131",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7123605,
+    "lon": -74.0408367
+  },
+  {
+    "street": "Steuben Street",
+    "housenumber": "144",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7197266,
+    "lon": -74.0393253
+  },
+  {
+    "street": "Essex Street",
+    "housenumber": "149",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7131162,
+    "lon": -74.0411429
+  },
+  {
+    "street": "Regent Street",
+    "housenumber": "30",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7155641,
+    "lon": -74.0475158
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "107",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7171845,
+    "lon": -74.0504619
+  },
+  {
+    "street": "Bright Street",
+    "housenumber": "107",
+    "city": "Jersey City",
+    "lat": 40.7171818,
+    "lon": -74.0499906
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "187",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7137324,
+    "lon": -74.0400193
+  },
+  {
+    "street": "Essex Street",
+    "housenumber": "134",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7136329,
+    "lon": -74.0403629
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "180",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7133416,
+    "lon": -74.0378496
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "255",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7166172,
+    "lon": -74.0394248
+  },
+  {
+    "street": "10th Street",
+    "housenumber": "204",
+    "city": "Jersey City",
+    "lat": 40.7291113,
+    "lon": -74.0422554
+  },
+  {
+    "street": "10th Street",
+    "housenumber": "234",
+    "city": "Jersey City",
+    "lat": 40.7292084,
+    "lon": -74.0436658
+  },
+  {
+    "street": "10th Street",
+    "housenumber": "242",
+    "city": "Jersey City",
+    "lat": 40.7293023,
+    "lon": -74.0445106
+  },
+  {
+    "street": "Manila Avenue",
+    "housenumber": "500",
+    "city": "Jersey City",
+    "lat": 40.727099,
+    "lon": -74.0415053
+  },
+  {
+    "street": "Colgate Street",
+    "housenumber": "35",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7214277,
+    "lon": -74.0531434
+  },
+  {
+    "street": "Wayne Street",
+    "housenumber": "158",
+    "city": "Jersey City",
+    "postcode": "07302",
+    "lat": 40.7211326,
+    "lon": -74.0495691
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "61",
+    "city": "Jersey City",
+    "lat": 40.7149272,
+    "lon": -74.0365283
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "81",
+    "city": "Jersey City",
+    "lat": 40.7149999,
+    "lon": -74.0371542
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "80",
+    "city": "Jersey City",
+    "postcode": "07302-4522",
+    "lat": 40.7154287,
+    "lon": -74.0370396
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "112",
+    "city": "Jersey City",
+    "lat": 40.7158209,
+    "lon": -74.038699
+  },
+  {
+    "street": "York Street",
+    "housenumber": "107",
+    "city": "Jersey City",
+    "lat": 40.7159472,
+    "lon": -74.0383878
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "lat": 40.7155687,
+    "lon": -74.0381752
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "103",
+    "city": "Jersey City",
+    "lat": 40.7152126,
+    "lon": -74.0383566
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "105",
+    "city": "Jersey City",
+    "lat": 40.7152086,
+    "lon": -74.0384473
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "119",
+    "city": "Jersey City",
+    "lat": 40.7152759,
+    "lon": -74.0390769
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "121",
+    "city": "Jersey City",
+    "lat": 40.7152926,
+    "lon": -74.0391678
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "123",
+    "city": "Jersey City",
+    "lat": 40.7153037,
+    "lon": -74.0392576
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "401",
+    "city": "Jersey City",
+    "postcode": "07310",
+    "lat": 40.7221283,
+    "lon": -74.0368379
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "133",
+    "city": "Jersey City",
+    "lat": 40.7153476,
+    "lon": -74.0399071
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "135",
+    "city": "Jersey City",
+    "lat": 40.7153637,
+    "lon": -74.0399915
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "155",
+    "city": "Jersey City",
+    "lat": 40.7154423,
+    "lon": -74.0407565
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "157",
+    "city": "Jersey City",
+    "lat": 40.7154576,
+    "lon": -74.0408288
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "159",
+    "city": "Jersey City",
+    "lat": 40.7154012,
+    "lon": -74.0409197
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "173",
+    "city": "Jersey City",
+    "lat": 40.7155589,
+    "lon": -74.0415701
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "175",
+    "city": "Jersey City",
+    "lat": 40.7155746,
+    "lon": -74.0416351
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "195",
+    "city": "Jersey City",
+    "lat": 40.7156069,
+    "lon": -74.042565
+  },
+  {
+    "street": "Van Vorst Street",
+    "housenumber": "45",
+    "city": "Jersey City",
+    "lat": 40.7162348,
+    "lon": -74.0411285
+  },
+  {
+    "street": "York Street",
+    "housenumber": "163",
+    "city": "Jersey City",
+    "lat": 40.7162792,
+    "lon": -74.0412855
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "253",
+    "city": "Jersey City",
+    "lat": 40.7164312,
+    "lon": -74.0377646
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "251",
+    "city": "Jersey City",
+    "lat": 40.716325,
+    "lon": -74.03775
+  },
+  {
+    "street": "York Street",
+    "housenumber": "100",
+    "city": "Jersey City",
+    "lat": 40.7162938,
+    "lon": -74.0380499
+  },
+  {
+    "street": "York Street",
+    "housenumber": "102",
+    "city": "Jersey City",
+    "lat": 40.7162836,
+    "lon": -74.0381399
+  },
+  {
+    "street": "York Street",
+    "housenumber": "66",
+    "city": "Jersey City",
+    "lat": 40.7161063,
+    "lon": -74.0362367
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "103",
+    "city": "Jersey City",
+    "lat": 40.7167062,
+    "lon": -74.0389765
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "99",
+    "city": "Jersey City",
+    "lat": 40.7167277,
+    "lon": -74.0388354
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "95",
+    "city": "Jersey City",
+    "lat": 40.7166963,
+    "lon": -74.0386592
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "93",
+    "city": "Jersey City",
+    "lat": 40.7166712,
+    "lon": -74.0385255
+  },
+  {
+    "street": "Montgomery Street",
+    "housenumber": "81",
+    "city": "Jersey City",
+    "lat": 40.7165965,
+    "lon": -74.0379893
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "249",
+    "city": "Jersey City",
+    "lat": 40.7162539,
+    "lon": -74.0377428
+  },
+  {
+    "street": "Washington Street",
+    "housenumber": "247",
+    "city": "Jersey City",
+    "lat": 40.7161935,
+    "lon": -74.0378403
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "196",
+    "city": "Jersey City",
+    "lat": 40.7160691,
+    "lon": -74.04276
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "198",
+    "city": "Jersey City",
+    "lat": 40.7160761,
+    "lon": -74.0428262
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "200",
+    "city": "Jersey City",
+    "lat": 40.7160835,
+    "lon": -74.0428931
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "202",
+    "city": "Jersey City",
+    "lat": 40.716092,
+    "lon": -74.0429598
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "204",
+    "city": "Jersey City",
+    "lat": 40.7160985,
+    "lon": -74.0430227
+  },
+  {
+    "street": "Grand Street",
+    "housenumber": "206",
+    "city": "Jersey City",
+    "lat": 40.7161052,
+    "lon": -74.0430869
+  }
+]

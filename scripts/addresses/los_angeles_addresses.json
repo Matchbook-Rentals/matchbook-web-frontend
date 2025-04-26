@@ -1,0 +1,7831 @@
+[
+  {
+    "street": "Pasadena Avenue",
+    "housenumber": "2521",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0766932,
+    "lon": -118.216012
+  },
+  {
+    "street": "W Jefferson Boulevard",
+    "housenumber": "5664",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0263634,
+    "lon": -118.3721521
+  },
+  {
+    "street": "North San Fernando Road",
+    "housenumber": "2135",
+    "city": "Los Angeles",
+    "postcode": "90065",
+    "lat": 34.1032728,
+    "lon": -118.237237
+  },
+  {
+    "street": "Sepulveda Boulevard",
+    "housenumber": "3456",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0203234,
+    "lon": -118.422068
+  },
+  {
+    "street": "Pier S Avenue",
+    "housenumber": "111",
+    "city": "Long Beach",
+    "postcode": "90802",
+    "lat": 33.758721,
+    "lon": -118.2417558
+  },
+  {
+    "street": "Selma Avenue",
+    "housenumber": "6371",
+    "city": "Los Angeles",
+    "lat": 34.0998981,
+    "lon": -118.3293304
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "6922",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0981853,
+    "lon": -118.327536
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8337",
+    "city": "Sunland",
+    "postcode": "91040",
+    "lat": 34.2602353,
+    "lon": -118.3147464
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8343",
+    "city": "Sunland",
+    "postcode": "91040",
+    "lat": 34.2602359,
+    "lon": -118.3149028
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "9401",
+    "city": "Sunland",
+    "postcode": "91040",
+    "lat": 34.2676885,
+    "lon": -118.335695
+  },
+  {
+    "street": "Yale Street",
+    "housenumber": "817",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.064243,
+    "lon": -118.2399896
+  },
+  {
+    "street": "South Cochran Avenue",
+    "housenumber": "755",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0607833,
+    "lon": -118.3480679
+  },
+  {
+    "street": "Emerson Avenue",
+    "housenumber": "8810",
+    "city": "Los Angeles",
+    "lat": 33.9567542,
+    "lon": -118.4038398
+  },
+  {
+    "street": "Boyce Avenue",
+    "housenumber": "3716",
+    "city": "Los Angeles",
+    "lat": 34.1205644,
+    "lon": -118.2611861
+  },
+  {
+    "street": "Apperson Street",
+    "housenumber": "7324",
+    "city": "Tujunga",
+    "postcode": "91042",
+    "lat": 34.2562986,
+    "lon": -118.292479
+  },
+  {
+    "street": "Whitaker Avenue",
+    "housenumber": "7120",
+    "city": "Lake Balboa",
+    "postcode": "91406",
+    "lat": 34.2001498,
+    "lon": -118.4976494
+  },
+  {
+    "street": "Monte Vista Street",
+    "housenumber": "6025",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1138237,
+    "lon": -118.1908635
+  },
+  {
+    "street": "Nordhoff St",
+    "housenumber": "18111",
+    "city": "Northridge",
+    "postcode": "91330",
+    "lat": 34.2389212,
+    "lon": -118.529324
+  },
+  {
+    "street": "Emerson Avenue",
+    "housenumber": "8740",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9585759,
+    "lon": -118.4040575
+  },
+  {
+    "street": "Griffin Avenue",
+    "housenumber": "4570",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0965859,
+    "lon": -118.2012972
+  },
+  {
+    "street": "North Occidental Boulevard",
+    "housenumber": "155",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0720796,
+    "lon": -118.279396
+  },
+  {
+    "street": "Sherman Way",
+    "housenumber": "13524",
+    "city": "Van Nuys",
+    "postcode": "91405",
+    "lat": 34.2008132,
+    "lon": -118.4276641
+  },
+  {
+    "street": "South Hope Street",
+    "housenumber": "550",
+    "city": "Los Angeles",
+    "postcode": "90071",
+    "lat": 34.0497343,
+    "lon": -118.255629
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3663",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0621612,
+    "lon": -118.3049974
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "3894",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0147347,
+    "lon": -118.3345203
+  },
+  {
+    "street": "South Western Avenue",
+    "housenumber": "265",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.069434,
+    "lon": -118.309525
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "1808",
+    "city": "Los Angeles",
+    "postcode": "90057",
+    "lat": 34.0549074,
+    "lon": -118.2738281
+  },
+  {
+    "street": "Vedanta Place",
+    "housenumber": "1946",
+    "city": "Hollywood",
+    "postcode": "90068",
+    "lat": 34.1066011,
+    "lon": -118.3274
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "3405",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0474224,
+    "lon": -118.3178556
+  },
+  {
+    "street": "South Boyle Avenue",
+    "housenumber": "573",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0400525,
+    "lon": -118.2204042
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "18055",
+    "city": "Encino",
+    "postcode": "91316",
+    "lat": 34.1653191,
+    "lon": -118.526151
+  },
+  {
+    "street": "Valley Beth Shalom Day School",
+    "housenumber": "15739",
+    "city": "Encino",
+    "postcode": "91436",
+    "lat": 34.1561516,
+    "lon": -118.4786603
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "4269",
+    "city": "Los Angeles",
+    "postcode": "90037",
+    "lat": 34.0056317,
+    "lon": -118.2829672
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "4003",
+    "city": "Los Angeles",
+    "postcode": "90018",
+    "lat": 34.0327896,
+    "lon": -118.3286871
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "2230",
+    "city": "Los Angeles",
+    "postcode": "90018",
+    "lat": 34.0252901,
+    "lon": -118.3197978
+  },
+  {
+    "street": "South Westmoreland Avenue",
+    "housenumber": "760",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0583446,
+    "lon": -118.2889641
+  },
+  {
+    "street": "North Virgil Avenue",
+    "housenumber": "975",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0894543,
+    "lon": -118.2872977
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "4950",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1052869,
+    "lon": -118.2975759
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "2516",
+    "city": "Los Angeles",
+    "postcode": "90057",
+    "lat": 34.064949,
+    "lon": -118.2772079
+  },
+  {
+    "street": "Saint George Street",
+    "housenumber": "2718",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1086203,
+    "lon": -118.2747975
+  },
+  {
+    "street": "North Gramercy Place",
+    "housenumber": "148",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0744519,
+    "lon": -118.3121846
+  },
+  {
+    "street": "South Van Ness Avenue",
+    "housenumber": "310",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0686216,
+    "lon": -118.3147982
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "3210",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0469559,
+    "lon": -118.3120201
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "3233",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0474625,
+    "lon": -118.3134787
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "915",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0560331,
+    "lon": -118.3225372
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "8167",
+    "city": "Los Angeles",
+    "postcode": "90077",
+    "lat": 34.0725553,
+    "lon": -118.36758
+  },
+  {
+    "street": "Beverly Boulevard",
+    "housenumber": "7659",
+    "city": "Los Angeles",
+    "lat": 34.0763808,
+    "lon": -118.3566099
+  },
+  {
+    "street": "North Fairfax Avenue",
+    "housenumber": "619",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0823094,
+    "lon": -118.3617135
+  },
+  {
+    "street": "North Fairfax Avenue",
+    "housenumber": "855",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0869404,
+    "lon": -118.3617405
+  },
+  {
+    "street": "South Figueroa Street",
+    "housenumber": "8005",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9664056,
+    "lon": -118.2829846
+  },
+  {
+    "street": "West Manchester Boulevard",
+    "housenumber": "837",
+    "city": "Los Angeles",
+    "postcode": "90044",
+    "lat": 33.9602923,
+    "lon": -118.2881295
+  },
+  {
+    "street": "West Boulevard",
+    "housenumber": "6520",
+    "city": "Los Angeles",
+    "postcode": "90043",
+    "lat": 33.9798334,
+    "lon": -118.3349323
+  },
+  {
+    "street": "West Slauson Avenue",
+    "housenumber": "4000",
+    "city": "Los Angeles",
+    "postcode": "90043",
+    "lat": 33.9886762,
+    "lon": -118.344246
+  },
+  {
+    "street": "West Manchester Avenue",
+    "housenumber": "1016",
+    "city": "Los Angeles",
+    "postcode": "90044",
+    "lat": 33.959695,
+    "lon": -118.2930087
+  },
+  {
+    "street": "Santa Ana Boulevard",
+    "housenumber": "2222",
+    "city": "Los Angeles",
+    "postcode": "90059",
+    "lat": 33.9350135,
+    "lon": -118.2331185
+  },
+  {
+    "street": "South Fickett Street",
+    "housenumber": "101",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0425121,
+    "lon": -118.2075725
+  },
+  {
+    "street": "Aldama Street",
+    "housenumber": "6310",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1197308,
+    "lon": -118.1886836
+  },
+  {
+    "street": "East Cesar E Chavez Avenue",
+    "housenumber": "1401",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0527896,
+    "lon": -118.220628
+  },
+  {
+    "street": "Selig Place",
+    "housenumber": "3839",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.068622,
+    "lon": -118.1997947
+  },
+  {
+    "street": "Huntington Drive South",
+    "housenumber": "4515",
+    "city": "Los Angeles",
+    "postcode": "90032",
+    "lat": 34.0856698,
+    "lon": -118.1893702
+  },
+  {
+    "street": "North Avenue 61",
+    "housenumber": "322",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1141244,
+    "lon": -118.1904428
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "5268",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0322336,
+    "lon": -118.3578545
+  },
+  {
+    "street": "East L Street",
+    "housenumber": "1011",
+    "city": "Los Angeles",
+    "postcode": "90744",
+    "lat": 33.7877778,
+    "lon": -118.2505556
+  },
+  {
+    "street": "Grand View Boulevard",
+    "housenumber": "3826",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 34.0044361,
+    "lon": -118.430568
+  },
+  {
+    "street": "Bellingham Avenue",
+    "housenumber": "6418",
+    "city": "North Hollywood",
+    "postcode": "91606",
+    "lat": 34.1873388,
+    "lon": -118.3983532
+  },
+  {
+    "street": "Rinaldi Street",
+    "housenumber": "17540",
+    "city": "Granada Hills",
+    "postcode": "91344",
+    "lat": 34.2787293,
+    "lon": -118.5091003
+  },
+  {
+    "street": "Sepulveda Boulevard",
+    "housenumber": "5329",
+    "city": "Sherman Oak",
+    "postcode": "91411",
+    "lat": 34.1675,
+    "lon": -118.466944
+  },
+  {
+    "street": "Roscoe Boulevard",
+    "housenumber": "13060",
+    "city": "Sun Valley",
+    "postcode": "91352",
+    "lat": 34.2213183,
+    "lon": -118.4186781
+  },
+  {
+    "street": "Sherman Way",
+    "housenumber": "14615",
+    "city": "Van Nuys",
+    "postcode": "91405",
+    "lat": 34.2015003,
+    "lon": -118.4517525
+  },
+  {
+    "street": "Rinaldi Street",
+    "housenumber": "16651",
+    "city": "Granada Hills",
+    "postcode": "91344",
+    "lat": 34.2795392,
+    "lon": -118.495373
+  },
+  {
+    "street": "Apperson Street",
+    "housenumber": "7344",
+    "city": "Tujunga",
+    "postcode": "91042",
+    "lat": 34.2563889,
+    "lon": -118.2916667
+  },
+  {
+    "street": "Jordan Avenue",
+    "housenumber": "7400",
+    "city": "Canoga Park",
+    "postcode": "91303",
+    "lat": 34.2049389,
+    "lon": -118.6024929
+  },
+  {
+    "street": "Walgrove Avenue",
+    "housenumber": "2241",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 33.9986511,
+    "lon": -118.447978
+  },
+  {
+    "street": "Sawtelle Boulevard",
+    "housenumber": "1925",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0416667,
+    "lon": -118.444722
+  },
+  {
+    "street": "Purdue Avenue",
+    "housenumber": "2147",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0371511,
+    "lon": -118.443513
+  },
+  {
+    "street": "Butler Avenue",
+    "housenumber": "1710",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0435911,
+    "lon": -118.4500647
+  },
+  {
+    "street": "N Figueroa Street",
+    "housenumber": "4328",
+    "city": "Los Angeles",
+    "lat": 34.0950167,
+    "lon": -118.207818
+  },
+  {
+    "street": "North Figueroa Street",
+    "housenumber": "4585",
+    "city": "Los Angeles",
+    "postcode": "90065",
+    "lat": 34.0980773,
+    "lon": -118.2059037
+  },
+  {
+    "street": "Monte Vista Street",
+    "housenumber": "5711",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1122358,
+    "lon": -118.1941319
+  },
+  {
+    "street": "Monte Vista Street",
+    "housenumber": "5125",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1084652,
+    "lon": -118.2016667
+  },
+  {
+    "street": "North Figueroa Street",
+    "housenumber": "5101",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1061111,
+    "lon": -118.2008333
+  },
+  {
+    "street": "York Boulevard",
+    "housenumber": "6071",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1178846,
+    "lon": -118.1867778
+  },
+  {
+    "street": "South Grand Avenue",
+    "housenumber": "919",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.04422,
+    "lon": -118.2599289
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "12412",
+    "city": "North Hollywood",
+    "postcode": "91606",
+    "lat": 34.1863401,
+    "lon": -118.4036149
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8724",
+    "city": "Sunland",
+    "postcode": "91040-1923",
+    "lat": 34.2599712,
+    "lon": -118.323967
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8700",
+    "city": "Sunland",
+    "postcode": "91040",
+    "lat": 34.2600527,
+    "lon": -118.3233849
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5505",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0626106,
+    "lon": -118.3484706
+  },
+  {
+    "street": "North Figueroa Street",
+    "housenumber": "6145",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1136199,
+    "lon": -118.1864612
+  },
+  {
+    "street": "Workman Street",
+    "housenumber": "2530",
+    "city": "Los Angeles",
+    "postcode": "90031-2212",
+    "lat": 34.0761988,
+    "lon": -118.214034
+  },
+  {
+    "street": "West Temple Street",
+    "housenumber": "1410",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0671091,
+    "lon": -118.2574018
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "12006",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 34.0058446,
+    "lon": -118.4289671
+  },
+  {
+    "street": "North Saint Andrew's Place",
+    "housenumber": "149",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0744997,
+    "lon": -118.311743
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "4607",
+    "city": "Los Angeles",
+    "lat": 34.0017495,
+    "lon": -118.274326
+  },
+  {
+    "street": "S. La Brea Ave",
+    "housenumber": "2906",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0282866,
+    "lon": -118.352604
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "21052",
+    "city": "Chatsworth",
+    "postcode": "91311",
+    "lat": 34.2569724,
+    "lon": -118.592637
+  },
+  {
+    "street": "South Palos Verdes Street",
+    "housenumber": "425",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7406367,
+    "lon": -118.2818491
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "2111",
+    "city": "Boyle Heights",
+    "lat": 34.0448535,
+    "lon": -118.212979
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "11272",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0464645,
+    "lon": -118.447994
+  },
+  {
+    "street": "Le Conte Avenue",
+    "housenumber": "10886",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0634558,
+    "lon": -118.4445262
+  },
+  {
+    "street": "N Figueroa Street",
+    "housenumber": "5604",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1090062,
+    "lon": -118.1936572
+  },
+  {
+    "street": "La Cienega Boulevard",
+    "housenumber": "1762",
+    "city": "Los Angeles",
+    "postcode": "90035",
+    "lat": 34.0451945,
+    "lon": -118.376304
+  },
+  {
+    "street": "Western Heritage Way",
+    "housenumber": "4700",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1483813,
+    "lon": -118.2817076
+  },
+  {
+    "street": "South La Fayette Park Place",
+    "housenumber": "666",
+    "city": "Los Angeles",
+    "postcode": "90057",
+    "lat": 34.0604011,
+    "lon": -118.283482
+  },
+  {
+    "street": "Micheltorena Street",
+    "housenumber": "1923",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.0949253,
+    "lon": -118.2713064
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "431",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0466789,
+    "lon": -118.2550741
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "7021",
+    "city": "Hollywood",
+    "lat": 34.1019444,
+    "lon": -118.3425
+  },
+  {
+    "street": "Zeldins Way",
+    "housenumber": "15800",
+    "city": "Los Angeles",
+    "postcode": "90049",
+    "lat": 34.1259081,
+    "lon": -118.4778413
+  },
+  {
+    "street": "South Barrington Avenue",
+    "housenumber": "1439",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0449378,
+    "lon": -118.4577727
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6745",
+    "city": "Hollywood Place",
+    "postcode": "90028",
+    "lat": 34.1017216,
+    "lon": -118.3373325
+  },
+  {
+    "street": "Arizona Avenue",
+    "housenumber": "7514",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9728718,
+    "lon": -118.395598
+  },
+  {
+    "street": "Center Drive",
+    "housenumber": "6081",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9780463,
+    "lon": -118.391908
+  },
+  {
+    "street": "South Sepulveda Boulevard",
+    "housenumber": "8601",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9596518,
+    "lon": -118.3968346
+  },
+  {
+    "street": "North Alameda Street",
+    "housenumber": "1001",
+    "city": "Los Angeles",
+    "lat": 34.0596738,
+    "lon": -118.236941
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "118",
+    "city": "Los Angeles",
+    "lat": 34.0448335,
+    "lon": -118.2495584
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "331",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0499025,
+    "lon": -118.2399704
+  },
+  {
+    "street": "E 1st St.",
+    "housenumber": "327",
+    "city": "Los Angeles",
+    "lat": 34.0499714,
+    "lon": -118.2400831
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "229",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0449001,
+    "lon": -118.253359
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "645",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0455899,
+    "lon": -118.2608354
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "800",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0449843,
+    "lon": -118.265798
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "800",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0446975,
+    "lon": -118.2646054
+  },
+  {
+    "street": "S Main Street",
+    "housenumber": "400",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0479704,
+    "lon": -118.2471827
+  },
+  {
+    "street": "West Sixth Street",
+    "housenumber": "630",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0490405,
+    "lon": -118.2560063
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "731",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0486352,
+    "lon": -118.258366
+  },
+  {
+    "street": "E. 1st Street",
+    "housenumber": "312",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0501499,
+    "lon": -118.2407905
+  },
+  {
+    "street": "S. San Pedro St.",
+    "housenumber": "100",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0501641,
+    "lon": -118.2408677
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "362",
+    "city": "Los Angeles",
+    "lat": 34.0491094,
+    "lon": -118.239352
+  },
+  {
+    "street": "Culver Boulevard",
+    "housenumber": "12740",
+    "city": "Los Angeles",
+    "lat": 33.9853271,
+    "lon": -118.425096
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "1360",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0960683,
+    "lon": -118.3264426
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "7950",
+    "city": "Sunland",
+    "postcode": "91040-2937",
+    "lat": 34.2592518,
+    "lon": -118.3063392
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8363",
+    "city": "Sunland-Tujunga",
+    "postcode": "91040",
+    "lat": 34.2601185,
+    "lon": -118.3155035
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "8405",
+    "city": "Sunland",
+    "postcode": "91040",
+    "lat": 34.2599921,
+    "lon": -118.3160267
+  },
+  {
+    "street": "Indiana Ave",
+    "housenumber": "2228",
+    "city": "Los Angeles",
+    "postcode": "90032",
+    "lat": 34.0699744,
+    "lon": -118.1926727
+  },
+  {
+    "street": "Indiana Ave",
+    "housenumber": "2222",
+    "city": "Los Angeles",
+    "postcode": "90032",
+    "lat": 34.0698414,
+    "lon": -118.1926254
+  },
+  {
+    "street": "York Boulevard",
+    "housenumber": "5000",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.121259,
+    "lon": -118.206804
+  },
+  {
+    "street": "Bellanca Avenue",
+    "housenumber": "8734",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9576546,
+    "lon": -118.3797562
+  },
+  {
+    "street": "Riverside Drive",
+    "housenumber": "12851",
+    "city": "Studio City",
+    "postcode": "91607",
+    "lat": 34.1578394,
+    "lon": -118.4132217
+  },
+  {
+    "street": "York Boulevard",
+    "housenumber": "6421",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1144391,
+    "lon": -118.180684
+  },
+  {
+    "street": "York Boulevard",
+    "housenumber": "5101",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.121147,
+    "lon": -118.204555
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6667",
+    "city": "Los Angeles",
+    "lat": 34.101763,
+    "lon": -118.3350264
+  },
+  {
+    "street": "Soto Street",
+    "housenumber": "401",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0403747,
+    "lon": -118.2121714
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "254",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0511181,
+    "lon": -118.2475744
+  },
+  {
+    "street": "3rd St",
+    "housenumber": "3501",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0692525,
+    "lon": -118.291986
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3680",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0614545,
+    "lon": -118.306404
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3540",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0615618,
+    "lon": -118.301721
+  },
+  {
+    "street": "South Kingsley Drive",
+    "housenumber": "265",
+    "city": "Los Angeles",
+    "postcode": "90004-4307",
+    "lat": 34.0692294,
+    "lon": -118.3033681
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3330",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0616163,
+    "lon": -118.2956713
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3333",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0619246,
+    "lon": -118.2956559
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3327",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.061895,
+    "lon": -118.2951937
+  },
+  {
+    "street": "Alvarado Street",
+    "housenumber": "230",
+    "city": "Los Angeles",
+    "postcode": "90057",
+    "lat": 34.0630316,
+    "lon": -118.2722924
+  },
+  {
+    "street": "Glendale Boulevard",
+    "housenumber": "1417",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.080601,
+    "lon": -118.260636
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1515",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0825423,
+    "lon": -118.2609295
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1800",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0866114,
+    "lon": -118.257763
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1802",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0866972,
+    "lon": -118.2577115
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1804",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.086783,
+    "lon": -118.2576599
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1806",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0868687,
+    "lon": -118.2576084
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1808",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0869545,
+    "lon": -118.2575569
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1810",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0870403,
+    "lon": -118.2575053
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1812",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0871261,
+    "lon": -118.2574538
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1814",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0872119,
+    "lon": -118.2574023
+  },
+  {
+    "street": "Alvarado St",
+    "housenumber": "1816",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0872977,
+    "lon": -118.2573508
+  },
+  {
+    "street": "Alvarado Street",
+    "housenumber": "1818",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0873835,
+    "lon": -118.2572992
+  },
+  {
+    "street": "North Beaudry Avenue",
+    "housenumber": "516",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0647554,
+    "lon": -118.2491904
+  },
+  {
+    "street": "E Washington Boulevard",
+    "housenumber": "1525",
+    "city": "Los Angeles",
+    "postcode": "90021",
+    "lat": 34.0217183,
+    "lon": -118.245277
+  },
+  {
+    "street": "Mesquit St",
+    "housenumber": "670",
+    "city": "Los Angeles",
+    "postcode": "90021",
+    "lat": 34.0364609,
+    "lon": -118.2291154
+  },
+  {
+    "street": "North Spring Street",
+    "housenumber": "1220",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0656662,
+    "lon": -118.233427
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "2214",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0733788,
+    "lon": -118.217175
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3105",
+    "city": "Los Angeles",
+    "postcode": "90031-2703",
+    "lat": 34.0740599,
+    "lon": -118.2087196
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3130",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0735207,
+    "lon": -118.208118
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "3432",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.073596,
+    "lon": -118.2041038
+  },
+  {
+    "street": "Colorado Boulevard",
+    "housenumber": "2160",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1389047,
+    "lon": -118.2138722
+  },
+  {
+    "street": "West Anaheim Street",
+    "housenumber": "1202",
+    "city": "Harbor City",
+    "postcode": "90710-3805",
+    "lat": 33.7818646,
+    "lon": -118.2980305
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "4314",
+    "city": "Los Angeles",
+    "lat": 34.0834375,
+    "lon": -118.2946531
+  },
+  {
+    "street": "Fountain Avenue",
+    "housenumber": "4429",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0959335,
+    "lon": -118.286227
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1000",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0619255,
+    "lon": -118.4476983
+  },
+  {
+    "street": "West Weyburn",
+    "housenumber": "10955",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0624873,
+    "lon": -118.4473927
+  },
+  {
+    "street": "South Figueroa Street",
+    "housenumber": "3748",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0169985,
+    "lon": -118.2822768
+  },
+  {
+    "street": "South Cochran Avenue",
+    "housenumber": "619",
+    "city": "Los Angeles",
+    "lat": 34.063677,
+    "lon": -118.34735
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5353",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0624774,
+    "lon": -118.345318
+  },
+  {
+    "street": "Fountain Avenue",
+    "housenumber": "4532",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0955913,
+    "lon": -118.2876342
+  },
+  {
+    "street": "Randall Street",
+    "housenumber": "11025",
+    "city": "Sun Valley",
+    "postcode": "91352",
+    "lat": 34.2376122,
+    "lon": -118.3714114
+  },
+  {
+    "street": "Penrose Street",
+    "housenumber": "11351",
+    "city": "Sun Valley",
+    "lat": 34.223899,
+    "lon": -118.378998
+  },
+  {
+    "street": "North Figueroa Street",
+    "housenumber": "7331",
+    "city": "Eagle Rock",
+    "postcode": "90041",
+    "lat": 34.137166,
+    "lon": -118.1882869
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "5121",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1055989,
+    "lon": -118.3012536
+  },
+  {
+    "street": "North Las Palmas Avenue",
+    "housenumber": "1617",
+    "city": "Los Angeles",
+    "lat": 34.1005001,
+    "lon": -118.3363038
+  },
+  {
+    "street": "Carlos Avenue",
+    "housenumber": "6024",
+    "city": "Los Angeles",
+    "lat": 34.1030409,
+    "lon": -118.323171
+  },
+  {
+    "street": "South Virgil Avenue",
+    "housenumber": "319",
+    "city": "Los Angeles",
+    "lat": 34.0683767,
+    "lon": -118.287065
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "10201",
+    "city": "Los Angeles",
+    "lat": 34.0498145,
+    "lon": -118.4114226
+  },
+  {
+    "street": "Los Feliz Boulevard",
+    "housenumber": "4500",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1116128,
+    "lon": -118.287845
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2121",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1106324,
+    "lon": -118.2876573
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1727",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1026007,
+    "lon": -118.2920843
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1702",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019944,
+    "lon": -118.2915943
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1800",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.10374,
+    "lon": -118.286982
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1850",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1046906,
+    "lon": -118.2872591
+  },
+  {
+    "street": "Russell Avenue",
+    "housenumber": "1813",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1040977,
+    "lon": -118.2877982
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1824",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1044069,
+    "lon": -118.2916172
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1929",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1062341,
+    "lon": -118.2877096
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1806 1/2",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1038999,
+    "lon": -118.2872188
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2035",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1088413,
+    "lon": -118.287919
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1900",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1055989,
+    "lon": -118.286962
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1904",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.105737,
+    "lon": -118.287023
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1906",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1057366,
+    "lon": -118.287138
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2081",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1098325,
+    "lon": -118.287797
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1767",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1032292,
+    "lon": -118.2919463
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1850",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1046247,
+    "lon": -118.291645
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1700",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.10191,
+    "lon": -118.291465
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "4650",
+    "city": "Los Angeles",
+    "postcode": "90027-4202",
+    "lat": 34.105215,
+    "lon": -118.2913752
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1802",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1038134,
+    "lon": -118.2916166
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1822",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1043591,
+    "lon": -118.2916172
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1739",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1028381,
+    "lon": -118.291931
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1700",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019509,
+    "lon": -118.2872293
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2035",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1089263,
+    "lon": -118.288093
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1966",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1073013,
+    "lon": -118.287281
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1978",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1075639,
+    "lon": -118.2872775
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1958",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1070398,
+    "lon": -118.28729
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2056",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.109119,
+    "lon": -118.2872781
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1858",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1048398,
+    "lon": -118.2916334
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1818",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.104207,
+    "lon": -118.291618
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1760",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.103174,
+    "lon": -118.2916325
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1727",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1025588,
+    "lon": -118.292332
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1769",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1033686,
+    "lon": -118.2875896
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1869",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1050787,
+    "lon": -118.2920313
+  },
+  {
+    "street": "W Sunset Blvd",
+    "housenumber": "1427",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0750673,
+    "lon": -118.2527114
+  },
+  {
+    "street": "San Fernando",
+    "housenumber": "8909",
+    "city": "Los Angeles",
+    "postcode": "91352",
+    "lat": 34.2303228,
+    "lon": -118.3846885
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "6511",
+    "city": "Hollywood",
+    "postcode": "90038",
+    "lat": 34.0910273,
+    "lon": -118.331389
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "6701",
+    "city": "Los Angeles",
+    "postcode": "90038-1202",
+    "lat": 34.0910473,
+    "lon": -118.336518
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "263",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0691676,
+    "lon": -118.3443578
+  },
+  {
+    "street": "Beverly Boulevard",
+    "housenumber": "7020",
+    "city": "Los Angeles",
+    "lat": 34.0759395,
+    "lon": -118.3437355
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "1163",
+    "city": "Los Angeles",
+    "lat": 34.0540351,
+    "lon": -118.3438109
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "1015",
+    "city": "Los Angeles",
+    "lat": 34.0563218,
+    "lon": -118.3456134
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "747",
+    "city": "Los Angeles",
+    "lat": 34.0608105,
+    "lon": -118.344816
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "817",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.059895,
+    "lon": -118.345165
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5420",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0620726,
+    "lon": -118.347026
+  },
+  {
+    "street": "La Brea Avenue",
+    "housenumber": "1337",
+    "city": "Los Angeles",
+    "lat": 34.0490994,
+    "lon": -118.3445137
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "12050",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1429249,
+    "lon": -118.3943675
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "12100",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1433558,
+    "lon": -118.395443
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "12050",
+    "city": "Los Angeles",
+    "lat": 34.1427409,
+    "lon": -118.3945848
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "11713",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1416953,
+    "lon": -118.3882226
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "12036",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1434801,
+    "lon": -118.393697
+  },
+  {
+    "street": "Lankershim Bouleva",
+    "housenumber": "7040",
+    "city": "Los Angeles",
+    "lat": 34.1984417,
+    "lon": -118.3872427
+  },
+  {
+    "street": "Shaerman Way",
+    "housenumber": "12104",
+    "city": "North Hollywood",
+    "postcode": "91605",
+    "lat": 34.2002586,
+    "lon": -118.397032
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "5545",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.098277,
+    "lon": -118.3110997
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "5609",
+    "city": "Los Angeles",
+    "postcode": "90028-8534",
+    "lat": 34.098548,
+    "lon": -118.311626
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "5170",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0976962,
+    "lon": -118.302913
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "5979",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0700464,
+    "lon": -118.3508864
+  },
+  {
+    "street": "Larga Avenue",
+    "housenumber": "3534",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.1178587,
+    "lon": -118.2602596
+  },
+  {
+    "street": "Casitas Avenue",
+    "housenumber": "3285",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.1167185,
+    "lon": -118.252424
+  },
+  {
+    "street": "Silver Lake Boulevard",
+    "housenumber": "3250",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.1139738,
+    "lon": -118.253779
+  },
+  {
+    "street": "North Larchmont",
+    "housenumber": "206",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0749988,
+    "lon": -118.3234084
+  },
+  {
+    "street": "North Larchmont Boulevard",
+    "housenumber": "244",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0757609,
+    "lon": -118.3233949
+  },
+  {
+    "street": "North Vine Street",
+    "housenumber": "727",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0843522,
+    "lon": -118.3269636
+  },
+  {
+    "street": "North Vine Street",
+    "housenumber": "727",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0843522,
+    "lon": -118.3273498
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "750",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.084767,
+    "lon": -118.3263534
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "990",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0883123,
+    "lon": -118.3088446
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6338",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1014426,
+    "lon": -118.3280047
+  },
+  {
+    "street": "West Colorado Boulevard",
+    "housenumber": "2218",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1390734,
+    "lon": -118.215246
+  },
+  {
+    "street": "Yosemite Drive",
+    "housenumber": "2245",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1356634,
+    "lon": -118.216452
+  },
+  {
+    "street": "Eagle Rock Boulevard",
+    "housenumber": "4947",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1360186,
+    "lon": -118.215262
+  },
+  {
+    "street": "South Spring Street",
+    "housenumber": "120",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0512024,
+    "lon": -118.243731
+  },
+  {
+    "street": "Century Park East",
+    "housenumber": "2080",
+    "city": "Los Angeles",
+    "lat": 34.05881,
+    "lon": -118.41208
+  },
+  {
+    "street": "West Live Oak Drive",
+    "housenumber": "2175",
+    "city": "Los Angeles",
+    "lat": 34.1086,
+    "lon": -118.311764
+  },
+  {
+    "street": "Berth",
+    "housenumber": "93",
+    "city": "San Pedro",
+    "lat": 33.749599,
+    "lon": -118.278495
+  },
+  {
+    "street": "Newcastle Avenue",
+    "housenumber": "5501",
+    "city": "Encino",
+    "lat": 34.1706939,
+    "lon": -118.5246011
+  },
+  {
+    "street": "Wagner Street",
+    "housenumber": "12120",
+    "city": "Culver City",
+    "lat": 33.993738,
+    "lon": -118.417598
+  },
+  {
+    "street": "Gracie Allen Drive",
+    "housenumber": "8705",
+    "city": "Los Angeles",
+    "lat": 34.0753,
+    "lon": -118.379229
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "11501",
+    "city": "Los Angeles",
+    "lat": 34.009386,
+    "lon": -118.423672
+  },
+  {
+    "street": "E. 3rd",
+    "housenumber": "608 1/2",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0455378,
+    "lon": -118.2360081
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "12011",
+    "city": "Los Angeles",
+    "lat": 34.1869275,
+    "lon": -118.394782
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6341",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933569,
+    "lon": -118.328105
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6333",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933624,
+    "lon": -118.3278421
+  },
+  {
+    "street": "North Cahuenga Boulevard",
+    "housenumber": "1238 3/4",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0938578,
+    "lon": -118.3286616
+  },
+  {
+    "street": "North Cahuenga Boulevard",
+    "housenumber": "1254 1/2",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0936401,
+    "lon": -118.3286857
+  },
+  {
+    "street": "North Cahuenga Boulevard",
+    "housenumber": "1240",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0937369,
+    "lon": -118.3286618
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "5327",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.093368,
+    "lon": -118.3277094
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6357",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933613,
+    "lon": -118.328679
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6353",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933636,
+    "lon": -118.3285435
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6349",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933613,
+    "lon": -118.328388
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "6345",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933547,
+    "lon": -118.3282552
+  },
+  {
+    "street": "La Mirada Avenue",
+    "housenumber": "5319",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0933702,
+    "lon": -118.3274331
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "6290",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0973564,
+    "lon": -118.3264568
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "1240",
+    "city": "Hollywood",
+    "postcode": "90038",
+    "lat": 34.093717,
+    "lon": -118.325951
+  },
+  {
+    "street": "North Cahuenga Boulevard",
+    "housenumber": "6430",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.0971954,
+    "lon": -118.3299182
+  },
+  {
+    "street": "Lexington Avenue",
+    "housenumber": "6254",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0923513,
+    "lon": -118.3262631
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "10901",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1400528,
+    "lon": -118.3679456
+  },
+  {
+    "street": "Watseka Ave",
+    "housenumber": "3764",
+    "city": "Los Angeles",
+    "postcode": "90034-4000",
+    "lat": 34.0252468,
+    "lon": -118.3972169
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "8985",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0268336,
+    "lon": -118.3932467
+  },
+  {
+    "street": "Watseka Avenue",
+    "housenumber": "3764",
+    "city": "Los Angeles",
+    "postcode": "90034-4000",
+    "lat": 34.0251431,
+    "lon": -118.39708
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "9609",
+    "city": "Los Angeles",
+    "postcode": "90232",
+    "lat": 34.0250334,
+    "lon": -118.3964686
+  },
+  {
+    "street": "National Boulevard",
+    "housenumber": "9842",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0308016,
+    "lon": -118.4009577
+  },
+  {
+    "street": "National Boulevard",
+    "housenumber": "9844",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0307538,
+    "lon": -118.4009623
+  },
+  {
+    "street": "National Boulevard",
+    "housenumber": "9824",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0310728,
+    "lon": -118.4009784
+  },
+  {
+    "street": "Manchester Boulevard",
+    "housenumber": "432",
+    "city": "Los Angeles",
+    "lat": 33.9597739,
+    "lon": -118.2815554
+  },
+  {
+    "street": "South San Pedro Street",
+    "housenumber": "101",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0503291,
+    "lon": -118.2412754
+  },
+  {
+    "street": "E. 3rd St.",
+    "housenumber": "808 1/2",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0457258,
+    "lon": -118.2358663
+  },
+  {
+    "street": "E. 3rd St.",
+    "housenumber": "810",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0457438,
+    "lon": -118.235748
+  },
+  {
+    "street": "E. 3rd St.",
+    "housenumber": "820",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0457579,
+    "lon": -118.2356538
+  },
+  {
+    "street": "Onizuka St",
+    "housenumber": "123",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0497881,
+    "lon": -118.2420937
+  },
+  {
+    "street": "South San Pedro Street",
+    "housenumber": "111",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0500663,
+    "lon": -118.241391
+  },
+  {
+    "street": "2nd Street",
+    "housenumber": "101-A",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0497446,
+    "lon": -118.2423146
+  },
+  {
+    "street": "S. San Pedro St.",
+    "housenumber": "106",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0500747,
+    "lon": -118.2409516
+  },
+  {
+    "street": "S. San Pedro St.",
+    "housenumber": "108",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0499912,
+    "lon": -118.2410229
+  },
+  {
+    "street": "S. San Pedro St.",
+    "housenumber": "110",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0499448,
+    "lon": -118.2410625
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "314",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0500885,
+    "lon": -118.2407016
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "324",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0499024,
+    "lon": -118.2403979
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "341",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0497124,
+    "lon": -118.2396931
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "359",
+    "city": "Los Angeles",
+    "lat": 34.0495076,
+    "lon": -118.239428
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "353",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0495853,
+    "lon": -118.2395246
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "369",
+    "city": "Los Angeles",
+    "lat": 34.0492656,
+    "lon": -118.2384956
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "347",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0496226,
+    "lon": -118.2395849
+  },
+  {
+    "street": "Astronaut Ellison S Onizuka Street",
+    "housenumber": "123",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0498115,
+    "lon": -118.24218
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "309",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0502826,
+    "lon": -118.2405204
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "321",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0500826,
+    "lon": -118.2402401
+  },
+  {
+    "street": "East 1st Street",
+    "housenumber": "315",
+    "city": "Los Angeles",
+    "lat": 34.0501863,
+    "lon": -118.240384
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "337",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0498104,
+    "lon": -118.2398257
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "313",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.050236,
+    "lon": -118.2404477
+  },
+  {
+    "street": "E. 1st St",
+    "housenumber": "309",
+    "city": "Los Angeles",
+    "lat": 34.0503084,
+    "lon": -118.2405785
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "305",
+    "city": "Los Angeles",
+    "lat": 34.0503425,
+    "lon": -118.2406321
+  },
+  {
+    "street": "E. 1st St.",
+    "housenumber": "303",
+    "city": "Los Angeles",
+    "lat": 34.0503654,
+    "lon": -118.2406593
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "106 1/2",
+    "city": "Los Angeles",
+    "lat": 34.0505895,
+    "lon": -118.2405389
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "106",
+    "city": "Los Angeles",
+    "lat": 34.05055,
+    "lon": -118.2405745
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "112",
+    "city": "Los Angeles",
+    "lat": 34.0507096,
+    "lon": -118.2404336
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "116",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0507644,
+    "lon": -118.240384
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "108",
+    "city": "Los Angeles",
+    "lat": 34.0506503,
+    "lon": -118.2404874
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "110",
+    "city": "Los Angeles",
+    "lat": 34.0506833,
+    "lon": -118.2404575
+  },
+  {
+    "street": "Judge John Aiso St.",
+    "housenumber": "114",
+    "city": "Los Angeles",
+    "lat": 34.0507331,
+    "lon": -118.2404124
+  },
+  {
+    "street": "E. Commercial St.",
+    "housenumber": "430",
+    "city": "Los Angeles",
+    "lat": 34.0532705,
+    "lon": -118.2366417
+  },
+  {
+    "street": "East Temple Street",
+    "housenumber": "433",
+    "city": "Los Angeles",
+    "lat": 34.050626,
+    "lon": -118.236271
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "717",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0450765,
+    "lon": -118.2636174
+  },
+  {
+    "street": "Ducommun",
+    "housenumber": "706",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.051902,
+    "lon": -118.2329729
+  },
+  {
+    "street": "Jackson St.",
+    "housenumber": "701",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0511479,
+    "lon": -118.2331207
+  },
+  {
+    "street": "Santa Fe Avenue",
+    "housenumber": "100",
+    "city": "Los Angeles",
+    "lat": 34.048551,
+    "lon": -118.2324518
+  },
+  {
+    "street": "Santa Fe Avenue",
+    "housenumber": "110",
+    "city": "Los Angeles",
+    "lat": 34.0486778,
+    "lon": -118.2324265
+  },
+  {
+    "street": "North Center Street",
+    "housenumber": "500",
+    "city": "Los Angeles",
+    "lat": 34.0518885,
+    "lon": -118.231331
+  },
+  {
+    "street": "Vignes Street",
+    "housenumber": "103",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0474919,
+    "lon": -118.2340028
+  },
+  {
+    "street": "Vignes Street",
+    "housenumber": "107",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0478497,
+    "lon": -118.2340036
+  },
+  {
+    "street": "Vignes Street",
+    "housenumber": "105",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0475497,
+    "lon": -118.2340029
+  },
+  {
+    "street": "South Hewitt Street",
+    "housenumber": "106",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0482864,
+    "lon": -118.2360259
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "929",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0472569,
+    "lon": -118.2340458
+  },
+  {
+    "street": "South Santa Fe Avenue",
+    "housenumber": "255",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0461169,
+    "lon": -118.232823
+  },
+  {
+    "street": "South Santa Fe Avenue",
+    "housenumber": "215",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0465024,
+    "lon": -118.232799
+  },
+  {
+    "street": "Palmetto Street",
+    "housenumber": "1316",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0401402,
+    "lon": -118.2322808
+  },
+  {
+    "street": "Palmetto Street",
+    "housenumber": "1324",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0401645,
+    "lon": -118.231947
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "588",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0387856,
+    "lon": -118.2326614
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "584",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0389779,
+    "lon": -118.232682
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "586",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0388812,
+    "lon": -118.232672
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "581",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.039295,
+    "lon": -118.2329267
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "585",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0389093,
+    "lon": -118.2328841
+  },
+  {
+    "street": "South Alameda Street",
+    "housenumber": "570",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0393828,
+    "lon": -118.2379015
+  },
+  {
+    "street": "South Alameda Street",
+    "housenumber": "568",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0395928,
+    "lon": -118.2379091
+  },
+  {
+    "street": "South Alameda Street",
+    "housenumber": "560",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0397495,
+    "lon": -118.2378604
+  },
+  {
+    "street": "2nd Street",
+    "housenumber": "360",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0480619,
+    "lon": -118.2400005
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "1101",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0418687,
+    "lon": -118.2370858
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "1129",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0417061,
+    "lon": -118.2365249
+  },
+  {
+    "street": "East 5th Street",
+    "housenumber": "1131",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0416824,
+    "lon": -118.236727
+  },
+  {
+    "street": "Seaton Street",
+    "housenumber": "450",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0419228,
+    "lon": -118.2373668
+  },
+  {
+    "street": "Seaton Street",
+    "housenumber": "454",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0417713,
+    "lon": -118.2373445
+  },
+  {
+    "street": "Factory Place",
+    "housenumber": "1226",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0389302,
+    "lon": -118.237404
+  },
+  {
+    "street": "Factory Place",
+    "housenumber": "1232",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0389334,
+    "lon": -118.2372578
+  },
+  {
+    "street": "Factory Place",
+    "housenumber": "1236",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0389392,
+    "lon": -118.2369946
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1247",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.038275,
+    "lon": -118.2373847
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1255",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0382766,
+    "lon": -118.2371655
+  },
+  {
+    "street": "East 6th Street",
+    "housenumber": "1259",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0382772,
+    "lon": -118.2370866
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21610",
+    "city": "Los Angeles",
+    "lat": 34.1872673,
+    "lon": -118.601289
+  },
+  {
+    "street": "Owensmouth Avenue",
+    "housenumber": "6400 B",
+    "city": "Los Angeles",
+    "lat": 34.1864787,
+    "lon": -118.6011235
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "5850",
+    "city": "Los Angeles",
+    "postcode": "90043-2434",
+    "lat": 33.9883918,
+    "lon": -118.3304291
+  },
+  {
+    "street": "West Victory Boulevard",
+    "housenumber": "21603",
+    "city": "Canoga Park",
+    "postcode": "91303",
+    "lat": 34.1888505,
+    "lon": -118.600124
+  },
+  {
+    "street": "Canoga Avenue",
+    "housenumber": "6633",
+    "city": "Canoga Park",
+    "postcode": "91303",
+    "lat": 34.1909332,
+    "lon": -118.598949
+  },
+  {
+    "street": "Erwin Street",
+    "housenumber": "21747",
+    "city": "Los Angeles",
+    "lat": 34.1835656,
+    "lon": -118.6031332
+  },
+  {
+    "street": "Erwin Street",
+    "housenumber": "21757-A",
+    "city": "Los Angeles",
+    "lat": 34.1841694,
+    "lon": -118.6053606
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21436",
+    "city": "Los Angeles",
+    "lat": 34.1880029,
+    "lon": -118.5981467
+  },
+  {
+    "street": "North Broadway",
+    "housenumber": "2201",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0738018,
+    "lon": -118.217782
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "22835",
+    "city": "West Hills",
+    "postcode": "91307",
+    "lat": 34.18764,
+    "lon": -118.625674
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "22815",
+    "city": "West Hills",
+    "postcode": "91307",
+    "lat": 34.1867524,
+    "lon": -118.6242294
+  },
+  {
+    "street": "Fallbrook Avenue",
+    "housenumber": "6433",
+    "city": "West Hills",
+    "postcode": "91307",
+    "lat": 34.1881762,
+    "lon": -118.62528
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "22940",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1856179,
+    "lon": -118.626515
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "22950",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1856281,
+    "lon": -118.626998
+  },
+  {
+    "street": "Canoga Avenue",
+    "housenumber": "6443",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1877527,
+    "lon": -118.5979818
+  },
+  {
+    "street": "Canoga Avenue",
+    "housenumber": "6250",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1844286,
+    "lon": -118.5971303
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21512",
+    "city": "Los Angeles",
+    "lat": 34.1877339,
+    "lon": -118.5995106
+  },
+  {
+    "street": "Canoga Avenue",
+    "housenumber": "6441",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1876792,
+    "lon": -118.597965
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21440",
+    "city": "Los Angeles",
+    "lat": 34.1879067,
+    "lon": -118.5983656
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21520",
+    "city": "Los Angeles",
+    "lat": 34.1876784,
+    "lon": -118.5998411
+  },
+  {
+    "street": "Owensmouth Avenue",
+    "housenumber": "6400 D",
+    "city": "Los Angeles",
+    "lat": 34.18657,
+    "lon": -118.600968
+  },
+  {
+    "street": "Owensmouth Avenue",
+    "housenumber": "6400 C",
+    "city": "Los Angeles",
+    "lat": 34.1866071,
+    "lon": -118.6007491
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21504",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1877801,
+    "lon": -118.5992363
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21502",
+    "city": "Los Angeles",
+    "lat": 34.1877945,
+    "lon": -118.5991506
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21508",
+    "city": "Los Angeles",
+    "lat": 34.187756,
+    "lon": -118.5993792
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21524",
+    "city": "Los Angeles",
+    "lat": 34.1862861,
+    "lon": -118.6001277
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21516",
+    "city": "Los Angeles",
+    "lat": 34.1877019,
+    "lon": -118.5997014
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "21510",
+    "city": "Los Angeles",
+    "lat": 34.1878245,
+    "lon": -118.5994484
+  },
+  {
+    "street": "Charles E. Young Drive, East",
+    "housenumber": "337",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.0741881,
+    "lon": -118.439347
+  },
+  {
+    "street": "Saticoy Street",
+    "housenumber": "17224",
+    "city": "Van Nuys",
+    "postcode": "91406",
+    "lat": 34.2073487,
+    "lon": -118.507991
+  },
+  {
+    "street": "South Flower St",
+    "housenumber": "612",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0499523,
+    "lon": -118.2574447
+  },
+  {
+    "street": "W. 7th Street",
+    "housenumber": "601",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0475188,
+    "lon": -118.2566694
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "600",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0473499,
+    "lon": -118.256999
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "513",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0470366,
+    "lon": -118.255926
+  },
+  {
+    "street": "South Flower Street",
+    "housenumber": "800",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0470446,
+    "lon": -118.260069
+  },
+  {
+    "street": "West 8th Street",
+    "housenumber": "806 (Unit B)",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0473558,
+    "lon": -118.2604543
+  },
+  {
+    "street": "S. Figueroa St.",
+    "housenumber": "800",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0478055,
+    "lon": -118.2611301
+  },
+  {
+    "street": "West 8th Street",
+    "housenumber": "806",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0473255,
+    "lon": -118.2604059
+  },
+  {
+    "street": "W. 9th St.",
+    "housenumber": "645 (Suite #108)",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0453231,
+    "lon": -118.260413
+  },
+  {
+    "street": "W. 9th St.",
+    "housenumber": "645 (Suite #106)",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.045512,
+    "lon": -118.260235
+  },
+  {
+    "street": "W. 9th St.",
+    "housenumber": "645 (Unit 110)",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0460223,
+    "lon": -118.261092
+  },
+  {
+    "street": "W. 9th St.",
+    "housenumber": "600",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0450964,
+    "lon": -118.2607358
+  },
+  {
+    "street": "W. 9th St",
+    "housenumber": "645",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0454731,
+    "lon": -118.260294
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "13629",
+    "city": "Sherman Oaks",
+    "postcode": "91423",
+    "lat": 34.1480562,
+    "lon": -118.4305459
+  },
+  {
+    "street": "Centinela Avenue",
+    "housenumber": "3760",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 34.0051047,
+    "lon": -118.4335247
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "12255",
+    "city": "Mar Vista",
+    "postcode": "90066",
+    "lat": 34.004598,
+    "lon": -118.4323256
+  },
+  {
+    "street": "Glendon Avenue",
+    "housenumber": "1000",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0621165,
+    "lon": -118.4439469
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2044",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1089435,
+    "lon": -118.2872848
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5453",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019644,
+    "lon": -118.3090457
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2081",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1098336,
+    "lon": -118.2879687
+  },
+  {
+    "street": "Lankershim",
+    "housenumber": "5166",
+    "city": "North Hollywood",
+    "postcode": "91601",
+    "lat": 34.1647435,
+    "lon": -118.374243
+  },
+  {
+    "street": "Lacy Street",
+    "housenumber": "2664",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.083077,
+    "lon": -118.2185928
+  },
+  {
+    "street": "Lacy Street",
+    "housenumber": "2662",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0828501,
+    "lon": -118.218732
+  },
+  {
+    "street": "National Boulevard",
+    "housenumber": "10850",
+    "city": "Los Angeles",
+    "postcode": "90064",
+    "lat": 34.0299222,
+    "lon": -118.4214045
+  },
+  {
+    "street": "South La Cienega Boulevard",
+    "housenumber": "3562",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0225641,
+    "lon": -118.3719791
+  },
+  {
+    "street": "South La Cienega",
+    "housenumber": "3560",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0228211,
+    "lon": -118.3719315
+  },
+  {
+    "street": "South La Cienega Boulevard",
+    "housenumber": "3501",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0240091,
+    "lon": -118.3727676
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "5065",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0984521,
+    "lon": -118.300345
+  },
+  {
+    "street": "Maxella Avenue",
+    "housenumber": "13450",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9862626,
+    "lon": -118.4413424
+  },
+  {
+    "street": "Glencoe Avenue",
+    "housenumber": "4375",
+    "city": "Marina del Rey",
+    "postcode": "90292",
+    "lat": 33.9852796,
+    "lon": -118.438308
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "524",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0459981,
+    "lon": -118.248945
+  },
+  {
+    "street": "South Spring Street",
+    "housenumber": "501",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.04738,
+    "lon": -118.2498732
+  },
+  {
+    "street": "South Figueroa Street",
+    "housenumber": "4000",
+    "city": "Los Angeles",
+    "postcode": "90037",
+    "lat": 34.0107501,
+    "lon": -118.281899
+  },
+  {
+    "street": "South Figueroa Street",
+    "housenumber": "3974",
+    "city": "Los Angeles",
+    "postcode": "90037",
+    "lat": 34.0118217,
+    "lon": -118.282298
+  },
+  {
+    "street": "South Figueroa Street",
+    "housenumber": "4410",
+    "city": "Los Angeles",
+    "postcode": "90037",
+    "lat": 34.0034629,
+    "lon": -118.282402
+  },
+  {
+    "street": "Odyssey Drive",
+    "housenumber": "15600",
+    "city": "Los Angeles",
+    "lat": 34.2828166,
+    "lon": -118.473241
+  },
+  {
+    "street": "Balboa Boulevard",
+    "housenumber": "11900",
+    "city": "Los Angeles",
+    "postcode": "91344",
+    "lat": 34.2862578,
+    "lon": -118.5010948
+  },
+  {
+    "street": "Rinaldi Street",
+    "housenumber": "16035",
+    "city": "Los Angeles",
+    "postcode": "91344",
+    "lat": 34.2793249,
+    "lon": -118.4820935
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "5930",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.1046905,
+    "lon": -118.319019
+  },
+  {
+    "street": "Aviation Boulevard",
+    "housenumber": "11500",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9296211,
+    "lon": -118.3772137
+  },
+  {
+    "street": "Colorado Boulevard",
+    "housenumber": "4600",
+    "city": "Los Angeles",
+    "lat": 34.1408698,
+    "lon": -118.2730654
+  },
+  {
+    "street": "South La Cienega Boulevard",
+    "housenumber": "3344",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.026787,
+    "lon": -118.3718808
+  },
+  {
+    "street": "National Bl.",
+    "housenumber": "9850",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0306365,
+    "lon": -118.4009795
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "8985",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0277643,
+    "lon": -118.3936984
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "9036",
+    "city": "Culver City",
+    "postcode": "90232",
+    "lat": 34.0267615,
+    "lon": -118.3919657
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "8985",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0272116,
+    "lon": -118.3928443
+  },
+  {
+    "street": "San Vicente Boulevard",
+    "housenumber": "6428",
+    "city": "Los Angeles",
+    "lat": 34.0617176,
+    "lon": -118.3688022
+  },
+  {
+    "street": "San Vicente Boulevard",
+    "housenumber": "6430",
+    "city": "Los Angeles",
+    "lat": 34.0617546,
+    "lon": -118.3688566
+  },
+  {
+    "street": "San Fernando Road",
+    "housenumber": "3105",
+    "city": "Los Angeles",
+    "postcode": "90065",
+    "lat": 34.1153848,
+    "lon": -118.2455588
+  },
+  {
+    "street": "North San Fernando Road",
+    "housenumber": "3060",
+    "city": "Los Angeles",
+    "postcode": "90065",
+    "lat": 34.1143477,
+    "lon": -118.2456554
+  },
+  {
+    "street": "Los Feliz Boulevard",
+    "housenumber": "2919",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.1266125,
+    "lon": -118.263377
+  },
+  {
+    "street": "Weyburn Avenue",
+    "housenumber": "10861",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0633324,
+    "lon": -118.4439456
+  },
+  {
+    "street": "Weyburn Avenue",
+    "housenumber": "10861",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0627169,
+    "lon": -118.443724
+  },
+  {
+    "street": "La Tijera Boulevard",
+    "housenumber": "7360",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9712585,
+    "lon": -118.378227
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "10610",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1372823,
+    "lon": -118.3637172
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "1735",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.1027177,
+    "lon": -118.326997
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7169747,
+    "lon": -118.281618
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7172468,
+    "lon": -118.281312
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7173846,
+    "lon": -118.280827
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.717483,
+    "lon": -118.28045
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7175865,
+    "lon": -118.280076
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7178291,
+    "lon": -118.279765
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7179595,
+    "lon": -118.279268
+  },
+  {
+    "street": "Whalers Walk",
+    "housenumber": "224",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7180339,
+    "lon": -118.27983
+  },
+  {
+    "street": "Watchhorn Walk",
+    "housenumber": "Berth 33 - E",
+    "city": "Los Angeles",
+    "lat": 33.7210732,
+    "lon": -118.282154
+  },
+  {
+    "street": "Watchhorn Walk",
+    "housenumber": "Berth 33 D",
+    "city": "Los Angeles",
+    "lat": 33.7211635,
+    "lon": -118.281816
+  },
+  {
+    "street": "Watchhorn Walk",
+    "housenumber": "Berth 33 C",
+    "city": "Los Angeles",
+    "lat": 33.7212762,
+    "lon": -118.2813905
+  },
+  {
+    "street": "Watchhorn Walk",
+    "housenumber": "Berth 33 A/B",
+    "city": "Los Angeles",
+    "lat": 33.7213607,
+    "lon": -118.281237
+  },
+  {
+    "street": "Western Ave # O",
+    "housenumber": "26650",
+    "city": "Los Angeles",
+    "postcode": "90710",
+    "lat": 33.7793052,
+    "lon": -118.309127
+  },
+  {
+    "street": "Western Ave Ste M",
+    "housenumber": "26640",
+    "city": "Los Angeles",
+    "postcode": "90710",
+    "lat": 33.7795337,
+    "lon": -118.3085297
+  },
+  {
+    "street": "Western Avenue # D",
+    "housenumber": "26640",
+    "city": "Los Angeles",
+    "postcode": "90710",
+    "lat": 33.7800847,
+    "lon": -118.3092748
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "12855",
+    "city": "Los Angeles",
+    "lat": 34.0568327,
+    "lon": -118.4910507
+  },
+  {
+    "street": "West Manchester Avenue",
+    "housenumber": "5569",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9602858,
+    "lon": -118.3784235
+  },
+  {
+    "street": "Cantlay Street",
+    "housenumber": "16032",
+    "city": "Los Angeles",
+    "lat": 34.2023347,
+    "lon": -118.4845446
+  },
+  {
+    "street": "Sherman Way",
+    "housenumber": "15701",
+    "city": "Los Angeles",
+    "lat": 34.2009625,
+    "lon": -118.4759464
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "15901",
+    "city": "Los Angeles",
+    "lat": 34.2575505,
+    "lon": -118.4781046
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9757",
+    "city": "Los Angeles",
+    "lat": 34.2479488,
+    "lon": -118.4852038
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9441",
+    "city": "Los Angeles",
+    "lat": 34.2420463,
+    "lon": -118.4853326
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9153",
+    "city": "Los Angeles",
+    "lat": 34.2370598,
+    "lon": -118.4852576
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "16443",
+    "city": "Los Angeles",
+    "lat": 34.2358814,
+    "lon": -118.4911608
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17215",
+    "city": "Los Angeles",
+    "lat": 34.2360397,
+    "lon": -118.5101127
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17518",
+    "city": "Los Angeles",
+    "lat": 34.2355919,
+    "lon": -118.5168655
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17628",
+    "city": "Los Angeles",
+    "lat": 34.235654,
+    "lon": -118.5191453
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17707",
+    "city": "Los Angeles",
+    "lat": 34.236062,
+    "lon": -118.519789
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9531",
+    "city": "Los Angeles",
+    "lat": 34.2444929,
+    "lon": -118.4852517
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9900",
+    "city": "Los Angeles",
+    "lat": 34.2509022,
+    "lon": -118.4846942
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "15942",
+    "city": "Los Angeles",
+    "lat": 34.2572539,
+    "lon": -118.4792088
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9517",
+    "city": "Los Angeles",
+    "lat": 34.2434797,
+    "lon": -118.4852359
+  },
+  {
+    "street": "Glencoe Avenue",
+    "housenumber": "4216 3/4",
+    "city": "Los Angeles",
+    "postcode": "90292",
+    "lat": 33.9885354,
+    "lon": -118.440772
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "14500",
+    "city": "Panorama City",
+    "postcode": "91402",
+    "lat": 34.2352117,
+    "lon": -118.448477
+  },
+  {
+    "street": "Woodley Avenue",
+    "housenumber": "9327",
+    "city": "Los Angeles",
+    "lat": 34.2400357,
+    "lon": -118.485263
+  },
+  {
+    "street": "Abbot Kinney Boulevard",
+    "housenumber": "1661",
+    "city": "Venice",
+    "postcode": "90291",
+    "lat": 33.9893043,
+    "lon": -118.4625972
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17350",
+    "city": "Los Angeles",
+    "lat": 34.2356564,
+    "lon": -118.5130966
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "16403",
+    "city": "Los Angeles",
+    "lat": 34.2354669,
+    "lon": -118.4899894
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "757",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.0663274,
+    "lon": -118.4471116
+  },
+  {
+    "street": "UCLA Medical Plaza",
+    "housenumber": "150",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0661034,
+    "lon": -118.4465012
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17500",
+    "city": "Los Angeles",
+    "lat": 34.2356206,
+    "lon": -118.5159893
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17260",
+    "city": "Los Angeles",
+    "lat": 34.2355916,
+    "lon": -118.5101717
+  },
+  {
+    "street": "Osborne Street",
+    "housenumber": "13450",
+    "city": "Arleta",
+    "postcode": "91331-5522",
+    "lat": 34.2415986,
+    "lon": -118.426108
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "1600",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1000166,
+    "lon": -118.326466
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6806",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.1013812,
+    "lon": -118.3391108
+  },
+  {
+    "street": "Plummer Street",
+    "housenumber": "15950",
+    "city": "Los Angeles",
+    "lat": 34.2427185,
+    "lon": -118.4800752
+  },
+  {
+    "street": "Plummer Street",
+    "housenumber": "16249",
+    "city": "Los Angeles",
+    "lat": 34.2431218,
+    "lon": -118.4869414
+  },
+  {
+    "street": "Plummer Street",
+    "housenumber": "16459",
+    "city": "Los Angeles",
+    "lat": 34.2430726,
+    "lon": -118.4911181
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "15650",
+    "city": "North Hills",
+    "postcode": "91343",
+    "lat": 34.2354183,
+    "lon": -118.473801
+  },
+  {
+    "street": "Lindley Avenue",
+    "housenumber": "7300",
+    "city": "Los Angeles",
+    "lat": 34.2028453,
+    "lon": -118.527115
+  },
+  {
+    "street": "Lindley Avenue",
+    "housenumber": "7466",
+    "city": "Los Angeles",
+    "lat": 34.2065887,
+    "lon": -118.5271502
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "21112",
+    "city": "Los Angeles",
+    "postcode": "91311",
+    "lat": 34.2570478,
+    "lon": -118.5934693
+  },
+  {
+    "street": "DEVONSHIRE",
+    "housenumber": "21925",
+    "city": "Chatsworth",
+    "postcode": "91311-2908",
+    "lat": 34.2575856,
+    "lon": -118.605801
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "21356",
+    "city": "Chatsworth",
+    "postcode": "91311",
+    "lat": 34.2570135,
+    "lon": -118.5969479
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "9107",
+    "city": "Panorama City",
+    "postcode": "91402-1417",
+    "lat": 34.2357838,
+    "lon": -118.4507417
+  },
+  {
+    "street": "Lindley Avenue",
+    "housenumber": "6459",
+    "city": "Los Angeles",
+    "lat": 34.1887307,
+    "lon": -118.5270858
+  },
+  {
+    "street": "Lindley Avenue",
+    "housenumber": "6728",
+    "city": "Los Angeles",
+    "lat": 34.1929154,
+    "lon": -118.5271124
+  },
+  {
+    "street": "New Dock Street",
+    "housenumber": "901",
+    "city": "Terminal Island",
+    "postcode": "90731",
+    "lat": 33.7577352,
+    "lon": -118.2518763
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "1261",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0702234,
+    "lon": -118.2502772
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "1165",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0593432,
+    "lon": -118.44468
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "10901",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0587822,
+    "lon": -118.4446496
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1050",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0612088,
+    "lon": -118.447068
+  },
+  {
+    "street": "Lindbrook Drive",
+    "housenumber": "10910",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0593747,
+    "lon": -118.444957
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "1161",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0594135,
+    "lon": -118.444746
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "4945",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019433,
+    "lon": -118.2974054
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "4950",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1015968,
+    "lon": -118.2974108
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "5101",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0910816,
+    "lon": -118.3008727
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2118",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1104048,
+    "lon": -118.2872908
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "4655",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.100717,
+    "lon": -118.2906785
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "4628",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0999488,
+    "lon": -118.2901366
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1760",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1029827,
+    "lon": -118.2872345
+  },
+  {
+    "street": "West Manchester Avenue",
+    "housenumber": "5606",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9594302,
+    "lon": -118.3790367
+  },
+  {
+    "street": "West Manchester Avenue",
+    "housenumber": "5565",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9603596,
+    "lon": -118.3782255
+  },
+  {
+    "street": "Nordhoff Street",
+    "housenumber": "17828",
+    "city": "Los Angeles",
+    "lat": 34.235549,
+    "lon": -118.5227643
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5150",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1016048,
+    "lon": -118.302383
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5112",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1013499,
+    "lon": -118.3011924
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "3900",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0916276,
+    "lon": -118.2798212
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "3819",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0914835,
+    "lon": -118.2789966
+  },
+  {
+    "street": "West Manchester Avenue",
+    "housenumber": "5545",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9601892,
+    "lon": -118.3781174
+  },
+  {
+    "street": "La Tijera Boulevard",
+    "housenumber": "7420",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.969847,
+    "lon": -118.3796122
+  },
+  {
+    "street": "Center Drive",
+    "housenumber": "6081",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.977603,
+    "lon": -118.3915128
+  },
+  {
+    "street": "Reseda Boulevard",
+    "housenumber": "9353",
+    "city": "Los Angeles",
+    "lat": 34.2408089,
+    "lon": -118.5363167
+  },
+  {
+    "street": "Reseda Boulevard",
+    "housenumber": "9830",
+    "city": "Los Angeles",
+    "lat": 34.2491291,
+    "lon": -118.5359252
+  },
+  {
+    "street": "Reseda Boulevard",
+    "housenumber": "10022",
+    "city": "Los Angeles",
+    "lat": 34.2522571,
+    "lon": -118.5356968
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5429",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.102296,
+    "lon": -118.3081363
+  },
+  {
+    "street": "Hillhurst Ave",
+    "housenumber": "1831",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1043508,
+    "lon": -118.2877879
+  },
+  {
+    "street": "North Evergreen Street",
+    "housenumber": "810",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0477847,
+    "lon": -118.1975999
+  },
+  {
+    "street": "South Vermont Avenue",
+    "housenumber": "440",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0655794,
+    "lon": -118.290934
+  },
+  {
+    "street": "Lindbrook Drive",
+    "housenumber": "10845",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.060417,
+    "lon": -118.442651
+  },
+  {
+    "street": "S Figueroa Street",
+    "housenumber": "1020",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0441291,
+    "lon": -118.2643512
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "413",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0478111,
+    "lon": -118.2477037
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "408",
+    "city": "Los Angeles",
+    "lat": 34.0477861,
+    "lon": -118.2473359
+  },
+  {
+    "street": "La Tijera Boulevard",
+    "housenumber": "8751",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9574928,
+    "lon": -118.3946106
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1066",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0617628,
+    "lon": -118.4475334
+  },
+  {
+    "street": "Portola Plaza",
+    "housenumber": "520",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.0693799,
+    "lon": -118.4426883
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "449",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0483953,
+    "lon": -118.250781
+  },
+  {
+    "street": "6th Street",
+    "housenumber": "309",
+    "city": "Los Angeles",
+    "lat": 34.0469244,
+    "lon": -118.2522555
+  },
+  {
+    "street": "6th Street",
+    "housenumber": "311",
+    "city": "Los Angeles",
+    "lat": 34.0469647,
+    "lon": -118.252315
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "708",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0449584,
+    "lon": -118.253306
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6714",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1013813,
+    "lon": -118.336709
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6922",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1013577,
+    "lon": -118.3407707
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "7038",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1013461,
+    "lon": -118.3428997
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6618",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1013414,
+    "lon": -118.3340833
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6384",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.101418,
+    "lon": -118.3293596
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6356",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1013925,
+    "lon": -118.3285174
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6320",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1014048,
+    "lon": -118.3274311
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6300",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1014187,
+    "lon": -118.3269928
+  },
+  {
+    "street": "Vine Street",
+    "housenumber": "1635",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1008064,
+    "lon": -118.3269315
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6328",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1014218,
+    "lon": -118.3276578
+  },
+  {
+    "street": "E Anaheim St",
+    "housenumber": "233",
+    "city": "Los Angeles",
+    "postcode": "90744",
+    "lat": 33.7803597,
+    "lon": -118.2602936
+  },
+  {
+    "street": "8th Street",
+    "housenumber": "3136",
+    "city": "Los Angeles",
+    "lat": 34.0575821,
+    "lon": -118.2959098
+  },
+  {
+    "street": "Sawtelle Boulevard",
+    "housenumber": "1850",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0428265,
+    "lon": -118.445041
+  },
+  {
+    "street": "Ivar Avenue",
+    "housenumber": "1600",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.0997432,
+    "lon": -118.328298
+  },
+  {
+    "street": "W Pico Boulevard",
+    "housenumber": "3809",
+    "city": "Los Angeles",
+    "lat": 34.04768,
+    "lon": -118.3229229
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "4651",
+    "city": "Los Angeles",
+    "lat": 34.0324145,
+    "lon": -118.3408343
+  },
+  {
+    "street": "W Temple St",
+    "housenumber": "1267",
+    "city": "Los Angeles",
+    "lat": 34.0666786,
+    "lon": -118.2544194
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5633",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.101881,
+    "lon": -118.312633
+  },
+  {
+    "street": "W 3rd St",
+    "housenumber": "4050",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0688521,
+    "lon": -118.3007352
+  },
+  {
+    "street": "N Western Ave",
+    "housenumber": "1532",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0990808,
+    "lon": -118.3090907
+  },
+  {
+    "street": "S Grand Ave",
+    "housenumber": "350",
+    "city": "Los Angeles",
+    "lat": 34.0518917,
+    "lon": -118.2514359
+  },
+  {
+    "street": "Astronaut E S Onizuka St",
+    "housenumber": "123",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0498928,
+    "lon": -118.242079
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "6523",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0981258,
+    "lon": -118.331898
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5364",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0620838,
+    "lon": -118.3455769
+  },
+  {
+    "street": "South Flower Street",
+    "housenumber": "550",
+    "city": "Los Angeles",
+    "postcode": "90069",
+    "lat": 34.0501821,
+    "lon": -118.2568186
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "445",
+    "city": "Los Angeles",
+    "lat": 34.052768,
+    "lon": -118.257213
+  },
+  {
+    "street": "S. Figueroa",
+    "housenumber": "445",
+    "city": "Los Angeles",
+    "lat": 34.052798,
+    "lon": -118.25693
+  },
+  {
+    "street": "North Mansfield",
+    "housenumber": "1135",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0920181,
+    "lon": -118.3407752
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "3607",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0903077,
+    "lon": -118.2769065
+  },
+  {
+    "street": "Seabluff",
+    "housenumber": "6020",
+    "city": "Los Angeles",
+    "postcode": "90094",
+    "lat": 33.9731821,
+    "lon": -118.4223595
+  },
+  {
+    "street": "Satcioy St",
+    "housenumber": "Suite 6",
+    "city": "Los Angeles",
+    "lat": 34.2056715,
+    "lon": -118.416658
+  },
+  {
+    "street": "Canoga Avenue",
+    "housenumber": "8357",
+    "city": "Canoga Park",
+    "postcode": "91304",
+    "lat": 34.2214137,
+    "lon": -118.5979816
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2046",
+    "city": "Los Angeles",
+    "lat": 34.1089902,
+    "lon": -118.287284
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2042",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1089069,
+    "lon": -118.2872848
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2018",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1083517,
+    "lon": -118.287217
+  },
+  {
+    "street": "Sepulveda Eastway",
+    "housenumber": "8946",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9548493,
+    "lon": -118.3945517
+  },
+  {
+    "street": "Sepulveda Boulevard",
+    "housenumber": "3458",
+    "city": "Los Angeles",
+    "lat": 34.0202308,
+    "lon": -118.422312
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "2128",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1108665,
+    "lon": -118.2872699
+  },
+  {
+    "street": "Entrada Dr",
+    "housenumber": "421",
+    "city": "Santa Monica",
+    "postcode": "90402",
+    "lat": 34.03175,
+    "lon": -118.512016
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "6540 Suite B 108",
+    "city": "Los Angeles",
+    "postcode": "91042",
+    "lat": 34.2451214,
+    "lon": -118.2748857
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "6585",
+    "city": "Los Angeles",
+    "postcode": "91042",
+    "lat": 34.2466745,
+    "lon": -118.2752491
+  },
+  {
+    "street": "Foothill Boulevard",
+    "housenumber": "6511",
+    "city": "Los Angeles",
+    "postcode": "91042",
+    "lat": 34.2454528,
+    "lon": -118.273454
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "11976",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1429858,
+    "lon": -118.3933469
+  },
+  {
+    "street": "Astronaut Ellison S Onizuka Street",
+    "housenumber": "123",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0503752,
+    "lon": -118.242284
+  },
+  {
+    "street": "South Spring Street",
+    "housenumber": "453",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0476682,
+    "lon": -118.2497228
+  },
+  {
+    "street": "Lindbrook Drive",
+    "housenumber": "10904",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0594014,
+    "lon": -118.444856
+  },
+  {
+    "street": "Glendon Avenue",
+    "housenumber": "1139",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.06002,
+    "lon": -118.443857
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1001",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0617733,
+    "lon": -118.447964
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1051",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0615264,
+    "lon": -118.4465104
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1037",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0617224,
+    "lon": -118.4466561
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1077",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0611157,
+    "lon": -118.4461524
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1055",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0614636,
+    "lon": -118.446453
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1045",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0615961,
+    "lon": -118.446552
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "1091",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0609153,
+    "lon": -118.445954
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1051",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0609866,
+    "lon": -118.4473631
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1099",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0602729,
+    "lon": -118.4467449
+  },
+  {
+    "street": "Kinross Avenue",
+    "housenumber": "10955",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0601466,
+    "lon": -118.446892
+  },
+  {
+    "street": "Kinross Avenue",
+    "housenumber": "10922",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0600065,
+    "lon": -118.4453904
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1071",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0606949,
+    "lon": -118.447186
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1108",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0600264,
+    "lon": -118.446099
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1073",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0606471,
+    "lon": -118.4471291
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1114",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0599185,
+    "lon": -118.446004
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1035",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0611016,
+    "lon": -118.447476
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1001",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0614488,
+    "lon": -118.4477897
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1091",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0604296,
+    "lon": -118.4468857
+  },
+  {
+    "street": "Gayley Avenue",
+    "housenumber": "1065",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0607955,
+    "lon": -118.4472762
+  },
+  {
+    "street": "South Spring Street",
+    "housenumber": "840",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0423497,
+    "lon": -118.254092
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "926",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0630281,
+    "lon": -118.446874
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "936",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0629463,
+    "lon": -118.4468728
+  },
+  {
+    "street": "Pacific Ave",
+    "housenumber": "6935",
+    "city": "Los Angeles",
+    "postcode": "90293",
+    "lat": 33.9575236,
+    "lon": -118.4495595
+  },
+  {
+    "street": "Culver Boulevard",
+    "housenumber": "195",
+    "city": "Playa Del Rey",
+    "postcode": "90293",
+    "lat": 33.9590749,
+    "lon": -118.4485982
+  },
+  {
+    "street": "Culver Boulevard",
+    "housenumber": "193",
+    "city": "Playa Del Rey",
+    "postcode": "90293",
+    "lat": 33.9589604,
+    "lon": -118.4485687
+  },
+  {
+    "street": "Pershing Drive",
+    "housenumber": "8501",
+    "city": "Los Angeles",
+    "postcode": "90293",
+    "lat": 33.9560131,
+    "lon": -118.4425735
+  },
+  {
+    "street": "Tiverton Avenue",
+    "housenumber": "1060",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0602095,
+    "lon": -118.443093
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "1002",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0606185,
+    "lon": -118.445141
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "900",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0635256,
+    "lon": -118.4451155
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "1142",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0599714,
+    "lon": -118.4446858
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "950",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0627171,
+    "lon": -118.444967
+  },
+  {
+    "street": "Swarthmore Avenue",
+    "housenumber": "864",
+    "city": "Los Angeles",
+    "postcode": "90272",
+    "lat": 34.0463902,
+    "lon": -118.525663
+  },
+  {
+    "street": "Swarthmore Avenue",
+    "housenumber": "780",
+    "city": "Los Angeles",
+    "postcode": "90272",
+    "lat": 34.0452746,
+    "lon": -118.5253519
+  },
+  {
+    "street": "Fairfax Avenue",
+    "housenumber": "910",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0596968,
+    "lon": -118.3627734
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "3501",
+    "city": "Los Angeles",
+    "postcode": "91108",
+    "lat": 34.026059,
+    "lon": -118.334067
+  },
+  {
+    "street": "Griffith Park Boulevard",
+    "housenumber": "1523",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0905944,
+    "lon": -118.2771694
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "760",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.065767,
+    "lon": -118.4442777
+  },
+  {
+    "street": "Charles Young Drive East Court of Sciences Student Center",
+    "housenumber": "617",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.068205,
+    "lon": -118.4421057
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "308",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.0700736,
+    "lon": -118.4439683
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "308",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0706235,
+    "lon": -118.4441988
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "308",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0702829,
+    "lon": -118.4439659
+  },
+  {
+    "street": "South Centinela Avenue",
+    "housenumber": "4545",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 33.9919659,
+    "lon": -118.4223393
+  },
+  {
+    "street": "North Los Angeles Street",
+    "housenumber": "425",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0557136,
+    "lon": -118.2392117
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "201",
+    "city": "Los Angeles",
+    "lat": 34.0542041,
+    "lon": -118.2408525
+  },
+  {
+    "street": "Laurel Canyon Boulevard",
+    "housenumber": "5338",
+    "city": "Los Angeles",
+    "postcode": "91607",
+    "lat": 34.1679362,
+    "lon": -118.3960242
+  },
+  {
+    "street": "N Avenue 56",
+    "housenumber": "110",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1093091,
+    "lon": -118.194556
+  },
+  {
+    "street": "N Figueroa St",
+    "housenumber": "5485",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1087193,
+    "lon": -118.1960033
+  },
+  {
+    "street": "N Figueroa St",
+    "housenumber": "5461",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1085948,
+    "lon": -118.1963295
+  },
+  {
+    "street": "N Figueroa St",
+    "housenumber": "5465",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1083715,
+    "lon": -118.1966853
+  },
+  {
+    "street": "N Figueroa St",
+    "housenumber": "5451",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1085741,
+    "lon": -118.1970264
+  },
+  {
+    "street": "N Figueroa St",
+    "housenumber": "5441",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1086047,
+    "lon": -118.1971176
+  },
+  {
+    "street": "N Avenue 53",
+    "housenumber": "220",
+    "city": "Los Angeles",
+    "lat": 34.1085134,
+    "lon": -118.1994603
+  },
+  {
+    "street": "York Boulevard",
+    "housenumber": "5250",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1198066,
+    "lon": -118.2013052
+  },
+  {
+    "street": "Avenue 52",
+    "housenumber": "1306",
+    "city": "Los Angeles",
+    "lat": 34.1200218,
+    "lon": -118.2013702
+  },
+  {
+    "street": "South Avenue 21",
+    "housenumber": "650",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.063794,
+    "lon": -118.216879
+  },
+  {
+    "street": "West 190th Street",
+    "housenumber": "879",
+    "city": "Los Angeles",
+    "lat": 33.8601141,
+    "lon": -118.28923
+  },
+  {
+    "street": "Glenoaks Boulevard",
+    "housenumber": "9944",
+    "city": "Sun Valley",
+    "postcode": "91352",
+    "lat": 34.2508649,
+    "lon": -118.3882533
+  },
+  {
+    "street": "North Soto",
+    "housenumber": "320",
+    "city": "Los Angeles",
+    "postcode": "90033",
+    "lat": 34.0472792,
+    "lon": -118.2072007
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "16133",
+    "city": "Encino",
+    "postcode": "91436",
+    "lat": 34.1567642,
+    "lon": -118.4850325
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "1900",
+    "city": "Los Angeles",
+    "lat": 34.105349,
+    "lon": -118.3368528
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "1900",
+    "city": "Los Angeles",
+    "postcode": "90068",
+    "lat": 34.1056053,
+    "lon": -118.3370723
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "1900",
+    "city": "Los Angeles",
+    "lat": 34.105589,
+    "lon": -118.3368736
+  },
+  {
+    "street": "Westwood Boulevard",
+    "housenumber": "1712",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0515292,
+    "lon": -118.438246
+  },
+  {
+    "street": "Sepulveda Boulevard",
+    "housenumber": "6104",
+    "city": "Van Nuys",
+    "postcode": "91411",
+    "lat": 34.1810474,
+    "lon": -118.4649718
+  },
+  {
+    "street": "Robertson Boulevard",
+    "housenumber": "1456",
+    "city": "Los Angeles",
+    "postcode": "90035",
+    "lat": 34.0531256,
+    "lon": -118.383815
+  },
+  {
+    "street": "Robertson Blvd",
+    "housenumber": "1456",
+    "city": "Los Angeles",
+    "postcode": "90035",
+    "lat": 34.0517079,
+    "lon": -118.376004
+  },
+  {
+    "street": "Virginia Ave",
+    "housenumber": "5752",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0915279,
+    "lon": -118.315401
+  },
+  {
+    "street": "S Grand Ave, 11th Fl",
+    "housenumber": "801",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0457316,
+    "lon": -118.2583612
+  },
+  {
+    "street": "S Grand Ave",
+    "housenumber": "650",
+    "city": "Los Angeles",
+    "postcode": "90017",
+    "lat": 34.0474283,
+    "lon": -118.256409
+  },
+  {
+    "street": "South Avalon Boulevard",
+    "housenumber": "4211",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 34.0073173,
+    "lon": -118.2661911
+  },
+  {
+    "street": "North Highland Avenue",
+    "housenumber": "1622",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.0995721,
+    "lon": -118.3384268
+  },
+  {
+    "street": "N. Hill Pl",
+    "housenumber": "636",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0606566,
+    "lon": -118.241977
+  },
+  {
+    "street": "Traction Avenue, Suite 3A",
+    "housenumber": "830",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0445437,
+    "lon": -118.235325
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "816",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0432155,
+    "lon": -118.254986
+  },
+  {
+    "street": "North Cahuenga Boulevard",
+    "housenumber": "1606",
+    "city": "Hollywood",
+    "postcode": "90028",
+    "lat": 34.1000498,
+    "lon": -118.3293758
+  },
+  {
+    "street": "Rose Avenue",
+    "housenumber": "512",
+    "city": "Los Angeles",
+    "lat": 33.9980134,
+    "lon": -118.4737828
+  },
+  {
+    "street": "Larchmont Boulevard",
+    "housenumber": "639",
+    "city": "Los Angeles",
+    "lat": 34.0826957,
+    "lon": -118.3240362
+  },
+  {
+    "street": "Vermont Avenue",
+    "housenumber": "2600",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0317653,
+    "lon": -118.290833
+  },
+  {
+    "street": "South Vermont Avenue",
+    "housenumber": "1981",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0383026,
+    "lon": -118.291767
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5153",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019752,
+    "lon": -118.302431
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "6472",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0907422,
+    "lon": -118.330531
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "17401",
+    "city": "Encino",
+    "postcode": "91316",
+    "lat": 34.1614772,
+    "lon": -118.5128713
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15260",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.153551,
+    "lon": -118.465823
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15125",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.1533238,
+    "lon": -118.462603
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "3461",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0697992,
+    "lon": -118.290693
+  },
+  {
+    "street": "West 9th Street",
+    "housenumber": "555",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7359344,
+    "lon": -118.2893418
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "2845",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0599589,
+    "lon": -118.2853254
+  },
+  {
+    "street": "S. Hoover Street",
+    "housenumber": "685",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0604833,
+    "lon": -118.2843867
+  },
+  {
+    "street": "Westwood Plaza",
+    "housenumber": "555",
+    "city": "Los Angeles",
+    "postcode": "90095",
+    "lat": 34.0680327,
+    "lon": -118.445256
+  },
+  {
+    "street": "Olive Street",
+    "housenumber": "643",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0470952,
+    "lon": -118.2553355
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "34",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9794357,
+    "lon": -118.4657732
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "21",
+    "city": "Los Angeles",
+    "postcode": "90292",
+    "lat": 33.9795469,
+    "lon": -118.4663526
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "22",
+    "city": "Los Angeles",
+    "postcode": "90292",
+    "lat": 33.9793044,
+    "lon": -118.4660468
+  },
+  {
+    "street": "Lincoln Boulevard",
+    "housenumber": "845",
+    "city": "Los Angeles",
+    "postcode": "90291",
+    "lat": 33.9985922,
+    "lon": -118.462568
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15489",
+    "city": "Los Angeles",
+    "postcode": "91403",
+    "lat": 34.1548954,
+    "lon": -118.4717449
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15445",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.1546969,
+    "lon": -118.4702973
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15503",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.1552863,
+    "lon": -118.4724769
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15503",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.1553142,
+    "lon": -118.47193
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "333",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9809208,
+    "lon": -118.4639301
+  },
+  {
+    "street": "East 17th Street",
+    "housenumber": "106",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.032812,
+    "lon": -118.26279
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "578",
+    "city": "Marina del Ray",
+    "postcode": "90291",
+    "lat": 33.9839594,
+    "lon": -118.459164
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "4600",
+    "city": "Los Angeles",
+    "postcode": "90027-5517",
+    "lat": 34.0995269,
+    "lon": -118.2894422
+  },
+  {
+    "street": "West Pacific Coast Highway",
+    "housenumber": "1151",
+    "city": "Harbor City",
+    "postcode": "90710",
+    "lat": 33.7903105,
+    "lon": -118.2970871
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "2000",
+    "city": "Los Angeles",
+    "postcode": "90057",
+    "lat": 34.0572495,
+    "lon": -118.275106
+  },
+  {
+    "street": "Bowcroft Street",
+    "housenumber": "6001",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0195622,
+    "lon": -118.379225
+  },
+  {
+    "street": "Balboa Boulevard",
+    "housenumber": "5363",
+    "city": "Encino",
+    "postcode": "91316",
+    "lat": 34.168999,
+    "lon": -118.502127
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3731",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0619384,
+    "lon": -118.3075131
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "2717",
+    "city": "Los Angeles",
+    "postcode": "90006",
+    "lat": 34.0530242,
+    "lon": -118.2924797
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "1601",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0446155,
+    "lon": -118.3289453
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "1601",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0445753,
+    "lon": -118.328827
+  },
+  {
+    "street": "South La Brea Avenue",
+    "housenumber": "1604",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0455718,
+    "lon": -118.3452198
+  },
+  {
+    "street": "CENTINELA",
+    "housenumber": "5498 1/2",
+    "city": "Los Angeles",
+    "postcode": "90045-2032",
+    "lat": 33.9767076,
+    "lon": -118.3766242
+  },
+  {
+    "street": "Obama Boulevard",
+    "housenumber": "5791",
+    "city": "Los Angeles",
+    "postcode": "90016-5013",
+    "lat": 34.0218762,
+    "lon": -118.3718604
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5625",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1018734,
+    "lon": -118.312438
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "253",
+    "city": "Los Angeles",
+    "lat": 34.0760338,
+    "lon": -118.30954
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "124",
+    "city": "Los Angeles",
+    "lat": 34.074174,
+    "lon": -118.308883
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "113",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0744594,
+    "lon": -118.309334
+  },
+  {
+    "street": "North Western Avenue",
+    "housenumber": "473",
+    "city": "Los Angeles",
+    "postcode": "90004-2609",
+    "lat": 34.0801347,
+    "lon": -118.309577
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "501",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0434194,
+    "lon": -118.2609485
+  },
+  {
+    "street": "South Western Avenue",
+    "housenumber": "100",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0734421,
+    "lon": -118.3087933
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "10834",
+    "city": "West Los Angeles",
+    "postcode": "90025-4617",
+    "lat": 34.0496576,
+    "lon": -118.435558
+  },
+  {
+    "street": "W Washington Boulevard",
+    "housenumber": "734",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9870053,
+    "lon": -118.4537643
+  },
+  {
+    "street": "Range View Avenue",
+    "housenumber": "4909",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1245658,
+    "lon": -118.208019
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "17380",
+    "city": "Pacific Palisades",
+    "postcode": "90272",
+    "lat": 34.0391125,
+    "lon": -118.554115
+  },
+  {
+    "street": "Jefferson Boulevard",
+    "housenumber": "12313",
+    "city": "Los Angeles",
+    "postcode": "90230",
+    "lat": 33.9815679,
+    "lon": -118.4090115
+  },
+  {
+    "street": "West Bluff Creek Drive",
+    "housenumber": "12422",
+    "city": "Los Angeles",
+    "lat": 33.9770819,
+    "lon": -118.4067862
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "6161",
+    "city": "Los Angeles",
+    "lat": 34.0534796,
+    "lon": -118.3759231
+  },
+  {
+    "street": "South La Cienega Boulevard",
+    "housenumber": "1270",
+    "city": "Los Angeles",
+    "postcode": "90035",
+    "lat": 34.0535939,
+    "lon": -118.3759571
+  },
+  {
+    "street": "Oxnard Street",
+    "housenumber": "10825",
+    "city": "North Hollywood",
+    "postcode": "91606",
+    "lat": 34.1795712,
+    "lon": -118.366983
+  },
+  {
+    "street": "E Pico Boulevard",
+    "housenumber": "931",
+    "city": "Los Angeles",
+    "postcode": "90021",
+    "lat": 34.0309595,
+    "lon": -118.249441
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "7533",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0981945,
+    "lon": -118.3537822
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "6301",
+    "city": "Los Angeles",
+    "lat": 34.0911711,
+    "lon": -118.327061
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "4930",
+    "city": "Los Angeles",
+    "postcode": "90019-4228",
+    "lat": 34.0477036,
+    "lon": -118.344057
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "7600",
+    "city": "Los Angeles",
+    "postcode": "90046-2715",
+    "lat": 34.0977551,
+    "lon": -118.3553452
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "3909",
+    "city": "Los Angeles",
+    "postcode": "90029-2242",
+    "lat": 34.0921096,
+    "lon": -118.279796
+  },
+  {
+    "street": "W 8th Street",
+    "housenumber": "433",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0451389,
+    "lon": -118.256586
+  },
+  {
+    "street": "N Gower St",
+    "housenumber": "1132 1/2",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.091688,
+    "lon": -118.321976
+  },
+  {
+    "street": "West Century Boulevard",
+    "housenumber": "5201",
+    "city": "Los Angeles",
+    "lat": 33.9456486,
+    "lon": -118.3703947
+  },
+  {
+    "street": "Sherman Way",
+    "housenumber": "19701",
+    "city": "winnetka",
+    "postcode": "91306",
+    "lat": 34.2014648,
+    "lon": -118.562636
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "15300",
+    "city": "Pacific Palisades",
+    "postcode": "90272",
+    "lat": 34.0472715,
+    "lon": -118.5261305
+  },
+  {
+    "street": "West 39th Street",
+    "housenumber": "508",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7088847,
+    "lon": -118.2884402
+  },
+  {
+    "street": "South Pacific Avenue",
+    "housenumber": "2136",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7244187,
+    "lon": -118.2878354
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "1401",
+    "city": "Los Angeles",
+    "lat": 34.0284633,
+    "lon": -118.2472529
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "6476",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0906166,
+    "lon": -118.33039
+  },
+  {
+    "street": "Topanga Canyon Boulevard",
+    "housenumber": "4900",
+    "city": "Woodland Hills",
+    "postcode": "91364",
+    "lat": 34.157097,
+    "lon": -118.60558
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "12301",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.042787,
+    "lon": -118.469771
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4329",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0051456,
+    "lon": -118.331688
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4327",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0051945,
+    "lon": -118.331687
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4325",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0052401,
+    "lon": -118.331688
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4321",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.005289,
+    "lon": -118.331691
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4319",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0053368,
+    "lon": -118.331691
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4317",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0054069,
+    "lon": -118.331694
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4333",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0049697,
+    "lon": -118.331692
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4339",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0047185,
+    "lon": -118.331697
+  },
+  {
+    "street": "West 43rd Place",
+    "housenumber": "3419 B",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0044039,
+    "lon": -118.332167
+  },
+  {
+    "street": "West 43rd Place",
+    "housenumber": "3419",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0044043,
+    "lon": -118.332239
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4330",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0050245,
+    "lon": -118.331278
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4332",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0049601,
+    "lon": -118.331278
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4334",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0048956,
+    "lon": -118.3312809
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4336",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0048333,
+    "lon": -118.33128
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4338",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0047957,
+    "lon": -118.33128
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4342",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0047557,
+    "lon": -118.33128
+  },
+  {
+    "street": "Degnan Boulevard",
+    "housenumber": "4346",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0046734,
+    "lon": -118.33128
+  },
+  {
+    "street": "Airport Boulevard",
+    "housenumber": "9775",
+    "city": "Los Angeles",
+    "lat": 33.9481049,
+    "lon": -118.386528
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "5570",
+    "city": "Los Angeles",
+    "lat": 34.1087932,
+    "lon": -118.1940237
+  },
+  {
+    "street": "Eagle Rock Boulevard",
+    "housenumber": "4919",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1361075,
+    "lon": -118.2158526
+  },
+  {
+    "street": "Leimert Boulevard",
+    "housenumber": "4343",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0044595,
+    "lon": -118.330798
+  },
+  {
+    "street": "Glencoe Avenue",
+    "housenumber": "4325 #c4",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9857445,
+    "lon": -118.4396529
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "523",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9831887,
+    "lon": -118.4608707
+  },
+  {
+    "street": "East Huntington Drive North",
+    "housenumber": "5593",
+    "city": "Los Angeles",
+    "postcode": "90032",
+    "lat": 34.0954806,
+    "lon": -118.158415
+  },
+  {
+    "street": "Lincoln Boulevard",
+    "housenumber": "225",
+    "city": "Venice",
+    "postcode": "90291",
+    "lat": 34.0012423,
+    "lon": -118.469738
+  },
+  {
+    "street": "West Olympic Boulevard",
+    "housenumber": "6066",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0579591,
+    "lon": -118.3637572
+  },
+  {
+    "street": "Moorpark Street",
+    "housenumber": "12877",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1504968,
+    "lon": -118.41317
+  },
+  {
+    "street": "Tujunga Avenue",
+    "housenumber": "4360",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1494258,
+    "lon": -118.3788411
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "3706",
+    "city": "Los Angeles",
+    "postcode": "90065",
+    "lat": 34.0901193,
+    "lon": -118.2121612
+  },
+  {
+    "street": "South Hill Street",
+    "housenumber": "1626",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0339943,
+    "lon": -118.2648737
+  },
+  {
+    "street": "Los Angeles Street",
+    "housenumber": "120",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0509394,
+    "lon": -118.2423351
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1761",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1031212,
+    "lon": -118.2919377
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1757",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1030302,
+    "lon": -118.2919284
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1755",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1029747,
+    "lon": -118.291927
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1727",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.102646,
+    "lon": -118.2919619
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1770",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1032945,
+    "lon": -118.2916347
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1730",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1025738,
+    "lon": -118.291628
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "618",
+    "city": "Los Angeles",
+    "postcode": "90014",
+    "lat": 34.0459934,
+    "lon": -118.2523539
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5019",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019122,
+    "lon": -118.2990149
+  },
+  {
+    "street": "Stocker Street",
+    "housenumber": "3731",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0067226,
+    "lon": -118.338439
+  },
+  {
+    "street": "South Barrington Avenue",
+    "housenumber": "2449",
+    "city": "Los Angeles",
+    "postcode": "90064",
+    "lat": 34.030145,
+    "lon": -118.445012
+  },
+  {
+    "street": "Hillhurst Avenue",
+    "housenumber": "1514",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0986066,
+    "lon": -118.287276
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "4459",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.0980305,
+    "lon": -118.2865976
+  },
+  {
+    "street": "Fountain Avenue",
+    "housenumber": "4348",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0957208,
+    "lon": -118.284483
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "4356",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0956922,
+    "lon": -118.284251
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1866",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1049593,
+    "lon": -118.2916486
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "7424",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0978872,
+    "lon": -118.352627
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5273",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.10191,
+    "lon": -118.3059254
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5253",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1018927,
+    "lon": -118.305505
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5259",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1021111,
+    "lon": -118.3055095
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7111",
+    "city": "Los Angeles",
+    "postcode": "90038",
+    "lat": 34.0836654,
+    "lon": -118.3446801
+  },
+  {
+    "street": "North Vermont Avenue",
+    "housenumber": "1816 1/2",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1041148,
+    "lon": -118.2916011
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5151",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019752,
+    "lon": -118.3022717
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5161",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1018933,
+    "lon": -118.30272
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5155",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1019753,
+    "lon": -118.3026082
+  },
+  {
+    "street": "N Figueroa Street",
+    "housenumber": "5703",
+    "city": "Los Angeles",
+    "lat": 34.1097977,
+    "lon": -118.192771
+  },
+  {
+    "street": "North Figueroa Street",
+    "housenumber": "5804",
+    "city": "Highland Park",
+    "postcode": "90042",
+    "lat": 34.1098867,
+    "lon": -118.1915716
+  },
+  {
+    "street": "South Grand Avenue",
+    "housenumber": "255",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0535685,
+    "lon": -118.2511738
+  },
+  {
+    "street": "South Grand Avenue",
+    "housenumber": "255",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0533606,
+    "lon": -118.2513795
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "2809",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0260723,
+    "lon": -118.2780288
+  },
+  {
+    "street": "Franklin Ave",
+    "housenumber": "4656",
+    "city": "Los Angeles",
+    "postcode": "90027",
+    "lat": 34.1051361,
+    "lon": -118.2914812
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "2170",
+    "city": "Los Angeles",
+    "lat": 34.0775791,
+    "lon": -118.2660491
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "2162",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0775456,
+    "lon": -118.2659713
+  },
+  {
+    "street": "Glendale Boulevard",
+    "housenumber": "2395",
+    "city": "Los Angeles",
+    "postcode": "90039",
+    "lat": 34.0999189,
+    "lon": -118.2594424
+  },
+  {
+    "street": "West Sunset Boulevard",
+    "housenumber": "2200",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0776853,
+    "lon": -118.2664375
+  },
+  {
+    "street": "Fargo Street",
+    "housenumber": "2100",
+    "city": "Los Angeles",
+    "lat": 34.0906177,
+    "lon": -118.2560846
+  },
+  {
+    "street": "North Heliotrope Drive",
+    "housenumber": "710",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0839326,
+    "lon": -118.294756
+  },
+  {
+    "street": "North Heliotrope Drive",
+    "housenumber": "712",
+    "city": "Los Angeles",
+    "postcode": "90029",
+    "lat": 34.0840116,
+    "lon": -118.294754
+  },
+  {
+    "street": "S Main Street",
+    "housenumber": "421",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0476428,
+    "lon": -118.2478072
+  },
+  {
+    "street": "West Century Boulevard",
+    "housenumber": "5933",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9463266,
+    "lon": -118.390939
+  },
+  {
+    "street": "Beverly Boulevard",
+    "housenumber": "7905",
+    "city": "West Hollywood",
+    "postcode": "90048",
+    "lat": 34.0763044,
+    "lon": -118.361829
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "11150",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0468656,
+    "lon": -118.4452686
+  },
+  {
+    "street": "Laurel Canyon Boulevard",
+    "housenumber": "5317",
+    "city": "Valley Village",
+    "lat": 34.167222,
+    "lon": -118.396706
+  },
+  {
+    "street": "Olvera Street",
+    "housenumber": "23",
+    "city": "Los Angeles",
+    "lat": 34.0579573,
+    "lon": -118.237396
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "6249",
+    "city": "Van Nuys",
+    "postcode": "91401",
+    "lat": 34.1874576,
+    "lon": -118.449041
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "6279",
+    "city": "Van Nuys",
+    "lat": 34.1844962,
+    "lon": -118.4489979
+  },
+  {
+    "street": "South Bundy Drive",
+    "housenumber": "1133",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0452278,
+    "lon": -118.468447
+  },
+  {
+    "street": "Franklin Avenue",
+    "housenumber": "5919",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1053856,
+    "lon": -118.3187801
+  },
+  {
+    "street": "West 5th Street",
+    "housenumber": "633",
+    "city": "Los Angeles",
+    "postcode": "90071",
+    "lat": 34.0510492,
+    "lon": -118.2545544
+  },
+  {
+    "street": "Roscoe Boulevard",
+    "housenumber": "15500",
+    "city": "Van Nuys",
+    "postcode": "91406",
+    "lat": 34.2209769,
+    "lon": -118.470891
+  },
+  {
+    "street": "Roscoe Boulevard",
+    "housenumber": "15500",
+    "city": "Van Nuys",
+    "postcode": "91406",
+    "lat": 34.2209765,
+    "lon": -118.471027
+  },
+  {
+    "street": "Roscoe Boulevard",
+    "housenumber": "15500",
+    "city": "Van Nuys",
+    "postcode": "91406",
+    "lat": 34.2209736,
+    "lon": -118.4707582
+  },
+  {
+    "street": "Roscoe Boulevard",
+    "housenumber": "15500",
+    "city": "Van Nuys",
+    "postcode": "91406",
+    "lat": 34.2209762,
+    "lon": -118.471146
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5115",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0623944,
+    "lon": -118.3412992
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "651",
+    "city": "Los Angeles",
+    "postcode": "90031",
+    "lat": 34.0661251,
+    "lon": -118.222296
+  },
+  {
+    "street": "Beverly Boulevard",
+    "housenumber": "7721",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0763235,
+    "lon": -118.3581861
+  },
+  {
+    "street": "Beverly Boulevard",
+    "housenumber": "7751",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0763657,
+    "lon": -118.3586635
+  },
+  {
+    "street": "South Hope Street",
+    "housenumber": "333",
+    "city": "Los Angeles",
+    "postcode": "90034",
+    "lat": 34.0566147,
+    "lon": -118.24999
+  },
+  {
+    "street": "West Carson Street",
+    "housenumber": "1545",
+    "city": "Los Angeles",
+    "lat": 33.8316765,
+    "lon": -118.30545
+  },
+  {
+    "street": "Victory Boulevard",
+    "housenumber": "12900",
+    "city": "North Hollywood",
+    "postcode": "91606",
+    "lat": 34.1863797,
+    "lon": -118.4139991
+  },
+  {
+    "street": "North Avenue 64",
+    "housenumber": "519",
+    "city": "Los Angeles",
+    "postcode": "90042",
+    "lat": 34.1187577,
+    "lon": -118.1791324
+  },
+  {
+    "street": "Oxnard Street",
+    "housenumber": "12444",
+    "city": "Los Angeles",
+    "postcode": "91606",
+    "lat": 34.1792562,
+    "lon": -118.4047012
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "5600",
+    "city": "Van Nuys",
+    "postcode": "91401",
+    "lat": 34.1722809,
+    "lon": -118.448163
+  },
+  {
+    "street": "Burbank Boulevard",
+    "housenumber": "14431",
+    "city": "Van Nuys",
+    "postcode": "91401",
+    "lat": 34.1724315,
+    "lon": -118.447529
+  },
+  {
+    "street": "Burbank Boulevard",
+    "housenumber": "14445",
+    "city": "Van Nuys",
+    "postcode": "91401",
+    "lat": 34.1724329,
+    "lon": -118.447906
+  },
+  {
+    "street": "West 214th Street",
+    "housenumber": "1627",
+    "city": "Torrance",
+    "postcode": "90501",
+    "lat": 33.8344854,
+    "lon": -118.3080509
+  },
+  {
+    "street": "Agnes Avenue",
+    "housenumber": "66",
+    "city": "North Hollywood",
+    "lat": 34.1913864,
+    "lon": -118.396251
+  },
+  {
+    "street": "Laurel Canyon Boulevard",
+    "housenumber": "6657",
+    "city": "North Hollywood",
+    "postcode": "91606",
+    "lat": 34.1919342,
+    "lon": -118.397511
+  },
+  {
+    "street": "South Grand Avenue",
+    "housenumber": "350",
+    "city": "Los Angeles",
+    "postcode": "90071",
+    "lat": 34.0515291,
+    "lon": -118.2514177
+  },
+  {
+    "street": "West Century Boulevard",
+    "housenumber": "5552",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9451423,
+    "lon": -118.3781926
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "1714",
+    "city": "Los Angeles",
+    "postcode": "90026",
+    "lat": 34.0772949,
+    "lon": -118.2590331
+  },
+  {
+    "street": "Rinaldi Street",
+    "housenumber": "16651",
+    "city": "Granada Hills",
+    "postcode": "91344",
+    "lat": 34.279687,
+    "lon": -118.4950573
+  },
+  {
+    "street": "Airport Boulevard",
+    "housenumber": "9620",
+    "city": "Los Angeles",
+    "lat": 33.9490691,
+    "lon": -118.385326
+  },
+  {
+    "street": "Santa Monica Boulevard",
+    "housenumber": "10699",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0528059,
+    "lon": -118.4315104
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "18653",
+    "city": "Tarzana",
+    "postcode": "91356",
+    "lat": 34.1707822,
+    "lon": -118.5401698
+  },
+  {
+    "street": "Hunter Street",
+    "housenumber": "2458",
+    "city": "Los Angeles",
+    "lat": 34.0275232,
+    "lon": -118.2277632
+  },
+  {
+    "street": "Hunter Street",
+    "housenumber": "2458",
+    "city": "Los Angeles",
+    "lat": 34.0275232,
+    "lon": -118.2276638
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "448",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0470906,
+    "lon": -118.247986
+  },
+  {
+    "street": "South Centinela Avenue",
+    "housenumber": "4135",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 33.9962192,
+    "lon": -118.4278119
+  },
+  {
+    "street": "Inglewood Boulevard",
+    "housenumber": "4513",
+    "city": "Culver City",
+    "postcode": "90230",
+    "lat": 33.9945178,
+    "lon": -118.4175441
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "7307",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1365834,
+    "lon": -118.1883448
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "7311",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.136445,
+    "lon": -118.189389
+  },
+  {
+    "street": "Figueroa Street",
+    "housenumber": "7311",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1363258,
+    "lon": -118.189417
+  },
+  {
+    "street": "Center Drive",
+    "housenumber": "6081",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9783743,
+    "lon": -118.393093
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "1710",
+    "city": "Los Angeles",
+    "lat": 34.1020553,
+    "lon": -118.3385442
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "7040",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.09768,
+    "lon": -118.3431884
+  },
+  {
+    "street": "Sunset Boulevard",
+    "housenumber": "7040",
+    "city": "Hollywood",
+    "postcode": "90028-7567",
+    "lat": 34.0978027,
+    "lon": -118.3431865
+  },
+  {
+    "street": "South Central Avenue",
+    "housenumber": "138",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0480144,
+    "lon": -118.2390974
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "23",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9795818,
+    "lon": -118.4662755
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "37",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9797675,
+    "lon": -118.4659416
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "36",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9794784,
+    "lon": -118.4657025
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "38",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9795195,
+    "lon": -118.4656311
+  },
+  {
+    "street": "La Brea Avenue",
+    "housenumber": "3430",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.023895,
+    "lon": -118.3545498
+  },
+  {
+    "street": "Huntington Drive North",
+    "housenumber": "5533",
+    "city": "Los Angeles",
+    "postcode": "90032",
+    "lat": 34.0943055,
+    "lon": -118.1599515
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "12746",
+    "city": "Los Angeles",
+    "postcode": "90096",
+    "lat": 33.9772337,
+    "lon": -118.416587
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "14",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.979143,
+    "lon": -118.4663573
+  },
+  {
+    "street": "Washington Boulevard",
+    "housenumber": "30",
+    "city": "Marina Del Rey",
+    "postcode": "90292",
+    "lat": 33.9793921,
+    "lon": -118.4658651
+  },
+  {
+    "street": "Fountain Park Drive",
+    "housenumber": "13151",
+    "city": "Playa Vista",
+    "postcode": "90094",
+    "lat": 33.9746199,
+    "lon": -118.4298792
+  },
+  {
+    "street": "Lincoln Blvd",
+    "housenumber": "5450",
+    "city": "Playa Vista",
+    "postcode": "90094",
+    "lat": 33.9737013,
+    "lon": -118.4306865
+  },
+  {
+    "street": "N. Figueroa Street",
+    "housenumber": "7307",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1368914,
+    "lon": -118.1894809
+  },
+  {
+    "street": "N. Figueroa Street",
+    "housenumber": "7315",
+    "city": "Los Angeles",
+    "postcode": "90041",
+    "lat": 34.1368314,
+    "lon": -118.1895023
+  },
+  {
+    "street": "South La Cienega Boulevard",
+    "housenumber": "1845",
+    "city": "Los Angeles",
+    "postcode": "90035",
+    "lat": 34.0428248,
+    "lon": -118.3767904
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5665",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0626162,
+    "lon": -118.3523148
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "5401",
+    "city": "Los Angeles",
+    "postcode": "90036",
+    "lat": 34.0625343,
+    "lon": -118.346381
+  },
+  {
+    "street": "Japanese Village Plaza Mall",
+    "housenumber": "123",
+    "city": "Los Angeles",
+    "lat": 34.0489229,
+    "lon": -118.2401754
+  },
+  {
+    "street": "World Way",
+    "housenumber": "380",
+    "city": "Los Angeles",
+    "postcode": "90045",
+    "lat": 33.9437847,
+    "lon": -118.4101792
+  },
+  {
+    "street": "East 2nd Street",
+    "housenumber": "366",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0478985,
+    "lon": -118.2397855
+  },
+  {
+    "street": "Mateo Street",
+    "housenumber": "582",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0390904,
+    "lon": -118.2326722
+  },
+  {
+    "street": "Boyd Street",
+    "housenumber": "410",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0461064,
+    "lon": -118.242205
+  },
+  {
+    "street": "South Central Avenue",
+    "housenumber": "132",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0482755,
+    "lon": -118.239061
+  },
+  {
+    "street": "Broxton Avenue",
+    "housenumber": "945",
+    "city": "Los Angeles",
+    "postcode": "90024",
+    "lat": 34.0626647,
+    "lon": -118.447281
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "11700",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 34.0083233,
+    "lon": -118.4245029
+  },
+  {
+    "street": "East 20th Street",
+    "housenumber": "1515",
+    "city": "Los Angeles",
+    "lat": 34.0205358,
+    "lon": -118.2461007
+  },
+  {
+    "street": "Roxford Street",
+    "housenumber": "15948",
+    "city": "Sylmar",
+    "postcode": "91342",
+    "lat": 34.3038635,
+    "lon": -118.478341
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5615",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1018649,
+    "lon": -118.3119049
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "5621",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1018611,
+    "lon": -118.312106
+  },
+  {
+    "street": "Hollywood Boulevard",
+    "housenumber": "6655",
+    "city": "Los Angeles",
+    "postcode": "90028",
+    "lat": 34.1017322,
+    "lon": -118.334886
+  },
+  {
+    "street": "Ohio Avenue",
+    "housenumber": "12115",
+    "city": "Los Angeles",
+    "postcode": "90025",
+    "lat": 34.0400933,
+    "lon": -118.4633122
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "11390",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1396277,
+    "lon": -118.378666
+  },
+  {
+    "street": "South Sepulveda Boulevard",
+    "housenumber": "8645",
+    "city": "Westchester",
+    "postcode": "90045",
+    "lat": 33.9586411,
+    "lon": -118.3965106
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "12930",
+    "city": "Studio City",
+    "postcode": "91604",
+    "lat": 34.1450866,
+    "lon": -118.414918
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "7902",
+    "city": "Panorama City",
+    "postcode": "91402",
+    "lat": 34.2145339,
+    "lon": -118.4484706
+  },
+  {
+    "street": "North Mariposa Avenue",
+    "housenumber": "329",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0772259,
+    "lon": -118.2997136
+  },
+  {
+    "street": "Devonshire Street",
+    "housenumber": "21701",
+    "city": "Chatsworth",
+    "postcode": "91311",
+    "lat": 34.2574425,
+    "lon": -118.6021417
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "3201",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0643439,
+    "lon": -118.291897
+  },
+  {
+    "street": "West 6th Street",
+    "housenumber": "3223",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0640554,
+    "lon": -118.292527
+  },
+  {
+    "street": "South Hope Street",
+    "housenumber": "1835",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0339159,
+    "lon": -118.2695622
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "4211",
+    "city": "Los Angeles",
+    "postcode": "90018",
+    "lat": 34.0328208,
+    "lon": -118.3309917
+  },
+  {
+    "street": "Compton Avenue",
+    "housenumber": "10122",
+    "city": "Los Angeles",
+    "postcode": "90002",
+    "lat": 33.9444597,
+    "lon": -118.245906
+  },
+  {
+    "street": "Colfax Avenue",
+    "housenumber": "4390",
+    "city": "Los Angeles",
+    "postcode": "91604",
+    "lat": 34.1499888,
+    "lon": -118.3872871
+  },
+  {
+    "street": "South Spaulding Avenue",
+    "housenumber": "2033",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0397855,
+    "lon": -118.366951
+  },
+  {
+    "street": "Avenue of the Stars",
+    "housenumber": "2121",
+    "city": "Los Angeles",
+    "postcode": "90067",
+    "lat": 34.0550656,
+    "lon": -118.4134437
+  },
+  {
+    "street": "West Pico Boulevard",
+    "housenumber": "2727",
+    "city": "Los Angeles",
+    "postcode": "90006",
+    "lat": 34.0469193,
+    "lon": -118.2989615
+  },
+  {
+    "street": "East Century Boulevard",
+    "housenumber": "1773",
+    "city": "Los Angeles",
+    "postcode": "90002-3024",
+    "lat": 33.945834,
+    "lon": -118.2410584
+  },
+  {
+    "street": "Altura Street",
+    "housenumber": "2808",
+    "city": "Los Angeles",
+    "lat": 34.0752878,
+    "lon": -118.2127842
+  },
+  {
+    "street": "Sichel Street",
+    "housenumber": "2210",
+    "city": "Los Angeles",
+    "lat": 34.0702989,
+    "lon": -118.2126901
+  },
+  {
+    "street": "Pasadena Avenue",
+    "housenumber": "2635",
+    "city": "Los Angeles",
+    "lat": 34.0779254,
+    "lon": -118.2154895
+  },
+  {
+    "street": "Mercury Avenue",
+    "housenumber": "4509",
+    "city": "Los Angeles",
+    "lat": 34.0861155,
+    "lon": -118.1902318
+  },
+  {
+    "street": "Portola Avenue",
+    "housenumber": "3431",
+    "city": "Los Angeles",
+    "lat": 34.0856733,
+    "lon": -118.1728243
+  },
+  {
+    "street": "Huntington Drive South",
+    "housenumber": "4810",
+    "city": "Los Angeles",
+    "lat": 34.0851667,
+    "lon": -118.1797553
+  },
+  {
+    "street": "State Street",
+    "housenumber": "401",
+    "city": "Los Angeles",
+    "lat": 34.0496589,
+    "lon": -118.215893
+  },
+  {
+    "street": "South Evergreen Avenue",
+    "housenumber": "427",
+    "city": "Los Angeles",
+    "lat": 34.0368278,
+    "lon": -118.2048741
+  },
+  {
+    "street": "Warren Street",
+    "housenumber": "1307",
+    "city": "Los Angeles",
+    "lat": 34.0521055,
+    "lon": -118.220194
+  },
+  {
+    "street": "South Evergreen Avenue",
+    "housenumber": "122",
+    "city": "Los Angeles",
+    "lat": 34.0397377,
+    "lon": -118.2024829
+  },
+  {
+    "street": "Pico Boulevard",
+    "housenumber": "8846",
+    "city": "Los Angeles",
+    "lat": 34.0547356,
+    "lon": -118.3848267
+  },
+  {
+    "street": "Bridge Street",
+    "housenumber": "1815",
+    "city": "Los Angeles",
+    "lat": 34.0516144,
+    "lon": -118.215205
+  },
+  {
+    "street": "South Lorena Street",
+    "housenumber": "611",
+    "city": "Los Angeles",
+    "lat": 34.0306389,
+    "lon": -118.199531
+  },
+  {
+    "street": "Martin Luther King Junior Boulevard",
+    "housenumber": "1135",
+    "city": "Los Angeles",
+    "lat": 34.0111333,
+    "lon": -118.2957046
+  },
+  {
+    "street": "West 47th Street",
+    "housenumber": "104",
+    "city": "Los Angeles",
+    "lat": 34.0008867,
+    "lon": -118.2743369
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "12746",
+    "city": "Los Angeles",
+    "postcode": "90094",
+    "lat": 33.9766329,
+    "lon": -118.417592
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "12777",
+    "city": "Los Angeles",
+    "lat": 33.9782572,
+    "lon": -118.4181543
+  },
+  {
+    "street": "South Playa Vista Drive",
+    "housenumber": "6400",
+    "city": "Los Angeles",
+    "lat": 33.9701814,
+    "lon": -118.4255
+  },
+  {
+    "street": "S. Central Avenue",
+    "housenumber": "8724",
+    "city": "Los Angeles",
+    "postcode": "90002",
+    "lat": 33.9585338,
+    "lon": -118.2561758
+  },
+  {
+    "street": "S. Central Avenue",
+    "housenumber": "9218",
+    "city": "Los Angeles",
+    "postcode": "90002",
+    "lat": 33.9525781,
+    "lon": -118.2557053
+  },
+  {
+    "street": "South Avalon Boulevard",
+    "housenumber": "7600",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9709509,
+    "lon": -118.264979
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "8803-8807",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9570828,
+    "lon": -118.2785032
+  },
+  {
+    "street": "West Florence Avenue",
+    "housenumber": "210",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9744788,
+    "lon": -118.276576
+  },
+  {
+    "street": "Avalon Boulevard",
+    "housenumber": "7301",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9735424,
+    "lon": -118.2653434
+  },
+  {
+    "street": "Avalon Boulevard",
+    "housenumber": "9719",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9476905,
+    "lon": -118.2654242
+  },
+  {
+    "street": "South San Pedro Street",
+    "housenumber": "5951",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9859366,
+    "lon": -118.2697051
+  },
+  {
+    "street": "West 10th Street",
+    "housenumber": "867",
+    "city": "San Pedro",
+    "postcode": "90731",
+    "lat": 33.7350778,
+    "lon": -118.2961376
+  },
+  {
+    "street": "Rosewood Avenue",
+    "housenumber": "4101",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0793082,
+    "lon": -118.2933083
+  },
+  {
+    "street": "Lagoon Avenue",
+    "housenumber": "943",
+    "city": "Wilmington",
+    "postcode": "90744",
+    "lat": 33.7824325,
+    "lon": -118.2682216
+  },
+  {
+    "street": "North Berendo Street",
+    "housenumber": "504",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0792449,
+    "lon": -118.2939051
+  },
+  {
+    "street": "North Avalon Boulevard",
+    "housenumber": "1035",
+    "city": "Wilmington",
+    "postcode": "90744",
+    "lat": 33.7837528,
+    "lon": -118.2628791
+  },
+  {
+    "street": "Culver Boulevard",
+    "housenumber": "12910",
+    "city": "Los Angeles",
+    "postcode": "90066",
+    "lat": 33.9821573,
+    "lon": -118.4268206
+  },
+  {
+    "street": "W. 8th St",
+    "housenumber": "2936",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0575414,
+    "lon": -118.2902212
+  },
+  {
+    "street": "South Westmoreland Avenue",
+    "housenumber": "760",
+    "city": "Los Angeles",
+    "postcode": "90005",
+    "lat": 34.0582733,
+    "lon": -118.2889654
+  },
+  {
+    "street": "South Alvarado Street",
+    "housenumber": "1366",
+    "city": "Los Angeles",
+    "postcode": "90006",
+    "lat": 34.0456589,
+    "lon": -118.2834673
+  },
+  {
+    "street": "S. Vermont Ave",
+    "housenumber": "2625",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0319144,
+    "lon": -118.2918378
+  },
+  {
+    "street": "West 21st Street",
+    "housenumber": "650",
+    "city": "Los Angeles",
+    "postcode": "90007-2030",
+    "lat": 34.0328124,
+    "lon": -118.275261
+  },
+  {
+    "street": "South Broadway",
+    "housenumber": "9706",
+    "city": "Los Angeles",
+    "postcode": "90003",
+    "lat": 33.9480202,
+    "lon": -118.2779605
+  },
+  {
+    "street": "West 1st Street",
+    "housenumber": "3500",
+    "city": "Los Angeles",
+    "postcode": "90004",
+    "lat": 34.0731665,
+    "lon": -118.289675
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "514",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0274444,
+    "lon": -118.2756105
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "1631",
+    "city": "Los Angeles",
+    "postcode": "90007",
+    "lat": 34.0330405,
+    "lon": -118.2983637
+  },
+  {
+    "street": "West Vernon Avenue",
+    "housenumber": "3303",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0041338,
+    "lon": -118.3296221
+  },
+  {
+    "street": "Don Felipe Drive",
+    "housenumber": "3740",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0069031,
+    "lon": -118.340823
+  },
+  {
+    "street": "West Vernon Avenue",
+    "housenumber": "2400",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0034278,
+    "lon": -118.3194002
+  },
+  {
+    "street": "West Vernon Avenue",
+    "housenumber": "2400",
+    "city": "Los Angeles",
+    "postcode": "90008",
+    "lat": 34.0033722,
+    "lon": -118.3193975
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "3663",
+    "city": "Los Angeles",
+    "postcode": "90010",
+    "lat": 34.0619773,
+    "lon": -118.3061742
+  },
+  {
+    "street": "East 20th Street",
+    "housenumber": "822",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 34.0256794,
+    "lon": -118.2565427
+  },
+  {
+    "street": "Stanford Avenue",
+    "housenumber": "2800",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 34.0192692,
+    "lon": -118.2602039
+  },
+  {
+    "street": "Central Avenue",
+    "housenumber": "4425",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 34.0031354,
+    "lon": -118.2568565
+  },
+  {
+    "street": "Compton Avenue",
+    "housenumber": "5017",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 33.9970811,
+    "lon": -118.2480908
+  },
+  {
+    "street": "Avalon Boulevard",
+    "housenumber": "5014",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 33.9974462,
+    "lon": -118.2649809
+  },
+  {
+    "street": "McKinley Avenue",
+    "housenumber": "4802",
+    "city": "Los Angeles",
+    "postcode": "90011",
+    "lat": 34.0000902,
+    "lon": -118.2607215
+  },
+  {
+    "street": "North Main Street",
+    "housenumber": "535",
+    "city": "Los Angeles",
+    "postcode": "90012",
+    "lat": 34.0571561,
+    "lon": -118.2397573
+  },
+  {
+    "street": "Towne Avenue",
+    "housenumber": "445",
+    "city": "Los Angeles",
+    "postcode": "90013",
+    "lat": 34.0433591,
+    "lon": -118.2420051
+  },
+  {
+    "street": "Francisco Street",
+    "housenumber": "906",
+    "city": "Los Angeles",
+    "postcode": "90015",
+    "lat": 34.0467673,
+    "lon": -118.2647127
+  },
+  {
+    "street": "Van Nuys Boulevard",
+    "housenumber": "4454",
+    "city": "Los Angeles",
+    "lat": 34.1524022,
+    "lon": -118.4480992
+  },
+  {
+    "street": "Ventura Boulevard",
+    "housenumber": "15300",
+    "city": "Sherman Oaks",
+    "postcode": "91403",
+    "lat": 34.1535085,
+    "lon": -118.4664419
+  },
+  {
+    "street": "West Adams Boulevard",
+    "housenumber": "4959",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0328042,
+    "lon": -118.348519
+  },
+  {
+    "street": "South Harvard Boulevard",
+    "housenumber": "2270",
+    "city": "Los Angeles",
+    "postcode": "90018",
+    "lat": 34.035007,
+    "lon": -118.306226
+  },
+  {
+    "street": "West Jefferson Boulevard",
+    "housenumber": "2040",
+    "city": "Los Angeles",
+    "postcode": "90018",
+    "lat": 34.0251586,
+    "lon": -118.3162896
+  },
+  {
+    "street": "Crenshaw Boulevard",
+    "housenumber": "3045",
+    "city": "Los Angeles",
+    "postcode": "90016",
+    "lat": 34.0268869,
+    "lon": -118.3354459
+  },
+  {
+    "street": "West Boulevard",
+    "housenumber": "1809",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.0406392,
+    "lon": -118.3371679
+  },
+  {
+    "street": "West Washington Boulevard",
+    "housenumber": "2147",
+    "city": "Los Angeles",
+    "postcode": "90018-1540",
+    "lat": 34.040168,
+    "lon": -118.3080338
+  },
+  {
+    "street": "Venice Boulevard",
+    "housenumber": "5814",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.041485,
+    "lon": -118.3661857
+  },
+  {
+    "street": "South Norton Avenue",
+    "housenumber": "1245",
+    "city": "Los Angeles",
+    "postcode": "90019",
+    "lat": 34.048329,
+    "lon": -118.3237945
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "3401",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0695168,
+    "lon": -118.2899987
+  },
+  {
+    "street": "South Oxford Avenue",
+    "housenumber": "309",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0685936,
+    "lon": -118.3081733
+  },
+  {
+    "street": "South Vermont Avenue",
+    "housenumber": "434",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0665228,
+    "lon": -118.2913424
+  },
+  {
+    "street": "West 3rd Street",
+    "housenumber": "4357",
+    "city": "Los Angeles",
+    "postcode": "90020",
+    "lat": 34.0688003,
+    "lon": -118.309678
+  },
+  {
+    "street": "Wilshire Boulevard",
+    "housenumber": "6300",
+    "city": "Los Angeles",
+    "postcode": "90048",
+    "lat": 34.0632161,
+    "lon": -118.366118
+  },
+  {
+    "street": "Cahuenga Boulevard",
+    "housenumber": "5668",
+    "city": "Los Angeles",
+    "postcode": "91601",
+    "lat": 34.1737987,
+    "lon": -118.3611766
+  },
+  {
+    "street": "N Cahuenga Boulevard",
+    "housenumber": "5730",
+    "city": "North Hollywood",
+    "postcode": "91601",
+    "lat": 34.1749579,
+    "lon": -118.3612699
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7160",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0832537,
+    "lon": -118.3456377
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7172",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0832581,
+    "lon": -118.3458935
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7201",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0836847,
+    "lon": -118.3464263
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7207",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0836964,
+    "lon": -118.3465808
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7221",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0837097,
+    "lon": -118.3469875
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7223",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0837258,
+    "lon": -118.3470852
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7224",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833022,
+    "lon": -118.3469698
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7228",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833018,
+    "lon": -118.3472699
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7226",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833591,
+    "lon": -118.3471136
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7172",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833346,
+    "lon": -118.3458952
+  },
+  {
+    "street": "Topanga Canyon Boulevard",
+    "housenumber": "6220",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.1832376,
+    "lon": -118.605122
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7204 1/2",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.083313,
+    "lon": -118.3464895
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7257",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0837138,
+    "lon": -118.347759
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7261",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0836976,
+    "lon": -118.3479287
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7264",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833214,
+    "lon": -118.3479359
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7266",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833234,
+    "lon": -118.3480717
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7270 1/2",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833204,
+    "lon": -118.3481993
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7303",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0837325,
+    "lon": -118.3488561
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7313",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.083773,
+    "lon": -118.3491875
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7318",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.083312,
+    "lon": -118.3493329
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7322",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833279,
+    "lon": -118.3495448
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7324",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0833349,
+    "lon": -118.3496291
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "7325",
+    "city": "Los Angeles",
+    "postcode": "90046",
+    "lat": 34.0837779,
+    "lon": -118.3494509
+  },
+  {
+    "street": "Colorado Boulevard",
+    "housenumber": "2626",
+    "city": "Los Angeles",
+    "postcode": "90041-1070",
+    "lat": 34.1415053,
+    "lon": -118.224087
+  },
+  {
+    "street": "North Topanga Canyon Boulevard",
+    "housenumber": "6344",
+    "city": "Woodland Hills",
+    "postcode": "91367",
+    "lat": 34.186322,
+    "lon": -118.6045242
+  }
+]

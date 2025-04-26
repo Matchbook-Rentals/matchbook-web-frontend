@@ -1,0 +1,7925 @@
+[
+  {
+    "street": "3rd Street Northwest",
+    "housenumber": "1076",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.784822,
+    "lon": -84.469272
+  },
+  {
+    "street": "Northeast 5th Street",
+    "housenumber": "103",
+    "city": "Atlanta",
+    "postcode": "61723",
+    "lat": 40.2646568,
+    "lon": -89.2352018
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1080",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7638831,
+    "lon": -84.35215
+  },
+  {
+    "street": "Avon Avenue Southwest",
+    "housenumber": "1114",
+    "city": "Atlanta",
+    "postcode": "30310",
+    "lat": 33.7219622,
+    "lon": -84.4244211
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "781",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7759154,
+    "lon": -84.384113
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "480",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7406619,
+    "lon": -84.3315914
+  },
+  {
+    "street": "McLendon Avenue Northeast",
+    "housenumber": "1561",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7646032,
+    "lon": -84.3368464
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "1328",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7907261,
+    "lon": -84.385743
+  },
+  {
+    "street": "Niles Avenue Northwest",
+    "housenumber": "1150",
+    "city": "Atlanta",
+    "lat": 33.7823281,
+    "lon": -84.4246505
+  },
+  {
+    "street": "Euclid Avenue",
+    "housenumber": "1240",
+    "city": "Atlanta",
+    "lat": 33.7667725,
+    "lon": -84.3479809
+  },
+  {
+    "street": "Hosea Williams Drive SE",
+    "housenumber": "2071",
+    "city": "Atlanta",
+    "postcode": "30317",
+    "lat": 33.7506617,
+    "lon": -84.3199242
+  },
+  {
+    "street": "Clifton Road Northeast",
+    "housenumber": "1441",
+    "city": "Atlanta",
+    "postcode": "30322",
+    "lat": 33.7949415,
+    "lon": -84.320485
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1833",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8028826,
+    "lon": -84.3310358
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1841",
+    "city": "Atlanta",
+    "postcode": "30322",
+    "lat": 33.8046363,
+    "lon": -84.3292013
+  },
+  {
+    "street": "Forest Park Road Southeast",
+    "housenumber": "0",
+    "city": "Atlanta",
+    "postcode": "30354",
+    "lat": 33.6756888,
+    "lon": -84.35244
+  },
+  {
+    "street": "3450 Benjamin E. Mays Drive Southwest",
+    "housenumber": "3450",
+    "city": "Atlanta",
+    "postcode": "30331",
+    "lat": 33.7339293,
+    "lon": -84.5039848
+  },
+  {
+    "street": "Martin Street Southeast",
+    "housenumber": "970",
+    "city": "Atlanta",
+    "postcode": "30315",
+    "lat": 33.7281626,
+    "lon": -84.3829821
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "4360",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8739923,
+    "lon": -84.3999275
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "400",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7732232,
+    "lon": -84.3746974
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "1155",
+    "city": "Atlanta",
+    "lat": 33.7861229,
+    "lon": -84.3547132
+  },
+  {
+    "street": "Bolton Road",
+    "housenumber": "2355",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8199718,
+    "lon": -84.4597065
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "1190",
+    "city": "Atlanta",
+    "lat": 33.7871483,
+    "lon": -84.3555245
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1463",
+    "city": "Atlanta",
+    "postcode": "30322",
+    "lat": 33.8006604,
+    "lon": -84.3157575
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "1280",
+    "city": "Atlanta",
+    "lat": 33.7894138,
+    "lon": -84.3850368
+  },
+  {
+    "street": "14th Street Northeast",
+    "housenumber": "173",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7862701,
+    "lon": -84.3819106
+  },
+  {
+    "street": "Clifton Road Northeast",
+    "housenumber": "1510",
+    "city": "Atlanta",
+    "postcode": "30322",
+    "lat": 33.7966201,
+    "lon": -84.3233428
+  },
+  {
+    "street": "Centennial Olympic Park Drive",
+    "housenumber": "275",
+    "city": "Atlanta",
+    "postcode": "30313",
+    "lat": 33.762471,
+    "lon": -84.3917414
+  },
+  {
+    "street": "University Place Northwest",
+    "housenumber": "587",
+    "city": "Atlanta",
+    "postcode": "30314",
+    "lat": 33.7558062,
+    "lon": -84.4067828
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "878",
+    "city": "Atlanta",
+    "lat": 33.7790324,
+    "lon": -84.3844582
+  },
+  {
+    "street": "950 Joseph E. Lowery BLVD NW",
+    "housenumber": "Suite 19",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7806976,
+    "lon": -84.4175004
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "842",
+    "city": "Atlanta",
+    "lat": 33.7775571,
+    "lon": -84.38462
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "240",
+    "city": "Atlanta",
+    "lat": 33.7603914,
+    "lon": -84.3877294
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "2020",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8101574,
+    "lon": -84.414179
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7797895,
+    "lon": -84.3678804
+  },
+  {
+    "street": "526",
+    "housenumber": "526",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7743037,
+    "lon": -84.3695954
+  },
+  {
+    "street": "Ponce De Leon Avenue Northeast",
+    "housenumber": "650",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7758867,
+    "lon": -84.3660842
+  },
+  {
+    "street": "Ponce De Leon Avenue",
+    "housenumber": "650",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7755442,
+    "lon": -84.3660241
+  },
+  {
+    "street": "Ponce de Leon Place Northeast",
+    "housenumber": "716",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7739105,
+    "lon": -84.3643413
+  },
+  {
+    "street": "Metropolitan Parkway",
+    "housenumber": "675",
+    "city": "Atlanta",
+    "postcode": "30310",
+    "lat": 33.7367287,
+    "lon": -84.4085398
+  },
+  {
+    "street": "Luckie Street Northwest",
+    "housenumber": "133",
+    "city": "Atlanta",
+    "lat": 33.7585609,
+    "lon": -84.390646
+  },
+  {
+    "street": "Luckie Street Northwest",
+    "housenumber": "111",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7578228,
+    "lon": -84.3899486
+  },
+  {
+    "street": "Monroe Circle Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7790201,
+    "lon": -84.3668298
+  },
+  {
+    "street": "5th Street Northwest",
+    "housenumber": "22",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7766541,
+    "lon": -84.3879032
+  },
+  {
+    "street": "5th Street Northwest",
+    "housenumber": "75",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7772461,
+    "lon": -84.3889458
+  },
+  {
+    "street": "5th Street Northwest",
+    "housenumber": "75",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7770241,
+    "lon": -84.389256
+  },
+  {
+    "street": "5th Street Northwest",
+    "housenumber": "85",
+    "city": "Atlanta",
+    "lat": 33.7770189,
+    "lon": -84.3898846
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "563",
+    "city": "Atlanta",
+    "lat": 33.7465083,
+    "lon": -84.3694076
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "923",
+    "city": "Atlanta",
+    "lat": 33.7735134,
+    "lon": -84.3571312
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "939",
+    "city": "Atlanta",
+    "lat": 33.7735536,
+    "lon": -84.3566457
+  },
+  {
+    "street": "Peachtree Street Northwest",
+    "housenumber": "100",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7566098,
+    "lon": -84.3886713
+  },
+  {
+    "street": "Peachtree Street",
+    "housenumber": "70",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7556376,
+    "lon": -84.3890408
+  },
+  {
+    "street": "Peachthree Street Northeast",
+    "housenumber": "1812",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8042852,
+    "lon": -84.3936559
+  },
+  {
+    "street": "McLendon Avenue Northeast",
+    "housenumber": "1642",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7649696,
+    "lon": -84.3335683
+  },
+  {
+    "street": "McLendon Avenue Northeast",
+    "housenumber": "1654",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7649126,
+    "lon": -84.3333709
+  },
+  {
+    "street": "McLendon Avenue",
+    "housenumber": "1669",
+    "city": "Atlanta",
+    "lat": 33.7646985,
+    "lon": -84.3328388
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "612",
+    "city": "Atlanta",
+    "lat": 33.7374915,
+    "lon": -84.3297158
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "613",
+    "city": "Atlanta",
+    "lat": 33.7373041,
+    "lon": -84.3301557
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "530",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7396908,
+    "lon": -84.3317114
+  },
+  {
+    "street": "Atlantic Drive Northwest",
+    "housenumber": "1380",
+    "city": "Atlanta",
+    "postcode": "30363",
+    "lat": 33.7927085,
+    "lon": -84.3978483
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "933",
+    "city": "Atlanta",
+    "lat": 33.7806155,
+    "lon": -84.3839442
+  },
+  {
+    "street": "Peachtree Road",
+    "housenumber": "2333",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8188124,
+    "lon": -84.3883597
+  },
+  {
+    "street": "Peachtree Road Northeast",
+    "housenumber": "2365",
+    "city": "Atlanta",
+    "postcode": "30305-4147",
+    "lat": 33.8209249,
+    "lon": -84.3865436
+  },
+  {
+    "street": "Peachtree Road Northwest",
+    "housenumber": "2274",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8166797,
+    "lon": -84.3906009
+  },
+  {
+    "street": "Peachtree Road Northeast",
+    "housenumber": "2280",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8166954,
+    "lon": -84.3905793
+  },
+  {
+    "street": "Piedmont Road",
+    "housenumber": "3424",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.848112,
+    "lon": -84.3741295
+  },
+  {
+    "street": "Marietta Street",
+    "housenumber": "1009-B",
+    "city": "Atlanta",
+    "lat": 33.7794653,
+    "lon": -84.410306
+  },
+  {
+    "street": "Moreland Avenue",
+    "housenumber": "438",
+    "city": "Atlanta",
+    "lat": 33.7662554,
+    "lon": -84.349211
+  },
+  {
+    "street": "North Highland Avenue",
+    "housenumber": "1006",
+    "city": "Atlanta",
+    "lat": 33.7819998,
+    "lon": -84.3545563
+  },
+  {
+    "street": "Peachtree Center Avenue NE",
+    "housenumber": "265",
+    "city": "Atlanta",
+    "lat": 33.76133,
+    "lon": -84.384821
+  },
+  {
+    "street": "Peachtree Center Avenue NE",
+    "housenumber": "265",
+    "city": "Atlanta",
+    "lat": 33.76166,
+    "lon": -84.384881
+  },
+  {
+    "street": "Peachtree Road, NW",
+    "housenumber": "3050",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8387611,
+    "lon": -84.3810494
+  },
+  {
+    "street": "Peachtree Road",
+    "housenumber": "1820",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8053118,
+    "lon": -84.3941692
+  },
+  {
+    "street": "Haralson Avenue NE",
+    "housenumber": "208",
+    "city": "Atlanta",
+    "lat": 33.7595421,
+    "lon": -84.3505635
+  },
+  {
+    "street": "Euclid",
+    "housenumber": "1105",
+    "city": "Atlanta",
+    "lat": 33.7619936,
+    "lon": -84.352511
+  },
+  {
+    "street": "Glenwood Avenue Southeast",
+    "housenumber": "1314",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7403114,
+    "lon": -84.3446271
+  },
+  {
+    "street": "Decatur Street",
+    "housenumber": "349",
+    "city": "Atlanta",
+    "lat": 33.7497186,
+    "lon": -84.3787121
+  },
+  {
+    "street": "McLendon Avenue",
+    "housenumber": "1395",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7647575,
+    "lon": -84.3418708
+  },
+  {
+    "street": "Auburn Avenue Northeast",
+    "housenumber": "135",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7554342,
+    "lon": -84.383103
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "552",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7394488,
+    "lon": -84.3442075
+  },
+  {
+    "street": "Gilmer Street Southeast",
+    "housenumber": "33",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7534614,
+    "lon": -84.3859797
+  },
+  {
+    "street": "Moreland Avenue",
+    "housenumber": "506",
+    "city": "Little Five Points Village",
+    "postcode": "30307",
+    "lat": 33.7680684,
+    "lon": -84.3494503
+  },
+  {
+    "street": "Moreland Avenue Northeast",
+    "housenumber": "484",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7677324,
+    "lon": -84.3493412
+  },
+  {
+    "street": "Moreland Avenue Northeast",
+    "housenumber": "484",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7675825,
+    "lon": -84.3493499
+  },
+  {
+    "street": "Moreland Avenue Northeast",
+    "housenumber": "466",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7669471,
+    "lon": -84.3493904
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1160",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7651342,
+    "lon": -84.3497093
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1152",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7651989,
+    "lon": -84.3496289
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1117",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7641577,
+    "lon": -84.3506162
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1140",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7649192,
+    "lon": -84.3500033
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1130",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7647296,
+    "lon": -84.3502728
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1087",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7635022,
+    "lon": -84.3514209
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1126",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7645862,
+    "lon": -84.3505078
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1083",
+    "city": "Atlanta",
+    "lat": 33.7632796,
+    "lon": -84.3515271
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1139",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7646549,
+    "lon": -84.3499482
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1111",
+    "city": "Atlanta",
+    "lat": 33.7640868,
+    "lon": -84.3506849
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1149",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7647396,
+    "lon": -84.3498542
+  },
+  {
+    "street": "Euclid Avenue Northeast",
+    "housenumber": "1099",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7637965,
+    "lon": -84.3510303
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2399",
+    "city": "Atlanta",
+    "lat": 33.8198693,
+    "lon": -84.3669667
+  },
+  {
+    "street": "Main Street Northeast",
+    "housenumber": "565",
+    "city": "Atlanta",
+    "lat": 33.8223388,
+    "lon": -84.3687794
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2459",
+    "city": "Atlanta",
+    "lat": 33.8225437,
+    "lon": -84.3669604
+  },
+  {
+    "street": "Main Street Northeast",
+    "housenumber": "520",
+    "city": "Atlanta",
+    "lat": 33.8227088,
+    "lon": -84.3701093
+  },
+  {
+    "street": "Edgewood Avenue Southeast",
+    "housenumber": "458",
+    "city": "Atlanta",
+    "lat": 33.7544311,
+    "lon": -84.3726945
+  },
+  {
+    "street": "Edgewood Avenue Southeast",
+    "housenumber": "458",
+    "city": "Atlanta",
+    "lat": 33.754426,
+    "lon": -84.3725803
+  },
+  {
+    "street": "Edgewood Avenue Southeast",
+    "housenumber": "445",
+    "city": "Atlanta",
+    "lat": 33.7542146,
+    "lon": -84.3729977
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2450",
+    "city": "Atlanta",
+    "lat": 33.8229551,
+    "lon": -84.3676558
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2571",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.825593,
+    "lon": -84.365614
+  },
+  {
+    "street": "Kings Circle Northeast",
+    "housenumber": "7",
+    "city": "Atlanta",
+    "lat": 33.8187767,
+    "lon": -84.3811874
+  },
+  {
+    "street": "Kings Circle",
+    "housenumber": "10",
+    "city": "Atlanta",
+    "lat": 33.8179615,
+    "lon": -84.3812037
+  },
+  {
+    "street": "McPherson Avenue Southeast",
+    "housenumber": "1181",
+    "city": "Atlanta",
+    "lat": 33.7424009,
+    "lon": -84.3489866
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "493B",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7405084,
+    "lon": -84.3460577
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "380",
+    "city": "Atlanta",
+    "lat": 33.7434993,
+    "lon": -84.3484703
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "493",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7405809,
+    "lon": -84.3460952
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "493A",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7405463,
+    "lon": -84.3460764
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "479A",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7409366,
+    "lon": -84.3464331
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "469",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7411039,
+    "lon": -84.3466195
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "485",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7407694,
+    "lon": -84.3462601
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "491",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7406177,
+    "lon": -84.346114
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "461",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7413871,
+    "lon": -84.3468944
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "419",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7423551,
+    "lon": -84.3479942
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "479",
+    "city": "Atlanta",
+    "lat": 33.7409556,
+    "lon": -84.3464586
+  },
+  {
+    "street": "Flat Shoals Ave. SE",
+    "housenumber": "477",
+    "city": "Atlanta",
+    "lat": 33.7409824,
+    "lon": -84.3464894
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "481A",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7409154,
+    "lon": -84.3464103
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "467",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7411574,
+    "lon": -84.3466799
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "489B",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7408407,
+    "lon": -84.3463298
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "495",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7404738,
+    "lon": -84.3459316
+  },
+  {
+    "street": "Moreland Avenue Southeast",
+    "housenumber": "450",
+    "city": "Atlanta",
+    "lat": 33.7418043,
+    "lon": -84.3488566
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "411",
+    "city": "Atlanta",
+    "lat": 33.7425514,
+    "lon": -84.3485535
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "530",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.739982,
+    "lon": -84.3448828
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "514A",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.740257,
+    "lon": -84.3452922
+  },
+  {
+    "street": "Flat Shoals Avenue Southeast",
+    "housenumber": "520",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7400362,
+    "lon": -84.3450562
+  },
+  {
+    "street": "PIEDMONT RD",
+    "housenumber": "2555",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.8256019,
+    "lon": -84.3640088
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1953",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8080642,
+    "lon": -84.4124587
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1984",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8087596,
+    "lon": -84.4137676
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "2020",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8101435,
+    "lon": -84.413958
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1942",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8076898,
+    "lon": -84.4130756
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1961",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8083918,
+    "lon": -84.4121476
+  },
+  {
+    "street": "Collier Road NW",
+    "housenumber": "784",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8091964,
+    "lon": -84.4137971
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1985",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8088688,
+    "lon": -84.4125982
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1959",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.808267,
+    "lon": -84.412507
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1970",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8084019,
+    "lon": -84.4130521
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1983",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8086548,
+    "lon": -84.4125928
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1715",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8018104,
+    "lon": -84.4125016
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1921",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8070479,
+    "lon": -84.4123916
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1715",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8025147,
+    "lon": -84.4127511
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1776",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.802956,
+    "lon": -84.4151302
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1715",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8024099,
+    "lon": -84.4127484
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1742",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8015518,
+    "lon": -84.4158651
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1920",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8073377,
+    "lon": -84.4131708
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1923",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8072998,
+    "lon": -84.4124158
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1715",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8012286,
+    "lon": -84.4133867
+  },
+  {
+    "street": "Collier Road Northwest",
+    "housenumber": "857",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8102877,
+    "lon": -84.4160885
+  },
+  {
+    "street": "Collier Road Northwest",
+    "housenumber": "857",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8102967,
+    "lon": -84.4152061
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "2020",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8101384,
+    "lon": -84.4137201
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3521",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8509061,
+    "lon": -84.4291581
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1250",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8483406,
+    "lon": -84.4279835
+  },
+  {
+    "street": "Monroe Circle Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7791816,
+    "lon": -84.3671568
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7803773,
+    "lon": -84.3687017
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7802641,
+    "lon": -84.3680522
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7802888,
+    "lon": -84.3685218
+  },
+  {
+    "street": "Virginia Avenue Northeast",
+    "housenumber": "992",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7824468,
+    "lon": -84.3549103
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "2160",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.8109643,
+    "lon": -84.3700338
+  },
+  {
+    "street": "Clifton Road Northeast",
+    "housenumber": "1817",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8047966,
+    "lon": -84.3333564
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1819",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8067887,
+    "lon": -84.3312219
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1749",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8018401,
+    "lon": -84.3304489
+  },
+  {
+    "street": "Clifton Road",
+    "housenumber": "1825",
+    "city": "Atlanta",
+    "postcode": "30322",
+    "lat": 33.803321,
+    "lon": -84.3323807
+  },
+  {
+    "street": "Elizabeth Street Northeast",
+    "housenumber": "331",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.76346,
+    "lon": -84.358494
+  },
+  {
+    "street": "Elizabeth Street Northeast",
+    "housenumber": "325",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.763353,
+    "lon": -84.3583169
+  },
+  {
+    "street": "Bernina Avenue Northeast",
+    "housenumber": "913",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7639997,
+    "lon": -84.3577859
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "312",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7633214,
+    "lon": -84.3580319
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "240, Suite 2B",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.762055,
+    "lon": -84.3599633
+  },
+  {
+    "street": "Moreland Avenue Northeast",
+    "housenumber": "292",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.762309,
+    "lon": -84.3496422
+  },
+  {
+    "street": "Dekalb Avenue Northeast",
+    "housenumber": "1238",
+    "city": "Atlanta",
+    "lat": 33.7609981,
+    "lon": -84.3474244
+  },
+  {
+    "street": "14th Street NW",
+    "housenumber": "250",
+    "city": "Atlanta",
+    "lat": 33.7856197,
+    "lon": -84.3950197
+  },
+  {
+    "street": "Hosea L Williams Drive Northeast",
+    "housenumber": "1992",
+    "city": "Atlanta",
+    "lat": 33.7513898,
+    "lon": -84.3224426
+  },
+  {
+    "street": "Luckie Street Northwest",
+    "housenumber": "60",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7566131,
+    "lon": -84.3890915
+  },
+  {
+    "street": "Hill Street Southeast",
+    "housenumber": "916",
+    "city": "Atlanta",
+    "lat": 33.7294975,
+    "lon": -84.3782918
+  },
+  {
+    "street": "Cherokee Avenue S.E.",
+    "housenumber": "700",
+    "city": "Atlanta",
+    "lat": 33.7363316,
+    "lon": -84.3733083
+  },
+  {
+    "street": "Courtland Street",
+    "housenumber": "116",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7572421,
+    "lon": -84.3841091
+  },
+  {
+    "street": "Walker Street Southwest",
+    "housenumber": "180",
+    "city": "Atlanta",
+    "lat": 33.7497558,
+    "lon": -84.4008807
+  },
+  {
+    "street": "Ponce de Leon Avenue",
+    "housenumber": "566",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7738799,
+    "lon": -84.3679353
+  },
+  {
+    "street": "Ponce De Leon Avenue Northeast",
+    "housenumber": "425",
+    "city": "Atlanta",
+    "lat": 33.7725347,
+    "lon": -84.3734617
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "410",
+    "city": "Atlanta",
+    "postcode": "30308-2501",
+    "lat": 33.7714975,
+    "lon": -84.3737256
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "460",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7713964,
+    "lon": -84.3719343
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "386",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7715555,
+    "lon": -84.3744445
+  },
+  {
+    "street": "Ponce De Leon Avenue",
+    "housenumber": "429",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7726747,
+    "lon": -84.3730014
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "129",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7710404,
+    "lon": -84.3831791
+  },
+  {
+    "street": "Crown Road Southeast",
+    "housenumber": "3900",
+    "city": "Atlanta",
+    "postcode": "30304",
+    "lat": 33.651969,
+    "lon": -84.3935183
+  },
+  {
+    "street": "West Peachtree Street Northeast",
+    "housenumber": "1521",
+    "city": "Atlanta",
+    "lat": 33.7959431,
+    "lon": -84.3874177
+  },
+  {
+    "street": "Peachtree Road",
+    "housenumber": "2143",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8127925,
+    "lon": -84.3916046
+  },
+  {
+    "street": "Piedmont Avenue Northeast",
+    "housenumber": "1001",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7820276,
+    "lon": -84.3801928
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1541",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8091718,
+    "lon": -84.4493533
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1501",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8078747,
+    "lon": -84.4484574
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1542",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8091058,
+    "lon": -84.4495322
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1502",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8078435,
+    "lon": -84.448849
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1663",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8093634,
+    "lon": -84.4492031
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1655",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8091807,
+    "lon": -84.4487686
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1669",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8095061,
+    "lon": -84.4494123
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1721",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8110304,
+    "lon": -84.4487793
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1697",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8104064,
+    "lon": -84.4490314
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1716",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8107095,
+    "lon": -84.4487096
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1674",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8097512,
+    "lon": -84.4491226
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1687",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8101524,
+    "lon": -84.4491387
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1662",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8096398,
+    "lon": -84.4488973
+  },
+  {
+    "street": "Carr Circle NW",
+    "housenumber": "1650",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8094526,
+    "lon": -84.4484843
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1641",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8104555,
+    "lon": -84.4475616
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1567",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8098047,
+    "lon": -84.4486988
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1580",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8105089,
+    "lon": -84.4486184
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1560",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8098716,
+    "lon": -84.4489402
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1638",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8111552,
+    "lon": -84.4470841
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1740",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8112005,
+    "lon": -84.4487823
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1598",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8113068,
+    "lon": -84.4486345
+  },
+  {
+    "street": "Barfield Run NW",
+    "housenumber": "1669",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.80931,
+    "lon": -84.4495142
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1664",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8103975,
+    "lon": -84.4473041
+  },
+  {
+    "street": "Gilstrap Lane NW",
+    "housenumber": "1646",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8110661,
+    "lon": -84.4470412
+  },
+  {
+    "street": "Gates Place NW",
+    "housenumber": "1626",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8103886,
+    "lon": -84.447921
+  },
+  {
+    "street": "Gates Place NW",
+    "housenumber": "1614",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8095818,
+    "lon": -84.4483019
+  },
+  {
+    "street": "Gates Place NW",
+    "housenumber": "1600",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8082759,
+    "lon": -84.448495
+  },
+  {
+    "street": "Gates Place NW",
+    "housenumber": "1612",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8089667,
+    "lon": -84.4488544
+  },
+  {
+    "street": "Dupont Commons Drive NW",
+    "housenumber": "1616",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.808004,
+    "lon": -84.4482592
+  },
+  {
+    "street": "Dupont Commons Drive NW",
+    "housenumber": "1604",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8076298,
+    "lon": -84.4485382
+  },
+  {
+    "street": "Dupont Commons Drive NW",
+    "housenumber": "1620",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8081288,
+    "lon": -84.4482056
+  },
+  {
+    "street": "Dupont Commons Drive NW",
+    "housenumber": "1600",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8075404,
+    "lon": -84.4486562
+  },
+  {
+    "street": "Glenwood Avenue SE",
+    "housenumber": "1279",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7400291,
+    "lon": -84.3456828
+  },
+  {
+    "street": "Flat Shoals Avenue SE",
+    "housenumber": "510",
+    "city": "Atlanta",
+    "lat": 33.7403458,
+    "lon": -84.3454252
+  },
+  {
+    "street": "Glen Iris Drive NE",
+    "housenumber": "620",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7713105,
+    "lon": -84.3678707
+  },
+  {
+    "street": "10th Street NW",
+    "housenumber": "100",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.781285,
+    "lon": -84.3901179
+  },
+  {
+    "street": "Peachtree Road Northeast",
+    "housenumber": "2221",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.8140715,
+    "lon": -84.3903596
+  },
+  {
+    "street": "Huff Road Northwest",
+    "housenumber": "1133",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.789128,
+    "lon": -84.426118
+  },
+  {
+    "street": "Boulevard Southeast",
+    "housenumber": "520",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7406544,
+    "lon": -84.3676064
+  },
+  {
+    "street": "Boulevard SE",
+    "housenumber": "448",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7420573,
+    "lon": -84.3675392
+  },
+  {
+    "street": "Boulevard Southeast",
+    "housenumber": "447",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7422402,
+    "lon": -84.3684889
+  },
+  {
+    "street": "Garrett Street SE",
+    "housenumber": "928",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7406611,
+    "lon": -84.3572531
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "2020",
+    "city": "Atlanta",
+    "postcode": "30318-1732",
+    "lat": 33.8102117,
+    "lon": -84.4145863
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "650",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7751411,
+    "lon": -84.3658985
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "650",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7714564,
+    "lon": -84.3673949
+  },
+  {
+    "street": "Ponce De Leon Avenue Northeast",
+    "housenumber": "718",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7739207,
+    "lon": -84.3635876
+  },
+  {
+    "street": "Memorial Drive Southeast",
+    "housenumber": "437",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.746078,
+    "lon": -84.3727959
+  },
+  {
+    "street": "Howell Mill Road",
+    "housenumber": "1198",
+    "city": "Atlanta",
+    "lat": 33.7871341,
+    "lon": -84.4126599
+  },
+  {
+    "street": "Cone Street Northwest",
+    "housenumber": "131",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7580206,
+    "lon": -84.3896289
+  },
+  {
+    "street": "Marietta Street",
+    "housenumber": "101",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7569676,
+    "lon": -84.3923429
+  },
+  {
+    "street": "Ted Turner Drive Northwest",
+    "housenumber": "76",
+    "city": "Atlanta",
+    "lat": 33.7571903,
+    "lon": -84.3926492
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "Suite 1200",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7863081,
+    "lon": -84.3833146
+  },
+  {
+    "street": "West Peachtree Street Northwest",
+    "housenumber": "1041",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7830897,
+    "lon": -84.3875018
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "737",
+    "city": "Atlanta",
+    "lat": 33.7735268,
+    "lon": -84.3628805
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "602",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7707666,
+    "lon": -84.352723
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "1394",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7926253,
+    "lon": -84.3528263
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "1033",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7828246,
+    "lon": -84.3541834
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "1025",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7826476,
+    "lon": -84.3541565
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "854",
+    "city": "Atlanta",
+    "postcode": "30306-4507",
+    "lat": 33.7777539,
+    "lon": -84.3529805
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "778",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.775858,
+    "lon": -84.352712
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "752",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7750662,
+    "lon": -84.3530571
+  },
+  {
+    "street": "Greenwood Avenue Northeast",
+    "housenumber": "1044",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7768443,
+    "lon": -84.3530763
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "776",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7757452,
+    "lon": -84.3526962
+  },
+  {
+    "street": "North Highland Avenue Northeast",
+    "housenumber": "832",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.7772288,
+    "lon": -84.3528518
+  },
+  {
+    "street": "Boulevard Northeast",
+    "housenumber": "660",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.772713,
+    "lon": -84.3716686
+  },
+  {
+    "street": "Ponce de Leon Avenue Northeast",
+    "housenumber": "224",
+    "city": "Atlanta",
+    "lat": 33.7728357,
+    "lon": -84.3799419
+  },
+  {
+    "street": "Avenue Place",
+    "housenumber": "1520",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8012458,
+    "lon": -84.3288666
+  },
+  {
+    "street": "North Avenue Northeast",
+    "housenumber": "1079",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7708957,
+    "lon": -84.3522105
+  },
+  {
+    "street": "Barnett Street Northeast",
+    "housenumber": "730",
+    "city": "Atlanta",
+    "lat": 33.7743608,
+    "lon": -84.3590009
+  },
+  {
+    "street": "Bill Kennedy Way",
+    "housenumber": "475",
+    "city": "Atlanta",
+    "postcode": "30315",
+    "lat": 33.7403577,
+    "lon": -84.3583541
+  },
+  {
+    "street": "Moreland Avenue",
+    "housenumber": "749",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7339183,
+    "lon": -84.3494935
+  },
+  {
+    "street": "Moreland Avenue",
+    "housenumber": "749",
+    "city": "Atlanta",
+    "lat": 33.7339383,
+    "lon": -84.3497107
+  },
+  {
+    "street": "Glenwood Avenue Southeast",
+    "housenumber": "880",
+    "city": "Atlanta",
+    "lat": 33.7404562,
+    "lon": -84.358365
+  },
+  {
+    "street": "Sampson Street Northeast",
+    "housenumber": "151",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.758223,
+    "lon": -84.3650178
+  },
+  {
+    "street": "10th Street Northeast",
+    "housenumber": "230",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7819402,
+    "lon": -84.379972
+  },
+  {
+    "street": "10th Street Northeast",
+    "housenumber": "227",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7816659,
+    "lon": -84.3799211
+  },
+  {
+    "street": "Kirkwood Avenue Southeast",
+    "housenumber": "692B",
+    "city": "Atlanta",
+    "postcode": "30316",
+    "lat": 33.7504418,
+    "lon": -84.3643866
+  },
+  {
+    "street": "Carroll Street Southeast",
+    "housenumber": "208",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7489743,
+    "lon": -84.3679405
+  },
+  {
+    "street": "Cheshire Bridge Road",
+    "housenumber": "2321",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.8180542,
+    "lon": -84.3498928
+  },
+  {
+    "street": "Marietta NW",
+    "housenumber": "1031",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7794715,
+    "lon": -84.4107885
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "1684",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.8003716,
+    "lon": -84.3719173
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "1544",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.798133,
+    "lon": -84.37076
+  },
+  {
+    "street": "10th Street Northwest",
+    "housenumber": "97",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7818043,
+    "lon": -84.3902501
+  },
+  {
+    "street": "10th Street Northeast",
+    "housenumber": "125",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7814868,
+    "lon": -84.3829548
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "925",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7798485,
+    "lon": -84.3840567
+  },
+  {
+    "street": "10th Street Northwest",
+    "housenumber": "97",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7821102,
+    "lon": -84.390334
+  },
+  {
+    "street": "Peachtree Road",
+    "housenumber": "1197",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7870427,
+    "lon": -84.3829289
+  },
+  {
+    "street": "14th Street Northwest",
+    "housenumber": "365",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.786412,
+    "lon": -84.3990859
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "1175",
+    "city": "Atlanta",
+    "postcode": "30361",
+    "lat": 33.7876873,
+    "lon": -84.3832231
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1058",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7836184,
+    "lon": -84.4120813
+  },
+  {
+    "street": "10th Street Northwest",
+    "housenumber": "535",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7818564,
+    "lon": -84.4050344
+  },
+  {
+    "street": "Hemphill Avenue Northwest",
+    "housenumber": "1093",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7846556,
+    "lon": -84.4056305
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "1801",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8044115,
+    "lon": -84.4133399
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "931",
+    "city": "Atlanta",
+    "lat": 33.7803409,
+    "lon": -84.3686685
+  },
+  {
+    "street": "Monroe Drive Northeast",
+    "housenumber": "1035",
+    "city": "Atlanta",
+    "postcode": "30306",
+    "lat": 33.782909,
+    "lon": -84.36811
+  },
+  {
+    "street": "18th Street",
+    "housenumber": "375",
+    "city": "Atlanta",
+    "postcode": "30363-1190",
+    "lat": 33.793086,
+    "lon": -84.399525
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2625",
+    "city": "Atlanta",
+    "postcode": "30324-3011",
+    "lat": 33.828273,
+    "lon": -84.3663
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "654",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7723842,
+    "lon": -84.3850584
+  },
+  {
+    "street": "West Main Street",
+    "housenumber": "3101",
+    "city": "Atlanta",
+    "postcode": "75551",
+    "lat": 33.1002745,
+    "lon": -94.215834
+  },
+  {
+    "street": "5th Street Northwest",
+    "housenumber": "85",
+    "city": "Atlanta",
+    "postcode": "30308",
+    "lat": 33.7771046,
+    "lon": -84.3898251
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "235",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7604838,
+    "lon": -84.3874051
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "270",
+    "city": "Atlanta",
+    "lat": 33.7621298,
+    "lon": -84.3878635
+  },
+  {
+    "street": "Ralph McGill Boulevard",
+    "housenumber": "723",
+    "city": "Atlanta",
+    "lat": 33.7663377,
+    "lon": -84.3630041
+  },
+  {
+    "street": "Chattahoochee Avenue Northwest",
+    "housenumber": "935",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7999589,
+    "lon": -84.4186821
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "3432",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8486648,
+    "lon": -84.3734664
+  },
+  {
+    "street": "Piedmont Road Northeast",
+    "housenumber": "2625",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.826407,
+    "lon": -84.365495
+  },
+  {
+    "street": "Caroline Street",
+    "housenumber": "1270",
+    "city": "Atlanta",
+    "postcode": "30307",
+    "lat": 33.7583378,
+    "lon": -84.3466381
+  },
+  {
+    "street": "Cherokee Avenue Southeast",
+    "housenumber": "452A",
+    "city": "Atlanta",
+    "postcode": "30312",
+    "lat": 33.7422084,
+    "lon": -84.3732891
+  },
+  {
+    "street": "Walton Street Northwest",
+    "housenumber": "150",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7581942,
+    "lon": -84.392804
+  },
+  {
+    "street": "Andrew Young International Boulevard",
+    "housenumber": "101",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7600184,
+    "lon": -84.3909147
+  },
+  {
+    "street": "Peachtree Center Avenue Northeast",
+    "housenumber": "303",
+    "city": "Atlanta",
+    "lat": 33.7624344,
+    "lon": -84.3858457
+  },
+  {
+    "street": "Peachtree Center Avenue Northeast",
+    "housenumber": "303",
+    "city": "Atlanta",
+    "lat": 33.7627199,
+    "lon": -84.385835
+  },
+  {
+    "street": "Peachtree Street Northwest",
+    "housenumber": "210",
+    "city": "Atlanta",
+    "lat": 33.7594309,
+    "lon": -84.3885801
+  },
+  {
+    "street": "Peachtree Street Northeast",
+    "housenumber": "1080",
+    "city": "Atlanta",
+    "postcode": "30309",
+    "lat": 33.7838568,
+    "lon": -84.3836206
+  },
+  {
+    "street": "Peachtree Street",
+    "housenumber": "52",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.755184,
+    "lon": -84.389284
+  },
+  {
+    "street": "Peachtree Street",
+    "housenumber": "123",
+    "city": "Atlanta",
+    "postcode": "30303",
+    "lat": 33.7566615,
+    "lon": -84.3880778
+  },
+  {
+    "street": "Miami Circle Northeast",
+    "housenumber": "764",
+    "city": "Atlanta",
+    "postcode": "30324",
+    "lat": 33.8312303,
+    "lon": -84.3621253
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1049",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8643912,
+    "lon": -84.4216544
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1075",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8644864,
+    "lon": -84.4224651
+  },
+  {
+    "street": "Dumbarton Road Northwest",
+    "housenumber": "3873",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8614735,
+    "lon": -84.417457
+  },
+  {
+    "street": "The Highlands Northwest",
+    "housenumber": "3895",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8618142,
+    "lon": -84.422069
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4000",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8648562,
+    "lon": -84.4209777
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4036",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8654012,
+    "lon": -84.4204069
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4041",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.865371,
+    "lon": -84.4199355
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4045",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8655373,
+    "lon": -84.419731
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4056",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8659277,
+    "lon": -84.4199074
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4059",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8659128,
+    "lon": -84.4194717
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4073",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.866328,
+    "lon": -84.4193118
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4080",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8666067,
+    "lon": -84.4196352
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4099",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8671677,
+    "lon": -84.4191453
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4100",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8671051,
+    "lon": -84.4195479
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4112",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8675255,
+    "lon": -84.4195368
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4115",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8675724,
+    "lon": -84.4191292
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4126",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8678833,
+    "lon": -84.4195191
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4131",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8679937,
+    "lon": -84.4191147
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4145",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8683561,
+    "lon": -84.4191021
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4159",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8689151,
+    "lon": -84.4193063
+  },
+  {
+    "street": "Glen Devon Drive Northwest",
+    "housenumber": "4160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8686505,
+    "lon": -84.4173169
+  },
+  {
+    "street": "Glen Devon Drive Northwest",
+    "housenumber": "4161",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8686115,
+    "lon": -84.4169011
+  },
+  {
+    "street": "Glen Devon Drive Northwest",
+    "housenumber": "4170",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8690483,
+    "lon": -84.4170123
+  },
+  {
+    "street": "Glen Devon Drive Northwest",
+    "housenumber": "4188",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8693432,
+    "lon": -84.4166453
+  },
+  {
+    "street": "Glen Devon Drive Northwest",
+    "housenumber": "4190",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8694751,
+    "lon": -84.4162204
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "785",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8649901,
+    "lon": -84.4135524
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "801",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8648712,
+    "lon": -84.414292
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "878",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8645527,
+    "lon": -84.4143078
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "881",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8647695,
+    "lon": -84.4154479
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "900",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8644708,
+    "lon": -84.415729
+  },
+  {
+    "street": "Buckingham Circle Northwest",
+    "housenumber": "964",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8597341,
+    "lon": -84.4195723
+  },
+  {
+    "street": "Buckingham Circle Northwest",
+    "housenumber": "967",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8600428,
+    "lon": -84.4194574
+  },
+  {
+    "street": "Buckingham Circle Northwest",
+    "housenumber": "979",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8601286,
+    "lon": -84.419804
+  },
+  {
+    "street": "Buckingham Circle Northwest",
+    "housenumber": "985",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8599538,
+    "lon": -84.4202471
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1095",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646291,
+    "lon": -84.4231071
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1125",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8648765,
+    "lon": -84.4236201
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1130",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646805,
+    "lon": -84.4239774
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1145",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8652496,
+    "lon": -84.4240856
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1155",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8657066,
+    "lon": -84.424419
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8662591,
+    "lon": -84.4257246
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1165",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8661599,
+    "lon": -84.4247932
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1175",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8666142,
+    "lon": -84.4253759
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1185",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8669586,
+    "lon": -84.425934
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1200",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.867035,
+    "lon": -84.426474
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "1212",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8671303,
+    "lon": -84.4272473
+  },
+  {
+    "street": "Beechwood Hills Court Northwest",
+    "housenumber": "1287",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8602247,
+    "lon": -84.4313184
+  },
+  {
+    "street": "Beechwood Hills Court Northwest",
+    "housenumber": "1315",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8610493,
+    "lon": -84.4311102
+  },
+  {
+    "street": "Beechwood Hills Court Northwest",
+    "housenumber": "1327",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8613264,
+    "lon": -84.4313934
+  },
+  {
+    "street": "Beechwood Hills Court Northwest",
+    "housenumber": "1339",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8614957,
+    "lon": -84.4318948
+  },
+  {
+    "street": "Beechwood Hills Court Northwest",
+    "housenumber": "1360",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8612045,
+    "lon": -84.4326407
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1495",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8694902,
+    "lon": -84.4275324
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8695927,
+    "lon": -84.4271623
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1515",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8691015,
+    "lon": -84.4277562
+  },
+  {
+    "street": "Stonegate Way Northwest",
+    "housenumber": "1521",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8687337,
+    "lon": -84.4275421
+  },
+  {
+    "street": "Stonegate Way Northwest",
+    "housenumber": "1537",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8685584,
+    "lon": -84.4265018
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1560",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8681285,
+    "lon": -84.4280748
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1580",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8675313,
+    "lon": -84.4284657
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1611",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.867421,
+    "lon": -84.4292488
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1685",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.867817,
+    "lon": -84.4314877
+  },
+  {
+    "street": "Randall Ridge Road Northwest",
+    "housenumber": "3833",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.859804,
+    "lon": -84.4289459
+  },
+  {
+    "street": "Randall Ridge Road Northwest",
+    "housenumber": "3840",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8602042,
+    "lon": -84.4289796
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3849",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8605697,
+    "lon": -84.4328272
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3855",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8599515,
+    "lon": -84.4244436
+  },
+  {
+    "street": "Randall Ridge Road Northwest",
+    "housenumber": "3856",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8604761,
+    "lon": -84.4285984
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3865",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8609977,
+    "lon": -84.4246961
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3895",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8614746,
+    "lon": -84.432851
+  },
+  {
+    "street": "Randall Ridge Road Northwest",
+    "housenumber": "3900",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.862524,
+    "lon": -84.4274077
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3910",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.862572,
+    "lon": -84.4254538
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3940",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8629851,
+    "lon": -84.4327504
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3958",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8634174,
+    "lon": -84.4325642
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3970",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8638268,
+    "lon": -84.4323621
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3980",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8625293,
+    "lon": -84.4262798
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3986",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8643171,
+    "lon": -84.432054
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3990",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.862773,
+    "lon": -84.4290557
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3995",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8633806,
+    "lon": -84.4290042
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4000",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.863349,
+    "lon": -84.4293224
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "4010",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8648721,
+    "lon": -84.4317645
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4015",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8637202,
+    "lon": -84.4289076
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4020",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8639905,
+    "lon": -84.4290352
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "4034",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8657662,
+    "lon": -84.4322053
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4035",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8641837,
+    "lon": -84.4285917
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4040",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8651782,
+    "lon": -84.4283953
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4041",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646821,
+    "lon": -84.4283244
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4060",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8660538,
+    "lon": -84.4288728
+  },
+  {
+    "street": "Paran Trail Northwest",
+    "housenumber": "4065",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8666392,
+    "lon": -84.4314067
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4084",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8665648,
+    "lon": -84.4286754
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4086",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8665536,
+    "lon": -84.429055
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "4099",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8669493,
+    "lon": -84.4288121
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "4100",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8668095,
+    "lon": -84.4328041
+  },
+  {
+    "street": "Conway Valley Road Northwest",
+    "housenumber": "4268",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8680891,
+    "lon": -84.4229117
+  },
+  {
+    "street": "Ellsworth Industrial Drive Northwest",
+    "housenumber": "1320",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.7908714,
+    "lon": -84.4276569
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1560",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8637578,
+    "lon": -84.4349456
+  },
+  {
+    "street": "Paran Glen Road Northwest",
+    "housenumber": "1567",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8619806,
+    "lon": -84.4378169
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1574",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8641896,
+    "lon": -84.4350057
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1577",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8644356,
+    "lon": -84.4346527
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1577",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.869631,
+    "lon": -84.438882
+  },
+  {
+    "street": "Paran Glen Road Northwest",
+    "housenumber": "1585",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8616373,
+    "lon": -84.4393141
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1586",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646455,
+    "lon": -84.4349938
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1593",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8696361,
+    "lon": -84.4393569
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1609",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8696364,
+    "lon": -84.4399175
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1617",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8696392,
+    "lon": -84.4404704
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1622",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8658671,
+    "lon": -84.4355845
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1632",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8693028,
+    "lon": -84.4407298
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1639",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8696443,
+    "lon": -84.4409091
+  },
+  {
+    "street": "Musket Ridge Northwest",
+    "housenumber": "1648",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8693822,
+    "lon": -84.4412535
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1726",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8673807,
+    "lon": -84.4339235
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1740",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.867513,
+    "lon": -84.4340952
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1754",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8680043,
+    "lon": -84.4345253
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1785",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8683287,
+    "lon": -84.4344795
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1795",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8680988,
+    "lon": -84.4350369
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1880",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8667695,
+    "lon": -84.4371904
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2010",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8640279,
+    "lon": -84.4396143
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2075",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8624122,
+    "lon": -84.4400066
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3830",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8599279,
+    "lon": -84.4333108
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3850",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8604038,
+    "lon": -84.4331376
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3880",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8612111,
+    "lon": -84.4331606
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3922",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8622614,
+    "lon": -84.4330644
+  },
+  {
+    "street": "Beechwood Drive Northwest",
+    "housenumber": "3930",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8626025,
+    "lon": -84.4329234
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3947",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8611576,
+    "lon": -84.4423304
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3950",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8608185,
+    "lon": -84.4422933
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3969",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8610585,
+    "lon": -84.441609
+  },
+  {
+    "street": "Paran Pointe Drive Northwest",
+    "housenumber": "4060",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8649844,
+    "lon": -84.4366881
+  },
+  {
+    "street": "Flintlock Road Northwest",
+    "housenumber": "4121",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8678734,
+    "lon": -84.4394905
+  },
+  {
+    "street": "Paran Pointe Drive Northwest",
+    "housenumber": "4121",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8665111,
+    "lon": -84.436338
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4150",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8683927,
+    "lon": -84.4329637
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4151",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8687924,
+    "lon": -84.4328993
+  },
+  {
+    "street": "Flintlock Road Northwest",
+    "housenumber": "4155",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8692146,
+    "lon": -84.4395913
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8693375,
+    "lon": -84.4335775
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4161",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8690139,
+    "lon": -84.4331298
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4181",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8692319,
+    "lon": -84.4332754
+  },
+  {
+    "street": "Sentinel Post Road Northwest",
+    "housenumber": "4245",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8688433,
+    "lon": -84.4375378
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3865",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8606439,
+    "lon": -84.4450886
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3876",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8606689,
+    "lon": -84.4445408
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3885",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8610281,
+    "lon": -84.4445069
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3905",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8610818,
+    "lon": -84.4437773
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "4160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8634076,
+    "lon": -84.4436921
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "4200",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8638138,
+    "lon": -84.4468261
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "4240",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8640604,
+    "lon": -84.4494427
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4406",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8647995,
+    "lon": -84.4526113
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4408",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646489,
+    "lon": -84.4533067
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4424",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8642818,
+    "lon": -84.4539021
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4426",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8643532,
+    "lon": -84.4538953
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4428",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.864423,
+    "lon": -84.4538866
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4430",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8645039,
+    "lon": -84.4538756
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4432",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8646569,
+    "lon": -84.453865
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4434",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8647481,
+    "lon": -84.4538664
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4436",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8648336,
+    "lon": -84.4538699
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4438",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.864918,
+    "lon": -84.4538684
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4440",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8649952,
+    "lon": -84.4538607
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4442",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8650751,
+    "lon": -84.4538476
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4446",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.865243,
+    "lon": -84.4538214
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4448",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8653329,
+    "lon": -84.4537985
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4450",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8654141,
+    "lon": -84.453762
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4452",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8654913,
+    "lon": -84.4537082
+  },
+  {
+    "street": "Paces Battle Northwest",
+    "housenumber": "4454",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.865665,
+    "lon": -84.4536815
+  },
+  {
+    "street": "Swathmore Drive Northwest",
+    "housenumber": "1005",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8758225,
+    "lon": -84.4200633
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1010",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8758456,
+    "lon": -84.4132682
+  },
+  {
+    "street": "Swathmore Drive Northwest",
+    "housenumber": "1021",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8758298,
+    "lon": -84.420566
+  },
+  {
+    "street": "Somerset Drive Northwest",
+    "housenumber": "1023",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8775555,
+    "lon": -84.4205741
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "1025",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8740083,
+    "lon": -84.4200645
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "1039",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8738683,
+    "lon": -84.4210802
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "1051",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8737951,
+    "lon": -84.4216113
+  },
+  {
+    "street": "Garmon Drive Northwest",
+    "housenumber": "1123",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8774233,
+    "lon": -84.4218614
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1200",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8719999,
+    "lon": -84.4180681
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1210",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8717342,
+    "lon": -84.4184393
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1220",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8713155,
+    "lon": -84.4187534
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1240",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8711301,
+    "lon": -84.4194253
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1260",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8710055,
+    "lon": -84.4200939
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1276",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8709449,
+    "lon": -84.4207328
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1325",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8712172,
+    "lon": -84.4221241
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1330",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8709156,
+    "lon": -84.4225353
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4203",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8700722,
+    "lon": -84.4155626
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4204",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8702463,
+    "lon": -84.4158501
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4219",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8703922,
+    "lon": -84.4153325
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4220",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8706101,
+    "lon": -84.4156613
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4233",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8710756,
+    "lon": -84.4152371
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4234",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8711237,
+    "lon": -84.4156577
+  },
+  {
+    "street": "Harrogate Drive Northwest",
+    "housenumber": "4247",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.871365,
+    "lon": -84.4153206
+  },
+  {
+    "street": "Wickersham Drive Northwest",
+    "housenumber": "4254",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8711879,
+    "lon": -84.4132562
+  },
+  {
+    "street": "Wickersham Drive Northwest",
+    "housenumber": "4285",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8722856,
+    "lon": -84.4135548
+  },
+  {
+    "street": "Wickersham Drive Northwest",
+    "housenumber": "4298",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.872355,
+    "lon": -84.4139981
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4323",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8733391,
+    "lon": -84.4177241
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4335",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8737293,
+    "lon": -84.4179566
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4336",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.873789,
+    "lon": -84.4183741
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4345",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8739879,
+    "lon": -84.4178766
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4375",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8744206,
+    "lon": -84.4174944
+  },
+  {
+    "street": "Paran Place Northwest",
+    "housenumber": "4390",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8753273,
+    "lon": -84.4158983
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4423",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.875968,
+    "lon": -84.417395
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4467",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8771652,
+    "lon": -84.4173692
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4486",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8776483,
+    "lon": -84.4177597
+  },
+  {
+    "street": "Mount Paran Parkway Northwest",
+    "housenumber": "4487",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8777225,
+    "lon": -84.4173571
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4510",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8782024,
+    "lon": -84.4136592
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "955",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8742879,
+    "lon": -84.4181055
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "955",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8767996,
+    "lon": -84.4130847
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "977",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8741702,
+    "lon": -84.4188895
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "979",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8764918,
+    "lon": -84.413951
+  },
+  {
+    "street": "Coronado Drive Northwest",
+    "housenumber": "986",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8737428,
+    "lon": -84.4195256
+  },
+  {
+    "street": "Swathmore Drive Northwest",
+    "housenumber": "989",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8758151,
+    "lon": -84.419546
+  },
+  {
+    "street": "Harris Glen Northwest",
+    "housenumber": "11",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8720672,
+    "lon": -84.4302812
+  },
+  {
+    "street": "Swathmore Drive Northwest",
+    "housenumber": "1123",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8757143,
+    "lon": -84.4237377
+  },
+  {
+    "street": "Swims Valley Drive Northwest",
+    "housenumber": "1252",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.87748,
+    "lon": -84.4279839
+  },
+  {
+    "street": "Swims Valley Drive Northwest",
+    "housenumber": "1282",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8774133,
+    "lon": -84.4294416
+  },
+  {
+    "street": "Swims Valley Drive Northwest",
+    "housenumber": "1298",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.876707,
+    "lon": -84.4298653
+  },
+  {
+    "street": "Monte Carlo Drive Northwest",
+    "housenumber": "1315",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8737216,
+    "lon": -84.4284681
+  },
+  {
+    "street": "Monte Carlo Drive Northwest",
+    "housenumber": "1320",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8735424,
+    "lon": -84.4288139
+  },
+  {
+    "street": "Monte Carlo Drive Northwest",
+    "housenumber": "1325",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8742356,
+    "lon": -84.4287662
+  },
+  {
+    "street": "Monte Carlo Drive Northwest",
+    "housenumber": "1330",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8739616,
+    "lon": -84.4291103
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1350",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8708364,
+    "lon": -84.423116
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1376",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8707016,
+    "lon": -84.4237487
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1420",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8702277,
+    "lon": -84.4249204
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1475",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8699253,
+    "lon": -84.4272546
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "1480",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8700209,
+    "lon": -84.4267601
+  },
+  {
+    "street": "Garmon Road Northwest",
+    "housenumber": "4271",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8713987,
+    "lon": -84.4264898
+  },
+  {
+    "street": "Garmon Road Northwest",
+    "housenumber": "4272",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8716293,
+    "lon": -84.4268832
+  },
+  {
+    "street": "Garmon Road Northwest",
+    "housenumber": "4300",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8723021,
+    "lon": -84.4268758
+  },
+  {
+    "street": "Garmon Road Northwest",
+    "housenumber": "4310",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8729328,
+    "lon": -84.4268688
+  },
+  {
+    "street": "Garmon Road Northwest",
+    "housenumber": "4315",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8738125,
+    "lon": -84.4264571
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4321",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8735223,
+    "lon": -84.431207
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4326",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8732233,
+    "lon": -84.4316944
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4331",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8741746,
+    "lon": -84.4317117
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4341",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8748795,
+    "lon": -84.4315476
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4381",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.875482,
+    "lon": -84.431637
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4405",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8759918,
+    "lon": -84.432077
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4415",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8763284,
+    "lon": -84.4324505
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4434",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8761831,
+    "lon": -84.43275
+  },
+  {
+    "street": "Garmon Drive Northwest",
+    "housenumber": "4451",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8769601,
+    "lon": -84.425483
+  },
+  {
+    "street": "Harris Glen Northwest",
+    "housenumber": "7",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.871909,
+    "lon": -84.4291418
+  },
+  {
+    "street": "Harris Glen Northwest",
+    "housenumber": "8",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8720292,
+    "lon": -84.4290771
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "1500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.876609,
+    "lon": -84.4359235
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "1501",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.877419,
+    "lon": -84.4361636
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4191",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8698564,
+    "lon": -84.4334023
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4220",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8704216,
+    "lon": -84.4336905
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4225",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8705183,
+    "lon": -84.4333228
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4255",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8712997,
+    "lon": -84.4334436
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4270",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8715724,
+    "lon": -84.4339387
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4280",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8751229,
+    "lon": -84.434934
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "4290",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8723279,
+    "lon": -84.4375477
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "4295",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8726508,
+    "lon": -84.4370931
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "4315",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8734862,
+    "lon": -84.4374775
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "4318",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8731838,
+    "lon": -84.4376793
+  },
+  {
+    "street": "Whitewater Creek Road Northwest",
+    "housenumber": "4335",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8738433,
+    "lon": -84.4375908
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4355",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8737714,
+    "lon": -84.4341836
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4370",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8744682,
+    "lon": -84.4347994
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4395",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8754024,
+    "lon": -84.4347367
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4445",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8765411,
+    "lon": -84.4330377
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4454",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8762938,
+    "lon": -84.4333947
+  },
+  {
+    "street": "Harris Valley Road Northwest",
+    "housenumber": "4465",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8765582,
+    "lon": -84.4337921
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8781783,
+    "lon": -84.4346015
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4501",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8778619,
+    "lon": -84.4346582
+  },
+  {
+    "street": "Harris Trail Northwest",
+    "housenumber": "4521",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8781911,
+    "lon": -84.43388
+  },
+  {
+    "street": "Sentinel Post Road Northwest",
+    "housenumber": "4555",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8747702,
+    "lon": -84.4428573
+  },
+  {
+    "street": "Sentinel Post Road Northwest",
+    "housenumber": "4563",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8754452,
+    "lon": -84.4426626
+  },
+  {
+    "street": "Sentinel View Northwest",
+    "housenumber": "4620",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8754325,
+    "lon": -84.4404912
+  },
+  {
+    "street": "Sentinel View Northwest",
+    "housenumber": "4621",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8749932,
+    "lon": -84.4406994
+  },
+  {
+    "street": "Sentinel Post Road Northwest",
+    "housenumber": "4691",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8739141,
+    "lon": -84.4388353
+  },
+  {
+    "street": "Emory Point Drive",
+    "housenumber": "855 ",
+    "city": "Atlanta",
+    "postcode": "30329",
+    "lat": 33.8017699,
+    "lon": -84.3286359
+  },
+  {
+    "street": "Garraux Road Northwest",
+    "housenumber": "2100",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8546013,
+    "lon": -84.4560339
+  },
+  {
+    "street": "Garraux Road Northwest",
+    "housenumber": "2180",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8536704,
+    "lon": -84.4582887
+  },
+  {
+    "street": "Trafalgar Court Northwest",
+    "housenumber": "1150",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8552217,
+    "lon": -84.424643
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1155",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510853,
+    "lon": -84.4249137
+  },
+  {
+    "street": "Regency Road Northwest",
+    "housenumber": "1165",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8566615,
+    "lon": -84.4253342
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1185",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8506524,
+    "lon": -84.426014
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1191",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8504252,
+    "lon": -84.4266111
+  },
+  {
+    "street": "Paces West Drive Northwest",
+    "housenumber": "1311",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8501946,
+    "lon": -84.4272203
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3464",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8512035,
+    "lon": -84.4328446
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3466",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8512492,
+    "lon": -84.4327686
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3468",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8513431,
+    "lon": -84.432705
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3470",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8513455,
+    "lon": -84.4326252
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3472",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8513912,
+    "lon": -84.4325563
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3474",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8514189,
+    "lon": -84.4325176
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3476",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.851461,
+    "lon": -84.4324488
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3478",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8515007,
+    "lon": -84.4323871
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3480",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8515357,
+    "lon": -84.4323211
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3482",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.851591,
+    "lon": -84.4322523
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3484",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8516307,
+    "lon": -84.4321834
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3486",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8516705,
+    "lon": -84.4321189
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3488",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8517078,
+    "lon": -84.4320629
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3494",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8522738,
+    "lon": -84.4323378
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3496",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.852227,
+    "lon": -84.4324144
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3498",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8521765,
+    "lon": -84.4324885
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8521356,
+    "lon": -84.4325535
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3502",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8520967,
+    "lon": -84.4326115
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3504",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8520577,
+    "lon": -84.4326764
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3508",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8519624,
+    "lon": -84.4328202
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3512",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8518466,
+    "lon": -84.4328708
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3514",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8517944,
+    "lon": -84.4328288
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3516",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8517518,
+    "lon": -84.4327927
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3518",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8517043,
+    "lon": -84.4327449
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3520",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8516376,
+    "lon": -84.4326842
+  },
+  {
+    "street": "Garraux Woods Road Northwest",
+    "housenumber": "1888",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8538291,
+    "lon": -84.4499765
+  },
+  {
+    "street": "Ridgewood Road Northwest",
+    "housenumber": "3483",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8499859,
+    "lon": -84.4452517
+  },
+  {
+    "street": "Parian Ridge Road Northwest",
+    "housenumber": "3825",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8596961,
+    "lon": -84.4450666
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3906",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8573135,
+    "lon": -84.4468376
+  },
+  {
+    "street": "Paces Valley Road Northwest",
+    "housenumber": "3604",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8530836,
+    "lon": -84.4101505
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3696",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8573404,
+    "lon": -84.4045466
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "532",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8561192,
+    "lon": -84.4045453
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4310",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8724352,
+    "lon": -84.4092526
+  },
+  {
+    "street": "East Conway Drive Northwest",
+    "housenumber": "4350",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.874623,
+    "lon": -84.4056909
+  },
+  {
+    "street": "Jett Road Northwest",
+    "housenumber": "4410",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8751273,
+    "lon": -84.4043331
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4425",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8756007,
+    "lon": -84.4102623
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4468",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8769337,
+    "lon": -84.4122934
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8776685,
+    "lon": -84.4128903
+  },
+  {
+    "street": "Allen Court Northwest",
+    "housenumber": "4530",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8779803,
+    "lon": -84.4066875
+  },
+  {
+    "street": "Carriage Way Northwest",
+    "housenumber": "610",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8697569,
+    "lon": -84.4072951
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "700",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8699822,
+    "lon": -84.4106413
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "970",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8758535,
+    "lon": -84.4128525
+  },
+  {
+    "street": "Buckingham Circle Northwest",
+    "housenumber": "1001",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8596463,
+    "lon": -84.4214874
+  },
+  {
+    "street": "Foxcroft Road Northwest",
+    "housenumber": "1071",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.857064,
+    "lon": -84.4179033
+  },
+  {
+    "street": "East Beechwood Drive Northwest",
+    "housenumber": "1110",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8534565,
+    "lon": -84.4228653
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1128",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510805,
+    "lon": -84.4228362
+  },
+  {
+    "street": "Dumbarton Road Northwest",
+    "housenumber": "3517",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8517105,
+    "lon": -84.4148814
+  },
+  {
+    "street": "Ranier Drive Northwest",
+    "housenumber": "3580",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8528297,
+    "lon": -84.4199748
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3620",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8531865,
+    "lon": -84.4228539
+  },
+  {
+    "street": "Dumbarton Road Northwest",
+    "housenumber": "3636",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8550025,
+    "lon": -84.4159131
+  },
+  {
+    "street": "Dumbarton Road Northwest",
+    "housenumber": "3650",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.855412,
+    "lon": -84.4162094
+  },
+  {
+    "street": "Randall Mill Road Northwest",
+    "housenumber": "3700",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8575853,
+    "lon": -84.4220657
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "966",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8500064,
+    "lon": -84.4163822
+  },
+  {
+    "street": "Cave Road Northwest",
+    "housenumber": "1400",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8596035,
+    "lon": -84.4337637
+  },
+  {
+    "street": "Nancy Creek Ridge Northwest",
+    "housenumber": "1610",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8500061,
+    "lon": -84.4393599
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2167",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8596798,
+    "lon": -84.4393239
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2180",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8596249,
+    "lon": -84.4389414
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2241",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8581099,
+    "lon": -84.4391657
+  },
+  {
+    "street": "Mount Paran Road Northwest",
+    "housenumber": "2326",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8557436,
+    "lon": -84.4371317
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3365",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8541056,
+    "lon": -84.4396872
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3452",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8508989,
+    "lon": -84.4333165
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3454",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8509459,
+    "lon": -84.4332462
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3456",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510024,
+    "lon": -84.4331587
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3458",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510662,
+    "lon": -84.4330598
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3460",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8511108,
+    "lon": -84.4329895
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3462",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8511601,
+    "lon": -84.432912
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3522",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8512945,
+    "lon": -84.4331277
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3524",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8512388,
+    "lon": -84.4332073
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3526",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8511869,
+    "lon": -84.4332781
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3528",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8511367,
+    "lon": -84.4333533
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3530",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510866,
+    "lon": -84.4334286
+  },
+  {
+    "street": "Paces Place Northwest",
+    "housenumber": "3532",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8510384,
+    "lon": -84.4334994
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3650",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.854107,
+    "lon": -84.4395192
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3655",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8545724,
+    "lon": -84.4389976
+  },
+  {
+    "street": "Riverly Road Northwest",
+    "housenumber": "3490",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8506431,
+    "lon": -84.4540724
+  },
+  {
+    "street": "Riverly Road Northwest",
+    "housenumber": "3505",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8516515,
+    "lon": -84.4536181
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "4080",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8581207,
+    "lon": -84.4529418
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3836",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8600576,
+    "lon": -84.4037058
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "4118",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8675362,
+    "lon": -84.4067671
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "468",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.859884,
+    "lon": -84.4029371
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "475",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8692011,
+    "lon": -84.4029914
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "520",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8680789,
+    "lon": -84.4041736
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "583",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.867779,
+    "lon": -84.4062885
+  },
+  {
+    "street": "Fairfield Road Northwest",
+    "housenumber": "655",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8606144,
+    "lon": -84.410402
+  },
+  {
+    "street": "Andover Drive Northwest",
+    "housenumber": "671",
+    "city": "Atlanta",
+    "lat": 33.8655977,
+    "lon": -84.4092121
+  },
+  {
+    "street": "Fairfield Road Northwest",
+    "housenumber": "700",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8601295,
+    "lon": -84.4105247
+  },
+  {
+    "street": "Fairfield Road Northwest",
+    "housenumber": "710",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8598833,
+    "lon": -84.4110767
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "711",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8679544,
+    "lon": -84.412465
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "725",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8669957,
+    "lon": -84.4124599
+  },
+  {
+    "street": "Fairfield Road Northwest",
+    "housenumber": "740",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8599756,
+    "lon": -84.412535
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "750",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.865358,
+    "lon": -84.4123923
+  },
+  {
+    "street": "West Conway Drive Northwest",
+    "housenumber": "755",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8654124,
+    "lon": -84.4127371
+  },
+  {
+    "street": "Fairfield Road Northwest",
+    "housenumber": "770",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8606671,
+    "lon": -84.4128592
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2060",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8393555,
+    "lon": -84.4556197
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2100",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8398134,
+    "lon": -84.4563165
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2121",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8406621,
+    "lon": -84.4562862
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2145",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8412129,
+    "lon": -84.4568406
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2167",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8416496,
+    "lon": -84.4573999
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2191",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8420672,
+    "lon": -84.4580374
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2200",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8421059,
+    "lon": -84.4584484
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2201",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8430497,
+    "lon": -84.458433
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2350",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8440921,
+    "lon": -84.4572746
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2400",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8436095,
+    "lon": -84.4562301
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2401",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8437354,
+    "lon": -84.457017
+  },
+  {
+    "street": "West Wieuca Road Northwest",
+    "housenumber": "216",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8741995,
+    "lon": -84.3933571
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "270",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697347,
+    "lon": -84.3962967
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "280",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697339,
+    "lon": -84.3966965
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "286",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697333,
+    "lon": -84.3970515
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "300",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697328,
+    "lon": -84.397346
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "310",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8698113,
+    "lon": -84.397649
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "330",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697286,
+    "lon": -84.3983617
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "340",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697408,
+    "lon": -84.3986943
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "350",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.869747,
+    "lon": -84.399012
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "370",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697498,
+    "lon": -84.3996439
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "390",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697529,
+    "lon": -84.4003297
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "410",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697551,
+    "lon": -84.400993
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "420",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8697386,
+    "lon": -84.4013089
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "4238",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8706364,
+    "lon": -84.3943644
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "4242",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.870856,
+    "lon": -84.3944549
+  },
+  {
+    "street": "Jett Road Northwest",
+    "housenumber": "4383",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8747177,
+    "lon": -84.4013012
+  },
+  {
+    "street": "East Conway Drive Northwest",
+    "housenumber": "4428",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8766084,
+    "lon": -84.4028309
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "225",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8596785,
+    "lon": -84.3952416
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "265",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8595734,
+    "lon": -84.3960898
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "281",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8595643,
+    "lon": -84.3969134
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "309",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8595785,
+    "lon": -84.397724
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "329",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8595385,
+    "lon": -84.3984133
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "336",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8567753,
+    "lon": -84.3980325
+  },
+  {
+    "street": "Tuxedo Park Northwest",
+    "housenumber": "3530",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8521368,
+    "lon": -84.4026751
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "359",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.859357,
+    "lon": -84.399127
+  },
+  {
+    "street": "Tuxedo Park Northwest",
+    "housenumber": "3590",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8498365,
+    "lon": -84.4014568
+  },
+  {
+    "street": "Tuxedo Court Northwest",
+    "housenumber": "3605",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8548443,
+    "lon": -84.4027189
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3668",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8551592,
+    "lon": -84.3979654
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3707",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8555912,
+    "lon": -84.394385
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3727",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.856862,
+    "lon": -84.3936644
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "375",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8591785,
+    "lon": -84.3998194
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "380",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8574347,
+    "lon": -84.3999123
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "409",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8595445,
+    "lon": -84.4008445
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "457",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8576651,
+    "lon": -84.4024619
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "471",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8575412,
+    "lon": -84.4027661
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1745",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8397952,
+    "lon": -84.4445268
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1753",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8399069,
+    "lon": -84.4449606
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1764",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.839764,
+    "lon": -84.4454673
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1776",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8400621,
+    "lon": -84.4455631
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1780",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8398154,
+    "lon": -84.4459674
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1874",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8397857,
+    "lon": -84.4488687
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1915",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8399724,
+    "lon": -84.4502152
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1956",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8397946,
+    "lon": -84.4513853
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2600",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8424799,
+    "lon": -84.4498109
+  },
+  {
+    "street": "Riverly Place Northwest",
+    "housenumber": "8",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8496079,
+    "lon": -84.4519441
+  },
+  {
+    "street": "Paces Forest Drive Northwest",
+    "housenumber": "1220",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8485355,
+    "lon": -84.426501
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3150",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.840651,
+    "lon": -84.4273685
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8408334,
+    "lon": -84.4274707
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3200",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8423651,
+    "lon": -84.428063
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3280",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8444423,
+    "lon": -84.4256448
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3401",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8471099,
+    "lon": -84.4286926
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3447",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8488382,
+    "lon": -84.4297326
+  },
+  {
+    "street": "Rhodenhaven Drive Northwest",
+    "housenumber": "3091",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8398135,
+    "lon": -84.4116225
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3304",
+    "city": "Atlanta",
+    "lat": 33.842067,
+    "lon": -84.4074925
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3306",
+    "city": "Atlanta",
+    "lat": 33.8422497,
+    "lon": -84.4075255
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3316",
+    "city": "Atlanta",
+    "lat": 33.8431359,
+    "lon": -84.4075054
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3425",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8484264,
+    "lon": -84.4036488
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3470",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8496543,
+    "lon": -84.4058315
+  },
+  {
+    "street": "Paces Valley Road Northwest",
+    "housenumber": "3481",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.849586,
+    "lon": -84.410947
+  },
+  {
+    "street": "Chateau Drive Northwest",
+    "housenumber": "481",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8437693,
+    "lon": -84.4035213
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "724",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8486567,
+    "lon": -84.411499
+  },
+  {
+    "street": "Pineland Road Northwest",
+    "housenumber": "240",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8659098,
+    "lon": -84.3951627
+  },
+  {
+    "street": "Pineland Road Northwest",
+    "housenumber": "246",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8657258,
+    "lon": -84.3953449
+  },
+  {
+    "street": "King Road Northwest",
+    "housenumber": "310",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8620096,
+    "lon": -84.3976805
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3900",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8613222,
+    "lon": -84.3950261
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3908",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8616692,
+    "lon": -84.3949029
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "450",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8598855,
+    "lon": -84.402268
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "459",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8602191,
+    "lon": -84.4027028
+  },
+  {
+    "street": "Hillside Drive Northwest",
+    "housenumber": "465",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8700941,
+    "lon": -84.4026487
+  },
+  {
+    "street": "King Road Northwest",
+    "housenumber": "497",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8632136,
+    "lon": -84.4028051
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "15",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8400328,
+    "lon": -84.3929644
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "17",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8405417,
+    "lon": -84.3932019
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "18",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8406664,
+    "lon": -84.3936736
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "25",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8417568,
+    "lon": -84.3936571
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3119",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8397621,
+    "lon": -84.3966678
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "3195",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8415425,
+    "lon": -84.3982165
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "3335",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8460509,
+    "lon": -84.3929075
+  },
+  {
+    "street": "Tuxedo Road Northwest",
+    "housenumber": "3403",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8476788,
+    "lon": -84.4026699
+  },
+  {
+    "street": "Knollwood Drive Northwest",
+    "housenumber": "3469",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8496074,
+    "lon": -84.3955593
+  },
+  {
+    "street": "Woodhaven Road Northwest",
+    "housenumber": "3470",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8495418,
+    "lon": -84.3998128
+  },
+  {
+    "street": "Benton Place Northwest",
+    "housenumber": "1015",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8493632,
+    "lon": -84.4203688
+  },
+  {
+    "street": "Asheworth Court Northwest",
+    "housenumber": "300",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8471292,
+    "lon": -84.4182632
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3124",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8404605,
+    "lon": -84.4199034
+  },
+  {
+    "street": "East Wood Valley Road Northwest",
+    "housenumber": "3134",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8415034,
+    "lon": -84.4161627
+  },
+  {
+    "street": "Northside Parkway Northwest",
+    "housenumber": "3160",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8416814,
+    "lon": -84.4215751
+  },
+  {
+    "street": "North Wood Valley Road Northwest",
+    "housenumber": "3224",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.842926,
+    "lon": -84.4129869
+  },
+  {
+    "street": "Pinestream Road Northwest",
+    "housenumber": "3252",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8438083,
+    "lon": -84.4227473
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3265",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8441033,
+    "lon": -84.4157395
+  },
+  {
+    "street": "Pinestream Road Northwest",
+    "housenumber": "3282",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8446516,
+    "lon": -84.4227428
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3301",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8448369,
+    "lon": -84.4146031
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3311",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8451783,
+    "lon": -84.4144543
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3315",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8455209,
+    "lon": -84.4143196
+  },
+  {
+    "street": "East Wood Valley Road Northwest",
+    "housenumber": "3375",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8472496,
+    "lon": -84.4129783
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3388",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8473223,
+    "lon": -84.415229
+  },
+  {
+    "street": "East Wood Valley Road Northwest",
+    "housenumber": "3389",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8475881,
+    "lon": -84.4131813
+  },
+  {
+    "street": "East Wood Valley Road Northwest",
+    "housenumber": "3399",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8478915,
+    "lon": -84.4135219
+  },
+  {
+    "street": "Wood Valley Road Northwest",
+    "housenumber": "3425",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8479751,
+    "lon": -84.4140604
+  },
+  {
+    "street": "Pinestream Road Northwest",
+    "housenumber": "3467",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8496958,
+    "lon": -84.4220478
+  },
+  {
+    "street": "Asheworth Court Northwest",
+    "housenumber": "750",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8477984,
+    "lon": -84.4178457
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "800",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8494068,
+    "lon": -84.4141239
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "820",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8495648,
+    "lon": -84.4146968
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "840",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8496854,
+    "lon": -84.4151341
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1424",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8467101,
+    "lon": -84.4354018
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1525",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.846044,
+    "lon": -84.4380539
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1585",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8457859,
+    "lon": -84.4394891
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1631",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8449724,
+    "lon": -84.4419016
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1671",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8448319,
+    "lon": -84.4423923
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "1690",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8445306,
+    "lon": -84.4426115
+  },
+  {
+    "street": "Clarendale Drive Northwest",
+    "housenumber": "3101",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8398532,
+    "lon": -84.4338974
+  },
+  {
+    "street": "Clarendale Drive Northwest",
+    "housenumber": "3111",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8400342,
+    "lon": -84.4341803
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3111",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8398303,
+    "lon": -84.4410164
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3325",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8494163,
+    "lon": -84.4337913
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3350",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8452688,
+    "lon": -84.4420087
+  },
+  {
+    "street": "Old Plantation Road Northwest",
+    "housenumber": "3354",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8460635,
+    "lon": -84.4390519
+  },
+  {
+    "street": "Old Plantation Road Northwest",
+    "housenumber": "3375",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8468133,
+    "lon": -84.4381075
+  },
+  {
+    "street": "Old Plantation Road Northwest",
+    "housenumber": "3450",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8492009,
+    "lon": -84.4368416
+  },
+  {
+    "street": "Paces Ferry Road Northwest",
+    "housenumber": "3450",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8494255,
+    "lon": -84.4365618
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2061",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8397361,
+    "lon": -84.455809
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2425",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8431981,
+    "lon": -84.4560582
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2450",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8431528,
+    "lon": -84.4540129
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2500",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.842909,
+    "lon": -84.4533876
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "2785",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8307029,
+    "lon": -84.4089793
+  },
+  {
+    "street": "Andrews Drive Northwest",
+    "housenumber": "2865",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8330549,
+    "lon": -84.3889498
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "116",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8530055,
+    "lon": -84.3920878
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "133",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8589063,
+    "lon": -84.390712
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "139",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8589535,
+    "lon": -84.3911584
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "140",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8534846,
+    "lon": -84.3924137
+  },
+  {
+    "street": "Blackland Road Northwest",
+    "housenumber": "161",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8589966,
+    "lon": -84.3925742
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "21",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519582,
+    "lon": -84.3836837
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "29",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519806,
+    "lon": -84.3839477
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "31",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519136,
+    "lon": -84.3837945
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "35",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519374,
+    "lon": -84.3835478
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3580",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8520494,
+    "lon": -84.3857244
+  },
+  {
+    "street": "Karland Drive Northwest",
+    "housenumber": "36",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8497584,
+    "lon": -84.3837957
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3607",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8522734,
+    "lon": -84.3847366
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3625",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8524525,
+    "lon": -84.3846067
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3633",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8525005,
+    "lon": -84.3844447
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3635",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8524284,
+    "lon": -84.384244
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3637",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8524407,
+    "lon": -84.3841872
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3639",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8524602,
+    "lon": -84.3841304
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3641",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8524871,
+    "lon": -84.384062
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3643",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8525139,
+    "lon": -84.3840082
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3645",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8525408,
+    "lon": -84.3839515
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "3690",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8564286,
+    "lon": -84.3837786
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "37",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519446,
+    "lon": -84.3836061
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "3700",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8566697,
+    "lon": -84.3840516
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "40",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8498222,
+    "lon": -84.3898566
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "41",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519529,
+    "lon": -84.38373
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "43",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519588,
+    "lon": -84.3837883
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "45",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519636,
+    "lon": -84.3838437
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "47",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519684,
+    "lon": -84.383899
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "51",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519779,
+    "lon": -84.38402
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "53",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519875,
+    "lon": -84.3840856
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "55",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8519946,
+    "lon": -84.3841715
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "59",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8520382,
+    "lon": -84.3842853
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "61",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8520721,
+    "lon": -84.3843378
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "63",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8521048,
+    "lon": -84.3843874
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "65",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8521412,
+    "lon": -84.38444
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "67",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8521582,
+    "lon": -84.3844633
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "69",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8521788,
+    "lon": -84.3845056
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "71",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8522334,
+    "lon": -84.3845553
+  },
+  {
+    "street": "Honour Avenue Northwest",
+    "housenumber": "73",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8522637,
+    "lon": -84.3846238
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "95",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8517884,
+    "lon": -84.3908143
+  },
+  {
+    "street": "West Wieuca Road Northeast",
+    "housenumber": "111",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8776666,
+    "lon": -84.3830564
+  },
+  {
+    "street": "West Wieuca Road Northeast",
+    "housenumber": "24",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8772292,
+    "lon": -84.3865974
+  },
+  {
+    "street": "West Wieuca Road Northeast",
+    "housenumber": "60",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8772477,
+    "lon": -84.3854376
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "106",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8313819,
+    "lon": -84.3839005
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "114",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8313479,
+    "lon": -84.3837073
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "122",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8313131,
+    "lon": -84.3835099
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "124",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.831286,
+    "lon": -84.3832876
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "131",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8310534,
+    "lon": -84.3830796
+  },
+  {
+    "street": "Pharr Road Northeast",
+    "housenumber": "210",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8372928,
+    "lon": -84.3805645
+  },
+  {
+    "street": "Pharr Road Northeast",
+    "housenumber": "220",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8373728,
+    "lon": -84.3800689
+  },
+  {
+    "street": "Peachtree Avenue Northeast",
+    "housenumber": "23",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8347388,
+    "lon": -84.383545
+  },
+  {
+    "street": "Andrews Drive Northwest",
+    "housenumber": "2804",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.831536,
+    "lon": -84.3886364
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "2810",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8319216,
+    "lon": -84.3832333
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "2812",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8315442,
+    "lon": -84.3835531
+  },
+  {
+    "street": "Andrews Drive Northwest",
+    "housenumber": "2820",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8319127,
+    "lon": -84.388806
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "2824",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8316267,
+    "lon": -84.3832195
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "2828",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8314327,
+    "lon": -84.3832681
+  },
+  {
+    "street": "Rumson Road Northeast",
+    "housenumber": "2830",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8313617,
+    "lon": -84.3832777
+  },
+  {
+    "street": "Slaton Drive Northwest",
+    "housenumber": "2980",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8363849,
+    "lon": -84.3870896
+  },
+  {
+    "street": "Bolling Way Northeast",
+    "housenumber": "3039",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8378048,
+    "lon": -84.3798648
+  },
+  {
+    "street": "Delmont Drive Northeast",
+    "housenumber": "37",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8333506,
+    "lon": -84.3821925
+  },
+  {
+    "street": "Delmont Drive Northeast",
+    "housenumber": "45",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8333428,
+    "lon": -84.3819453
+  },
+  {
+    "street": "Sheridan Drive Northeast",
+    "housenumber": "50",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8325107,
+    "lon": -84.3824239
+  },
+  {
+    "street": "Sheridan Drive Northeast",
+    "housenumber": "58",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8324377,
+    "lon": -84.3821784
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "2790",
+    "city": "Atlanta",
+    "lat": 33.8309548,
+    "lon": -84.4075956
+  },
+  {
+    "street": "Queensbury Lane Northwest",
+    "housenumber": "2800",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8311237,
+    "lon": -84.4042948
+  },
+  {
+    "street": "Queensbury Lane Northwest",
+    "housenumber": "2805",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8313894,
+    "lon": -84.4039435
+  },
+  {
+    "street": "Queensbury Lane Northwest",
+    "housenumber": "2814",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8314212,
+    "lon": -84.4043973
+  },
+  {
+    "street": "Queensbury Lane Northwest",
+    "housenumber": "2820",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8316488,
+    "lon": -84.4046412
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "2854",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8326716,
+    "lon": -84.4089243
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "2864",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8331116,
+    "lon": -84.4088204
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "2915",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8344399,
+    "lon": -84.4072897
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "2998",
+    "city": "Atlanta",
+    "lat": 33.8364548,
+    "lon": -84.4076832
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3008",
+    "city": "Atlanta",
+    "lat": 33.8370268,
+    "lon": -84.4076891
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "3012",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8375466,
+    "lon": -84.404169
+  },
+  {
+    "street": "Argonne Drive Northwest",
+    "housenumber": "518",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8347816,
+    "lon": -84.4040527
+  },
+  {
+    "street": "Kingswood Lane Northwest",
+    "housenumber": "530",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.831828,
+    "lon": -84.4050669
+  },
+  {
+    "street": "Kingswood Lane Northwest",
+    "housenumber": "540",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8316669,
+    "lon": -84.405291
+  },
+  {
+    "street": "Kingswood Lane Northwest",
+    "housenumber": "550",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8314963,
+    "lon": -84.4056089
+  },
+  {
+    "street": "Edinboro Road Northwest",
+    "housenumber": "650",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8353352,
+    "lon": -84.408926
+  },
+  {
+    "street": "Bohler Court Northwest",
+    "housenumber": "1282",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8279417,
+    "lon": -84.4296164
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1296",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8297656,
+    "lon": -84.4309946
+  },
+  {
+    "street": "Bohler Court Northwest",
+    "housenumber": "1304",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8279431,
+    "lon": -84.4303223
+  },
+  {
+    "street": "Westminster Walk Northwest",
+    "housenumber": "1310",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8333618,
+    "lon": -84.4298551
+  },
+  {
+    "street": "Bohler Court Northwest",
+    "housenumber": "1314",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8279437,
+    "lon": -84.4306305
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1442",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8358779,
+    "lon": -84.432845
+  },
+  {
+    "street": "Westminster Circle Northwest",
+    "housenumber": "2975",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8365802,
+    "lon": -84.4250306
+  },
+  {
+    "street": "Margaret Mitchell Drive Northwest",
+    "housenumber": "2987",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8364902,
+    "lon": -84.432518
+  },
+  {
+    "street": "Greendale Drive Northwest",
+    "housenumber": "3020",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8376032,
+    "lon": -84.4263676
+  },
+  {
+    "street": "Margaret Mitchell Drive Northwest",
+    "housenumber": "3020",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.83786,
+    "lon": -84.4308461
+  },
+  {
+    "street": "Ridgemore Place Northwest",
+    "housenumber": "2670",
+    "city": "Atlanta",
+    "postcode": "30318",
+    "lat": 33.8279044,
+    "lon": -84.4458321
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "2919",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8370273,
+    "lon": -84.4523986
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "2976",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8371837,
+    "lon": -84.4499124
+  },
+  {
+    "street": "Ridgewood Road Northwest",
+    "housenumber": "2978",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8369059,
+    "lon": -84.4478099
+  },
+  {
+    "street": "Ridgewood Road Northwest",
+    "housenumber": "2979",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8368677,
+    "lon": -84.447407
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "2980",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8377829,
+    "lon": -84.4492702
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3005",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8372672,
+    "lon": -84.4472854
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3011",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8372241,
+    "lon": -84.4459358
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3038",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8377551,
+    "lon": -84.4437169
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "3044",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8378668,
+    "lon": -84.4432852
+  },
+  {
+    "street": "Ridgewood Road Northwest",
+    "housenumber": "3064",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8378869,
+    "lon": -84.4475113
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "10",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8395046,
+    "lon": -84.3932021
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2752",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8297588,
+    "lon": -84.4026861
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2762",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8300716,
+    "lon": -84.4027329
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2772",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.830402,
+    "lon": -84.4027295
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2782",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8306821,
+    "lon": -84.402727
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "2789",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.830677,
+    "lon": -84.3931066
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2820",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8318021,
+    "lon": -84.402714
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2834",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8320974,
+    "lon": -84.4027135
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2850",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8325157,
+    "lon": -84.4027099
+  },
+  {
+    "street": "Normandy Drive Northwest",
+    "housenumber": "2870",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8331326,
+    "lon": -84.4026562
+  },
+  {
+    "street": "Habersham Way Northwest",
+    "housenumber": "2897",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8341975,
+    "lon": -84.3940945
+  },
+  {
+    "street": "Habersham Way Northwest",
+    "housenumber": "2960",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8348674,
+    "lon": -84.3938191
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3003",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8366798,
+    "lon": -84.4000432
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3021",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8375748,
+    "lon": -84.4002354
+  },
+  {
+    "street": "West Pine Valley Road Northwest",
+    "housenumber": "3025",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8377828,
+    "lon": -84.400625
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3030",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8378503,
+    "lon": -84.4000469
+  },
+  {
+    "street": "West Pine Valley Road Northwest",
+    "housenumber": "3034",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8377926,
+    "lon": -84.4012859
+  },
+  {
+    "street": "West Pine Valley Road Northwest",
+    "housenumber": "3042",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8380205,
+    "lon": -84.4015297
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3047",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8380816,
+    "lon": -84.3994323
+  },
+  {
+    "street": "West Pine Valley Road Northwest",
+    "housenumber": "3060",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8386332,
+    "lon": -84.401764
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "3071",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8381132,
+    "lon": -84.3937802
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3075",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8393295,
+    "lon": -84.3970174
+  },
+  {
+    "street": "Arden Road Northwest",
+    "housenumber": "3084",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.839658,
+    "lon": -84.4026055
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3086",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8391682,
+    "lon": -84.3993386
+  },
+  {
+    "street": "East Pine Valley Road Northwest",
+    "housenumber": "3099",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8396274,
+    "lon": -84.3985601
+  },
+  {
+    "street": "Argonne Drive Northwest",
+    "housenumber": "350",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8355502,
+    "lon": -84.3984738
+  },
+  {
+    "street": "Argonne Drive Northwest",
+    "housenumber": "385",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8361003,
+    "lon": -84.3998155
+  },
+  {
+    "street": "Argonne Drive Northwest",
+    "housenumber": "425",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8360651,
+    "lon": -84.4015201
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "8",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8385292,
+    "lon": -84.3932332
+  },
+  {
+    "street": "Putnam Circle Northeast",
+    "housenumber": "143",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8606301,
+    "lon": -84.3842949
+  },
+  {
+    "street": "Putnam Circle Northeast",
+    "housenumber": "183",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8606434,
+    "lon": -84.3856901
+  },
+  {
+    "street": "Rose Court Northeast",
+    "housenumber": "19",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8654101,
+    "lon": -84.386047
+  },
+  {
+    "street": "Powers Ferry Road Northwest",
+    "housenumber": "3860",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8607247,
+    "lon": -84.3887086
+  },
+  {
+    "street": "West Park Court Northwest",
+    "housenumber": "40",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8627578,
+    "lon": -84.3920378
+  },
+  {
+    "street": "Laurel Forest Circle Northeast",
+    "housenumber": "97",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8629228,
+    "lon": -84.3854765
+  },
+  {
+    "street": "Nawench Drive Northwest",
+    "housenumber": "1015",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8326269,
+    "lon": -84.4209783
+  },
+  {
+    "street": "Dawn View Lane Northwest",
+    "housenumber": "1092",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8305714,
+    "lon": -84.4213702
+  },
+  {
+    "street": "Battle Overlook Northwest",
+    "housenumber": "2672",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8280772,
+    "lon": -84.4131456
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3000",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8369688,
+    "lon": -84.4208487
+  },
+  {
+    "street": "Rockingham Drive Northwest",
+    "housenumber": "3192",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8357338,
+    "lon": -84.4155554
+  },
+  {
+    "street": "Wesley Parkway Northwest",
+    "housenumber": "1365",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8333578,
+    "lon": -84.433286
+  },
+  {
+    "street": "Wesley Parkway Northwest",
+    "housenumber": "1371",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8331801,
+    "lon": -84.4335497
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1466",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8366027,
+    "lon": -84.4342716
+  },
+  {
+    "street": "Dover Road Northwest",
+    "housenumber": "2779",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8316158,
+    "lon": -84.4129363
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "2996",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8379196,
+    "lon": -84.4213853
+  },
+  {
+    "street": "Rockingham Drive Northwest",
+    "housenumber": "3015",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8374008,
+    "lon": -84.4130512
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3031",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8382944,
+    "lon": -84.4213111
+  },
+  {
+    "street": "Howell Mill Road Northwest",
+    "housenumber": "3044",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8383432,
+    "lon": -84.4222087
+  },
+  {
+    "street": "Rockingham Drive Northwest",
+    "housenumber": "3071",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8381819,
+    "lon": -84.4143785
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1585",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8385178,
+    "lon": -84.4395709
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1665",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8391385,
+    "lon": -84.4419766
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "1685",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8392672,
+    "lon": -84.4424767
+  },
+  {
+    "street": "Clarendale Drive Northwest",
+    "housenumber": "3071",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8390196,
+    "lon": -84.4329516
+  },
+  {
+    "street": "Clarendale Drive Northwest",
+    "housenumber": "3076",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8390729,
+    "lon": -84.433446
+  },
+  {
+    "street": "West Wesley Road Northwest",
+    "housenumber": "2041",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8394939,
+    "lon": -84.4550835
+  },
+  {
+    "street": "Nancy Creek Road Northwest",
+    "housenumber": "2895",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8391847,
+    "lon": -84.4538489
+  },
+  {
+    "street": "Lakeland Drive Northwest",
+    "housenumber": "10",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8487516,
+    "lon": -84.3829939
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "100",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8411201,
+    "lon": -84.3844863
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "102",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8412093,
+    "lon": -84.3846871
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "103",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8413159,
+    "lon": -84.3838455
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "118",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8417015,
+    "lon": -84.384954
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "126",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8420728,
+    "lon": -84.3854542
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "138",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8426256,
+    "lon": -84.3862901
+  },
+  {
+    "street": "East Andrews Drive Northwest",
+    "housenumber": "144",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8423274,
+    "lon": -84.3839144
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "2",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8488024,
+    "lon": -84.389074
+  },
+  {
+    "street": "West Paces Ferry Road Northwest",
+    "housenumber": "205",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8444803,
+    "lon": -84.3910801
+  },
+  {
+    "street": "Lakeland Drive Northwest",
+    "housenumber": "24",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8487512,
+    "lon": -84.3834157
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "25",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8494113,
+    "lon": -84.3892202
+  },
+  {
+    "street": "Andrews Drive Northwest",
+    "housenumber": "3099",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8410455,
+    "lon": -84.3894013
+  },
+  {
+    "street": "Andrews Drive Northwest",
+    "housenumber": "3240",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8436265,
+    "lon": -84.3877988
+  },
+  {
+    "street": "Valley Road Northwest",
+    "housenumber": "3257",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8430125,
+    "lon": -84.3857874
+  },
+  {
+    "street": "Grant Valley Road Northwest",
+    "housenumber": "3310",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8453135,
+    "lon": -84.3867091
+  },
+  {
+    "street": "Habersham Road Northwest",
+    "housenumber": "3382",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.847609,
+    "lon": -84.392806
+  },
+  {
+    "street": "East Andrews Drive Northwest",
+    "housenumber": "46",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8423895,
+    "lon": -84.3837721
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "11",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.839668,
+    "lon": -84.3928355
+  },
+  {
+    "street": "Austell Way Northwest",
+    "housenumber": "110",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8385519,
+    "lon": -84.3909759
+  },
+  {
+    "street": "Austell Way Northwest",
+    "housenumber": "116",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8385274,
+    "lon": -84.391295
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "7",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8389025,
+    "lon": -84.3926892
+  },
+  {
+    "street": "West Andrews Drive Northwest",
+    "housenumber": "9",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8394291,
+    "lon": -84.3927678
+  },
+  {
+    "street": "Mornington Drive Northwest",
+    "housenumber": "3036",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8381721,
+    "lon": -84.4091753
+  },
+  {
+    "street": "Northside Drive Northwest",
+    "housenumber": "3100",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8390587,
+    "lon": -84.4083038
+  },
+  {
+    "street": "Ridgewood Road Northwest",
+    "housenumber": "3080",
+    "city": "Atlanta",
+    "postcode": "30327",
+    "lat": 33.8394763,
+    "lon": -84.4470275
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "10",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8577981,
+    "lon": -84.378753
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "11",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8582036,
+    "lon": -84.379724
+  },
+  {
+    "street": "Old Ivy Road Northeast",
+    "housenumber": "122",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.85455,
+    "lon": -84.3788016
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "13",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.858282,
+    "lon": -84.3796804
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "14",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8578452,
+    "lon": -84.3786906
+  },
+  {
+    "street": "Habersham Road Northeast",
+    "housenumber": "15",
+    "city": "Atlanta",
+    "postcode": "30305",
+    "lat": 33.8531078,
+    "lon": -84.3824362
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "15",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.858376,
+    "lon": -84.3796618
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "16",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8578609,
+    "lon": -84.3786593
+  },
+  {
+    "street": "Old Ivy Road Northeast",
+    "housenumber": "167",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8548695,
+    "lon": -84.3778727
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "17",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8583918,
+    "lon": -84.3795617
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "17",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.858054,
+    "lon": -84.3786973
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "18",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8578975,
+    "lon": -84.3786219
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "19",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8583762,
+    "lon": -84.3795242
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "19",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8580278,
+    "lon": -84.3787473
+  },
+  {
+    "street": "Ivy Parkway Northeast",
+    "housenumber": "20",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.857198,
+    "lon": -84.3785951
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "20",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8579184,
+    "lon": -84.3786031
+  },
+  {
+    "street": "Ivy Gates Northeast",
+    "housenumber": "21",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8583764,
+    "lon": -84.3794303
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "21",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8580748,
+    "lon": -84.3787349
+  },
+  {
+    "street": "Ivy Parkway Northeast",
+    "housenumber": "22",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8571092,
+    "lon": -84.3786324
+  },
+  {
+    "street": "Ivy Ridge Northeast",
+    "housenumber": "22",
+    "city": "Atlanta",
+    "postcode": "30342",
+    "lat": 33.8579393,
+    "lon": -84.3785782
+  }
+]

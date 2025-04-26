@@ -1,0 +1,7959 @@
+[
+  {
+    "street": "Meadow Lake Avenue",
+    "housenumber": "6701",
+    "city": "Dallas",
+    "lat": 32.82405,
+    "lon": -96.744468
+  },
+  {
+    "street": "Harter Road",
+    "housenumber": "848",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8454042,
+    "lon": -96.7077154
+  },
+  {
+    "street": "Meadow Road",
+    "housenumber": "8383",
+    "city": "Dallas",
+    "postcode": "75231",
+    "lat": 32.8862541,
+    "lon": -96.7589549
+  },
+  {
+    "street": "South Hampton Road",
+    "housenumber": "4015",
+    "city": "Dallas",
+    "postcode": "75224",
+    "lat": 32.6930055,
+    "lon": -96.857945
+  },
+  {
+    "street": "Vilbig Road",
+    "housenumber": "2900",
+    "city": "Dallas",
+    "postcode": "75212",
+    "lat": 32.7771052,
+    "lon": -96.8474667
+  },
+  {
+    "street": "Calumet Avenue",
+    "housenumber": "321",
+    "city": "Dallas",
+    "postcode": "75211",
+    "lat": 32.7426377,
+    "lon": -96.8943607
+  },
+  {
+    "street": "Canada Drive",
+    "housenumber": "2305",
+    "city": "Dallas",
+    "postcode": "75212",
+    "lat": 32.7927852,
+    "lon": -96.8546884
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1521",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7809073,
+    "lon": -96.7986257
+  },
+  {
+    "street": "Greenville Avenue",
+    "housenumber": "5111",
+    "city": "Dallas",
+    "postcode": "75026",
+    "lat": 32.8499603,
+    "lon": -96.7706432
+  },
+  {
+    "street": "Royal Lane",
+    "housenumber": "5959",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.896102,
+    "lon": -96.805553
+  },
+  {
+    "street": "East Illinois Avenue",
+    "housenumber": "2816",
+    "city": "Dallas",
+    "postcode": "75216",
+    "lat": 32.716289,
+    "lon": -96.779541
+  },
+  {
+    "street": "Elm Street",
+    "housenumber": "411",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7797097,
+    "lon": -96.8084399
+  },
+  {
+    "street": "Fawn Path",
+    "housenumber": "90",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914236,
+    "lon": -84.799528
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "526",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921748,
+    "lon": -84.850663
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "492",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921779,
+    "lon": -84.85063
+  },
+  {
+    "street": "Legion Road",
+    "housenumber": "224",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925588,
+    "lon": -84.832427
+  },
+  {
+    "street": "Legion Road",
+    "housenumber": "226",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926511,
+    "lon": -84.832708
+  },
+  {
+    "street": "West Cooper Avenue",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921948,
+    "lon": -84.841473
+  },
+  {
+    "street": "West Cooper Avenue",
+    "housenumber": "227",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921985,
+    "lon": -84.84311
+  },
+  {
+    "street": "West Cooper Avenue",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921784,
+    "lon": -84.841481
+  },
+  {
+    "street": "West Cooper Avenue",
+    "housenumber": "224",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921823,
+    "lon": -84.843149
+  },
+  {
+    "street": "Old Villa Rica Road",
+    "housenumber": "1198",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.898784,
+    "lon": -84.836495
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931098,
+    "lon": -84.835487
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93125,
+    "lon": -84.835564
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "376",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.933014,
+    "lon": -84.828814
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "221",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922817,
+    "lon": -84.841804
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "247",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922507,
+    "lon": -84.843192
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "436",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922659,
+    "lon": -84.841749
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "446",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922345,
+    "lon": -84.843159
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.90904,
+    "lon": -84.842879
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "224",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907566,
+    "lon": -84.843868
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.908885,
+    "lon": -84.842812
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "211",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907563,
+    "lon": -84.843671
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919542,
+    "lon": -84.839341
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "242",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920993,
+    "lon": -84.838806
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "117",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919658,
+    "lon": -84.839482
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "209",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921,
+    "lon": -84.839004
+  },
+  {
+    "street": "Piney Woods Trail",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916197,
+    "lon": -84.836328
+  },
+  {
+    "street": "Piney Woods Trail",
+    "housenumber": "241",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915406,
+    "lon": -84.834916
+  },
+  {
+    "street": "Piney Woods Trail",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916326,
+    "lon": -84.836205
+  },
+  {
+    "street": "Piney Woods Trail",
+    "housenumber": "228",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915546,
+    "lon": -84.834814
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923718,
+    "lon": -84.836911
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "435",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923946,
+    "lon": -84.836008
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "328",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923857,
+    "lon": -84.837016
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "438",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924108,
+    "lon": -84.836042
+  },
+  {
+    "street": "Mount Olivet Road",
+    "housenumber": "4999",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914056,
+    "lon": -84.888196
+  },
+  {
+    "street": "Mount Olivet Road",
+    "housenumber": "4997",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91414,
+    "lon": -84.888232
+  },
+  {
+    "street": "Mount Olivet Road",
+    "housenumber": "4972",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914,
+    "lon": -84.888383
+  },
+  {
+    "street": "Mount Olivet Road",
+    "housenumber": "4968",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914084,
+    "lon": -84.888419
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91071,
+    "lon": -84.797431
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "378",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912187,
+    "lon": -84.797382
+  },
+  {
+    "street": "Nathan Dean Boulevard",
+    "housenumber": "525",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907485,
+    "lon": -84.824616
+  },
+  {
+    "street": "Nathan Dean Boulevard",
+    "housenumber": "505",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907909,
+    "lon": -84.824485
+  },
+  {
+    "street": "Hardee Street",
+    "housenumber": "586",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913881,
+    "lon": -84.825238
+  },
+  {
+    "street": "Hardee Street",
+    "housenumber": "574",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91454,
+    "lon": -84.827527
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "379",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912422,
+    "lon": -84.797171
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "399",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912618,
+    "lon": -84.797196
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "380",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912407,
+    "lon": -84.797368
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "398",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912584,
+    "lon": -84.79739
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "519",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916543,
+    "lon": -84.833804
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "511",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916919,
+    "lon": -84.834049
+  },
+  {
+    "street": "Academy Drive",
+    "housenumber": "247",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907791,
+    "lon": -84.832554
+  },
+  {
+    "street": "Academy Drive",
+    "housenumber": "135",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.908698,
+    "lon": -84.832273
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "118",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925592,
+    "lon": -84.839434
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "160",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930732,
+    "lon": -84.838319
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "123",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925718,
+    "lon": -84.839561
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "157",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930733,
+    "lon": -84.838517
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "163",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917557,
+    "lon": -84.839825
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "155",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91783,
+    "lon": -84.839244
+  },
+  {
+    "street": "East Cooper Avenue",
+    "housenumber": "136",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921935,
+    "lon": -84.839218
+  },
+  {
+    "street": "East Cooper Avenue",
+    "housenumber": "130",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921941,
+    "lon": -84.839295
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "572",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921067,
+    "lon": -84.851506
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "528",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921623,
+    "lon": -84.850797
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "334",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922927,
+    "lon": -84.844521
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "324",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92298,
+    "lon": -84.843946
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "339",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92309,
+    "lon": -84.844545
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "331",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923144,
+    "lon": -84.843964
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "215",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928135,
+    "lon": -84.84933
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "229",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927792,
+    "lon": -84.850497
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "361",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922283,
+    "lon": -84.832839
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "373",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923992,
+    "lon": -84.83217
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "348",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922363,
+    "lon": -84.833012
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "372",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924076,
+    "lon": -84.83234
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "3250",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904258,
+    "lon": -84.850472
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91876,
+    "lon": -84.837254
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "155",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920532,
+    "lon": -84.837224
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918744,
+    "lon": -84.837451
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "156",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920548,
+    "lon": -84.837421
+  },
+  {
+    "street": "Buchanan Street",
+    "housenumber": "219",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916417,
+    "lon": -84.856004
+  },
+  {
+    "street": "Buchanan Street",
+    "housenumber": "221",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916779,
+    "lon": -84.85577
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "116",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926597,
+    "lon": -84.843123
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927146,
+    "lon": -84.843429
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92689,
+    "lon": -84.842343
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927331,
+    "lon": -84.842592
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92682,
+    "lon": -84.842522
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "210",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927261,
+    "lon": -84.842771
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "364",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92284,
+    "lon": -84.845187
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "336",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922899,
+    "lon": -84.844817
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "367",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922983,
+    "lon": -84.845286
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "341",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923063,
+    "lon": -84.844838
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "133",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928519,
+    "lon": -84.851604
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "137",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928511,
+    "lon": -84.852955
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923767,
+    "lon": -84.843896
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923824,
+    "lon": -84.843516
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "275",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92393,
+    "lon": -84.843916
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "255",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923986,
+    "lon": -84.843553
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.909135,
+    "lon": -84.842623
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.909523,
+    "lon": -84.842677
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "278",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916254,
+    "lon": -84.822168
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "316",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916395,
+    "lon": -84.822976
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "279",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9161,
+    "lon": -84.822096
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "317",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916279,
+    "lon": -84.823116
+  },
+  {
+    "street": "East Cooper Avenue",
+    "housenumber": "120",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921933,
+    "lon": -84.83954
+  },
+  {
+    "street": "East Cooper Avenue",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921933,
+    "lon": -84.840189
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "312",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922428,
+    "lon": -84.83951
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923074,
+    "lon": -84.839758
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "311",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922381,
+    "lon": -84.839699
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923027,
+    "lon": -84.839948
+  },
+  {
+    "street": "Dallas Acworth Highway",
+    "housenumber": "2483",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.940865,
+    "lon": -84.817004
+  },
+  {
+    "street": "Dallas Acworth Highway",
+    "housenumber": "2599",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.940913,
+    "lon": -84.816941
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "416",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923653,
+    "lon": -84.847906
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "396",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923676,
+    "lon": -84.847077
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "415",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923817,
+    "lon": -84.847922
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923841,
+    "lon": -84.847082
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "1244",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916525,
+    "lon": -84.87804
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "3158",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916561,
+    "lon": -84.877993
+  },
+  {
+    "street": "Wood Valley Drive",
+    "housenumber": "52",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.90621,
+    "lon": -84.843125
+  },
+  {
+    "street": "Wood Valley Drive",
+    "housenumber": "58",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.906331,
+    "lon": -84.843494
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "178",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902288,
+    "lon": -84.833184
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "116",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.900593,
+    "lon": -84.833994
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923454,
+    "lon": -84.839012
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "146",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924044,
+    "lon": -84.838981
+  },
+  {
+    "street": "Ridgeview Complex",
+    "housenumber": "746",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907005,
+    "lon": -84.825168
+  },
+  {
+    "street": "Ridgeview Complex",
+    "housenumber": "712",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907559,
+    "lon": -84.826191
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "225",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926141,
+    "lon": -84.844236
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926335,
+    "lon": -84.843262
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926306,
+    "lon": -84.844232
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926492,
+    "lon": -84.843321
+  },
+  {
+    "street": "School Avenue",
+    "housenumber": "130",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928149,
+    "lon": -84.843946
+  },
+  {
+    "street": "School Avenue",
+    "housenumber": "124",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92832,
+    "lon": -84.843436
+  },
+  {
+    "street": "School Avenue",
+    "housenumber": "129",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928303,
+    "lon": -84.844016
+  },
+  {
+    "street": "School Avenue",
+    "housenumber": "123",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928472,
+    "lon": -84.843512
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1304",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910309,
+    "lon": -84.79373
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910314,
+    "lon": -84.793842
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "162",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930978,
+    "lon": -84.838316
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "166",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931715,
+    "lon": -84.8383
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "159",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930981,
+    "lon": -84.838514
+  },
+  {
+    "street": "Watson Drive",
+    "housenumber": "163",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931718,
+    "lon": -84.838498
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92412,
+    "lon": -84.838902
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "329",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924207,
+    "lon": -84.838214
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92428,
+    "lon": -84.838945
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "314",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924368,
+    "lon": -84.838256
+  },
+  {
+    "street": "Bainbridge Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915237,
+    "lon": -84.824445
+  },
+  {
+    "street": "Bainbridge Place",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915048,
+    "lon": -84.824316
+  },
+  {
+    "street": "Bainbridge Place",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915129,
+    "lon": -84.824144
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "322",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922998,
+    "lon": -84.843709
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923005,
+    "lon": -84.84362
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "329",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923162,
+    "lon": -84.843728
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "327",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923169,
+    "lon": -84.843639
+  },
+  {
+    "street": "Legion Road",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924788,
+    "lon": -84.832696
+  },
+  {
+    "street": "Legion Road",
+    "housenumber": "216",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925354,
+    "lon": -84.832474
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920668,
+    "lon": -84.837086
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "216",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920703,
+    "lon": -84.837176
+  },
+  {
+    "street": "Westside Circle",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912705,
+    "lon": -84.859793
+  },
+  {
+    "street": "Westside Circle",
+    "housenumber": "25",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912641,
+    "lon": -84.859711
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1879",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.911911,
+    "lon": -84.819637
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1663",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9124,
+    "lon": -84.821625
+  },
+  {
+    "street": "Summerhill Road",
+    "housenumber": "899",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907906,
+    "lon": -84.783531
+  },
+  {
+    "street": "Braly Path",
+    "housenumber": "70",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930769,
+    "lon": -84.828964
+  },
+  {
+    "street": "Braly Path",
+    "housenumber": "188",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930278,
+    "lon": -84.828894
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92312,
+    "lon": -84.839727
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "299",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923223,
+    "lon": -84.839236
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923279,
+    "lon": -84.839775
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923382,
+    "lon": -84.839284
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1041",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920196,
+    "lon": -84.860866
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1033",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920163,
+    "lon": -84.860783
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1058",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920344,
+    "lon": -84.86078
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1052",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920311,
+    "lon": -84.860697
+  },
+  {
+    "street": "Grove Park Avenue",
+    "housenumber": "112",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920663,
+    "lon": -84.841826
+  },
+  {
+    "street": "Grove Park Avenue",
+    "housenumber": "126",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920874,
+    "lon": -84.842571
+  },
+  {
+    "street": "Grove Park Avenue",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920499,
+    "lon": -84.841849
+  },
+  {
+    "street": "Grove Park Avenue",
+    "housenumber": "127",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920746,
+    "lon": -84.842695
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "134",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925002,
+    "lon": -84.848349
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "138",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925248,
+    "lon": -84.848488
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "133",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92492,
+    "lon": -84.848521
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "139",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925185,
+    "lon": -84.848671
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922058,
+    "lon": -84.843189
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92229,
+    "lon": -84.843211
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "454",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919386,
+    "lon": -84.839367
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "452",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919461,
+    "lon": -84.839394
+  },
+  {
+    "street": "Seaboard Drive",
+    "housenumber": "1152",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91556,
+    "lon": -84.840128
+  },
+  {
+    "street": "Seaboard Drive",
+    "housenumber": "1148",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91729,
+    "lon": -84.839857
+  },
+  {
+    "street": "Seaboard Drive",
+    "housenumber": "799",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915574,
+    "lon": -84.840326
+  },
+  {
+    "street": "Seaboard Drive",
+    "housenumber": "779",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917331,
+    "lon": -84.840048
+  },
+  {
+    "street": "Bone Place",
+    "housenumber": "102",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927672,
+    "lon": -84.836328
+  },
+  {
+    "street": "Bone Place",
+    "housenumber": "124",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928019,
+    "lon": -84.836217
+  },
+  {
+    "street": "Bonnabel Court",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912216,
+    "lon": -84.845281
+  },
+  {
+    "street": "Bonnabel Court",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912337,
+    "lon": -84.845282
+  },
+  {
+    "street": "Bonnabel Court",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912214,
+    "lon": -84.845479
+  },
+  {
+    "street": "Bonnabel Court",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912335,
+    "lon": -84.84548
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4108",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923032,
+    "lon": -84.85697
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4142",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924278,
+    "lon": -84.858516
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4085",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922899,
+    "lon": -84.857086
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4261",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924177,
+    "lon": -84.858672
+  },
+  {
+    "street": "Westwood Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931719,
+    "lon": -84.851599
+  },
+  {
+    "street": "Westwood Drive",
+    "housenumber": "220",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929848,
+    "lon": -84.852894
+  },
+  {
+    "street": "Westwood Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931696,
+    "lon": -84.851403
+  },
+  {
+    "street": "Westwood Drive",
+    "housenumber": "215",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929689,
+    "lon": -84.852946
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "1423",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904336,
+    "lon": -84.848038
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2157",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904367,
+    "lon": -84.849114
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2304",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904173,
+    "lon": -84.848068
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2844",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904202,
+    "lon": -84.849112
+  },
+  {
+    "street": "Ivy Terrace Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.902982,
+    "lon": -84.835009
+  },
+  {
+    "street": "Ivy Terrace Drive",
+    "housenumber": "103",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.901454,
+    "lon": -84.833781
+  },
+  {
+    "street": "Hampton Lane",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919634,
+    "lon": -84.827113
+  },
+  {
+    "street": "Hampton Lane",
+    "housenumber": "108",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919341,
+    "lon": -84.826513
+  },
+  {
+    "street": "Hampton Lane",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919779,
+    "lon": -84.827021
+  },
+  {
+    "street": "Hampton Lane",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919483,
+    "lon": -84.826413
+  },
+  {
+    "street": "Graham Road",
+    "housenumber": "1706",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915532,
+    "lon": -84.811526
+  },
+  {
+    "street": "Graham Road",
+    "housenumber": "933",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915538,
+    "lon": -84.811723
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912217,
+    "lon": -84.833974
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "421",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912549,
+    "lon": -84.833996
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912217,
+    "lon": -84.834172
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "416",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912523,
+    "lon": -84.834192
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919509,
+    "lon": -84.823145
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "106",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918886,
+    "lon": -84.822611
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "103",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919663,
+    "lon": -84.823077
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "107",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918951,
+    "lon": -84.822429
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "748",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929874,
+    "lon": -84.847035
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "4098",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931497,
+    "lon": -84.848521
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "234",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929818,
+    "lon": -84.847221
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931369,
+    "lon": -84.848645
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "108",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91866,
+    "lon": -84.822497
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "120",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918503,
+    "lon": -84.822453
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "109",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918722,
+    "lon": -84.822314
+  },
+  {
+    "street": "Brookside Court",
+    "housenumber": "123",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91848,
+    "lon": -84.822257
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "121",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907025,
+    "lon": -84.805991
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "125",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906976,
+    "lon": -84.805235
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "186",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929021,
+    "lon": -84.844727
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "176",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929061,
+    "lon": -84.845448
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2159",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904367,
+    "lon": -84.849408
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2705",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904407,
+    "lon": -84.85012
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2846",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904203,
+    "lon": -84.849411
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "3240",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904244,
+    "lon": -84.850137
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "140",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928678,
+    "lon": -84.853249
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "150",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928701,
+    "lon": -84.854175
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "139",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928514,
+    "lon": -84.853256
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "147",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928536,
+    "lon": -84.854174
+  },
+  {
+    "street": "Beckward Path",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906965,
+    "lon": -84.787097
+  },
+  {
+    "street": "Beckward Path",
+    "housenumber": "61",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906816,
+    "lon": -84.787179
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "498",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912189,
+    "lon": -84.8358
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "422",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913217,
+    "lon": -84.835606
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "463",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912024,
+    "lon": -84.8358
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "423",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913363,
+    "lon": -84.835514
+  },
+  {
+    "street": "Polk Circle",
+    "housenumber": "238",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93165,
+    "lon": -84.848641
+  },
+  {
+    "street": "Polk Circle",
+    "housenumber": "86",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.932581,
+    "lon": -84.848887
+  },
+  {
+    "street": "Polk Circle",
+    "housenumber": "4043",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931608,
+    "lon": -84.848833
+  },
+  {
+    "street": "Polk Circle",
+    "housenumber": "61",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93255,
+    "lon": -84.849081
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "153",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912014,
+    "lon": -84.845229
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "205",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912018,
+    "lon": -84.844751
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "152",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912178,
+    "lon": -84.845231
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "204",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912182,
+    "lon": -84.844753
+  },
+  {
+    "street": "Ragsdale Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.929271,
+    "lon": -84.845484
+  },
+  {
+    "street": "Ragsdale Place",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.930552,
+    "lon": -84.845418
+  },
+  {
+    "street": "Ashford Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920752,
+    "lon": -84.862275
+  },
+  {
+    "street": "Ashford Drive",
+    "housenumber": "125",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919997,
+    "lon": -84.862744
+  },
+  {
+    "street": "Ashford Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920674,
+    "lon": -84.8621
+  },
+  {
+    "street": "Ashford Drive",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919921,
+    "lon": -84.862569
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "247",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92463,
+    "lon": -84.832775
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "229",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924674,
+    "lon": -84.832831
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925563,
+    "lon": -84.835112
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "230",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925821,
+    "lon": -84.834399
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925084,
+    "lon": -84.839087
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925088,
+    "lon": -84.839046
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "318",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923025,
+    "lon": -84.843456
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "308",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923036,
+    "lon": -84.843392
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "325",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923186,
+    "lon": -84.843497
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "319",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923197,
+    "lon": -84.843433
+  },
+  {
+    "street": "Vernoy Aiken Road",
+    "housenumber": "241",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.903757,
+    "lon": -84.830569
+  },
+  {
+    "street": "Mount Olivet Loop",
+    "housenumber": "547",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914708,
+    "lon": -84.892097
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1498",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910326,
+    "lon": -84.794103
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1410",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910404,
+    "lon": -84.795604
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "426",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922634,
+    "lon": -84.849793
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "490",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923237,
+    "lon": -84.849164
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "501",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922738,
+    "lon": -84.849946
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "507",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923357,
+    "lon": -84.849301
+  },
+  {
+    "street": "Braswell Street",
+    "housenumber": "148",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91826,
+    "lon": -84.832756
+  },
+  {
+    "street": "Braswell Street",
+    "housenumber": "126",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918273,
+    "lon": -84.834458
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906808,
+    "lon": -84.804942
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "204",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906815,
+    "lon": -84.804428
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906972,
+    "lon": -84.804942
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "205",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906979,
+    "lon": -84.804428
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907359,
+    "lon": -84.843623
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "103",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907477,
+    "lon": -84.842839
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "106",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907524,
+    "lon": -84.843624
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907582,
+    "lon": -84.842991
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "383",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923869,
+    "lon": -84.845714
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "385",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923865,
+    "lon": -84.845931
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1032",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909423,
+    "lon": -84.811569
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1050",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910265,
+    "lon": -84.816389
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924274,
+    "lon": -84.850009
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "126",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924392,
+    "lon": -84.851342
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "125",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924274,
+    "lon": -84.850207
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "107",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924441,
+    "lon": -84.851153
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926574,
+    "lon": -84.843053
+  },
+  {
+    "street": "Herman Avenue",
+    "housenumber": "116",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926763,
+    "lon": -84.842547
+  },
+  {
+    "street": "Ivy Trace Lane",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.899347,
+    "lon": -84.835662
+  },
+  {
+    "street": "Ivy Trace Lane",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.900117,
+    "lon": -84.836026
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "274",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920966,
+    "lon": -84.830026
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "272",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92114,
+    "lon": -84.830138
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "131",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922353,
+    "lon": -84.845698
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "139",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921257,
+    "lon": -84.844578
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "120",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922193,
+    "lon": -84.84565
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92142,
+    "lon": -84.844601
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "398",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919477,
+    "lon": -84.835573
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920571,
+    "lon": -84.836859
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "399",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919365,
+    "lon": -84.835718
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "303",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920427,
+    "lon": -84.836955
+  },
+  {
+    "street": "Sandi Place",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917443,
+    "lon": -84.860382
+  },
+  {
+    "street": "Sandi Place",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91801,
+    "lon": -84.860137
+  },
+  {
+    "street": "Sandi Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917471,
+    "lon": -84.860576
+  },
+  {
+    "street": "Sandi Place",
+    "housenumber": "110",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918077,
+    "lon": -84.860317
+  },
+  {
+    "street": "Butler Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923972,
+    "lon": -84.843984
+  },
+  {
+    "street": "Butler Place",
+    "housenumber": "146",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925332,
+    "lon": -84.844314
+  },
+  {
+    "street": "Butler Place",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923942,
+    "lon": -84.844178
+  },
+  {
+    "street": "Butler Place",
+    "housenumber": "141",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925297,
+    "lon": -84.844507
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "206",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930786,
+    "lon": -84.852746
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931182,
+    "lon": -84.852675
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "209",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930813,
+    "lon": -84.852941
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "213",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931204,
+    "lon": -84.852871
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "103",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923425,
+    "lon": -84.849296
+  },
+  {
+    "street": "Pinecrest Circle",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924017,
+    "lon": -84.850032
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "160",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924564,
+    "lon": -84.841427
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "164",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925257,
+    "lon": -84.841681
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2707",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904419,
+    "lon": -84.850284
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2715",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90442,
+    "lon": -84.8503
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "3242",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904255,
+    "lon": -84.850299
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "3248",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904256,
+    "lon": -84.850315
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "328",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.915136,
+    "lon": -84.845168
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "326",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.91641,
+    "lon": -84.843449
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "239",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918773,
+    "lon": -84.823949
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "249",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9187,
+    "lon": -84.824005
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "238",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918715,
+    "lon": -84.823764
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "242",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918602,
+    "lon": -84.823846
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "272",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923883,
+    "lon": -84.843219
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "210",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924117,
+    "lon": -84.842289
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "253",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924041,
+    "lon": -84.843274
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924274,
+    "lon": -84.842348
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92201,
+    "lon": -84.839349
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "314",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92219,
+    "lon": -84.839426
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "315",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921945,
+    "lon": -84.839531
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "313",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922145,
+    "lon": -84.839617
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "426",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93202,
+    "lon": -84.843647
+  },
+  {
+    "street": "Lee Street",
+    "housenumber": "155",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91711,
+    "lon": -84.834201
+  },
+  {
+    "street": "Lee Street",
+    "housenumber": "149",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916479,
+    "lon": -84.836329
+  },
+  {
+    "street": "Lee Street",
+    "housenumber": "134",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916953,
+    "lon": -84.834145
+  },
+  {
+    "street": "Lee Street",
+    "housenumber": "128",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916351,
+    "lon": -84.836205
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "231",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919481,
+    "lon": -84.823241
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "237",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918911,
+    "lon": -84.823649
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921335,
+    "lon": -84.839362
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921724,
+    "lon": -84.840134
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "338",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.913321,
+    "lon": -84.850046
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "336",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.914839,
+    "lon": -84.84557
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "283",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928804,
+    "lon": -84.836765
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "293",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930518,
+    "lon": -84.836222
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "284",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928879,
+    "lon": -84.836941
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "294",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930619,
+    "lon": -84.836378
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "1501",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914535,
+    "lon": -84.883193
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "1505",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916078,
+    "lon": -84.877999
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4059",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922283,
+    "lon": -84.855985
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4067",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922719,
+    "lon": -84.856765
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909768,
+    "lon": -84.842705
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910474,
+    "lon": -84.844409
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "219",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909754,
+    "lon": -84.842902
+  },
+  {
+    "street": "Lafayette Street",
+    "housenumber": "221",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910415,
+    "lon": -84.844594
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928328,
+    "lon": -84.84409
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "317",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929004,
+    "lon": -84.844431
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928261,
+    "lon": -84.844271
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "332",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928952,
+    "lon": -84.844619
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "466",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918293,
+    "lon": -84.838977
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "460",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919193,
+    "lon": -84.839299
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "356",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923714,
+    "lon": -84.845251
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "354",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923723,
+    "lon": -84.844805
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "379",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923878,
+    "lon": -84.845256
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "361",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923888,
+    "lon": -84.844811
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929315,
+    "lon": -84.848201
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929607,
+    "lon": -84.847177
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "120",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929473,
+    "lon": -84.848259
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929759,
+    "lon": -84.847252
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "509",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917138,
+    "lon": -84.834187
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "507",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917377,
+    "lon": -84.834332
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4092",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922937,
+    "lon": -84.856807
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4106",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92295,
+    "lon": -84.856831
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4069",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922798,
+    "lon": -84.856914
+  },
+  {
+    "street": "Herbert Gamel Road",
+    "housenumber": "4083",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922811,
+    "lon": -84.856938
+  },
+  {
+    "street": "Summerhill Road",
+    "housenumber": "2554",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906942,
+    "lon": -84.784822
+  },
+  {
+    "street": "St Ann Street",
+    "housenumber": "112",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910641,
+    "lon": -84.844705
+  },
+  {
+    "street": "St Ann Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910627,
+    "lon": -84.846064
+  },
+  {
+    "street": "St Ann Street",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910476,
+    "lon": -84.844702
+  },
+  {
+    "street": "St Ann Street",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910462,
+    "lon": -84.846061
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "124",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923868,
+    "lon": -84.840987
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "114",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924367,
+    "lon": -84.841162
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918592,
+    "lon": -84.837165
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "247",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919079,
+    "lon": -84.835503
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918747,
+    "lon": -84.83723
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "210",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919234,
+    "lon": -84.835569
+  },
+  {
+    "street": "Wildwood Drive",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928124,
+    "lon": -84.849307
+  },
+  {
+    "street": "Wildwood Drive",
+    "housenumber": "338",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927123,
+    "lon": -84.850737
+  },
+  {
+    "street": "Wildwood Drive",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928141,
+    "lon": -84.84911
+  },
+  {
+    "street": "Wildwood Drive",
+    "housenumber": "345",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92696,
+    "lon": -84.850706
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "251",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92668,
+    "lon": -84.832506
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "307",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930769,
+    "lon": -84.82896
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "252",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926802,
+    "lon": -84.832639
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "310",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930881,
+    "lon": -84.829105
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "232",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924329,
+    "lon": -84.842312
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926304,
+    "lon": -84.843181
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1065",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912501,
+    "lon": -84.82189
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "749",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913395,
+    "lon": -84.823561
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "204",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921231,
+    "lon": -84.838986
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921263,
+    "lon": -84.839104
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "355",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921773,
+    "lon": -84.833255
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "359",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922067,
+    "lon": -84.833001
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1195",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9108358,
+    "lon": -84.8013734
+  },
+  {
+    "street": "Atlanta Highway",
+    "housenumber": "1125",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910844,
+    "lon": -84.801889
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "174",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929079,
+    "lon": -84.845745
+  },
+  {
+    "street": "Polk Avenue",
+    "housenumber": "162",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929178,
+    "lon": -84.846686
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919828,
+    "lon": -84.827037
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "242",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92121,
+    "lon": -84.824023
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "336",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90425,
+    "lon": -84.802155
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "420",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902727,
+    "lon": -84.802149
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904253,
+    "lon": -84.801958
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "481",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90273,
+    "lon": -84.801951
+  },
+  {
+    "street": "Salem Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917697,
+    "lon": -84.861455
+  },
+  {
+    "street": "Salem Place",
+    "housenumber": "112",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918315,
+    "lon": -84.861111
+  },
+  {
+    "street": "Salem Place",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917768,
+    "lon": -84.861634
+  },
+  {
+    "street": "Salem Place",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918386,
+    "lon": -84.861289
+  },
+  {
+    "street": "Carter Road",
+    "housenumber": "272",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914866,
+    "lon": -84.856845
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919497,
+    "lon": -84.826335
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "223",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920481,
+    "lon": -84.823601
+  },
+  {
+    "street": "Auburn Park",
+    "housenumber": "117",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919265,
+    "lon": -84.86354
+  },
+  {
+    "street": "Auburn Park",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919834,
+    "lon": -84.862902
+  },
+  {
+    "street": "Auburn Park",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919273,
+    "lon": -84.863737
+  },
+  {
+    "street": "Auburn Park",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91998,
+    "lon": -84.862811
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "257",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928591,
+    "lon": -84.843313
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "303",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928986,
+    "lon": -84.843524
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928519,
+    "lon": -84.843491
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "308",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928942,
+    "lon": -84.843714
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "680",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919625,
+    "lon": -84.858537
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "630",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92025,
+    "lon": -84.853887
+  },
+  {
+    "street": "Dandy Road",
+    "housenumber": "274",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91575,
+    "lon": -84.811759
+  },
+  {
+    "street": "Dandy Road",
+    "housenumber": "410",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916904,
+    "lon": -84.815783
+  },
+  {
+    "street": "Dandy Road",
+    "housenumber": "345",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915586,
+    "lon": -84.811775
+  },
+  {
+    "street": "Dandy Road",
+    "housenumber": "435",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916762,
+    "lon": -84.815882
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "307",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90737,
+    "lon": -84.844548
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907361,
+    "lon": -84.843922
+  },
+  {
+    "street": "Bainbridge Court",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91575,
+    "lon": -84.82379
+  },
+  {
+    "street": "Bainbridge Court",
+    "housenumber": "118",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914933,
+    "lon": -84.822639
+  },
+  {
+    "street": "Bainbridge Court",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915867,
+    "lon": -84.823651
+  },
+  {
+    "street": "Bainbridge Court",
+    "housenumber": "119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915095,
+    "lon": -84.822608
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "125",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904089,
+    "lon": -84.816332
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904426,
+    "lon": -84.816801
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "126",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9040707,
+    "lon": -84.8165296
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904445,
+    "lon": -84.816997
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "206",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906815,
+    "lon": -84.804131
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "210",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906791,
+    "lon": -84.803661
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90698,
+    "lon": -84.804132
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "209",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906955,
+    "lon": -84.803682
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "174",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915924,
+    "lon": -84.823651
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916284,
+    "lon": -84.823211
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "175",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916041,
+    "lon": -84.823791
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "203",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916416,
+    "lon": -84.823329
+  },
+  {
+    "street": "Dallas Circle",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912798,
+    "lon": -84.834177
+  },
+  {
+    "street": "Dallas Circle",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913008,
+    "lon": -84.834134
+  },
+  {
+    "street": "Briarwod Drive",
+    "housenumber": "326",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927855,
+    "lon": -84.850845
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "316",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928526,
+    "lon": -84.851328
+  },
+  {
+    "street": "Briarwod Drive",
+    "housenumber": "347",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927701,
+    "lon": -84.850773
+  },
+  {
+    "street": "Briarwod Drive",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928473,
+    "lon": -84.851515
+  },
+  {
+    "street": "Nature Path",
+    "housenumber": "146",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910127,
+    "lon": -84.81134
+  },
+  {
+    "street": "Nature Path",
+    "housenumber": "79",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910111,
+    "lon": -84.811537
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "295",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927369,
+    "lon": -84.843549
+  },
+  {
+    "street": "North Johnston Street",
+    "housenumber": "299",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92811,
+    "lon": -84.843964
+  },
+  {
+    "street": "Westwood Court",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930777,
+    "lon": -84.853001
+  },
+  {
+    "street": "Westwood Court",
+    "housenumber": "319",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930958,
+    "lon": -84.8545
+  },
+  {
+    "street": "Westwood Court",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930614,
+    "lon": -84.853029
+  },
+  {
+    "street": "Westwood Court",
+    "housenumber": "318",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930795,
+    "lon": -84.85453
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "109",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923017,
+    "lon": -84.84092
+  },
+  {
+    "street": "West Spring Street",
+    "housenumber": "121",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922987,
+    "lon": -84.841038
+  },
+  {
+    "street": "Roberts Street",
+    "housenumber": "158",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927391,
+    "lon": -84.842567
+  },
+  {
+    "street": "Roberts Street",
+    "housenumber": "170",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927815,
+    "lon": -84.841248
+  },
+  {
+    "street": "Roberts Street",
+    "housenumber": "155",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927538,
+    "lon": -84.842657
+  },
+  {
+    "street": "Roberts Street",
+    "housenumber": "183",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927967,
+    "lon": -84.841322
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "256",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923085,
+    "lon": -84.843177
+  },
+  {
+    "street": "West Griffin Street",
+    "housenumber": "238",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923363,
+    "lon": -84.84202
+  },
+  {
+    "street": "Benson Drive",
+    "housenumber": "102",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917934,
+    "lon": -84.857474
+  },
+  {
+    "street": "Wills Place",
+    "housenumber": "112",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929029,
+    "lon": -84.84569
+  },
+  {
+    "street": "Wills Place",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92887,
+    "lon": -84.845693
+  },
+  {
+    "street": "Wills Place",
+    "housenumber": "129",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929026,
+    "lon": -84.845493
+  },
+  {
+    "street": "Wills Place",
+    "housenumber": "135",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928867,
+    "lon": -84.845496
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914799,
+    "lon": -84.825065
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "138",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91524,
+    "lon": -84.824469
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914925,
+    "lon": -84.825192
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "139",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915358,
+    "lon": -84.824607
+  },
+  {
+    "street": "North Griffin Street",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923893,
+    "lon": -84.846644
+  },
+  {
+    "street": "North Griffin Street",
+    "housenumber": "421",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924734,
+    "lon": -84.846733
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "312",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93106,
+    "lon": -84.828896
+  },
+  {
+    "street": "Professional Court",
+    "housenumber": "220",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915113,
+    "lon": -84.83163
+  },
+  {
+    "street": "Professional Court",
+    "housenumber": "250",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914263,
+    "lon": -84.830986
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922917,
+    "lon": -84.840605
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923056,
+    "lon": -84.840011
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923077,
+    "lon": -84.84065
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923215,
+    "lon": -84.840065
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923285,
+    "lon": -84.838947
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "399",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923637,
+    "lon": -84.837235
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "300",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923444,
+    "lon": -84.838998
+  },
+  {
+    "street": "East Spring Street",
+    "housenumber": "326",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923802,
+    "lon": -84.837239
+  },
+  {
+    "street": "Silver Fox Trail",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90463,
+    "lon": -84.816725
+  },
+  {
+    "street": "Silver Fox Trail",
+    "housenumber": "500",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902678,
+    "lon": -84.812129
+  },
+  {
+    "street": "Silver Fox Trail",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904705,
+    "lon": -84.816901
+  },
+  {
+    "street": "Silver Fox Trail",
+    "housenumber": "499",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902638,
+    "lon": -84.811937
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912866,
+    "lon": -84.79728
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "469",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913464,
+    "lon": -84.7976
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "400",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91281,
+    "lon": -84.797466
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "470",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91346,
+    "lon": -84.797798
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "140",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917689,
+    "lon": -84.830509
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "124",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917658,
+    "lon": -84.831761
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "133",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917527,
+    "lon": -84.830478
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "121",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917493,
+    "lon": -84.831765
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918113,
+    "lon": -84.838857
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918512,
+    "lon": -84.837447
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918269,
+    "lon": -84.838921
+  },
+  {
+    "street": "West Foster Avenue",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918668,
+    "lon": -84.83751
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "209",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927555,
+    "lon": -84.842718
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "255",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928368,
+    "lon": -84.843184
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "212",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927484,
+    "lon": -84.842897
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "224",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928297,
+    "lon": -84.843363
+  },
+  {
+    "street": "Old Villa Rica Road",
+    "housenumber": "599",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.902206,
+    "lon": -84.840368
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "128",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923867,
+    "lon": -84.848009
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "132",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924748,
+    "lon": -84.848236
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92382,
+    "lon": -84.848199
+  },
+  {
+    "street": "McBee Drive",
+    "housenumber": "131",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924717,
+    "lon": -84.84843
+  },
+  {
+    "street": "Buchanan Street",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915633,
+    "lon": -84.856563
+  },
+  {
+    "street": "Buchanan Street",
+    "housenumber": "215",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916038,
+    "lon": -84.856261
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "472",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916979,
+    "lon": -84.841808
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "486",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918105,
+    "lon": -84.842213
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "157",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920684,
+    "lon": -84.836941
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923625,
+    "lon": -84.836954
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "162",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920681,
+    "lon": -84.837139
+  },
+  {
+    "street": "Highland Avenue",
+    "housenumber": "232",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923581,
+    "lon": -84.837145
+  },
+  {
+    "street": "Bethel Avenue",
+    "housenumber": "233",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918277,
+    "lon": -84.845453
+  },
+  {
+    "street": "Bethel Avenue",
+    "housenumber": "287",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918534,
+    "lon": -84.846705
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91604,
+    "lon": -84.823864
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "276",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916344,
+    "lon": -84.821892
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915922,
+    "lon": -84.824001
+  },
+  {
+    "street": "Bainbridge Circle",
+    "housenumber": "277",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91619,
+    "lon": -84.82182
+  },
+  {
+    "street": "Foster Lake Road",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921987,
+    "lon": -84.830984
+  },
+  {
+    "street": "Foster Lake Road",
+    "housenumber": "119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922102,
+    "lon": -84.832882
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "165",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925545,
+    "lon": -84.841599
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926665,
+    "lon": -84.842218
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "166",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925484,
+    "lon": -84.841782
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926596,
+    "lon": -84.842398
+  },
+  {
+    "street": "South Street",
+    "housenumber": "348",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922601,
+    "lon": -84.844536
+  },
+  {
+    "street": "South Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922879,
+    "lon": -84.844567
+  },
+  {
+    "street": "South Street",
+    "housenumber": "107",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922585,
+    "lon": -84.844733
+  },
+  {
+    "street": "South Street",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922863,
+    "lon": -84.844764
+  },
+  {
+    "street": "Hilltop Circle",
+    "housenumber": "613",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912254,
+    "lon": -84.835641
+  },
+  {
+    "street": "Hilltop Circle",
+    "housenumber": "601",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913091,
+    "lon": -84.835484
+  },
+  {
+    "street": "Hilltop Circle",
+    "housenumber": "614",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912172,
+    "lon": -84.835812
+  },
+  {
+    "street": "Hilltop Circle",
+    "housenumber": "600",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91322,
+    "lon": -84.835607
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "291",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.910699,
+    "lon": -84.797142
+  },
+  {
+    "street": "White Ingram Parkway",
+    "housenumber": "377",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912188,
+    "lon": -84.797129
+  },
+  {
+    "street": "Old Harris Road",
+    "housenumber": "1053",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909455,
+    "lon": -84.805982
+  },
+  {
+    "street": "Old Harris Road",
+    "housenumber": "1049",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909701,
+    "lon": -84.805723
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "205",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930907,
+    "lon": -84.84129
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "241",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930789,
+    "lon": -84.838576
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930851,
+    "lon": -84.841104
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "228",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930953,
+    "lon": -84.838552
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929897,
+    "lon": -84.852927
+  },
+  {
+    "street": "Westwood Place",
+    "housenumber": "204",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930547,
+    "lon": -84.852785
+  },
+  {
+    "street": "Magazine Street",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.909714,
+    "lon": -84.842943
+  },
+  {
+    "street": "Magazine Street",
+    "housenumber": "134",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.907578,
+    "lon": -84.844792
+  },
+  {
+    "street": "Magazine Street",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90955,
+    "lon": -84.842933
+  },
+  {
+    "street": "Magazine Street",
+    "housenumber": "135",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907577,
+    "lon": -84.844595
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923111,
+    "lon": -84.840719
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923597,
+    "lon": -84.84089
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "223",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923064,
+    "lon": -84.840909
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92355,
+    "lon": -84.84108
+  },
+  {
+    "street": "Tucker Boulevard",
+    "housenumber": "25",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.918227,
+    "lon": -84.870715
+  },
+  {
+    "street": "Academy Drive",
+    "housenumber": "121",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914151,
+    "lon": -84.832036
+  },
+  {
+    "street": "Academy Drive",
+    "housenumber": "107",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91616,
+    "lon": -84.833514
+  },
+  {
+    "street": "Baulding Path",
+    "housenumber": "30",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9117327,
+    "lon": -84.819662
+  },
+  {
+    "street": "Baulding Path",
+    "housenumber": "29",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9117111,
+    "lon": -84.8194006
+  },
+  {
+    "street": "Woodland Drive",
+    "housenumber": "4246",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922843,
+    "lon": -84.857076
+  },
+  {
+    "street": "Woodland Drive",
+    "housenumber": "4314",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923181,
+    "lon": -84.858905
+  },
+  {
+    "street": "Woodland Drive",
+    "housenumber": "4229",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922745,
+    "lon": -84.856917
+  },
+  {
+    "street": "Woodland Drive",
+    "housenumber": "4331",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923165,
+    "lon": -84.859102
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92197,
+    "lon": -84.839046
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92321,
+    "lon": -84.839017
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921973,
+    "lon": -84.839244
+  },
+  {
+    "street": "Park Street",
+    "housenumber": "233",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92321,
+    "lon": -84.839215
+  },
+  {
+    "street": "Summerhill Road",
+    "housenumber": "2598",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907066,
+    "lon": -84.784565
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924942,
+    "lon": -84.838836
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925292,
+    "lon": -84.835448
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "204",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925106,
+    "lon": -84.838859
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "218",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925454,
+    "lon": -84.83548
+  },
+  {
+    "street": "Lester Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92525,
+    "lon": -84.835365
+  },
+  {
+    "street": "Lester Drive",
+    "housenumber": "102",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921788,
+    "lon": -84.834656
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "171",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916948,
+    "lon": -84.841742
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "167",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917462,
+    "lon": -84.84009
+  },
+  {
+    "street": "Graham Road",
+    "housenumber": "21",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912017,
+    "lon": -84.806467
+  },
+  {
+    "street": "Clay Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925358,
+    "lon": -84.832211
+  },
+  {
+    "street": "Clay Drive",
+    "housenumber": "203",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924879,
+    "lon": -84.831019
+  },
+  {
+    "street": "Clay Drive",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925521,
+    "lon": -84.832185
+  },
+  {
+    "street": "Clay Drive",
+    "housenumber": "206",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924996,
+    "lon": -84.830881
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929211,
+    "lon": -84.848392
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928376,
+    "lon": -84.849121
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929286,
+    "lon": -84.848216
+  },
+  {
+    "street": "Briarwood Drive",
+    "housenumber": "213",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928223,
+    "lon": -84.84905
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "498",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906777,
+    "lon": -84.80333
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "422",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.905385,
+    "lon": -84.802327
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "301",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.906825,
+    "lon": -84.80314
+  },
+  {
+    "street": "Butler Industrial Drive",
+    "housenumber": "333",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.905447,
+    "lon": -84.802144
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "424",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92339,
+    "lon": -84.848947
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "418",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923628,
+    "lon": -84.848196
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "429",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923522,
+    "lon": -84.849065
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "423",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923791,
+    "lon": -84.848222
+  },
+  {
+    "street": "Brookview Drive",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.928677,
+    "lon": -84.837086
+  },
+  {
+    "street": "Brookview Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.92879,
+    "lon": -84.837741
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907109,
+    "lon": -84.806745
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907039,
+    "lon": -84.806292
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "308",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.909993,
+    "lon": -84.846129
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "904",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910417,
+    "lon": -84.846116
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "307",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.909998,
+    "lon": -84.846327
+  },
+  {
+    "street": "St Charles Avenue",
+    "housenumber": "903",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.910422,
+    "lon": -84.846314
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "341",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919312,
+    "lon": -84.835367
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "345",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921357,
+    "lon": -84.833322
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "316",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919459,
+    "lon": -84.835454
+  },
+  {
+    "street": "East Foster Avenue",
+    "housenumber": "344",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921354,
+    "lon": -84.83352
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "399",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923847,
+    "lon": -84.846804
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "389",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92385,
+    "lon": -84.846674
+  },
+  {
+    "street": "Belle Chase",
+    "housenumber": "110",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.911443,
+    "lon": -84.844731
+  },
+  {
+    "street": "Belle Chase",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.911439,
+    "lon": -84.846041
+  },
+  {
+    "street": "Belle Chase",
+    "housenumber": "111",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.911278,
+    "lon": -84.84473
+  },
+  {
+    "street": "Belle Chase",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.911274,
+    "lon": -84.84604
+  },
+  {
+    "street": "Mount Olivet Road",
+    "housenumber": "4327",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914628,
+    "lon": -84.889494
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "251",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923834,
+    "lon": -84.839974
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "299",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924054,
+    "lon": -84.839175
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92399,
+    "lon": -84.840037
+  },
+  {
+    "street": "East Griffin Street",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924209,
+    "lon": -84.839241
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "555",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914868,
+    "lon": -84.830107
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "545",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915105,
+    "lon": -84.831376
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "360",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923695,
+    "lon": -84.846223
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "394",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923692,
+    "lon": -84.846391
+  },
+  {
+    "street": "Mc Tyre Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919244,
+    "lon": -84.839266
+  },
+  {
+    "street": "Mc Tyre Drive",
+    "housenumber": "114",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919337,
+    "lon": -84.838925
+  },
+  {
+    "street": "Mc Tyre Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919402,
+    "lon": -84.839322
+  },
+  {
+    "street": "McTyre Drive",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919493,
+    "lon": -84.838988
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.908918,
+    "lon": -84.842588
+  },
+  {
+    "street": "Toulouse Street",
+    "housenumber": "223",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90892,
+    "lon": -84.842649
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "450",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919653,
+    "lon": -84.839461
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "242",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921673,
+    "lon": -84.840177
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "445",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919608,
+    "lon": -84.839651
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "415",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921647,
+    "lon": -84.840372
+  },
+  {
+    "street": "West Avenue",
+    "housenumber": "960",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912667,
+    "lon": -84.853581
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "9770",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909737,
+    "lon": -84.805823
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "9726",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909639,
+    "lon": -84.806328
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "118",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922248,
+    "lon": -84.845364
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922364,
+    "lon": -84.844745
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "129",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922409,
+    "lon": -84.845406
+  },
+  {
+    "street": "Victory Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922526,
+    "lon": -84.844785
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "214",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920783,
+    "lon": -84.837413
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "206",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921159,
+    "lon": -84.838727
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "299",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920629,
+    "lon": -84.837481
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "205",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921003,
+    "lon": -84.838789
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "455",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9039355,
+    "lon": -84.8151277
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "127",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904021,
+    "lon": -84.816067
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "456",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90369,
+    "lon": -84.815149
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "128",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.90386,
+    "lon": -84.816108
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917659,
+    "lon": -84.83206
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917641,
+    "lon": -84.834198
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917495,
+    "lon": -84.832059
+  },
+  {
+    "street": "Glenn Street",
+    "housenumber": "119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917485,
+    "lon": -84.834135
+  },
+  {
+    "street": "Durham Street",
+    "housenumber": "169",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918548,
+    "lon": -84.858902
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "241",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925048,
+    "lon": -84.838949
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "271",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92741,
+    "lon": -84.837021
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "210",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925147,
+    "lon": -84.839106
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "274",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927421,
+    "lon": -84.837219
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "1421",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.903659,
+    "lon": -84.845964
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "566",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916413,
+    "lon": -84.833464
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "536",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91647,
+    "lon": -84.833514
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "539",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916315,
+    "lon": -84.833623
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "521",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.916372,
+    "lon": -84.833673
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "141",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92487,
+    "lon": -84.839349
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924894,
+    "lon": -84.839222
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "142",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92503,
+    "lon": -84.839394
+  },
+  {
+    "street": "East Memorial Drive",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925054,
+    "lon": -84.839267
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "102",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.900562,
+    "lon": -84.837574
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "106",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.900174,
+    "lon": -84.836105
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.900668,
+    "lon": -84.837423
+  },
+  {
+    "street": "Ivy Crest Drive",
+    "housenumber": "109",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.900339,
+    "lon": -84.836098
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918214,
+    "lon": -84.826689
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "199",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919201,
+    "lon": -84.826319
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918316,
+    "lon": -84.826844
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "236",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91928,
+    "lon": -84.826493
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "899",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902667,
+    "lon": -84.812158
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "457",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.903764,
+    "lon": -84.814806
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "900",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.902519,
+    "lon": -84.812246
+  },
+  {
+    "street": "Silver Ridge Drive",
+    "housenumber": "458",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.903616,
+    "lon": -84.814894
+  },
+  {
+    "street": "Veterans Drive",
+    "housenumber": "132",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925933,
+    "lon": -84.834144
+  },
+  {
+    "street": "Veterans Drive",
+    "housenumber": "104",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927651,
+    "lon": -84.836115
+  },
+  {
+    "street": "Veterans Drive",
+    "housenumber": "133",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925911,
+    "lon": -84.83434
+  },
+  {
+    "street": "Veterans Drive",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927491,
+    "lon": -84.836072
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921772,
+    "lon": -84.841413
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "409",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92181,
+    "lon": -84.84142
+  },
+  {
+    "street": "Cooper Place",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.930735,
+    "lon": -84.843516
+  },
+  {
+    "street": "Cooper Place",
+    "housenumber": "118",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.930637,
+    "lon": -84.842679
+  },
+  {
+    "street": "Cooper Place",
+    "housenumber": "113",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.930899,
+    "lon": -84.843504
+  },
+  {
+    "street": "Cooper Place",
+    "housenumber": "117",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.930798,
+    "lon": -84.842641
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "129",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928582,
+    "lon": -84.851295
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "115",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929398,
+    "lon": -84.848544
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "130",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928736,
+    "lon": -84.851365
+  },
+  {
+    "street": "Rosewood Drive",
+    "housenumber": "122",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929505,
+    "lon": -84.848393
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907078,
+    "lon": -84.807641
+  },
+  {
+    "street": "Commerce Drive",
+    "housenumber": "105",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.907119,
+    "lon": -84.807112
+  },
+  {
+    "street": "Ivy Brook Drive",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.902112,
+    "lon": -84.836934
+  },
+  {
+    "street": "Ivy Brook Drive",
+    "housenumber": "324",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.902579,
+    "lon": -84.836927
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "233",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925788,
+    "lon": -84.834044
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "249",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926517,
+    "lon": -84.832736
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "232",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.925932,
+    "lon": -84.83414
+  },
+  {
+    "street": "Memorial Drive",
+    "housenumber": "250",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.926645,
+    "lon": -84.83286
+  },
+  {
+    "street": "Campbell Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918056,
+    "lon": -84.862963
+  },
+  {
+    "street": "Campbell Drive",
+    "housenumber": "229",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917598,
+    "lon": -84.861784
+  },
+  {
+    "street": "Campbell Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918205,
+    "lon": -84.862877
+  },
+  {
+    "street": "Campbell Drive",
+    "housenumber": "228",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917747,
+    "lon": -84.861701
+  },
+  {
+    "street": "Westside Circle",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912743,
+    "lon": -84.860051
+  },
+  {
+    "street": "McPherson Parkway",
+    "housenumber": "202",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.903738,
+    "lon": -84.835209
+  },
+  {
+    "street": "McPherson Parkway",
+    "housenumber": "236",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.904059,
+    "lon": -84.83354
+  },
+  {
+    "street": "McPherson Parkway",
+    "housenumber": "149",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.903887,
+    "lon": -84.835127
+  },
+  {
+    "street": "McPherson Parkway",
+    "housenumber": "207",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.904071,
+    "lon": -84.833737
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "198",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9310118,
+    "lon": -84.8410256
+  },
+  {
+    "street": "Hart Circle",
+    "housenumber": "156",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9320151,
+    "lon": -84.8387966
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "262",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922246,
+    "lon": -84.830848
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "252",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.924072,
+    "lon": -84.83202
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "265",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922168,
+    "lon": -84.831023
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "253",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923992,
+    "lon": -84.832193
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "212",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922533,
+    "lon": -84.843231
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923008,
+    "lon": -84.843243
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "221",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922525,
+    "lon": -84.843428
+  },
+  {
+    "street": "Hood Street",
+    "housenumber": "201",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923001,
+    "lon": -84.843441
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "282",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920188,
+    "lon": -84.829528
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "276",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920748,
+    "lon": -84.829887
+  },
+  {
+    "street": "Sunset Drive",
+    "housenumber": "1856",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914603,
+    "lon": -84.79945
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "225",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920306,
+    "lon": -84.823385
+  },
+  {
+    "street": "Brookside Drive",
+    "housenumber": "229",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919736,
+    "lon": -84.823126
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "498",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918336,
+    "lon": -84.834565
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "400",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919166,
+    "lon": -84.835222
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "499",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91828,
+    "lon": -84.834751
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919052,
+    "lon": -84.835364
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "273",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927661,
+    "lon": -84.837008
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "281",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928591,
+    "lon": -84.836867
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "276",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.927664,
+    "lon": -84.837206
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "282",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.928636,
+    "lon": -84.837057
+  },
+  {
+    "street": "Happy Valley Church Road",
+    "housenumber": "2302",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.904136,
+    "lon": -84.847774
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "491",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912023,
+    "lon": -84.835504
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "479",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912013,
+    "lon": -84.834222
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "504",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912187,
+    "lon": -84.835503
+  },
+  {
+    "street": "Paulding Lane",
+    "housenumber": "508",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.912177,
+    "lon": -84.834221
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "270",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921358,
+    "lon": -84.830278
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "264",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922028,
+    "lon": -84.830709
+  },
+  {
+    "street": "Brentwood Court",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919722,
+    "lon": -84.862635
+  },
+  {
+    "street": "Brentwood Court",
+    "housenumber": "121",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918744,
+    "lon": -84.862107
+  },
+  {
+    "street": "Brentwood Court",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91987,
+    "lon": -84.862548
+  },
+  {
+    "street": "Brentwood Court",
+    "housenumber": "118",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918737,
+    "lon": -84.861909
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912009,
+    "lon": -84.846005
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "151",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912012,
+    "lon": -84.845526
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912174,
+    "lon": -84.846006
+  },
+  {
+    "street": "Tulane Drive",
+    "housenumber": "150",
+    "city": "Dallas",
+    "postcode": "30157",
+    "lat": 33.912177,
+    "lon": -84.845527
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "488",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918337,
+    "lon": -84.842277
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "504",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919875,
+    "lon": -84.841863
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "499",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918308,
+    "lon": -84.842472
+  },
+  {
+    "street": "South Johnston Street",
+    "housenumber": "417",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919935,
+    "lon": -84.842047
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "100",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918176,
+    "lon": -84.827765
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "200",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919616,
+    "lon": -84.827189
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918306,
+    "lon": -84.827887
+  },
+  {
+    "street": "Hampton Drive",
+    "housenumber": "241",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9197,
+    "lon": -84.827359
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "330",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913551,
+    "lon": -84.82379
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "284",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913717,
+    "lon": -84.824002
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.92331,
+    "lon": -84.839841
+  },
+  {
+    "street": "Church Street",
+    "housenumber": "124",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.923779,
+    "lon": -84.840008
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "295",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930713,
+    "lon": -84.83604
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "299",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930988,
+    "lon": -84.835726
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "296",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930814,
+    "lon": -84.836196
+  },
+  {
+    "street": "Old Acworth Road",
+    "housenumber": "298",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.931122,
+    "lon": -84.83584
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1127",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920795,
+    "lon": -84.862272
+  },
+  {
+    "street": "West Memorial Drive",
+    "housenumber": "1119",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.920772,
+    "lon": -84.862217
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "534",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917669,
+    "lon": -84.83427
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "500",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918098,
+    "lon": -84.834469
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "505",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.917608,
+    "lon": -84.834454
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "501",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.91805,
+    "lon": -84.834658
+  },
+  {
+    "street": "South Street",
+    "housenumber": "109",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.921474,
+    "lon": -84.844545
+  },
+  {
+    "street": "South Street",
+    "housenumber": "139",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.922336,
+    "lon": -84.844697
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "305",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929217,
+    "lon": -84.843583
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "433",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.930545,
+    "lon": -84.84357
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "404",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.929193,
+    "lon": -84.843779
+  },
+  {
+    "street": "Confederate Avenue",
+    "housenumber": "424",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.93055,
+    "lon": -84.843767
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "140",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915416,
+    "lon": -84.824258
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "172",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915749,
+    "lon": -84.823858
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "141",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915531,
+    "lon": -84.824399
+  },
+  {
+    "street": "Bainbridge Way",
+    "housenumber": "173",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.915863,
+    "lon": -84.824
+  },
+  {
+    "street": "Merritt Circle",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918305,
+    "lon": -84.845424
+  },
+  {
+    "street": "Merritt Circle",
+    "housenumber": "375",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919423,
+    "lon": -84.845627
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "1401",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.913994,
+    "lon": -84.886358
+  },
+  {
+    "street": "Jimmy Campbell Parkway",
+    "housenumber": "1499",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.914124,
+    "lon": -84.885582
+  },
+  {
+    "street": "Paris Road",
+    "housenumber": "60",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.909201,
+    "lon": -84.793624
+  },
+  {
+    "street": "Merritt Circle",
+    "housenumber": "337",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.919654,
+    "lon": -84.845823
+  },
+  {
+    "street": "Merritt Circle",
+    "housenumber": "101",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.918805,
+    "lon": -84.846759
+  },
+  {
+    "street": "North Jim Miller Road",
+    "housenumber": "2325",
+    "city": "Dallas",
+    "lat": 32.7575273,
+    "lon": -96.7015627
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "242",
+    "city": "Dallas",
+    "postcode": "97338",
+    "lat": 44.9281195,
+    "lon": -123.312859
+  },
+  {
+    "street": "McKinney Avenue",
+    "housenumber": "3411",
+    "city": "Dallas",
+    "postcode": "75204",
+    "lat": 32.8055155,
+    "lon": -96.7988421
+  },
+  {
+    "street": "Ross Avenue",
+    "housenumber": "4024",
+    "city": "Dallas",
+    "postcode": "75204-0711",
+    "lat": 32.7996141,
+    "lon": -96.7837616
+  },
+  {
+    "street": "Bryan Street",
+    "housenumber": "4301",
+    "city": "Dallas",
+    "postcode": "75204",
+    "lat": 32.7993043,
+    "lon": -96.779455
+  },
+  {
+    "street": "South Westmoreland Road",
+    "housenumber": "1104",
+    "city": "Dallas",
+    "postcode": "75211",
+    "lat": 32.733881,
+    "lon": -96.8732776
+  },
+  {
+    "street": "Forest Lane",
+    "housenumber": "7171",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.9134024,
+    "lon": -96.7909829
+  },
+  {
+    "street": "East Mockingbird Lane",
+    "housenumber": "5331",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8373115,
+    "lon": -96.7766572
+  },
+  {
+    "street": "Browder Street",
+    "housenumber": "222",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7795435,
+    "lon": -96.7983163
+  },
+  {
+    "street": "Browder Street",
+    "housenumber": "1601",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7796707,
+    "lon": -96.7978821
+  },
+  {
+    "street": "Dallas Parkway",
+    "housenumber": "13710",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9332832,
+    "lon": -96.8206984
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "13556",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9327175,
+    "lon": -96.8032133
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "14856",
+    "city": "Dallas",
+    "postcode": "75254",
+    "lat": 32.9507942,
+    "lon": -96.8025928
+  },
+  {
+    "street": "5223 alpha road dallas tx 75240",
+    "housenumber": "5223",
+    "city": "Galleria",
+    "postcode": "75240",
+    "lat": 32.9331986,
+    "lon": -96.8188859
+  },
+  {
+    "street": "Dallas Parkway",
+    "housenumber": "13710",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9334118,
+    "lon": -96.8206994
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "315",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.747778,
+    "lon": -96.8284905
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "321",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7479311,
+    "lon": -96.8284804
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "407",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7484183,
+    "lon": -96.8284455
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "417",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7487756,
+    "lon": -96.8284547
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "419",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7488247,
+    "lon": -96.8284541
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "418",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7488254,
+    "lon": -96.8281856
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "416",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7487609,
+    "lon": -96.8281945
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "414",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7487017,
+    "lon": -96.8281999
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "412",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7486344,
+    "lon": -96.8282003
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "413",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7486275,
+    "lon": -96.8284478
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "410",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7485757,
+    "lon": -96.8282022
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "408",
+    "city": "Dallas",
+    "lat": 32.7482334,
+    "lon": -96.8281895
+  },
+  {
+    "street": "West Lawther Drive",
+    "housenumber": "4875",
+    "city": "Dallas",
+    "lat": 32.8547957,
+    "lon": -96.7315679
+  },
+  {
+    "street": "Abrams Road",
+    "housenumber": "8520",
+    "city": "Town",
+    "postcode": "75243",
+    "lat": 32.8951059,
+    "lon": -96.7395008
+  },
+  {
+    "street": "Arapaho Road",
+    "housenumber": "7815",
+    "city": "Dallas",
+    "postcode": "75248",
+    "lat": 32.9624633,
+    "lon": -96.773028
+  },
+  {
+    "street": "Campbell Road",
+    "housenumber": "7615",
+    "city": "Dallas",
+    "postcode": "75248",
+    "lat": 32.9799111,
+    "lon": -96.7687484
+  },
+  {
+    "street": "Park Lane",
+    "housenumber": "8190",
+    "city": "Dallas",
+    "postcode": "75231",
+    "lat": 32.8678936,
+    "lon": -96.7679033
+  },
+  {
+    "street": "Apple Street",
+    "housenumber": "1200",
+    "city": "Dallas",
+    "lat": 32.7951838,
+    "lon": -96.778941
+  },
+  {
+    "street": "Swiss Avenue",
+    "housenumber": "4005",
+    "city": "Dallas",
+    "postcode": "75204",
+    "lat": 32.7946918,
+    "lon": -96.7790132
+  },
+  {
+    "street": "Gaston Avenue",
+    "housenumber": "4025",
+    "city": "Dallas",
+    "postcode": "75246",
+    "lat": 32.7938827,
+    "lon": -96.7772577
+  },
+  {
+    "street": "Greenville Avenue",
+    "housenumber": "3702",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8324673,
+    "lon": -96.7697745
+  },
+  {
+    "street": "Greenville Ave",
+    "housenumber": "3715",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8322825,
+    "lon": -96.7703914
+  },
+  {
+    "street": "Frankford Road",
+    "housenumber": "4520",
+    "city": "Dallas",
+    "lat": 32.996977,
+    "lon": -96.8312678
+  },
+  {
+    "street": "Dallas Parkway",
+    "housenumber": "17721",
+    "city": "Dallas",
+    "postcode": "75287",
+    "lat": 32.9905235,
+    "lon": -96.8307018
+  },
+  {
+    "street": "Frankford Road",
+    "housenumber": "4520",
+    "city": "Dallas",
+    "lat": 32.9969799,
+    "lon": -96.8315333
+  },
+  {
+    "street": "Frankford Road",
+    "housenumber": "3632",
+    "city": "Dallas",
+    "postcode": "75287",
+    "lat": 32.9959341,
+    "lon": -96.8542149
+  },
+  {
+    "street": "Monitor Street",
+    "housenumber": "2266",
+    "city": "Dallas",
+    "postcode": "75207",
+    "lat": 32.79879,
+    "lon": -96.8353446
+  },
+  {
+    "street": "North Henderson Avenue",
+    "housenumber": "1900",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8116285,
+    "lon": -96.774497
+  },
+  {
+    "street": "South Lamar Street",
+    "housenumber": "1409",
+    "city": "Dallas",
+    "postcode": "75215",
+    "lat": 32.7673342,
+    "lon": -96.7960474
+  },
+  {
+    "street": "S Lamar Street",
+    "housenumber": "1601",
+    "city": "Dallas",
+    "postcode": "75215-1816",
+    "lat": 32.7663238,
+    "lon": -96.793966
+  },
+  {
+    "street": "Walnut Street",
+    "housenumber": "9596",
+    "city": "Dallas",
+    "postcode": "75243",
+    "lat": 32.923532,
+    "lon": -96.727152
+  },
+  {
+    "street": "Southeast Mill Street",
+    "housenumber": "166",
+    "city": "Dallas",
+    "lat": 44.9216985,
+    "lon": -123.3158253
+  },
+  {
+    "street": "Belt Line Road",
+    "housenumber": "5225",
+    "city": "Dallas",
+    "postcode": "75248",
+    "lat": 32.9551011,
+    "lon": -96.8176749
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "11910",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.9104602,
+    "lon": -96.8018161
+  },
+  {
+    "street": "Hillcrest Rd.",
+    "housenumber": "12720",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.9226407,
+    "lon": -96.7849348
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1623",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7811891,
+    "lon": -96.7972891
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1623",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7814205,
+    "lon": -96.7973562
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1623",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7816508,
+    "lon": -96.7974139
+  },
+  {
+    "street": "West 7th Street",
+    "housenumber": "316",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7488294,
+    "lon": -96.8274388
+  },
+  {
+    "street": "Commerce Street",
+    "housenumber": "1295",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7796427,
+    "lon": -96.8009445
+  },
+  {
+    "street": "Merchants Drive",
+    "housenumber": "1261",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9110881,
+    "lon": -84.7998167
+  },
+  {
+    "street": "Merchants Square",
+    "housenumber": "260",
+    "city": "Dallas",
+    "postcode": "30132",
+    "lat": 33.9092178,
+    "lon": -84.801399
+  },
+  {
+    "street": "Canton Street, Suite 202",
+    "housenumber": "3720",
+    "city": "Irving",
+    "lat": 32.7854369,
+    "lon": -96.7732422
+  },
+  {
+    "street": "West Camp Wisdom Road",
+    "housenumber": "8120",
+    "city": "Dallas",
+    "postcode": "75249",
+    "lat": 32.6607865,
+    "lon": -96.968403
+  },
+  {
+    "street": "Corsicana Street",
+    "housenumber": "1818",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7757748,
+    "lon": -96.79171
+  },
+  {
+    "street": "Boll Street",
+    "housenumber": "2511",
+    "city": "Dallas",
+    "postcode": "75204",
+    "lat": 32.7967612,
+    "lon": -96.8008587
+  },
+  {
+    "street": "Scotch Creek Road",
+    "housenumber": "3211",
+    "city": "Dallas",
+    "postcode": "75019",
+    "lat": 32.9333563,
+    "lon": -96.9863866
+  },
+  {
+    "street": "Memorial Highway",
+    "housenumber": "2685",
+    "city": "Dallas",
+    "postcode": "18612",
+    "lat": 41.335834,
+    "lon": -75.961028
+  },
+  {
+    "street": "Forest Central Drive, Suite 300",
+    "housenumber": "11551",
+    "city": "Dallas",
+    "postcode": "75243",
+    "lat": 32.9054228,
+    "lon": -96.7671845
+  },
+  {
+    "street": "Webb Chapel Rd 200",
+    "housenumber": "10909",
+    "city": "Dallas",
+    "postcode": "75229",
+    "lat": 32.8953849,
+    "lon": -96.8706526
+  },
+  {
+    "street": "Hillcrest Road",
+    "housenumber": "12720",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.9222634,
+    "lon": -96.784039
+  },
+  {
+    "street": "Goldmark",
+    "housenumber": "13561",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9336416,
+    "lon": -96.7574724
+  },
+  {
+    "street": "North Pearl Street, Suite 1150",
+    "housenumber": "700",
+    "city": "Dallas",
+    "postcode": "75201",
+    "lat": 32.7876377,
+    "lon": -96.7961312
+  },
+  {
+    "street": "Oak Lawn Avenue",
+    "housenumber": "3012",
+    "city": "Dallas",
+    "postcode": "75219",
+    "lat": 32.8097782,
+    "lon": -96.8079335
+  },
+  {
+    "street": "North Saint Paul Street",
+    "housenumber": "325",
+    "city": "Dallas",
+    "lat": 32.7830693,
+    "lon": -96.7977617
+  },
+  {
+    "street": "North Central Expressway",
+    "housenumber": "6060",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8399113,
+    "lon": -96.7747861
+  },
+  {
+    "street": "West Mockingbird Lane",
+    "housenumber": "4740",
+    "city": "Dallas",
+    "postcode": "75209",
+    "lat": 32.8361389,
+    "lon": -96.8278806
+  },
+  {
+    "street": "East Northwest Highway",
+    "housenumber": "10233",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.866639,
+    "lon": -96.7089001
+  },
+  {
+    "street": "Brockbank Drive",
+    "housenumber": "9801",
+    "city": "Dallas",
+    "postcode": "75220",
+    "lat": 32.8707281,
+    "lon": -96.8753585
+  },
+  {
+    "street": "South Akard Street",
+    "housenumber": "1407",
+    "city": "Dallas",
+    "postcode": "75215",
+    "lat": 32.7700066,
+    "lon": -96.7925749
+  },
+  {
+    "street": "North Central Expressway",
+    "housenumber": "10207",
+    "city": "Dallas",
+    "lat": 32.8857836,
+    "lon": -96.77089
+  },
+  {
+    "street": "Cedar Springs Road",
+    "housenumber": "4028",
+    "city": "Dallas",
+    "lat": 32.8118138,
+    "lon": -96.8117573
+  },
+  {
+    "street": "Spring Valley Road",
+    "housenumber": "5365",
+    "city": "Dallas",
+    "lat": 32.9398314,
+    "lon": -96.8157292
+  },
+  {
+    "street": "West Northwest Highway",
+    "housenumber": "6807",
+    "city": "Dallas",
+    "lat": 32.8660428,
+    "lon": -96.7884083
+  },
+  {
+    "street": "Frankford Road",
+    "housenumber": "2636",
+    "city": "Dallas",
+    "lat": 32.9966361,
+    "lon": -96.8671522
+  },
+  {
+    "street": "Midway Road",
+    "housenumber": "17610",
+    "city": "Dallas",
+    "lat": 32.988164,
+    "lon": -96.8409014
+  },
+  {
+    "street": "Forest Lane",
+    "housenumber": "8989",
+    "city": "Dallas",
+    "lat": 32.910129,
+    "lon": -96.7496767
+  },
+  {
+    "street": "Buckner Boulevard",
+    "housenumber": "1152",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8342922,
+    "lon": -96.7024929
+  },
+  {
+    "street": "North Stemmons Freeway",
+    "housenumber": "8383",
+    "city": "Dallas",
+    "postcode": "75247-4107",
+    "lat": 32.8258715,
+    "lon": -96.8729082
+  },
+  {
+    "street": "North Stemmons Freeway",
+    "housenumber": "8235",
+    "city": "Dallas",
+    "postcode": "75247",
+    "lat": 32.8247067,
+    "lon": -96.8724531
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "13601",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9332202,
+    "lon": -96.8062602
+  },
+  {
+    "street": "Preston",
+    "housenumber": "102",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.8962276,
+    "lon": -96.8035453
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "11919",
+    "city": "Preston Forest Square",
+    "postcode": "75230",
+    "lat": 32.9113742,
+    "lon": -96.8042186
+  },
+  {
+    "street": "Hillcrest Road",
+    "housenumber": "10909",
+    "city": "Dallas",
+    "postcode": "75230",
+    "lat": 32.8962907,
+    "lon": -96.7884552
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "11211",
+    "city": "Dallas",
+    "postcode": "75248",
+    "lat": 32.9017677,
+    "lon": -96.8043661
+  },
+  {
+    "street": "Noel Road",
+    "housenumber": "13355",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9293349,
+    "lon": -96.8184789
+  },
+  {
+    "street": "West Lovers Lane",
+    "housenumber": "5725",
+    "city": "Dallas",
+    "postcode": "75205",
+    "lat": 32.851486,
+    "lon": -96.8143527
+  },
+  {
+    "street": "West Lovers Lane",
+    "housenumber": "4503",
+    "city": "Dallas",
+    "postcode": "75209",
+    "lat": 32.8515715,
+    "lon": -96.8332854
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "63",
+    "city": "Dallas",
+    "lat": 41.3327758,
+    "lon": -75.9544001
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "47",
+    "city": "Dallas",
+    "lat": 41.3325114,
+    "lon": -75.9536604
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "42",
+    "city": "Dallas",
+    "lat": 41.3323761,
+    "lon": -75.953434
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "48",
+    "city": "Dallas",
+    "lat": 41.3325424,
+    "lon": -75.9537144
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "40",
+    "city": "Dallas",
+    "lat": 41.3322524,
+    "lon": -75.9532272
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "48",
+    "city": "Dallas",
+    "lat": 41.3325647,
+    "lon": -75.9537655
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "57",
+    "city": "Dallas",
+    "lat": 41.3326575,
+    "lon": -75.9540551
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "44",
+    "city": "Dallas",
+    "lat": 41.3324347,
+    "lon": -75.9535397
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "58",
+    "city": "Dallas",
+    "lat": 41.3327012,
+    "lon": -75.95419
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "65",
+    "city": "Dallas",
+    "lat": 41.3328131,
+    "lon": -75.9545208
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "26",
+    "city": "Dallas",
+    "lat": 41.3320567,
+    "lon": -75.9527332
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "40",
+    "city": "Dallas",
+    "lat": 41.3326053,
+    "lon": -75.9538677
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "29",
+    "city": "Dallas",
+    "lat": 41.3321047,
+    "lon": -75.952976
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "23",
+    "city": "Dallas",
+    "lat": 41.3319592,
+    "lon": -75.9525529
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "41",
+    "city": "Dallas",
+    "lat": 41.3322886,
+    "lon": -75.9532935
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "62",
+    "city": "Dallas",
+    "lat": 41.3327343,
+    "lon": -75.9542851
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "40",
+    "city": "Dallas",
+    "lat": 41.3326202,
+    "lon": -75.9539245
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "1",
+    "city": "Dallas",
+    "lat": 41.3325839,
+    "lon": -75.9538109
+  },
+  {
+    "street": "Dallas Shopping Center",
+    "housenumber": "56",
+    "city": "Dallas",
+    "lat": 41.3326372,
+    "lon": -75.9539898
+  },
+  {
+    "street": "Memorial Highway",
+    "housenumber": "3168",
+    "city": "Dallas",
+    "postcode": "18612",
+    "lat": 41.3316456,
+    "lon": -75.955099
+  },
+  {
+    "street": "North Central Expressway",
+    "housenumber": "8687",
+    "city": "Dallas",
+    "postcode": "75225",
+    "lat": 32.8691792,
+    "lon": -96.771885
+  },
+  {
+    "street": "Montfort Dr.",
+    "housenumber": "13319",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.9297593,
+    "lon": -96.8117062
+  },
+  {
+    "street": "Commerce Street",
+    "housenumber": "2801",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.783407,
+    "lon": -96.7831295
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3401b",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.7856437,
+    "lon": -96.7760717
+  },
+  {
+    "street": "Plano Road",
+    "housenumber": "10950",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.89827,
+    "lon": -96.6996018
+  },
+  {
+    "street": "Cedar Springs Road",
+    "housenumber": "4123",
+    "city": "Dallas",
+    "postcode": "75219",
+    "lat": 32.8119397,
+    "lon": -96.8130095
+  },
+  {
+    "street": "Exposition Avenue",
+    "housenumber": "841",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.782037,
+    "lon": -96.7666301
+  },
+  {
+    "street": "Lbj Freeway",
+    "housenumber": "7940",
+    "city": "Dallas",
+    "postcode": "75251",
+    "lat": 32.9231627,
+    "lon": -96.7695584
+  },
+  {
+    "street": "Dallas Fort Worth Turnpike",
+    "housenumber": "4404",
+    "city": "Dallas",
+    "postcode": "75211",
+    "lat": 32.76292,
+    "lon": -96.899359
+  },
+  {
+    "street": "Brookhurst Drive",
+    "housenumber": "642",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8504003,
+    "lon": -96.7082315
+  },
+  {
+    "street": "Easton Road",
+    "housenumber": "721",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8534077,
+    "lon": -96.7023991
+  },
+  {
+    "street": "Harter Road",
+    "housenumber": "848",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8447022,
+    "lon": -96.7069923
+  },
+  {
+    "street": "Greenville Avenue",
+    "housenumber": "4925",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8469852,
+    "lon": -96.770513
+  },
+  {
+    "street": "Cedar Springs Road",
+    "housenumber": "8008",
+    "city": "Dallas",
+    "postcode": "75235",
+    "lat": 32.8458559,
+    "lon": -96.8502674
+  },
+  {
+    "street": "Cedar Springs Road",
+    "housenumber": "8008",
+    "city": "Dallas",
+    "postcode": "75235",
+    "lat": 32.8450241,
+    "lon": -96.8498982
+  },
+  {
+    "street": "Herb Kelleher Way",
+    "housenumber": "8008",
+    "city": "Dallas",
+    "postcode": "75235",
+    "lat": 32.8457372,
+    "lon": -96.8501047
+  },
+  {
+    "street": "Cedar Springs Road",
+    "housenumber": "8008",
+    "city": "Dallas",
+    "lat": 32.8457266,
+    "lon": -96.8496614
+  },
+  {
+    "street": "Dallas High Shoals Highway",
+    "housenumber": "3129",
+    "city": "Dallas",
+    "postcode": "28034",
+    "lat": 35.3178117,
+    "lon": -81.1920136
+  },
+  {
+    "street": "Dallas Hi-Shoals Highway",
+    "housenumber": "3117",
+    "city": "Dallas",
+    "postcode": "28034",
+    "lat": 35.3164771,
+    "lon": -81.1903406
+  },
+  {
+    "street": "Dallas High Shoals Road",
+    "housenumber": "3100",
+    "city": "Dallas",
+    "postcode": "28034-1306",
+    "lat": 35.3171155,
+    "lon": -81.1894036
+  },
+  {
+    "street": "Dallas High Shoals Road",
+    "housenumber": "3130",
+    "city": "Dallas",
+    "postcode": "28034",
+    "lat": 35.318825,
+    "lon": -81.1896883
+  },
+  {
+    "street": "Dallas Cherryville Highway",
+    "housenumber": "1017",
+    "city": "Dallas",
+    "postcode": "28034",
+    "lat": 35.3150213,
+    "lon": -81.1920602
+  },
+  {
+    "street": "Dallas Cherryville Highway",
+    "housenumber": "1009",
+    "city": "Dallas",
+    "postcode": "28034",
+    "lat": 35.3151143,
+    "lon": -81.1914099
+  },
+  {
+    "street": "Abrams Road",
+    "housenumber": "9730",
+    "city": "Dallas",
+    "postcode": "75243",
+    "lat": 32.9085629,
+    "lon": -96.7350754
+  },
+  {
+    "street": "South Hampton Road",
+    "housenumber": "8207",
+    "city": "Dallas",
+    "postcode": "75232",
+    "lat": 32.6471729,
+    "lon": -96.8578406
+  },
+  {
+    "street": "West Wheatland Road",
+    "housenumber": "2403",
+    "city": "Dallas",
+    "postcode": "75237",
+    "lat": 32.6480719,
+    "lon": -96.8577378
+  },
+  {
+    "street": "Dallas Fort Worth Turnpike",
+    "housenumber": "4390",
+    "city": "Dallas",
+    "postcode": "75211",
+    "lat": 32.7652215,
+    "lon": -96.8990935
+  },
+  {
+    "street": "Dallas Fort Worth Turnpike",
+    "housenumber": "4390",
+    "city": "Dallas",
+    "postcode": "75211",
+    "lat": 32.7652351,
+    "lon": -96.8988135
+  },
+  {
+    "street": "Gaston Avenue",
+    "housenumber": "4918",
+    "city": "Dallas",
+    "postcode": "75214",
+    "lat": 32.8005127,
+    "lon": -96.7684705
+  },
+  {
+    "street": "Marsh Lane #101",
+    "housenumber": "19049",
+    "city": "Dallas",
+    "postcode": "75187",
+    "lat": 33.0106965,
+    "lon": -96.8577865
+  },
+  {
+    "street": "Sherry Lane",
+    "housenumber": "5950",
+    "city": "Dallas",
+    "postcode": "75225",
+    "lat": 32.8620714,
+    "lon": -96.8112433
+  },
+  {
+    "street": "Dragon Street",
+    "housenumber": "1411",
+    "city": "Dallas",
+    "postcode": "75207",
+    "lat": 32.7907665,
+    "lon": -96.819377
+  },
+  {
+    "street": "East Northwest Highway",
+    "housenumber": "10105",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.864529,
+    "lon": -96.7122853
+  },
+  {
+    "street": "East Northwest Highway",
+    "housenumber": "10233",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.8646552,
+    "lon": -96.7096085
+  },
+  {
+    "street": "East Northwest Parkway North",
+    "housenumber": "11211",
+    "city": "Dallas",
+    "lat": 32.8646709,
+    "lon": -96.6869304
+  },
+  {
+    "street": "Garland Road",
+    "housenumber": "9119",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8296233,
+    "lon": -96.7079503
+  },
+  {
+    "street": "Casa Linda Plaza",
+    "housenumber": "320",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8339054,
+    "lon": -96.6999091
+  },
+  {
+    "street": "Garland Road",
+    "housenumber": "9540",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8335719,
+    "lon": -96.7012985
+  },
+  {
+    "street": "Casa Linda Plaza",
+    "housenumber": "246",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8324585,
+    "lon": -96.7003007
+  },
+  {
+    "street": "Garland Road",
+    "housenumber": "9440",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8328146,
+    "lon": -96.7028166
+  },
+  {
+    "street": "Garland Rd",
+    "housenumber": "7826",
+    "city": "Dallas",
+    "postcode": "75218",
+    "lat": 32.8122979,
+    "lon": -96.7267739
+  },
+  {
+    "street": "Blackwell Street",
+    "housenumber": "5811",
+    "city": "Dallas",
+    "postcode": "75214",
+    "lat": 32.8671884,
+    "lon": -96.7648958
+  },
+  {
+    "street": "East Northwest Highway",
+    "housenumber": "6537",
+    "city": "Dallas",
+    "lat": 32.8566409,
+    "lon": -96.7474075
+  },
+  {
+    "street": "Abrams Road",
+    "housenumber": "5828",
+    "city": "Dallas",
+    "postcode": "75214",
+    "lat": 32.8560118,
+    "lon": -96.7497186
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1200",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7800021,
+    "lon": -96.8015595
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1501",
+    "city": "Dallas",
+    "lat": 32.7807588,
+    "lon": -96.7993146
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1501",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7807383,
+    "lon": -96.79944
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1411",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7806362,
+    "lon": -96.7998688
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "1409",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7806104,
+    "lon": -96.800005
+  },
+  {
+    "street": "Preston Road",
+    "housenumber": "16150",
+    "city": "Dallas",
+    "postcode": "75248",
+    "lat": 32.9709977,
+    "lon": -96.8031926
+  },
+  {
+    "street": "Forest Lane",
+    "housenumber": "9035",
+    "city": "Dallas",
+    "postcode": "75243",
+    "lat": 32.9103251,
+    "lon": -96.747539
+  },
+  {
+    "street": "West Ellendale Avenue",
+    "housenumber": "160",
+    "city": "Dallas",
+    "postcode": "97338",
+    "lat": 44.9306484,
+    "lon": -123.313328
+  },
+  {
+    "street": "West Ellendale Avenue",
+    "housenumber": "178",
+    "city": "Dallas",
+    "postcode": "97338",
+    "lat": 44.9306614,
+    "lon": -123.314413
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "772",
+    "city": "Dallas",
+    "postcode": "97338",
+    "lat": 44.9218311,
+    "lon": -123.316503
+  },
+  {
+    "street": "Park Lane North",
+    "housenumber": "8018",
+    "city": "Dallas",
+    "lat": 32.8704943,
+    "lon": -96.7689088
+  },
+  {
+    "street": "Ferndale Road",
+    "housenumber": "9643",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.8784316,
+    "lon": -96.7089327
+  },
+  {
+    "street": "Parry Avenue",
+    "housenumber": "3601",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.7814683,
+    "lon": -96.7668736
+  },
+  {
+    "street": "Lbj Freeway",
+    "housenumber": "39759",
+    "city": "Dallas",
+    "postcode": "75237",
+    "lat": 32.6504515,
+    "lon": -96.863774
+  },
+  {
+    "street": "Twin Stacks Drive",
+    "housenumber": "1206",
+    "city": "Dallas",
+    "postcode": "18612",
+    "lat": 41.3400902,
+    "lon": -75.9766799
+  },
+  {
+    "street": "Knox Street",
+    "housenumber": "3104",
+    "city": "Dallas",
+    "lat": 32.8230717,
+    "lon": -96.7877262
+  },
+  {
+    "street": "W Wheatland Rd",
+    "housenumber": "4001",
+    "city": "Dallas",
+    "postcode": "75237",
+    "lat": 32.6479088,
+    "lon": -96.8857586
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "2934",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.7843154,
+    "lon": -96.7807252
+  },
+  {
+    "street": "Main Street",
+    "housenumber": "3033",
+    "city": "Dallas",
+    "lat": 32.7849398,
+    "lon": -96.7792256
+  },
+  {
+    "street": "Spring Valley Road",
+    "housenumber": "8152",
+    "city": "Dallas",
+    "postcode": "75240",
+    "lat": 32.93908,
+    "lon": -96.7654361
+  },
+  {
+    "street": "East University Boulevard",
+    "housenumber": "5937",
+    "city": "Dallas",
+    "postcode": "75206",
+    "lat": 32.8463563,
+    "lon": -96.764394
+  },
+  {
+    "street": "Gannon Lane",
+    "housenumber": "4333",
+    "city": "Dallas",
+    "postcode": "75237",
+    "lat": 32.6570886,
+    "lon": -96.8899452
+  },
+  {
+    "street": "South Lamar Street",
+    "housenumber": "665",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7753516,
+    "lon": -96.803425
+  },
+  {
+    "street": "South Lamar Street",
+    "housenumber": "665",
+    "city": "Dallas",
+    "postcode": "75202",
+    "lat": 32.7755703,
+    "lon": -96.8035457
+  },
+  {
+    "street": "Jupiter Road",
+    "housenumber": "12959",
+    "city": "Dallas",
+    "postcode": "75238",
+    "lat": 32.8721389,
+    "lon": -96.6834397
+  },
+  {
+    "street": "Coit Road",
+    "housenumber": "12950",
+    "city": "Dallas",
+    "postcode": "75243",
+    "lat": 32.9230695,
+    "lon": -96.7684117
+  },
+  {
+    "street": "Commerce Street",
+    "housenumber": "2919",
+    "city": "Dallas",
+    "postcode": "75226",
+    "lat": 32.7837282,
+    "lon": -96.7812177
+  },
+  {
+    "street": "North Bishop Avenue",
+    "housenumber": "401",
+    "city": "Dallas",
+    "postcode": "75208",
+    "lat": 32.7481881,
+    "lon": -96.8284492
+  }
+]

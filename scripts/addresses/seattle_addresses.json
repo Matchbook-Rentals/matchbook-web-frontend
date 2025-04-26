@@ -1,0 +1,7735 @@
+[
+  {
+    "street": "9th Avenue Northeast",
+    "housenumber": "4500",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.661746,
+    "lon": -122.318112
+  },
+  {
+    "street": "Northeast 45th Street",
+    "housenumber": "1303",
+    "city": "Seattle",
+    "lat": 47.6611364,
+    "lon": -122.3140309
+  },
+  {
+    "street": "Alaskan Way",
+    "housenumber": "2701",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6134905,
+    "lon": -122.35349
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4002",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6554523,
+    "lon": -122.3131495
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "1215",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6757049,
+    "lon": -122.3150052
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "7317",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6823063,
+    "lon": -122.344707
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4326",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6603988,
+    "lon": -122.3129833
+  },
+  {
+    "street": "Northeast 127th Street",
+    "housenumber": "3020",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7216444,
+    "lon": -122.2952057
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "7700",
+    "city": "Seattle",
+    "lat": 47.6848701,
+    "lon": -122.3006041
+  },
+  {
+    "street": "Northeast Ravenna Boulevard",
+    "housenumber": "520",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6772572,
+    "lon": -122.3221899
+  },
+  {
+    "street": "Garfield Street",
+    "housenumber": "201",
+    "city": "Seattle",
+    "lat": 47.6329517,
+    "lon": -122.3519772
+  },
+  {
+    "street": "South Orcas Street",
+    "housenumber": "2920",
+    "city": "Seattle",
+    "lat": 47.5523537,
+    "lon": -122.296345
+  },
+  {
+    "street": "South Norman Street",
+    "housenumber": "2150",
+    "city": "Seattle",
+    "lat": 47.593034,
+    "lon": -122.3043984
+  },
+  {
+    "street": "2nd Avenue South",
+    "housenumber": "319",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.599381,
+    "lon": -122.331864
+  },
+  {
+    "street": "South Horton Street",
+    "housenumber": "1733",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5739087,
+    "lon": -122.309763
+  },
+  {
+    "street": "West Marginal Way Southwest",
+    "housenumber": "3568",
+    "city": "Seattle",
+    "postcode": "98106",
+    "lat": 47.5731714,
+    "lon": -122.3598915
+  },
+  {
+    "street": "Northeast 78th Street",
+    "housenumber": "844",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6855716,
+    "lon": -122.3182472
+  },
+  {
+    "street": "14th Avenue",
+    "housenumber": "1522",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6147868,
+    "lon": -122.3140488
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "500",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.623353,
+    "lon": -122.3204596
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "1445",
+    "city": "Seattle",
+    "lat": 47.5998241,
+    "lon": -122.3121945
+  },
+  {
+    "street": "22nd Avenue Northwest",
+    "housenumber": "5710",
+    "city": "Seattle",
+    "lat": 47.6706446,
+    "lon": -122.3845067
+  },
+  {
+    "street": "26th Avenue South",
+    "housenumber": "1122",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5922894,
+    "lon": -122.2988436
+  },
+  {
+    "street": "North 105th Street",
+    "housenumber": "400",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7052481,
+    "lon": -122.3538228
+  },
+  {
+    "street": "Beacon Avenue South",
+    "housenumber": "7126",
+    "city": "Seattle",
+    "postcode": "98108",
+    "lat": 47.5383451,
+    "lon": -122.2945171
+  },
+  {
+    "street": "25th Avenue Northwest",
+    "housenumber": "7706",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.685313,
+    "lon": -122.3885158
+  },
+  {
+    "street": "22nd Avenue Northwest",
+    "housenumber": "5710",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.670688,
+    "lon": -122.3845033
+  },
+  {
+    "street": "24th Avenue Northwest",
+    "housenumber": "6556",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6775584,
+    "lon": -122.3873446
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3211",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394198,
+    "lon": -122.398961
+  },
+  {
+    "street": "8th Avenue Northeast",
+    "housenumber": "11036",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7099438,
+    "lon": -122.319557
+  },
+  {
+    "street": "East Alder Street",
+    "housenumber": "1211",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6047959,
+    "lon": -122.3155949
+  },
+  {
+    "street": "Southwest Holden Street",
+    "housenumber": "2600",
+    "city": "Seattle",
+    "postcode": "98126",
+    "lat": 47.534445,
+    "lon": -122.366224
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "101",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6188627,
+    "lon": -122.3210607
+  },
+  {
+    "street": "34th Avenue West",
+    "housenumber": "2836",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6458921,
+    "lon": -122.4005483
+  },
+  {
+    "street": "15th Avenue Northwest",
+    "housenumber": "8729",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6932941,
+    "lon": -122.3771241
+  },
+  {
+    "street": "32nd Avenue South",
+    "housenumber": "7058",
+    "city": "Seattle",
+    "lat": 47.5390048,
+    "lon": -122.2909854
+  },
+  {
+    "street": "Harbor Avenue Southwest",
+    "housenumber": "1222",
+    "city": "Seattle",
+    "lat": 47.5927575,
+    "lon": -122.382124
+  },
+  {
+    "street": "Ashworth Avenue North",
+    "housenumber": "9536",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6987889,
+    "lon": -122.3391742
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "7311",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6821453,
+    "lon": -122.344708
+  },
+  {
+    "street": "8th Avenue South",
+    "housenumber": "713",
+    "city": "Seattle",
+    "lat": 47.5961613,
+    "lon": -122.322621
+  },
+  {
+    "street": "Southwest Avalon Way",
+    "housenumber": "2918",
+    "city": "Seattle",
+    "postcode": "98126",
+    "lat": 47.5706768,
+    "lon": -122.3710361
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4453",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5632158,
+    "lon": -122.3869867
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4449",
+    "city": "Seattle",
+    "lat": 47.5633605,
+    "lon": -122.3869567
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4509",
+    "city": "Seattle",
+    "lat": 47.5626236,
+    "lon": -122.3869793
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4542",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5616219,
+    "lon": -122.3865536
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4556",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5612196,
+    "lon": -122.3865559
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4557",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5613144,
+    "lon": -122.3869904
+  },
+  {
+    "street": "42nd Avenue Southwest",
+    "housenumber": "4706",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5606819,
+    "lon": -122.3848038
+  },
+  {
+    "street": "Southwest Edmunds Street",
+    "housenumber": "4301",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5591717,
+    "lon": -122.3875646
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4709",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5608253,
+    "lon": -122.3869938
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4719",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.560547,
+    "lon": -122.3870188
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4720",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5604072,
+    "lon": -122.3865765
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4546",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5615325,
+    "lon": -122.3865474
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2768",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5786654,
+    "lon": -122.4116777
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2742",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5788221,
+    "lon": -122.4112033
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2726",
+    "city": "Seattle",
+    "lat": 47.5790228,
+    "lon": -122.4104377
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "5905",
+    "city": "Seattle",
+    "postcode": "98136",
+    "lat": 47.550119,
+    "lon": -122.3873209
+  },
+  {
+    "street": "Northeast Ravenna Boulevard",
+    "housenumber": "1217",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.671152,
+    "lon": -122.3144575
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2650",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6641459,
+    "lon": -122.29806
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3300",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397122,
+    "lon": -122.399808
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3320",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397154,
+    "lon": -122.400418
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3321",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394257,
+    "lon": -122.4006017
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3320",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6398069,
+    "lon": -122.4007202
+  },
+  {
+    "street": "33rd Avenue West",
+    "housenumber": "2450",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6402644,
+    "lon": -122.3994513
+  },
+  {
+    "street": "West Smith Street",
+    "housenumber": "3213",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6403799,
+    "lon": -122.3986615
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3202",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397096,
+    "lon": -122.398577
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3206",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397092,
+    "lon": -122.39872
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2420",
+    "city": "Seattle",
+    "postcode": "98199-3202",
+    "lat": 47.6402829,
+    "lon": -122.3981517
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2231",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392646,
+    "lon": -122.3985109
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2229",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392027,
+    "lon": -122.39851
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2236",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392558,
+    "lon": -122.3981125
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2236",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392559,
+    "lon": -122.397847
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3223",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.639422,
+    "lon": -122.3994577
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3311",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.639426,
+    "lon": -122.4001996
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3315",
+    "city": "Seattle",
+    "lat": 47.6394355,
+    "lon": -122.4003224
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3320",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6398093,
+    "lon": -122.400597
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3412",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397301,
+    "lon": -122.4016778
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3412",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6396984,
+    "lon": -122.4016772
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3416",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6396937,
+    "lon": -122.4019686
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3418",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6396968,
+    "lon": -122.4020842
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3424",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6396868,
+    "lon": -122.4021944
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3219",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394183,
+    "lon": -122.3992455
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3213",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394209,
+    "lon": -122.399035
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3111",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.639223,
+    "lon": -122.3976471
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3200",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397098,
+    "lon": -122.398506
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3208",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.639709,
+    "lon": -122.398783
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3220",
+    "city": "Seattle",
+    "lat": 47.6396931,
+    "lon": -122.399273
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3222",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397036,
+    "lon": -122.399429
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3320",
+    "city": "Seattle",
+    "lat": 47.6397915,
+    "lon": -122.400449
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3209",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394267,
+    "lon": -122.3988387
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3221",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.639425,
+    "lon": -122.3993643
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2436",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.640713,
+    "lon": -122.3981692
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2434",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.640667,
+    "lon": -122.3981604
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2432",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6406323,
+    "lon": -122.3981626
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2430",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6406021,
+    "lon": -122.3981616
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2426",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6404111,
+    "lon": -122.3978536
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3204",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6397103,
+    "lon": -122.398636
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3203",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6393916,
+    "lon": -122.3985674
+  },
+  {
+    "street": "32nd Avenue West",
+    "housenumber": "2236",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392548,
+    "lon": -122.3979271
+  },
+  {
+    "street": "West Lynn Street",
+    "housenumber": "3216",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6392066,
+    "lon": -122.3991864
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3414",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6396938,
+    "lon": -122.4018669
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "3409",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6394328,
+    "lon": -122.4016282
+  },
+  {
+    "street": "33rd Avenue West",
+    "housenumber": "2450",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6401367,
+    "lon": -122.3994606
+  },
+  {
+    "street": "33rd Avenue West",
+    "housenumber": "2425",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6403282,
+    "lon": -122.3997907
+  },
+  {
+    "street": "33rd Avenue West",
+    "housenumber": "2425",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6402279,
+    "lon": -122.399799
+  },
+  {
+    "street": "West Wheeler Street",
+    "housenumber": "3213",
+    "city": "Seattle",
+    "lat": 47.6399744,
+    "lon": -122.3989736
+  },
+  {
+    "street": "24th Avenue East",
+    "housenumber": "2223",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6393933,
+    "lon": -122.302295
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "8830",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6929851,
+    "lon": -122.3173161
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "8824",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6928227,
+    "lon": -122.31743
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "8014",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6869038,
+    "lon": -122.3124639
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "12245",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7188438,
+    "lon": -122.3452635
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "9126",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6956415,
+    "lon": -122.3172262
+  },
+  {
+    "street": "Northeast 64th Street",
+    "housenumber": "1026",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6751275,
+    "lon": -122.316204
+  },
+  {
+    "street": "Latona Avenue Northeast",
+    "housenumber": "6411",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6755809,
+    "lon": -122.3256061
+  },
+  {
+    "street": "North 67th Street",
+    "housenumber": "316",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6778315,
+    "lon": -122.354558
+  },
+  {
+    "street": "North 67th Street",
+    "housenumber": "312",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6778315,
+    "lon": -122.3546696
+  },
+  {
+    "street": "Northeast Northgate Way",
+    "housenumber": "330",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7092276,
+    "lon": -122.324837
+  },
+  {
+    "street": "Northeast Northgate Way",
+    "housenumber": "334",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7087621,
+    "lon": -122.324481
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "8050",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6874966,
+    "lon": -122.311965
+  },
+  {
+    "street": "Beacon Avenue South",
+    "housenumber": "4801",
+    "city": "Seattle",
+    "postcode": "98108",
+    "lat": 47.559443,
+    "lon": -122.3049638
+  },
+  {
+    "street": "North 55th Street",
+    "housenumber": "2110",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6687913,
+    "lon": -122.33323
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "658",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.5993543,
+    "lon": -122.3247
+  },
+  {
+    "street": "Wallingford Avenue North",
+    "housenumber": "4002",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6557553,
+    "lon": -122.3360908
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4622",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6623174,
+    "lon": -122.3004015
+  },
+  {
+    "street": "East Roy Street",
+    "housenumber": "915",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6251788,
+    "lon": -122.3203029
+  },
+  {
+    "street": "North 55th Street",
+    "housenumber": "2101",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.668582,
+    "lon": -122.3331798
+  },
+  {
+    "street": "North 56th Street",
+    "housenumber": "2227",
+    "city": "Seattle",
+    "lat": 47.6688385,
+    "lon": -122.3318278
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "7406",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6831722,
+    "lon": -122.344276
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "171",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.599091,
+    "lon": -122.331856
+  },
+  {
+    "street": "Occidental Avenue South",
+    "housenumber": "400",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.5990989,
+    "lon": -122.332663
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1622 1/2",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615058,
+    "lon": -122.338103
+  },
+  {
+    "street": "25th Avenue Southwest",
+    "housenumber": "9025",
+    "city": "Seattle",
+    "postcode": "98106",
+    "lat": 47.5226736,
+    "lon": -122.3655616
+  },
+  {
+    "street": "Northeast San Juan Road",
+    "housenumber": "1506",
+    "city": "Seattle",
+    "postcode": "98195",
+    "lat": 47.6496478,
+    "lon": -122.3117815
+  },
+  {
+    "street": "55th Avenue South",
+    "housenumber": "9817",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5123563,
+    "lon": -122.2647331
+  },
+  {
+    "street": "55th Avenue South",
+    "housenumber": "9817",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5132995,
+    "lon": -122.2647307
+  },
+  {
+    "street": "West Highland Drive",
+    "housenumber": "211",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6294772,
+    "lon": -122.359935
+  },
+  {
+    "street": "North 85th Street",
+    "housenumber": "514",
+    "city": "Seattle",
+    "lat": 47.6906728,
+    "lon": -122.3516836
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8516",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6909056,
+    "lon": -122.355158
+  },
+  {
+    "street": "Yale Avenue North",
+    "housenumber": "422",
+    "city": "Seattle",
+    "lat": 47.6224942,
+    "lon": -122.3302536
+  },
+  {
+    "street": "32nd Avenue South",
+    "housenumber": "7054",
+    "city": "Seattle",
+    "lat": 47.5391031,
+    "lon": -122.2905328
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "7320",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6824348,
+    "lon": -122.3551067
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "3127",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6903909,
+    "lon": -122.3979721
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "3125",
+    "city": "Seattle",
+    "lat": 47.6904588,
+    "lon": -122.3980417
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "1407",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.690509,
+    "lon": -122.37442
+  },
+  {
+    "street": "Holman Road Northwest",
+    "housenumber": "9000",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.695046,
+    "lon": -122.3745952
+  },
+  {
+    "street": "Holman Road Northwest",
+    "housenumber": "9208",
+    "city": "Seattle",
+    "lat": 47.6964379,
+    "lon": -122.371682
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8411",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6902404,
+    "lon": -122.355484
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8701",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6927624,
+    "lon": -122.3556934
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1418",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6796262,
+    "lon": -122.3745013
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "2052",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6688461,
+    "lon": -122.3843499
+  },
+  {
+    "street": "Leary Avenue Northwest",
+    "housenumber": "5405",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6669699,
+    "lon": -122.3827493
+  },
+  {
+    "street": "32nd Avenue Northwest",
+    "housenumber": "6408",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6755569,
+    "lon": -122.3982329
+  },
+  {
+    "street": "32nd Avenue Northwest",
+    "housenumber": "6414",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6757051,
+    "lon": -122.3982158
+  },
+  {
+    "street": "32nd Avenue Northwest",
+    "housenumber": "6406",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6755005,
+    "lon": -122.3982331
+  },
+  {
+    "street": "32nd Avenue Northwest",
+    "housenumber": "6405",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6750663,
+    "lon": -122.398548
+  },
+  {
+    "street": "East Galer Street",
+    "housenumber": "1400",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6299452,
+    "lon": -122.315202
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "1475",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6904828,
+    "lon": -122.3758807
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "305",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6903568,
+    "lon": -122.361061
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "8007",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6871861,
+    "lon": -122.3128724
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "301",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6903392,
+    "lon": -122.3608285
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "9520",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6982143,
+    "lon": -122.3442903
+  },
+  {
+    "street": "Northeast 127th Street",
+    "housenumber": "3050",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7216441,
+    "lon": -122.2943474
+  },
+  {
+    "street": "Northeast 127th Street",
+    "housenumber": "3040",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7216443,
+    "lon": -122.2948379
+  },
+  {
+    "street": "Northeast 127th Street",
+    "housenumber": "3046",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7216442,
+    "lon": -122.2946057
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "10322",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7037177,
+    "lon": -122.301322
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "11064",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7098612,
+    "lon": -122.30029
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "11064",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7100996,
+    "lon": -122.3001481
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "11064",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7101768,
+    "lon": -122.3001136
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "109",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6188258,
+    "lon": -122.3293843
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "614",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6023507,
+    "lon": -122.333723
+  },
+  {
+    "street": "West Marina Place",
+    "housenumber": "2601",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6302742,
+    "lon": -122.3911337
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "12354",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7191381,
+    "lon": -122.3121619
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1911",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612712,
+    "lon": -122.3344526
+  },
+  {
+    "street": "Southwest Stevens Street",
+    "housenumber": "5817",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5775704,
+    "lon": -122.4070101
+  },
+  {
+    "street": "West Marina Place",
+    "housenumber": "2601",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6303796,
+    "lon": -122.3915164
+  },
+  {
+    "street": "North 83rd Street",
+    "housenumber": "305",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6890191,
+    "lon": -122.3548756
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8218",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6890313,
+    "lon": -122.355098
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8214",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6889441,
+    "lon": -122.355099
+  },
+  {
+    "street": "Harrison Street",
+    "housenumber": "305",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6227643,
+    "lon": -122.352986
+  },
+  {
+    "street": "8th Avenue Northeast",
+    "housenumber": "11016",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7092728,
+    "lon": -122.3202727
+  },
+  {
+    "street": "Northeast Northgate Way",
+    "housenumber": "520",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7089995,
+    "lon": -122.32211
+  },
+  {
+    "street": "North 85th Street",
+    "housenumber": "101",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6904007,
+    "lon": -122.357756
+  },
+  {
+    "street": "Leary Way Northwest",
+    "housenumber": "4358",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6603199,
+    "lon": -122.3657841
+  },
+  {
+    "street": "Leary Way Northwest",
+    "housenumber": "4354",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6602513,
+    "lon": -122.3657442
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "950",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6283095,
+    "lon": -122.339185
+  },
+  {
+    "street": "Northeast 127th Street",
+    "housenumber": "3000",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7212539,
+    "lon": -122.296005
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "1421",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6904674,
+    "lon": -122.375134
+  },
+  {
+    "street": "Northwest 85th Street",
+    "housenumber": "1481",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6904827,
+    "lon": -122.3760661
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "12248",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7192687,
+    "lon": -122.3443862
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "603",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6019163,
+    "lon": -122.3343878
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "102",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6015625,
+    "lon": -122.3339641
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "526",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6021043,
+    "lon": -122.332052
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "4501",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6614669,
+    "lon": -122.3178014
+  },
+  {
+    "street": "Northeast 45th Street",
+    "housenumber": "1100",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6615194,
+    "lon": -122.3163483
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1216",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.661518,
+    "lon": -122.342687
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "2221",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6685144,
+    "lon": -122.385856
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4509",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6616178,
+    "lon": -122.3133074
+  },
+  {
+    "street": "Northeast Ravenna Boulevard",
+    "housenumber": "444",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6780451,
+    "lon": -122.323478
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4523",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6619742,
+    "lon": -122.3133017
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "9400",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6968584,
+    "lon": -122.3173709
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "916",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6142159,
+    "lon": -122.3199026
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "913",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6139546,
+    "lon": -122.319989
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6501",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6759478,
+    "lon": -122.3175127
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6509",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6761594,
+    "lon": -122.3175071
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "1033",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.675689,
+    "lon": -122.3160243
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6416",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756398,
+    "lon": -122.3171164
+  },
+  {
+    "street": "East Green Lake Drive North",
+    "housenumber": "7850",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6857444,
+    "lon": -122.336541
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4201",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6584393,
+    "lon": -122.3133866
+  },
+  {
+    "street": "Northeast 47th Street",
+    "housenumber": "1315",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6629378,
+    "lon": -122.3135683
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4559",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6629735,
+    "lon": -122.3132817
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4549",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6627283,
+    "lon": -122.3132694
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4547",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6626542,
+    "lon": -122.3132817
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4545",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.662607,
+    "lon": -122.3132864
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4543",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6625207,
+    "lon": -122.3132911
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4541",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6624595,
+    "lon": -122.3132934
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4537b",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6624056,
+    "lon": -122.3132972
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4530",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6622155,
+    "lon": -122.312935
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4524",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6620812,
+    "lon": -122.3129464
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4518",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6618524,
+    "lon": -122.312967
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4510",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6616455,
+    "lon": -122.3129247
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4508",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.661549,
+    "lon": -122.312966
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4344",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.661119,
+    "lon": -122.312998
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4505",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6614794,
+    "lon": -122.313301
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "5260",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.668221,
+    "lon": -122.3128245
+  },
+  {
+    "street": "Harbor Avenue Southwest",
+    "housenumber": "1660",
+    "city": "Seattle",
+    "postcode": "98126",
+    "lat": 47.5894296,
+    "lon": -122.3805678
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4707",
+    "city": "Seattle",
+    "lat": 47.5609189,
+    "lon": -122.3869873
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4721",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5604465,
+    "lon": -122.3870061
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2311",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5825553,
+    "lon": -122.3866909
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2325",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5822532,
+    "lon": -122.386715
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2300",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5828828,
+    "lon": -122.3862617
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "5611",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.669801,
+    "lon": -122.3132234
+  },
+  {
+    "street": "Utah Avenue South",
+    "housenumber": "2401",
+    "city": "Seattle",
+    "postcode": "98134",
+    "lat": 47.580644,
+    "lon": -122.3353602
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2820",
+    "city": "Seattle",
+    "lat": 47.5782717,
+    "lon": -122.4130535
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "925",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.613954,
+    "lon": -122.3196108
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "922",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6142126,
+    "lon": -122.3196324
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1009",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6139808,
+    "lon": -122.3189279
+  },
+  {
+    "street": "4th Avenue South",
+    "housenumber": "2727",
+    "city": "Seattle",
+    "postcode": "98134",
+    "lat": 47.5789347,
+    "lon": -122.3294652
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4303",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6591419,
+    "lon": -122.350174
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4301",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.659062,
+    "lon": -122.3501761
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4306",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6597466,
+    "lon": -122.3496279
+  },
+  {
+    "street": "Corliss Avenue North",
+    "housenumber": "37153",
+    "city": "Seattle",
+    "lat": 47.6524186,
+    "lon": -122.3317696
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "600",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6024841,
+    "lon": -122.332397
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "602",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025255,
+    "lon": -122.332446
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "601",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6023199,
+    "lon": -122.332846
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "611",
+    "city": "Seattle",
+    "lat": 47.6026853,
+    "lon": -122.3331436
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "621",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6028262,
+    "lon": -122.3332807
+  },
+  {
+    "street": "James Street",
+    "housenumber": "215",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025012,
+    "lon": -122.331723
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "606",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6026275,
+    "lon": -122.332563
+  },
+  {
+    "street": "James Street",
+    "housenumber": "217",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.602532,
+    "lon": -122.3316491
+  },
+  {
+    "street": "James Street",
+    "housenumber": "219",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025628,
+    "lon": -122.331574
+  },
+  {
+    "street": "James Street",
+    "housenumber": "221",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025935,
+    "lon": -122.3315
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "611",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.603058,
+    "lon": -122.331943
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "615",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6031259,
+    "lon": -122.332014
+  },
+  {
+    "street": "12th Avenue",
+    "housenumber": "1538",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.615021,
+    "lon": -122.316641
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "5500",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6686245,
+    "lon": -122.3128343
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "5270",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6683927,
+    "lon": -122.3128601
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "527",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6238838,
+    "lon": -122.3211171
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1000",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6142354,
+    "lon": -122.319201
+  },
+  {
+    "street": "Latona Avenue Northeast",
+    "housenumber": "3822",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6545007,
+    "lon": -122.325473
+  },
+  {
+    "street": "12th Avenue",
+    "housenumber": "1515",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6144138,
+    "lon": -122.317071
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "201",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6007703,
+    "lon": -122.3344084
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "434",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6513035,
+    "lon": -122.3528453
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "450",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511256,
+    "lon": -122.3523658
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "456",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511554,
+    "lon": -122.3521912
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3406",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6497935,
+    "lon": -122.3495615
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3410",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6499101,
+    "lon": -122.3495767
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "601",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6494187,
+    "lon": -122.3501
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "626",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.649881,
+    "lon": -122.3501408
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "624",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6497803,
+    "lon": -122.350269
+  },
+  {
+    "street": "Phinney Avenue North",
+    "housenumber": "3501",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6515924,
+    "lon": -122.3546542
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "404",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6523605,
+    "lon": -122.3540934
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "462",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6520205,
+    "lon": -122.3527429
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "465",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6517179,
+    "lon": -122.3528563
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "456",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6521396,
+    "lon": -122.353006
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "452",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6521307,
+    "lon": -122.3532394
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3415",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6501248,
+    "lon": -122.350007
+  },
+  {
+    "street": "East Pine Street",
+    "housenumber": "1408",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6154362,
+    "lon": -122.3135746
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "1604",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6482121,
+    "lon": -122.3385566
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "1906",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6481547,
+    "lon": -122.3345878
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "12354",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7190724,
+    "lon": -122.3121587
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1701",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612646,
+    "lon": -122.337149
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1600",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615678,
+    "lon": -122.3389999
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1423",
+    "city": "Seattle",
+    "lat": 47.6612108,
+    "lon": -122.3396129
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1624",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615087,
+    "lon": -122.3379826
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1710",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.661497,
+    "lon": -122.3371255
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1710",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615222,
+    "lon": -122.3370512
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1712",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6614949,
+    "lon": -122.3369848
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1714",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615218,
+    "lon": -122.3369083
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1716",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6614926,
+    "lon": -122.336844
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1718",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615191,
+    "lon": -122.3367749
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1720",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6614954,
+    "lon": -122.3366971
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1722",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6614851,
+    "lon": -122.3366441
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1724",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615097,
+    "lon": -122.3365854
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1719",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612786,
+    "lon": -122.3364392
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1715",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612777,
+    "lon": -122.3366054
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1713",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612813,
+    "lon": -122.3367124
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1711",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612786,
+    "lon": -122.3368004
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1705",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612827,
+    "lon": -122.336944
+  },
+  {
+    "street": "Densmore Avenue North",
+    "housenumber": "4402",
+    "city": "Seattle",
+    "lat": 47.660464,
+    "lon": -122.3371607
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "716",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6497124,
+    "lon": -122.3489993
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "703",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6492247,
+    "lon": -122.3491213
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "706",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.649626,
+    "lon": -122.3492704
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "708",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6496206,
+    "lon": -122.3492088
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "710",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6496061,
+    "lon": -122.3491364
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "704",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6496345,
+    "lon": -122.3493242
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1407",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6134138,
+    "lon": -122.321342
+  },
+  {
+    "street": "West Nickerson Street",
+    "housenumber": "1900",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6555838,
+    "lon": -122.3811821
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "2100",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6471412,
+    "lon": -122.333742
+  },
+  {
+    "street": "Wallingford Avenue North",
+    "housenumber": "3333",
+    "city": "Seattle",
+    "lat": 47.6479304,
+    "lon": -122.33679
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "119",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6525775,
+    "lon": -122.3567849
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "1200",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6299509,
+    "lon": -122.3400728
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "1200",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6298971,
+    "lon": -122.3394817
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "2040",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6374143,
+    "lon": -122.3399752
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "1818",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6353957,
+    "lon": -122.3398693
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "2132",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385488,
+    "lon": -122.3405474
+  },
+  {
+    "street": "Westlake Avenue North",
+    "housenumber": "2100",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6382235,
+    "lon": -122.3403034
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "4000",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6556026,
+    "lon": -122.308621
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6403",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6751479,
+    "lon": -122.3175421
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6413",
+    "city": "Seattle",
+    "lat": 47.6754261,
+    "lon": -122.3175098
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6417",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756157,
+    "lon": -122.3175045
+  },
+  {
+    "street": "12th Avenue Northeast",
+    "housenumber": "6401",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6752743,
+    "lon": -122.3166359
+  },
+  {
+    "street": "12th Avenue Northeast",
+    "housenumber": "6417",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756002,
+    "lon": -122.3164292
+  },
+  {
+    "street": "Evanston Avenue North",
+    "housenumber": "3401",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6500149,
+    "lon": -122.351523
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "609",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6245901,
+    "lon": -122.3293532
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3508",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6508415,
+    "lon": -122.35025
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3526",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6513311,
+    "lon": -122.3507373
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3512",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6509602,
+    "lon": -122.3504187
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3501",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6507227,
+    "lon": -122.3500813
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3507",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6508151,
+    "lon": -122.3508326
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "1090",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6485313,
+    "lon": -122.3435302
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "1100",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6484836,
+    "lon": -122.3431933
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4333",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6599534,
+    "lon": -122.3502245
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "475",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6516256,
+    "lon": -122.3524036
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "407",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6518795,
+    "lon": -122.3539433
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "403",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6519456,
+    "lon": -122.3538952
+  },
+  {
+    "street": "North 43rd Street",
+    "housenumber": "400",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6590626,
+    "lon": -122.3542449
+  },
+  {
+    "street": "Ballard Avenue Northwest",
+    "housenumber": "5231",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6661245,
+    "lon": -122.3830931
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "3409",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6489046,
+    "lon": -122.3431612
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "1341",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6476048,
+    "lon": -122.3408349
+  },
+  {
+    "street": "12th Avenue",
+    "housenumber": "800",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6093696,
+    "lon": -122.3165764
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "304",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6527416,
+    "lon": -122.3551712
+  },
+  {
+    "street": "12th Avenue",
+    "housenumber": "812",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6096999,
+    "lon": -122.31656
+  },
+  {
+    "street": "12th Avenue",
+    "housenumber": "806",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6094924,
+    "lon": -122.3165649
+  },
+  {
+    "street": "East Olive Way",
+    "housenumber": "1416",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6176107,
+    "lon": -122.3265717
+  },
+  {
+    "street": "East Olive Way",
+    "housenumber": "1355",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6166381,
+    "lon": -122.3275746
+  },
+  {
+    "street": "East Olive Way",
+    "housenumber": "1356",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.616968,
+    "lon": -122.327413
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "1054",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6490384,
+    "lon": -122.3442798
+  },
+  {
+    "street": "North 56th Street",
+    "housenumber": "2201",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6686092,
+    "lon": -122.3326924
+  },
+  {
+    "street": "East Howell Street",
+    "housenumber": "514",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6177999,
+    "lon": -122.3244614
+  },
+  {
+    "street": "15th Avenue West",
+    "housenumber": "1827",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6354479,
+    "lon": -122.3765086
+  },
+  {
+    "street": "10th Avenue",
+    "housenumber": "1521",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6146657,
+    "lon": -122.319677
+  },
+  {
+    "street": "Latona Avenue Northeast",
+    "housenumber": "6417",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756476,
+    "lon": -122.3255978
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1118",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6142351,
+    "lon": -122.3172039
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "205",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6006761,
+    "lon": -122.334398
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "207",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6006031,
+    "lon": -122.3344038
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "209",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.600512,
+    "lon": -122.3343914
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "213",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6003478,
+    "lon": -122.3343945
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "217",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6002379,
+    "lon": -122.334402
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "221",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.600165,
+    "lon": -122.3344018
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "210",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6004669,
+    "lon": -122.3339782
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4231",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6592428,
+    "lon": -122.3133406
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4139",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6579925,
+    "lon": -122.3133866
+  },
+  {
+    "street": "Brooklyn Avenue Northeast",
+    "housenumber": "4142",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6581295,
+    "lon": -122.3142098
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4235",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6593411,
+    "lon": -122.3133401
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4217",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6588831,
+    "lon": -122.31337
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4237",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6594156,
+    "lon": -122.313348
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4203",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6585163,
+    "lon": -122.3133686
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4208",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6585573,
+    "lon": -122.3130437
+  },
+  {
+    "street": "Northeast 42nd Street",
+    "housenumber": "1401",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6582094,
+    "lon": -122.313051
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4224",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6590787,
+    "lon": -122.313044
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4241",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6595358,
+    "lon": -122.3133282
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4205",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6585538,
+    "lon": -122.3133678
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4219",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6589343,
+    "lon": -122.313369
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4214",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6586448,
+    "lon": -122.3130434
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4138",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6579661,
+    "lon": -122.3130645
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4245",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6596112,
+    "lon": -122.3133326
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4207",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6586007,
+    "lon": -122.3133668
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4221",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6589856,
+    "lon": -122.313368
+  },
+  {
+    "street": "Northeast 43rd Street",
+    "housenumber": "1305",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6597161,
+    "lon": -122.314074
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4247",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6596899,
+    "lon": -122.3133438
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4200",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6584272,
+    "lon": -122.3130467
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4209",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.658659,
+    "lon": -122.3133634
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4124",
+    "city": "Seattle",
+    "lat": 47.6574994,
+    "lon": -122.3127738
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4142",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6580857,
+    "lon": -122.3130727
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4213",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.658756,
+    "lon": -122.3133633
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4239",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6594675,
+    "lon": -122.3133211
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4147",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.658195,
+    "lon": -122.3134196
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4108",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6571914,
+    "lon": -122.313075
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4215",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6588175,
+    "lon": -122.313363
+  },
+  {
+    "street": "Brooklyn Avenue Northeast",
+    "housenumber": "4106",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6569986,
+    "lon": -122.31417
+  },
+  {
+    "street": "Brooklyn Avenue Northeast",
+    "housenumber": "4106",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6571228,
+    "lon": -122.3141689
+  },
+  {
+    "street": "Brooklyn Avenue Northeast",
+    "housenumber": "4106",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6572231,
+    "lon": -122.3141679
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4114",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6573018,
+    "lon": -122.3130587
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4214",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6587941,
+    "lon": -122.3130382
+  },
+  {
+    "street": "Brooklyn Avenue Northeast",
+    "housenumber": "4106",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6569977,
+    "lon": -122.313987
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4143",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6580661,
+    "lon": -122.31341
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4223",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6590369,
+    "lon": -122.3133669
+  },
+  {
+    "street": "University Way Northeast",
+    "housenumber": "4116",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6574105,
+    "lon": -122.3130573
+  },
+  {
+    "street": "North 49th Street",
+    "housenumber": "1319",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.664175,
+    "lon": -122.341127
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "101",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.599079,
+    "lon": -122.333975
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "1919",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5989882,
+    "lon": -122.3067239
+  },
+  {
+    "street": "North 85th Street",
+    "housenumber": "120",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6909885,
+    "lon": -122.3570102
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4615",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6627178,
+    "lon": -122.3419463
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "3118",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6759038,
+    "lon": -122.2931717
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "517",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6235665,
+    "lon": -122.312827
+  },
+  {
+    "street": "Summit Avenue East",
+    "housenumber": "609",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6246357,
+    "lon": -122.325475
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "509",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6234297,
+    "lon": -122.3128279
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "411",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6223517,
+    "lon": -122.312829
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "429",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6227783,
+    "lon": -122.312814
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "623",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.624979,
+    "lon": -122.3211541
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "625",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6250278,
+    "lon": -122.3211759
+  },
+  {
+    "street": "Northwest 65th Street",
+    "housenumber": "418",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6760846,
+    "lon": -122.3623051
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "700",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6253026,
+    "lon": -122.3210851
+  },
+  {
+    "street": "10th Avenue",
+    "housenumber": "1525",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6149543,
+    "lon": -122.31965
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "8210",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6889264,
+    "lon": -122.2901952
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "8200",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6887167,
+    "lon": -122.2901924
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "8230",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6893232,
+    "lon": -122.2901818
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "837",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6491855,
+    "lon": -122.3485678
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "110",
+    "city": "Seattle",
+    "lat": 47.6529954,
+    "lon": -122.3570524
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "3525",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6503315,
+    "lon": -122.3430069
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4262",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.659079,
+    "lon": -122.3498788
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "503",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6515647,
+    "lon": -122.3521306
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3406",
+    "city": "Seattle",
+    "lat": 47.6498425,
+    "lon": -122.3495743
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3518",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511207,
+    "lon": -122.3504565
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4254",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6588765,
+    "lon": -122.3498789
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "600",
+    "city": "Seattle",
+    "lat": 47.6516322,
+    "lon": -122.3511171
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3515",
+    "city": "Seattle",
+    "lat": 47.651019,
+    "lon": -122.3501099
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3515",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6510745,
+    "lon": -122.3501154
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3526",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6513319,
+    "lon": -122.3506637
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3518",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511077,
+    "lon": -122.349715
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3520",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511647,
+    "lon": -122.349716
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3514",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6510479,
+    "lon": -122.3497139
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3510",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6509565,
+    "lon": -122.3497063
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "315",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6521386,
+    "lon": -122.354793
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3416",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6501282,
+    "lon": -122.3496228
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2206",
+    "city": "Seattle",
+    "lat": 47.5836323,
+    "lon": -122.3862776
+  },
+  {
+    "street": "South King Street",
+    "housenumber": "660",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.5984664,
+    "lon": -122.3245189
+  },
+  {
+    "street": "Pike Street",
+    "housenumber": "81 A",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6083167,
+    "lon": -122.3408538
+  },
+  {
+    "street": "Terry Avenue North",
+    "housenumber": "442",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6228655,
+    "lon": -122.3369538
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "12720",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7219293,
+    "lon": -122.293348
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "12513",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7200057,
+    "lon": -122.29507
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "12518",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7197764,
+    "lon": -122.2946574
+  },
+  {
+    "street": "4th Avenue",
+    "housenumber": "2504",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6169346,
+    "lon": -122.3462858
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "2124",
+    "city": "Seattle",
+    "lat": 47.61515,
+    "lon": -122.341243
+  },
+  {
+    "street": "Northwest Leary Way",
+    "housenumber": "1135",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6633625,
+    "lon": -122.373049
+  },
+  {
+    "street": "Holman Road Northwest",
+    "housenumber": "9999",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.7015346,
+    "lon": -122.363926
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3526",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6512525,
+    "lon": -122.3507589
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "462",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6523273,
+    "lon": -122.3527605
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "469",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6516655,
+    "lon": -122.3526101
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "473",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6516224,
+    "lon": -122.3525145
+  },
+  {
+    "street": "North 36th Street",
+    "housenumber": "501",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6515915,
+    "lon": -122.3522739
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "8617",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6914198,
+    "lon": -122.290881
+  },
+  {
+    "street": "East Pine Street",
+    "housenumber": "1404",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.615416,
+    "lon": -122.3140811
+  },
+  {
+    "street": "Wallingford Avenue North",
+    "housenumber": "3650",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6518718,
+    "lon": -122.3361496
+  },
+  {
+    "street": "5th Avenue North",
+    "housenumber": "803",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6264448,
+    "lon": -122.3477407
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "500",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6246921,
+    "lon": -122.3472754
+  },
+  {
+    "street": "5th Avenue North",
+    "housenumber": "813",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6267583,
+    "lon": -122.347723
+  },
+  {
+    "street": "5th Avenue North",
+    "housenumber": "823",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6270447,
+    "lon": -122.3477368
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "500",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6248892,
+    "lon": -122.347276
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "500",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6252742,
+    "lon": -122.3472593
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "801",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6757068,
+    "lon": -122.319878
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2200",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615041,
+    "lon": -122.3323912
+  },
+  {
+    "street": "North Canal Street",
+    "housenumber": "132",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6516868,
+    "lon": -122.356353
+  },
+  {
+    "street": "Stevens Way",
+    "housenumber": "185",
+    "city": "Seattle",
+    "postcode": "98195",
+    "lat": 47.6533583,
+    "lon": -122.305763
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "2401",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6684943,
+    "lon": -122.3879015
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "8050",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.688232,
+    "lon": -122.2902351
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "6329",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756524,
+    "lon": -122.3121753
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "2044",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6688574,
+    "lon": -122.3841041
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "600",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6499533,
+    "lon": -122.3508881
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2660",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6638839,
+    "lon": -122.2980595
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2670",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6636364,
+    "lon": -122.298059
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2656",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6640104,
+    "lon": -122.2980596
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2678",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6634937,
+    "lon": -122.2980623
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2676",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6635515,
+    "lon": -122.298057
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2680",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6634305,
+    "lon": -122.2980597
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2666",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6637448,
+    "lon": -122.298057
+  },
+  {
+    "street": "Northeast University Village Street",
+    "housenumber": "2700",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.663506,
+    "lon": -122.2973441
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4613",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6622038,
+    "lon": -122.300053
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4619",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6623061,
+    "lon": -122.300044
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4630",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6625017,
+    "lon": -122.300406
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4610",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6620029,
+    "lon": -122.3003941
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4616",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6622168,
+    "lon": -122.3003868
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4606",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6618334,
+    "lon": -122.30039
+  },
+  {
+    "street": "27th Avenue Northeast",
+    "housenumber": "4625",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6624422,
+    "lon": -122.2978639
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4626",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6624225,
+    "lon": -122.3003983
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4609",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6619866,
+    "lon": -122.300061
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4601",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.661845,
+    "lon": -122.300048
+  },
+  {
+    "street": "Northeast 46th Street",
+    "housenumber": "2600",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.66189,
+    "lon": -122.2997071
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4612",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6621495,
+    "lon": -122.3003827
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "4608",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6619251,
+    "lon": -122.3003849
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4634",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6625162,
+    "lon": -122.30002
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4627",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6624186,
+    "lon": -122.3000365
+  },
+  {
+    "street": "Northeast Village Lane",
+    "housenumber": "2695",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6621695,
+    "lon": -122.2979545
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "321",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6213086,
+    "lon": -122.3131094
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "523",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6239693,
+    "lon": -122.3129097
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "115",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.618961,
+    "lon": -122.3128997
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "300",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6206739,
+    "lon": -122.3124931
+  },
+  {
+    "street": "26th Avenue Northeast",
+    "housenumber": "4634",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.662684,
+    "lon": -122.2997452
+  },
+  {
+    "street": "Northeast Northlake Way",
+    "housenumber": "660",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6546656,
+    "lon": -122.3213485
+  },
+  {
+    "street": "Northeast Northlake Way",
+    "housenumber": "658",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6546633,
+    "lon": -122.321519
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "4555",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6626473,
+    "lon": -122.317644
+  },
+  {
+    "street": "Northeast Boat Street",
+    "housenumber": "1410",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6509807,
+    "lon": -122.314342
+  },
+  {
+    "street": "Northeast 55th Street",
+    "housenumber": "2827",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6684047,
+    "lon": -122.2960883
+  },
+  {
+    "street": "North 55th Street",
+    "housenumber": "2106",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6687837,
+    "lon": -122.333474
+  },
+  {
+    "street": "Northeast 45th Street",
+    "housenumber": "2746",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6622402,
+    "lon": -122.296441
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "4200",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6358827,
+    "lon": -122.2782742
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "4234",
+    "city": "Seattle",
+    "lat": 47.6364484,
+    "lon": -122.2773302
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "417",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6224273,
+    "lon": -122.3214738
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1221",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6139598,
+    "lon": -122.3157647
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "4000",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6341044,
+    "lon": -122.280812
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1121",
+    "city": "Seattle",
+    "lat": 47.6139484,
+    "lon": -122.3171251
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "435",
+    "city": "Seattle",
+    "lat": 47.6229877,
+    "lon": -122.3128173
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "507",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6233694,
+    "lon": -122.312828
+  },
+  {
+    "street": "19th Avenue East",
+    "housenumber": "903",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6270436,
+    "lon": -122.307517
+  },
+  {
+    "street": "Lakeside Avenue",
+    "housenumber": "102",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6017581,
+    "lon": -122.2849774
+  },
+  {
+    "street": "Lake Washington Boulevard",
+    "housenumber": "200",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6029635,
+    "lon": -122.2842541
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "120",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6021098,
+    "lon": -122.2848508
+  },
+  {
+    "street": "Rainier Avenue South",
+    "housenumber": "4816",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5589937,
+    "lon": -122.285421
+  },
+  {
+    "street": "Wilson Avenue South",
+    "housenumber": "5028",
+    "city": "Seattle",
+    "lat": 47.5560767,
+    "lon": -122.2701248
+  },
+  {
+    "street": "Rainier Avenue South",
+    "housenumber": "4918",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5572106,
+    "lon": -122.2845232
+  },
+  {
+    "street": "Rainier Avenue South",
+    "housenumber": "4872",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.557967,
+    "lon": -122.2849069
+  },
+  {
+    "street": "South King Street",
+    "housenumber": "520",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.5984623,
+    "lon": -122.3267286
+  },
+  {
+    "street": "Maynard Avenue South",
+    "housenumber": "409",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.5990324,
+    "lon": -122.32525
+  },
+  {
+    "street": "5th Avenue South",
+    "housenumber": "600",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.596843,
+    "lon": -122.327043
+  },
+  {
+    "street": "Rainier Avenue South",
+    "housenumber": "852",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5946228,
+    "lon": -122.3100668
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1418",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5896845,
+    "lon": -122.2922255
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1425",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5895405,
+    "lon": -122.292667
+  },
+  {
+    "street": "Lakeside Avenue",
+    "housenumber": "121",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6020673,
+    "lon": -122.285358
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2244",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6396272,
+    "lon": -122.325518
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2307",
+    "city": "Seattle",
+    "lat": 47.6400585,
+    "lon": -122.3260795
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2366",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.641428,
+    "lon": -122.325667
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2240",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6394411,
+    "lon": -122.325516
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2305",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6399433,
+    "lon": -122.3260931
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2301",
+    "city": "Seattle",
+    "lat": 47.6398557,
+    "lon": -122.3260998
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "2320",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6688561,
+    "lon": -122.3871997
+  },
+  {
+    "street": "North Northgate Way",
+    "housenumber": "2137",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7082314,
+    "lon": -122.3320965
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "10555",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7067227,
+    "lon": -122.355787
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "10002",
+    "city": "Seattle",
+    "postcode": "98133",
+    "lat": 47.7023384,
+    "lon": -122.344387
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8564",
+    "city": "Seattle",
+    "lat": 47.6918221,
+    "lon": -122.355083
+  },
+  {
+    "street": "Aurora Avenue North",
+    "housenumber": "13241",
+    "city": "Seattle",
+    "postcode": "98133-7508",
+    "lat": 47.7246216,
+    "lon": -122.3454212
+  },
+  {
+    "street": "Northeast 117th Street",
+    "housenumber": "1510",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7141162,
+    "lon": -122.3119066
+  },
+  {
+    "street": "15th Avenue Northeast",
+    "housenumber": "14359",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7335331,
+    "lon": -122.3131011
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "7001",
+    "city": "Seattle",
+    "lat": 47.6797002,
+    "lon": -122.2906625
+  },
+  {
+    "street": "35th Avenue Northeast",
+    "housenumber": "7303",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6814027,
+    "lon": -122.290647
+  },
+  {
+    "street": "Lake City Way Northeast",
+    "housenumber": "8065",
+    "city": "Seattle",
+    "lat": 47.6881353,
+    "lon": -122.3115477
+  },
+  {
+    "street": "20th Avenue Northeast",
+    "housenumber": "6504",
+    "city": "Seattle",
+    "lat": 47.6758864,
+    "lon": -122.3063181
+  },
+  {
+    "street": "20th Avenue Northeast",
+    "housenumber": "6504",
+    "city": "Seattle",
+    "lat": 47.6758876,
+    "lon": -122.3064262
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "2258",
+    "city": "Seattle",
+    "lat": 47.6759463,
+    "lon": -122.303328
+  },
+  {
+    "street": "40th Avenue Northeast",
+    "housenumber": "6514",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6761289,
+    "lon": -122.284355
+  },
+  {
+    "street": "Northeast Northgate Way",
+    "housenumber": "302",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7092311,
+    "lon": -122.325169
+  },
+  {
+    "street": "Northeast Thornton Place",
+    "housenumber": "316",
+    "city": "Seattle",
+    "postcode": "98125",
+    "lat": 47.7027883,
+    "lon": -122.325333
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8523",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6911513,
+    "lon": -122.355518
+  },
+  {
+    "street": "Latona Avenue Northeast",
+    "housenumber": "6423",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6758124,
+    "lon": -122.3255853
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1520",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6146859,
+    "lon": -122.32057
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1417",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6136243,
+    "lon": -122.3209773
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2043",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6380666,
+    "lon": -122.326077
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2236",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6393506,
+    "lon": -122.325512
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2245",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6396282,
+    "lon": -122.326075
+  },
+  {
+    "street": "Eastlake Avenue East",
+    "housenumber": "2228",
+    "city": "Seattle",
+    "lat": 47.6390214,
+    "lon": -122.3256831
+  },
+  {
+    "street": "East Union Street",
+    "housenumber": "1400",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6130697,
+    "lon": -122.314003
+  },
+  {
+    "street": "14th Avenue",
+    "housenumber": "1531",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6150591,
+    "lon": -122.3143994
+  },
+  {
+    "street": "15th Avenue",
+    "housenumber": "1550",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6150995,
+    "lon": -122.3126
+  },
+  {
+    "street": "Madison Street",
+    "housenumber": "1700",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6157986,
+    "lon": -122.3100354
+  },
+  {
+    "street": "East Union Street",
+    "housenumber": "1412",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6130656,
+    "lon": -122.3135826
+  },
+  {
+    "street": "14th Avenue",
+    "housenumber": "1535",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.615173,
+    "lon": -122.3143967
+  },
+  {
+    "street": "35th Avenue Southwest",
+    "housenumber": "7349",
+    "city": "Seattle",
+    "lat": 47.5358005,
+    "lon": -122.3768542
+  },
+  {
+    "street": "25th Avenue Southwest",
+    "housenumber": "9023",
+    "city": "Seattle",
+    "postcode": "98106",
+    "lat": 47.5227467,
+    "lon": -122.3655602
+  },
+  {
+    "street": "Southwest Barton Street",
+    "housenumber": "2800",
+    "city": "Seattle",
+    "postcode": "98126",
+    "lat": 47.5213673,
+    "lon": -122.3670494
+  },
+  {
+    "street": "Southwest Henderson Street",
+    "housenumber": "3507",
+    "city": "Seattle",
+    "postcode": "98126",
+    "lat": 47.5227493,
+    "lon": -122.3772028
+  },
+  {
+    "street": "Evanston Avenue North",
+    "housenumber": "4017",
+    "city": "Seattle",
+    "lat": 47.6559007,
+    "lon": -122.3514318
+  },
+  {
+    "street": "Ballard Avenue Northwest",
+    "housenumber": "5427",
+    "city": "Seattle",
+    "lat": 47.6680496,
+    "lon": -122.3857166
+  },
+  {
+    "street": "21st Avenue",
+    "housenumber": "1411",
+    "city": "Seattle",
+    "lat": 47.6132215,
+    "lon": -122.3051662
+  },
+  {
+    "street": "East Union Street",
+    "housenumber": "2022",
+    "city": "Seattle",
+    "lat": 47.613099,
+    "lon": -122.3051216
+  },
+  {
+    "street": "East Union Street",
+    "housenumber": "2000",
+    "city": "Seattle",
+    "lat": 47.6130546,
+    "lon": -122.3060798
+  },
+  {
+    "street": "21st Avenue",
+    "housenumber": "1411",
+    "city": "Seattle",
+    "lat": 47.6132472,
+    "lon": -122.3051008
+  },
+  {
+    "street": "11th Avenue",
+    "housenumber": "1529",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6149264,
+    "lon": -122.3182548
+  },
+  {
+    "street": "11th Avenue",
+    "housenumber": "1536",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6154722,
+    "lon": -122.3169862
+  },
+  {
+    "street": "15th Avenue West",
+    "housenumber": "1827",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6354438,
+    "lon": -122.3768796
+  },
+  {
+    "street": "15th Avenue West",
+    "housenumber": "1827",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6354455,
+    "lon": -122.3767726
+  },
+  {
+    "street": "Northeast 49th Street",
+    "housenumber": "2692",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6644336,
+    "lon": -122.2979741
+  },
+  {
+    "street": "Northeast 49th Street",
+    "housenumber": "2680",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6644314,
+    "lon": -122.2984243
+  },
+  {
+    "street": "25th Avenue Northeast",
+    "housenumber": "5105",
+    "city": "Seattle",
+    "lat": 47.6668892,
+    "lon": -122.300834
+  },
+  {
+    "street": "West Mercer Street",
+    "housenumber": "29",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6244715,
+    "lon": -122.3578586
+  },
+  {
+    "street": "15th Avenue Northwest",
+    "housenumber": "5305",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6673017,
+    "lon": -122.3765633
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "605",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6248767,
+    "lon": -122.3569011
+  },
+  {
+    "street": "West Mercer Street",
+    "housenumber": "210",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6244319,
+    "lon": -122.359596
+  },
+  {
+    "street": "West Mercer Street",
+    "housenumber": "25",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.624485,
+    "lon": -122.3576839
+  },
+  {
+    "street": "West Mercer Street",
+    "housenumber": "210",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6242945,
+    "lon": -122.359601
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3504",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6507302,
+    "lon": -122.3496864
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "711",
+    "city": "Seattle",
+    "lat": 47.6502851,
+    "lon": -122.34923
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3411",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6500215,
+    "lon": -122.3499973
+  },
+  {
+    "street": "Southwest Admiral Way",
+    "housenumber": "4311",
+    "city": "Seattle",
+    "lat": 47.5810592,
+    "lon": -122.3869026
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2600",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5810556,
+    "lon": -122.38635
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "4752",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5594825,
+    "lon": -122.3866085
+  },
+  {
+    "street": "California Avenue Southwest",
+    "housenumber": "2601",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5810522,
+    "lon": -122.3867555
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "600",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6249277,
+    "lon": -122.3565653
+  },
+  {
+    "street": "Thomas Street",
+    "housenumber": "1190",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6209307,
+    "lon": -122.3332743
+  },
+  {
+    "street": "Alaskan Way",
+    "housenumber": "2801",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6146314,
+    "lon": -122.3547916
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "1415",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6099366,
+    "lon": -122.3353594
+  },
+  {
+    "street": "South Lander Street",
+    "housenumber": "97",
+    "city": "Seattle",
+    "postcode": "98134",
+    "lat": 47.579634,
+    "lon": -122.334486
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2135",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6382428,
+    "lon": -122.3570985
+  },
+  {
+    "street": "Northwest 65th Street",
+    "housenumber": "512",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6760806,
+    "lon": -122.3629711
+  },
+  {
+    "street": "8th Avenue Northwest",
+    "housenumber": "6500",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6761599,
+    "lon": -122.3657479
+  },
+  {
+    "street": "Northwest 65th Street",
+    "housenumber": "704",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6761007,
+    "lon": -122.3647966
+  },
+  {
+    "street": "West Nickerson Street",
+    "housenumber": "1900",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6555776,
+    "lon": -122.3808946
+  },
+  {
+    "street": "21st Avenue West",
+    "housenumber": "4001",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6560771,
+    "lon": -122.3837069
+  },
+  {
+    "street": "West Nickerson Street",
+    "housenumber": "1900",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6557257,
+    "lon": -122.3803558
+  },
+  {
+    "street": "18th Avenue West",
+    "housenumber": "3909",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6552973,
+    "lon": -122.3801343
+  },
+  {
+    "street": "West Nickerson Street",
+    "housenumber": "1900",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6555698,
+    "lon": -122.381006
+  },
+  {
+    "street": "Nickerson Street",
+    "housenumber": "198",
+    "city": "Seattle",
+    "lat": 47.6481483,
+    "lon": -122.3529448
+  },
+  {
+    "street": "Nickerson Street",
+    "housenumber": "198",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6479131,
+    "lon": -122.352851
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "506",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6019354,
+    "lon": -122.331839
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "601",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6495031,
+    "lon": -122.350381
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "4212",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6582304,
+    "lon": -122.3498031
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "702",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6506304,
+    "lon": -122.3495952
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3424",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6503638,
+    "lon": -122.3496403
+  },
+  {
+    "street": "Fremont Place North",
+    "housenumber": "3516",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6511373,
+    "lon": -122.3505961
+  },
+  {
+    "street": "Boren Avenue North",
+    "housenumber": "351",
+    "city": "Seattle",
+    "lat": 47.6217104,
+    "lon": -122.336121
+  },
+  {
+    "street": "14th Avenue",
+    "housenumber": "1517",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6146738,
+    "lon": -122.3144417
+  },
+  {
+    "street": "East Lynn Street",
+    "housenumber": "1008",
+    "city": "Seattle",
+    "lat": 47.6397152,
+    "lon": -122.3195915
+  },
+  {
+    "street": "Boren Avenue",
+    "housenumber": "1017",
+    "city": "Seattle",
+    "lat": 47.6098344,
+    "lon": -122.3257516
+  },
+  {
+    "street": "Terry Avenue",
+    "housenumber": "1019",
+    "city": "Seattle",
+    "lat": 47.6092896,
+    "lon": -122.3269245
+  },
+  {
+    "street": "Melrose Avenue",
+    "housenumber": "1718",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.617657,
+    "lon": -122.3277204
+  },
+  {
+    "street": "Minor Avenue",
+    "housenumber": "1221",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6115297,
+    "lon": -122.3257784
+  },
+  {
+    "street": "Alaskan Way",
+    "housenumber": "1301",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6061669,
+    "lon": -122.3424999
+  },
+  {
+    "street": "East Denny Way",
+    "housenumber": "1312",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6189087,
+    "lon": -122.3148331
+  },
+  {
+    "street": "14th Avenue East",
+    "housenumber": "101",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6189157,
+    "lon": -122.314447
+  },
+  {
+    "street": "14th Avenue East",
+    "housenumber": "105",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6190229,
+    "lon": -122.3144862
+  },
+  {
+    "street": "East John Street",
+    "housenumber": "1307",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6198423,
+    "lon": -122.3153053
+  },
+  {
+    "street": "13th Avenue East",
+    "housenumber": "103",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6189478,
+    "lon": -122.3157427
+  },
+  {
+    "street": "East Denny Way",
+    "housenumber": "1305",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6186978,
+    "lon": -122.315225
+  },
+  {
+    "street": "14th Avenue",
+    "housenumber": "1803",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6178301,
+    "lon": -122.314502
+  },
+  {
+    "street": "East Olive Street",
+    "housenumber": "1605",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6162161,
+    "lon": -122.3110997
+  },
+  {
+    "street": "East Madison Street",
+    "housenumber": "1325",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.613675,
+    "lon": -122.3145073
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "801",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6033154,
+    "lon": -122.335258
+  },
+  {
+    "street": "Yesler Way",
+    "housenumber": "77",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6016155,
+    "lon": -122.335257
+  },
+  {
+    "street": "Yesler Way",
+    "housenumber": "73",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6016146,
+    "lon": -122.3354445
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2666",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5795494,
+    "lon": -122.4087986
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "1300",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6077008,
+    "lon": -122.3385575
+  },
+  {
+    "street": "Leary Avenue Northwest",
+    "housenumber": "5242",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6665862,
+    "lon": -122.3817902
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1109",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6494094,
+    "lon": -122.343591
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4455",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6609496,
+    "lon": -122.3424229
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4318",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6597851,
+    "lon": -122.3419416
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "3506",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6497249,
+    "lon": -122.3424
+  },
+  {
+    "street": "15th Avenue Northwest",
+    "housenumber": "8345",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6901404,
+    "lon": -122.377051
+  },
+  {
+    "street": "Phinney Avenue North",
+    "housenumber": "5918",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.672328,
+    "lon": -122.3541759
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "8319",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6897312,
+    "lon": -122.3554992
+  },
+  {
+    "street": "Northeast Northlake Way",
+    "housenumber": "653",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6543487,
+    "lon": -122.3218283
+  },
+  {
+    "street": "Northeast Northlake Way",
+    "housenumber": "659",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6543465,
+    "lon": -122.3213633
+  },
+  {
+    "street": "Northeast 43rd Street",
+    "housenumber": "1309",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6597146,
+    "lon": -122.3138263
+  },
+  {
+    "street": "Northeast 42nd Street",
+    "housenumber": "1408",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6584244,
+    "lon": -122.3127804
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3421",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6502718,
+    "lon": -122.3500314
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3423",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6503182,
+    "lon": -122.3500891
+  },
+  {
+    "street": "Evanston Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6506413,
+    "lon": -122.3514784
+  },
+  {
+    "street": "Fremont Avenue North",
+    "housenumber": "3515",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.65113,
+    "lon": -122.35012
+  },
+  {
+    "street": "22nd Avenue Northwest",
+    "housenumber": "5604",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6696277,
+    "lon": -122.3845346
+  },
+  {
+    "street": "Northwest 70th Street",
+    "housenumber": "1421",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6794441,
+    "lon": -122.3749126
+  },
+  {
+    "street": "Northwest 46th Street",
+    "housenumber": "1416",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6627763,
+    "lon": -122.373877
+  },
+  {
+    "street": "East Olive Way",
+    "housenumber": "1500",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6178484,
+    "lon": -122.3263788
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "201",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6200406,
+    "lon": -122.3210692
+  },
+  {
+    "street": "Belmont Avenue East",
+    "housenumber": "115",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6190049,
+    "lon": -122.324211
+  },
+  {
+    "street": "Westlake Avenue",
+    "housenumber": "2200",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6183162,
+    "lon": -122.3381763
+  },
+  {
+    "street": "1st Avenue South",
+    "housenumber": "103",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6015299,
+    "lon": -122.3343745
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "2100",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6120336,
+    "lon": -122.343901
+  },
+  {
+    "street": "21st Avenue West",
+    "housenumber": "3055",
+    "city": "Seattle",
+    "postcode": "98199",
+    "lat": 47.6482614,
+    "lon": -122.3835401
+  },
+  {
+    "street": "10th Avenue West",
+    "housenumber": "1903C",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.636137,
+    "lon": -122.370557
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "615",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6394747,
+    "lon": -122.365746
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "620",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6397012,
+    "lon": -122.3659746
+  },
+  {
+    "street": "10th Avenue West",
+    "housenumber": "1907",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6362491,
+    "lon": -122.370557
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "625",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6394732,
+    "lon": -122.3661111
+  },
+  {
+    "street": "24th Avenue Northwest",
+    "housenumber": "5909",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6719658,
+    "lon": -122.3878282
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "2522",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6179284,
+    "lon": -122.345931
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "535",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6394797,
+    "lon": -122.364771
+  },
+  {
+    "street": "West Galer Street",
+    "housenumber": "224",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6324599,
+    "lon": -122.360822
+  },
+  {
+    "street": "West Galer Street",
+    "housenumber": "321",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6322027,
+    "lon": -122.361454
+  },
+  {
+    "street": "West Galer Street",
+    "housenumber": "325",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6322072,
+    "lon": -122.361613
+  },
+  {
+    "street": "West Galer Street",
+    "housenumber": "317",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6322046,
+    "lon": -122.361327
+  },
+  {
+    "street": "Western Avenue",
+    "housenumber": "2801",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.616037,
+    "lon": -122.3533168
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "401",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6220796,
+    "lon": -122.31283
+  },
+  {
+    "street": "15th Avenue East",
+    "housenumber": "407",
+    "city": "Seattle",
+    "postcode": "98112",
+    "lat": 47.6222245,
+    "lon": -122.3128293
+  },
+  {
+    "street": "8th Avenue Northwest",
+    "housenumber": "6757",
+    "city": "Seattle",
+    "postcode": "98117",
+    "lat": 47.6794598,
+    "lon": -122.3662573
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2718",
+    "city": "Seattle",
+    "lat": 47.579117,
+    "lon": -122.4101426
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2808",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5784426,
+    "lon": -122.412365
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2722",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5790584,
+    "lon": -122.4103152
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2508",
+    "city": "Seattle",
+    "lat": 47.5808405,
+    "lon": -122.4057616
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2532",
+    "city": "Seattle",
+    "lat": 47.5805845,
+    "lon": -122.4063283
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2516",
+    "city": "Seattle",
+    "lat": 47.5807773,
+    "lon": -122.405959
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2620",
+    "city": "Seattle",
+    "lat": 47.5801305,
+    "lon": -122.4073049
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2622",
+    "city": "Seattle",
+    "lat": 47.5800913,
+    "lon": -122.4074264
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2618",
+    "city": "Seattle",
+    "lat": 47.5802534,
+    "lon": -122.4071759
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2716",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5791383,
+    "lon": -122.4100684
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2536",
+    "city": "Seattle",
+    "lat": 47.5804548,
+    "lon": -122.4066648
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2632",
+    "city": "Seattle",
+    "lat": 47.5799991,
+    "lon": -122.4077047
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2356",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5803814,
+    "lon": -122.4068141
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2800",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5784839,
+    "lon": -122.4122171
+  },
+  {
+    "street": "Alki Avenue Southwest",
+    "housenumber": "2676",
+    "city": "Seattle",
+    "postcode": "98116",
+    "lat": 47.5793974,
+    "lon": -122.4091509
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1218",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615362,
+    "lon": -122.3424975
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4469",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612375,
+    "lon": -122.342412
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4545",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.661638,
+    "lon": -122.3423945
+  },
+  {
+    "street": "Stone Way North",
+    "housenumber": "4468",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612326,
+    "lon": -122.341894
+  },
+  {
+    "street": "1st Avenue North",
+    "housenumber": "600",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6249137,
+    "lon": -122.3550559
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "100",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6247689,
+    "lon": -122.3550584
+  },
+  {
+    "street": "Latona Avenue Northeast",
+    "housenumber": "6421",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6757104,
+    "lon": -122.3256094
+  },
+  {
+    "street": "Mercer Street",
+    "housenumber": "23",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6244409,
+    "lon": -122.3556307
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "1207",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6757046,
+    "lon": -122.3152865
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "1205",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756915,
+    "lon": -122.3153795
+  },
+  {
+    "street": "Northeast 65th Street",
+    "housenumber": "1037",
+    "city": "Seattle",
+    "postcode": "98115",
+    "lat": 47.6756963,
+    "lon": -122.31583
+  },
+  {
+    "street": "Roosevelt Way Northeast",
+    "housenumber": "6417",
+    "city": "Seattle",
+    "postcode": "98105",
+    "lat": 47.6756194,
+    "lon": -122.317657
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "1341",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6473492,
+    "lon": -122.3408001
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2201",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385089,
+    "lon": -122.3571055
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2101",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6373176,
+    "lon": -122.3571382
+  },
+  {
+    "street": "South Vale Street",
+    "housenumber": "1205",
+    "city": "Seattle",
+    "postcode": "98108",
+    "lat": 47.54902,
+    "lon": -122.3171131
+  },
+  {
+    "street": "Northeast 45th Street",
+    "housenumber": "266",
+    "city": "Seattle",
+    "lat": 47.6614916,
+    "lon": -122.3253013
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "1930",
+    "city": "Seattle",
+    "lat": 47.6116348,
+    "lon": -122.341267
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "1920",
+    "city": "Seattle",
+    "lat": 47.611501,
+    "lon": -122.3410283
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "1926",
+    "city": "Seattle",
+    "lat": 47.6115679,
+    "lon": -122.3411383
+  },
+  {
+    "street": "East Yesler Way",
+    "housenumber": "1918",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6017892,
+    "lon": -122.306579
+  },
+  {
+    "street": "Western Avenue",
+    "housenumber": "2822",
+    "city": "Seattle",
+    "postcode": "98121",
+    "lat": 47.6162004,
+    "lon": -122.3530557
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "538",
+    "city": "Seattle",
+    "lat": 47.5967424,
+    "lon": -122.2870569
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "702",
+    "city": "Seattle",
+    "lat": 47.5963963,
+    "lon": -122.2870872
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "710",
+    "city": "Seattle",
+    "lat": 47.5962761,
+    "lon": -122.2870462
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1629",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.634472,
+    "lon": -122.3571792
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1507",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6326914,
+    "lon": -122.3572116
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1629",
+    "city": "Seattle",
+    "lat": 47.6344269,
+    "lon": -122.3571816
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1417",
+    "city": "Seattle",
+    "lat": 47.6321796,
+    "lon": -122.3570771
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1623",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.634299,
+    "lon": -122.3571904
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1531",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6333635,
+    "lon": -122.3572377
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1515",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6327965,
+    "lon": -122.3572204
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1525",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6331383,
+    "lon": -122.3572254
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1621",
+    "city": "Seattle",
+    "lat": 47.6342074,
+    "lon": -122.3571915
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1616",
+    "city": "Seattle",
+    "lat": 47.634074,
+    "lon": -122.3568049
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1501",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6324569,
+    "lon": -122.3572194
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1630",
+    "city": "Seattle",
+    "lat": 47.6343693,
+    "lon": -122.3568017
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2127",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6379911,
+    "lon": -122.3571118
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2128",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6380595,
+    "lon": -122.3567282
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2135",
+    "city": "Seattle",
+    "lat": 47.6381824,
+    "lon": -122.3570983
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2115",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.637716,
+    "lon": -122.3571242
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1835",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6357546,
+    "lon": -122.3571711
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2131",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6380929,
+    "lon": -122.3571086
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2129",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6380526,
+    "lon": -122.3571107
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2105",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6374275,
+    "lon": -122.3571093
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2123",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6379208,
+    "lon": -122.3571128
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2128",
+    "city": "Seattle",
+    "lat": 47.6381095,
+    "lon": -122.3567282
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2117",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6377777,
+    "lon": -122.3571266
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2125",
+    "city": "Seattle",
+    "lat": 47.6379528,
+    "lon": -122.3571118
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2121",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6378377,
+    "lon": -122.3571242
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "1905",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6362448,
+    "lon": -122.3572335
+  },
+  {
+    "street": "West Crockett Street",
+    "housenumber": "6",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6372991,
+    "lon": -122.3574286
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2107",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6375042,
+    "lon": -122.3571093
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2111",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6375776,
+    "lon": -122.3571068
+  },
+  {
+    "street": "East Pike Street",
+    "housenumber": "1316",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6142676,
+    "lon": -122.3146967
+  },
+  {
+    "street": "West McGraw Street",
+    "housenumber": "601",
+    "city": "Seattle",
+    "postcode": "98119",
+    "lat": 47.6394544,
+    "lon": -122.3651889
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2203",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385835,
+    "lon": -122.3571008
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2205",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6386532,
+    "lon": -122.3571017
+  },
+  {
+    "street": "Boston Street",
+    "housenumber": "12",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385159,
+    "lon": -122.3563471
+  },
+  {
+    "street": "Boston Street",
+    "housenumber": "7",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.638259,
+    "lon": -122.356528
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2208",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6387102,
+    "lon": -122.3567358
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2215",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.63896,
+    "lon": -122.357092
+  },
+  {
+    "street": "Boston Street",
+    "housenumber": "2",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385016,
+    "lon": -122.3567302
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2207",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6386844,
+    "lon": -122.3571009
+  },
+  {
+    "street": "Boston Street",
+    "housenumber": "10",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6385109,
+    "lon": -122.3564728
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2209",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6387141,
+    "lon": -122.3571003
+  },
+  {
+    "street": "Burke Avenue North",
+    "housenumber": "3426",
+    "city": "Seattle",
+    "lat": 47.6488129,
+    "lon": -122.3349472
+  },
+  {
+    "street": "Burke Avenue North",
+    "housenumber": "3428",
+    "city": "Seattle",
+    "lat": 47.6488672,
+    "lon": -122.3349623
+  },
+  {
+    "street": "Burke Avenue North",
+    "housenumber": "3430",
+    "city": "Seattle",
+    "lat": 47.6489249,
+    "lon": -122.3349598
+  },
+  {
+    "street": "Phinney Avenue North",
+    "housenumber": "5910",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6721718,
+    "lon": -122.3541824
+  },
+  {
+    "street": "Greenwood Avenue North",
+    "housenumber": "7401",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6826633,
+    "lon": -122.3554886
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2402",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6397307,
+    "lon": -122.3566328
+  },
+  {
+    "street": "Queen Anne Avenue North",
+    "housenumber": "2400",
+    "city": "Seattle",
+    "postcode": "98109",
+    "lat": 47.6397307,
+    "lon": -122.356743
+  },
+  {
+    "street": "5th Avenue",
+    "housenumber": "1628",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6126011,
+    "lon": -122.336982
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "1414",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6092612,
+    "lon": -122.3370963
+  },
+  {
+    "street": "3rd Avenue",
+    "housenumber": "1404",
+    "city": "Seattle",
+    "postcode": "98101",
+    "lat": 47.6090622,
+    "lon": -122.3369141
+  },
+  {
+    "street": "Martin Luther King Junior Way South",
+    "housenumber": "6030",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5475586,
+    "lon": -122.284937
+  },
+  {
+    "street": "Martin Luther King Junior Way South",
+    "housenumber": "7137",
+    "city": "Seattle",
+    "postcode": "98118",
+    "lat": 47.5378556,
+    "lon": -122.2818793
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1907",
+    "city": "Seattle",
+    "lat": 47.6489019,
+    "lon": -122.3347998
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1907",
+    "city": "Seattle",
+    "lat": 47.6488983,
+    "lon": -122.3347695
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1907",
+    "city": "Seattle",
+    "lat": 47.6488367,
+    "lon": -122.3347709
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1911",
+    "city": "Seattle",
+    "lat": 47.6488386,
+    "lon": -122.3345963
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1911",
+    "city": "Seattle",
+    "lat": 47.6489077,
+    "lon": -122.3345951
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1911",
+    "city": "Seattle",
+    "lat": 47.6488907,
+    "lon": -122.3346435
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "1911",
+    "city": "Seattle",
+    "lat": 47.6488379,
+    "lon": -122.3346444
+  },
+  {
+    "street": "North Northlake Way",
+    "housenumber": "2000",
+    "city": "Seattle",
+    "lat": 47.6475361,
+    "lon": -122.3343741
+  },
+  {
+    "street": "North Pacific Street",
+    "housenumber": "2100",
+    "city": "Seattle",
+    "lat": 47.6485565,
+    "lon": -122.3330948
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "2101",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6478278,
+    "lon": -122.33366
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "2101",
+    "city": "Seattle",
+    "lat": 47.6490707,
+    "lon": -122.3335896
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "2103",
+    "city": "Seattle",
+    "lat": 47.6490664,
+    "lon": -122.3334783
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "2105",
+    "city": "Seattle",
+    "lat": 47.6490692,
+    "lon": -122.3335515
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "2107",
+    "city": "Seattle",
+    "lat": 47.6490688,
+    "lon": -122.3335131
+  },
+  {
+    "street": "North Pacific Street",
+    "housenumber": "2110",
+    "city": "Seattle",
+    "lat": 47.6486627,
+    "lon": -122.3329258
+  },
+  {
+    "street": "North 34th Street",
+    "housenumber": "2111",
+    "city": "Seattle",
+    "lat": 47.6482045,
+    "lon": -122.3336772
+  },
+  {
+    "street": "North Pacific Street",
+    "housenumber": "2116",
+    "city": "Seattle",
+    "lat": 47.6487345,
+    "lon": -122.3330111
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3327",
+    "city": "Seattle",
+    "lat": 47.6474966,
+    "lon": -122.3344163
+  },
+  {
+    "street": "Burke Avenue North",
+    "housenumber": "3410",
+    "city": "Seattle",
+    "lat": 47.6483762,
+    "lon": -122.3347719
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3410",
+    "city": "Seattle",
+    "lat": 47.6484068,
+    "lon": -122.3336903
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3411",
+    "city": "Seattle",
+    "lat": 47.6484698,
+    "lon": -122.3341659
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3412",
+    "city": "Seattle",
+    "lat": 47.6484825,
+    "lon": -122.3336967
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3413",
+    "city": "Seattle",
+    "lat": 47.6485206,
+    "lon": -122.3341664
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3413",
+    "city": "Seattle",
+    "lat": 47.648523,
+    "lon": -122.3343576
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3413",
+    "city": "Seattle",
+    "lat": 47.6485338,
+    "lon": -122.3343558
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3413",
+    "city": "Seattle",
+    "lat": 47.6485701,
+    "lon": -122.3343569
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3413",
+    "city": "Seattle",
+    "lat": 47.6485393,
+    "lon": -122.3341652
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3414",
+    "city": "Seattle",
+    "lat": 47.6485227,
+    "lon": -122.333702
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3415",
+    "city": "Seattle",
+    "lat": 47.6485547,
+    "lon": -122.3341704
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3416",
+    "city": "Seattle",
+    "lat": 47.6485671,
+    "lon": -122.333704
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "lat": 47.648633,
+    "lon": -122.3341697
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "lat": 47.6486347,
+    "lon": -122.3341697
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "lat": 47.6485942,
+    "lon": -122.3341675
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "lat": 47.6485709,
+    "lon": -122.3341704
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3417",
+    "city": "Seattle",
+    "lat": 47.6486347,
+    "lon": -122.3341722
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3418",
+    "city": "Seattle",
+    "lat": 47.6486331,
+    "lon": -122.3336933
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3421",
+    "city": "Seattle",
+    "lat": 47.648473,
+    "lon": -122.3343562
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3423",
+    "city": "Seattle",
+    "lat": 47.6484996,
+    "lon": -122.3343567
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3425",
+    "city": "Seattle",
+    "lat": 47.6485715,
+    "lon": -122.334359
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3427",
+    "city": "Seattle",
+    "lat": 47.6486337,
+    "lon": -122.3343576
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3428",
+    "city": "Seattle",
+    "lat": 47.6488539,
+    "lon": -122.333549
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3430",
+    "city": "Seattle",
+    "lat": 47.6489229,
+    "lon": -122.3335054
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3431",
+    "city": "Seattle",
+    "lat": 47.6486794,
+    "lon": -122.3344031
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3433",
+    "city": "Seattle",
+    "lat": 47.648733,
+    "lon": -122.334407
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3435",
+    "city": "Seattle",
+    "lat": 47.6487858,
+    "lon": -122.3344106
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3437",
+    "city": "Seattle",
+    "lat": 47.6488387,
+    "lon": -122.3344049
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3441",
+    "city": "Seattle",
+    "lat": 47.6489008,
+    "lon": -122.3344042
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3443",
+    "city": "Seattle",
+    "lat": 47.6489561,
+    "lon": -122.3344083
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3445",
+    "city": "Seattle",
+    "lat": 47.6489997,
+    "lon": -122.334412
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3447",
+    "city": "Seattle",
+    "lat": 47.6490466,
+    "lon": -122.3344184
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3451",
+    "city": "Seattle",
+    "lat": 47.6486814,
+    "lon": -122.3341474
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3453",
+    "city": "Seattle",
+    "lat": 47.6487299,
+    "lon": -122.3341509
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3455",
+    "city": "Seattle",
+    "lat": 47.6487882,
+    "lon": -122.3341576
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3457",
+    "city": "Seattle",
+    "lat": 47.6488453,
+    "lon": -122.3341592
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3461",
+    "city": "Seattle",
+    "lat": 47.6489023,
+    "lon": -122.3341584
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3463",
+    "city": "Seattle",
+    "lat": 47.6489527,
+    "lon": -122.3341599
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3465",
+    "city": "Seattle",
+    "lat": 47.6489963,
+    "lon": -122.3341586
+  },
+  {
+    "street": "Meridian Avenue North",
+    "housenumber": "3467",
+    "city": "Seattle",
+    "lat": 47.64905,
+    "lon": -122.3341602
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "299R",
+    "city": "Seattle",
+    "lat": 47.6000912,
+    "lon": -122.2861065
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "301",
+    "city": "Seattle",
+    "lat": 47.6000813,
+    "lon": -122.2863525
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "301",
+    "city": "Seattle",
+    "lat": 47.600079,
+    "lon": -122.2862649
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "301",
+    "city": "Seattle",
+    "lat": 47.600008,
+    "lon": -122.2863545
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "305",
+    "city": "Seattle",
+    "lat": 47.6000594,
+    "lon": -122.2865681
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "305",
+    "city": "Seattle",
+    "lat": 47.600065,
+    "lon": -122.2864833
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "309",
+    "city": "Seattle",
+    "lat": 47.5999338,
+    "lon": -122.2864452
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "309",
+    "city": "Seattle",
+    "lat": 47.5998859,
+    "lon": -122.2864396
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "310",
+    "city": "Seattle",
+    "lat": 47.5992598,
+    "lon": -122.2852207
+  },
+  {
+    "street": "35th Avenue South",
+    "housenumber": "324",
+    "city": "Seattle",
+    "lat": 47.5994469,
+    "lon": -122.2875507
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "332",
+    "city": "Seattle",
+    "lat": 47.5993619,
+    "lon": -122.2854908
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "334",
+    "city": "Seattle",
+    "lat": 47.5993487,
+    "lon": -122.2853172
+  },
+  {
+    "street": "Lakeside Avenue South",
+    "housenumber": "335",
+    "city": "Seattle",
+    "lat": 47.5992587,
+    "lon": -122.2868931
+  },
+  {
+    "street": "South Leschi Place",
+    "housenumber": "3501A",
+    "city": "Seattle",
+    "lat": 47.599779,
+    "lon": -122.2875536
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3509",
+    "city": "Seattle",
+    "lat": 47.6000216,
+    "lon": -122.2872996
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "3510",
+    "city": "Seattle",
+    "lat": 47.5992364,
+    "lon": -122.2871188
+  },
+  {
+    "street": "South Leschi Place",
+    "housenumber": "3512",
+    "city": "Seattle",
+    "lat": 47.5997998,
+    "lon": -122.2871169
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3517",
+    "city": "Seattle",
+    "lat": 47.5999992,
+    "lon": -122.2870425
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3525",
+    "city": "Seattle",
+    "lat": 47.6000549,
+    "lon": -122.2867259
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3529",
+    "city": "Seattle",
+    "lat": 47.6000666,
+    "lon": -122.2866362
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3535",
+    "city": "Seattle",
+    "lat": 47.6000279,
+    "lon": -122.2861413
+  },
+  {
+    "street": "South King Street",
+    "housenumber": "2818",
+    "city": "Seattle",
+    "lat": 47.5982143,
+    "lon": -122.295667
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "2831",
+    "city": "Seattle",
+    "lat": 47.5990798,
+    "lon": -122.2954456
+  },
+  {
+    "street": "South Jackson Street",
+    "housenumber": "2851",
+    "city": "Seattle",
+    "lat": 47.5990656,
+    "lon": -122.2953287
+  },
+  {
+    "street": "South King Street",
+    "housenumber": "3001",
+    "city": "Seattle",
+    "lat": 47.5979262,
+    "lon": -122.2932745
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "407",
+    "city": "Seattle",
+    "lat": 47.5988966,
+    "lon": -122.2952861
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "418",
+    "city": "Seattle",
+    "lat": 47.5979095,
+    "lon": -122.2956552
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "427",
+    "city": "Seattle",
+    "lat": 47.598219,
+    "lon": -122.2953181
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "500",
+    "city": "Seattle",
+    "lat": 47.5979084,
+    "lon": -122.2960898
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "501",
+    "city": "Seattle",
+    "lat": 47.5978643,
+    "lon": -122.2953326
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "502",
+    "city": "Seattle",
+    "lat": 47.5978599,
+    "lon": -122.296088
+  },
+  {
+    "street": "28th Avenue South",
+    "housenumber": "504",
+    "city": "Seattle",
+    "lat": 47.5978005,
+    "lon": -122.2959227
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "507",
+    "city": "Seattle",
+    "lat": 47.5977056,
+    "lon": -122.2942298
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "509",
+    "city": "Seattle",
+    "lat": 47.5977316,
+    "lon": -122.2941825
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "529",
+    "city": "Seattle",
+    "lat": 47.5970833,
+    "lon": -122.2942607
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "531",
+    "city": "Seattle",
+    "lat": 47.5970616,
+    "lon": -122.2942613
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "537",
+    "city": "Seattle",
+    "lat": 47.5969358,
+    "lon": -122.2953619
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "537",
+    "city": "Seattle",
+    "lat": 47.5969142,
+    "lon": -122.295363
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "537",
+    "city": "Seattle",
+    "lat": 47.5968921,
+    "lon": -122.2953625
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "538",
+    "city": "Seattle",
+    "lat": 47.5968513,
+    "lon": -122.294851
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "538",
+    "city": "Seattle",
+    "lat": 47.5968875,
+    "lon": -122.2948522
+  },
+  {
+    "street": "Temple Place",
+    "housenumber": "552",
+    "city": "Seattle",
+    "lat": 47.6077068,
+    "lon": -122.296559
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1422",
+    "city": "Seattle",
+    "lat": 47.5895823,
+    "lon": -122.2922228
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1428",
+    "city": "Seattle",
+    "lat": 47.589518,
+    "lon": -122.2922214
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1360",
+    "city": "Seattle",
+    "lat": 47.590769,
+    "lon": -122.2921307
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1362",
+    "city": "Seattle",
+    "lat": 47.5908275,
+    "lon": -122.2931136
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1362",
+    "city": "Seattle",
+    "lat": 47.5907972,
+    "lon": -122.2921633
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1364",
+    "city": "Seattle",
+    "lat": 47.5907727,
+    "lon": -122.2931121
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1364",
+    "city": "Seattle",
+    "lat": 47.5907424,
+    "lon": -122.2921012
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1366",
+    "city": "Seattle",
+    "lat": 47.5907251,
+    "lon": -122.2931072
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1366",
+    "city": "Seattle",
+    "postcode": "98144",
+    "lat": 47.5906616,
+    "lon": -122.2921409
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1368",
+    "city": "Seattle",
+    "lat": 47.5906761,
+    "lon": -122.2931064
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1370",
+    "city": "Seattle",
+    "lat": 47.5906117,
+    "lon": -122.2931081
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1371",
+    "city": "Seattle",
+    "lat": 47.5905567,
+    "lon": -122.2926608
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1372",
+    "city": "Seattle",
+    "lat": 47.5905569,
+    "lon": -122.2931066
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1373",
+    "city": "Seattle",
+    "lat": 47.5904996,
+    "lon": -122.2927676
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1374",
+    "city": "Seattle",
+    "lat": 47.590514,
+    "lon": -122.2930994
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1375",
+    "city": "Seattle",
+    "lat": 47.5904996,
+    "lon": -122.2926644
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1375A",
+    "city": "Seattle",
+    "lat": 47.5905428,
+    "lon": -122.2927538
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1376",
+    "city": "Seattle",
+    "lat": 47.5904544,
+    "lon": -122.2930977
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1377",
+    "city": "Seattle",
+    "lat": 47.5904451,
+    "lon": -122.292601
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1379",
+    "city": "Seattle",
+    "lat": 47.5904447,
+    "lon": -122.2928543
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1400",
+    "city": "Seattle",
+    "lat": 47.5901817,
+    "lon": -122.2922831
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1404",
+    "city": "Seattle",
+    "lat": 47.5900948,
+    "lon": -122.292192
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1406",
+    "city": "Seattle",
+    "lat": 47.5900728,
+    "lon": -122.2921907
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1412",
+    "city": "Seattle",
+    "lat": 47.5899697,
+    "lon": -122.2921973
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1414",
+    "city": "Seattle",
+    "lat": 47.5898736,
+    "lon": -122.2921948
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1417",
+    "city": "Seattle",
+    "lat": 47.5898093,
+    "lon": -122.2926787
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1419",
+    "city": "Seattle",
+    "lat": 47.5897803,
+    "lon": -122.2926774
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1420",
+    "city": "Seattle",
+    "lat": 47.5896329,
+    "lon": -122.2922281
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1421",
+    "city": "Seattle",
+    "lat": 47.5897433,
+    "lon": -122.2926774
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1423",
+    "city": "Seattle",
+    "lat": 47.5896466,
+    "lon": -122.2926778
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1424",
+    "city": "Seattle",
+    "lat": 47.5895524,
+    "lon": -122.2922241
+  },
+  {
+    "street": "South Day Street",
+    "housenumber": "3103",
+    "city": "Seattle",
+    "lat": 47.5902198,
+    "lon": -122.2922217
+  },
+  {
+    "street": "South Day Street",
+    "housenumber": "3107",
+    "city": "Seattle",
+    "lat": 47.5902165,
+    "lon": -122.2920152
+  },
+  {
+    "street": "31st Avenue South",
+    "housenumber": "1417",
+    "city": "Seattle",
+    "lat": 47.5897704,
+    "lon": -122.2926171
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1301",
+    "city": "Seattle",
+    "lat": 47.5920547,
+    "lon": -122.2956873
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1306",
+    "city": "Seattle",
+    "lat": 47.5918742,
+    "lon": -122.2952436
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1308",
+    "city": "Seattle",
+    "lat": 47.5918142,
+    "lon": -122.2952353
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1309",
+    "city": "Seattle",
+    "lat": 47.5918157,
+    "lon": -122.2938282
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1310",
+    "city": "Seattle",
+    "lat": 47.5918664,
+    "lon": -122.295039
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1310",
+    "city": "Seattle",
+    "lat": 47.5918453,
+    "lon": -122.2950404
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1310",
+    "city": "Seattle",
+    "lat": 47.5918124,
+    "lon": -122.2950395
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1311",
+    "city": "Seattle",
+    "lat": 47.5918301,
+    "lon": -122.2936296
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1311",
+    "city": "Seattle",
+    "lat": 47.5918136,
+    "lon": -122.293629
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1311",
+    "city": "Seattle",
+    "lat": 47.5917947,
+    "lon": -122.2936272
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1312",
+    "city": "Seattle",
+    "lat": 47.5917011,
+    "lon": -122.2952137
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1314",
+    "city": "Seattle",
+    "lat": 47.5917047,
+    "lon": -122.295055
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1318",
+    "city": "Seattle",
+    "lat": 47.5915325,
+    "lon": -122.2950109
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1319",
+    "city": "Seattle",
+    "lat": 47.5915859,
+    "lon": -122.2957447
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1321",
+    "city": "Seattle",
+    "lat": 47.5915815,
+    "lon": -122.2958384
+  },
+  {
+    "street": "29th Avenue South",
+    "housenumber": "1324",
+    "city": "Seattle",
+    "lat": 47.5913989,
+    "lon": -122.2952335
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1353",
+    "city": "Seattle",
+    "lat": 47.5910916,
+    "lon": -122.2936389
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1369",
+    "city": "Seattle",
+    "lat": 47.5908879,
+    "lon": -122.2942939
+  },
+  {
+    "street": "30th Avenue South",
+    "housenumber": "1377",
+    "city": "Seattle",
+    "lat": 47.5908568,
+    "lon": -122.2942962
+  },
+  {
+    "street": "Yakima Avenue South",
+    "housenumber": "1411",
+    "city": "Seattle",
+    "lat": 47.5904809,
+    "lon": -122.2944731
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2723",
+    "city": "Seattle",
+    "lat": 47.5917467,
+    "lon": -122.2965794
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2723",
+    "city": "Seattle",
+    "lat": 47.5917192,
+    "lon": -122.2965748
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2723",
+    "city": "Seattle",
+    "lat": 47.5916908,
+    "lon": -122.2965644
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2801",
+    "city": "Seattle",
+    "lat": 47.592013,
+    "lon": -122.2958635
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2805",
+    "city": "Seattle",
+    "lat": 47.5920111,
+    "lon": -122.2957501
+  },
+  {
+    "street": "South Judkins Street",
+    "housenumber": "2809",
+    "city": "Seattle",
+    "lat": 47.5920112,
+    "lon": -122.2956492
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2810",
+    "city": "Seattle",
+    "lat": 47.5914439,
+    "lon": -122.2957352
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2901",
+    "city": "Seattle",
+    "lat": 47.5911998,
+    "lon": -122.29545
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2910",
+    "city": "Seattle",
+    "lat": 47.5913948,
+    "lon": -122.295047
+  },
+  {
+    "street": "South Atlantic Street",
+    "housenumber": "2920",
+    "city": "Seattle",
+    "lat": 47.5898992,
+    "lon": -122.294024
+  },
+  {
+    "street": "South Atlantic Street",
+    "housenumber": "2950",
+    "city": "Seattle",
+    "lat": 47.5898732,
+    "lon": -122.2940252
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2951",
+    "city": "Seattle",
+    "lat": 47.5912059,
+    "lon": -122.2946114
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2963",
+    "city": "Seattle",
+    "lat": 47.5911199,
+    "lon": -122.2938403
+  },
+  {
+    "street": "South Irving Street",
+    "housenumber": "2965",
+    "city": "Seattle",
+    "lat": 47.5910723,
+    "lon": -122.2938425
+  },
+  {
+    "street": "North 35th Street",
+    "housenumber": "709",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6502979,
+    "lon": -122.349338
+  },
+  {
+    "street": "Northwest Market Street",
+    "housenumber": "1744",
+    "city": "Seattle",
+    "postcode": "98107",
+    "lat": 47.6688365,
+    "lon": -122.3809989
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "813",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6040433,
+    "lon": -122.3343965
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "815",
+    "city": "Seattle",
+    "lat": 47.6041022,
+    "lon": -122.3344501
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "816",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6037407,
+    "lon": -122.3351172
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "820",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.603883,
+    "lon": -122.3352831
+  },
+  {
+    "street": "2nd Avenue",
+    "housenumber": "821",
+    "city": "Seattle",
+    "lat": 47.6042553,
+    "lon": -122.3345882
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "807",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6034741,
+    "lon": -122.3353812
+  },
+  {
+    "street": "Columbia Street",
+    "housenumber": "94",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6032314,
+    "lon": -122.3353113
+  },
+  {
+    "street": "Post Avenue",
+    "housenumber": "808",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6033419,
+    "lon": -122.335675
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "823",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.603795,
+    "lon": -122.3356617
+  },
+  {
+    "street": "Cherry Street",
+    "housenumber": "103",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025843,
+    "lon": -122.3339216
+  },
+  {
+    "street": "Cherry Street",
+    "housenumber": "107",
+    "city": "Seattle",
+    "lat": 47.6026108,
+    "lon": -122.3338945
+  },
+  {
+    "street": "Cherry Street",
+    "housenumber": "107",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6026065,
+    "lon": -122.333833
+  },
+  {
+    "street": "Cherry Street",
+    "housenumber": "117",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6027369,
+    "lon": -122.333569
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "620",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6024672,
+    "lon": -122.333958
+  },
+  {
+    "street": "1st Avenue",
+    "housenumber": "624",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025376,
+    "lon": -122.333998
+  },
+  {
+    "street": "Cherry Street",
+    "housenumber": "101",
+    "city": "Seattle",
+    "postcode": "98104",
+    "lat": 47.6025689,
+    "lon": -122.3339644
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2110",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.661502,
+    "lon": -122.333122
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2202",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6615049,
+    "lon": -122.332319
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2103",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612762,
+    "lon": -122.3334927
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2101",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612769,
+    "lon": -122.333602
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2121",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612626,
+    "lon": -122.332721
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1913",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612734,
+    "lon": -122.3344151
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "1903",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6612662,
+    "lon": -122.3347126
+  },
+  {
+    "street": "North 45th Street",
+    "housenumber": "2114",
+    "city": "Seattle",
+    "postcode": "98103",
+    "lat": 47.6614974,
+    "lon": -122.3329383
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3501",
+    "city": "Seattle",
+    "lat": 47.6001118,
+    "lon": -122.2875386
+  },
+  {
+    "street": "35th Avenue South",
+    "housenumber": "300",
+    "city": "Seattle",
+    "lat": 47.6000801,
+    "lon": -122.2875807
+  },
+  {
+    "street": "35th Avenue South",
+    "housenumber": "304",
+    "city": "Seattle",
+    "lat": 47.5999568,
+    "lon": -122.2874738
+  },
+  {
+    "street": "South Leschi Place",
+    "housenumber": "3502",
+    "city": "Seattle",
+    "lat": 47.5998818,
+    "lon": -122.2873824
+  },
+  {
+    "street": "South Main Street",
+    "housenumber": "3501",
+    "city": "Seattle",
+    "lat": 47.6001346,
+    "lon": -122.2875196
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "621",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6249184,
+    "lon": -122.3211244
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "619",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6248707,
+    "lon": -122.3211269
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "617",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6248147,
+    "lon": -122.3211555
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "613",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6247346,
+    "lon": -122.32115
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "605",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6244757,
+    "lon": -122.3211369
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "603",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6244327,
+    "lon": -122.3211356
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "601",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6243734,
+    "lon": -122.321133
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "539",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6241323,
+    "lon": -122.3211199
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "531",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6239528,
+    "lon": -122.321117
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "519",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6237338,
+    "lon": -122.3211155
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "515",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.62365,
+    "lon": -122.321114
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "509",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6235137,
+    "lon": -122.321113
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "507",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6234547,
+    "lon": -122.3211123
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "505",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6233672,
+    "lon": -122.321111
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "503",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6232916,
+    "lon": -122.3211105
+  },
+  {
+    "street": "East Pine Street",
+    "housenumber": "700",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6153574,
+    "lon": -122.323178
+  },
+  {
+    "street": "East Pine Street",
+    "housenumber": "715",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6151097,
+    "lon": -122.322685
+  },
+  {
+    "street": "East Pine Street",
+    "housenumber": "815",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6151051,
+    "lon": -122.3213215
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1531",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6150832,
+    "lon": -122.3210596
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1833",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6186155,
+    "lon": -122.3211039
+  },
+  {
+    "street": "Broadway",
+    "housenumber": "1831",
+    "city": "Seattle",
+    "postcode": "98122",
+    "lat": 47.6185701,
+    "lon": -122.321079
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "109",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6190301,
+    "lon": -122.32105
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "111",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6190778,
+    "lon": -122.3210499
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "113",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6191274,
+    "lon": -122.3210517
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "131",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6197011,
+    "lon": -122.3210701
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "135",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6197788,
+    "lon": -122.32108
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "209",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6201245,
+    "lon": -122.32104
+  },
+  {
+    "street": "Broadway East",
+    "housenumber": "211",
+    "city": "Seattle",
+    "postcode": "98102",
+    "lat": 47.6202452,
+    "lon": -122.3210841
+  }
+]
