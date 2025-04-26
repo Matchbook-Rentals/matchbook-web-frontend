@@ -10,7 +10,7 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "esnext", // <--- This tells TypeScript to use ES Module syntax
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
