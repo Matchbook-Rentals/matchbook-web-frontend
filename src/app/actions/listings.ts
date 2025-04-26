@@ -14,10 +14,14 @@ const checkAuth = async () => {
 }
 
 export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number, state: string): Promise<ListingAndImages[]> => {
+  const startTime = performance.now();
+  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb started.`);
+
   const userId = await checkAuth();
+  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Auth check completed.`);
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
-  console.log('STATE', state)
+  console.log('STATE', state) // Keep existing state log
 
   try {
     // Input validation
@@ -37,6 +41,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
 
     // Log the exact value being used for filtering
     console.log(`Filtering listings for state: "'${trimmedState}'" (Length: ${trimmedState.length})`);
+    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Input validation completed.`);
 
     // First, filter by state (indexed) and then get listing IDs and distances within the radius
     // Use the raw query for combined state, distance filtering.
@@ -81,6 +86,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
         user: true
       }
     });
+    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Fetched full listing details.`);
 
     // Combine the distance information with the full listing details
     const listingsWithDistanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
@@ -98,10 +104,12 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
 
     // Sort by distance (maintaining the original distance-based order)
     listingsWithFullDetails.sort((a, b) => a.distance - b.distance);
+    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Data combined and sorted.`);
 
+    console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb finished successfully.`);
     return listingsWithFullDetails;
   } catch (error) {
-    console.error('Error in pullListingsFromDb:', error);
+    console.error(`[${(performance.now() - startTime).toFixed(2)}ms] Error in pullListingsFromDb:`, error);
     throw error; // Re-throw the error for the caller to handle
   }
 }
