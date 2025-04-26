@@ -33,10 +33,9 @@ interface FilterOptions {
   location: string[];
   parking: string[];
   kitchen: string[];
-  climateControl: string[];
+  basics: string[]; // Renamed from climateControl, includes wifi
   luxury: string[];
   laundry: string[];
-  wifi: string[]; // Add wifi filter state
 }
 
 interface TripContextType {
@@ -148,10 +147,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         .filter(amen => tripData[amen.name])
         .map(amen => amen.name)
     ],
-    climateControl: [
+    // Combine Climate Control and Wifi into Basics
+    basics: [
       ...getFiltersByCategory(CategoryType.CLIMATE_CONTROL)
         .filter(amen => tripData[amen.name])
-        .map(amen => amen.name)
+        .map(amen => amen.name),
+      ...(tripData.wifi ? ['wifi'] : []), // Add wifi from general category if true
+      ...(tripData.dedicatedWorkspace ? ['dedicatedWorkspace'] : []) // Add dedicatedWorkspace if true
     ],
     luxury: [
       ...getFiltersByCategory(CategoryType.LUXURY)
@@ -162,10 +164,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       ...getFiltersByCategory(CategoryType.LAUNDRY)
         .filter(amen => tripData[amen.name])
         .map(amen => amen.name)
-    ],
-    // Initialize wifi filter based on tripData
-    wifi: [
-      ...(tripData.wifi ? ['wifi'] : [])
     ],
   });
 
@@ -331,8 +329,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesKitchen = filters.kitchen?.length === 0 ||
         filters.kitchen?.every(appliance => listing[appliance]);
 
-      const matchesClimateControl = filters.climateControl?.length === 0 ||
-        filters.climateControl?.every(control => listing[control]);
+      // Updated to check 'basics' array
+      const matchesBasics = filters.basics?.length === 0 ||
+        filters.basics?.every(basic => listing[basic]);
 
       const matchesLuxury = filters.luxury?.length === 0 ||
         filters.luxury?.every(amenity => listing[amenity]);
@@ -340,9 +339,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // For laundry, we check for (inComplex, inUnit, notAvailable)
       const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
         filters.laundry?.some(option => listing[option]);
-
-      // WiFi filter - check if listing has wifi if the filter is active
-      const matchesWifi = filters.wifi?.length === 0 || listing.wifi;
 
       // Return true if the listing meets all criteria
       return isNotFavorited &&
@@ -361,10 +357,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesLocation &&
         matchesParking &&
         matchesKitchen &&
-        matchesClimateControl &&
+        matchesBasics && // Use matchesBasics now
         matchesLuxury &&
-        matchesLaundry &&
-        matchesWifi; // Add wifi check
+        matchesLaundry;
     }),
     [listings, lookup, trip, filters]
   );
@@ -612,28 +607,40 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       searchRadius: newFilters.searchRadius,
     };
 
-    // Initialize all boolean filters to false first
-    const boolFilters = getBooleanFilters();
-    boolFilters.forEach(filter => {
-      dbFilters[filter.name] = !!newFilters[filter.name];
+    // Initialize all boolean filters defined in constants/filters.ts to false
+    const allBooleanFilterNames = getBooleanFilters().map(f => f.name);
+    allBooleanFilterNames.forEach(name => {
+      dbFilters[name] = false;
     });
 
-    // Then set true for the ones that are selected in any array
-    for (const [key, value] of Object.entries(newFilters)) {
-      if (Array.isArray(value)) {
-        // For each selected value in the array
-        value.forEach(selectedValue => {
-          // Find the matching filter and set it to true
-          const matchingFilter = boolFilters.find(filter => filter.name === selectedValue);
-          if (matchingFilter) {
-            dbFilters[matchingFilter.name] = true;
+    // Set true for filters selected in the newFilters object
+    // Handle array filters (propertyTypes, utilities, pets, accessibility, location, parking, kitchen, basics, luxury, laundry)
+    Object.keys(newFilters).forEach(key => {
+      const filterValue = newFilters[key as keyof FilterOptions];
+      if (Array.isArray(filterValue)) {
+        filterValue.forEach(selectedValue => {
+          // Ensure the selectedValue corresponds to a known boolean filter
+          if (allBooleanFilterNames.includes(selectedValue)) {
+            dbFilters[selectedValue] = true;
           }
         });
+      } else if (typeof filterValue === 'boolean' && allBooleanFilterNames.includes(key)) {
+        // Handle direct boolean filters like furnished, unfurnished
+        // Note: utilitiesIncluded, petsAllowed etc. are handled via their arrays now
+        dbFilters[key] = filterValue;
       }
-    }
+    });
 
+    // Special handling for filters that might not be directly in arrays but are boolean
+    // Example: furnished/unfurnished are handled directly
+    dbFilters.furnished = newFilters.furnished;
+    dbFilters.unfurnished = newFilters.unfurnished;
+
+    // Ensure numeric filters are correctly passed (already handled by initial dbFilters setup)
+
+    console.log("Updating trip filters with:", dbFilters); // Debug log
     await updateTripFilters(trip.id, dbFilters);
-  }, []);
+  }, [trip.id]); // Add trip.id dependency
 
   const contextValue: TripContextType = {
     state: {
