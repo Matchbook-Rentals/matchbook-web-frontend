@@ -1,14 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Textarea } from "@/components/ui/textarea"; // Assuming you have a Textarea component
-import { Label } from "@/components/ui/label"; // Assuming you have a Label component
-import { Button } from "@/components/ui/button"; // Assuming you have a Button component
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"; // Add Input import
+import { ScrollArea } from "@/components/ui/scroll-area"; // Add ScrollArea import
+
+// Define a type for better address object handling
+type Address = {
+  streetAddress?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  postalCode?: string;
+  [key: string]: any; // Allow other properties
+};
 
 export default function SampleListingsPage() {
   const [addressObjectString, setAddressObjectString] = useState('');
+  const [numberOfItems, setNumberOfItems] = useState<number>(10); // State for number input
   const [error, setError] = useState<string | null>(null);
-  const [parsedAddresses, setParsedAddresses] = useState<any[] | null>(null);
+  const [parsedAddresses, setParsedAddresses] = useState<Address[] | null>(null); // Use Address type
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAddressObjectString(event.target.value);
@@ -28,20 +42,35 @@ export default function SampleListingsPage() {
       // Note: This requires the input to be valid JSON, not just a JS object literal.
       // For a pure JS object literal, parsing is more complex and potentially unsafe (e.g., using eval).
       // Using JSON.parse is the recommended approach for data exchange.
-      const parsedData = JSON.parse(trimmedInput);
+      let parsedData: any;
+      try {
+        parsedData = JSON.parse(trimmedInput);
+      } catch (parseError: any) {
+        throw new Error(`Invalid JSON format: ${parseError.message}`);
+      }
+
 
       if (!Array.isArray(parsedData)) {
         throw new Error('Input must parse into a JavaScript array.');
       }
 
+      // Optional: Validate structure of each item if needed
+      const validatedAddresses: Address[] = parsedData.map((item, index) => {
+        if (typeof item !== 'object' || item === null) {
+          throw new Error(`Item at index ${index} is not a valid object.`);
+        }
+        // Add more specific checks here if necessary
+        return item as Address;
+      });
+
       // Optional: Add more specific validation for address structure if needed
       // e.g., check if each item is an object with expected keys like street, city, zip, etc.
 
-      console.log('Successfully parsed addresses:', parsedData);
-      setParsedAddresses(parsedData);
+      console.log('Successfully parsed addresses:', validatedAddresses);
+      setParsedAddresses(validatedAddresses);
       setError(null);
-      // Here you would typically send the parsedData to your backend or process it further
-      alert(`Successfully parsed ${parsedData.length} addresses.`);
+      // Here you would typically send the validatedAddresses to your backend or process it further
+      // alert(`Successfully parsed ${validatedAddresses.length} addresses.`); // Replaced alert with display area
 
     } catch (e: any) {
       console.error('Error parsing address object:', e);
@@ -71,13 +100,41 @@ export default function SampleListingsPage() {
         {error && (
           <p className="text-red-500 text-sm">{error}</p>
         )}
-        <Button onClick={handleSubmit}>Parse Addresses</Button>
+        <div className="flex items-center space-x-4">
+           <Button onClick={handleSubmit}>Parse Addresses</Button>
+           {/* New Number Input and Button */}
+           <div className="flex items-center space-x-2">
+             <Label htmlFor="numberOfItemsInput">Items:</Label>
+             <Input
+               id="numberOfItemsInput"
+               type="number"
+               value={numberOfItems}
+               onChange={(e) => setNumberOfItems(parseInt(e.target.value, 10) || 0)}
+               className="w-20" // Adjust width as needed
+             />
+             <Button variant="outline" onClick={() => console.log('Process button clicked with value:', numberOfItems)}>
+               Process First {numberOfItems}
+             </Button>
+           </div>
+        </div>
+
+        {/* Display Parsed Addresses in Scroll Area */}
         {parsedAddresses && (
-          <div className="mt-4 p-4 border rounded bg-green-50">
-            <h2 className="text-lg font-semibold mb-2">Successfully Parsed Addresses</h2>
-            <p>Found {parsedAddresses.length} addresses.</p>
-            {/* Optionally display a preview of the parsed data */}
-            {/* <pre className="text-sm overflow-auto max-h-60">{JSON.stringify(parsedAddresses.slice(0, 5), null, 2)}</pre> */}
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-3">Parsed Addresses ({parsedAddresses.length} found)</h2>
+            <ScrollArea className="h-72 w-full rounded-md border p-4"> {/* Adjust height as needed */}
+              {parsedAddresses.map((address, index) => (
+                <div key={index} className="mb-4 p-3 border-b last:border-b-0">
+                  <p><strong>Street Address:</strong> {address.streetAddress || address.street || 'N/A'}</p>
+                  <p><strong>City:</strong> {address.city || 'N/A'}</p>
+                  <p><strong>State:</strong> {address.state || 'N/A'}</p>
+                  <p><strong>Postal Code:</strong> {address.zip || address.postalCode || 'N/A'}</p>
+                  <p className="mt-1 text-xs text-gray-500 break-all">
+                    <strong>Location String:</strong> {JSON.stringify(address)}
+                  </p>
+                </div>
+              ))}
+            </ScrollArea>
           </div>
         )}
       </div>
