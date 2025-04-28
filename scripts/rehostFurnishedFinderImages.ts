@@ -37,7 +37,8 @@ async function rehostImage(imageUrl: string): Promise<string | null> {
     }
 
     console.log(`Successfully rehosted ${imageUrl} to ${newUrl}`);
-    return newUrl;
+    // Ensure we return null if newUrl is undefined to match the function signature
+    return newUrl ?? null; 
 
   } catch (error) {
     console.error(`Error calling upload API for ${imageUrl}:`, error);
