@@ -398,9 +398,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesBasics && // Use matchesBasics now
         matchesLuxury &&
         matchesLaundry;
-    }),
+    }); // <-- Add closing parenthesis for listings.filter() here
     // Ensure trip object (containing dates and flexibility) is a dependency
-    [listings, lookup, trip, filters]
+    }, [listings, lookup, trip, filters]
   );
 
   const likedListings = useMemo(() =>
