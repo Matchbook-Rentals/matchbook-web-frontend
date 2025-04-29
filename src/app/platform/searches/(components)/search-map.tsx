@@ -80,35 +80,99 @@ const SearchMap: React.FC<SearchMapProps> = ({
     useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
   };
 
-  /** Create clusters based on visible markers and zoom level */
+  /** Create clusters based on visible markers and zoom level using a grid */
   const createClusters = (zoomLevel: number): ClusterMarker[] => {
     if (!mapRef.current) return [];
-    const clusterRadius = Math.max(40, 100 - zoomLevel * 4); // Dynamic radius based on zoom
-    const visited = new Set<string>();
-    const newClusters: ClusterMarker[] = [];
+
     const bounds = mapRef.current.getBounds();
     const visibleMarkers = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)));
 
-    visibleMarkers.forEach(marker => {
-      if (visited.has(marker.listing.id)) return;
-      const cluster: ClusterMarker = { lat: marker.lat, lng: marker.lng, count: 1, listingIds: [marker.listing.id] };
-      visited.add(marker.listing.id);
+    if (visibleMarkers.length === 0) return [];
 
-      visibleMarkers.forEach(otherMarker => {
-        if (visited.has(otherMarker.listing.id)) return;
-        const distance = calculatePixelDistance(marker.lat, marker.lng, otherMarker.lat, otherMarker.lng);
-        if (distance < clusterRadius) {
-          cluster.count++;
-          cluster.listingIds.push(otherMarker.listing.id);
-          cluster.lat = (cluster.lat * (cluster.count - 1) + otherMarker.lat) / cluster.count;
-          cluster.lng = (cluster.lng * (cluster.count - 1) + otherMarker.lng) / cluster.count;
-          visited.add(otherMarker.listing.id);
-        }
-      });
-      newClusters.push(cluster);
+    // Dynamic pixel radius based on zoom, similar to original logic
+    const clusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
+
+    const grid = new Map<string, MapMarker[]>();
+    const visitedRevised = new Set<string>();
+    const revisedClusters: ClusterMarker[] = [];
+
+    // Helper to get grid cell key from pixel coordinates
+    const getGridKey = (point: maplibregl.Point): string => {
+      // Use clusterPixelRadius for grid cell size
+      const col = Math.floor(point.x / clusterPixelRadius);
+      const row = Math.floor(point.y / clusterPixelRadius);
+      return `${col}_${row}`;
+    };
+
+    // 1. Assign markers to grid cells
+    visibleMarkers.forEach(marker => {
+      const point = mapRef.current!.project([marker.lng, marker.lat]);
+      const key = getGridKey(point);
+      if (!grid.has(key)) {
+        grid.set(key, []);
+      }
+      grid.get(key)!.push(marker);
     });
-    return newClusters;
+
+    // 2. Iterate through markers to form clusters using BFS and grid
+    visibleMarkers.forEach(marker => {
+        if (visitedRevised.has(marker.listing.id)) return;
+
+        // Start a new potential cluster using BFS
+        const clusterQueue: MapMarker[] = [marker];
+        visitedRevised.add(marker.listing.id);
+        const currentClusterMembers: MapMarker[] = [];
+
+        while (clusterQueue.length > 0) {
+            const currentMarker = clusterQueue.shift()!;
+            currentClusterMembers.push(currentMarker);
+
+            const point = mapRef.current!.project([currentMarker.lng, currentMarker.lat]);
+            const currentCellCol = Math.floor(point.x / clusterPixelRadius);
+            const currentCellRow = Math.floor(point.y / clusterPixelRadius);
+
+            // Check neighboring cells for potential members
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    const key = `${currentCellCol + dx}_${currentCellRow + dy}`;
+                    if (grid.has(key)) {
+                        grid.get(key)!.forEach(neighbor => {
+                            // Check if neighbor is already visited *before* distance calculation
+                            if (!visitedRevised.has(neighbor.listing.id)) {
+                                const distance = calculatePixelDistance(currentMarker.lat, currentMarker.lng, neighbor.lat, neighbor.lng);
+                                if (distance < clusterPixelRadius) {
+                                    visitedRevised.add(neighbor.listing.id);
+                                    clusterQueue.push(neighbor);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        // Create the final cluster from members found in BFS
+        if (currentClusterMembers.length > 0) {
+            let totalLat = 0;
+            let totalLng = 0;
+            const listingIds: string[] = [];
+            currentClusterMembers.forEach(m => {
+                totalLat += m.lat;
+                totalLng += m.lng;
+                listingIds.push(m.listing.id);
+            });
+            revisedClusters.push({
+                lat: totalLat / currentClusterMembers.length,
+                lng: totalLng / currentClusterMembers.length,
+                count: currentClusterMembers.length,
+                listingIds: listingIds
+            });
+        }
+    });
+
+    return revisedClusters;
   };
+
 
   /** Render individual or cluster markers */
   const renderMarkers = (clusters: ClusterMarker[]) => {
