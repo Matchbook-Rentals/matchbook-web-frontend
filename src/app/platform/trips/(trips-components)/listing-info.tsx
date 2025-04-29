@@ -28,6 +28,7 @@ import { usePathname, useParams } from 'next/navigation';
 import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge } from '@/components/icons'; // Assuming these icons exist
 import { sendInitialMessage } from '@/app/actions/messages'; // Import the server action
 import { useToast } from '@/components/ui/use-toast'; // Import useToast
+import SearchMessageHostDialog from '@/components/ui/search-message-host-dialog';
 
 // Define the desired order for amenity categories
 const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
@@ -221,48 +222,11 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <span className="flex items-center gap-1 text-sm"><TrailBlazerBadge />Trail Blazer</span>
           <span className="flex items-center gap-1 text-sm"><HallmarkHostBadge />Hallmark Host</span>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant='outline' className='w-full border-black mt-4'>
-              Message Host
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Message Host</DialogTitle>
-              {/* Optional: Add DialogDescription if needed */}
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="message" className="text-right sr-only">
-                  Message
-                </Label>
-                <Textarea
-                  id="message"
-                  placeholder="Type your message here..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="col-span-4"
-                />
-              </div>
-            </div>
-            <DialogFooter className="flex flex-row justify-end space-x-2">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary" className="w-1/4 bg-gray-200">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                type="button"
-                onClick={handleSendMessage}
-                disabled={isSending || !message.trim()} // Disable if sending or message is empty/whitespace
-                className="w-1/4"
-              >
-                {isSending ? 'Sending...' : 'Send'}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <SearchMessageHostDialog
+          listingId={listing.id}
+          hostName={listing.user?.firstName}
+          trigger={ <Button variant='outline' className='w-full border-black mt-4'> Message Host </Button> }
+        />
       </div>
 
       {/* Description section */}

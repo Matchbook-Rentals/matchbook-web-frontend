@@ -62,12 +62,14 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
     try {
       const result = await sendInitialMessage(listingId, message);
       if (result.success) {
+
         toast({
           title: "Message Sent!",
           description: `Your message has been sent to ${hostName}.`,
         });
         setMessage(''); // Clear message input on success
         setIsOpen(false); // Close the dialog on success
+        setExistingConversationId(result.conversationId);
       } else {
         toast({
           variant: "destructive",
@@ -89,14 +91,14 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
 
   const handleViewMessagesClick = () => {
     if (existingConversationId) {
-      router.push(`/platform/messages/${existingConversationId}`);
+      router.push(`/platform/messages/?convo=${existingConversationId}`);
     }
   };
 
   if (isLoading) {
     return (
       <Button variant='outline' className='w-full border-black mt-4' disabled>
-        Loading...
+        Checking for messages
       </Button>
     );
   }
@@ -119,7 +121,7 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Message {hostName}</DialogTitle>
+          <DialogTitle className='text-center'>Message {hostName}</DialogTitle>
           {/* Optional: Add DialogDescription if needed */}
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -145,7 +147,6 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
             </Button>
           </DialogClose>
           <Button
-            type="button"
             onClick={handleSendMessage}
             disabled={isSending || !message.trim()} // Disable if sending or message is empty/whitespace
             className="w-1/4"
