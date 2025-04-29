@@ -3,7 +3,7 @@
 import prisma from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
-import { Listing, ListingUnavailability } from "@prisma/client";
+import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data"; // Import the data
 
 const checkAuth = async () => {
