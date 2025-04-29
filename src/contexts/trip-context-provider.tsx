@@ -12,6 +12,12 @@ import { CategoryType, getBooleanFilters, getFiltersByCategory, tripFilters } fr
 import { useActionPopup } from '@/hooks/use-action-popup'
 import ActionPopup from '@/app/platform/searches/(components)/action-popup'
 
+interface ListingWithAvailability extends ListingAndImages {
+  availableStart?: Date;
+  availableEnd?: Date;
+  isActuallyAvailable?: boolean; // Helper flag from calculation
+}
+
 interface ViewedListing {
   listing: ListingAndImages;
   action: 'favorite' | 'dislike';
@@ -43,9 +49,9 @@ interface TripContextType {
   state: {
     trip: TripAndMatches;
     listings: ListingAndImages[];
-    showListings: ListingAndImages[];
+    showListings: ListingWithAvailability[]; // <-- Update this type
     viewedListings: ViewedListing[];
-    likedListings: ListingAndImages[];
+    likedListings: ListingAndImages[]; // Keep these as base type for now, or update if needed
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
     matchedListings: ListingAndImages[];
@@ -262,7 +268,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
   // This code filters and memoizes the listings to be shown
-  const showListings = useMemo(() => {
+  const showListings = useMemo((): ListingWithAvailability[] => { // <-- Update return type
     // --- Calculate Core Dates, Duration, and Flexible Window ---
     const coreStartDate = trip?.startDate ? new Date(trip.startDate) : null;
     const coreEndDate = trip?.endDate ? new Date(trip.endDate) : null;
@@ -278,7 +284,98 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     }
     // --- End Date Calculations ---
 
-    return listings.filter(listing => {
+    // 1. Map listings to calculate availability and specific dates
+    const processedListings = listings.map((listing): ListingWithAvailability => {
+      let isActuallyAvailable = false;
+      let availableStart: Date | undefined = undefined;
+      let availableEnd: Date | undefined = undefined;
+
+      // Initial check: Are core dates valid for calculation?
+      if (coreStartDate && coreEndDate && earliestValidStart && latestValidEnd && stayDurationDays > 0) {
+
+        // --- Perform the isAvailable check (determines if *any* placement is possible) ---
+        isActuallyAvailable = !listing.unavailablePeriods?.some(period => {
+          const periodStart = new Date(period.startDate);
+          const periodEnd = new Date(period.endDate);
+          if (!isValid(periodStart) || !isValid(periodEnd)) return false;
+          const latestStartBeforePeriod = subDays(periodStart, stayDurationDays);
+          const earliestStartAfterPeriod = addDays(periodEnd, 1);
+          const endDateIfStartingAfter = addDays(earliestStartAfterPeriod, stayDurationDays - 1);
+          const blockedBefore = latestStartBeforePeriod < earliestValidStart;
+          const blockedAfter = endDateIfStartingAfter > latestValidEnd;
+          return blockedBefore && blockedAfter;
+        });
+        // --- End isAvailable check ---
+
+        // --- If available, find the earliest start and latest end ---
+        if (isActuallyAvailable) {
+          // Find Earliest Valid Start
+          let currentCheckStart = earliestValidStart;
+          while (currentCheckStart <= coreStartDate) { // Optimization: Check only up to core start
+            const currentCheckEnd = addDays(currentCheckStart, stayDurationDays - 1);
+            if (currentCheckEnd > latestValidEnd) break; // Exceeds flexible end window
+
+            const overlaps = listing.unavailablePeriods?.some(p => {
+              const pStart = new Date(p.startDate);
+              const pEnd = new Date(p.endDate);
+              // Check if [currentCheckStart, currentCheckEnd] overlaps with [pStart, pEnd]
+              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
+            });
+
+            if (!overlaps) {
+              availableStart = currentCheckStart; // Found the earliest
+              break;
+            }
+
+            // If overlap, find the end of the blocking period to jump ahead
+            const blockingPeriod = listing.unavailablePeriods?.find(p => {
+              const pStart = new Date(p.startDate);
+              const pEnd = new Date(p.endDate);
+              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
+            });
+            currentCheckStart = blockingPeriod ? addDays(new Date(blockingPeriod.endDate), 1) : addDays(currentCheckStart, 1); // Jump or increment
+          }
+
+          // Find Latest Valid End
+          let currentCheckEnd = latestValidEnd;
+          while (currentCheckEnd >= coreEndDate) { // Optimization: Check only down to core end
+            const currentCheckStart = subDays(currentCheckEnd, stayDurationDays - 1);
+            if (currentCheckStart < earliestValidStart) break; // Exceeds flexible start window
+
+            const overlaps = listing.unavailablePeriods?.some(p => {
+              const pStart = new Date(p.startDate);
+              const pEnd = new Date(p.endDate);
+              // Check if [currentCheckStart, currentCheckEnd] overlaps with [pStart, pEnd]
+              return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
+            });
+
+            if (!overlaps) {
+              availableEnd = currentCheckEnd; // Found the latest
+              break;
+            }
+
+            // If overlap, find the start of the blocking period to jump back
+             const blockingPeriod = listing.unavailablePeriods?.find(p => {
+               const pStart = new Date(p.startDate);
+               const pEnd = new Date(p.endDate);
+               return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
+            });
+            currentCheckEnd = blockingPeriod ? subDays(new Date(blockingPeriod.startDate), 1) : subDays(currentCheckEnd, 1); // Jump or decrement
+          }
+        }
+        // --- End earliest/latest calculation ---
+      } // End check for valid core dates
+
+      return {
+        ...listing,
+        isActuallyAvailable, // Store the result of the availability check
+        availableStart,
+        availableEnd
+      };
+    }); // End listings.map
+
+    // 2. Filter the processed listings based on availability and other criteria
+    return processedListings.filter(listing => {
       // Check if the listing is not favorited, disliked, or requested
       const isNotFavorited = !lookup.favIds.has(listing.id);
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
@@ -319,8 +416,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
           // If *both* are true, this period blocks all possibilities.
           return blockedBefore && blockedAfter;
         });
-      })();
+      const isNotDisliked = !lookup.dislikedIds.has(listing.id);
+      const isNotRequested = !lookup.requestedIds.has(listing.id);
 
+      // Use the calculated availability flag
+      const isAvailable = listing.isActuallyAvailable;
+
+      // --- Keep all other filters the same ---
       // Property type filter
       const matchesPropertyType = filters.propertyTypes.length === 0 ||
         filters.propertyTypes.includes(listing.category);
@@ -398,9 +500,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesBasics && // Use matchesBasics now
         matchesLuxury &&
         matchesLaundry;
-    }); // <-- Add closing parenthesis for listings.filter() here
+    }); // <-- This is now the closing parenthesis for processedListings.filter()
     // Ensure trip object (containing dates and flexibility) is a dependency
-    }, [listings, lookup, trip, filters]
+    }, [listings, lookup, trip, filters] // Dependencies remain the same
   );
 
   const likedListings = useMemo(() =>
