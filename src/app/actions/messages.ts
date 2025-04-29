@@ -11,9 +11,8 @@ export async function createMessage(data: any) {
       data: {
         content: data.content,
         senderId: userId,
-        receiverId: data.receiverId,
-        senderRole: data.senderRole,
-        receiverRole: data.receiverRole,
+        conversationId: data.conversationId, // Requires conversationId in input data
+        // receiverId, senderRole, receiverRole are removed as per new schema
       },
     });
 
@@ -79,11 +78,8 @@ export async function sendInitialMessage(listingId: string, content: string) {
       data: {
         content: content,
         senderId: senderId,
-        receiverId: receiverId, // Explicitly set receiverId for clarity, though conversation implies it
         conversationId: conversation.id,
-        // Assuming default roles or determine based on context if needed
-        // senderRole: 'GUEST', // Example role
-        // receiverRole: 'HOST', // Example role
+        // receiverId, senderRole, receiverRole are removed as per new schema
       },
     });
 
@@ -123,22 +119,41 @@ export async function markMessagesAsReadByTimestamp(conversationId: string, time
       return { success: false, error: 'Unauthorized access to conversation' };
     }
 
-    // Mark messages from other users as read
-    const updateResult = await prisma.message.updateMany({
+    // Find messages sent by others before the timestamp that the user hasn't read yet
+    const messagesToMark = await prisma.message.findMany({
       where: {
         conversationId: conversationId,
-        NOT: { senderId: userId }, // Messages NOT sent by the current user
-        isRead: false,
-        createdAt: { lte: timestamp } // Only mark messages created before or at this timestamp
+        senderId: { not: userId }, // Messages NOT sent by the current user
+        createdAt: { lte: timestamp }, // Before or at the timestamp
+        readBy: { // Check if a MessageRead record for this user DOES NOT exist
+          none: {
+            userId: userId
+          }
+        }
       },
-      data: {
-        isRead: true
-      }
+      select: { id: true } // Only need the IDs
     });
 
-    return { success: true, count: updateResult.count };
+    if (messagesToMark.length === 0) {
+      return { success: true, count: 0 }; // No new messages to mark as read
+    }
+
+    // Prepare data for creating MessageRead records
+    const dataToCreate = messagesToMark.map(message => ({
+      messageId: message.id,
+      userId: userId
+      // readAt defaults to now() in the schema
+    }));
+
+    // Create MessageRead records for the found messages
+    const createResult = await prisma.messageRead.createMany({
+      data: dataToCreate,
+      skipDuplicates: true // Avoid errors if a read record was somehow created concurrently
+    });
+
+    return { success: true, count: createResult.count };
+
   } catch (error) {
-    console.error('Error marking messages as read by timestamp:', error);
     console.error('Error marking messages as read by timestamp:', error);
     return { success: false, error: 'Failed to mark messages as read' };
   }
