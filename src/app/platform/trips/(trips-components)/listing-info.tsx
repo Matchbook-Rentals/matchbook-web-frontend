@@ -305,7 +305,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                   {amenities.map((amenity) => (
                     <AmenityListItem
                       key={amenity.code}
-                      icon={amenity.icon || Star}
+                      icon={amenity.icon || StarIcon}
                       label={amenity.label}
                       iconClassNames='h-[24px] w-[24px]'
                       labelClassNames={amenityTextStyle}
@@ -322,7 +322,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
               {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
                 <AmenityListItem
                   key={amenity.code}
-                  icon={amenity.icon || Star}
+                  icon={amenity.icon || StarIcon}
                   label={amenity.label}
                   labelClassNames={amenityTextStyle}
                   iconClassNames='h-[32px] w-[32px]'
@@ -366,7 +366,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                           {amenities.map((amenity) => (
                             <AmenityListItem
                               key={amenity.code}
-                              icon={amenity.icon || Star}
+                              icon={amenity.icon || StarIcon}
                               label={amenity.label}
                               iconClassNames='h-[24px] w-[24px]'
                               labelClassNames={amenityTextStyle}
