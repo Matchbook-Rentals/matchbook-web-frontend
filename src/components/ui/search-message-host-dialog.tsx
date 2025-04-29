@@ -19,7 +19,6 @@ import { sendInitialMessage } from '@/app/actions/messages'; // Adjust path if n
 interface SearchMessageHostDialogProps {
   listingId: string;
   hostName: string;
-  trigger: React.ReactNode; // The element that opens the dialog
 }
 
 const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listingId, hostName, trigger }) => {
@@ -68,7 +67,9 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {trigger}
+        <Button variant='outline' className='w-full border-black mt-4'>
+          Message Host
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
