@@ -235,6 +235,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
       box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
     `;
     el.innerText = `${cluster.count}`;
+    // Store listing IDs on the element for hover detection
+    el.dataset.listingIds = cluster.listingIds.join(',');
     el.addEventListener('click', (e) => {
       e.stopPropagation();
       useVisibleListingsStore.getState().setVisibleListingIds(cluster.listingIds);
@@ -279,11 +281,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
       }
     });
 
-    clusterMarkersRef.current.forEach((marker, id) => {
-      if (!isFullscreen && clickedCluster && id === `cluster-${clickedCluster.listingIds.join('-')}`) {
-        setColor(marker, '#404040', '2');
+    clusterMarkersRef.current.forEach((marker) => {
+      const el = marker.getElement();
+      const listingIdsStr = el.dataset.listingIds || '';
+      const clusterListingIds = listingIdsStr.split(',');
+      const isHovered = hoveredListing && clusterListingIds.includes(hoveredListing.id);
+      const isClicked = !isFullscreen && clickedCluster && clusterListingIds.join('-') === clickedCluster.listingIds.join('-');
+
+      if (isHovered || isClicked) {
+        setColor(marker, '#404040', '2'); // Highlight color
       } else {
-        setColor(marker, '#FF0000', '1');
+        setColor(marker, '#FF0000', '1'); // Default color
       }
     });
   };
