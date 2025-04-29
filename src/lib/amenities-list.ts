@@ -62,7 +62,7 @@ const amenities = [
   { code: 'grill', label: 'Grill', icon: AmenitiesIcons.UpdatedGrillIcon, category: 'luxury' },
 
   // Laundry
-  { code: 'laundryFacilities', label: 'Laundry Facilities', icon: AmenitiesIcons.UpdatedDryerIcon, category: 'laundry' },
+  { code: 'laundryFacilities', label: 'Laundry Facilities', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
   { code: 'washerInUnit', label: 'Washer In Unit', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
   { code: 'washerHookup', label: 'Washer Hookup', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
   { code: 'washerNotAvailable', label: 'Washer Not Available', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
