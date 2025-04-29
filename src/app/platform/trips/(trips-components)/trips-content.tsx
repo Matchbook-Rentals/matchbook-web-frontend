@@ -84,6 +84,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                   searchIconColor='text-[#404040]'
                   popoverMaxWidth='900px'
                   headerText='Find your next home'
+                  hasAccess
                 />
               </div>
             </div>
