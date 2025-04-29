@@ -165,12 +165,7 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                  );
               })}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-                    </p>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+            {/* Removed duplicate/stray elements below */}
             <CarouselPrevious className="hidden sm:flex absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
             <CarouselNext className="hidden sm:flex absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
           </Carousel>
