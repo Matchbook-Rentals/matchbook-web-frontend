@@ -1,3 +1,4 @@
+import React, { useState } from 'react'; // Import useState
 import { MatchbookVerified } from '@/components/icons';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { ListingAndImages } from '@/types';
@@ -7,10 +8,16 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
+  DialogHeader,   // Import DialogHeader
+  DialogTitle,    // Import DialogTitle
+  DialogFooter,   // Import DialogFooter
+  DialogClose,    // Import DialogClose
 } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea'; // Import Textarea
+import { Label } from '@/components/ui/label';       // Import Label
 import {
-  TallDialogContent,
+  TallDialogContent, // Keep this if used for the amenities dialog
   TallDialogTitle,
   TallDialogTrigger,
   TallDialogTriggerText,
@@ -37,6 +44,7 @@ interface ListingDescriptionProps {
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false }) => {
+  const [message, setMessage] = useState(''); // State for the message textarea
   const pathname = usePathname();
   const { tripId } = useParams();
 
@@ -171,9 +179,43 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <span className="flex items-center gap-1 text-sm"><TrailBlazerBadge />Trail Blazer</span>
           <span className="flex items-center gap-1 text-sm"><HallmarkHostBadge />Hallmark Host</span>
         </div>
-        <Button variant='outline' className='w-full border-black mt-4'>
-          Message Host
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant='outline' className='w-full border-black mt-4'>
+              Message Host
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Message Host</DialogTitle>
+              {/* Optional: Add DialogDescription if needed */}
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="message" className="text-right sr-only">
+                  Message
+                </Label>
+                <Textarea
+                  id="message"
+                  placeholder="Type your message here..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="col-span-4"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type="button" onClick={() => console.log('Send clicked', message)}> {/* Placeholder for send action */}
+                Send
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Description section */}
