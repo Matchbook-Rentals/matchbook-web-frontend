@@ -1,6 +1,7 @@
 'use client';
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
+import { subDays, addDays, differenceInDays, isValid } from 'date-fns'; // <-- Import date functions
 import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
@@ -261,27 +262,64 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
 
   // This code filters and memoizes the listings to be shown
-  const showListings = useMemo(() =>
-    listings.filter(listing => {
+  const showListings = useMemo(() => {
+    // --- Calculate Core Dates, Duration, and Flexible Window ---
+    const coreStartDate = trip?.startDate ? new Date(trip.startDate) : null;
+    const coreEndDate = trip?.endDate ? new Date(trip.endDate) : null;
+    let stayDurationDays = 0;
+    let earliestValidStart: Date | null = null;
+    let latestValidEnd: Date | null = null;
+
+    if (coreStartDate && coreEndDate && isValid(coreStartDate) && isValid(coreEndDate) && coreEndDate >= coreStartDate) {
+      // Calculate duration (add 1 for inclusive days)
+      stayDurationDays = differenceInDays(coreEndDate, coreStartDate) + 1;
+      earliestValidStart = subDays(coreStartDate, trip.flexibleStart || 0);
+      latestValidEnd = addDays(coreEndDate, trip.flexibleEnd || 0);
+    }
+    // --- End Date Calculations ---
+
+    return listings.filter(listing => {
       // Check if the listing is not favorited, disliked, or requested
       const isNotFavorited = !lookup.favIds.has(listing.id);
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
       const isNotRequested = !lookup.requestedIds.has(listing.id);
 
-      // Check if the listing is available during the trip period
-      const isAvailable = !listing.unavailablePeriods?.some(period => {
-        const periodStart = new Date(period.startDate);
-        const periodEnd = new Date(period.endDate);
-        const searchStart = new Date(trip?.startDate || '');
-        const searchEnd = new Date(trip?.endDate || '');
+      // Check availability considering flexibility
+      const isAvailable = (() => {
+        // If core dates are invalid or duration is zero, treat as unavailable (or available, depending on desired default)
+        if (!coreStartDate || !coreEndDate || !earliestValidStart || !latestValidEnd || stayDurationDays <= 0) {
+          return false;
+        }
 
-        // Check for any overlap between the unavailable period and the trip dates
-        return (
-          (searchStart >= periodStart && searchStart <= periodEnd) ||
-          (searchEnd >= periodStart && searchEnd <= periodEnd) ||
-          (searchStart <= periodStart && searchEnd >= periodEnd)
-        );
-      });
+        // Check if *any* unavailability period makes placement impossible
+        return !listing.unavailablePeriods?.some(period => {
+          const periodStart = new Date(period.startDate);
+          const periodEnd = new Date(period.endDate); // Use the actual end date from DB
+
+          if (!isValid(periodStart) || !isValid(periodEnd)) return false; // Skip invalid periods
+
+          // Calculate the latest the stay could start *before* this period
+          // To end just before periodStart, the stay must start at periodStart - stayDurationDays
+          const latestStartBeforePeriod = subDays(periodStart, stayDurationDays);
+
+          // Calculate the earliest the stay could start *after* this period
+          // To start right after periodEnd, the stay must start at periodEnd + 1 day
+          // (Assuming periodEnd is inclusive, adjust if it's exclusive)
+          const earliestStartAfterPeriod = addDays(periodEnd, 1); // Adjust if periodEnd is exclusive
+
+          // Calculate the end date if starting right after the period
+          const endDateIfStartingAfter = addDays(earliestStartAfterPeriod, stayDurationDays - 1);
+
+          // Condition for unavailability due to this period:
+          // 1. The latest start *before* the period is earlier than the earliest allowed start.
+          const blockedBefore = latestStartBeforePeriod < earliestValidStart;
+          // 2. The earliest start *after* the period results in an end date later than the latest allowed end.
+          const blockedAfter = endDateIfStartingAfter > latestValidEnd;
+
+          // If *both* are true, this period blocks all possibilities.
+          return blockedBefore && blockedAfter;
+        });
+      })();
 
       // Property type filter
       const matchesPropertyType = filters.propertyTypes.length === 0 ||
@@ -361,6 +399,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesLuxury &&
         matchesLaundry;
     }),
+    // Ensure trip object (containing dates and flexibility) is a dependency
     [listings, lookup, trip, filters]
   );
 
