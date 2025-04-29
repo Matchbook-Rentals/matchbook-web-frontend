@@ -33,6 +33,23 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
   const { toast } = useToast();
   const router = useRouter(); // Initialize router
 
+  useEffect(() => {
+    const checkConversation = async () => {
+      setIsLoading(true);
+      try {
+        const result = await findConversationByListingAndUser(listingId);
+        setExistingConversationId(result.conversationId);
+      } catch (error) {
+        console.error("Failed to check for existing conversation:", error);
+        // Optionally show a toast or handle error state
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkConversation();
+  }, [listingId]); // Re-run if listingId changes
+
   const handleSendMessage = async () => {
     if (!message.trim()) {
       toast({
