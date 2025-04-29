@@ -15,9 +15,10 @@ import {
   TallDialogTrigger,
   TallDialogTriggerText,
 } from '@/constants/styles';
-import { Star } from 'lucide-react';
+import { Star as StarIcon } from 'lucide-react'; // Renamed Star to StarIcon for clarity
 import ShareButton from '@/components/ui/share-button';
 import { usePathname, useParams } from 'next/navigation';
+import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge } from '@/components/icons'; // Assuming these icons exist
 
 // Define the desired order for amenity categories
 const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
@@ -153,16 +154,26 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
 
       {/* Host Information Section - Updated Rating Display */}
       <div className={`${sectionStyles} lg:hidden`}>
-        <div className="flex items-center justify-between">
-          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">
-            Hosted by {listing.user?.firstName || 'Unknown'}
-          </p>
-          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center">
-            <Star className="w-4 h-4" /> {listing.uScore ? listing.uScore.toFixed(1) : 'N/A'} <span className=''> (23) </span>
-          </p>
+        {/* Host Information Section */}
+        <div className='mb-4 space-y-2'>
+          <div className='flex items-center justify-between'>
+            <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">Hosted by {listing.user?.firstName || 'Unknown'}</p>
+            <p className={`md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center`}>
+              <StarIcon className="w-4 h-4" /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
+              <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
+            </p>
+          </div>
         </div>
-        <div className="flex items-center justify-between">
+
+        {/* Host Badges Section */}
+        <div className='flex justify-between gap-2'>
+          <span className="flex items-center gap-1 text-sm"><VerifiedBadge />Verified</span>
+          <span className="flex items-center gap-1 text-sm"><TrailBlazerBadge />Trail Blazer</span>
+          <span className="flex items-center gap-1 text-sm"><HallmarkHostBadge />Hallmark Host</span>
         </div>
+        <Button variant='outline' className='w-full border-black mt-4'>
+          Message Host
+        </Button>
       </div>
 
       {/* Description section */}
