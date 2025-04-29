@@ -43,6 +43,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     // Find the states to include in the search
     const stateRadiusInfo = statesInRadiusData.find(item => item.state === trimmedState);
     const statesToSearch = stateRadiusInfo ? stateRadiusInfo.statesInRadius : [trimmedState]; // Fallback to only the input state if not found
+    console.log('STATES TO SEARCH', statesToSearch);
 
     // Log the states being used for filtering
     console.log(`Filtering listings for states: ${statesToSearch.join(', ')}`);
