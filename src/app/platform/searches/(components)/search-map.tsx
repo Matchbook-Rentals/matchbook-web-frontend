@@ -92,7 +92,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     // Dynamic pixel radius based on zoom, similar to original logic
     let baseClusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
     // Halve the radius if in fullscreen mode for *less* aggressive clustering
-    const clusterPixelRadius = isFullscreen ? baseClusterPixelRadius / 2 : baseClusterPixelRadius;
+    const clusterPixelRadius = baseClusterPixelRadius;
 
     const grid = new Map<string, MapMarker[]>();
     const visitedRevised = new Set<string>();
@@ -300,11 +300,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
   useEffect(() => {
     if (!mapContainerRef.current || !center) return;
 
+
+    let mapRenderZoom = currentZoom || zoom || 12;
+
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
       style: 'https://tiles.openfreemap.org/styles/bright',
       center,
-      zoom,
+      zoom: mapRenderZoom,
       scrollZoom: false,
     });
     mapRef.current = map;
@@ -324,7 +327,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     map.on('zoomend', updateMarkers);
     map.on('moveend', () => {
       updateVisibleMarkers();
-      if (!isFullscreen) updateMarkers();
+      updateMarkers();
     });
     map.on('click', () => {
       setSelectedMarker(null);
@@ -361,6 +364,15 @@ const SearchMap: React.FC<SearchMapProps> = ({
     }
   }, [isFullscreen, markers]);
 
+
+  const handleFullscreen = () => {
+    let newZoom = isFullscreen ? currentZoom - 1 : currentZoom + 1;
+    let maxZoom = Math.min(newZoom, 14);
+
+    setCurrentZoom(maxZoom);
+    setIsFullscreen(!isFullscreen);
+  }
+
   // **Render**
   return (
     <div style={{ height }} ref={mapContainerRef}>
@@ -379,7 +391,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
             </button>
           </div>
           <div className="absolute top-2 left-2 z-10">
-            <button onClick={() => setIsFullscreen(!isFullscreen)} className="bg-white p-2 rounded-md shadow">
+            <button onClick={handleFullscreen} className="bg-white p-2 rounded-md shadow">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
