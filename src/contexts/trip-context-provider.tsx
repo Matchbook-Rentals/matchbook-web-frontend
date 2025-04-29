@@ -381,45 +381,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
       const isNotRequested = !lookup.requestedIds.has(listing.id);
 
-      // Check availability considering flexibility
-      const isAvailable = (() => {
-        // If core dates are invalid or duration is zero, treat as unavailable (or available, depending on desired default)
-        if (!coreStartDate || !coreEndDate || !earliestValidStart || !latestValidEnd || stayDurationDays <= 0) {
-          return false;
-        }
-
-        // Check if *any* unavailability period makes placement impossible
-        return !listing.unavailablePeriods?.some(period => {
-          const periodStart = new Date(period.startDate);
-          const periodEnd = new Date(period.endDate); // Use the actual end date from DB
-
-          if (!isValid(periodStart) || !isValid(periodEnd)) return false; // Skip invalid periods
-
-          // Calculate the latest the stay could start *before* this period
-          // To end just before periodStart, the stay must start at periodStart - stayDurationDays
-          const latestStartBeforePeriod = subDays(periodStart, stayDurationDays);
-
-          // Calculate the earliest the stay could start *after* this period
-          // To start right after periodEnd, the stay must start at periodEnd + 1 day
-          // (Assuming periodEnd is inclusive, adjust if it's exclusive)
-          const earliestStartAfterPeriod = addDays(periodEnd, 1); // Adjust if periodEnd is exclusive
-
-          // Calculate the end date if starting right after the period
-          const endDateIfStartingAfter = addDays(earliestStartAfterPeriod, stayDurationDays - 1);
-
-          // Condition for unavailability due to this period:
-          // 1. The latest start *before* the period is earlier than the earliest allowed start.
-          const blockedBefore = latestStartBeforePeriod < earliestValidStart;
-          // 2. The earliest start *after* the period results in an end date later than the latest allowed end.
-          const blockedAfter = endDateIfStartingAfter > latestValidEnd;
-
-          // If *both* are true, this period blocks all possibilities.
-          return blockedBefore && blockedAfter;
-        });
-      const isNotDisliked = !lookup.dislikedIds.has(listing.id);
-      const isNotRequested = !lookup.requestedIds.has(listing.id);
-
-      // Use the calculated availability flag
+      // Use the calculated availability flag from the mapping phase
       const isAvailable = listing.isActuallyAvailable;
 
       // --- Keep all other filters the same ---
