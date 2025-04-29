@@ -204,13 +204,13 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                 />
               </div>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex flex-col items-end space-y-2">
               <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" className="w-1/4">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="button" onClick={() => console.log('Send clicked', message)}> {/* Placeholder for send action */}
+              <Button type="button" onClick={() => console.log('Send clicked', message)} className="w-1/4"> {/* Placeholder for send action */}
                 Send
               </Button>
             </DialogFooter>
