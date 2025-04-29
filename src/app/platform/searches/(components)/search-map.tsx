@@ -90,7 +90,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
     if (visibleMarkers.length === 0) return [];
 
     // Dynamic pixel radius based on zoom, similar to original logic
-    const clusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
+    let baseClusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
+    // Halve the radius if in fullscreen mode for *less* aggressive clustering
+    const clusterPixelRadius = isFullscreen ? baseClusterPixelRadius / 2 : baseClusterPixelRadius;
 
     const grid = new Map<string, MapMarker[]>();
     const visitedRevised = new Set<string>();
