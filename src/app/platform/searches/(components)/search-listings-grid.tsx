@@ -7,6 +7,7 @@ import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
 import { useMapSelectionStore } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { Loader2 } from 'lucide-react'; // <-- Import a spinner icon
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
@@ -21,6 +22,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // <-- Add loading state
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -48,8 +50,26 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   // Initialize or reset displayed listings when filteredListings change
   useEffect(() => {
-    // Start with the first batch of items
-    setDisplayedListings(filteredListings.slice(0, ITEMS_PER_LOAD));
+    // Indicate loading is starting
+    setIsLoading(true);
+
+    // Scroll to top
+    if (scrollAreaRef.current?.children[0]) { // Access the viewport element within ScrollArea
+        const viewport = scrollAreaRef.current.children[0] as HTMLElement;
+        viewport.scrollTo({ top: 0, behavior: 'smooth' }); // Use smooth scroll
+    }
+
+    // Use setTimeout to allow the loading state and scroll to potentially render first
+    const timer = setTimeout(() => {
+      // Reset displayed list with the first batch of the *new* filtered items
+      setDisplayedListings(filteredListings.slice(0, ITEMS_PER_LOAD));
+      // Stop loading
+      setIsLoading(false);
+    }, 50); // Small delay (e.g., 50ms) might improve spinner visibility
+
+    // Cleanup timeout if the effect re-runs before it fires
+    return () => clearTimeout(timer);
+
   }, [filteredListings]); // Dependency: only filteredListings
 
   // Load more items when sentinel becomes visible
@@ -200,15 +220,23 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       className="relative flex flex-col h-full"
       style={{ height: height ? `${height}px` : '640px' }} // Use height prop, provide fallback
     >
-      {listings.length === 0 ? (
+      {/* --- Loading Spinner Overlay --- */}
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+          <Loader2 className="h-8 w-8 animate-spin text-blueBrand" />
+        </div>
+      )}
+
+      {/* --- Original Content --- */}
+      {!isLoading && listings.length === 0 ? ( // Hide original content when loading
         <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings to display
         </div>
-      ) : filteredListings.length === 0 ? (
+      ) : !isLoading && filteredListings.length === 0 ? ( // Hide original content when loading
         <div className="flex-grow w-full flex items-center justify-center text-gray-500"> {/* Use flex-grow */}
           No listings in that area, Try changing your filters or zooming out to see more listings
         </div>
-      ) : (
+      ) : !isLoading && ( // Hide original content when loading
         <>
           {/* Make ScrollArea grow */}
           <ScrollArea
