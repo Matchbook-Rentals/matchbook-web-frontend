@@ -97,64 +97,100 @@ export async function sendInitialMessage(listingId: string, content: string) {
   }
 }
 
+// --- Start Updated markMessagesAsReadByTimestamp ---
 export async function markMessagesAsReadByTimestamp(conversationId: string, timestamp: Date) {
   try {
     const { userId } = auth();
     if (!userId) return { success: false, error: 'Unauthorized' };
     if (!conversationId) return { success: false, error: 'Conversation ID is required' };
 
-    // Get the conversation to verify the user is a participant
+    // Optional: Get the conversation to verify the user is a participant
+    // This check is good practice but might be omitted if performance is critical
+    // and authorization is handled elsewhere.
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
-      include: { participants: true }
+      select: { participants: { select: { userId: true } } } // Select only participant IDs
     });
 
     if (!conversation) {
       return { success: false, error: 'Conversation not found' };
     }
 
-    // Verify user is a participant in this conversation
     const isParticipant = conversation.participants.some(p => p.userId === userId);
     if (!isParticipant) {
       return { success: false, error: 'Unauthorized access to conversation' };
     }
 
-    // Find messages sent by others before the timestamp that the user hasn't read yet
-    const messagesToMark = await prisma.message.findMany({
-      where: {
-        conversationId: conversationId,
-        senderId: { not: userId }, // Messages NOT sent by the current user
-        createdAt: { lte: timestamp }, // Before or at the timestamp
-        readBy: { // Check if a MessageRead record for this user DOES NOT exist
-          none: {
-            userId: userId
-          }
-        }
-      },
-      select: { id: true } // Only need the IDs
+    // Find the IDs of messages to update first
+    const messagesToUpdate = await prisma.message.findMany({
+       where: {
+         conversationId: conversationId,
+         senderId: { not: userId },
+         createdAt: { lte: timestamp },
+         isRead: false
+       },
+       select: { id: true } // Select only the IDs
     });
 
-    if (messagesToMark.length === 0) {
-      return { success: true, count: 0 }; // No new messages to mark as read
+    const messageIdsToUpdate = messagesToUpdate.map(msg => msg.id);
+
+    if (messageIdsToUpdate.length === 0) {
+      console.log(`No unread messages to mark as read in conversation ${conversationId} for user ${userId} up to ${timestamp}`);
+      return { success: true, count: 0 };
     }
 
-    // Prepare data for creating MessageRead records
-    const dataToCreate = messagesToMark.map(message => ({
-      messageId: message.id,
-      userId: userId
-      // readAt defaults to now() in the schema
-    }));
-
-    // Create MessageRead records for the found messages
-    const createResult = await prisma.messageRead.createMany({
-      data: dataToCreate,
-      skipDuplicates: true // Avoid errors if a read record was somehow created concurrently
+    // Update messages directly in the database
+    const updateResult = await prisma.message.updateMany({
+      where: {
+        id: { in: messageIdsToUpdate } // Target specific messages by ID
+        // Redundant checks removed as we already filtered by ID
+        // conversationId: conversationId,
+        // senderId: { not: userId },
+        // createdAt: { lte: timestamp },
+        // isRead: false
+      },
+      data: {
+        isRead: true,
+        readAt: new Date() // Set the read timestamp
+      }
     });
 
-    return { success: true, count: createResult.count };
+    console.log(`Marked ${updateResult.count} messages as read in conversation ${conversationId} for user ${userId}`);
+
+    // --- TODO: Delete related notifications ---
+    // When a message is marked as read, any pending 'unread_message' notifications
+    // related to this conversation for this user should ideally be marked as read or deleted.
+    // This prevents the user from seeing a notification for a message they've already seen.
+    /*
+    if (updateResult.count > 0) {
+      try {
+        const deletedNotifications = await prisma.notification.deleteMany({
+          where: {
+            userId: userId,
+            relatedId: conversationId, // Assuming relatedId stores conversationId for message notifications
+            type: 'unread_message',    // Make sure this matches the type used by the cron job
+            isRead: false              // Only delete/update unread notifications
+          }
+        });
+        console.log(`Deleted ${deletedNotifications.count} related unread_message notifications for user ${userId} in conversation ${conversationId}`);
+        // Alternatively, you might want to mark them as read instead of deleting:
+        // await prisma.notification.updateMany({ where: {...}, data: { isRead: true } });
+      } catch (notificationError) {
+        console.error('Error deleting/updating related notifications:', notificationError);
+        // Decide if this error should affect the overall success status
+      }
+    }
+    */
+    // --- End TODO ---
+
+
+    // We are no longer creating MessageRead records here for this specific action.
+
+    return { success: true, count: updateResult.count };
 
   } catch (error) {
     console.error('Error marking messages as read by timestamp:', error);
     return { success: false, error: 'Failed to mark messages as read' };
   }
 }
+// --- End Updated markMessagesAsReadByTimestamp ---
