@@ -30,7 +30,11 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const userButtonContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
+  const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user';
+  const isAdmin = userRole === 'admin';
 
   useEffect(() => {
     updateUserLogin(new Date());
@@ -207,7 +211,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
   return (
     <div className="flex items-center space-x-2 md:space-x-4">
-      {isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
+      {/* Notifications Icon - Requires beta access */}
+      {isSignedIn && hasBetaAccess && (
         <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
           <PopoverTrigger className="relative flex items-center justify-center">
             <Bell className="h-5 w-5 text-charcoal" />
@@ -274,50 +279,70 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Home</button>
                 </Link>
 
-                {/* Role-specific links */}
-                {(userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user') && (
+                {/* Searches - Requires beta access */}
+                {hasBetaAccess ? (
                   <Link href="/platform/trips">
                     <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Searches</button>
                   </Link>
+                ) : (
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Searches</button>
                 )}
 
-                <Link href="/platform/application">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Application</button>
-                </Link>
+                {/* Application - Requires beta access */}
+                {hasBetaAccess ? (
+                  <Link href="/platform/application">
+                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Application</button>
+                  </Link>
+                ) : (
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Application</button>
+                )}
 
-                <Link href="/platform/bookings">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Bookings</button>
-                </Link>
+                {/* Bookings - Requires beta access */}
+                {hasBetaAccess ? (
+                  <Link href="/platform/bookings">
+                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Bookings</button>
+                  </Link>
+                ) : (
+                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Bookings</button>
+                )}
               </div>
 
-              {/* Messages section */}
+              {/* Messages section - Requires admin access */}
               <div className="border-t border-gray-200">
-                {userRole === 'admin' && (
+                {isAdmin ? (
                   <Link href="/platform/messages">
                     <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Inbox</button>
                   </Link>
-                )}
-              </div>
-
-              {/* Host switch */}
-              <div className="border-t border-gray-200">
-                {pathname && pathname.startsWith('/platform/host-dashboard') ? (
-                  <Link href="/platform/bookings">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
-                      Switch to Renting
-                    </button>
-                  </Link>
                 ) : (
-                  <Link href="/platform/host-dashboard">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
-                      Switch to Hosting
-                    </button>
-                  </Link>
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Inbox</button>
                 )}
               </div>
 
-              {/* Beta access notice */}
-              {!userRole && (
+              {/* Host switch - Requires beta access */}
+              <div className="border-t border-gray-200">
+                {hasBetaAccess ? (
+                  pathname && pathname.startsWith('/platform/host-dashboard') ? (
+                    <Link href="/platform/bookings">
+                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                        Switch to Renting
+                      </button>
+                    </Link>
+                  ) : (
+                    <Link href="/platform/host-dashboard">
+                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                        Switch to Hosting
+                      </button>
+                    </Link>
+                  )
+                ) : (
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>
+                    {pathname && pathname.startsWith('/platform/host-dashboard') ? 'Switch to Renting' : 'Switch to Hosting'}
+                  </button>
+                )}
+              </div>
+
+              {/* Beta access notice - Show only if user doesn't have beta access */}
+              {!hasBetaAccess && (
                 <div className="border-t border-gray-200">
                   <div className="w-full px-4 py-3 text-left text-sm font-medium text-gray-500">Beta access coming soon!</div>
                 </div>
@@ -337,15 +362,21 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 >
                   Support
                 </button>
-                {userRole === 'admin' && (
-                  <>
-                    <Link href="/platform/verification">
-                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Verification</button>
-                    </Link>
-                    <Link href="/admin">
-                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Admin Dashboard</button>
-                    </Link>
-                  </>
+                
+                {/* Verification - Requires admin access */}
+                {isAdmin ? (
+                  <Link href="/platform/verification">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Verification</button>
+                  </Link>
+                ) : (
+                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Verification</button>
+                )}
+
+                {/* Admin Dashboard - Only visible to admins */}
+                {isAdmin && (
+                  <Link href="/admin">
+                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Admin Dashboard</button>
+                  </Link>
                 )}
               </div>
 
