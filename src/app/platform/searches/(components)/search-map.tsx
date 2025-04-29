@@ -177,14 +177,15 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
 
   /** Render individual or cluster markers */
-  const renderMarkers = (clusters: ClusterMarker[]) => {
+  const renderMarkers = (clusters: ClusterMarker[], zoom: number) => {
     if (!mapRef.current) return;
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current.clear();
     clusterMarkersRef.current.forEach(marker => marker.remove());
     clusterMarkersRef.current.clear();
 
-    const shouldCluster = currentZoom < 15;
+    const shouldCluster = zoom < 17;
+    console.log('SHOULD CLUSTER' ,zoom, shouldCluster)
     if (!shouldCluster) {
       const bounds = mapRef.current.getBounds();
       markers
@@ -315,11 +316,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
     const updateMarkers = () => {
       const newZoom = map.getZoom();
+      console.log('NEW ZOOM', newZoom);
       setCurrentZoom(newZoom);
       updateVisibleMarkers();
       const newClusters = createClusters(newZoom);
       setClusters(newClusters);
-      renderMarkers(newClusters);
+      renderMarkers(newClusters, newZoom);
       updateMarkerColors();
     };
 
@@ -343,7 +345,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, [center, markers, zoom, isFullscreen]);
+  }, [center, zoom, isFullscreen]);
 
   // **State Sync Effects**
   useEffect(() => {
@@ -360,7 +362,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       updateVisibleMarkers();
       const newClusters = createClusters(currentZoom);
       setClusters(newClusters);
-      renderMarkers(newClusters);
+      renderMarkers(newClusters, currentZoom);
     }
   }, [isFullscreen, markers]);
 
