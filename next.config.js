@@ -37,6 +37,11 @@ const nextConfig = {
         hostname: 'img.clerk.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.furnishedfinder.com',
+        pathname: '**',
+      },
     ],
   },
   typescript: {

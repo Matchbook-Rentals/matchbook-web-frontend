@@ -17,7 +17,9 @@ interface AddressData {
 }
 
 const prisma = new PrismaClient();
-const addressesFilePath = path.join(__dirname, './addresses/', 'austin_addresses.JSON'); // Assumes JSON is in the root
+const cityName = 'indianapolis';
+const stateCode = 'IN';
+const addressesFilePath = path.join(__dirname, './addresses/', `${cityName}_addresses.json`); // Assumes JSON is in the root
 const BATCH_SIZE = 1000; // Max listings to fetch
 
 async function updateListings() {
@@ -88,7 +90,7 @@ async function updateListings() {
     // Assuming 'zip' is the field in your Prisma schema for postal code
     if (addressData.postcode !== undefined) updateData.postalCode = addressData.postcode;
     // Add state if available in your JSON and schema
-    updateData.state = 'TX';
+    updateData.state = stateCode;
     updateData.locationString= `${addressData.housenumber} ${addressData.street}, ${addressData.city}, ${updateData.state}, ${addressData.postcode} `
 
     // Skip update if no valid lat/lon found
@@ -112,7 +114,7 @@ async function updateListings() {
   }
 
   console.log('--------------------');
-  console.log('Update process finished.');
+  console.log('Update process finished.', cityName );
   console.log(`Successfully updated: ${updatedCount}`);
   console.log(`Failed updates: ${failedCount}`);
   console.log(`Listings remaining with latitude 0 (if any): ${listingsToUpdate.length - updatedCount}`);

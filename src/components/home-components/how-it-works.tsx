@@ -11,7 +11,7 @@ export const HowItWorks = (): JSX.Element => {
     },
     { 
       number: "2", 
-      title: "Apply with a 1-Click",
+      title: "Apply with 1-Click",
       imgUrl: "/marketing-images/step-2.png"
     },
     { 

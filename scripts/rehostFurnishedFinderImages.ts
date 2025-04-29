@@ -83,7 +83,7 @@ async function main() {
         } else {
           console.warn(`Skipping imageSrc update for listing ${listing.id} due to rehosting failure.`);
         }
-        await delay(15000); // Wait 15 seconds before the next potential upload
+        await delay(1000); // Wait 15 seconds before the next potential upload
       } else if (listing.imageSrc) {
          console.log(`Listing ${listing.id} imageSrc is not from Furnished Finder: ${listing.imageSrc}`);
       } else {
