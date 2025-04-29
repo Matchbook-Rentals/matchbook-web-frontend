@@ -34,7 +34,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
   const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user';
-  const isAdmin = userRole === 'admin';
+  //const isAdmin = userRole === 'admin';
+  const isAdmin = false;
 
   useEffect(() => {
     updateUserLogin(new Date());
