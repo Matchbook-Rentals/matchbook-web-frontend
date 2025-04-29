@@ -311,10 +311,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         if (isActuallyAvailable) {
           // Find Earliest Valid Start
           let currentCheckStart = earliestValidStart;
-          while (currentCheckStart <= coreStartDate) { // Optimization: Check only up to core start
-            const currentCheckEnd = addDays(currentCheckStart, stayDurationDays - 1);
-            if (currentCheckEnd > latestValidEnd) break; // Exceeds flexible end window
+          // Calculate the latest possible date the stay could START and still fit
+          const latestPossibleStartDate = subDays(latestValidEnd, stayDurationDays - 1);
 
+          while (currentCheckStart <= latestPossibleStartDate) { // Check all potential start dates within the flexible window
+            const currentCheckEnd = addDays(currentCheckStart, stayDurationDays - 1);
+
+            // Check if the *entire interval* [currentCheckStart, currentCheckEnd] overlaps with *any* unavailability period
             const overlaps = listing.unavailablePeriods?.some(p => {
               const pStart = new Date(p.startDate);
               const pEnd = new Date(p.endDate);
@@ -323,17 +326,23 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
             });
 
             if (!overlaps) {
-              availableStart = currentCheckStart; // Found the earliest
-              break;
+              // If NO overlap is found for this entire interval, this is the earliest valid start date.
+              availableStart = currentCheckStart;
+              break; // Found the earliest, exit the loop.
             }
 
-            // If overlap, find the end of the blocking period to jump ahead
+            // If there WAS an overlap, we need to find the end of the blocking period
+            // to determine the *next* potential start date to check.
             const blockingPeriod = listing.unavailablePeriods?.find(p => {
               const pStart = new Date(p.startDate);
               const pEnd = new Date(p.endDate);
+              // Find the specific period that caused the overlap for this interval
               return isValid(pStart) && isValid(pEnd) && currentCheckStart < addDays(pEnd, 1) && currentCheckEnd >= pStart;
             });
-            currentCheckStart = blockingPeriod ? addDays(new Date(blockingPeriod.endDate), 1) : addDays(currentCheckStart, 1); // Jump or increment
+
+            // Jump the next check to the day *after* the blocking period ends.
+            // This is the earliest the stay could possibly start now.
+            currentCheckStart = blockingPeriod ? addDays(new Date(blockingPeriod.endDate), 1) : addDays(currentCheckStart, 1); // Fallback: increment day-by-day if find fails (should be rare)
           }
 
           // Find Latest Valid End
