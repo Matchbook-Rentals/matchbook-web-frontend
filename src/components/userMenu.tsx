@@ -11,11 +11,23 @@ import { getNotifications, updateNotification, deleteNotification } from '@/app/
 import { updateUserImage, updateUserLogin } from '@/app/actions/user';
 import { Notification } from '@prisma/client';
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
-import { Bell, Circle } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
+
+// Define the structure for menu items
+interface MenuItem {
+  id: string;
+  label: string | ((pathname: string) => string);
+  href?: string | ((pathname: string) => string);
+  onClick?: () => void;
+  requiresBeta?: boolean; // Requires beta_user, moderator, or admin
+  requiresAdmin?: boolean; // Requires admin
+  adminOnlyVisible?: boolean; // Only visible to admin
+  section: number; // For grouping and dividers
+}
 
 export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, color: string }) {
   const { user } = useUser();
@@ -34,12 +46,31 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
   const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user';
-  //const isAdmin = userRole === 'admin';
-  const isAdmin = false;
+  const isAdmin = userRole === 'admin'; // Use actual admin role check
 
   useEffect(() => {
     updateUserLogin(new Date());
   }, []);
+
+  // Define the menu structure
+  const menuItems: MenuItem[] = [
+    { id: 'home', label: 'Home', href: '/', section: 1 },
+    { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
+    { id: 'application', label: 'Application', href: '/platform/application', requiresBeta: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
+    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresAdmin: true, section: 2 }, // Changed from adminOnlyVisible for consistency with previous logic
+    {
+      id: 'switch-mode',
+      label: (pathname) => pathname.startsWith('/platform/host-dashboard') ? 'Switch to Renting' : 'Switch to Hosting',
+      href: (pathname) => pathname.startsWith('/platform/host-dashboard') ? '/platform/bookings' : '/platform/host-dashboard',
+      requiresBeta: true,
+      section: 3
+    },
+    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
+    { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, section: 4 }, // Changed from adminOnlyVisible
+    { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
+  ];
 
   const fetchNotifications = useCallback(async () => {
     if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user')) {
@@ -272,75 +303,61 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               </div>
             )}
           </PopoverTrigger>
-          <PopoverContent  className="p-0">
+          <PopoverContent className="p-0">
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
-              {/* Core navigation options */}
-              <div className="flex flex-col">
-                <Link href="/">
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Home</button>
-                </Link>
+              {/* Render menu items from the structure */}
+              {(() => {
+                let lastSection = 0;
+                return menuItems.map((item) => {
+                  // Visibility Check: Skip rendering if adminOnlyVisible and user is not admin
+                  if (item.adminOnlyVisible && !isAdmin) {
+                    return null;
+                  }
 
-                {/* Searches - Requires beta access */}
-                {hasBetaAccess ? (
-                  <Link href="/platform/trips">
-                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Searches</button>
-                  </Link>
-                ) : (
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Searches</button>
-                )}
+                  // Enabled Check
+                  let isItemEnabled = true;
+                  if (item.requiresBeta && !hasBetaAccess) {
+                    isItemEnabled = false;
+                  }
+                  if (item.requiresAdmin && !isAdmin) {
+                    isItemEnabled = false;
+                  }
 
-                {/* Application - Requires beta access */}
-                {hasBetaAccess ? (
-                  <Link href="/platform/application">
-                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Application</button>
-                  </Link>
-                ) : (
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Application</button>
-                )}
+                  // Determine dynamic label and href
+                  const label = typeof item.label === 'function' ? item.label(pathname || '') : item.label;
+                  const href = typeof item.href === 'function' ? item.href(pathname || '') : item.href;
 
-                {/* Bookings - Requires beta access */}
-                {hasBetaAccess ? (
-                  <Link href="/platform/bookings">
-                    <button className="px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 w-full" onClick={() => setIsMenuOpen(false)}>Bookings</button>
-                  </Link>
-                ) : (
-                  <button className="px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed w-full" disabled>Bookings</button>
-                )}
-              </div>
+                  const sectionChanged = item.section !== lastSection;
+                  lastSection = item.section; // Update lastSection for the next iteration
 
-              {/* Messages section - Requires admin access */}
-              <div className="border-t border-gray-200">
-                {isAdmin ? (
-                  <Link href="/platform/messages">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Inbox</button>
-                  </Link>
-                ) : (
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Inbox</button>
-                )}
-              </div>
+                  const buttonContent = (
+                    <button
+                      onClick={item.onClick ? item.onClick : () => setIsMenuOpen(false)}
+                      className={`w-full px-4 py-3 text-left text-sm font-medium ${
+                        isItemEnabled
+                          ? 'text-gray-800 hover:bg-gray-50'
+                          : 'text-gray-400 cursor-not-allowed'
+                      }`}
+                      disabled={!isItemEnabled}
+                    >
+                      {label}
+                    </button>
+                  );
 
-              {/* Host switch - Requires beta access */}
-              <div className="border-t border-gray-200">
-                {hasBetaAccess ? (
-                  pathname && pathname.startsWith('/platform/host-dashboard') ? (
-                    <Link href="/platform/bookings">
-                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
-                        Switch to Renting
-                      </button>
-                    </Link>
-                  ) : (
-                    <Link href="/platform/host-dashboard">
-                      <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
-                        Switch to Hosting
-                      </button>
-                    </Link>
-                  )
-                ) : (
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>
-                    {pathname && pathname.startsWith('/platform/host-dashboard') ? 'Switch to Renting' : 'Switch to Hosting'}
-                  </button>
-                )}
-              </div>
+                  return (
+                    <React.Fragment key={item.id}>
+                      {sectionChanged && lastSection > 1 && <div className="border-t border-gray-200" />}
+                      {href && isItemEnabled ? (
+                        <Link href={href} passHref>
+                          {buttonContent}
+                        </Link>
+                      ) : (
+                        buttonContent
+                      )}
+                    </React.Fragment>
+                  );
+                }).filter(Boolean); // Filter out null values from skipped items
+              })()}
 
               {/* Beta access notice - Show only if user doesn't have beta access */}
               {!hasBetaAccess && (
@@ -348,38 +365,6 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   <div className="w-full px-4 py-3 text-left text-sm font-medium text-gray-500">Beta access coming soon!</div>
                 </div>
               )}
-
-              {/* Settings, support, and admin section */}
-              <div className="border-t border-gray-200">
-                <button
-                  onClick={() => { handleSettings(); setIsMenuOpen(false); }}
-                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
-                >
-                  Settings
-                </button>
-                <button
-                  onClick={() => { setIsSupportOpen(true); setIsMenuOpen(false); }}
-                  className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
-                >
-                  Support
-                </button>
-                
-                {/* Verification - Requires admin access */}
-                {isAdmin ? (
-                  <Link href="/platform/verification">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Verification</button>
-                  </Link>
-                ) : (
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Verification</button>
-                )}
-
-                {/* Admin Dashboard - Only visible to admins */}
-                {isAdmin && (
-                  <Link href="/admin">
-                    <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>Admin Dashboard</button>
-                  </Link>
-                )}
-              </div>
 
               {/* Logout */}
               <div className="border-t border-gray-200">
