@@ -58,12 +58,12 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
     { id: 'application', label: 'Application', href: '/platform/application', requiresBeta: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresAdmin: true, section: 2 }, // Changed from adminOnlyVisible for consistency with previous logic
+    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 }, // Changed from adminOnlyVisible for consistency with previous logic
     {
       id: 'switch-mode',
       label: (pathname) => pathname.startsWith('/platform/host-dashboard') ? 'Switch to Renting' : 'Switch to Hosting',
       href: (pathname) => pathname.startsWith('/platform/host-dashboard') ? '/platform/bookings' : '/platform/host-dashboard',
-      requiresBeta: true,
+      requiresAdmin: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
