@@ -51,25 +51,42 @@ async function rehostImage(imageUrl: string): Promise<string | null> {
 
 async function main() {
   console.log('Starting script to rehost Furnished Finder images...');
+  const BATCH_SIZE = 1000; // Process 1000 listings at a time
+  let skip = 0;
+  let listingsProcessed = 0;
+  let keepFetching = true;
 
   try {
-    const listings = await prisma.listing.findMany({
-      where: {
-        latitude: {
-          not: 0,
+    while (keepFetching) {
+      console.log(`Fetching listings batch: skip=${skip}, take=${BATCH_SIZE}`);
+      const listings = await prisma.listing.findMany({
+        where: {
+          latitude: {
+            not: 0,
+          },
         },
-      },
-      include: {
-        listingImages: true, // Include related images
-      },
-    });
+        include: {
+          listingImages: true, // Include related images
+        },
+        take: BATCH_SIZE,
+        skip: skip,
+        orderBy: { // Add an orderBy clause for stable pagination
+          id: 'asc', 
+        }
+      });
 
-    console.log(`Found ${listings.length} listings with non-zero latitude.`);
+      console.log(`Fetched ${listings.length} listings in this batch.`);
 
-    for (const listing of listings) {
-      console.log(`Processing listing ID: ${listing.id}`);
+      if (listings.length === 0) {
+        keepFetching = false;
+        console.log('No more listings to process.');
+        break;
+      }
 
-      // Process the main imageSrc
+      for (const listing of listings) {
+        console.log(`Processing listing ID: ${listing.id}`);
+
+        // Process the main imageSrc
       if (listing.imageSrc && listing.imageSrc.startsWith(FURNISHED_FINDER_DOMAIN)) {
         console.log(`Found Furnished Finder imageSrc: ${listing.imageSrc}`);
         const newImageUrl = await rehostImage(listing.imageSrc);
@@ -122,10 +139,21 @@ async function main() {
       } else {
          console.log(`Listing ${listing.id} has no additional listingImages.`);
       }
-       console.log(`Finished processing listing ID: ${listing.id}`);
-    }
+        console.log(`Finished processing listing ID: ${listing.id}`);
+      } // End of for loop for listings in the batch
 
-    console.log('Script finished processing all listings.');
+      listingsProcessed += listings.length;
+      skip += BATCH_SIZE;
+
+      // If we fetched less than the batch size, it means we've reached the end
+      if (listings.length < BATCH_SIZE) {
+        keepFetching = false;
+        console.log('Reached the end of listings.');
+      }
+
+    } // End of while loop for fetching batches
+
+    console.log(`Script finished processing. Total listings processed: ${listingsProcessed}.`);
 
   } catch (error) {
     console.error('An error occurred during script execution:', error);
