@@ -15,17 +15,6 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false); // Loading state for active image
 
-  if (listingImages.length === 0) {
-    // Still show pulse if listingImages is empty initially before this check
-    return (
-      <div className="w-full h-[50vh] bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
-        Loading Images...
-      </div>
-    );
-  }
-
-  const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
-
   // Effect to reset loading state when active image or image list changes
   useEffect(() => {
     setIsMainImageLoaded(false);
@@ -59,6 +48,17 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       api.off("select", handleSelect);
     };
   }, [api, activeImage]); // Rerun when api is available or activeImage changes externally
+
+  if (listingImages.length === 0) {
+    // Still show pulse if listingImages is empty initially before this check
+    return (
+      <div className="w-full h-[50vh] bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+        Loading Images...
+      </div>
+    );
+  }
+
+  const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
 
   const handleImageClick = (index: number) => {
     setActiveImage(index);
