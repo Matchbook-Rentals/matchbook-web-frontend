@@ -4,15 +4,27 @@ import prisma from '@/lib/prismadb'
 import { checkRole } from '@/utils/roles'
 import { revalidatePath } from 'next/cache'
 
-export async function getPendingListings() {
+const DEFAULT_PAGE_SIZE = 10;
+
+interface GetPendingListingsParams {
+  page?: number;
+  pageSize?: number;
+}
+
+export async function getPendingListings({ page = 1, pageSize = DEFAULT_PAGE_SIZE }: GetPendingListingsParams = {}) {
   if (!checkRole('admin')) {
     throw new Error('Unauthorized')
   }
 
-  const pendingListings = await prisma.listing.findMany({
-    where: {
-      approvalStatus: 'pendingReview'
-    },
+  const skip = (page - 1) * pageSize;
+
+  const [pendingListings, totalCount] = await prisma.$transaction([
+    prisma.listing.findMany({
+      where: {
+        approvalStatus: 'pendingReview'
+      },
+      skip: skip,
+      take: pageSize,
     select: {
       id: true,
       title: true,
@@ -32,12 +44,18 @@ export async function getPendingListings() {
         }
       }
     },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  })
+      orderBy: {
+        createdAt: 'desc'
+      }
+    }),
+    prisma.listing.count({
+      where: {
+        approvalStatus: 'pendingReview'
+      }
+    })
+  ]);
 
-  return pendingListings
+  return { listings: pendingListings, totalCount };
 }
 
 export async function getListingDetails(listingId: string) {

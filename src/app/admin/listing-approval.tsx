@@ -5,6 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { formatDistanceToNow } from 'date-fns'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 interface ListingData {
   id: string
@@ -21,20 +30,36 @@ interface ListingData {
   }[]
 }
 
+interface ListingApprovalProps {
+  listings: ListingData[];
+  totalCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+
 export default function ListingApproval({
-  listings
-}: {
-  listings: ListingData[]
-}) {
+  listings,
+  totalCount,
+  currentPage,
+  pageSize
+}: ListingApprovalProps) {
   const router = useRouter()
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      router.push(`/admin/listing-approval?page=${page}`);
+    }
+  };
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Pending Listings ({listings.length})</h1>
-      </div>
+      {/* Header removed as it's now in the parent CardHeader */}
+      {/* <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Pending Listings ({totalCount})</h1>
+      </div> */}
 
-      {listings.length === 0 ? (
+      {listings.length === 0 && currentPage === 1 ? (
         <Card>
           <CardContent className="p-6">
             <p className="text-center text-muted-foreground py-8">
@@ -83,6 +108,64 @@ export default function ListingApproval({
               </CardContent>
             </Card>
           ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href={currentPage > 1 ? `/admin/listing-approval?page=${currentPage - 1}` : undefined}
+                  aria-disabled={currentPage <= 1}
+                  tabIndex={currentPage <= 1 ? -1 : undefined}
+                  className={
+                    currentPage <= 1 ? "pointer-events-none opacity-50" : undefined
+                  }
+                />
+              </PaginationItem>
+
+              {/* Basic Pagination Logic - Consider a more robust implementation for many pages */}
+              {[...Array(totalPages)].map((_, i) => {
+                 const pageNum = i + 1;
+                 // Simple logic: show first, last, current, and adjacent pages
+                 const showPage = pageNum === 1 || pageNum === totalPages || Math.abs(pageNum - currentPage) <= 1;
+                 // Add ellipsis logic if needed for large page counts
+                 // const showEllipsis = Math.abs(pageNum - currentPage) === 2 && totalPages > 5;
+
+                 if (showPage) {
+                   return (
+                     <PaginationItem key={pageNum}>
+                       <PaginationLink
+                         href={`/admin/listing-approval?page=${pageNum}`}
+                         isActive={currentPage === pageNum}
+                       >
+                         {pageNum}
+                       </PaginationLink>
+                     </PaginationItem>
+                   );
+                 }
+                 // Basic ellipsis placeholder - enhance if needed
+                 if (Math.abs(pageNum - currentPage) === 2 && totalPages > 5) {
+                    return <PaginationItem key={`ellipsis-${pageNum}`}><PaginationEllipsis /></PaginationItem>;
+                 }
+                 return null;
+              })}
+
+
+              <PaginationItem>
+                <PaginationNext
+                  href={currentPage < totalPages ? `/admin/listing-approval?page=${currentPage + 1}` : undefined}
+                  aria-disabled={currentPage >= totalPages}
+                  tabIndex={currentPage >= totalPages ? -1 : undefined}
+                  className={
+                    currentPage >= totalPages ? "pointer-events-none opacity-50" : undefined
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       )}
     </div>
