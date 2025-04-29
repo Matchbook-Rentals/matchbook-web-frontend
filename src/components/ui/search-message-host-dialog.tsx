@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
+import { useRouter } from 'next/navigation'; // Import useRouter
 import {
   Dialog,
   DialogContent,
@@ -15,17 +16,22 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { sendInitialMessage } from '@/app/actions/messages'; // Adjust path if necessary
+import { findConversationByListingAndUser } from '@/app/actions/conversations'; // Import the new action
 
 interface SearchMessageHostDialogProps {
   listingId: string;
   hostName: string;
+  // Remove trigger prop if the button is now always rendered inside
 }
 
-const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listingId, hostName, trigger }) => {
+const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listingId, hostName }) => {
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // Control dialog open state
+  const [existingConversationId, setExistingConversationId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Start loading
   const { toast } = useToast();
+  const router = useRouter(); // Initialize router
 
   const handleSendMessage = async () => {
     if (!message.trim()) {
@@ -64,6 +70,29 @@ const SearchMessageHostDialog: React.FC<SearchMessageHostDialogProps> = ({ listi
     }
   };
 
+  const handleViewMessagesClick = () => {
+    if (existingConversationId) {
+      router.push(`/platform/messages/${existingConversationId}`);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Button variant='outline' className='w-full border-black mt-4' disabled>
+        Loading...
+      </Button>
+    );
+  }
+
+  if (existingConversationId) {
+    return (
+      <Button variant='outline' className='w-full border-black mt-4' onClick={handleViewMessagesClick}>
+        View Messages
+      </Button>
+    );
+  }
+
+  // Only render the Dialog if no conversation exists
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>

@@ -303,6 +303,58 @@ export async function getAllConversations() {
   return conversations;
 }
 
+
+// Function to find an existing conversation for a specific listing between the current user and the host
+export async function findConversationByListingAndUser(listingId: string): Promise<{ conversationId: string | null }> {
+  try {
+    const userId = await checkAuth();
+
+    // 1. Fetch the listing to get the host's userId
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true } // Select only the host's userId
+    });
+
+    if (!listing) {
+      console.error(`Listing not found for ID: ${listingId}`);
+      return { conversationId: null }; // Or throw an error if preferred
+    }
+    const hostId = listing.userId;
+
+    // Prevent checking for conversations with oneself if the user is the host
+    if (userId === hostId) {
+      return { conversationId: null };
+    }
+
+    // 2. Find the conversation
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        listingId: listingId, // Ensure it's for the correct listing
+        isGroup: false,       // Ensure it's a direct conversation
+        participants: {
+          // Check that BOTH the current user and the host are participants
+          every: {
+            userId: { in: [userId, hostId] }
+          }
+        }
+      },
+      select: { id: true } // Only need the conversation ID
+    });
+
+    return { conversationId: conversation?.id || null };
+
+  } catch (error) {
+    // Handle potential errors (e.g., auth error, database error)
+    if (error.message === 'Unauthorized') {
+      console.error('Unauthorized attempt to find conversation.');
+      // Depending on requirements, you might want to re-throw or return null
+      return { conversationId: null };
+    }
+    console.error('Error finding conversation by listing and user:', error);
+    return { conversationId: null }; // Return null on error
+  }
+}
+
 // Function to get the most recent conversations with full message history
 export async function getRecentConversationsWithMessages(limit: number = 15) {
   const authUserId = await checkAuth();
