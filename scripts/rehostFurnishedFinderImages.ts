@@ -1,6 +1,7 @@
 #!/usr/bin/env ts-node
 
-import { PrismaClient } from '@prisma/client';
+// Use require for CommonJS compatibility with ts-node in this context
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 const FURNISHED_FINDER_DOMAIN = 'https://www.furnishedfinder.com/';
