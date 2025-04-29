@@ -1,5 +1,4 @@
 import { getPendingListings } from '../listing-approval-actions'
-import { getPendingListings } from '../listing-approval-actions'
 import ListingApproval from '../listing-approval'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
