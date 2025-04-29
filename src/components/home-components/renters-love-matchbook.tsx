@@ -5,7 +5,7 @@ export const RentersLoveMatchbook = (): JSX.Element => {
   const features = [
     {
       id: 1,
-      title: "One Application. One Click. Unlimited options",
+      title: "One Application. One Click. Unlimited Options",
       description:
         "Fill out your application once. Then apply to any property on MatchBook with a single click.",
       image: "/marketing-images/unlimited-avatar.png",
@@ -31,15 +31,15 @@ export const RentersLoveMatchbook = (): JSX.Element => {
       id: 4,
       title: "Get MatchBook Verified and Stay in Control",
       description:
-        "Pay $25 once for your credit, criminal, and eviction check. Share it with any MatchBook listing — no extra fees. Can't find the right place? We'll send your screening to any landlord.",
+        "Pay $25 once for your credit, criminal, and eviction check. Share it with any MatchBook listing — no extra fees.",
       image: "/marketing-images/verified-avatar.png",
       imageAlt: "MatchBook verification icon",
     },
     {
       id: 5,
-      title: "Sign and Book in One Place",
+      title: "Sign and Book and Pay in One Place",
       description:
-        "Found the right fit? Sign your rental agreement and send your deposit right on MatchBook. No emails, no PDFs, no back-and-forth.",
+        "Found the right fit? Sign your rental agreement and pay directly through MatchBook. No emails, no PDFs, no back-and-forth.",
       image: "/marketing-images/in-one-place-avatar.png",
       imageAlt: "Sign and book illustration",
     },
