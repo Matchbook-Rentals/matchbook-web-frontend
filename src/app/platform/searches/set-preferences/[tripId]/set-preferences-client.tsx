@@ -155,13 +155,13 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
 
   return (
     <div className="container mx-auto py-8 max-w-[700px]">
-      <h1 className="text-2xl font-bold mb-6">Tell us more about what you&apos;re looking for in a place</h1>
+      <h1 className="text-2xl w-full font-bold mb-6">Tell us more about what you&apos;re looking for in a place</h1>
 
-      <ScrollArea className="w-full rounded-md border p-4">
+      <ScrollArea className="w-full rounded-md p-0">
         {/* Property Types Section */}
         <div className="space-y-4 border-b-2 pb-3">
           <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
-          <div className="flex flex-wrap xxs:flex-nowrap justify-between gap-x-2 sm:gap-4">
+          <div className="flex flex-wrap xs:flex-nowrap justify-between gap-2 sm:gap-4">
             {propertyTypeOptions.map(({ value, label, icon }) => {
               const isSelected = filters.propertyTypes.includes(value);
               return (
@@ -175,7 +175,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
                     }`}
                   labelClassNames={`text-[14px] font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                     }`}
-                  iconClassNames="w-[80px] h-[80px] flex items-center justify-center"
+                  iconClassNames="w-[85px] h-[85px] flex items-center justify-center"
                   onClick={() => {
                     const updatedPropertyTypes = isSelected
                       ? filters.propertyTypes.filter(type => type !== value)
