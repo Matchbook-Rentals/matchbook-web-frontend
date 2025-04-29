@@ -39,11 +39,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
+          {listingImages.length > 0 ? 
           <img
             src={listingImages[activeImage]?.url}
             alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
             className="w-full h-full object-cover rounded-lg"
           />
+          : <div w-full h-full bg-gray-200 animate-pulse />
+          }
         </div>
 
         {/* Desktop grid carousel */}
