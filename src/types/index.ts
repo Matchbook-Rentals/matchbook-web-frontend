@@ -38,6 +38,9 @@ export interface ListingAndImages extends Listing {
   uScore?: number;
   unavailablePeriods?: ListingUnavailability[];
   bookings?: Booking[];
+  availableStart?: Date;
+  availableEnd?: Date;
+  isActuallyAvailable?: boolean; // Helper flag from calculation
 }
 
 export interface RequestWithUser extends HousingRequest {

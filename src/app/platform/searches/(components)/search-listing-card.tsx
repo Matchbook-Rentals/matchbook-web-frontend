@@ -218,7 +218,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         {/* Listing Category and Rating */}
         <div className='flex justify-between mt-2'>
           {`${listing.category === 'singleFamily' ? 'Home' :
-             listing.category ? (listing.category.charAt(0).toUpperCase() + listing.category.slice(1).toLowerCase()) : 'Property'} in
+            listing.category ? (listing.category.charAt(0).toUpperCase() + listing.category.slice(1).toLowerCase()) : 'Property'} in
             ${listing.locationString ? (listing.locationString.split(',').at(-2)?.trim() || listing.locationString) : 'Location'}`}
           <div className="flex items-center">
             <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
@@ -235,8 +235,26 @@ export default function SearchListingCard({ listing, status, className, style, d
           <div className="">
             {listing.roomCount || 4} bds | {listing.bathroomCount || 2} ba
           </div>
-          {isFlexible && ( <p >{listing.availableStart.toLocaleString();} - {listing.availableEnd.toLocaleString();} </p> )}
         </div>
+        {/* Show flexible dates if isFlexible is true */}
+      {!!isFlexible && (
+          <p className="text-sm  mt-1">
+            Available {' '}
+            {listing.availableStart?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.startDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })} - {listing.availableEnd?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.endDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })}
+          </p>
+        )}
       </div>
 
       {callToAction && (

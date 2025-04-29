@@ -449,7 +449,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         filters.laundry?.some(option => listing[option]);
 
       // Determine availability based on successful calculation of start/end dates
-      const isAvailable = listing.availableStart !== undefined && listing.availableEnd !== undefined;
+      const isAvailable = listing.isActuallyAvailable;
 
       // Return true if the listing meets all criteria
       return isNotFavorited &&

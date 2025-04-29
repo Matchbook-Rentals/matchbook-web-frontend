@@ -31,6 +31,8 @@ export const pullListingsFromDb = async (
 
   const earthRadiusMiles = 3959; // Earth's radius in miles
   console.log('STATE', state) // Keep existing state log
+  console.log('LatestStart', startDate) // Keep existing state log
+  console.log('EarliestEnd', endDate) // Keep existing state log
 
   try {
     // Input validation

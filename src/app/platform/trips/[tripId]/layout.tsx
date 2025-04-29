@@ -13,9 +13,30 @@ async function TripDataWrapper({ children, params }: {
   if (!trip) { return <p> NO TRIP FOUND </p> }
 
   const locationArray = trip.locationString.split(',');
-  const state = locationArray[locationArray.length-1];
+  const state = locationArray[locationArray.length - 1];
 
-  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100, state);
+  // Calculate latest possible start date by adding flexible days to start date
+  let latestStart, earliestEnd;
+
+  if (!trip.startDate) {
+    latestStart = new Date();
+  }
+  else {
+    latestStart = new Date(trip.startDate);
+    latestStart.setDate(latestStart.getDate() + trip.flexibleStart);
+  }
+
+  if (!trip.endDate) {
+    earliestEnd = new Date();
+    earliestEnd.setMonth(earliestEnd.getMonth() + 1);
+  }
+  else {
+    earliestEnd = new Date(trip.endDate);
+    earliestEnd.setDate(earliestEnd.getDate() + trip.flexibleEnd);
+  }
+
+
+  const listings = await pullListingsFromDb(trip.latitude, trip.longitude, 100, state, latestStart, earliestEnd);
   const application = await getUserApplication();
   const hasApplicationData = !!application;
 
