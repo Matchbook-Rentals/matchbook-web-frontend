@@ -390,9 +390,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const isNotDisliked = !lookup.dislikedIds.has(listing.id);
       const isNotRequested = !lookup.requestedIds.has(listing.id);
 
-      // Use the calculated availability flag from the mapping phase
-      const isAvailable = listing.isActuallyAvailable;
-
       // --- Keep all other filters the same ---
       // Property type filter
       const matchesPropertyType = filters.propertyTypes.length === 0 ||
@@ -451,11 +448,13 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       const matchesLaundry = filters.laundry?.length === 0 || filters.laundry?.length === 3 ||
         filters.laundry?.some(option => listing[option]);
 
+      // Determine availability based on successful calculation of start/end dates
+      const isAvailable = listing.availableStart !== undefined && listing.availableEnd !== undefined;
+
       // Return true if the listing meets all criteria
       return isNotFavorited &&
         isNotDisliked &&
         isNotRequested &&
-        isAvailable &&
         matchesPropertyType &&
         matchesPrice &&
         matchesRadius &&
@@ -469,8 +468,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         matchesParking &&
         matchesKitchen &&
         matchesBasics && // Use matchesBasics now
-        matchesLuxury &&
-        matchesLaundry;
+        matchesLuxury && // Added missing &&
+        matchesLaundry &&
+        isAvailable; // Filter based on successful date calculation
     }); // <-- This is now the closing parenthesis for processedListings.filter()
     // Ensure trip object (containing dates and flexibility) is a dependency
     }, [listings, lookup, trip, filters] // Dependencies remain the same
