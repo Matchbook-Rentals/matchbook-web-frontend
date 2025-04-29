@@ -19,7 +19,85 @@ export async function createMessage(data: any) {
 
     return { success: true, message };
   } catch (error) {
-    return { success: false, error: error.message };
+    console.error('Error creating message:', error);
+    return { success: false, error: 'Failed to create message' };
+  }
+}
+
+export async function sendInitialMessage(listingId: string, content: string) {
+  'use server'
+  try {
+    const { userId: senderId } = auth();
+    if (!senderId) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // 1. Fetch the listing to get the host's userId (receiverId)
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true } // Select only the host's userId
+    });
+
+    if (!listing) {
+      return { success: false, error: 'Listing not found' };
+    }
+    const receiverId = listing.userId;
+
+    // Prevent users from messaging themselves about their own listing
+    if (senderId === receiverId) {
+      return { success: false, error: 'Cannot send a message to yourself' };
+    }
+
+    // 2. Find or create the conversation
+    let conversation = await prisma.conversation.findFirst({
+      where: {
+        listingId: listingId,
+        participants: {
+          every: {
+            userId: { in: [senderId, receiverId] }
+          }
+        }
+      }
+    });
+
+    if (!conversation) {
+      conversation = await prisma.conversation.create({
+        data: {
+          listingId: listingId,
+          participants: {
+            create: [
+              { userId: senderId },
+              { userId: receiverId }
+            ]
+          }
+        }
+      });
+    }
+
+    // 3. Create the message within the conversation
+    const message = await prisma.message.create({
+      data: {
+        content: content,
+        senderId: senderId,
+        receiverId: receiverId, // Explicitly set receiverId for clarity, though conversation implies it
+        conversationId: conversation.id,
+        // Assuming default roles or determine based on context if needed
+        // senderRole: 'GUEST', // Example role
+        // receiverRole: 'HOST', // Example role
+      },
+    });
+
+    // TODO: Optionally trigger WebSocket event here to notify receiver
+
+    return { success: true, message, conversationId: conversation.id };
+
+  } catch (error) {
+    console.error('Error sending initial message:', error);
+    // Check if error is a Prisma known request error (e.g., unique constraint violation)
+    if (error.code === 'P2002') {
+       return { success: false, error: 'A conversation for this listing between these users might already exist or failed creation.' };
+    }
+    return { success: false, error: 'Failed to send initial message' };
   }
 }
 
@@ -61,6 +139,7 @@ export async function markMessagesAsReadByTimestamp(conversationId: string, time
     return { success: true, count: updateResult.count };
   } catch (error) {
     console.error('Error marking messages as read by timestamp:', error);
-    return { success: false, error: error.message };
+    console.error('Error marking messages as read by timestamp:', error);
+    return { success: false, error: 'Failed to mark messages as read' };
   }
 }
