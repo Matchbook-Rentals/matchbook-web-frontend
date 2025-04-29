@@ -160,7 +160,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
             <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">Hosted by {listing.user?.firstName || 'Unknown'}</p>
             <p className={`md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center`}>
               <StarIcon className="w-4 h-4" /> {listing?.averageRating || listing.uScore ? (listing?.averageRating || listing.uScore?.toFixed(1)) : 'N/A'}
-              <span className='text-sm pt-2 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
+              <span className='text-sm pt-0 pl-0 -translate-x-1'>({listing?.numberOfStays || 23})</span>
             </p>
           </div>
         </div>
