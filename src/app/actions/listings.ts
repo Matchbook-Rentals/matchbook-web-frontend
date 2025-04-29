@@ -60,6 +60,7 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
       )) AS distance
       FROM Listing l
       WHERE l.state IN (${ Prisma.join(statesToSearch) }) -- Filter by states first
+        AND l.approvalStatus = 'approved' -- Only include approved listings
       HAVING distance <= ${radiusMiles} -- Then filter by distance
       ORDER BY distance
     `;
