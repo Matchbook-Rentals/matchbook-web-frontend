@@ -12,6 +12,7 @@ import {
   createMessage,
 } from '@/app/actions/conversations';
 import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
+import { time } from 'console';
 
 interface ExtendedConversation {
   id: string;
@@ -153,6 +154,8 @@ const updateMessagesReadTimestamp = (
         }
       : conv
   );
+
+
 };
 
 
@@ -475,6 +478,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
                 deliveredAt: data.deliveredAt || new Date().toISOString() // Timestamp delivery
               })
             );
+
+              if (data.conversationId === selectedConversationId) {
+                markMessagesAsReadByTimestamp(selectedConversationId || data.conversationId, data.deliveredAt || new Date().toISOString())
+              }
             return;
           }
           

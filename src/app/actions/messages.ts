@@ -151,7 +151,7 @@ export async function markMessagesAsReadByTimestamp(conversationId: string, time
       },
       data: {
         isRead: true,
-        readAt: new Date() // Set the read timestamp
+        //readAt: new Date() // Set the read timestamp
       }
     });
 
