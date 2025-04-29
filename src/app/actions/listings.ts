@@ -4,7 +4,8 @@ import prisma from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server'
 import { ListingAndImages } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
-import { statesInRadiusData } from "@/constants/state-radius-data"; // Import the data
+import { statesInRadiusData } from "@/constants/state-radius-data";
+import { isValid } from 'date-fns'; // Import date-fns for validation
 
 const checkAuth = async () => {
   const { userId } = auth();
@@ -14,9 +15,16 @@ const checkAuth = async () => {
   return userId;
 }
 
-export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: number, state: string): Promise<ListingAndImages[]> => {
+export const pullListingsFromDb = async (
+  lat: number,
+  lng: number,
+  radiusMiles: number,
+  state: string,
+  startDate: Date, // Add startDate parameter
+  endDate: Date    // Add endDate parameter
+): Promise<ListingAndImages[]> => {
   const startTime = performance.now();
-  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb started.`);
+  console.log(`[${(performance.now() - startTime).toFixed(2)}ms] pullListingsFromDb started with dates: ${startDate?.toISOString()} to ${endDate?.toISOString()}.`);
 
   const userId = await checkAuth();
   console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Auth check completed.`);
@@ -38,6 +46,17 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     if (typeof state !== 'string' || state.trim().length === 0) {
       throw new Error(`Invalid state. Must be a non-empty string. received ${state}`);
     }
+    // Validate dates
+    if (!startDate || !isValid(startDate)) {
+      throw new Error(`Invalid start date provided.`);
+    }
+    if (!endDate || !isValid(endDate)) {
+      throw new Error(`Invalid end date provided.`);
+    }
+    if (startDate >= endDate) {
+      throw new Error(`Start date must be before end date.`);
+    }
+
     const trimmedState = state.trim().toUpperCase(); // Trim and ensure uppercase for lookup
 
     // Find the states to include in the search
@@ -75,9 +94,27 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     const listingIds = listingsWithDistance.map(l => l.id);
     const listings = await prisma.listing.findMany({
       where: {
-        id: {
-          in: listingIds
-        }
+        AND: [ // Combine ID filter and unavailability filter
+          {
+            id: {
+              in: listingIds
+            }
+          },
+          { // Add condition to exclude listings with overlapping unavailability
+            NOT: {
+              unavailablePeriods: {
+                some: {
+                  // An unavailability period overlaps if:
+                  // its start is before the desired end AND its end is after the desired start
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } }
+                  ]
+                }
+              }
+            }
+          }
+        ]
       },
       include: {
         listingImages: true,
