@@ -1,11 +1,12 @@
 import { Dumbbell } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import { Wifi as WifiIcon } from 'lucide-react';
 
 const amenities = [
   // Basics
   { code: 'airConditioner', label: 'Air Conditioner', icon: AmenitiesIcons.UpdatedAirConditioningIcon, category: 'basics' },
   { code: 'heater', label: 'Heater', icon: AmenitiesIcons.UpdatedHeaterIcon, category: 'basics' },
-  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'basics' },
+  { code: 'wifi', label: 'WiFi', icon: WifiIcon, category: 'basics' },
   { code: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: AmenitiesIcons.UpdatedDedicatedWorkspaceIcon, category: 'basics' },
 
   // Accessibility and Safety
@@ -92,7 +93,7 @@ export const iconAmenities = [
   // Basics
   { code: 'airConditioner', label: 'Air Conditioner', icon: AmenitiesIcons.UpdatedAirConditioningIcon, category: 'basics' },
   { code: 'heater', label: 'Heater', icon: AmenitiesIcons.UpdatedHeaterIcon, category: 'basics' },
-  { code: 'wifi', label: 'WiFi', icon: AmenitiesIcons.UpdatedWifiIcon, category: 'basics' },
+  { code: 'wifi', label: 'WiFi', icon: WifiIcon, category: 'basics' },
   { code: 'dedicatedWorkspace', label: 'Dedicated Workspace', icon: AmenitiesIcons.UpdatedDedicatedWorkspaceIcon, category: 'basics' },
 
   // Accessibility
