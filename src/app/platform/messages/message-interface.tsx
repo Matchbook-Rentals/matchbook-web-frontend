@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 import { io, Socket } from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid
 import ConversationList from './components/ConversationList';
@@ -256,6 +257,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const [isAdmin, setIsAdmin] = useState(false);
   const isMobile = useMobileDetect();
   const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
+  const searchParams = useSearchParams(); // Get search params
       
   // Handle WebSocket messages using functional updates and ref for selected ID
   const handleWebSocketMessage = (message: any) => {
@@ -574,8 +576,24 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   useEffect(() => {
     if (user) {
       setAllConversations(initialConversations);
-      setIsAdmin(user.publicMetadata?.role === 'admin');
+      setIsAdmin(user.publicMetadata?.role === 'admin'); // Assuming user has publicMetadata
       connectWithBackoff();
+
+      // Check for 'convo' query parameter on initial load
+      const convoIdFromQuery = searchParams.get('convo');
+      if (convoIdFromQuery) {
+        // Validate if the convoId exists in the user's initial conversations
+        const conversationExists = initialConversations.some(conv => conv.id === convoIdFromQuery);
+        if (conversationExists) {
+          // Use a timeout to ensure the state updates after initial render cycle
+          // and potentially after conversations are fully set.
+          setTimeout(() => {
+            handleSelectConversation(convoIdFromQuery);
+          }, 0);
+        } else {
+          console.warn(`Conversation ID "${convoIdFromQuery}" from query param not found in user's conversations.`);
+        }
+      }
     }
 
     // Cleanup function to properly clear all resources
