@@ -462,7 +462,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               <img
                 src={participantInfo.imageUrl}
                 alt={participantInfo.displayName}
-                className="w-12 h-12 rounded-full mr-4"
+                className="w-12 h-12 aspect-square rounded-full object-cover mr-4"
               />
               <div className="flex justify-between w-full gap-4">
                 <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>

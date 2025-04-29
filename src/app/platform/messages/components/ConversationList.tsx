@@ -227,7 +227,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   <div className="relative flex-shrink-0">
                     <img
                       src={imageUrl || "/placeholder-avatar.png"}
-                      className="w-11 h-11 rounded-full mr-3"
+                      className="w-11 h-11 aspect-square object-cover rounded-full mr-3"
                       alt={displayName}
                     />
                     {/* Use the isUnread prop for the indicator */}
