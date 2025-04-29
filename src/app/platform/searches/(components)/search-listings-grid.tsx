@@ -30,22 +30,14 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   // const [currentPage, setCurrentPage] = useState(1); // Removed pagination state
   const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
   // const listingsPerPage = gridColumns * 3; // Removed pagination calculation
-  // const infiniteScrollMode = gridColumns === 1; // Removed mode flag
 
   // Subscribe to the selected marker from the map selection store
-  // const selectedMarker = useMapSelectionStore((state) => state.selectedMarker); // Removed - no pagination to update
+   //const selectedMarker = useMapSelectionStore((state) => state.selectedMarker); // Removed - no pagination to update
 
   // *** New: subscribe to visible listings from the map ***
   const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
   const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
 
-  // Reset visible listings filter when in mobile view (infiniteScrollMode) - Removed, filter applies always unless null
-  // useEffect(() => {
-  //   if (infiniteScrollMode && visibleListingIds !== null) {
-  //     // On small screens, we should show all listings instead of filtering by map visibility
-  //     setVisibleListingIds(null);
-  //   }
-  // }, [infiniteScrollMode, visibleListingIds, setVisibleListingIds]);
 
   const filteredListings = useMemo(() => {
     // If visibleListingIds is null (meaning no map filter applied or explicitly cleared), show all listings.
@@ -177,10 +169,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
       };
   };
 
-  // const totalPages = Math.ceil(filteredListings.length / listingsPerPage); // Removed pagination calculation
-
-  // const renderPageNumbers = () => { ... }; // Removed pagination rendering function
-
   useEffect(() => {
     const updateGridColumns = () => {
       const width = window.innerWidth;
@@ -205,14 +193,6 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     return () => window.removeEventListener('resize', updateGridColumns);
   }, [visibleListingIds, setVisibleListingIds]); // Keep dependencies for now as reset logic is tied to them
 
-  // Removed Observer for the sentinel (now handled by the main infinite scroll observer)
-  // useEffect(() => { ... });
-
-  // Removed effect: update pagination when the selected marker changes
-  // useEffect(() => { ... });
-
-  // Removed effect: Check if current page is still valid when listings change
-  // useEffect(() => { ... });
 
   return (
     // Use the height prop for minHeight, keep flex structure
