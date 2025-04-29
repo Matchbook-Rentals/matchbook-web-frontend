@@ -66,11 +66,6 @@ export const pullListingsFromDb = async (lat: number, lng: number, radiusMiles: 
     `;
     console.log(`[${(performance.now() - startTime).toFixed(2)}ms] Raw query for IDs and distance completed.`);
 
-
-    // Removed the problematic findMany call (comment remains for context)
-    // const listingsWithDistance = await prisma.listing.findMany({ ... })
-
-
     if (!listingsWithDistance || listingsWithDistance.length === 0) {
       console.log(`No listings found matching states (${statesToSearch.join(', ')}) and radius criteria.`); // Updated log
       return [];
