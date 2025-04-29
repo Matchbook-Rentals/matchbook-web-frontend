@@ -45,6 +45,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   const router = useRouter()
   const { userId } = useAuth()
   const { state, actions } = useTripContext()
+  let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
 
   // Create ref for the image container and state for dimensions
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -234,6 +235,7 @@ export default function SearchListingCard({ listing, status, className, style, d
           <div className="">
             {listing.roomCount || 4} bds | {listing.bathroomCount || 2} ba
           </div>
+          {isFlexible && ( <p >{listing.availableStart.toLocaleString();} - {listing.availableEnd.toLocaleString();} </p> )}
         </div>
       </div>
 
