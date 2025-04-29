@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
@@ -10,15 +10,55 @@ interface ListingImageCarouselProps {
 }
 
 const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImages }) => {
-  const [activeImage, setActiveImage] = useState(0);
+  const [activeImage, setActiveImage] = useState(0); // Index for desktop main image
   const [api, setApi] = useState<CarouselApi>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMainImageLoaded, setIsMainImageLoaded] = useState(false); // Loading state for active image
 
   if (listingImages.length === 0) {
-    return <p>No listing Images</p>;
+    // Still show pulse if listingImages is empty initially before this check
+    return (
+      <div className="w-full h-[50vh] bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+        Loading Images...
+      </div>
+    );
   }
 
   const uniqueImages = Array.from(new Map(listingImages.map(img => [img.id, img])).values());
+
+  // Effect to reset loading state when active image or image list changes
+  useEffect(() => {
+    setIsMainImageLoaded(false);
+    // Potentially sync mobile carousel's active slide if api is available
+    // api?.scrollTo(activeImage); // Example, might need adjustment based on CarouselApi
+  }, [activeImage, listingImages]); // Watch both activeImage index and the image array
+
+  // Effect to update activeImage based on mobile carousel scroll
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+    const handleSelect = () => {
+      const currentSlide = api.selectedScrollSnap();
+      // Update activeImage state based on mobile carousel, but only if it differs
+      // This helps keep the loading state somewhat in sync
+      if (currentSlide !== activeImage) {
+         setActiveImage(currentSlide);
+      }
+       // Always reset loading state on mobile scroll snap
+       setIsMainImageLoaded(false);
+    };
+
+    api.on("select", handleSelect);
+
+    // Set initial loading state based on first image
+    setIsMainImageLoaded(false);
+
+
+    return () => {
+      api.off("select", handleSelect);
+    };
+  }, [api, activeImage]); // Rerun when api is available or activeImage changes externally
 
   const handleImageClick = (index: number) => {
     setActiveImage(index);
@@ -39,14 +79,25 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       <div className="hidden lg:flex flex-row space-x-3 lg:space-x-4 xl:space-x-5 w-full h-[50vh]">
         {/* Main image */}
         <div className="w-1/2 h-full relative">
-          {listingImages.length > 0 ? 
-          <img
-            src={listingImages[activeImage]?.url}
-            alt={`${listingImages[activeImage]?.category} image ${listingImages[activeImage]?.rank}`}
-            className="w-full h-full object-cover rounded-lg"
-          />
-          : <div w-full h-full bg-gray-200 animate-pulse />
-          }
+          {/* Placeholder */}
+          {!isMainImageLoaded && (
+            <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
+          )}
+          {/* Actual Image */}
+          {uniqueImages.length > 0 && uniqueImages[activeImage] && ( // Check if image exists at index
+            <img
+              key={uniqueImages[activeImage].id} // Add key to help React detect changes
+              src={uniqueImages[activeImage].url}
+              alt={`${uniqueImages[activeImage]?.category} image ${uniqueImages[activeImage]?.rank}`}
+              className={`w-full h-full object-cover rounded-lg ${isMainImageLoaded ? 'block' : 'hidden'}`} // Hide until loaded
+              onLoad={() => setIsMainImageLoaded(true)}
+              onError={() => setIsMainImageLoaded(true)} // Stop pulse on error too
+            />
+          )}
+           {/* Fallback pulse if array has items but index is somehow invalid */}
+           {(uniqueImages.length === 0 || !uniqueImages[activeImage]) && !isMainImageLoaded && (
+             <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg" />
+           )}
         </div>
 
         {/* Desktop grid carousel */}
@@ -85,16 +136,36 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
         <div className="w-full h-[30vh] relative">
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
-              {uniqueImages.map((image, index) => (
-                <CarouselItem key={image.id} className="w-full h-[30vh]">
-                  <div className="relative w-full h-full">
-                    <img
-                      src={image.url}
-                      alt={`${image.category} image ${image.rank}`}
-                      className="w-full h-full object-cover rounded-[5px]"
-                    />
-                    <p className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                      {index + 1} / {uniqueImages.length}
+              {uniqueImages.map((image, index) => {
+                 // Determine if this specific item should show loading state
+                 // This relies on activeImage state being updated by the carousel's 'select' event
+                 const isCurrentItemLoading = index === activeImage && !isMainImageLoaded;
+
+                 return (
+                  <CarouselItem key={image.id} className="w-full h-[30vh]">
+                    <div className="relative w-full h-full">
+                      {/* Placeholder for the current item if loading */}
+                      {isCurrentItemLoading && (
+                        <div className="absolute inset-0 w-full h-full bg-gray-200 animate-pulse rounded-[5px]" />
+                      )}
+                      <img
+                        key={image.id + '-mobile'} // Unique key for mobile image
+                        src={image.url}
+                        alt={`${image.category} image ${image.rank}`}
+                        className={`w-full h-full object-cover rounded-[5px] ${isCurrentItemLoading ? 'invisible' : 'visible'}`} // Use visibility to prevent layout shift
+                        // onLoad/onError only relevant for the active image to update the state
+                        onLoad={() => { if (index === activeImage) setIsMainImageLoaded(true); }}
+                        onError={() => { if (index === activeImage) setIsMainImageLoaded(true); }} // Stop pulse on error
+                      />
+                      <p className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm z-10">
+                        {index + 1} / {uniqueImages.length}
+                      </p>
+                    </div>
+                  </CarouselItem>
+                 );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="hidden sm:flex absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
                     </p>
                   </div>
                 </CarouselItem>
