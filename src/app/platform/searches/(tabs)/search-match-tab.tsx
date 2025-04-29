@@ -47,6 +47,10 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
+
+
+  let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
+
   useEffect(() => {
     const setHeight = () => {
       if (containerRef.current) {
@@ -297,7 +301,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         />
         <div className='flex justify-between gap-x-8 relative'>
           <div className='w-full lg:w-3/5'>
-            <ListingDescription listing={showListings[0]} />
+            <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible}/>
 
             <h3 className="text-[24px] text-[#404040] font-medium py-3">Location</h3>
 

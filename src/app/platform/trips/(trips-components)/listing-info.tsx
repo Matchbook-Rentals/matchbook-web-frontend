@@ -44,9 +44,10 @@ const bodyTextStyle = 'text-[14px] md:text-[16px] lg:text-[20px] font-normal';
 interface ListingDescriptionProps {
   listing: ListingAndImages;
   showFullAmenities?: boolean;
+  isFlexible?: boolean;
 }
 
-const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false }) => {
+const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false, isFlexible = false }) => {
   const [message, setMessage] = useState(''); // State for the message textarea
   const [isSending, setIsSending] = useState(false); // State for loading indicator
   const { toast } = useToast(); // Initialize toast
@@ -132,6 +133,25 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <p>{listing.squareFootage.toLocaleString()} sqft</p>
         </div>
       </div>
+
+      {isFlexible && (
+          <p className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>
+            Available {' '}
+            {listing.availableStart?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.startDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })} - {listing.availableEnd?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.endDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })}
+          </p>
+        )}
 
       {/* Highlights Section */}
       <div className={sectionStyles}>
