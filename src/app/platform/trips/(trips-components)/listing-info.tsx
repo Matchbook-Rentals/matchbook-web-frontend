@@ -26,6 +26,8 @@ import { Star as StarIcon } from 'lucide-react'; // Renamed Star to StarIcon for
 import ShareButton from '@/components/ui/share-button';
 import { usePathname, useParams } from 'next/navigation';
 import { VerifiedBadge, TrailBlazerBadge, HallmarkHostBadge } from '@/components/icons'; // Assuming these icons exist
+import { sendInitialMessage } from '@/app/actions/messages'; // Import the server action
+import { useToast } from '@/components/ui/use-toast'; // Import useToast
 
 // Define the desired order for amenity categories
 const categoryOrder = ['basics', 'accessibility', 'location', 'parking', 'kitchen', 'luxury', 'laundry', 'other'];
@@ -45,6 +47,8 @@ interface ListingDescriptionProps {
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false }) => {
   const [message, setMessage] = useState(''); // State for the message textarea
+  const [isSending, setIsSending] = useState(false); // State for loading indicator
+  const { toast } = useToast(); // Initialize toast
   const pathname = usePathname();
   const { tripId } = useParams();
 
@@ -60,6 +64,44 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
 
   const displayAmenities = calculateDisplayAmenities();
   const initialDisplayCount = 6;
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Cannot send empty message",
+      });
+      return;
+    }
+    setIsSending(true);
+    try {
+      const result = await sendInitialMessage(listing.id, message);
+      if (result.success) {
+        toast({
+          title: "Message Sent!",
+          description: "Your message has been sent to the host.",
+        });
+        setMessage(''); // Clear message input on success
+        // Optionally close the dialog here if needed, though DialogClose on Cancel works
+        // Consider adding state to control Dialog open prop if programmatic close is desired
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Failed to send message",
+          description: result.error || "An unknown error occurred.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred while sending the message.",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <div className='w-full'>
@@ -210,8 +252,13 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="button" onClick={() => console.log('Send clicked', message)} className="w-1/4"> {/* Placeholder for send action */}
-                Send
+              <Button
+                type="button"
+                onClick={handleSendMessage}
+                disabled={isSending || !message.trim()} // Disable if sending or message is empty/whitespace
+                className="w-1/4"
+              >
+                {isSending ? 'Sending...' : 'Send'}
               </Button>
             </DialogFooter>
           </DialogContent>
