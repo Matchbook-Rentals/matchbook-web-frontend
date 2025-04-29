@@ -151,6 +151,20 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
         </div>
       </div>
 
+      {/* Host Information Section - Updated Rating Display */}
+      <div className={`${sectionStyles} lg:hidden`}>
+        <div className="flex items-center justify-between">
+          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-medium">
+            Hosted by {listing.user?.firstName || 'Unknown'}
+          </p>
+          <p className="md:text-[16px] lg:text-[18px] xl:text-[22px] 2xl:text-[24px] font-normal flex gap-x-2 items-center">
+            <Star className="w-4 h-4" /> {listing.uScore ? listing.uScore.toFixed(1) : 'N/A'} <span className=''> (23) </span>
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+        </div>
+      </div>
+
       {/* Description section */}
       <div className={sectionStyles}>
         <h3 className={sectionHeaderStyles}> Description </h3>
