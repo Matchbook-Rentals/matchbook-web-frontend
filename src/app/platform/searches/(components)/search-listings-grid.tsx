@@ -26,6 +26,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const [maxDetailsHeight, setMaxDetailsHeight] = useState<number>(0);
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const prevFilteredIdsRef = useRef<Set<string>>(new Set()); // Ref to store previous IDs
   // const sentinelRef = useRef<HTMLDivElement>(null); // Removed sentinel ref
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
@@ -48,12 +49,28 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     return listings.filter(listing => visibleListingIds.includes(listing.id));
   }, [listings, visibleListingIds]);
 
-  // Initialize or reset displayed listings when filteredListings change
+  // Initialize or reset displayed listings only when the actual set of filtered IDs changes
   useEffect(() => {
-    // Indicate loading is starting
-    setIsLoading(true);
+    const currentFilteredIds = new Set(filteredListings.map(l => l.id));
+    const prevFilteredIds = prevFilteredIdsRef.current;
 
-    // Scroll to top
+    // Check if the sets of IDs are different
+    let setsAreEqual = currentFilteredIds.size === prevFilteredIds.size;
+    if (setsAreEqual) {
+      for (const id of currentFilteredIds) {
+        if (!prevFilteredIds.has(id)) {
+          setsAreEqual = false;
+          break;
+        }
+      }
+    }
+
+    // Only proceed if the sets are different
+    if (!setsAreEqual) {
+      // Indicate loading is starting
+      setIsLoading(true);
+
+      // Scroll to top
     if (scrollAreaRef.current?.children[0]) { // Access the viewport element within ScrollArea
         const viewport = scrollAreaRef.current.children[0] as HTMLElement;
         viewport.scrollTo({ top: 0, behavior: 'smooth' }); // Use smooth scroll
@@ -63,14 +80,24 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
     const timer = setTimeout(() => {
       // Reset displayed list with the first batch of the *new* filtered items
       setDisplayedListings(filteredListings.slice(0, ITEMS_PER_LOAD));
-      // Stop loading
-      setIsLoading(false);
-    }, 50); // Small delay (e.g., 50ms) might improve spinner visibility
+        // Stop loading
+        setIsLoading(false);
+        // Update the ref with the new set of IDs *after* the state update logic
+        prevFilteredIdsRef.current = currentFilteredIds;
+      }, 50); // Small delay (e.g., 50ms) might improve spinner visibility
 
-    // Cleanup timeout if the effect re-runs before it fires
-    return () => clearTimeout(timer);
+      // Cleanup timeout if the effect re-runs before it fires
+      return () => clearTimeout(timer);
+    }
+    // If sets are equal, do nothing in this effect.
+    // We still need to update the ref in case the list reference changed but content didn't
+    // This ensures the *next* comparison uses the correct previous set.
+    else if (prevFilteredIdsRef.current !== currentFilteredIds) { // Optimization: only update ref if needed
+       prevFilteredIdsRef.current = currentFilteredIds;
+    }
 
-  }, [filteredListings]); // Dependency: only filteredListings
+
+  }, [filteredListings]); // Dependency: still depends on filteredListings to trigger the check
 
   // Load more items when sentinel becomes visible
   const loadMoreItems = useCallback(() => {
