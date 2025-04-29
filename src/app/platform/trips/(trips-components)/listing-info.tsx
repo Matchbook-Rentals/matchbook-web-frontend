@@ -204,9 +204,9 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
                 />
               </div>
             </div>
-            <DialogFooter className="flex flex-col items-end space-y-2">
+            <DialogFooter className="flex flex-row justify-end space-x-2">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" className="w-1/4">
+                <Button type="button" variant="secondary" className="w-1/4 bg-gray-200">
                   Cancel
                 </Button>
               </DialogClose>
