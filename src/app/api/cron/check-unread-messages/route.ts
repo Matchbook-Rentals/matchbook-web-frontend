@@ -1,17 +1,9 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
-import { NotificationType } from '@prisma/client'; // Assuming NotificationType enum exists
 
 // Define the expected structure for a notification input
 // This should align with the fields defined in your `prisma.schema` for Notification
 // Adjust based on your actual Notification model structure
-interface CreateNotificationInput {
-  userId: string;
-  type: NotificationType;
-  content: string;
-  relatedId?: string; // e.g., conversationId or messageId
-  isRead?: boolean;
-}
 
 export async function GET(request: Request) {
   // 1. Authorization Check
@@ -31,7 +23,7 @@ export async function GET(request: Request) {
     const messagesToNotify = await prisma.message.findMany({
       where: {
         isRead: false,
-        notificationSentAt: null,
+        notificaitonSentAt: null,
         createdAt: {
           lte: twoMinutesAgo,
         },
@@ -64,7 +56,7 @@ export async function GET(request: Request) {
 
     console.log(`Cron job: Found ${messagesToNotify.length} messages to process for notifications.`);
 
-    const notificationsToCreate: CreateNotificationInput[] = [];
+    const notificationsToCreate = [];
     const messageIdsToUpdate: string[] = [];
 
     // 4. & 5. Determine recipients and prepare notifications
@@ -86,10 +78,10 @@ export async function GET(request: Request) {
         // Prepare notification data for this recipient
         notificationsToCreate.push({
           userId: participant.userId,
-          type: NotificationType.unread_message, // Use the enum value
+          actionType: 'message', // Use the enum value
+          actionId: message.id,
           content: `You have a new message from ${senderName}.`, // Simple content
-          relatedId: message.conversation.id, // Link notification to the conversation
-          isRead: false, // Notifications start as unread
+          url: `/platform/messages?convo=${message.conversation.id}`, // Link notification to the conversation
         });
       }
       // Add message ID to list for updating notificationSentAt status
@@ -118,7 +110,7 @@ export async function GET(request: Request) {
               },
             },
             data: {
-              notificationSentAt: new Date(),
+              notificaitonSentAt: new Date(),
             },
           }),
         ]);

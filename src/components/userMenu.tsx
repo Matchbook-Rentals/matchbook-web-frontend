@@ -15,7 +15,7 @@ import { Bell } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
-const NOTIFICATION_REFRESH_INTERVAL = 300000 // five minutes
+const NOTIFICATION_REFRESH_INTERVAL = 60000 // five minutes
 
 // Define the structure for menu items
 interface MenuItem {

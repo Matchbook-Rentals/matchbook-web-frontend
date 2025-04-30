@@ -102,11 +102,11 @@ const updateMessageInConversation = (
   return allConversations.map((conv) =>
     conv.id === conversationId
       ? {
-          ...conv,
-          messages: conv.messages.map((msg) =>
-            msg.id === messageId ? { ...msg, ...updatedMessage, pending: false } : msg // Match by id
-          ),
-        }
+        ...conv,
+        messages: conv.messages.map((msg) =>
+          msg.id === messageId ? { ...msg, ...updatedMessage, pending: false } : msg // Match by id
+        ),
+      }
       : conv
   );
 };
@@ -123,13 +123,13 @@ const markMessagesAsRead = (
   return allConversations.map((conv) =>
     conv.id === conversationId
       ? {
-          ...conv,
-          messages: conv.messages.map((msg) =>
-            msg.senderId !== userId && msg.createdAt && new Date(msg.createdAt) <= new Date(timestamp)
-              ? { ...msg, isRead: true }
-              : msg
-          ),
-        }
+        ...conv,
+        messages: conv.messages.map((msg) =>
+          msg.senderId !== userId && msg.createdAt && new Date(msg.createdAt) <= new Date(timestamp)
+            ? { ...msg, isRead: true }
+            : msg
+        ),
+      }
       : conv
   );
 };
@@ -144,14 +144,14 @@ const updateMessagesReadTimestamp = (
   return allConversations.map((conv) =>
     conv.id === conversationId
       ? {
-          ...conv,
-          isUnread: false,
-          messages: conv.messages.map((msg) =>
-            msg.id && messageIds.includes(msg.id)
-              ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read', isRead: true }
-              : msg
-          ),
-        }
+        ...conv,
+        isUnread: false,
+        messages: conv.messages.map((msg) =>
+          msg.id && messageIds.includes(msg.id)
+            ? { ...msg, updatedAt: timestamp, deliveryStatus: 'read', isRead: true }
+            : msg
+        ),
+      }
       : conv
   );
 
@@ -170,8 +170,8 @@ const filterConversationsByRole = (
   return role === 'all'
     ? conversations
     : conversations.filter((conv) =>
-        conv.participants.find((p) => p.userId === userId)?.role === role
-      );
+      conv.participants.find((p) => p.userId === userId)?.role === role
+    );
 };
 
 /**
@@ -246,7 +246,7 @@ const clearTypingTimeout = (
 /**
  * Main Message Interface Component
  */
-const MessageInterface = ({ conversations: initialConversations, user }: { conversations: ExtendedConversation[], user: {id: string} }) => {
+const MessageInterface = ({ conversations: initialConversations, user }: { conversations: ExtendedConversation[], user: { id: string } }) => {
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -261,33 +261,33 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const isMobile = useMobileDetect();
   const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
   const searchParams = useSearchParams(); // Get search params
-      
+
   // Handle WebSocket messages using functional updates and ref for selected ID
   const handleWebSocketMessage = (message: any) => {
     if (!user) return;
-    
+
     // Get the *current* selected ID from the ref *outside* the functional update
     const currentSelectedId = selectedConversationIdRef.current;
-    
+
     setAllConversations((prevConversations) => {
       // --- Logic using prevConversations (latest state) and currentSelectedId ---
-    
+
       if (message.type === 'message' || message.type === 'file') {
         // Use currentSelectedId here to check if the incoming message is for the *active* conversation
         const isActiveConversation = message.conversationId === currentSelectedId;
         const activeConvo = isActiveConversation ? prevConversations.find(c => c.id === currentSelectedId) : null;
-    
+
         const isFromActiveConvoOtherParticipant = activeConvo &&
           message.senderId === activeConvo.participants.find(p => p.userId !== user.id)?.userId;
-    
+
         let messageToProcess = { ...message }; // Clone message to modify
-    
+
         // If message is from the other participant in our *currently active* conversation, mark as read immediately
         if (isFromActiveConvoOtherParticipant) {
           messageToProcess.deliveryStatus = 'read';
           messageToProcess.isRead = true;
           messageToProcess.updatedAt = new Date().toISOString();
-    
+
           // Send read receipt via socket
           if (isConnected && socketRef.current) {
             const readReceiptMessage = {
@@ -299,37 +299,37 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
             };
             socketRef.current.emit('read_receipt', readReceiptMessage);
           }
-        } 
-    
+        }
+
         // Add the (potentially modified) message to the conversation state
         const newState = addMessageToConversation(prevConversations, messageToProcess.conversationId, messageToProcess);
-    
+
         // Update unread counts based on the *new* state and *original* message status
         // Only increment if:
         // 1. Message is from another user
         // 2. Message wasn't *already* marked read (e.g., by the immediate read logic above)
         // 3. The conversation the message belongs to is NOT the currently active one
         if (message.senderId !== user.id && !messageToProcess.isRead && !isActiveConversation) {
-           // Find the conversation in the *previous* state to check roles
-           const convForRoleCheck = prevConversations.find(c => c.id === message.conversationId);
-           if (convForRoleCheck) {
-             const userRole = convForRoleCheck.participants.find(p => p.userId === user.id)?.role;
-             if (userRole === 'Host') setUnreadHostMessages(prev => prev + 1);
-             else if (userRole === 'Tenant') setUnreadTenantMessages(prev => prev + 1);
-           }
+          // Find the conversation in the *previous* state to check roles
+          const convForRoleCheck = prevConversations.find(c => c.id === message.conversationId);
+          if (convForRoleCheck) {
+            const userRole = convForRoleCheck.participants.find(p => p.userId === user.id)?.role;
+            if (userRole === 'Host') setUnreadHostMessages(prev => prev + 1);
+            else if (userRole === 'Tenant') setUnreadTenantMessages(prev => prev + 1);
+          }
         }
-    
+
         return newState; // Return the updated state
-    
+
       } else if (message.type === 'typing' && message.senderId !== user.id) {
         // Typing status doesn't modify conversations, handle separately
         handleTypingMessage(message); // This updates typingUsers state, not allConversations
         return prevConversations; // No change to conversations state
-    
+
       } else if (message.type === 'read_receipt' && message.senderId !== user.id && message.messageIds) {
         // Update the specific messages' updatedAt timestamp based on the receipt
         return updateMessagesReadTimestamp(prevConversations, message.conversationId, message.messageIds, message.timestamp);
-    
+
       } else {
         // No relevant message type, return current state
         return prevConversations;
@@ -346,16 +346,16 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   const failureCountRef = useRef(0);
   const circuitOpenRef = useRef(false);
   const circuitResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Use existing environment variable for Socket.IO server URL
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
-  
+
   // Monitor socket health with heartbeats
   const startHeartbeat = (socket: Socket) => {
     if (heartbeatTimeoutRef.current) {
       clearTimeout(heartbeatTimeoutRef.current);
     }
-    
+
     // Send heartbeat every 30 seconds
     const pingServer = () => {
       if (socket && socket.connected) {
@@ -366,32 +366,32 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
             checkCircuitBreaker();
           }
         });
-        
+
         // Set up next heartbeat
         heartbeatTimeoutRef.current = setTimeout(pingServer, 30000);
       }
     };
-    
+
     // Start heartbeat cycle
     pingServer();
   };
-  
+
   // Circuit breaker implementation
   const MAX_FAILURES = 3;
   const CIRCUIT_RESET_DELAY = 30000; // 30 seconds
-  
+
   const checkCircuitBreaker = () => {
     failureCountRef.current++;
     if (failureCountRef.current >= MAX_FAILURES) {
       // Open the circuit - stop trying to use socket
       circuitOpenRef.current = true;
       console.warn(`Circuit breaker opened after ${failureCountRef.current} failures`);
-      
+
       // Try to reset after delay
       if (circuitResetTimeoutRef.current) {
         clearTimeout(circuitResetTimeoutRef.current);
       }
-      
+
       circuitResetTimeoutRef.current = setTimeout(() => {
         console.log('Attempting to reset circuit breaker');
         circuitOpenRef.current = false;
@@ -401,7 +401,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       }, CIRCUIT_RESET_DELAY);
     }
   };
-  
+
   const resetCircuitBreaker = () => {
     failureCountRef.current = 0;
     circuitOpenRef.current = false;
@@ -417,28 +417,28 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       console.log('Socket already exists, disconnecting first');
       socketRef.current.disconnect();
     }
-    
+
     const MAX_RETRIES = 5;
     const INITIAL_DELAY = 1000;
     const MAX_DELAY = 30000;
-    
+
     // Add jitter to prevent thundering herd problem
     const getJitteredDelay = (baseDelay: number) => {
       // Add random jitter of ±30%
       const jitterFactor = 0.7 + (Math.random() * 0.6); // 0.7-1.3
       return Math.min(baseDelay * jitterFactor, MAX_DELAY);
     };
-    
+
     const attemptConnection = (retryCount: number, retryDelay: number) => {
       if (retryCount >= MAX_RETRIES) {
         console.log('Maximum connection attempts reached, stopping');
         return;
       }
-      
+
       try {
         console.log(`Connecting to Socket.IO (attempt ${retryCount + 1}): ${socketUrl}`);
         const socket = io(socketUrl, {
-          query: { 
+          query: {
             userId: user?.id || '',
             client: 'web'
           },
@@ -451,22 +451,22 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           forceNew: true,
           autoConnect: true,
         });
-        
-        
+
+
         socket.on('connect', () => {
           setIsConnected(true);
           setConnectionAttempts(0);
           resetCircuitBreaker();
           startHeartbeat(socket);
         });
-        
+
         socket.on('heartbeat', (data) => {
           // Reset failure count on successful heartbeat
           failureCountRef.current = 0;
         });
-        
+
         socket.on('message', (data) => {
-          
+
           // Check if this is a delivery confirmation for a message we sent
           // Server should echo back the message with the original ID
           if (data.id && data.senderId === user?.id && data.confirmedDeliveryAt) {
@@ -479,46 +479,46 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
               })
             );
 
-              if (data.conversationId === selectedConversationId) {
-                markMessagesAsReadByTimestamp(selectedConversationId || data.conversationId, data.deliveredAt || new Date().toISOString())
-              }
+            if (data.conversationId === selectedConversationId) {
+              markMessagesAsReadByTimestamp(selectedConversationId || data.conversationId, data.deliveredAt || new Date().toISOString())
+            }
             return;
           }
-          
+
           handleWebSocketMessage(data);
         });
-        
+
         socket.on('typing', (data) => {
-          handleWebSocketMessage({...data, type: 'typing'});
+          handleWebSocketMessage({ ...data, type: 'typing' });
         });
-        
+
         socket.on('read_receipt', (data) => {
-          handleWebSocketMessage({...data, type: 'read_receipt'});
+          handleWebSocketMessage({ ...data, type: 'read_receipt' });
         });
-        
+
         socket.on('disconnect', (reason) => {
           console.log('Socket.IO Disconnected:', reason);
           setIsConnected(false);
-          
+
           if (reason === 'io server disconnect' || reason === 'transport close') {
             // The server has forcefully disconnected the socket or transport closed
             const nextRetryDelay = getJitteredDelay(
               Math.min(retryDelay * 1.5, MAX_DELAY)
             );
-            
-            console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-            
+
+            console.log(`Will retry in ${Math.round(nextRetryDelay / 1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+
             reconnectTimeoutRef.current = setTimeout(() => {
               attemptConnection(retryCount + 1, nextRetryDelay);
             }, nextRetryDelay);
           }
         });
-        
+
         socket.on('connect_error', (error) => {
           console.error('Socket.IO Connection Error:', error);
           setIsConnected(false);
           checkCircuitBreaker();
-          
+
           // Log detailed connection diagnostics
           console.error('Connection diagnostics:', {
             url: socketUrl,
@@ -532,48 +532,48 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
               // Additional error properties on non-standard errors
               ...Object.getOwnPropertyNames(error).reduce((acc, key) => {
                 if (!['name', 'message', 'stack'].includes(key)) {
-                  try { acc[key] = (error as any)[key]; } catch {}
+                  try { acc[key] = (error as any)[key]; } catch { }
                 }
                 return acc;
               }, {} as Record<string, any>)
             }
           });
-          
+
           // Schedule retry with exponential backoff if not handled by socket.io internal reconnection
           if (!socket.io.reconnection) {
             const nextRetryDelay = getJitteredDelay(
               Math.min(retryDelay * 1.5, MAX_DELAY)
             );
-            
-            console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-            
+
+            console.log(`Will retry in ${Math.round(nextRetryDelay / 1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+
             reconnectTimeoutRef.current = setTimeout(() => {
               attemptConnection(retryCount + 1, nextRetryDelay);
             }, nextRetryDelay);
           }
         });
-        
+
         socketRef.current = socket;
       } catch (error) {
         console.error('Failed to create Socket.IO connection:', error);
-        
+
         // Retry with backoff
         const nextRetryDelay = getJitteredDelay(
           Math.min(retryDelay * 1.5, MAX_DELAY)
         );
-        
-        console.log(`Will retry in ${Math.round(nextRetryDelay/1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-        
+
+        console.log(`Will retry in ${Math.round(nextRetryDelay / 1000)}s (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+
         reconnectTimeoutRef.current = setTimeout(() => {
           attemptConnection(retryCount + 1, nextRetryDelay);
         }, nextRetryDelay);
       }
     };
-    
+
     // Start connection attempts with initial parameters
     attemptConnection(0, INITIAL_DELAY);
   };
-  
+
   // Legacy connect function maintained for backwards compatibility
   const connectSocket = () => {
     connectWithBackoff();
@@ -596,6 +596,23 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           // and potentially after conversations are fully set.
           setTimeout(() => {
             handleSelectConversation(convoIdFromQuery);
+            markMessagesAsReadByTimestamp(convoIdFromQuery, new Date)
+
+            // Find conversation and get last 5 messages
+            const targetConv = allConversations.find(conv => conv.id === convoIdFromQuery);
+            if (targetConv) {
+              const lastMessages = targetConv.messages
+                .slice(-5) // Get last 5 messages
+                .map(msg => msg.id)
+                .filter(id => id); // Filter out any undefined IDs
+
+              updateMessagesReadTimestamp(
+                allConversations,
+                convoIdFromQuery,
+                lastMessages,
+                new Date().toISOString()
+              );
+            }
           }, 0);
         } else {
           console.warn(`Conversation ID "${convoIdFromQuery}" from query param not found in user's conversations.`);
@@ -610,7 +627,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         socketRef.current.disconnect();
         socketRef.current = null;
       }
-      
+
       // Clear all timeouts
       [
         reconnectTimeoutRef.current,
@@ -621,7 +638,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           clearTimeout(timeout);
         }
       });
-      
+
       // Reset circuit breaker state
       failureCountRef.current = 0;
       circuitOpenRef.current = false;
@@ -670,11 +687,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       // Optionally, you could queue this or just skip sending for now
       return;
     }
-    
+
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     // Re-check socketRef.current as ensureConnected might have re-established it asynchronously
-    if (!conv || !socketRef.current) return; 
-    
+    if (!conv || !socketRef.current) return;
+
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (receiver) {
       const message = {
@@ -692,7 +709,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   const handleSelectConversation = async (conversationId: string) => {
     if (!user) return;
-        
+
     setSelectedConversationId(conversationId);
     selectedConversationIdRef.current = conversationId; // Update ref
     setSidebarVisible(!isMobile);
@@ -704,19 +721,19 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     else if (userRole === 'Tenant') setUnreadTenantMessages(0);
 
     // Find unread messages from the other participant based on deliveryStatus
-    const unreadMessages = conv.messages.filter(m => 
-      m.senderId !== user.id && !m.isRead 
+    const unreadMessages = conv.messages.filter(m =>
+      m.senderId !== user.id && !m.isRead
     );
-     
+
     if (unreadMessages.length > 0) {
       const timestamp = new Date().toISOString();
       const messageIdsToMarkRead = unreadMessages.map(m => m.id).filter(id => !!id); // Ensure IDs are valid
-       
+
       // Update client state immediately using the new function
-      setAllConversations((prev) => 
+      setAllConversations((prev) =>
         updateMessagesReadTimestamp(prev, conversationId, messageIdsToMarkRead, timestamp)
       );
-       
+
       // Get the other participant for sending read receipt
       const receiver = conv.participants.find((p) => p.userId !== user.id);
       // Ensure connection before sending read receipt
@@ -739,10 +756,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     file?: { url?: string; name?: string; key?: string; type?: string }
   ) => {
     if (!user || !selectedConversationId) return;
-    
+
     const conv = allConversations.find((c) => c.id === selectedConversationId);
     if (!conv) return;
-    
+
     const receiver = conv.participants.find((p) => p.userId !== user.id);
     if (!receiver) return;
 
@@ -766,10 +783,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
     // Ensure connection before attempting to send via WebSocket
     if (!ensureConnected()) {
-       console.warn('Socket not connected when trying to send message. Reconnection initiated. Will attempt REST fallback.');
-       // Proceed directly to REST fallback since socket isn't ready
-       trySendViaRest();
-       return; // Stop here, don't try socket path
+      console.warn('Socket not connected when trying to send message. Reconnection initiated. Will attempt REST fallback.');
+      // Proceed directly to REST fallback since socket isn't ready
+      trySendViaRest();
+      return; // Stop here, don't try socket path
     }
 
     // If ensureConnected returned true, we are connected (or circuit is open, handled below)
@@ -782,14 +799,14 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       try {
         console.log('Sending message via Socket.IO with acknowledgment');
         const SOCKET_TIMEOUT = 5000; // 5 seconds timeout
-        
+
         // Create a promise that resolves on acknowledgment or rejects on timeout
         const sendPromise = new Promise<any>((resolve, reject) => {
           // Set timeout for socket acknowledgment
           const timeoutId = setTimeout(() => {
             reject(new Error('Socket.IO acknowledgment timeout'));
           }, SOCKET_TIMEOUT);
-          
+
           // Send with acknowledgment callback
           socketRef.current!.emit('message', messageData, (ack: any) => {
             clearTimeout(timeoutId);
@@ -800,11 +817,11 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
             }
           });
         });
-        
+
         // Wait for acknowledgment or timeout
         const ack = await sendPromise;
         console.log('Message successfully delivered via Socket.IO:', ack);
-        
+
         // Update message status on successful acknowledgment from server
         // The server confirmation might include the final DB ID if different, but we use the original messageId
         setAllConversations((prev) =>
@@ -822,7 +839,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         trySendViaRest(); // Fall back to REST API
       }
     }
-    
+
     // Helper function to try sending via REST API
     async function trySendViaRest() {
       try {
@@ -843,7 +860,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         console.error('REST API message delivery failed:', error);
         setAllConversations((prev) =>
           updateMessageInConversation(prev, selectedConversationId, messageId, { // Use messageId
-            failed: true, 
+            failed: true,
             pending: false,
             deliveryStatus: 'failed'
           })
@@ -854,7 +871,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   const handleCreateConversation = async (email: string) => {
     if (!user) return;
-    
+
     const newConv = await createConversation(email, 'Host', 'Tenant');
     setAllConversations((prev) => [...prev, { ...newConv, messages: [], participants: newConv.participants }]);
   };
@@ -871,10 +888,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   // Early return if user is not available
   if (!user) return null;
- 
+
   // Filter conversations first by role
   const roleFilteredConversations = filterConversationsByRole(allConversations, user.id, tabs);
-  
+
   // Augment conversations with isUnread status before passing down
   const augmentedConversations = roleFilteredConversations.map(conv => ({
     ...conv,
@@ -919,26 +936,25 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         </div>
       </div>
       <div
-        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${
-          isConnected ? 'bg-green-500' : (connectionAttempts >= 3) ? 'bg-yellow-500' : 'bg-red-500'
-        } text-white`}
+        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${isConnected ? 'bg-green-500' : (connectionAttempts >= 3) ? 'bg-yellow-500' : 'bg-red-500'
+          } text-white`}
       >
         {isConnected ? (
           'Connected'
         ) : (connectionAttempts >= 3) ? (
-          <button 
+          <button
             onClick={() => {
               setConnectionAttempts(0);
               connectSocket();
-            }} 
+            }}
             className="flex items-center"
           >
             <span>Connection failed</span>
             <span className="ml-2 text-xs">(Click to retry)</span>
           </button>
         ) : (
-          <button 
-            onClick={connectSocket} 
+          <button
+            onClick={connectSocket}
             className="flex items-center"
           >
             <span>Disconnected</span>
