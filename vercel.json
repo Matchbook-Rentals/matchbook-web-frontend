@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/check-unread-messages",
-      "schedule": "*/3 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
