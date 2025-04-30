@@ -243,12 +243,12 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         </span>
                       </div>
                       <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">
-                        {lastMessage && lastMessage.updatedAt ? 
+                        {lastMessage && lastMessage.createdAt ? 
                           (() => {
                             try {
                               // Try using updatedAt first
-                              if (typeof lastMessage.updatedAt === 'string') {
-                                const date = new Date(lastMessage.updatedAt);
+                              if (true) {
+                                const date = new Date(lastMessage.createdAt);
                                 if (!isNaN(date.getTime())) {
                                   return date.toLocaleTimeString([], {
                                     hour: 'numeric',
