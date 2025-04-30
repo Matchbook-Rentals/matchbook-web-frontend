@@ -311,10 +311,28 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
         if (isLastUserMessage) {
           // If the message has been read
-          if (message.isRead) {
-            const readTime = message.updatedAt ?
-              new Date(message.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
-            return <span className="text-xs text-gray-400">{`Read ${readTime}`}</span>;
+          if (message.isRead && message.updatedAt) {
+            const date = new Date(message.updatedAt);
+            const now = new Date();
+            const diff = now.getTime() - date.getTime();
+            const hours = diff / (1000 * 60 * 60);
+            let formattedTime: string;
+
+            if (hours < 24) {
+              // If less than 24 hours ago, show time
+              formattedTime = date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+              });
+            } else {
+              // If more than 24 hours ago, show date
+              formattedTime = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+              });
+            }
+            return <span className="text-xs text-gray-400">{`Read ${formattedTime}`}</span>;
           }
 
           // If the message has a delivery status from the server
