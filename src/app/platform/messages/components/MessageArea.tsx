@@ -374,7 +374,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 {/* Removed spacer div */}
               </div>
             )}
-            <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md overflow-hidden ${bubbleStyles}`}>
+            <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
               {group.map((message, messageIndex) => {
                 const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
                 const messageFile = {
@@ -386,7 +386,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 const addMarginTop = messageIndex > 0; // Add margin only if not the first message in the group
 
                 return (
-                  <div key={message.id || `msg-${messageIndex}`} className={` ${addMarginTop ? 'mt-1.5 pt-1.5 border-t border-gray-500/30' : ''} ${isImageOnlyMessage ? '' : 'px-0 py-0'}`}> {/* Add top margin/border for subsequent messages */}
+                  <div key={message.id || `msg-${messageIndex}`} className={` ${addMarginTop ? ' pt-1.5 border-gray-500/30' : ''} ${isImageOnlyMessage ? '' : 'px-0 py-0'}`}> {/* Add top margin/border for subsequent messages */}
                     {isImageOnlyMessage ? (
                       // Image-only message (no extra padding needed inside bubble)
                       <div className="mt-0"> {/* Adjust margin if needed */}
