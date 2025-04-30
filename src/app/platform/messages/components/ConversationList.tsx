@@ -101,6 +101,35 @@ const ConversationList: React.FC<ConversationListProps> = ({
     return matchesSearch;
   });
 
+  // Helper function to format the timestamp for the last message
+  const formatLastMessageTime = (createdAt: string | Date): string => {
+    try {
+      const date = new Date(createdAt);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime();
+      const hours = diff / (1000 * 60 * 60);
+
+      if (hours < 24) {
+        // If less than 24 hours ago, show time
+        return date.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
+      } else {
+        // If more than 24 hours ago, show date
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+    } catch (e) {
+      console.log('Date parsing error:', e, createdAt);
+      return 'Just now';
+    }
+  };
+
+
   return (
     <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[450px] flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
@@ -243,37 +272,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         </span>
                       </div>
                       <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">
-                        {lastMessage && lastMessage.createdAt ?
-                          (() => {
-                            try {
-                              if (true) {
-                                // Replace the broken date formatting code with this:
-                                const date = new Date(lastMessage.createdAt);
-                                const now = new Date();
-                                const diff = now.getTime() - date.getTime();
-                                const hours = diff / (1000 * 60 * 60);
-
-                                if (hours < 24) {
-                                  // If less than 24 hours ago, show time
-                                  return date.toLocaleTimeString('en-US', {
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                    hour12: true
-                                  });
-                                } else {
-                                  // If more than 24 hours ago, show date + time
-                                  return date.toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric'
-                                  });
-                                }
-
-
-                              } catch (e) {
-                                console.log('Date parsing error:', e, lastMessage);
-                                return 'Just now';
-                              }
-                            })() : ''}
+                        {lastMessage && lastMessage.createdAt ? formatLastMessageTime(lastMessage.createdAt) : ''}
                       </span>
                     </div>
                     <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
