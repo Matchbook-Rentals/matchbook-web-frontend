@@ -281,7 +281,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     let currentGroup: any[] = [];
 
     messages.forEach((message, index) => {
-      if (index === 0 || message.senderId !== messages[index - 1].senderId) {
+      // Start a new group if:
+      // 1. It's the first message.
+      // 2. The sender is different from the previous message.
+      // 3. The current message has an image.
+      // 4. The previous message had an image.
+      const startNewGroup = index === 0 ||
+                            message.senderId !== messages[index - 1].senderId ||
+                            !!message.imgUrl ||
+                            !!messages[index - 1].imgUrl;
+
+      if (startNewGroup) {
         // Start of a new group
         if (currentGroup.length > 0) {
           messageGroups.push(currentGroup);
