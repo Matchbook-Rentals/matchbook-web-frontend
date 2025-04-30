@@ -310,6 +310,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         // If the message is still pending (sending)
         if (lastMessage.pending) {
           return <span className="text-xs text-gray-400">Sending...</span>;
+        } // <-- Added missing closing brace
         // If the message failed to send
         if (lastMessage.failed) {
           return <span className="text-xs text-red-500">Failed to send</span>;
