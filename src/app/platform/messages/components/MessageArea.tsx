@@ -276,43 +276,50 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       );
     }
 
-    return messages.map((message) => {
-      // Check if message contains only an image and no text content
-      const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
-      const isCurrentUser = message.senderId === currentUserId;
-      const justifyClass = isCurrentUser ? 'justify-end' : 'justify-start';
+    // Group consecutive messages by sender
+    const messageGroups: any[][] = [];
+    let currentGroup: any[] = [];
 
-      const messageFile = {
-        fileUrl: message.imgUrl,
-        fileName: message.fileName || 'attachment',
-        fileKey: message.fileKey,
-        fileType: message.fileType
-      };
-
-      const showSenderAvatar = !isCurrentUser && !isImageOnlyMessage;
-      const bubbleStyles = isCurrentUser
-        ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
-        : 'bg-gray-100 pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
-
-      const renderMessageStatus = () => {
-        // If the message is still pending (sending)
-        if (message.pending) {
-          return <span className="text-xs text-gray-400">Sending...</span>;
+    messages.forEach((message, index) => {
+      if (index === 0 || message.senderId !== messages[index - 1].senderId) {
+        // Start of a new group
+        if (currentGroup.length > 0) {
+          messageGroups.push(currentGroup);
         }
+        currentGroup = [message];
+      } else {
+        // Continue the current group
+        currentGroup.push(message);
+      }
+    });
 
+    // Push the last group
+    if (currentGroup.length > 0) {
+      messageGroups.push(currentGroup);
+    }
+
+    return messageGroups.map((group, groupIndex) => {
+      const firstMessage = group[0];
+      const isCurrentUserGroup = firstMessage.senderId === currentUserId;
+      const justifyClass = isCurrentUserGroup ? 'justify-end' : 'justify-start';
+      const showAvatar = !isCurrentUserGroup; // Show avatar only for the other user's group
+
+      const renderGroupStatus = () => {
+        const lastMessage = group[group.length - 1];
+
+        // If the message is still pending (sending)
+        if (lastMessage.pending) {
+          return <span className="text-xs text-gray-400">Sending...</span>;
         // If the message failed to send
-        if (message.failed) {
+        if (lastMessage.failed) {
           return <span className="text-xs text-red-500">Failed to send</span>;
         }
 
-        const isLastUserMessage = message === messages
-          .filter(m => m.senderId === currentUserId)
-          .slice(-1)[0];
-
-        if (isLastUserMessage) {
-          // If the message has been read
-          if (message.isRead && message.updatedAt) {
-            const date = new Date(message.updatedAt);
+        // Check status only for the current user's messages
+        if (isCurrentUserGroup) {
+          // If the last message in the group has been read
+          if (lastMessage.isRead && lastMessage.updatedAt) {
+            const date = new Date(lastMessage.updatedAt);
             const now = new Date();
             const diff = now.getTime() - date.getTime();
             const hours = diff / (1000 * 60 * 60);
@@ -335,77 +342,95 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             return <span className="text-xs text-gray-400">{`Read ${formattedTime}`}</span>;
           }
 
-          // If the message has a delivery status from the server
-          if (message.deliveryStatus === 'delivered') {
-            const deliveredTime = message.deliveredAt ?
-              new Date(message.deliveredAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+          // If the last message has a delivery status from the server
+          if (lastMessage.deliveryStatus === 'delivered') {
+            const deliveredTime = lastMessage.deliveredAt ?
+              new Date(lastMessage.deliveredAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
             return <span className="text-xs text-gray-400">{deliveredTime ? `Delivered ${deliveredTime}` : "Delivered"}</span>;
           }
 
-          // Default status for sent messages
+          // Default status for sent messages (last one in the group)
           return <span className="text-xs text-gray-400">Sent</span>;
         }
 
-        return null;
+        return null; // No status for the other user's messages
       };
 
+      const bubbleStyles = isCurrentUserGroup
+        ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
+        : 'bg-gray-100 text-black pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
+
       return (
-        <div key={message.id} className="mb-3 pr-1 md:pr-3">
+        <div key={`group-${groupIndex}`} className="mb-3 pr-1 md:pr-3">
           <div className={`flex ${justifyClass}`}>
-            {showSenderAvatar && (
-              <div className="relative">
+            {showAvatar && (
+              <div className="relative self-end"> {/* Align avatar to bottom */}
                 <img
                   src={participantInfo.imageUrl}
                   alt="Profile"
-                  className="w-9 h-9 rounded-full mr-2 absolute bottom-[-12px]"
+                  className="w-9 h-9 rounded-full mr-2" // Removed absolute positioning
                 />
-                <div className="w-8 mr-3" />
+                {/* Removed spacer div */}
               </div>
             )}
+            <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md overflow-hidden ${bubbleStyles}`}>
+              {group.map((message, messageIndex) => {
+                const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
+                const messageFile = {
+                  fileUrl: message.imgUrl,
+                  fileName: message.fileName || 'attachment',
+                  fileKey: message.fileKey,
+                  fileType: message.fileType
+                };
+                const addMarginTop = messageIndex > 0; // Add margin only if not the first message in the group
 
-            {isImageOnlyMessage ? (
-              // Image-only message without chat bubble
-              <div className="max-w-[70%] mt-6">
-                <Image
-                  src={message.imgUrl}
-                  alt="Message Attachment"
-                  width={375}
-                  height={375}
-                  className="cursor-pointer rounded-lg"
-                  onClick={() => handleFileClick(messageFile)}
-                />
-              </div>
-            ) : (
-              // Message with chat bubble
-              <div
-                className={`max-w-[70%] text-black rounded-2xl py-3 border leading-snug shadow-md overflow-hidden ${bubbleStyles}`}
-              >
-                {message.imgUrl && (
-                  <div className={message.content ? "mb-2" : ""}>
-                    {renderFileAttachment(
-                      message.imgUrl,
-                      message.fileName || 'attachment',
-                      message.fileKey,
-                      message.fileType
+                return (
+                  <div key={message.id || `msg-${messageIndex}`} className={` ${addMarginTop ? 'mt-1.5 pt-1.5 border-t border-gray-500/30' : ''} ${isImageOnlyMessage ? '' : 'px-0 py-0'}`}> {/* Add top margin/border for subsequent messages */}
+                    {isImageOnlyMessage ? (
+                      // Image-only message (no extra padding needed inside bubble)
+                      <div className="mt-0"> {/* Adjust margin if needed */}
+                        <Image
+                          src={message.imgUrl}
+                          alt="Message Attachment"
+                          width={375}
+                          height={375}
+                          className="cursor-pointer rounded-lg" // Keep rounded corners if desired
+                          onClick={() => handleFileClick(messageFile)}
+                        />
+                      </div>
+                    ) : (
+                      // Message content (text and/or attachment)
+                      <>
+                        {message.imgUrl && (
+                          <div className={message.content ? "mb-2" : ""}>
+                            {renderFileAttachment(
+                              message.imgUrl,
+                              message.fileName || 'attachment',
+                              message.fileKey,
+                              message.fileType
+                            )}
+                          </div>
+                        )}
+                        {message.content && (
+                          <div
+                            className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta"
+                            style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}
+                          >
+                            {message.content}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
-                )}
-                {message.content && (
-                  <div
-                    className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta"
-                    style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}
-                  >
-                    {message.content}
-                  </div>
-                )}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </div>
 
-          {isCurrentUser && renderMessageStatus() && (
+          {isCurrentUserGroup && renderGroupStatus() && (
             <div className={`flex ${justifyClass} mt-1`}>
               <div className="text-right mr-1">
-                {renderMessageStatus()}
+                {renderGroupStatus()}
               </div>
             </div>
           )}
