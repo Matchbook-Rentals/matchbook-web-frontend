@@ -63,7 +63,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const toggleUnreadOnly = () => {
     setShowUnreadOnly(!showUnreadOnly);
   };
- 
+
   const getParticipantInfo = (conv: ExtendedConversation, currentUser: UserResource) => {
     if (!currentUser) return { displayName: "Loading...", imageUrl: "" };
 
@@ -97,7 +97,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       // Use the isUnread prop passed down from the parent
       return matchesSearch && conv.isUnread === true;
     }
- 
+
     return matchesSearch;
   });
 
@@ -120,7 +120,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="flex items-center space-x-4">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-              <Button  className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
+              <Button className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
                 {activeTab === 'all' ? 'All' : activeTab}
                 <ChevronDown className="h-4 w-4" />
               </Button>
@@ -174,7 +174,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               </div>
             </PopoverContent>
           </Popover>
-          
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -214,7 +214,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
             const lastMessage = conv.messages && conv.messages.length > 0
-              ? conv.messages[conv.messages.length -1]
+              ? conv.messages[conv.messages.length - 1]
               : null;
 
             return (
@@ -243,40 +243,37 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         </span>
                       </div>
                       <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">
-                        {lastMessage && lastMessage.createdAt ? 
+                        {lastMessage && lastMessage.createdAt ?
                           (() => {
                             try {
-                              // Try using updatedAt first
                               if (true) {
+                                // Replace the broken date formatting code with this:
                                 const date = new Date(lastMessage.createdAt);
-                                if (!isNaN(date.getTime())) {
-                                  return date.toLocaleTimeString([], {
+                                const now = new Date();
+                                const diff = now.getTime() - date.getTime();
+                                const hours = diff / (1000 * 60 * 60);
+
+                                if (hours < 24) {
+                                  // If less than 24 hours ago, show time
+                                  return date.toLocaleTimeString('en-US', {
                                     hour: 'numeric',
                                     minute: '2-digit',
                                     hour12: true
                                   });
-                                }
-                              }
-                              
-                              // Fallback to createdAt
-                              if (lastMessage.createdAt && typeof lastMessage.createdAt === 'string') {
-                                const date = new Date(lastMessage.createdAt);
-                                if (!isNaN(date.getTime())) {
-                                  return date.toLocaleTimeString([], {
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                    hour12: true
+                                } else {
+                                  // If more than 24 hours ago, show date + time
+                                  return date.toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric'
                                   });
                                 }
+
+
+                              } catch (e) {
+                                console.log('Date parsing error:', e, lastMessage);
+                                return 'Just now';
                               }
-                              
-                              // Last resort
-                              return 'Just now';
-                            } catch (e) {
-                              console.log('Date parsing error:', e, lastMessage);
-                              return 'Just now';
-                            }
-                          })() : ''}
+                            })() : ''}
                       </span>
                     </div>
                     <span className={`text-sm font-normal text-gray-600 truncate max-w-[200px]`}>
