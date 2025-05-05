@@ -70,6 +70,13 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, section: 4 }, // Changed from adminOnlyVisible
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
+    { 
+      id: 'test-error', 
+      label: 'Test Error Boundary', 
+      onClick: () => { throw new Error('Simulated error for testing global boundary'); }, 
+      adminOnlyVisible: true, 
+      section: 4 
+    },
   ];
 
   const fetchNotifications = useCallback(async () => {

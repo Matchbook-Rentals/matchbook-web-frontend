@@ -243,7 +243,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             placeholder="Select dates"
             value={formatDate(dateRange.start)}
             className={inputClasses}
-            readOnly={!hasAccess}
+            readOnly // Always readOnly
             onClick={(e) => handleInputClick(e, 'date', moveInInputRef)}
           />
         </div>
@@ -256,7 +256,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             placeholder="Select dates"
             value={formatDate(dateRange.end)}
             className={inputClasses}
-            readOnly={!hasAccess}
+            readOnly // Always readOnly
             onClick={(e) => handleInputClick(e, 'date', moveOutInputRef)}
           />
         </div>
@@ -269,7 +269,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
             placeholder="Add renters"
             value={hasBeenSelected ? `${totalGuests} Renter${totalGuests !== 1 ? 's' : ''}` : ''}
             className={`${inputClasses}`}
-            readOnly={!hasAccess}
+            readOnly // Always readOnly
             onClick={(e) => {
               setHasBeenSelected(true);
               handleInputClick(e, 'guests', guestsInputRef)
