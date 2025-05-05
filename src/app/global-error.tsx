@@ -30,12 +30,12 @@ export default function GlobalError({
     </div>
   );
 
+  // The component should return the content directly, without <html> or <body> tags.
+  // Next.js wraps this component in the necessary document structure.
   return (
-    <html>
-      <body>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center', 
           justifyContent: 'center', 
           minHeight: '100vh', // Use minHeight instead of height for flexibility
@@ -84,7 +84,5 @@ export default function GlobalError({
             If the problem continues, please <a href="/support" style={{ color: 'blue' }}>contact support</a>.
           </p> */}
         </div>
-      </body>
-    </html>
   )
 }
