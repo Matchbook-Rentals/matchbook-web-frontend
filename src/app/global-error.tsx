@@ -35,47 +35,9 @@ export default function GlobalError({
           }),
         });
         // No need to handle success response, just fire and forget
-      } catch (fetchError) {
-        // No need to handle success response, just fire and forget
-      });
     };
 
-    // Wrap the async logic in an immediately invoked function expression (IIFE)
-    // or a separate async function called here.
-    (async () => {
-      try {
-        await logError();
-        console.log("Error successfully logged to API.");
-      } catch (logApiError: any) {
-        // Log fetch errors to console AND alert the user
-        console.error("Failed to send error log to API:", logApiError);
-        // Display alert to the user
-        window.alert(`Failed to report error to server: ${logApiError?.message || 'Unknown error'}`);
-      }
-
-      // --- Automatic Reload ---
-      // This runs regardless of whether logging succeeded or failed.
-      const timerId = setTimeout(() => {
-        console.log("Global Error: Attempting automatic full page reload...");
-        window.location.reload();
-      }, 3000); // 3000 milliseconds = 3 seconds
-
-      // Cleanup function to clear the timeout if the component unmounts
-      // before the timeout triggers (less likely in a global error boundary, but good practice)
-      return () => clearTimeout(timerId);
-    })();
-
-
-    // --- End Log Error to API & Reload Logic ---
-
-    /* 
-    NOTE: The original reload logic was moved inside the async IIFE 
-    to ensure it runs *after* the await logError() attempt (either success or failure).
-    The timeout cleanup needs to be handled carefully. Returning it from the IIFE
-    won't work directly with useEffect's cleanup. Let's adjust.
-    */
-
-    // --- Corrected Automatic Reload & Cleanup ---
+    // --- Corrected Logic Block --- (Removed the incorrect IIFE wrapper)
     let timerId: NodeJS.Timeout | null = null; 
 
     const runAsyncOperations = async () => {
@@ -104,12 +66,6 @@ export default function GlobalError({
     };
     /* --- End Corrected Logic --- */
 
-
-    // Automatically attempt a full page reload after a short delay (e.g., 3 seconds) - OLD LOGIC REMOVED
-    const timerId = setTimeout(() => {
-      console.log("Global Error: Attempting automatic full page reload...");
-      window.location.reload();
-
   // We only want this effect to run once when the error occurs.
   // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [error, pathname]); // Add pathname to dependencies
@@ -119,13 +75,13 @@ export default function GlobalError({
   // Check for keywords often associated with auth issues.
   // This is a heuristic and might need adjustment based on actual errors seen.
   const message = error.message.toLowerCase();
-  //const isLikelyAuthError = 
-  //  message.includes('unauthenticated') || 
-  //  message.includes('unauthorized') || 
-  //  message.includes('session') || 
-  //  message.includes('clerk') || // Catch generic Clerk errors
-  //  message.includes('signin') || // Might indicate redirection issues
-  //  message.includes('signup');
+  const isLikelyAuthError = // <-- Uncommented
+    message.includes('unauthenticated') || 
+    message.includes('unauthorized') || 
+    message.includes('session') || 
+    message.includes('clerk') || // Catch generic Clerk errors
+    message.includes('signin') || // Might indicate redirection issues
+    message.includes('signup');
 
   // --- Render Logic ---
   let title = "Something Went Wrong";
@@ -136,6 +92,8 @@ export default function GlobalError({
     </Button>
   );
 
+  // Conditionally override title/description/actions for auth errors
+  if (isLikelyAuthError) { // <-- Added if condition
     title = "Session Issue";
     description = "Your session may have expired or become invalid. Please try refreshing, or log in again if the problem persists.";
     actions = (
@@ -148,7 +106,8 @@ export default function GlobalError({
         </Button>
       </div>
     );
-   
+  } // <-- Added closing brace for if condition
+
   // Add more 'else if' blocks here to detect other specific error types (e.g., network errors)
   // else if (isNetworkError) { ... }
 
