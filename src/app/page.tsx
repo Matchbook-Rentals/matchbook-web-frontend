@@ -59,7 +59,7 @@ const WebHomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       <MatchbookHeader  />
       <Hero />
       <RentEasyCopy />
@@ -70,7 +70,7 @@ const WebHomePage = () => {
       <PlaceYouLove />
       <RecentArticle />
       <Footer />
-    </>
+    </div>
   );
 };
 
