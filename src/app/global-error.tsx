@@ -32,7 +32,6 @@ export default function GlobalError({
             errorDigest: error?.digest,
             pathname: pathname,
             userAgent: navigator.userAgent, // Get browser info
-            isAuthError: isLikelyAuthError, // Send the flag determined below
           }),
         });
         // No need to handle success response, just fire and forget
@@ -43,6 +42,7 @@ export default function GlobalError({
     };
 
     logError();
+    router.refresh();
     // --- End Log Error to API ---
 
   // We only want this effect to run once when the error occurs.
@@ -55,13 +55,13 @@ export default function GlobalError({
   // Check for keywords often associated with auth issues.
   // This is a heuristic and might need adjustment based on actual errors seen.
   const message = error.message.toLowerCase();
-  const isLikelyAuthError = 
-    message.includes('unauthenticated') || 
-    message.includes('unauthorized') || 
-    message.includes('session') || 
-    message.includes('clerk') || // Catch generic Clerk errors
-    message.includes('signin') || // Might indicate redirection issues
-    message.includes('signup');
+  //const isLikelyAuthError = 
+  //  message.includes('unauthenticated') || 
+  //  message.includes('unauthorized') || 
+  //  message.includes('session') || 
+  //  message.includes('clerk') || // Catch generic Clerk errors
+  //  message.includes('signin') || // Might indicate redirection issues
+  //  message.includes('signup');
 
   // --- Render Logic ---
   let title = "Something Went Wrong";
@@ -72,7 +72,6 @@ export default function GlobalError({
     </Button>
   );
 
-  if (isLikelyAuthError) {
     title = "Session Issue";
     description = "Your session may have expired or become invalid. Please try refreshing, or log in again if the problem persists.";
     actions = (
@@ -85,7 +84,7 @@ export default function GlobalError({
         </Button>
       </div>
     );
-  } 
+   
   // Add more 'else if' blocks here to detect other specific error types (e.g., network errors)
   // else if (isNetworkError) { ... }
 
