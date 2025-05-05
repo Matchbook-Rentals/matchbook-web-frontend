@@ -257,7 +257,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         <p className='mb-3'>You can
           {numFavorites > 0 ? ' look at your favorites' : ''}
           {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
-          {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.</p>
+          {numFilteredOut > 0 ? ' alter your filters' : ''} to see more.</p>
         {(numFavorites > 0 || numFilteredOut > 0) && (
           <p>
             {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
