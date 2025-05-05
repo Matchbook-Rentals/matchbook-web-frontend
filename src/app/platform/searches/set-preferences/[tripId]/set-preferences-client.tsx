@@ -157,7 +157,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
     <div className="container mx-auto py-8 max-w-[700px]">
       <h1 className="text-2xl w-full font-bold mb-6">Tell us more about what you&apos;re looking for in a place</h1>
 
-      <ScrollArea className="w-full rounded-md p-0">
+      <ScrollArea className="w-full rounded-none p-0">
         {/* Property Types Section */}
         <div className="space-y-4 border-b-2 pb-3">
           <h3 className="text-[18px] font-medium text-[#404040]">Property Types</h3>
@@ -296,7 +296,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
         </div>
 
         {/* Submit button */}
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-end rounded-none">
           <Button 
             className="py-2 rounded-none text-[14px] px-4"
             onClick={handleSubmit}
