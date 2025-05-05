@@ -130,6 +130,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         center: mapCenter, // Validated coordinates
         zoom: 14,
         scrollZoom: false,
+        dragPan: false
       });
 
       mapRef.current = map; // Assign to ref only after successful creation
