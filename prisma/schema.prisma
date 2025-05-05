@@ -71,6 +71,7 @@ model User {
   BoldSignLease      BoldSignLease[]
   Lease              Lease[]
   tickets            Ticket[]
+  applicationErrors  ApplicationError[] // Relation to application errors logged for this user
 }
 
 model UserPreferences {
@@ -932,6 +933,23 @@ model ResidentialHistory {
 
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId String
+}
+
+model ApplicationError {
+  id           String    @id @default(cuid())
+  createdAt    DateTime  @default(now())
+  errorMessage String    @db.Text
+  errorStack   String?   @db.Text
+  errorDigest  String?
+  pathname     String?   // The URL path where the error occurred
+  userAgent    String?   @db.Text // Browser/client information
+  isAuthError  Boolean?  // Was this classified as a likely auth error?
+  userId       String?   // Optional: link to user if they were logged in
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([userId])
 }
 
 model ListingInCreation {
