@@ -17,6 +17,22 @@ export function formatDate(date: Date | string) {
 }
 
 /**
+ * Format a date and time to a standard string representation
+ * @param date - The date to format
+ * @returns Formatted date and time string (e.g., "May 5, 2025, 10:30 AM")
+ */
+export function formatDateTime(date: Date | string | null | undefined): string {
+  if (!date) return 'N/A';
+  try {
+    return format(new Date(date), 'MMM d, yyyy, h:mm a');
+  } catch (e) {
+    console.error("Error formatting date/time:", e);
+    // Fallback or handle error as appropriate
+    return new Date(date).toISOString(); 
+  }
+}
+
+/**
  * Formats a file size in bytes to a human-readable string.
  * @param bytes - The file size in bytes
  * @returns A formatted string representation of the file size
