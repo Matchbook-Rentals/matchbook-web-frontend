@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server'; // Use server version for route handlers
-import prisma from '@/lib/prisma'; // Adjust path as needed
+import prisma from '@/lib/prismadb'; // Adjust path as needed
 
 export async function POST(request: Request) {
   try {
