@@ -20,8 +20,8 @@ export default function GlobalError({
 
     // --- Log Error to API ---
     const logError = async () => {
-      try {
-        await fetch('/api/log-error', {
+      // Note: No try/catch here, let it bubble up to the useEffect's catch
+      await fetch('/api/log-error', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -36,17 +36,81 @@ export default function GlobalError({
         });
         // No need to handle success response, just fire and forget
       } catch (fetchError) {
-        // Log fetch errors to console, but don't disrupt the user
-        console.error("Failed to send error log to API:", fetchError);
+        // No need to handle success response, just fire and forget
+      });
+    };
+
+    // Wrap the async logic in an immediately invoked function expression (IIFE)
+    // or a separate async function called here.
+    (async () => {
+      try {
+        await logError();
+        console.log("Error successfully logged to API.");
+      } catch (logApiError: any) {
+        // Log fetch errors to console AND alert the user
+        console.error("Failed to send error log to API:", logApiError);
+        // Display alert to the user
+        window.alert(`Failed to report error to server: ${logApiError?.message || 'Unknown error'}`);
+      }
+
+      // --- Automatic Reload ---
+      // This runs regardless of whether logging succeeded or failed.
+      const timerId = setTimeout(() => {
+        console.log("Global Error: Attempting automatic full page reload...");
+        window.location.reload();
+      }, 3000); // 3000 milliseconds = 3 seconds
+
+      // Cleanup function to clear the timeout if the component unmounts
+      // before the timeout triggers (less likely in a global error boundary, but good practice)
+      return () => clearTimeout(timerId);
+    })();
+
+
+    // --- End Log Error to API & Reload Logic ---
+
+    /* 
+    NOTE: The original reload logic was moved inside the async IIFE 
+    to ensure it runs *after* the await logError() attempt (either success or failure).
+    The timeout cleanup needs to be handled carefully. Returning it from the IIFE
+    won't work directly with useEffect's cleanup. Let's adjust.
+    */
+
+    // --- Corrected Automatic Reload & Cleanup ---
+    let timerId: NodeJS.Timeout | null = null; 
+
+    const runAsyncOperations = async () => {
+      try {
+        await logError();
+        console.log("Error successfully logged to API.");
+      } catch (logApiError: any) {
+        console.error("Failed to send error log to API:", logApiError);
+        window.alert(`Failed to report error to server: ${logApiError?.message || 'Unknown error'}`);
+      } finally {
+        // Schedule the reload after attempting to log, regardless of success/failure
+        timerId = setTimeout(() => {
+          console.log("Global Error: Attempting automatic full page reload...");
+          window.location.reload();
+        }, 3000);
       }
     };
 
-    logError();
-    router.refresh();
-    // --- End Log Error to API ---
+    runAsyncOperations();
+
+    // Cleanup function for useEffect
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+    /* --- End Corrected Logic --- */
+
+
+    // Automatically attempt a full page reload after a short delay (e.g., 3 seconds) - OLD LOGIC REMOVED
+    const timerId = setTimeout(() => {
+      console.log("Global Error: Attempting automatic full page reload...");
+      window.location.reload();
 
   // We only want this effect to run once when the error occurs.
-  // Adding isLikelyAuthError to dependencies ensures it runs *after* that state is determined.
   // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [error, pathname]); // Add pathname to dependencies
 
