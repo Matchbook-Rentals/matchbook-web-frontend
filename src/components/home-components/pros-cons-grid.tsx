@@ -47,7 +47,7 @@ const defaultComparisons: ComparisonItem[] = [
 export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
   title = "MatchBook Makes Renting Easy",
   imageUrl = "/img/home-page/marketing-1.png",
-  competitorName = "Furnished Finders",
+  competitorName = "Furnished Finder",
   comparisons = defaultComparisons
 }) => {
   // SVG components for reuse
