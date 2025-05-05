@@ -1,20 +1,42 @@
-'use client' // Error components must be Client Components
+'use client';
 
+import { useEffect } from 'react';
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
+  useEffect(() => {
+    // Log the error to an error reporting service
+    console.error(error);
+  }, [error]);
 
-
-  // The component should return the content directly, without <html> or <body> tags.
-  // Next.js wraps this component in the necessary document structure.
   return (
-  <div>
-      YOU BROKE IT (This is a drastic interim step at fixing an issue please ignore and refresh)
-  </div>
-  )
+    <html>
+      <body>
+        <main style={{ textAlign: 'center', padding: '50px' }}>
+          <h1>Something went wrong!</h1>
+          <p>An unexpected error has occurred.</p>
+          {error.digest && (
+            <p>
+              Error ID: <code>{error.digest}</code>
+            </p>
+          )}
+          <button
+            onClick={() => reset()}
+            style={{
+              padding: '10px 20px',
+              marginTop: '20px',
+              cursor: 'pointer',
+            }}
+          >
+            Try again
+          </button>
+        </main>
+      </body>
+    </html>
+  );
 }
