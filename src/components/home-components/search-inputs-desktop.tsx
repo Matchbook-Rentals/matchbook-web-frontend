@@ -21,6 +21,7 @@ interface SearchInputsDesktopProps {
   searchIconColor?: string;
   popoverMaxWidth?: string;
   headerText?: string;
+  headerClassName?: string;
 }
 
 // Add this type definition
@@ -33,7 +34,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
   searchButtonClassNames,
   searchIconColor = 'text-white',
   popoverMaxWidth,
-  headerText
+  headerText,
+  headerClassName
 }) => {
   const [hasBeenSelected, setHasBeenSelected] = React.useState(false);
   const { isSignedIn } = useAuth();
@@ -218,7 +220,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
   return (
     <div ref={containerRef} className="relative">
-      {headerText && <h3 className="hidden text-xl font-semibold mb-3 text-green-800 text-center">{headerText}</h3>}
+      {headerText && <h3 className={cn("hidden text-xl font-semibold mb-3 text-green-800 text-center", headerClassName)}>{headerText}</h3>}
       <div
         className={cn('flex flex-row no-wrap px-3 py-2 items-center bg-background rounded-full shadow-md overflow-hidden', className)}
       >
@@ -331,5 +333,3 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 };
 
 export default SearchInputsDesktop;
-
-

@@ -11,6 +11,7 @@ import { createTrip } from "@/app/actions/trips";
 import { format } from "date-fns";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 import GuestTypeCounter from "./GuestTypeCounter";
+import { cn } from "@/lib/utils";
 
 interface Suggestion {
   place_id: string;
@@ -24,6 +25,7 @@ interface SearchInputsMobileProps {
   searchButtonClassNames?: string;
   searchIconColor?: string;
   headerText?: string;
+  headerClassName?: string;
 }
 
 const PRESET_CITIES = [
@@ -40,7 +42,8 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
   inputClassName,
   searchButtonClassNames,
   searchIconColor = 'text-white',
-  headerText
+  headerText,
+  headerClassName
 }) => {
   const [activeInput, setActiveInput] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -319,7 +322,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
         ease: "easeInOut"
       }}
     >
-      {headerText && <h3 className="text-xl font-semibold mb-3 text-green-800 block sm:hidden">{headerText}</h3>}
+      {headerText && <h3 className={cn("text-xl font-semibold mb-3 text-green-800 block sm:hidden", headerClassName)}>{headerText}</h3>}
       <div
         className={`${inputClasses} flex items-center`}
         onClick={() => handleInputClick(0)}

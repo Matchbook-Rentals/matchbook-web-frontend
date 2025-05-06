@@ -71,7 +71,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             minHeight: showSearch ? '80px' : '0px',
             marginBottom: showSearch ? '0px' : '20px',
           }}
-          className="transition-all duration-700">
+          className="transition-all hidden sm:block duration-700">
           {/* Desktop Search container - Conditionally rendered */}
           {showSearch && (
             <div className="flex justify-center mt-4 mb-4 md:mb-0 ">
@@ -80,7 +80,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
                   className="z-100 md:w-full px-0"
                   containerStyles='bg-background rounded-[15px]  drop-shadow-[0_0px_5px_rgba(0,_0,_0,_0.1)]'
                   inputStyles='bg-background'
-                  searchButtonClassNames='bg-green-900 hover:bg-green800 md:bg-background md:hover:bg-gray-200'
+                  searchButtonClassNames='bg-green-900 hover:bg-green800 sm:bg-background sm:hover:bg-gray-200'
                   searchIconColor='text-[#404040]'
                   popoverMaxWidth='900px'
                   headerText='Find your next home'
@@ -122,6 +122,7 @@ const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
             searchIconColor='text-white' // Mobile specific icon color
             popoverMaxWidth='90vw' // Adjust popover width for mobile
             headerText='Find your next home'
+            headerClassName='text-blueBrand'
             hasAccess
           />
         </DialogContent>

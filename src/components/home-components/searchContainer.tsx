@@ -12,6 +12,7 @@ interface SearchContainerProps {
   searchIconColor?: string;
   popoverMaxWidth?: string;
   headerText?: string;
+  headerClassName?: string;
 }
 
 const SearchContainer: React.FC<SearchContainerProps> = ({
@@ -22,6 +23,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
   searchIconColor,
   popoverMaxWidth,
   headerText,
+  headerClassName,
   hasAccess // Destructure hasAccess prop
 }) => {
   return (
@@ -36,6 +38,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
             searchIconColor={searchIconColor}
             popoverMaxWidth={popoverMaxWidth}
             headerText={headerText}
+            headerClassName={headerClassName}
           />
         </div>
       </div>
@@ -48,6 +51,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
             searchButtonClassNames={searchButtonClassNames}
             searchIconColor={searchIconColor}
             headerText={headerText}
+            headerClassName={headerClassName}
           />
         </div>
       </div>
