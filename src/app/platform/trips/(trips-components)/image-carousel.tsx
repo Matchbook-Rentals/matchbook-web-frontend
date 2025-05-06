@@ -40,10 +40,6 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
 
     api.on("select", handleSelect);
 
-    // Set initial loading state based on first image
-    setIsMainImageLoaded(false);
-
-
     return () => {
       api.off("select", handleSelect);
     };
