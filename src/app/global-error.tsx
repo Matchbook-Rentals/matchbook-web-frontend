@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 export default function GlobalError({
   error,
   reset,
@@ -7,13 +9,23 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    if (countdown <= 0) {
+      window.location.reload();
+      return;
+    }
+    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   return (
     <html>
       <body>
         <main style={{ textAlign: 'center', padding: '50px' }}>
           <h1>Something went wrong!</h1>
-          <p>An unexpected error has occurred. (3)</p>
+          <p>An unexpected error has occurred. (4)</p>
           {error.digest && (
             <p>
               Error ID: <code>{error.digest}</code>
@@ -30,7 +42,7 @@ export default function GlobalError({
           >
             Try again
           </button>
-
+          <p style={{ marginTop: '10px' }}>Auto-refreshing in {countdown} seconds...</p>
           <p> {error.digest} </p>
         </main>
       </body>
