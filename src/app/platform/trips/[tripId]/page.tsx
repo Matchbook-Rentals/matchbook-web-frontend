@@ -139,7 +139,7 @@ const TripsPage: React.FC = () => {
       {/* Conditionally render based on local activeTab state */}
       <div className='flex justify-end items-center sm:justify-start'>
         {isMobile && (
-          <div className='flex gap-x-4 items-center'>
+          <div className='flex gap-x-4 pt-2 items-center'>
             {['recommended', 'allListings'].includes(activeTab) && (
               <FilterOptionsDialog
                 isOpen={isFilterOpen}
@@ -183,7 +183,7 @@ const TripsPage: React.FC = () => {
           useUrlParams={false} // Disable internal URL handling as parent manages it
           className='mx-auto w-full'
           tabsClassName='w-full mx-auto pb-0'
-          tabsListClassName='w-full p-0  max-w-[100vw] '
+          tabsListClassName='w-full p-0 max-w-[100vw] '
 
         />
       )}
