@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import SearchEditBar from '@/components/home-components/search-edit-bar';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -220,7 +221,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
               <DialogContent
                 className={cn(
                   "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
-                  "md:top-[25vh] h-fit max-h-[89vh] overflow-y-scroll md:overflow-y-visible" // Default center on mobile, 25vh top on md+
+                  "md:top-[25vh] h-fit md:h-[200px] max-h-[89vh] overflow-y-auto  md:overflow-y-visible" // Default center on mobile, 25vh top on md+
                 )}
                 xOnRight={true}
               >

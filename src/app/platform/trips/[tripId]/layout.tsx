@@ -1,6 +1,7 @@
 import React from 'react'
 import { TripContextProvider } from '@/contexts/trip-context-provider';
 import LoadingTabs from './LoadingTabs';
+import DynamicFallback from './DynamicFallback';
 import { pullListingsFromDb } from '@/app/actions/listings';
 import { getTripById } from '@/app/actions/trips';
 import { getUserApplication } from '@/app/actions/applications';
@@ -63,7 +64,7 @@ export default function TripLayout({
   params: { tripId: string }
 }) {
   return (
-    <React.Suspense fallback={<LoadingTabs />}>
+    <React.Suspense fallback={<DynamicFallback />}>
       <TripDataWrapper params={params}>
         {children}
       </TripDataWrapper>

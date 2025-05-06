@@ -48,7 +48,7 @@ export default function SearchListingPage({ params }: ListingPageProps) {
   }
 
   return (
-      <div className={`${PAGE_MARGIN}`}>
+      <div className={`${PAGE_MARGIN} pt-2 md:pt-6`}>
         <SearchListingDetailsView listingId={params.listingId} />
       </div>
   )
