@@ -15,7 +15,7 @@ This document outlines the steps to refactor the `src/app/platform/messages/mess
     -   Outputs: `isConnected`, `circuitOpen`, `sendMessage`, `sendTyping`, `sendReadReceipt`, `retryConnection`.
     -   Callbacks as props: `onMessageReceived`, `onTypingReceived`, `onReadReceiptReceived`, `onConnectionStatusChange`.
 -   [x] Ensure all tests in `src/hooks/useWebSocketManager.test.ts` pass.
--   [ ] Update `MessageInterface.tsx` to use this hook, removing the extracted logic.
+-   [x] Update `MessageInterface.tsx` to use this hook, removing the extracted logic.
 
 ## Phase 2: Integration Testing for WebSocket Connection
 

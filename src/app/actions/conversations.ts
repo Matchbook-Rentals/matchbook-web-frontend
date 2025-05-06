@@ -53,7 +53,12 @@ export async function createConversation(
       isGroup: false,
     },
     include: {
-      participants: true
+      participants: true,
+      listing: {
+        select: {
+          title: true
+        }
+      },
     }
   });
 
@@ -82,7 +87,12 @@ export async function createConversation(
         include: {
           User: true
         }
-      }
+      },
+      listing: {
+        select: {
+          title: true
+        }
+      },
     }
   });
 
@@ -106,7 +116,12 @@ export async function getConversation(id: string) {
         include: {
           User: true
         }
-      }
+      },
+      listing: {
+        select: {
+          title: true
+        }
+      },
     },
   });
 }
@@ -291,7 +306,12 @@ export async function getAllConversations() {
             }
           }
         }
-      }
+      },
+      listing: {
+        select: {
+          title: true
+        }
+      },
     },
     orderBy: {
       updatedAt: 'desc',
@@ -385,7 +405,12 @@ export async function getRecentConversationsWithMessages(limit: number = 15) {
             }
           }
         }
-      }
+      },
+      listing: {
+        select: {
+          title: true
+        }
+      },
     },
     orderBy: {
       updatedAt: 'desc', // Most recent conversations first
