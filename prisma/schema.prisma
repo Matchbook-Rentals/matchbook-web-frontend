@@ -136,7 +136,7 @@ model Listing {
   lastDecisionComment    String?        @db.Text
   status                 String         @default("available")
   title                  String
-description String @db.VarChar(1500)
+  description            String         @db.VarChar(1500)
   imageSrc               String?
   category               String?
   roomCount              Int
@@ -502,29 +502,44 @@ model Notification {
 }
 
 model Message {
-  id             String   @id @default(cuid())
-  content        String?  @db.Text
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  senderId       String
-  conversationId String
-  isRead         Boolean  @default(false)
-  readAt         DateTime?
-  notifcaitonId  String?
-  notificaitonSentAt         DateTime?
-  imgUrl         String?
-  fileName       String?
-  fileKey        String?
-  fileType       String?
-  metadata       String?  @db.Text // Store JSON metadata like clientId, delivery status, etc.
+  id                 String   @id @default(cuid())
+  content            String?  @db.Text
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  senderId           String
+  conversationId     String
+  imgUrl             String?
+  fileName           String?
+  fileType           String?
+  fileSize           Int?
+  fileKey            String?
+  isRead             Boolean  @default(false)
+  readAt             DateTime?
+  notificationId     String? // Corrected typo
+  notificationSentAt DateTime? // Corrected typo
+  metadata           String?  @db.Text // Store JSON metadata like clientId, delivery status, etc.
+
+  attachments  Attachment[] // New field for multiple attachments
 
   sender       User          @relation("MessageSender", fields: [senderId], references: [id])
   conversation Conversation  @relation(fields: [conversationId], references: [id])
   readBy       MessageRead[]
+}
 
-  @@index([isRead, notificaitonSentAt, createdAt])
-  @@index([senderId])
-  @@index([conversationId])
+model Attachment {
+  id        String   @id @default(cuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  url       String   // URL to access the file
+  fileName  String   // Original name of the file
+  fileKey   String?  // Key for S3 or other storage
+  fileType  String   // MIME type
+  fileSize  Int?     // Size in bytes
+
+  createdAt DateTime @default(now())
+
+  @@index([messageId])
 }
 
 model Conversation {
