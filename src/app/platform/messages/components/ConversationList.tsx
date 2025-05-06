@@ -131,7 +131,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
 
   return (
-    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[450px] flex-col overflow-hidden">
+    <div className="h-[calc(100vh-theme(spacing.16))] bg-background flex border-r-2 p-1 pr-2 pt-4 pb-16 pl-[2.5vw] md:pr-[5vw] lg:pr-[2.5vw] min-w-[310px] w-full md:max-w-[450px] flex-col overflow-hidden">
       {/* Checkbox styling to ensure black fill when checked */}
       <style jsx>{`
         input[type="checkbox"]:checked {
@@ -149,7 +149,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="flex items-center space-x-4">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-              <Button className="bg-black text-white border-black rounded-full py-1 px-3 flex items-center gap-2">
+              <Button className="bg-black text-white border-black rouned-lg md:rounded-full py-1 px-3 flex items-center gap-2">
                 {activeTab === 'all' ? 'All' : activeTab}
                 <ChevronDown className="h-4 w-4" />
               </Button>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, ArrowLeftIcon, X, Download } from 'lucide-react';
+import { PaperclipIcon, ArrowLeftIcon, X, Download, File } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { FileObject, FilePreview } from '@/components/ui/file-preview';
@@ -178,7 +178,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     // Download functionality is handled separately by the FilePreview component itself if needed.
   };
 
-  const renderFileAttachment = (url: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
+  const renderFileAttachment = (url: string, fileName: string = 'attachment', fileKey?: string, fileType?: string, isGridItem?: boolean) => {
     const fileObject = {
       url,
       fileName,
@@ -187,31 +187,70 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
 
     if (isImageFile(fileName)) {
+      if (isGridItem) {
+        return (
+          <Image
+            src={url}
+            alt="Message Attachment"
+            layout="fill"
+            objectFit="cover"
+            className="cursor-pointer"
+            onClick={() => handleFileClick(fileObject)}
+          />
+        );
+      } else {
+        return (
+          <Image
+            src={url}
+            alt="Message Attachment"
+            width={250}
+            height={250}
+            className="rounded cursor-pointer"
+            onClick={() => handleFileClick(fileObject)}
+          />
+        );
+      }
+    }
+
+    // For non-image files:
+    if (isGridItem) {
+      // Custom compact rendering for non-image files in a grid
       return (
-        <Image
-          src={url}
-          alt="Message Attachment"
-          width={250}
-          height={250}
-          className="rounded cursor-pointer"
+        <div
+          className=" flex h-full flex-col items-center border justify-center px-2  rounded cursor-pointer"
+          onClick={() => handleFileClick(fileObject)}
+          title={fileName} // Show full filename on hover
+        >
+          <File className="" />
+          <p className="text-sm  truncate w-full text-center mt-2">
+            {fileName}
+          </p>
+          <button
+            className="mt-4 flex space-x-2 border p-2 hover:underline items-center" // Add margin top for spacing
+            onClick={() => downloadFile(fileObject.url, fileObject.fileName || 'image')}
+          >
+            <Download size={14} className="mr-2" />
+            Download
+          </button>
+
+        </div>
+      );
+    } else {
+      // Default rendering for non-image files not in a grid
+      return (
+        <FilePreview
+          file={{
+            url,
+            fileKey: fileKey || url,
+            fileName,
+            fileType
+          }}
+          previewSize="small"
+          allowPreview={false}
           onClick={() => handleFileClick(fileObject)}
         />
       );
     }
-
-    return (
-      <FilePreview
-        file={{
-          url,
-          fileKey: fileKey || url,
-          fileName,
-          fileType
-        }}
-        previewSize="small"
-        allowPreview={false}
-        onClick={() => handleFileClick(fileObject)}
-      />
-    );
   };
 
   const getParticipantInfo = () => {
@@ -363,7 +402,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
       const bubbleStyles = isCurrentUserGroup
         ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
-        : 'bg-gray-100 text-black pr-5 pl-5 rounded-bl-none font-normal border-gray-200';
+        : 'bg-gray-100 text-black pr-5 pl-5 rounded-bl-none text-wrap font-normal border-gray-200';
 
       return (
         <div key={`group-${groupIndex}`} className="mb-3 pr-1 md:pr-3">
@@ -378,7 +417,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 {/* Removed spacer div */}
               </div>
             )}
-            <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
+            <div className={`max-w-[70%] text-black text-wrap rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
               {group.map((message, messageIndex) => {
                 // Determine if there's text content
                 const hasTextContent = message.content && message.content.trim().length > 0;
@@ -396,21 +435,38 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                   >
                     {/* Render text content if it exists */}
                     {hasTextContent && (
-                      <p className="whitespace-pre-wrap break-words px-0 py-0">
+                      <p className="whitespace-pre-wrap break-words text-wrap px-0 py-0">
                         {message.content}
                       </p>
                     )}
 
                     {/* Render attachments if they exist */}
                     {hasAttachments && (
-                      <div className={`mt-${hasTextContent ? '2' : '0'} flex flex-col space-y-2`}>
-                        {(message.attachments as MessageFile[]).map((attachment, attIndex) => (
-                          <div key={`${message.id}-att-${attIndex}`} className="max-w-xs mx-auto">
-                            {/* Use the existing renderFileAttachment function */}
-                            {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType)}
+                      (() => {
+                        const attachments = message.attachments as MessageFile[];
+                        const numAttachments = attachments.length;
+                        const isMultipleAttachments = numAttachments > 1;
+
+                        const attachmentContainerClasses = isMultipleAttachments
+                          ? `grid grid-cols-2 gap-1 mt-${hasTextContent ? '2' : '0'}`
+                          : `mt-${hasTextContent ? '2' : '0'}`;
+
+                        return (
+                          <div className={attachmentContainerClasses}>
+                            {attachments.map((attachment, attIndex) => {
+                              const itemWrapperClasses = isMultipleAttachments
+                                ? "aspect-square h-[150px] relative overflow-hidden rounded"
+                                : "max-w-xs mx-auto"; 
+
+                              return (
+                                <div key={`${message.id}-att-${attIndex}`} className={itemWrapperClasses}>
+                                  {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, isMultipleAttachments)}
+                                </div>
+                              );
+                            })}
                           </div>
-                        ))}
-                      </div>
+                        );
+                      })()
                     )}
                   </div>
                 );
@@ -490,7 +546,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   };
 
-  const messageContainerClassName = `flex flex-col  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col box-border  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     <div className={messageContainerClassName}>
