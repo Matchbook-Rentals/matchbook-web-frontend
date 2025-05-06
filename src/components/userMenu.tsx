@@ -253,17 +253,17 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
             )}
           </PopoverTrigger>
           <PopoverContent  className="p-0">
-            <div className="w-80 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
+            <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="border-b border-gray-200">
                 <div className="px-4 py-3">
                   <h3 className="text-md font-medium">Notifications</h3>
                 </div>
               </div>
-              <div className="max-h-80 overflow-y-auto">
+              <div className="max-h-80 overflow-y-auto overflow-x-hidden ">
                 {notifications.length > 0 ? (
                   <div className="flex flex-col">
                     {notifications.map((notification) => (
-                      <div key={notification.id} className="border-b border-gray-100 last:border-b-0">
+                      <div key={notification.id} className="border-b w-full border-gray-100 last:border-b-0">
                         <NotificationItem
                           notification={notification}
                           onClick={handleNotificationClick}

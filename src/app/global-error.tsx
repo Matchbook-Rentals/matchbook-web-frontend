@@ -9,14 +9,14 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(1);
 
   useEffect(() => {
     if (countdown <= 0) {
       window.location.reload();
       return;
     }
-    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    const timer = setTimeout(() => setCountdown(countdown - 1), 100);
     return () => clearTimeout(timer);
   }, [countdown]);
 
@@ -25,7 +25,7 @@ export default function GlobalError({
       <body>
         <main style={{ textAlign: 'center', padding: '50px' }}>
           <h1>Something went wrong!</h1>
-          <p>An unexpected error has occurred. (4)</p>
+          <p>An unexpected error has occurred. (5)</p>
           {error.digest && (
             <p>
               Error ID: <code>{error.digest}</code>

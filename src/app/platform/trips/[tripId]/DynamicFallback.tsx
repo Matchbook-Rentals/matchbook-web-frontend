@@ -12,7 +12,7 @@ const DynamicFallback: React.FC = () => {
   // Customize fallback based on URL or query params
   if (pathname.includes('/listing/')) {
     // Show a simple skeleton for listings
-    return <div className={`${PAGE_MARGIN} flex justify-center items-center`}><LoadingSkeleton /></div>;
+    return <div className={`${PAGE_MARGIN} pt-6 flex justify-center items-center`}><LoadingSkeleton /></div>;
   }
   // Default fallback
   return <LoadingTabs />;
