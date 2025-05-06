@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 export default function GlobalError({
   error,
   reset,
@@ -9,18 +7,13 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
-    setTimeout(reset, 3000);
-  }, [error]);
 
   return (
     <html>
       <body>
         <main style={{ textAlign: 'center', padding: '50px' }}>
           <h1>Something went wrong!</h1>
-          <p>An unexpected error has occurred. (2)</p>
+          <p>An unexpected error has occurred. (3)</p>
           {error.digest && (
             <p>
               Error ID: <code>{error.digest}</code>
@@ -28,7 +21,7 @@ export default function GlobalError({
           )}
           <button
             onClick={() => window.location.reload()}
-            className='border-1'
+            className='border border-black'
             style={{
               padding: '10px 20px',
               marginTop: '20px',
@@ -37,6 +30,8 @@ export default function GlobalError({
           >
             Try again
           </button>
+
+          <p> {error.digest} </p>
         </main>
       </body>
     </html>
