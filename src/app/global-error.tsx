@@ -12,6 +12,7 @@ export default function GlobalError({
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
+    setTimeout(reset, 3000);
   }, [error]);
 
   return (
@@ -19,7 +20,7 @@ export default function GlobalError({
       <body>
         <main style={{ textAlign: 'center', padding: '50px' }}>
           <h1>Something went wrong!</h1>
-          <p>An unexpected error has occurred.</p>
+          <p>An unexpected error has occurred. (2)</p>
           {error.digest && (
             <p>
               Error ID: <code>{error.digest}</code>
