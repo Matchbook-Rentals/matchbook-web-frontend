@@ -935,7 +935,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           />
         </div>
       </div>
-      {/* 
       <div
         className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${isConnected ? 'bg-green-500' : (connectionAttempts >= 3) ? 'bg-yellow-500' : 'bg-red-500'
           } text-white`}
@@ -963,7 +962,6 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           </button>
         )}
       </div>
- */}
       {isAdmin && <AdminTools onDeleteAll={handleDeleteAllConversations} />}
     </div>
   );
