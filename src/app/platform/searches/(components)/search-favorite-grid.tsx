@@ -194,7 +194,7 @@ const SearchFavoriteGrid: React.FC<SearchFavoriteGridProps> = ({
           {/* Make ScrollArea grow */}
           <ScrollArea
             ref={scrollAreaRef}
-            className={`flex-grow w-[103%] sm:w-full mx-auto rounded-md md:pb-12 pr-3`} // Match styling from SearchListingsGrid
+            className={`flex-grow w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-12 pr-3`} // Match styling from SearchListingsGrid
             // Remove explicit height style, let flexbox handle it
           >
             <div

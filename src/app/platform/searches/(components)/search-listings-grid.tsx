@@ -254,7 +254,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
           {/* Make ScrollArea grow */}
           <ScrollArea
             ref={scrollAreaRef}
-            className={`flex-grow w-[103%] sm:w-full h-${height}px mx-auto rounded-md md:pb-2 pr-3`}
+            className={`flex-grow w-[103%] sm:w-full h-${height}px mx-auto rounded-md pb-16 md:pb-2 pr-3`}
             // Remove explicit height style, let flexbox handle it
           >
             <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
