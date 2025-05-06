@@ -264,8 +264,7 @@ description String @db.VarChar(1500)
   boldSignTemplateId String?
   unavailablePeriods ListingUnavailability[]
   Maybe              Maybe[]
-
-
+  conversations      Conversation[]          @relation("ConversationToListing")
   @@index([state])
 }
 
@@ -535,7 +534,7 @@ model Conversation {
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
   listingId    String?
-  listing      Listing?   @relation(fields: [listingId], references: [id])
+  listing      Listing?   @relation("ConversationToListing", fields: [listingId], references: [id])
   messages     Message[]
   participants ConversationParticipant[]
 }
