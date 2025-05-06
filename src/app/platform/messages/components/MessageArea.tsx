@@ -13,7 +13,7 @@ import { UserRating } from '@/components/reviews/host-review';
 interface MessageAreaProps {
   selectedConversation: any;
   messages: any[];
-  onSendMessage: (message: string, file?: { url?: string; name?: string; key?: string; type?: string }) => void;
+  onSendMessage: (message: string, attachments?: MessageFile[]) => void;
   currentUserId: string | undefined;
   currentUserImage?: string | null;
   onBack?: () => void;
@@ -22,10 +22,11 @@ interface MessageAreaProps {
 }
 
 interface MessageFile {
-  fileUrl: string;
+  url: string;
   fileName?: string;
   fileKey?: string;
   fileType?: string;
+  fileSize?: number;
 }
 
 interface UploadData {
@@ -34,7 +35,7 @@ interface UploadData {
   key: string;
   serverData: {
     uploadedBy: string;
-    fileUrl: string;
+    url: string;
   };
   url: string;
   customId: string | null;
@@ -136,20 +137,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
     if (!hasContent) return;
 
+    const messageContent = newMessageInput.trim();
+
     if (messageAttachments.length > 0) {
-      const attachment = messageAttachments[0];
-      const messageContent = newMessageInput.trim() || "";
-      onSendMessage(
-        messageContent,
-        {
-          url: attachment.fileUrl,
-          name: attachment.fileName,
-          key: attachment.fileKey,
-          type: attachment.fileType
-        }
-      );
+      onSendMessage(messageContent, messageAttachments);
     } else {
-      onSendMessage(newMessageInput);
+      onSendMessage(messageContent);
     }
 
     setNewMessageInput('');
@@ -166,10 +159,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const handleUploadFinish = (res: UploadData[]) => {
     console.log('=== UPLOAD FINISH ===', res);
     const attachments = res.map(r => ({
-      fileUrl: r.url,
+      url: r.url,
       fileName: r.name,
       fileKey: r.key,
-      fileType: r.type
+      fileType: r.type,
+      fileSize: r.size
     }));
     console.log('Setting message attachments:', attachments);
     setMessageAttachments(prev => [...prev, ...attachments]);
@@ -184,9 +178,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     // Download functionality is handled separately by the FilePreview component itself if needed.
   };
 
-  const renderFileAttachment = (fileUrl: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
+  const renderFileAttachment = (url: string, fileName: string = 'attachment', fileKey?: string, fileType?: string) => {
     const fileObject = {
-      fileUrl,
+      url,
       fileName,
       fileKey,
       fileType
@@ -195,7 +189,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     if (isImageFile(fileName)) {
       return (
         <Image
-          src={fileUrl}
+          src={url}
           alt="Message Attachment"
           width={250}
           height={250}
@@ -208,8 +202,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     return (
       <FilePreview
         file={{
-          fileUrl,
-          fileKey: fileKey || fileUrl,
+          url,
+          fileKey: fileKey || url,
           fileName,
           fileType
         }}
@@ -320,7 +314,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         // If the message is still pending (sending)
         if (lastMessage.pending) {
           return <span className="text-xs text-gray-400">Sending...</span>;
-        } // <-- Added missing closing brace
+        } 
         // If the message failed to send
         if (lastMessage.failed) {
           return <span className="text-xs text-red-500">Failed to send</span>;
@@ -386,51 +380,37 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             )}
             <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
               {group.map((message, messageIndex) => {
-                const isImageOnlyMessage = message.imgUrl && isImageFile(message.fileName || '') && !message.content;
-                const messageFile = {
-                  fileUrl: message.imgUrl,
-                  fileName: message.fileName || 'attachment',
-                  fileKey: message.fileKey,
-                  fileType: message.fileType
-                };
+                // Determine if there's text content
+                const hasTextContent = message.content && message.content.trim().length > 0;
+                // Determine if there are attachments
+                const hasAttachments = message.attachments && message.attachments.length > 0;
+
                 const addMarginTop = messageIndex > 0; // Add margin only if not the first message in the group
+                // Base padding, can be adjusted if there's no text and only attachments
+                const bubblePadding = hasTextContent ? 'px-0 py-0' : (hasAttachments ? 'p-1' : 'px-0 py-0'); // Add some padding if only attachments
 
                 return (
-                  <div key={message.id || `msg-${messageIndex}`} className={` ${addMarginTop ? ' pt-1.5 border-gray-500/30' : ''} ${isImageOnlyMessage ? '' : 'px-0 py-0'}`}> {/* Add top margin/border for subsequent messages */}
-                    {isImageOnlyMessage ? (
-                      // Image-only message (no extra padding needed inside bubble)
-                      <div className="mt-0"> {/* Adjust margin if needed */}
-                        <Image
-                          src={message.imgUrl}
-                          alt="Message Attachment"
-                          width={375}
-                          height={375}
-                          className="cursor-pointer rounded-lg" // Keep rounded corners if desired
-                          onClick={() => handleFileClick(messageFile)}
-                        />
+                  <div 
+                    key={message.id || `msg-${messageIndex}`}
+                    className={` ${addMarginTop ? ' pt-1.5 border-gray-500/30' : ''} ${bubblePadding}`}
+                  >
+                    {/* Render text content if it exists */}
+                    {hasTextContent && (
+                      <p className="whitespace-pre-wrap break-words px-0 py-0">
+                        {message.content}
+                      </p>
+                    )}
+
+                    {/* Render attachments if they exist */}
+                    {hasAttachments && (
+                      <div className={`mt-${hasTextContent ? '2' : '0'} flex flex-col space-y-2`}>
+                        {(message.attachments as MessageFile[]).map((attachment, attIndex) => (
+                          <div key={`${message.id}-att-${attIndex}`} className="max-w-xs mx-auto">
+                            {/* Use the existing renderFileAttachment function */}
+                            {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType)}
+                          </div>
+                        ))}
                       </div>
-                    ) : (
-                      // Message content (text and/or attachment)
-                      <>
-                        {message.imgUrl && (
-                          <div className={message.content ? "mb-2" : ""}>
-                            {renderFileAttachment(
-                              message.imgUrl,
-                              message.fileName || 'attachment',
-                              message.fileKey,
-                              message.fileType
-                            )}
-                          </div>
-                        )}
-                        {message.content && (
-                          <div
-                            className="break-words break-all whitespace-pre-wrap max-w-full overflow-hidden text-wrap font-jakarta"
-                            style={{ wordBreak: 'break-word', fontFamily: 'Poppins, sans-serif' }}
-                          >
-                            {message.content}
-                          </div>
-                        )}
-                      </>
                     )}
                   </div>
                 );
@@ -450,12 +430,25 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     });
   };
 
+  const downloadFile = (url: string, fileName: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    // Optional: Revoke object URL if it was created via URL.createObjectURL()
+    // if (url.startsWith('blob:')) {
+    //   URL.revokeObjectURL(url);
+    // }
+  };
+
   const renderFullSizeFile = () => {
     if (!selectedFile) return null;
 
     const fileObject = {
-      fileUrl: selectedFile.fileUrl,
-      fileKey: selectedFile.fileKey || selectedFile.fileUrl,
+      url: selectedFile.url,
+      fileKey: selectedFile.fileKey || selectedFile.url,
       fileName: selectedFile.fileName || 'attachment',
       fileType: selectedFile.fileType,
     };
@@ -464,7 +457,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       return (
         <div className="flex flex-col items-center">
           <Image
-            src={selectedFile.fileUrl}
+            src={selectedFile.url}
             alt="Enlarged Image"
             width={800}
             height={800}
@@ -472,10 +465,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
             priority
           />
           <Button
-            variant=""
+            variant="outline"
             size="sm"
             className="mt-4" // Add margin top for spacing
-            onClick={() => downloadFile(selectedFile.fileUrl, selectedFile.fileName || 'image')}
+            onClick={() => downloadFile(selectedFile.url, selectedFile.fileName || 'image')}
           >
             <Download size={14} className="mr-2" />
             Download
@@ -597,8 +590,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
             const isImage = isImageFile(attachment.fileName || '');
             const fileObject = {
-              fileUrl: attachment.fileUrl,
-              fileKey: attachment.fileKey || attachment.fileUrl,
+              url: attachment.url,
+              fileKey: attachment.fileKey || attachment.url,
               fileName: attachment.fileName || 'attachment',
               fileType: attachment.fileType
             };
@@ -614,7 +607,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                       <X size={14} />
                     </button>
                     <Image
-                      src={attachment.fileUrl}
+                      src={attachment.url}
                       alt="Message Attachment"
                       width={375}
                       height={375}

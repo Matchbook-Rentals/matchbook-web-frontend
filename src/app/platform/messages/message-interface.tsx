@@ -34,6 +34,16 @@ interface ExtendedConversation {
 // However, it's generally better to have a single source of truth for such types.
 // For this exercise, I'll keep the local MessageData and assume it's what the component internally works with.
 // The hook's MessageData is for what it sends/receives.
+
+// Define AttachmentData for clarity, similar to MessageFile in MessageArea
+interface AttachmentData {
+  url: string; // url from uploadthing
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
+  fileSize?: number;
+}
+
 interface MessageData {
   content: string;
   senderRole: 'Host' | 'Tenant';
@@ -42,22 +52,16 @@ interface MessageData {
   senderId?: string;
   id?: string;
   clientId?: string; // Added clientId for tracking pending messages
-  type?: string;
-  imgUrl?: string;
-  fileName?: string;
-  fileKey?: string;
-  fileType?: string;
+  type?: 'message' | 'file' | 'typing' | 'read_receipt'; // Expanded type
+  attachments?: AttachmentData[]; // Added for multiple attachments
   isTyping?: boolean;
   timestamp?: string;
   messageIds?: string[];
-  createdAt?: string;
-  updatedAt?: string;
-  deliveryStatus?: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
-  deliveredAt?: string;
-  // Fields that might come from HookMessageData if different:
   confirmedDeliveryAt?: string;
   pending?: boolean;
   failed?: boolean;
+  deliveredAt?: string;
+  deliveryStatus?: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
 }
 
 /**
@@ -168,10 +172,7 @@ const updateMessagesReadTimestamp = (
       }
       : conv
   );
-
-
 };
-
 
 /**
  * Utility function to filter conversations by role
@@ -193,7 +194,7 @@ const filterConversationsByRole = (
  */
 const createOptimisticMessage = (
   content: string,
-  file: { url?: string; name?: string; key?: string; type?: string } | undefined,
+  attachments: AttachmentData[] | undefined, // Changed from single file to array
   conversationId: string,
   senderId: string,
   messageId: string // Use the generated messageId
@@ -205,15 +206,9 @@ const createOptimisticMessage = (
   createdAt: new Date().toISOString(),
   isRead: false,
   pending: true,
-  // clientId, // Remove clientId
   deliveryStatus: 'sending',
-  ...(file?.url && {
-    imgUrl: file.url,
-    fileName: file.name,
-    fileKey: file.key,
-    fileType: file.type,
-    type: 'file',
-  }),
+  type: attachments && attachments.length > 0 ? 'file' : 'message',
+  attachments: attachments, // Add attachments array
 });
 
 /**
@@ -283,6 +278,12 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     if (!user) return;
     const currentSelectedId = selectedConversationIdRef.current;
 
+
+    if (message.type !== 'typing') {
+      console.log('TYPE', message.type)
+      console.log("RECIEVED", message);
+    }
+
     // Logic for message delivery confirmation (echoed back from server)
     if (message.id && message.senderId === user?.id && message.confirmedDeliveryAt) {
       setAllConversations((prev) =>
@@ -339,7 +340,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         return newState;
       });
     }
-  }, [user, /* webSocketManager.sendReadReceipt, webSocketManager.isConnected */ ]); // Dependencies will be updated by ESLint or manually after defining webSocketManager
+  }, [user, /* webSocketManager.sendReadReceipt, webSocketManager.isConnected */]); // Dependencies will be updated by ESLint or manually after defining webSocketManager
 
   // Callback for handling typing indicators from the WebSocket hook
   const onTypingReceivedHandler = useCallback((typingData: HookMessageData) => {
@@ -354,7 +355,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       updateMessagesReadTimestamp(prev, receiptData.conversationId, receiptData.messageIds!, receiptData.timestamp!)
     );
   }, [user]);
-  
+
   const onConnectionStatusChangeHandler = useCallback((status: { isConnected: boolean; circuitOpen: boolean }) => {
     console.log('[MessageInterface] Connection Status Changed:', status);
     // You can update local state here if needed, e.g., for more complex UI based on connection status
@@ -494,7 +495,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
   const handleSendMessage = async (
     content: string,
-    file?: { url?: string; name?: string; key?: string; type?: string }
+    attachments?: AttachmentData[] // Changed from single file to array, matching MessageArea.tsx
   ) => {
     if (!user || !selectedConversationId) return;
 
@@ -506,7 +507,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
     sendTypingStatus(false); // Call local sendTypingStatus which uses the hook
     const messageId = `message_${uuidv4()}`;
-    
+
     // Ensure messageData conforms to HookMessageData for sending via hook
     const messageData: HookMessageData = {
       id: messageId,
@@ -516,13 +517,13 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       senderId: user.id,
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
       timestamp: new Date().toISOString(),
-      type: file?.url ? 'file' : 'message',
-      ...(file?.url && { imgUrl: file.url, fileName: file.name, fileKey: file.key, fileType: file.type }),
+      type: attachments && attachments.length > 0 ? 'file' : 'message',
+      attachments: attachments, // Pass the array of attachments
       deliveryStatus: 'sending', // Optimistic status
       pending: true,
     };
 
-    const optimisticMessage = createOptimisticMessage(content, file, selectedConversationId, user.id, messageId);
+    const optimisticMessage = createOptimisticMessage(content, attachments, selectedConversationId, user.id, messageId);
     setAllConversations((prev) => addMessageToConversation(prev, selectedConversationId, optimisticMessage));
 
     try {
@@ -576,9 +577,9 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
     const newConvData = await createConversation(email, 'Host', 'Tenant');
     // Ensure newConvData structure matches ExtendedConversation, especially messages and participants
     const newConv: ExtendedConversation = {
-        id: newConvData.id,
-        messages: newConvData.messages || [], // Ensure messages is an array
-        participants: newConvData.participants || [], // Ensure participants is an array
+      id: newConvData.id,
+      messages: newConvData.messages || [], // Ensure messages is an array
+      participants: newConvData.participants || [], // Ensure participants is an array
     };
     setAllConversations((prev) => [...prev, newConv]);
   };
@@ -643,11 +644,10 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
         </div>
       </div>
       <div
-        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${
-          webSocketManager.isConnected ? 'bg-green-500' 
-          : webSocketManager.circuitOpen ? 'bg-orange-500' // Circuit open, might be retrying later
-          : 'bg-red-500' // Disconnected, not circuit open
-        } text-white`}
+        className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${webSocketManager.isConnected ? 'bg-green-500'
+            : webSocketManager.circuitOpen ? 'bg-orange-500' // Circuit open, might be retrying later
+              : 'bg-red-500' // Disconnected, not circuit open
+          } text-white`}
       >
         {webSocketManager.isConnected ? (
           'Connected'

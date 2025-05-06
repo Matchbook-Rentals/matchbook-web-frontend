@@ -5,6 +5,15 @@ import prisma from '@/lib/prismadb';
 
 export const dynamic = 'force-dynamic'; // This ensures the route is always dynamically rendered
 
+// Interface for incoming attachment data from the client
+interface AttachmentDataClient {
+  url: string;
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
+  fileSize?: number;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Parse the incoming message
@@ -34,10 +43,7 @@ export async function POST(request: NextRequest) {
       senderId,
       content,
       senderRole,
-      imgUrl,
-      fileName,
-      fileKey,
-      fileType,
+      attachments, // New field for multiple attachments
       createdAt, // Timestamp from the server
       updatedAt
       // clientId // We no longer use clientId
@@ -59,10 +65,17 @@ export async function POST(request: NextRequest) {
           conversationId,
           senderId,
           content: content || '', // Ensure content is at least an empty string
-          imgUrl,
-          fileName,
-          fileKey,
-          fileType,
+          attachments: attachments && (attachments as AttachmentDataClient[]).length > 0 ? {
+            createMany: {
+              data: (attachments as AttachmentDataClient[]).map(att => ({
+                url: att.url, // Map from client field name
+                fileName: att.fileName,
+                fileKey: att.fileKey,
+                fileType: att.fileType,
+                fileSize: att.fileSize,
+              })),
+            }
+          } : undefined,
           // Use provided timestamps if available, otherwise use current time
           ...(createdAt && { createdAt: new Date(createdAt) }),
           ...(updatedAt && { updatedAt: new Date(updatedAt) }),

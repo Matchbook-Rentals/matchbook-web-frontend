@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
+// Define AttachmentData for clarity, similar to the one in message-interface.tsx
+interface AttachmentData {
+  url: string; // url from uploadthing or similar
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
+  fileSize?: number;
+}
+
 // Define MessageData based on its usage in message-interface.tsx
 // Ensure this matches or is compatible with the type used there.
 export interface MessageData {
@@ -12,10 +21,7 @@ export interface MessageData {
   id?: string; // Message ID (can be client-generated initially)
   clientId?: string; // Optional: If needed for optimistic updates before server ID
   type?: 'message' | 'file' | 'typing' | 'read_receipt'; // Add other relevant types
-  imgUrl?: string;
-  fileName?: string;
-  fileKey?: string;
-  fileType?: string;
+  attachments?: AttachmentData[]; // Added for multiple attachments
   isTyping?: boolean;
   timestamp?: string; // ISO string usually
   messageIds?: string[]; // For read receipts
@@ -234,8 +240,15 @@ export const useWebSocketManager = ({
                 }
             });
 
-            socket.on('message', (data) => {
-                console.log('[WS_HOOK_SOCKET_EVENT] Message received:', data);
+            socket.on('message', (data: any) => {
+                const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
+                console.log(`[WS_HOOK] Message Event Received. Type: "${dataType}". Data:`, JSON.stringify(data, null, 2));
+                onMessageReceived(data);
+            });
+
+            socket.on('file', (data: any) => {
+                const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
+                console.log(`[WS_HOOK] Message Event Received. Type: "${dataType}". Data:`, JSON.stringify(data, null, 2));
                 onMessageReceived(data);
             });
 

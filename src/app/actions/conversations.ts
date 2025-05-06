@@ -111,6 +111,9 @@ export async function getConversation(id: string) {
           createdAt: 'desc', // Get messages in reverse chronological order
         },
         take: 50, // Limit to the most recent 50 messages
+        include: { // Include attachments for each message
+          attachments: true,
+        },
       },
       participants: {
         include: {
@@ -159,26 +162,35 @@ export async function deleteConversation(id: string) {
 
 // Message CRUD operations
 
+interface AttachmentDataInput {
+  fileUrl: string;
+  fileName?: string;
+  fileKey?: string;
+  fileType?: string;
+  fileSize?: number;
+}
+
 export async function createMessage(data: {
   content: string;
   senderRole: string;
   conversationId: string;
   receiverId: string;
-  imgUrl?: string;
-  fileName?: string;
-  fileKey?: string;
-  fileType?: string;
+  attachments?: AttachmentDataInput[]; 
 }) {
   const userId = await checkAuth();
 
   // Extract the fields that exist in the Prisma schema
-  const { content, conversationId, imgUrl, fileName, fileKey, fileType } = data;
+  const { content, conversationId, attachments } = data;
   
   // Add logging to track message creation details
-  console.log('=== CREATE MESSAGE DEBUG ===');
+  console.log('=== CREATE MESSAGE SERVER ACTION ===');
   console.log('Content:', content ? `"${content}"` : 'empty/null');
-  console.log('Has attachment:', !!imgUrl);
-  console.log('File details:', { fileName, fileType });
+  console.log('Has attachments:', attachments && attachments.length > 0 ? attachments.length : 0);
+  if (attachments && attachments.length > 0) {
+    attachments.forEach((att, index) => {
+      console.log(`Attachment ${index + 1}:`, { name: att.fileName, type: att.fileType, size: att.fileSize });
+    });
+  }
   console.log('------------------------');
 
   let message;
@@ -189,21 +201,34 @@ export async function createMessage(data: {
         content,
         conversationId,
         senderId: userId,
-        imgUrl,
-        fileName,
-        fileKey,
-        fileType,
+        // attachments are now handled via a nested create
+        ...(attachments && attachments.length > 0 && {
+          attachments: {
+            createMany: {
+              data: attachments.map((att: AttachmentDataInput) => ({
+                url: att.fileUrl, 
+                fileName: att.fileName,
+                fileKey: att.fileKey,
+                fileType: att.fileType,
+                fileSize: att.fileSize,
+              })),
+            },
+          },
+        }),
+      },
+      include: {
+        attachments: true, 
       },
     });
     
     // Log successful message creation
-    console.log('Message created successfully:', { 
+    console.log('Message created successfully in DB:', { 
       id: message.id, 
       hasContent: !!message.content,
-      hasAttachment: !!message.imgUrl
+      attachmentCount: message.attachments?.length || 0
     });
   } catch (error) {
-    console.error('Error creating message:', error);
+    console.error('Error creating message in DB:', error);
     throw error;
   }
 
@@ -214,18 +239,21 @@ export async function createMessage(data: {
       id: message.id,
       conversationId: message.conversationId,
       senderId: message.senderId,
-      receiverId: data.receiverId,
-      content: message.content || "", // Ensure content is at least an empty string
+      receiverId: data.receiverId, 
+      content: message.content || "", 
       senderRole: data.senderRole,
-      imgUrl: message.imgUrl,
-      // Include other fields that are now supported by the WebSocket server
-      fileName: message.fileName,
-      fileKey: message.fileKey,
-      fileType: message.fileType,
-      createdAt: message.createdAt,
-      updatedAt: message.updatedAt
+      attachments: message.attachments?.map((att: { id: string; url: string; fileName: string | null; fileKey: string | null; fileType: string | null; fileSize: number | null; createdAt: Date; messageId: string; }) => ({ 
+        fileUrl: att.url,       
+        fileName: att.fileName,
+        fileKey: att.fileKey,
+        fileType: att.fileType,
+        fileSize: att.fileSize
+      })) || [],
+      timestamp: message.createdAt.toISOString(), 
+      type: (message.attachments && message.attachments.length > 0) ? 'file' : 'message',
+      deliveryStatus: 'sent', 
     };
-    
+
     console.log('Sending to Go server with payload:', goServerPayload);
     
     const response = await fetch(`${process.env.NEXT_PUBLIC_GO_SERVER_URL}/send-message`, {
@@ -292,7 +320,10 @@ export async function getAllConversations() {
         orderBy: {
           createdAt: 'desc', // Get messages in reverse chronological order
         },
-        take: 50, // Limit to the most recent 50 messages
+        take: 50, // Limit to most recent 50 messages per conversation
+        include: { // Include attachments for each message
+          attachments: true,
+        },
       },
       participants: {
         include: {
@@ -314,7 +345,7 @@ export async function getAllConversations() {
       },
     },
     orderBy: {
-      updatedAt: 'desc',
+      updatedAt: 'desc', // Most recent conversations first
     },
   });
   for (let convo of conversations) {
