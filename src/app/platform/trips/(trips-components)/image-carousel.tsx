@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'; // Import useEffect
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import { ListingImage } from '@prisma/client';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { RejectIcon } from '@/components/icons';
 
 interface ListingImageCarouselProps {
@@ -174,12 +175,16 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                 <p className='text-[#404040] text-[12px] '>Show All</p>
               </Button>
             </DialogTrigger>
-            <DialogContent hideCloseButton className="max-w-[95vw] max-h-[75vh] sm:max-h-[90vh] pt-6 pb-4 overflow-y-auto rounded-lg">
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4"
-              >
-                {uniqueImages.map((image, index) => (
-                  <div key={image.id} className="relative w-full bg-gray-100  rounded-[20px] overflow-hidden">
+            <DialogContent className="max-w-[95vw] max-h-[75vh] sm:max-h-[90vh] pt-6 pb-4 rounded-lg flex flex-col">
+              <DialogHeader> {/* Sticky class removed */}
+                <DialogTitle className="text-xl text-center">All photos</DialogTitle>
+              </DialogHeader>
+              <ScrollArea className=" h-[600px]">
+                <div
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 pr-4" // Added pr-4 for scrollbar spacing
+                >
+                  {uniqueImages.map((image, index) => (
+                    <div key={image.id} className="relative w-full bg-gray-100  rounded-[20px] overflow-hidden">
                     <img
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
@@ -190,14 +195,9 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                     </p>
                   </div>
                 ))}
-              </div>
-              <Button
-                onClick={() => setIsDialogOpen(false)}
-                className="w-1/3 max-w-[300px] text-[16px] sticky bottom-0 mx-auto mt-2 rounded-full bg-charcoalBrand text-background"
-              >
-                <RejectIcon className='h-full p-1 mr-2 hidden xxs:inline' />
-                Close
-              </Button>
+                </div>
+              </ScrollArea>
+              {/* The custom close button has been removed */}
             </DialogContent>
           </Dialog>
         </div>

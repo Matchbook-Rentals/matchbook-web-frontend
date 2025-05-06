@@ -50,9 +50,9 @@ This document outlines the steps to refactor the `src/app/platform/messages/mess
 -   [x] Move logic for deleting conversations (previously `handleDeleteAllConversations` or similar for single deletion if applicable) into functions exposed by `useConversationManager` (e.g., `deleteConversation`), driven by TDD.
     -   [x] Inject `deleteConversation` server action as a dependency.
     -   [x] Write tests for `deleteConversation` in `useConversationManager.test.ts`.
--   [ ] Move logic for changing tabs (previously `setTabs`) into a function exposed by `useConversationManager` (e.g., `changeTab`), and update the `tabs` state within the hook, driven by TDD.
-    -   [ ] Write tests for `changeTab` in `useConversationManager.test.ts`.
--   [ ] Ensure all tests (incoming and outgoing logic) in `src/hooks/useConversationManager.test.ts` pass.
+-   [x] Move logic for changing tabs (previously `setTabs`) into a function exposed by `useConversationManager` (e.g., `changeTab`), and update the `tabs` state within the hook, driven by TDD.
+    -   [x] Write tests for `changeTab` in `useConversationManager.test.ts`.
+-   [x] Ensure all tests (incoming and outgoing logic) in `src/hooks/useConversationManager.test.ts` pass.
 -   [ ] Update `MessageInterface.tsx` to use the fully-featured `useConversationManager` hook, removing all extracted state and logic (both incoming and outgoing).
 -   [ ] Refine the hook's output interface if necessary (e.g., derived state like `filteredConversations`, `selectedConversation`, `messagesForSelectedConversation`, `isOtherUserTypingInSelected`).
 
@@ -73,4 +73,3 @@ This document outlines the steps to refactor the `src/app/platform/messages/mess
 -   [ ] Manage only essential UI state (like `sidebarVisible`).
 -   [ ] Pass props (state and handlers) from the hooks down to `ConversationList`, `MessageArea`, `ConnectionStatusIndicator`, etc.
 -   [ ] Verify the `convo` search parameter logic is handled correctly (likely within `useConversationManager` initialization).
-

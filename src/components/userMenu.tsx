@@ -74,12 +74,25 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
   const fetchNotifications = useCallback(async () => {
     if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user')) {
-      const result = await getNotifications();
-      if (result.success && result.notifications) {
-        setNotifications(result.notifications);
-        setHasUnread(result.notifications.some(notification => notification.unread));
-      } else if (!result.success) {
-        console.error('Failed to fetch notifications:', result.error);
+      try {
+        const result = await getNotifications();
+        if (result.success && Array.isArray(result.notifications)) {
+          setNotifications(result.notifications);
+          setHasUnread(result.notifications.some(notification => notification.unread));
+        } else if (result.success && !Array.isArray(result.notifications)) {
+          // This case handles when success is true but notifications is not an array
+          console.error('Failed to fetch notifications: notifications data is not an array.', result);
+          // Optionally, set notifications to empty array or handle as an error state
+          setNotifications([]);
+          setHasUnread(false);
+        } else if (!result.success) {
+          console.error('Failed to fetch notifications:', result.error);
+        }
+      } catch (error) {
+        console.error('An error occurred while fetching notifications:', error);
+        // Optionally, set notifications to empty array or handle as an error state
+        // setNotifications([]);
+        // setHasUnread(false);
       }
     }
   }, [isSignedIn, userRole]);
