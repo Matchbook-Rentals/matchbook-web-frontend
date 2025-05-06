@@ -141,7 +141,7 @@ export const useWebSocketManager = ({
         currentRetryCount.current = 0; // Reset retry count for fresh attempts
         // Explicitly call connectWithBackoff if userId is still valid
         if (userId) {
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            // eslint-disable-next-line
             connectWithBackoff(0); // Start with 0 retries
         }
       }, CIRCUIT_RESET_DELAY);

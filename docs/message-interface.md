@@ -19,12 +19,12 @@ This document outlines the steps to refactor the `src/app/platform/messages/mess
 
 ## Phase 2: Integration Testing for WebSocket Connection
 
--   [ ] Create a separate suite of integration tests (e.g., `src/hooks/useWebSocketManager.integration.test.ts`).
--   [ ] Configure the test environment to run against a real (dev/test) instance of the WebSocket server.
--   [ ] Write tests to verify:
-    -   Basic connection establishment.
-    -   Sending a message and confirming server receipt (e.g., via echo or server-side check).
-    -   Receiving a message broadcast from the server.
+-   [x] Create a separate suite of integration tests (e.g., `src/hooks/useWebSocketManager.integration.test.ts`).
+-   [x] Configure the test environment to run against a real (dev/test) instance of the WebSocket server.
+-   [x] Write tests to verify:
+    -   [x] Basic connection establishment.
+    -   [x] Sending a message and confirming server receipt (e.g., via echo or server-side check).
+    -   [x] Receiving a message broadcast from the server.
 -   [ ] Note: These tests will focus on the client-server interaction and may not cover all resilience edge cases testable via mocks.
 
 ## Phase 3: Extract Conversation State and Logic into a Custom Hook
