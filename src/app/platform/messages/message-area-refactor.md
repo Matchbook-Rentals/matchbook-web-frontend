@@ -3,7 +3,7 @@
 The main goal is to break down the large `MessageArea.tsx` component into smaller, more manageable, and testable sub-components. This will improve readability, maintainability, and allow for isolated testing of each part.
 
 ## 1. Setup & Analysis:
-- [ ] Ensure your testing environment (e.g., Jest, React Testing Library) is correctly configured for testing React components and hooks.
+- [ ] Ensure your testing environment (e.g., Vitest, jsdom, React Testing Library) is correctly configured for testing React components and hooks.
 - [ ] Thoroughly analyze `MessageArea.tsx`:
     - Identify its core responsibilities (e.g., displaying a list of messages, handling message input, managing file attachments, WebSocket interactions via hooks).
     - Pinpoint distinct UI sections and logic blocks that can be extracted into separate components or custom hooks.

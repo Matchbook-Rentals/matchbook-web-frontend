@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 // Define AttachmentData for clarity, similar to the one in message-interface.tsx
-interface AttachmentData {
+export interface AttachmentData {
   url: string; // url from uploadthing or similar
   fileName?: string;
   fileKey?: string;

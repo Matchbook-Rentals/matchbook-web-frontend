@@ -8,6 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Define the conversation participant structure
 interface ConversationParticipant {
@@ -238,7 +239,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </div>
 
       {/* Conversation List */}
-      <div className="flex-1 overflow-y-auto py-2">
+      <ScrollArea className="flex-1 py-2 w-[100%] md:w-[110%] pr-2 md:pr-8">
         {filteredConversations && filteredConversations.length > 0 ? (
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
@@ -305,7 +306,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             <p>No conversations found</p>
           </div>
         )}
-      </div>
+      </ScrollArea>
     </div>
   );
 };
