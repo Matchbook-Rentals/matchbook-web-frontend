@@ -143,9 +143,12 @@ function createClient(id, userId, socket) {
  */
 function closeClient(clientId, reason) {
   const client = clients.get(clientId);
-  if (!client) return;
+  if (!client) {
+    // console.log(`Attempted to close non-existent client: ${clientId}`); // Optional: Log if needed
+    return;
+  }
 
-  console.log(`Closing client ${clientId}: ${reason}`);
+  console.log(`[SERVER CLOSE] Explicitly closing client ${clientId}. Reason: ${reason}`);
   
   try {
     client.closed = true;
@@ -610,26 +613,47 @@ io.on('connection', async (socket) => { // Add async keyword here
 
   // Handle disconnection - leave the user room
   socket.on('disconnect', (reason) => {
-    console.log(`Client ${clientId} disconnected: ${reason}. Removing from clients list.`);
-    // socket.leave(userId); // Socket.IO automatically handles room cleanup on disconnect
-    closeClient(clientId, `Socket disconnected: ${reason}`);
+    // Log the disconnection reason received from Socket.IO
+    console.log(`[DISCONNECT EVENT] Client ${clientId} (User: ${userId}) disconnected. Reason: "${reason}".`);
+    // Possible reasons: 'client namespace disconnect', 'server namespace disconnect', 'ping timeout', 'transport close', 'transport error'
+
+    // Add specific logging for common reasons
+    if (reason === 'ping timeout') {
+      console.warn(`[DISCONNECT DETAIL] Ping timeout detected for client ${clientId}. Check client responsiveness and network stability.`);
+    } else if (reason === 'transport close') {
+      console.log(`[DISCONNECT DETAIL] Transport closed for client ${clientId}. This is often normal (e.g., tab closed) but can indicate network issues.`);
+    } else if (reason === 'transport error') {
+      console.error(`[DISCONNECT DETAIL] Transport error for client ${clientId}. Investigate potential network or configuration problems.`);
+    }
+
+    // Call closeClient to clean up server-side state
+    // The reason passed here adds context that the disconnection was detected by the 'disconnect' event handler
+    closeClient(clientId, `Socket disconnected event received (Reason: ${reason})`);
   });
 
-  // Handle errors
+  // Handle errors from the underlying engine
   socket.on('error', (err) => {
-    console.error(`Error with client ${clientId}:`, err);
-    closeClient(clientId, `Socket error: ${err.message}`);
+    console.error(`[SOCKET ERROR] Error received for client ${clientId} (User: ${userId}):`, err);
+    connectionMetrics.errors++;
+    // Close the client as the socket might be in an unusable state
+    closeClient(clientId, `Socket error event received: ${err.message}`);
   });
 
-  // Set a timeout to auto-close idle connections
+  // Note: The CLIENT_TIMEOUT_MS is used for the *initial connection* timeout by Socket.IO (`connectTimeout`).
+  // The `pingTimeout` setting in the Server constructor handles ongoing connection health checks.
+  // We don't need a separate manual timeout here if ping/pong is working correctly.
+  // Removing the manual setTimeout to rely on pingTimeout.
+  /*
   const timeout = setTimeout(() => {
-    closeClient(clientId, 'Connection timeout');
-  }, CLIENT_TIMEOUT_MS);
-
+    closeClient(clientId, 'Manual idle connection timeout'); // Changed reason for clarity
+  }, CLIENT_TIMEOUT_MS); // CLIENT_TIMEOUT_MS might be too short for idle timeout, pingTimeout is better
+  */
+  /*
   // Clear timeout when the socket disconnects
   socket.on('disconnect', () => {
     clearTimeout(timeout);
   });
+  */
 });
 
 // API endpoints for server status and stats

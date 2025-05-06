@@ -9,12 +9,12 @@ This document outlines the steps to refactor the `src/app/platform/messages/mess
 -   [X] Implement the basic hook structure in `useWebSocketManager.ts` to resolve the import error.
     -   *Status: Tests now fail with `ReferenceError: jest is not defined`.*
 -   [X] Convert Jest mocking syntax (`jest.mock`, `jest.fn`, `jest.clearAllMocks`, etc.) to Vitest syntax (`vi.mock`, `vi.fn`, `vi.clearAllMocks`, etc.) in `src/hooks/useWebSocketManager.test.ts`.
--   [ ] Implement hook logic incrementally to make tests pass (Connection, State, Resilience, Interface).
--   [ ] Define and implement the hook's interface driven by tests:
+-   [x] Implement hook logic incrementally to make tests pass (Connection, State, Resilience, Interface).
+-   [x] Define and implement the hook's interface driven by tests:
     -   Inputs: `userId`, `socketUrl`.
     -   Outputs: `isConnected`, `circuitOpen`, `sendMessage`, `sendTyping`, `sendReadReceipt`, `retryConnection`.
     -   Callbacks as props: `onMessageReceived`, `onTypingReceived`, `onReadReceiptReceived`, `onConnectionStatusChange`.
--   [ ] Ensure all tests in `src/hooks/useWebSocketManager.test.ts` pass.
+-   [x] Ensure all tests in `src/hooks/useWebSocketManager.test.ts` pass.
 -   [ ] Update `MessageInterface.tsx` to use this hook, removing the extracted logic.
 
 ## Phase 2: Integration Testing for WebSocket Connection
