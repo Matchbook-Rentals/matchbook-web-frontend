@@ -27,7 +27,8 @@ export default function GlobalError({
             </p>
           )}
           <button
-            onClick={() => reset()}
+            onClick={() => window.location.reload()}
+            className='border-1'
             style={{
               padding: '10px 20px',
               marginTop: '20px',
