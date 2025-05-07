@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, ArrowLeftIcon, X, Download, File } from 'lucide-react';
+import { PaperclipIcon, ArrowLeftIcon, X, Download } from 'lucide-react';
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { FileObject, FilePreview } from '@/components/ui/file-preview';
-import { isImageFile, getFileUrl } from '@/lib/utils';
+import { FilePreview } from '@/components/ui/file-preview';
+import { isImageFile } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DialogTrigger } from '@radix-ui/react-dialog';
 import { Button } from '@/components/ui/button';
 import { UserRating } from '@/components/reviews/host-review';
+import MessageList from './MessageList';
 
 interface MessageAreaProps {
   selectedConversation: any;
@@ -56,10 +57,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const messageContainerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [isAtBottom, setIsAtBottom] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -178,81 +176,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     // Download functionality is handled separately by the FilePreview component itself if needed.
   };
 
-  const renderFileAttachment = (url: string, fileName: string = 'attachment', fileKey?: string, fileType?: string, isGridItem?: boolean) => {
-    const fileObject = {
-      url,
-      fileName,
-      fileKey,
-      fileType
-    };
-
-    if (isImageFile(fileName)) {
-      if (isGridItem) {
-        return (
-          <Image
-            src={url}
-            alt="Message Attachment"
-            layout="fill"
-            objectFit="cover"
-            className="cursor-pointer"
-            onClick={() => handleFileClick(fileObject)}
-          />
-        );
-      } else {
-        return (
-          <Image
-            src={url}
-            alt="Message Attachment"
-            width={250}
-            height={250}
-            className="rounded cursor-pointer"
-            onClick={() => handleFileClick(fileObject)}
-          />
-        );
-      }
-    }
-
-    // For non-image files:
-    if (isGridItem) {
-      // Custom compact rendering for non-image files in a grid
-      return (
-        <div
-          className=" flex h-full flex-col items-center border justify-center px-2  rounded cursor-pointer"
-          onClick={() => handleFileClick(fileObject)}
-          title={fileName} // Show full filename on hover
-        >
-          <File className="" />
-          <p className="text-sm  truncate w-full text-center mt-2">
-            {fileName}
-          </p>
-          <button
-            className="mt-4 flex space-x-2 border p-2 hover:underline items-center" // Add margin top for spacing
-            onClick={() => downloadFile(fileObject.url, fileObject.fileName || 'image')}
-          >
-            <Download size={14} className="mr-2" />
-            Download
-          </button>
-
-        </div>
-      );
-    } else {
-      // Default rendering for non-image files not in a grid
-      return (
-        <FilePreview
-          file={{
-            url,
-            fileKey: fileKey || url,
-            fileName,
-            fileType
-          }}
-          previewSize="small"
-          allowPreview={false}
-          onClick={() => handleFileClick(fileObject)}
-        />
-      );
-    }
-  };
-
   const getParticipantInfo = () => {
     if (!selectedConversation || !selectedConversation.participants) {
       return { displayName: "Unknown", imageUrl: "" };
@@ -287,205 +210,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const participantInfo = selectedConversation ? getParticipantInfo() : { displayName: "", imageUrl: "" };
 
-  const renderMessageContent = () => {
-    if (!selectedConversation) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
-            <p className="text-gray-500 text-sm">Select a conversation from the list to get started</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (!messages || messages.length === 0) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <div className="bg-gray-50 rounded-lg p-6 shadow-sm text-center max-w-md">
-            <p className="text-gray-700 mb-3">No messages yet.</p>
-            <p className="text-gray-500 text-sm">Send a message to start the conversation!</p>
-          </div>
-        </div>
-      );
-    }
-
-    // Group consecutive messages by sender
-    const messageGroups: any[][] = [];
-    let currentGroup: any[] = [];
-
-    messages.forEach((message, index) => {
-      // Start a new group if:
-      // 1. It's the first message.
-      // 2. The sender is different from the previous message.
-      // 3. The current message has an image.
-      // 4. The previous message had an image.
-      const startNewGroup = index === 0 ||
-                            message.senderId !== messages[index - 1].senderId ||
-                            !!message.imgUrl ||
-                            !!messages[index - 1].imgUrl;
-
-      if (startNewGroup) {
-        // Start of a new group
-        if (currentGroup.length > 0) {
-          messageGroups.push(currentGroup);
-        }
-        currentGroup = [message];
-      } else {
-        // Continue the current group
-        currentGroup.push(message);
-      }
-    });
-
-    // Push the last group
-    if (currentGroup.length > 0) {
-      messageGroups.push(currentGroup);
-    }
-
-    return messageGroups.map((group, groupIndex) => {
-      const firstMessage = group[0];
-      const isCurrentUserGroup = firstMessage.senderId === currentUserId;
-      const justifyClass = isCurrentUserGroup ? 'justify-end' : 'justify-start';
-      const showAvatar = !isCurrentUserGroup; // Show avatar only for the other user's group
-
-      const renderGroupStatus = () => {
-        const lastMessage = group[group.length - 1];
-
-        // If the message is still pending (sending)
-        if (lastMessage.pending) {
-          return <span className="text-xs text-gray-400">Sending...</span>;
-        } 
-        // If the message failed to send
-        if (lastMessage.failed) {
-          return <span className="text-xs text-red-500">Failed to send</span>;
-        }
-
-        // Check status only for the current user's messages
-        if (isCurrentUserGroup) {
-          // If the last message in the group has been read
-          if (lastMessage.isRead && lastMessage.updatedAt) {
-            const date = new Date(lastMessage.updatedAt);
-            const now = new Date();
-            const diff = now.getTime() - date.getTime();
-            const hours = diff / (1000 * 60 * 60);
-            let formattedTime: string;
-
-            if (hours < 24) {
-              // If less than 24 hours ago, show time
-              formattedTime = date.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-              });
-            } else {
-              // If more than 24 hours ago, show date
-              formattedTime = date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric'
-              });
-            }
-            return <span className="text-xs text-gray-400">{`Read ${formattedTime}`}</span>;
-          }
-
-          // If the last message has a delivery status from the server
-          if (lastMessage.deliveryStatus === 'delivered') {
-            const deliveredTime = lastMessage.deliveredAt ?
-              new Date(lastMessage.deliveredAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
-            return <span className="text-xs text-gray-400">{deliveredTime ? `Delivered ${deliveredTime}` : "Delivered"}</span>;
-          }
-
-          // Default status for sent messages (last one in the group)
-          return <span className="text-xs text-gray-400">Sent</span>;
-        }
-
-        return null; // No status for the other user's messages
-      };
-
-      const bubbleStyles = isCurrentUserGroup
-        ? 'bg-gray-700 text-white border-white/10 pl-5 pr-5 font-normal rounded-br-none'
-        : 'bg-gray-100 text-black pr-5 pl-5 rounded-bl-none text-wrap font-normal border-gray-200';
-
-      return (
-        <div key={`group-${groupIndex}`} className="mb-3 pr-1 md:pr-3">
-          <div className={`flex ${justifyClass}`}>
-            {showAvatar && (
-              <div className="relative self-end"> {/* Align avatar to bottom */}
-                <img
-                  src={participantInfo.imageUrl}
-                  alt="Profile"
-                  className="w-9 h-9 rounded-full mr-2" // Removed absolute positioning
-                />
-                {/* Removed spacer div */}
-              </div>
-            )}
-            <div className={`max-w-[70%] text-black text-wrap rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
-              {group.map((message, messageIndex) => {
-                // Determine if there's text content
-                const hasTextContent = message.content && message.content.trim().length > 0;
-                // Determine if there are attachments
-                const hasAttachments = message.attachments && message.attachments.length > 0;
-
-                const addMarginTop = messageIndex > 0; // Add margin only if not the first message in the group
-                // Base padding, can be adjusted if there's no text and only attachments
-                const bubblePadding = hasTextContent ? 'px-0 py-0' : (hasAttachments ? 'p-1' : 'px-0 py-0'); // Add some padding if only attachments
-
-                return (
-                  <div 
-                    key={message.id || `msg-${messageIndex}`}
-                    className={` ${addMarginTop ? ' pt-1.5 border-gray-500/30' : ''} ${bubblePadding}`}
-                  >
-                    {/* Render text content if it exists */}
-                    {hasTextContent && (
-                      <p className="whitespace-pre-wrap break-words text-wrap px-0 py-0">
-                        {message.content}
-                      </p>
-                    )}
-
-                    {/* Render attachments if they exist */}
-                    {hasAttachments && (
-                      (() => {
-                        const attachments = message.attachments as MessageFile[];
-                        const numAttachments = attachments.length;
-                        const isMultipleAttachments = numAttachments > 1;
-
-                        const attachmentContainerClasses = isMultipleAttachments
-                          ? `grid grid-cols-2 gap-1 mt-${hasTextContent ? '2' : '0'}`
-                          : `mt-${hasTextContent ? '2' : '0'}`;
-
-                        return (
-                          <div className={attachmentContainerClasses}>
-                            {attachments.map((attachment, attIndex) => {
-                              const itemWrapperClasses = isMultipleAttachments
-                                ? "aspect-square h-[150px] relative overflow-hidden rounded"
-                                : "max-w-xs mx-auto"; 
-
-                              return (
-                                <div key={`${message.id}-att-${attIndex}`} className={itemWrapperClasses}>
-                                  {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, isMultipleAttachments)}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        );
-                      })()
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {isCurrentUserGroup && renderGroupStatus() && (
-            <div className={`flex ${justifyClass} mt-1`}>
-              <div className="text-right mr-1">
-                {renderGroupStatus()}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    });
-  };
-
   const downloadFile = (url: string, fileName: string) => {
     const link = document.createElement('a');
     link.href = url;
@@ -493,10 +217,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    // Optional: Revoke object URL if it was created via URL.createObjectURL()
-    // if (url.startsWith('blob:')) {
-    //   URL.revokeObjectURL(url);
-    // }
   };
 
   const renderFullSizeFile = () => {
@@ -523,7 +243,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="mt-4" // Add margin top for spacing
+            className="mt-4"
             onClick={() => downloadFile(selectedFile.url, selectedFile.fileName || 'image')}
           >
             <Download size={14} className="mr-2" />
@@ -543,7 +263,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
     );
-
   };
 
   const messageContainerClassName = `flex flex-col box-border  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
@@ -570,7 +289,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
               <div className="flex justify-between w-full gap-4">
                 <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>
               </div>
-
             </div>
 
             <Dialog>
@@ -578,18 +296,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({
                 <Button>
                   Show Review
                 </Button>
-
               </DialogTrigger>
-              <DialogContent  className='' >
-                <DialogHeader className=' pl-[5%] w-full  mx-auto '>
+              <DialogContent className=''>
+                <DialogHeader className='pl-[5%] w-full mx-auto'>
                   <p className='text-center font-medium text-lg'>
-                  Reviews for {participantInfo.displayName}
+                    Reviews for {participantInfo.displayName}
                   </p>
                 </DialogHeader>
                 <UserRating avatarImgUrl={participantInfo.imageUrl} />
-
               </DialogContent>
-
             </Dialog>
           </div>
         ) : (
@@ -611,27 +326,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
       <div className="flex-1 relative overflow-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full overflow-hidden">
-          <div ref={messageContainerRef} className="p-2 md:pl-[calc(2.5vw+7px)]  min-h-full">
-            {renderMessageContent()}
-            {isOtherUserTyping && (
-              <div className="flex justify-start mb-4 mt-4">
-                <div className="relative">
-                  <img
-                    src={participantInfo.imageUrl}
-                    alt="Profile"
-                    className="w-9 h-9 rounded-full mr-3 absolute bottom-[-12px]"
-                  />
-                  <div className="w-8 mr-3" />
-                </div>
-                <div className="max-w-[70%] bg-gray-100 shadow-md pl-5 pr-5 rounded-[15px] rounded-bl-none pt-3 pb-2 border border-gray-200">
-                  <div className="flex space-x-1 items-center h-5 mb-[2px]">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="p-2 md:pl-[calc(2.5vw+7px)] min-h-full">
+            <MessageList 
+              messages={messages}
+              currentUserId={currentUserId}
+              selectedConversation={selectedConversation}
+              participantInfo={participantInfo}
+              isOtherUserTyping={isOtherUserTyping}
+              handleFileClick={handleFileClick}
+            />
             <div ref={bottomRef} className="h-1" />
           </div>
         </ScrollArea>

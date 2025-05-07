@@ -175,13 +175,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                   >
                     <DeclinedApplicationIcon className="h-4 w-4" /> Declined Applications
                   </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-left flex items-center justify-start gap-2"
-                    onClick={() => router.push(`/platform/searches/set-preferences/${trip.id}`)}
-                  >
-                    <Settings className="h-4 w-4" /> Preferences
-                  </Button>
                   <hr className="my-1" />
                   <Button
                     variant="ghost"
@@ -259,13 +252,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
                       onClick={() => router.push(`/platform/trips/${trip.id}/declined`)}
                     >
                       <DeclinedApplicationIcon className="h-4 w-4" /> Declined Applications
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="w-full text-left flex items-center justify-start gap-2"
-                      onClick={() => router.push(`/platform/searches/set-preferences/${trip.id}`)}
-                    >
-                      <Settings className="h-4 w-4" /> Preferences
                     </Button>
                     <hr className="my-1" />
                     <Button
