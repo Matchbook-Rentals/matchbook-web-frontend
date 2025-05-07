@@ -26,12 +26,13 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
     <div className='h-[72px] border-b-2 flex items-center'>
       {selectedConversation ? (
         <div className="w-full relative flex justify-between items-center pr-4">
+        <div className='flex space-x-4'>
           {onBack && (
             <button
               onClick={handleBackClick}
-              className="md:hidden rounded-full bg-transparent"
+              className="md:hidden ml-4 rounded-full bg-transparent"
             >
-              <ArrowLeftIcon size={20} />
+              <ArrowLeftIcon size={24} />
             </button>
           )}
           <div className="flex items-center justify-center w-fit md:justify-start md:pl-[calc(2.5vw+7px)]">
@@ -45,6 +46,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
                 {participantInfo.displayName}
               </p>
             </div>
+          </div>
           </div>
 
           <Dialog>

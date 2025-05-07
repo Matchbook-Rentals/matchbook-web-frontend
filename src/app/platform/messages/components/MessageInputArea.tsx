@@ -4,6 +4,7 @@ import { PaperclipIcon, X } from 'lucide-react';
 import Image from "next/image";
 import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 interface MessageFile {
   url: string;
@@ -64,7 +65,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const [previousConversationId, setPreviousConversationId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const { width } = useWindowSize();
+  
   // Track previous conversation ID
   const prevConversationIdRef = useRef<string | null>(null);
 
@@ -73,6 +75,11 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
       setNewMessageInput('');
       setMessageAttachments([]);
+      
+      // Reset textarea height to default
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "44px";
+      }
     }
     prevConversationIdRef.current = selectedConversation?.id || null;
   }, [selectedConversation]);
@@ -92,6 +99,11 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
     setNewMessageInput('');
     setMessageAttachments([]);
+    
+    // Reset textarea height to default
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "44px";
+    }
     
     // Clean up any saved drafts for this conversation
     if (selectedConversation?.id) {
@@ -179,8 +191,12 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       </div>
 
       <div
-        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out"
-        style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
+        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-all duration-200 ease-in-out md:transition-[border-radius]"
+        style={{ 
+          borderRadius: newMessageInput.length > 80 
+            ? width && width >= 768 ? '1.25rem' : '0.375rem' // 1.25rem on desktop, rounded-md (0.375rem) on mobile
+            : '9999px' // rounded-full by default
+        }}
       >
         <textarea
           ref={textareaRef}
