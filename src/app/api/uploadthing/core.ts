@@ -91,7 +91,7 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
-  messageUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 4 }, video: { maxFileSize: "8MB", maxFileCount: 4 }, text: { maxFileSize: "8MB", maxFileCount: 4 }, audio: { maxFileSize: "8MB", maxFileCount: 4 }, pdf: { maxFileSize: "8MB", maxFileCount: 4 }, blob: { maxFileSize: "8MB", maxFileCount: 4 } })
+  messageUploader: f({ image: { maxFileSize: "16MB", maxFileCount: 12 }, video: { maxFileSize: "512MB", maxFileCount: 4 }, text: { maxFileSize: "8MB", maxFileCount: 4 }, audio: { maxFileSize: "8MB", maxFileCount: 4 }, pdf: { maxFileSize: "8MB", maxFileCount: 4 }, blob: { maxFileSize: "8MB", maxFileCount: 4 } })
     .middleware(async ({ req }) => {
       const user = await auth();
       if (!user.userId) throw new UploadThingError("Unauthorized");

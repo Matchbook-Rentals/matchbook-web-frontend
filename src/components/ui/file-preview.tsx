@@ -63,14 +63,14 @@ export function FilePreview({
 
   // Define sizes based on previewSize
   const cardSizeClasses = {
-    small: 'w-36 h-36',
-    medium: 'w-48 h-48',
-    large: 'w-64 h-64',
+    small: 'w-28 h-28 md:w-32 md:h-32',
+    medium: 'w-32 h-32 md:w-40 md:h-40',
+    large: 'w-36 h-36 md:w-48 md:h-48',
   };
   const imageSizeClasses = {
-    small: 'w-32 h-32',
-    medium: 'w-44 h-44',
-    large: 'w-60 h-60',
+    small: 'w-24 h-24 md:w-28 md:h-28',
+    medium: 'w-28 h-28 md:w-36 md:h-36',
+    large: 'w-32 h-32 md:w-44 md:h-44',
   };
   const nonImageContainerPadding = 'p-3'; // Consistent padding for non-images
   const nonImageIconSize = 'w-8 h-8'; // Fixed small icon size for non-images
@@ -219,11 +219,11 @@ export function FilePreview({
           {/* File Details & Actions (for images) */}
           <div className="flex flex-col w-1/3">
             <div className="px-1">
-              <p className="text-xs font-medium truncate max-w-full" title={file.fileName}>
-                {file.fileName}
+              <p className="text-[10px] md:text-xs font-medium truncate max-w-full" title={file.fileName}>
+                {file.fileName.length > 10 ? `${file.fileName.substring(0, 8)}...` : file.fileName}
               </p>
               {file.fileSize && (
-                <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+                <p className="text-[8px] md:text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
               )}
             </div>
             <div className="flex items-center mt-1 space-x-1">
@@ -231,11 +231,11 @@ export function FilePreview({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-5 w-5 md:h-7 md:w-7"
                   onClick={handleDownload}
                   disabled={isLoading}
                 >
-                  <Download size={14} />
+                  <Download size={12} />
                 </Button>
               )}
               {/* Add Preview button for images if needed */}
@@ -271,32 +271,32 @@ export function FilePreview({
         )}
 
         {/* File Info (Icon, Name, Size) - Vertical Stack */}
-        <div className="flex items-center  space-x-2 mb-1"> {/* Added mb-1 */}
-          <div className="flex-shrink-0"> {/* Removed pt-1 */}
-            <FileIconComponent />
+        <div className="flex items-center space-x-1 md:space-x-2 mb-1">
+          <div className="flex-shrink-0">
+            <FileIconComponent size="w-6 h-6 md:w-8 md:h-8" />
           </div>
           <div className="flex-grow min-w-0">
-            <p className="text-sm font-medium truncate max-w-[300px]" title={file.fileName}>
-              {file.fileName}
+            <p className="text-[11px] md:text-sm font-medium truncate max-w-[150px] md:max-w-[200px]" title={file.fileName}>
+              {file.fileName.length > 15 ? `${file.fileName.substring(0, 13)}...` : file.fileName}
             </p>
             {file.fileSize && (
-              <p className="text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
+              <p className="text-[9px] md:text-xs text-gray-500">{formatFileSize(file.fileSize)}</p>
             )}
           </div>
         </div>
 
         {/* Actions & Error */}
-        <div className="flex flex-col items-center"> {/* Stack actions vertically */}
-          <div className="flex justify-center items-center ">
+        <div className="flex flex-col items-center">
+          <div className="flex justify-center items-center">
             {allowDownload && (
               <Button
-                variant="outline" // Use link variant for less visual weight
+                variant="outline"
                 size="sm"
-                className="  text-xs bg-transparent border-gray-500 hover:bg-transparent hover:text-inherit border  hover:underline" // Minimal styling
+                className="h-6 text-[10px] px-2 py-1 md:text-xs md:px-3 md:py-1 bg-transparent border-gray-300 hover:bg-transparent hover:text-inherit border hover:underline"
                 onClick={handleDownload}
                 disabled={isLoading}
               >
-                <Download size={12} className="mr-1" /> Download
+                <Download size={10} className="mr-1 md:mr-2" /> Download
               </Button>
             )}
             {/* Add Preview button if needed, styled similarly */}
@@ -326,7 +326,7 @@ export function FileList({
   className = '',
 }: FileListProps) {
   return (
-    <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 ${className}`}>
+    <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 ${className}`}>
       {files.map((file, index) => (
         <FilePreview
           key={file.fileKey || index}

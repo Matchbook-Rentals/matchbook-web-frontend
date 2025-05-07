@@ -142,7 +142,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div className="py-1 px-12 bg-background">
-      <div className="flex flex-wrap justify-end gap-2 mb-2">
+      <div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/20 px-2 rounded">
         {messageAttachments.map((attachment, index) => {
           const handleRemove = () => {
             setMessageAttachments(prev => prev.filter((_, i) => i !== index));
@@ -157,33 +157,36 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
           };
 
           return (
-            <div key={index} className="inline-block rounded">
+            <div key={index} className="inline-block flex-shrink-0 aspect-square rounded">
               {isImage ? (
-                <div className="p-2 bg-white relative">
+                <div className="p-1 bg-white relative aspect-square h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
                   <button
-                    className="absolute top-1 right-1 z-10 w-6 h-6 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center"
+                    className="absolute top-0 right-0 z-10 w-5 h-5 bg-white/80 hover:bg-white/90 rounded-full items-center justify-center"
                     onClick={handleRemove}
                   >
-                    <X size={14} />
+                    <X size={12} />
                   </button>
                   <Image
                     src={attachment.url}
                     alt="Message Attachment"
-                    width={375}
-                    height={375}
-                    className="cursor-pointer"
+                    width={100}
+                    height={100}
+                    className="cursor-pointer object-cover aspect-square w-full h-full"
                     onClick={() => handleFileClick(attachment)}
                   />
                 </div>
               ) : (
-                <FilePreview
-                  file={fileObject}
-                  previewSize="small"
-                  allowPreview={false}
-                  showRemove={true}
-                  onRemove={handleRemove}
-                  onClick={() => handleFileClick(attachment)}
-                />
+                <div className="aspect-square h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
+                  <FilePreview
+                    file={fileObject}
+                    previewSize="small"
+                    allowPreview={false}
+                    showRemove={true}
+                    onRemove={handleRemove}
+                    onClick={() => handleFileClick(attachment)}
+                    className="h-full w-full aspect-square"
+                  />
+                </div>
               )}
             </div>
           );
