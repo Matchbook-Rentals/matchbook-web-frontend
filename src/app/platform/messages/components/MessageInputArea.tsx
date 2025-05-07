@@ -142,7 +142,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div className="py-1 px-12 bg-background">
-      <div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/20 px-2 rounded">
+      {messageAttachments.length > 0 && (<div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/20 px-2 rounded">
         {messageAttachments.map((attachment, index) => {
           const handleRemove = () => {
             setMessageAttachments(prev => prev.filter((_, i) => i !== index));
@@ -192,7 +192,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
           );
         })}
       </div>
-
+ )}
+      
       <div
         className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out"
         style={{ 
