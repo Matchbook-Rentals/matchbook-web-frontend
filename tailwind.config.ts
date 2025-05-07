@@ -167,6 +167,12 @@ const config = {
     }
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  safelist: [
+    'break-words',
+    'break-all',
+    'whitespace-pre-wrap',
+    'overflow-wrap-anywhere'
+  ]
 } satisfies Config
 
 export default withUt({

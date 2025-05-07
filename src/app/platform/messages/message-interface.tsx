@@ -644,6 +644,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           />
         </div>
       </div>
+      {/*
       <div
         className={`fixed bottom-4 right-4 px-3 py-1 rounded-full text-sm ${webSocketManager.isConnected ? 'bg-green-500'
             : webSocketManager.circuitOpen ? 'bg-orange-500' // Circuit open, might be retrying later
@@ -664,6 +665,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
           </button>
         )}
       </div>
+      */}
       {isAdmin && <AdminTools onDeleteAll={handleDeleteAllConversations} />}
     </div>
   );

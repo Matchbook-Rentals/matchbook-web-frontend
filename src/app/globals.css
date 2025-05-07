@@ -203,3 +203,11 @@
   border-width: 2px;
   border-color: black;
 }
+
+/* Custom utilities for text wrapping in MessageArea */
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}

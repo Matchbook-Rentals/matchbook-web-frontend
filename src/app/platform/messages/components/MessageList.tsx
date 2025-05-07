@@ -219,7 +219,7 @@ const MessageList: React.FC<MessageListProps> = ({
   };
 
   return (
-    <>
+    <div className='w-full'>
       {messageGroups.map((group, groupIndex) => {
         const firstMessage = group[0];
         const isCurrentUserGroup = firstMessage.senderId === currentUserId;
@@ -242,7 +242,7 @@ const MessageList: React.FC<MessageListProps> = ({
                   />
                 </div>
               )}
-              <div className={`max-w-[70%] text-black text-wrap rounded-2xl border leading-snug shadow-md py-2 overflow-hidden ${bubbleStyles}`}>
+              <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden overflow-wrap-anywhere ${bubbleStyles}`}>
                 {group.map((message, messageIndex) => {
                   // Determine if there's text content
                   const hasTextContent = message.content && message.content.trim().length > 0;
@@ -260,7 +260,7 @@ const MessageList: React.FC<MessageListProps> = ({
                     >
                       {/* Render text content if it exists */}
                       {hasTextContent && (
-                        <p className="whitespace-pre-wrap break-words text-wrap px-0 py-0">
+                        <p className="whitespace-pre-wrap break-words px-0 py-0 overflow-hidden overflow-wrap-anywhere">
                           {message.content}
                         </p>
                       )}
@@ -329,7 +329,7 @@ const MessageList: React.FC<MessageListProps> = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

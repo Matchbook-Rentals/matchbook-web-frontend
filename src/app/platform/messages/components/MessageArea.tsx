@@ -1,15 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeftIcon, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import Image from "next/image";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DialogTrigger } from '@radix-ui/react-dialog';
 import { Button } from '@/components/ui/button';
-import { UserRating } from '@/components/reviews/host-review';
 import MessageList from './MessageList';
 import MessageInputArea from './MessageInputArea';
+import ConversationHeader from './ConversationHeader';
 
 interface MessageAreaProps {
   selectedConversation: any;
@@ -197,68 +196,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border  h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col box-border h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     <div className={messageContainerClassName}>
-      <div className='h-[72px] border-b-2 flex items-center'>
-        {selectedConversation ? (
-          <div className="w-full relative flex justify-between items-center pr-4">
-            {onBack && (
-              <button
-                onClick={handleBackClick}
-                className="md:hidden  rounded-full bg-transparent"
-              >
-                <ArrowLeftIcon size={20} />
-              </button>
-            )}
-            <div className="flex items-center justify-center w-fit md:justify-start md:pl-[calc(2.5vw+7px)]">
-              <img
-                src={participantInfo.imageUrl}
-                alt={participantInfo.displayName}
-                className="w-12 h-12 aspect-square rounded-full object-cover mr-4"
-              />
-              <div className="flex justify-between w-full gap-4">
-                <p className="overflow-hidden text-[#212121] max-w-[200px] md:max-w-[500px] truncate text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-tight">{participantInfo.displayName}</p>
-              </div>
-            </div>
+      <ConversationHeader
+        selectedConversation={selectedConversation}
+        participantInfo={participantInfo}
+        onBack={onBack}
+        isMobile={isMobile}
+        handleBackClick={handleBackClick}
+      />
 
-            <Dialog>
-              <DialogTrigger>
-                <Button>
-                  Show Review
-                </Button>
-              </DialogTrigger>
-              <DialogContent className=''>
-                <DialogHeader className='pl-[5%] w-full mx-auto'>
-                  <p className='text-center font-medium text-lg'>
-                    Reviews for {participantInfo.displayName}
-                  </p>
-                </DialogHeader>
-                <UserRating avatarImgUrl={participantInfo.imageUrl} />
-              </DialogContent>
-            </Dialog>
-          </div>
-        ) : (
-          <div className="bg-blueBrand/10 w-full mx-auto p-4 flex items-center md:hidden shadow-md">
-            {onBack && isMobile && (
-              <button
-                onClick={handleBackClick}
-                className="md:hidden flex items-center justify-center p-2 rounded-full bg-transparent"
-              >
-                <ArrowLeftIcon size={20} />
-              </button>
-            )}
-            <div className="w-full text-center font-medium">
-              Select a conversation
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex-1 relative overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full overflow-hidden">
-          <div className="p-2 md:pl-[calc(2.5vw+7px)] min-h-full">
+      <div className="flex-1 w-full overflow-x-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full w-full overflow-x-hidden">
+          <div className="p-2 md:pl-[calc(2.5vw+7px)] min-h-full w-full">
             <MessageList 
               messages={messages}
               currentUserId={currentUserId}
@@ -272,12 +224,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <MessageInputArea 
-        onSendMessage={onSendMessage}
-        selectedConversation={selectedConversation}
-        onTyping={onTyping}
-        handleFileClick={handleFileClick}
-      />
+      <div className="mt-auto">
+        <MessageInputArea 
+          onSendMessage={onSendMessage}
+          selectedConversation={selectedConversation}
+          onTyping={onTyping}
+          handleFileClick={handleFileClick}
+        />
+      </div>
 
       <Dialog open={!!selectedFile} onOpenChange={(open) => !open && setSelectedFile(null)}>
         <DialogContent className="max-w-3xl" hideCloseButton={false}>

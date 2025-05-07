@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
 import { PaperclipIcon, X } from 'lucide-react';
 import Image from "next/image";
@@ -33,6 +33,25 @@ interface MessageInputAreaProps {
   handleFileClick: (file: MessageFile) => void;
 }
 
+const DRAFT_EXPIRY_MINUTES = 5;
+const RECENTLY_CHANGED_EXPIRY_SECONDS = 10; // Store drafts for 10 seconds after conversation change
+
+const getStorageKey = (conversationId: string) => `message_draft_${conversationId}`;
+const getRecentConversationKey = () => 'recent_conversation_change';
+
+interface StoredDraft {
+  message: string;
+  attachments: MessageFile[];
+  timestamp: number;
+}
+
+interface RecentConversationChange {
+  previousId: string;
+  message: string;
+  attachments: MessageFile[];
+  timestamp: number;
+}
+
 const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   onSendMessage,
   selectedConversation,
@@ -41,8 +60,23 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 }) => {
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
+  const [hasRecentChange, setHasRecentChange] = useState(false);
+  const [previousConversationId, setPreviousConversationId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Track previous conversation ID
+  const prevConversationIdRef = useRef<string | null>(null);
+
+  // Effect to reset input when selected conversation changes
+  useEffect(() => {
+    if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
+      setNewMessageInput('');
+      setMessageAttachments([]);
+    }
+    prevConversationIdRef.current = selectedConversation?.id || null;
+  }, [selectedConversation]);
+
 
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
@@ -58,6 +92,20 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
     setNewMessageInput('');
     setMessageAttachments([]);
+    
+    // Clean up any saved drafts for this conversation
+    if (selectedConversation?.id) {
+      localStorage.removeItem(getStorageKey(selectedConversation.id));
+      
+      // Also clean up recent change data if it exists for this conversation
+      const recentChangeData = localStorage.getItem(getRecentConversationKey());
+      if (recentChangeData) {
+        const recentChange: RecentConversationChange = JSON.parse(recentChangeData);
+        if (recentChange.previousId === selectedConversation.id) {
+          localStorage.removeItem(getRecentConversationKey());
+        }
+      }
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -131,7 +179,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       </div>
 
       <div
-        className="flex items-center bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out"
+        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-[border-radius] duration-200 ease-in-out"
         style={{ borderRadius: newMessageInput.length > 80 ? '1.25rem' : '9999px' }}
       >
         <textarea
