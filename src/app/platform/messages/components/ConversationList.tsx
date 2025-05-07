@@ -89,18 +89,28 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   // Filter conversations based on search term and unread status
-  const filteredConversations = conversations.filter(conv => {
-    const { displayName } = getParticipantInfo(conv, user);
-    const matchesSearch = displayName?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
+  const filteredConversations = conversations
+    .filter(conv => {
+      const { displayName } = getParticipantInfo(conv, user);
+      const matchesSearch = displayName?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
 
-    // If showUnreadOnly is true, filter for conversations with unread messages
-    if (showUnreadOnly) {
-      // Use the isUnread prop passed down from the parent
-      return matchesSearch && conv.isUnread === true;
-    }
+      // If showUnreadOnly is true, filter for conversations with unread messages
+      if (showUnreadOnly) {
+        // Use the isUnread prop passed down from the parent
+        return matchesSearch && conv.isUnread === true;
+      }
 
-    return matchesSearch;
-  });
+      return matchesSearch;
+    })
+    .sort((convA, convB) => {
+      const lastMessageA = convA.messages?.[convA.messages.length - 1];
+      const lastMessageB = convB.messages?.[convB.messages.length - 1];
+
+      const timeA = lastMessageA ? new Date(lastMessageA.createdAt).getTime() : 0;
+      const timeB = lastMessageB ? new Date(lastMessageB.createdAt).getTime() : 0;
+
+      return timeB - timeA; // Sort by most recent message first
+    });
 
   // Helper function to format the timestamp for the last message
   const formatLastMessageTime = (createdAt: string | Date): string => {

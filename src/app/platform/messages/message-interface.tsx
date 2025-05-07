@@ -517,6 +517,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
       senderId: user.id,
       senderRole: conv.participants.find((p) => p.userId === user.id)?.role as 'Host' | 'Tenant',
       timestamp: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       type: attachments && attachments.length > 0 ? 'file' : 'message',
       attachments: attachments, // Pass the array of attachments
       deliveryStatus: 'sending', // Optimistic status
