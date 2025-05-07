@@ -191,11 +191,17 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       </div>
 
       <div
-        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-all duration-200 ease-in-out md:transition-[border-radius]"
+        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out"
         style={{ 
-          borderRadius: newMessageInput.length > 80 
-            ? width && width >= 768 ? '1.25rem' : '0.375rem' // 1.25rem on desktop, rounded-md (0.375rem) on mobile
-            : '9999px' // rounded-full by default
+          borderRadius: newMessageInput.length > 0 
+            ? newMessageInput.length > 20 
+              ? newMessageInput.length > 40
+                ? newMessageInput.length > 60
+                  ? width && width >= 768 ? '1.25rem' : '0.375rem' // Final stage: 1.25rem on desktop, 0.375rem on mobile
+                  : width && width >= 768 ? '1.5rem' : '0.5rem'    // Stage 3: gradually reducing
+                : width && width >= 768 ? '2rem' : '0.75rem'       // Stage 2: middle transition
+              : width && width >= 768 ? '3rem' : '1.5rem'          // Stage 1: starting to round less
+            : '9999px'                                             // Default: rounded-full
         }}
       >
         <textarea
