@@ -210,7 +210,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       >
         <textarea
           ref={textareaRef}
-          className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-auto leading-relaxed font-jakarta"
+          className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta"
           placeholder="Type a message..."
           value={newMessageInput}
           onChange={(e) => {

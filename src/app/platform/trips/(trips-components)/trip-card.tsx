@@ -213,7 +213,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
               {/* Apply mobile styles by default, revert for md+ */}
               <DialogContent
                 className={cn(
-                  "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl md:bg-background md:border md:p-8",
+                  "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl  md:bg-background md:border py-2 px-2 lg:px-8",
                   "md:top-[25vh] h-fit md:h-[200px] max-h-[89vh] overflow-y-auto  md:overflow-y-visible" // Default center on mobile, 25vh top on md+
                 )}
                 xOnRight={true}
