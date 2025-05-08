@@ -105,12 +105,16 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl w-[90vw] h-[85vh] p-0 flex flex-col bg-card sm:rounded-lg">
-        <DialogHeader className="p-4 border-b flex-shrink-0">
+      <DialogContent className="max-w-3xl w-[90vw] h-[85vh] p-0 flex flex-col bg-card sm:rounded-lg test"> {/* Added test (red border) */}
+        <DialogHeader className="p-4 border-b flex-shrink-0 border-pink-500"> {/* Added border-pink-500 for DialogHeader */}
           <DialogTitle className='text-center'>
             Attachments
             {attachments.length > 0 && ` (${currentCarouselSlide} of ${attachments.length})`}
           </DialogTitle>
+          <DialogClose className="absolute right-4 top-3.5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
         </DialogHeader>
 
         <Carousel
@@ -120,19 +124,22 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
             loop: attachments.length > 1,
             align: "center",
           }}
-          className="flex-grow flex flex-col justify-center items-center p-1 sm:p-4 min-h-0 overflow-hidden"
+          // Removed justify-center items-center from here for Solution 2
+          className="flex-grow flex flex-col p-1 sm:p-4 min-h-0 overflow-hidden test-blue" // Added test-blue
         >
-          <CarouselContent className="-ml-4 h-full">
+          <CarouselContent className="-ml-4 h-full test-green"> {/* Added test-green */}
             {attachments.map((attachment, idx) => (
-              <CarouselItem key={attachment.fileKey || attachment.url || idx} className="pl-4 basis-full h-full flex flex-col items-center justify-center">
-                <div className="w-full h-full test relative flex items-center justify-center p-2">
+              <CarouselItem 
+                key={attachment.fileKey || attachment.url || idx} 
+                className="pl-4 basis-full h-full flex flex-col items-center justify-center test-yellow" // Added test-yellow
+              >
+                <div className="w-full h-full test relative flex items-center justify-center p-2 border-2 border-purple-500"> {/* Added border-purple-500 for image container */}
                   {isImageFile(attachment.fileName || '') ? (
                     <Image
                       src={attachment.url}
                       alt={attachment.fileName || 'Attachment'}
                       layout="fill"
-                      objectFit="contain"
-                      className="max-w-full max-h-full"
+                      objectFit="contain" // Changed from cover to contain in previous step
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center p-6 bg-muted/50 rounded-lg text-center h-auto w-auto max-w-md">
