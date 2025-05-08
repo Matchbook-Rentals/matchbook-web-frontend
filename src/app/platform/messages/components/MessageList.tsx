@@ -149,8 +149,12 @@ const MessageList: React.FC<MessageListProps> = ({
 
   // Helper function to determine message type
   const getMessageType = (message: any): string => {
+    const hasTextContent = message.content && message.content.trim().length > 0;
     // Check if message has attachments
     if (message.attachments && message.attachments.length > 0) {
+      // If there's text content with attachments, treat as a captioned attachment
+      if (hasTextContent) return 'captioned_attachment';
+      
       // Check if all attachments are images
       const allAttachmentsAreImages = message.attachments.every((attachment: MessageFile) => 
         attachment.fileName ? isImageFile(attachment.fileName) : false
@@ -165,14 +169,18 @@ const MessageList: React.FC<MessageListProps> = ({
   };
 
   messages.forEach((message, index) => {
+    // Get message type for current message
+    const currentMessageType = getMessageType(message);
+    
     // Start a new group if:
     // 1. It's the first message.
     // 2. The sender is different from the previous message.
     // 3. The current message type is different from the previous message type.
-    const currentMessageType = getMessageType(message);
+    // 4. The current message is a captioned attachment (always gets its own group).
     const startNewGroup = index === 0 ||
                           message.senderId !== messages[index - 1].senderId ||
-                          currentMessageType !== getMessageType(messages[index - 1]);
+                          currentMessageType !== getMessageType(messages[index - 1]) ||
+                          currentMessageType === 'captioned_attachment';
 
     if (startNewGroup) {
       // Start of a new group
@@ -277,18 +285,29 @@ const MessageList: React.FC<MessageListProps> = ({
               )}
               <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden overflow-wrap-anywhere ${bubbleStyles}`}>
                 {(() => {
-                  // First, render all text messages
-                  const textMessages = group.filter(msg => {
-                    const hasTextContent = msg.content && msg.content.trim().length > 0;
-                    const hasAttachments = msg.attachments && msg.attachments.length > 0;
-                    return hasTextContent && (!hasAttachments || (hasAttachments && 
-                      !(msg.attachments.every((att: MessageFile) => att.fileName ? isImageFile(att.fileName) : false))
-                    ));
-                  });
+                  // Get regular text messages (with no attachments)
+                  const textMessages = group.filter(msg => 
+                    getMessageType(msg) === 'text'
+                  );
 
-                  // Then collect all image attachments across all messages in this group
+                  // Get captioned attachment messages
+                  const captionedAttachmentMessages = group.filter(msg => 
+                    getMessageType(msg) === 'captioned_attachment'
+                  );
+
+                  // Get messages with image attachments only (no caption)
+                  const imageOnlyMessages = group.filter(msg => 
+                    getMessageType(msg) === 'image'
+                  );
+
+                  // Get messages with file attachments only (no caption)
+                  const fileOnlyMessages = group.filter(msg => 
+                    getMessageType(msg) === 'file'
+                  );
+
+                  // Then collect all image attachments across all image-only messages in this group
                   const allImageAttachments: {attachment: MessageFile, messageId: string | number}[] = [];
-                  group.forEach(msg => {
+                  imageOnlyMessages.forEach(msg => {
                     if (msg.attachments && msg.attachments.length > 0) {
                       const imageAttachments = msg.attachments.filter((att: MessageFile) => 
                         att.fileName ? isImageFile(att.fileName) : false
@@ -300,17 +319,6 @@ const MessageList: React.FC<MessageListProps> = ({
                         });
                       });
                     }
-                  });
-
-                  // Finally, collect all non-image file attachments
-                  const fileMessages = group.filter(msg => {
-                    if (!msg.attachments || msg.attachments.length === 0) return false;
-                    
-                    const hasNonImageFiles = msg.attachments.some((att: MessageFile) => 
-                      att.fileName ? !isImageFile(att.fileName) : true
-                    );
-                    
-                    return hasNonImageFiles;
                   });
 
                   return (
@@ -353,7 +361,7 @@ const MessageList: React.FC<MessageListProps> = ({
                       )}
 
                       {/* Render file attachments */}
-                      {fileMessages.map((message, messageIndex) => {
+                      {fileOnlyMessages.map((message, messageIndex) => {
                         const nonImageAttachments = message.attachments.filter((att: MessageFile) => 
                           att.fileName ? !isImageFile(att.fileName) : true
                         );
@@ -368,6 +376,55 @@ const MessageList: React.FC<MessageListProps> = ({
                                 {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, false)}
                               </div>
                             ))}
+                          </div>
+                        );
+                      })}
+
+                      {/* Render captioned attachment messages */}
+                      {captionedAttachmentMessages.map((message, messageIndex) => {
+                        const isImagesOnly = message.attachments.every((att: MessageFile) => 
+                          att.fileName ? isImageFile(att.fileName) : false
+                        );
+                        
+                        return (
+                          <div 
+                            key={message.id || `captioned-msg-${messageIndex}`}
+                            className={`${messageIndex > 0 || textMessages.length > 0 || allImageAttachments.length > 0 || fileOnlyMessages.length > 0 ? 'mt-3' : 'mt-0'}`}
+                          >
+                            {/* Render attachments first */}
+                            {isImagesOnly ? (
+                              <div className="mb-2">
+                                <div className={`grid ${message.attachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
+                                  {message.attachments.map((attachment: MessageFile, attIndex: number) => (
+                                    <div 
+                                      key={`${message.id}-captioned-img-${attIndex}`} 
+                                      className="aspect-square h-[150px] relative overflow-hidden rounded cursor-pointer"
+                                      onClick={() => openAttachmentCarousel(message.attachments, attIndex)}
+                                    >
+                                      <Image
+                                        src={attachment.url}
+                                        alt="Message Attachment"
+                                        layout="fill"
+                                        objectFit="cover"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mb-2">
+                                {message.attachments.map((attachment: MessageFile, attIndex: number) => (
+                                  <div key={`${message.id}-file-${attIndex}`} className="max-w-xs mx-auto mb-2">
+                                    {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, false)}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            
+                            {/* Render caption text */}
+                            <p className="whitespace-pre-wrap break-words px-0 py-0 overflow-hidden overflow-wrap-anywhere">
+                              {message.content}
+                            </p>
                           </div>
                         );
                       })}
