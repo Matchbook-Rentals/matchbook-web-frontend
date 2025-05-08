@@ -523,7 +523,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Status Update Dialog */}
               <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
-                <DialogContent xOnRight>
+                <DialogContent >
                   <DialogHeader>
                     <DialogTitle>Update Ticket Status</DialogTitle>
                     <DialogDescription>
@@ -552,7 +552,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Category Update Dialog */}
               <Dialog open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
-                <DialogContent xOnRight>
+                <DialogContent >
                   <DialogHeader>
                     <DialogTitle>Update Ticket Category</DialogTitle>
                     <DialogDescription>
@@ -582,7 +582,7 @@ export default function TicketsPage({ searchParams = {} }: PageProps) {
               
               {/* Delete Confirmation Dialog */}
               <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent xOnRight>
+                <DialogContent >
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-destructive">
                       <AlertTriangle className="h-5 w-5" />

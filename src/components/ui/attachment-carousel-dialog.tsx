@@ -107,14 +107,10 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl w-[90vw] h-[85vh] p-0 flex flex-col bg-card sm:rounded-lg">
         <DialogHeader className="p-4 border-b flex-shrink-0">
-          <DialogTitle>
+          <DialogTitle className='text-center'>
             Attachments
             {attachments.length > 0 && ` (${currentCarouselSlide} of ${attachments.length})`}
           </DialogTitle>
-          <DialogClose className="absolute right-4 top-3.5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </DialogClose>
         </DialogHeader>
 
         <Carousel
@@ -129,13 +125,13 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
           <CarouselContent className="-ml-4 h-full">
             {attachments.map((attachment, idx) => (
               <CarouselItem key={attachment.fileKey || attachment.url || idx} className="pl-4 basis-full h-full flex flex-col items-center justify-center">
-                <div className="w-full h-full relative flex items-center justify-center p-2">
+                <div className="w-full h-full test relative flex items-center justify-center p-2">
                   {isImageFile(attachment.fileName || '') ? (
                     <Image
                       src={attachment.url}
                       alt={attachment.fileName || 'Attachment'}
                       layout="fill"
-                      objectFit="contain"
+                      objectFit="cover"
                       className="max-w-full max-h-full"
                     />
                   ) : (

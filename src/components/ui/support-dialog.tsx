@@ -42,7 +42,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {/* Adjusted max-width slightly to better fit the new content */}
-      <DialogContent xOnRight className="sm:max-w-lg bg-[#fcfcfc]">
+      <DialogContent className="sm:max-w-lg bg-[#fcfcfc]">
         {/* Using DialogHeader for title consistency, but applying new styles */}
         <DialogHeader className="items-center pb-4">
           <DialogTitle className="text-[28px] font-semibold text-[#212121] leading-8 font-['Poppins',Helvetica]">
