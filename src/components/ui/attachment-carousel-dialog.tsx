@@ -127,7 +127,7 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
           // Removed justify-center items-center from here for Solution 2
           className="flex-grow flex flex-col p-1 sm:p-4 min-h-0 overflow-hidden test-blue" // Added test-blue
         >
-          <CarouselContent className="-ml-4 h-full test-green"> {/* Added test-green */}
+          <CarouselContent className="-ml-4  h-80 test-green"> {/* Added test-green */}
             {attachments.map((attachment, idx) => (
               <CarouselItem 
                 key={attachment.fileKey || attachment.url || idx} 
