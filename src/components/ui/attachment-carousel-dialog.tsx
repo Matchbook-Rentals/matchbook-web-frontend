@@ -112,13 +112,22 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] p-0 flex flex-col bg-card sm:rounded-lg overflow-hidden">
+      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] p-0 flex flex-col bg-card sm:rounded-lg overflow-hidden" hideCloseButton>
         <DialogHeader className="p-4 border-b flex-shrink-0 relative">
-          <DialogTitle className="text-center">
-            {attachments.length > 1 
-              ? `Attachment ${currentIndex + 1} of ${attachments.length}` 
-              : "Attachment"}
-          </DialogTitle>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center">
+              <DialogClose className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+                <X className="h-6 w-6" />
+                <span className="sr-only">Close</span>
+              </DialogClose>
+            </div>
+            <DialogTitle className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+              {attachments.length > 1 
+                ? `Attachment ${currentIndex + 1} of ${attachments.length}` 
+                : "Attachment"}
+            </DialogTitle>
+            <div className="w-6 h-6"></div> {/* Spacer that matches X button dimensions */}
+          </div>
         </DialogHeader>
 
         <div className="flex-1 overflow-hidden flex items-center justify-center">

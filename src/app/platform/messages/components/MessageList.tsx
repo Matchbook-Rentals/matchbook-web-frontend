@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { File, Download } from 'lucide-react';
 import Image from "next/image";
 import { isImageFile } from '@/lib/utils';
 import { FilePreview } from '@/components/ui/file-preview';
+import { AttachmentCarouselDialog } from '@/components/ui/attachment-carousel-dialog';
 
 interface MessageFile {
   url: string;
@@ -29,6 +30,15 @@ const MessageList: React.FC<MessageListProps> = ({
   isOtherUserTyping = false,
   handleFileClick
 }) => {
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+  const [carouselAttachments, setCarouselAttachments] = useState<MessageFile[]>([]);
+  const [initialCarouselIndex, setInitialCarouselIndex] = useState(0);
+  
+  const openAttachmentCarousel = (attachments: MessageFile[], index: number) => {
+    setCarouselAttachments(attachments);
+    setInitialCarouselIndex(index);
+    setIsCarouselOpen(true);
+  };
   const renderFileAttachment = (url: string, fileName: string = 'attachment', fileKey?: string, fileType?: string, isGridItem?: boolean) => {
     const fileObject = {
       url,
@@ -236,6 +246,13 @@ const MessageList: React.FC<MessageListProps> = ({
 
   return (
     <div className='w-full'>
+      <AttachmentCarouselDialog 
+        attachments={carouselAttachments}
+        isOpen={isCarouselOpen}
+        onOpenChange={setIsCarouselOpen}
+        initialIndex={initialCarouselIndex}
+        withDownloadButton={true}
+      />
       {messageGroups.map((group, groupIndex) => {
         const firstMessage = group[0];
         const isCurrentUserGroup = firstMessage.senderId === currentUserId;
@@ -317,15 +334,18 @@ const MessageList: React.FC<MessageListProps> = ({
                             {allImageAttachments.map((item, index) => (
                               <div 
                                 key={`${item.messageId}-img-${index}`} 
-                                className="aspect-square h-[150px] relative overflow-hidden rounded"
-                              >
-                                {renderFileAttachment(
-                                  item.attachment.url, 
-                                  item.attachment.fileName, 
-                                  item.attachment.fileKey, 
-                                  item.attachment.fileType, 
-                                  true
+                                className="aspect-square h-[150px] relative overflow-hidden rounded cursor-pointer"
+                                onClick={() => openAttachmentCarousel(
+                                  allImageAttachments.map(i => i.attachment), 
+                                  index
                                 )}
+                              >
+                                <Image
+                                  src={item.attachment.url}
+                                  alt="Message Attachment"
+                                  layout="fill"
+                                  objectFit="cover"
+                                />
                               </div>
                             ))}
                           </div>
