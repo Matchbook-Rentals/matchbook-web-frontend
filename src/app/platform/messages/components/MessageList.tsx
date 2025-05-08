@@ -133,20 +133,36 @@ const MessageList: React.FC<MessageListProps> = ({
     );
   }
 
-  // Group consecutive messages by sender
+  // Group consecutive messages by sender and content type
   const messageGroups: any[][] = [];
   let currentGroup: any[] = [];
+
+  // Helper function to determine message type
+  const getMessageType = (message: any): string => {
+    // Check if message has attachments
+    if (message.attachments && message.attachments.length > 0) {
+      // Check if all attachments are images
+      const allAttachmentsAreImages = message.attachments.every((attachment: MessageFile) => 
+        attachment.fileName ? isImageFile(attachment.fileName) : false
+      );
+      
+      if (allAttachmentsAreImages) return 'image';
+      return 'file';
+    }
+    
+    // Text-only message
+    return 'text';
+  };
 
   messages.forEach((message, index) => {
     // Start a new group if:
     // 1. It's the first message.
     // 2. The sender is different from the previous message.
-    // 3. The current message has an image.
-    // 4. The previous message had an image.
+    // 3. The current message type is different from the previous message type.
+    const currentMessageType = getMessageType(message);
     const startNewGroup = index === 0 ||
                           message.senderId !== messages[index - 1].senderId ||
-                          !!message.imgUrl ||
-                          !!messages[index - 1].imgUrl;
+                          currentMessageType !== getMessageType(messages[index - 1]);
 
     if (startNewGroup) {
       // Start of a new group
