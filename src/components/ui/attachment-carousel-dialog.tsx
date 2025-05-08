@@ -70,14 +70,37 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
   }, [carouselApi, initialIndex, isOpen, attachments.length]);
 
   // Handle file download
-  const handleDownload = (file: AttachmentFileItem) => {
+  const handleDownload = async (file: AttachmentFileItem) => {
     if (file.url) {
-      const link = document.createElement('a');
-      link.href = file.url;
-      link.setAttribute('download', file.fileName || 'download');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        // Fetch the image/file as a blob
+        const response = await fetch(file.url);
+        const blob = await response.blob();
+        
+        // Create a blob URL and use it for download
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = file.fileName || 'download';
+        
+        // Append to body, click, and clean up
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Release the blob URL
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+      } catch (error) {
+        console.error('Error downloading file:', error);
+        // Fallback to direct download if fetch fails
+        const link = document.createElement('a');
+        link.href = file.url;
+        link.setAttribute('download', file.fileName || 'download');
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
   };
 
