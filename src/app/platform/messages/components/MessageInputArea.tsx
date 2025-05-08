@@ -1,28 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UploadButton } from "@/app/utils/uploadthing";
-import { PaperclipIcon, X, Download as DownloadIcon, FileText as FileTextIcon } from 'lucide-react';
+import { PaperclipIcon, X } from 'lucide-react';
 import Image from "next/image";
 import { FilePreview } from '@/components/ui/file-preview';
-import { isImageFile, formatFileSize } from '@/lib/utils';
+import { isImageFile } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
-import { Button } from '@/components/ui/button';
 
-// ShadCN UI components for Dialog and Carousel
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
+// Import the new AttachmentCarouselDialog
+import { AttachmentCarouselDialog, AttachmentFileItem } from '@/components/ui/attachment-carousel-dialog';
 
 interface MessageFile {
   url: string;
@@ -87,11 +72,9 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   
   const prevConversationIdRef = useRef<string | null>(null);
 
-  // State for Attachment Carousel Dialog
+  // State for controlling the Attachment Carousel Dialog
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
-  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [currentCarouselSlide, setCurrentCarouselSlide] = useState(0);
 
 
   useEffect(() => {
@@ -105,17 +88,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     }
     prevConversationIdRef.current = selectedConversation?.id || null;
   }, [selectedConversation]);
-
-  // Effect for Carousel API to update current slide number
-  useEffect(() => {
-    if (!carouselApi) {
-      return;
-    }
-    setCurrentCarouselSlide(carouselApi.selectedScrollSnap() + 1); // Initial slide
-    carouselApi.on("select", () => {
-      setCurrentCarouselSlide(carouselApi.selectedScrollSnap() + 1);
-    });
-  }, [carouselApi]);
 
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
@@ -158,7 +130,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   const handleUploadFinish = (res: UploadData[]) => {
     console.log('=== UPLOAD FINISH ===', res);
-    const attachments = res.map(r => ({
+    const attachments: MessageFile[] = res.map(r => ({
       url: r.url,
       fileName: r.name,
       fileKey: r.key,
@@ -173,19 +145,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const openAttachmentCarousel = (index: number) => {
     setCarouselInitialIndex(index);
     setIsAttachmentCarouselOpen(true);
-  };
-
-  // Simplified download handler for files in carousel
-  const handleDownloadFromCarousel = (file: MessageFile) => {
-    if (file.url) {
-      const link = document.createElement('a');
-      link.href = file.url;
-      link.setAttribute('download', file.fileName || 'download');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      link.remove();
-    }
   };
 
   return (
@@ -327,77 +286,15 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         </div>
       </div>
 
-      {/* Attachment Carousel Dialog */}
-      <Dialog open={isAttachmentCarouselOpen} onOpenChange={setIsAttachmentCarouselOpen}>
-        <DialogContent className="max-w-3xl w-[90vw] h-[85vh] p-0 flex flex-col bg-card sm:rounded-lg">
-          <DialogHeader className="p-4 border-b flex-shrink-0">
-            <DialogTitle>
-              Attachments 
-              {messageAttachments.length > 0 && ` (${currentCarouselSlide} of ${messageAttachments.length})`}
-            </DialogTitle>
-            <DialogClose className="absolute right-4 top-3.5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </DialogClose>
-          </DialogHeader>
-
-          {messageAttachments.length > 0 && (
-            <Carousel
-              setApi={setCarouselApi}
-              opts={{
-                startIndex: carouselInitialIndex,
-                loop: messageAttachments.length > 1,
-                align: "center",
-              }}
-              className="flex-grow flex flex-col justify-center items-center p-1 sm:p-4 min-h-0 overflow-hidden"
-            >
-              <CarouselContent className="-ml-4 h-full">
-                {messageAttachments.map((attachment, idx) => (
-                  <CarouselItem key={idx} className="pl-4 basis-full h-full flex flex-col items-center justify-center">
-                    <div className="w-full h-full relative flex items-center justify-center p-2">
-                      {isImageFile(attachment.fileName || '') ? (
-                        <Image
-                          src={attachment.url}
-                          alt={attachment.fileName || 'Attachment'}
-                          layout="fill"
-                          objectFit="contain"
-                          className="max-w-full max-h-full"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center justify-center p-6 bg-muted/50 rounded-lg text-center h-auto w-auto max-w-md">
-                          <FileTextIcon className="w-20 h-20 sm:w-24 sm:h-24 text-muted-foreground mb-4" />
-                          <p className="text-base sm:text-lg font-semibold truncate max-w-xs sm:max-w-sm" title={attachment.fileName}>
-                            {attachment.fileName || 'File'}
-                          </p>
-                          {attachment.fileSize && (
-                            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-                              {formatFileSize(attachment.fileSize)}
-                            </p>
-                          )}
-                          <Button
-                            variant="outline"
-                            className="mt-4 sm:mt-6"
-                            onClick={() => handleDownloadFromCarousel(attachment)}
-                          >
-                            <DownloadIcon className="mr-2 h-4 w-4" />
-                            Download
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {messageAttachments.length > 1 && (
-                <>
-                  <CarouselPrevious className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10" />
-                  <CarouselNext className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10" />
-                </>
-              )}
-            </Carousel>
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* Use the new AttachmentCarouselDialog component */}
+      {messageAttachments.length > 0 && (
+        <AttachmentCarouselDialog
+          attachments={messageAttachments as AttachmentFileItem[]}
+          isOpen={isAttachmentCarouselOpen}
+          onOpenChange={setIsAttachmentCarouselOpen}
+          initialIndex={carouselInitialIndex}
+        />
+      )}
     </div>
   );
 };
