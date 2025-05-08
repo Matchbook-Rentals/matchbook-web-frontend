@@ -259,72 +259,101 @@ const MessageList: React.FC<MessageListProps> = ({
                 </div>
               )}
               <div className={`max-w-[70%] text-black rounded-2xl border leading-snug shadow-md py-2 overflow-hidden overflow-wrap-anywhere ${bubbleStyles}`}>
-                {group.map((message, messageIndex) => {
-                  // Determine if there's text content
-                  const hasTextContent = message.content && message.content.trim().length > 0;
-                  // Determine if there are attachments
-                  const hasAttachments = message.attachments && message.attachments.length > 0;
+                {(() => {
+                  // First, render all text messages
+                  const textMessages = group.filter(msg => {
+                    const hasTextContent = msg.content && msg.content.trim().length > 0;
+                    const hasAttachments = msg.attachments && msg.attachments.length > 0;
+                    return hasTextContent && (!hasAttachments || (hasAttachments && 
+                      !(msg.attachments.every((att: MessageFile) => att.fileName ? isImageFile(att.fileName) : false))
+                    ));
+                  });
 
-                  const addMarginTop = messageIndex > 0; // Add margin only if not the first message in the group
-                  // Base padding, can be adjusted if there's no text and only attachments
-                  const bubblePadding = hasTextContent ? 'px-0 py-0' : (hasAttachments ? 'p-1' : 'px-0 py-0'); // Add some padding if only attachments
+                  // Then collect all image attachments across all messages in this group
+                  const allImageAttachments: {attachment: MessageFile, messageId: string | number}[] = [];
+                  group.forEach(msg => {
+                    if (msg.attachments && msg.attachments.length > 0) {
+                      const imageAttachments = msg.attachments.filter((att: MessageFile) => 
+                        att.fileName ? isImageFile(att.fileName) : false
+                      );
+                      imageAttachments.forEach((att: MessageFile) => {
+                        allImageAttachments.push({
+                          attachment: att,
+                          messageId: msg.id || `msg-${group.indexOf(msg)}`
+                        });
+                      });
+                    }
+                  });
+
+                  // Finally, collect all non-image file attachments
+                  const fileMessages = group.filter(msg => {
+                    if (!msg.attachments || msg.attachments.length === 0) return false;
+                    
+                    const hasNonImageFiles = msg.attachments.some((att: MessageFile) => 
+                      att.fileName ? !isImageFile(att.fileName) : true
+                    );
+                    
+                    return hasNonImageFiles;
+                  });
 
                   return (
-                    <div 
-                      key={message.id || `msg-${messageIndex}`}
-                      className={`${addMarginTop ? 'pt-1.5 border-gray-500/30' : ''} ${bubblePadding}`}
-                    >
-                      {/* Render text content if it exists */}
-                      {hasTextContent && (
-                        <p className="whitespace-pre-wrap break-words px-0 py-0 overflow-hidden overflow-wrap-anywhere">
-                          {message.content}
-                        </p>
+                    <>
+                      {/* Render text messages */}
+                      {textMessages.map((message, messageIndex) => (
+                        <div 
+                          key={message.id || `text-msg-${messageIndex}`}
+                          className={`${messageIndex > 0 ? 'pt-1.5 border-gray-500/30' : ''} px-0 py-0`}
+                        >
+                          <p className="whitespace-pre-wrap break-words px-0 py-0 overflow-hidden overflow-wrap-anywhere">
+                            {message.content}
+                          </p>
+                        </div>
+                      ))}
+
+                      {/* Render image grid */}
+                      {allImageAttachments.length > 0 && (
+                        <div className={`${textMessages.length > 0 ? 'mt-2' : 'mt-0'}`}>
+                          <div className={`grid ${allImageAttachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
+                            {allImageAttachments.map((item, index) => (
+                              <div 
+                                key={`${item.messageId}-img-${index}`} 
+                                className="aspect-square h-[150px] relative overflow-hidden rounded"
+                              >
+                                {renderFileAttachment(
+                                  item.attachment.url, 
+                                  item.attachment.fileName, 
+                                  item.attachment.fileKey, 
+                                  item.attachment.fileType, 
+                                  true
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )}
 
-                      {/* Render attachments if they exist */}
-                      {hasAttachments && (
-                        (() => {
-                          const attachments = message.attachments as MessageFile[];
-                          const hasTextContent = message.content && message.content.trim().length > 0;
-                          const mtClass = hasTextContent ? 'mt-2' : 'mt-0';
-                          
-                          // Check if all attachments are images
-                          const allAttachmentsAreImages = attachments.every((attachment) => 
-                            attachment.fileName ? isImageFile(attachment.fileName) : false
-                          );
-                          
-                          if (allAttachmentsAreImages) {
-                            return (
-                              <div className={`${mtClass}`}>
-                                <div className={`grid ${attachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
-                                  {attachments.map((attachment, attIndex) => (
-                                    <div 
-                                      key={`${message.id}-att-${attIndex}`} 
-                                      className="aspect-square h-[150px] relative overflow-hidden rounded"
-                                    >
-                                      {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, true)}
-                                    </div>
-                                  ))}
-                                </div>
+                      {/* Render file attachments */}
+                      {fileMessages.map((message, messageIndex) => {
+                        const nonImageAttachments = message.attachments.filter((att: MessageFile) => 
+                          att.fileName ? !isImageFile(att.fileName) : true
+                        );
+                        
+                        return (
+                          <div 
+                            key={message.id || `file-msg-${messageIndex}`}
+                            className={`${(textMessages.length > 0 || allImageAttachments.length > 0 || messageIndex > 0) ? 'mt-2' : 'mt-0'}`}
+                          >
+                            {nonImageAttachments.map((attachment: MessageFile, attIndex: number) => (
+                              <div key={`${message.id}-file-${attIndex}`} className="max-w-xs mx-auto mb-2">
+                                {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, false)}
                               </div>
-                            );
-                          } else {
-                            // Non-image files
-                            return (
-                              <div className={`${mtClass}`}>
-                                {attachments.map((attachment, attIndex) => (
-                                  <div key={`${message.id}-att-${attIndex}`} className="max-w-xs mx-auto mb-2">
-                                    {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, false)}
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          }
-                        })()
-                      )}
-                    </div>
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </>
                   );
-                })}
+                })()}
               </div>
             </div>
 
