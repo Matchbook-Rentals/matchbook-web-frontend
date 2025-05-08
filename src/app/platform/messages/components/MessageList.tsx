@@ -285,28 +285,41 @@ const MessageList: React.FC<MessageListProps> = ({
                       {hasAttachments && (
                         (() => {
                           const attachments = message.attachments as MessageFile[];
-                          const numAttachments = attachments.length;
-                          const isMultipleAttachments = numAttachments > 1;
-
-                          const attachmentContainerClasses = isMultipleAttachments
-                            ? `grid grid-cols-2 gap-1 mt-${hasTextContent ? '2' : '0'}`
-                            : `mt-${hasTextContent ? '2' : '0'}`;
-
-                          return (
-                            <div className={attachmentContainerClasses}>
-                              {attachments.map((attachment, attIndex) => {
-                                const itemWrapperClasses = isMultipleAttachments
-                                  ? "aspect-square h-[150px] relative overflow-hidden rounded"
-                                  : "max-w-xs mx-auto"; 
-
-                                return (
-                                  <div key={`${message.id}-att-${attIndex}`} className={itemWrapperClasses}>
-                                    {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, isMultipleAttachments)}
-                                  </div>
-                                );
-                              })}
-                            </div>
+                          const hasTextContent = message.content && message.content.trim().length > 0;
+                          const mtClass = hasTextContent ? 'mt-2' : 'mt-0';
+                          
+                          // Check if all attachments are images
+                          const allAttachmentsAreImages = attachments.every((attachment) => 
+                            attachment.fileName ? isImageFile(attachment.fileName) : false
                           );
+                          
+                          if (allAttachmentsAreImages) {
+                            return (
+                              <div className={`${mtClass}`}>
+                                <div className={`grid ${attachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
+                                  {attachments.map((attachment, attIndex) => (
+                                    <div 
+                                      key={`${message.id}-att-${attIndex}`} 
+                                      className="aspect-square h-[150px] relative overflow-hidden rounded"
+                                    >
+                                      {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, true)}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          } else {
+                            // Non-image files
+                            return (
+                              <div className={`${mtClass}`}>
+                                {attachments.map((attachment, attIndex) => (
+                                  <div key={`${message.id}-att-${attIndex}`} className="max-w-xs mx-auto mb-2">
+                                    {renderFileAttachment(attachment.url, attachment.fileName, attachment.fileKey, attachment.fileType, false)}
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
                         })()
                       )}
                     </div>
