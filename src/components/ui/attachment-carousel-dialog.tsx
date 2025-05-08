@@ -131,7 +131,7 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
                       src={attachment.url}
                       alt={attachment.fileName || 'Attachment'}
                       layout="fill"
-                      objectFit="cover"
+                      objectFit="contain"
                       className="max-w-full max-h-full"
                     />
                   ) : (
