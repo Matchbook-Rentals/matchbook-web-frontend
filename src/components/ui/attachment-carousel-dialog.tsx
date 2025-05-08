@@ -35,6 +35,7 @@ interface AttachmentCarouselDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   initialIndex?: number;
+  withDownloadButton?: boolean;
 }
 
 export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> = ({
@@ -42,6 +43,7 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
   isOpen,
   onOpenChange,
   initialIndex = 0,
+  withDownloadButton = false,
 }) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -112,9 +114,6 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] p-0 flex flex-col bg-card sm:rounded-lg overflow-hidden">
         <DialogHeader className="p-4 border-b flex-shrink-0 relative">
-          <DialogClose className="absolute left-4 top-4 z-10">
-            <X className="h-5 w-5" />
-          </DialogClose>
           <DialogTitle className="text-center">
             {attachments.length > 1 
               ? `Attachment ${currentIndex + 1} of ${attachments.length}` 
@@ -185,8 +184,8 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
           </Carousel>
         </div>
 
-        {/* Download button for images */}
-        {attachments[currentIndex] && isImageFile(attachments[currentIndex].fileName || '') && (
+        {/* Download button for images (only shown if withDownloadButton is true) */}
+        {withDownloadButton && attachments[currentIndex] && isImageFile(attachments[currentIndex].fileName || '') && (
           <div className="p-4 border-t flex justify-center">
             <Button 
               variant="outline"
