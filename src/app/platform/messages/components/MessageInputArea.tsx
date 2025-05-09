@@ -149,7 +149,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div className="pb-1 px-2 bg-transparent">
-      {messageAttachments.length > 0 && (<div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/20 px-2 rounded">
+      {messageAttachments.length > 0 && (<div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/15 px-2 rounded">
         {messageAttachments.map((attachment, index) => {
           const handleRemoveAttachment = () => {
             setMessageAttachments(prev => prev.filter((_, i) => i !== index));
@@ -167,7 +167,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
           return (
             <div key={index} className="inline-block flex-shrink-0 aspect-square rounded group">
               {isImage ? (
-                <div className="p-1 bg-white relative aspect-square h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
+                <div className=" relative aspect-square h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
                   <button
                     className="absolute top-0 right-0 z-10 w-5 h-5 bg-white/80 hover:bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={handleRemoveAttachment}
