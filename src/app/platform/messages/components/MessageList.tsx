@@ -78,7 +78,7 @@ const MessageList: React.FC<MessageListProps> = ({
       // Custom compact rendering for non-image files in a grid
       return (
         <div
-          className="flex h-full flex-col items-center border justify-center px-2 rounded cursor-pointer"
+          className="flex h-full flex-col items-center border justify-center pl-2 rounded cursor-pointer"
           onClick={() => handleFileClick(fileObject)}
           title={fileName} // Show full filename on hover
         >

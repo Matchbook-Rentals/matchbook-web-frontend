@@ -148,7 +148,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   };
 
   return (
-    <div className="py-1 px-12 bg-background">
+    <div className="py-1 px-2 bg-transparent">
       {messageAttachments.length > 0 && (<div className="flex overflow-x-auto scrollbar-hide py-1 space-x-2 mb-2 bg-black/20 px-2 rounded">
         {messageAttachments.map((attachment, index) => {
           const handleRemoveAttachment = () => {
@@ -205,7 +205,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
  )}
       
       <div
-        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out"
+        className="flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out"
         style={{ 
           borderRadius: newMessageInput.length > 0 
             ? newMessageInput.length > 20 
@@ -220,7 +220,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       >
         <textarea
           ref={textareaRef}
-          className="flex-1 px-5 py-3 focus:outline-none text-black resize-none min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta"
+          className="flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta"
           placeholder="Type a message..."
           value={newMessageInput}
           onChange={(e) => {
