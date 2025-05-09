@@ -58,7 +58,7 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
     };
 
     carouselApi.on("select", handleSelect);
-    
+
     // Initialize carousel to the correct index
     if (isOpen) {
       const targetIndex = Math.min(Math.max(0, initialIndex), attachments.length - 1);
@@ -70,6 +70,25 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
       carouselApi.off("select", handleSelect);
     };
   }, [carouselApi, initialIndex, isOpen, attachments.length]);
+
+  // Effect to handle keyboard navigation
+  useEffect(() => {
+    if (!isOpen || !carouselApi) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        carouselApi.scrollPrev();
+      } else if (e.key === 'ArrowRight') {
+        carouselApi.scrollNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [carouselApi, isOpen]);
 
   // Handle file download
   const handleDownload = async (file: AttachmentFileItem) => {
