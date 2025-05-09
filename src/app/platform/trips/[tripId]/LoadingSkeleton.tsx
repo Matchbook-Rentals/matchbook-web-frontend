@@ -16,17 +16,14 @@ export default function LoadingSkeleton() {
             {/* First row: Property details and pricing */}
             <div className="col-span-2 bg-gray-200 rounded-lg" />
             <div className="col-span-2 bg-gray-200 rounded-lg" />
-            {/* Second row: Highlights and action buttons */}
-            <div className="col-span-1 bg-gray-200 rounded-lg" />
-            <div className="col-span-1 bg-gray-200 rounded-lg" />
-            <div className="col-span-1 bg-gray-200 rounded-lg" />
-            <div className="col-span-1 bg-gray-200 rounded-lg" />
+            <div className="col-span-2 bg-gray-200 rounded-lg" />
+            <div className="col-span-2 bg-gray-200 rounded-lg" />
           </div>
         </div>
       </div>
 
       {/* Mobile Layout */}
-      <div className="md:hidden flex flex-col space-y-4 w-full animate-pulse">
+      <div className="md:hidden relative min-h-[75vh] flex flex-col space-y-4 w-full animate-pulse">
         <div className="w-full flex justify-end"> <div className="animate-pulse bg-gray-200 w-[80px] h-[30px]" /></div>
         {/* Main image skeleton */}
         <div className="w-full h-[30vh] relative">
@@ -35,36 +32,12 @@ export default function LoadingSkeleton() {
           <div className="absolute bottom-4 right-4 h-10 w-24 bg-gray-300 rounded-md" />
         </div>
 
-        {/* Additional skeletons */}
-        <div className="space-y-2 px-4">
-          {/* Address */}
-          <div className="h-[5vh] bg-gray-200 rounded" />
-          {/* Property details */}
-          <div className="h-[10vh] bg-gray-200 rounded" />
-          {/* Pricing */}
-          <div className="h-[7vh] bg-gray-200 rounded" />
-          {/* Highlights */}
-          <div className="flex flex-col items-start justify-between space-y-4">
-            <div className="flex space-x-6">
-              <div className="h-8 w-8 animate-pulse bg-gray-200"></div>
-              <div className="h-8 w-32 bg-gray-200 rounded"></div>
-            </div>
-            <div className="flex space-x-6">
-              <div className="h-8 w-8 animate-pulse bg-gray-200"></div>
-              <div className="h-8 w-32 bg-gray-200 rounded"></div>
-            </div>
-            <div className="flex space-x-6">
-              <div className="h-8 w-8 animate-pulse bg-gray-200"></div>
-              <div className="h-8 w-32 bg-gray-200 rounded"></div>
-            </div>
-          </div>
           {/* Action buttons */}
           <div className="flex items-center justify-center space-x-4 absolute bottom-[5%] left-[50%] translate-x-[-50%] z-10">
             <div className="h-20 w-20 bg-gray-200 rounded-full"></div>
             <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
             <div className="h-20 w-20 bg-gray-200 rounded-full"></div>
           </div>
-        </div>
       </div>
     </>
   );
