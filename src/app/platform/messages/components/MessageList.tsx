@@ -279,7 +279,7 @@ const MessageList: React.FC<MessageListProps> = ({
                   <img
                     src={participantInfo.imageUrl}
                     alt="Profile"
-                    className="w-9 h-9 rounded-full mr-2"
+                    className="w-9 h-9 rounded-full object-cover mr-2"
                   />
                 </div>
               )}
