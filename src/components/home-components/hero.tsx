@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog"; // Import Dialog components
+import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
 
 const Hero: React.FC = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
@@ -84,19 +85,26 @@ const Hero: React.FC = () => {
       <Dialog open={showSearchPopup} onOpenChange={setShowSearchPopup}>
         {/* Content container with custom styling */}
         <DialogContent
-          className="sm:hidden h-fit max-h-[90vh] overflow-y-auto bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
+          hideCloseButton
+          className="sm:hidden h-fit max-h-[90vh] bg-transparent border-none shadow-none p-0 w-fit max-w-[95vw] top-[5vh] translate-y-0"
         >
-          {/* Use SearchContainer within the popup */}
-          <SearchContainer
-            hasAccess={hasAccess} // Pass hasAccess state
-            className="z-100" // Removed width constraints
-            containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
-            inputStyles='bg-background'
-            searchButtonClassNames='bg-primaryBrand hover:bg-primaryBrand/90 transition-none' // Mobile specific styles
-            searchIconColor='text-white' // Mobile specific icon color
-            popoverMaxWidth='90vw' // Adjust popover width for mobile
-            headerText='Find your next home'
-          />
+          <div className="flex justify-center w-full">
+            <ScrollArea className="h-full max-h-[90vh] w-auto">
+              <div className="px-1">
+                {/* Use SearchContainer within the popup */}
+                <SearchContainer
+                  hasAccess={hasAccess} // Pass hasAccess state
+                  className="z-100" // Removed width constraint as it's now centered by parent
+                  containerStyles='bg-background mx-auto rounded-[15px] drop-shadow-[0_0px_10px_rgba(0,_0,_0,_0.2)]' // Removed padding
+                  inputStyles='bg-background'
+                  searchButtonClassNames='bg-primaryBrand hover:bg-primaryBrand/90 transition-none' // Mobile specific styles
+                  searchIconColor='text-white' // Mobile specific icon color
+                  popoverMaxWidth='90vw' // Adjust popover width for mobile
+                  headerText='Find your next home'
+                />
+              </div>
+            </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
