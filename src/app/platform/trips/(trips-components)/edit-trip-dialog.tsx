@@ -48,11 +48,11 @@ const EditTripDialog: React.FC<EditTripDialogProps> = ({ trip }) => {
         // Mobile dialog
         <DialogContent
           className={cn(
-            "min-w-[50vw] max-w-[80vw] sm:max-w-[60vw] bg-transparent border-none rounded-full p-0 ",
+            "min-w-[50vw] max-w-[80vw] sm:max-w-[60vw] bg-transparent border-none rounded-none  p-0 ",
             "h-fit max-h-[89vh]"
           )}
         >
-          <ScrollArea className="h-full max-h-[80vh]">
+          <ScrollArea className="h-full max-h-[89vh] rounded-[15px]">
             <SearchEditBar trip={trip} />
           </ScrollArea>
         </DialogContent>
@@ -60,7 +60,7 @@ const EditTripDialog: React.FC<EditTripDialogProps> = ({ trip }) => {
         // Desktop dialog
         <DialogContent
           className={cn(
-            "min-w-[50vw] max-w-[80vw] bg-background border py-2 px-2 lg:px-8 xl:max-w-4xl",
+            "min-w-[50vw] max-w-[80vw] bg-background border py-2 x-2 lg:px-8 xl:max-w-4xl",
             "md:top-[25vh] h-[200px] overflow-y-visible"
           )}
         >

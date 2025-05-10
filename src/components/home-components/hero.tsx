@@ -11,12 +11,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"; // Import Dialog components
 import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
+import { useWindowSize } from "@/hooks/useWindowSize"; // Import window size hook
 
 const Hero: React.FC = () => {
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
   const [hasAccess, setHasAccess] = useState(false); // State for access check
   const { isSignedIn } = useAuth();
   const { user } = useUser();
+  const { width } = useWindowSize(); // Get current window width
 
   // Effect to check user access based on role
   useEffect(() => {
@@ -33,6 +35,13 @@ const Hero: React.FC = () => {
 
     checkAccess();
   }, [isSignedIn, user]); // Rerun check when auth state or user data changes
+
+  // Close mobile dialog when screen width exceeds 640px (sm breakpoint in Tailwind)
+  useEffect(() => {
+    if (width && width >= 640 && showSearchPopup) {
+      setShowSearchPopup(false);
+    }
+  }, [width, showSearchPopup]); // Run effect when width or showSearchPopup changes
 
   return (
     <div

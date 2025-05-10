@@ -3,7 +3,7 @@ import SocialLinks from "../SocialLinks";
 export default function Footer() {
 
   return (
-    <footer className="border-t border-gray-200 pt-0 pb-2">
+    <footer className="border-t border-gray-200 pt-0 pb-6 md:pb-2">
       <div className="mx-auto flex flex-col lg:flex-row justify-between w-full md:w-[90vw] lg:w-[80vw]">
         {/* Company Logo and Tagline */}
         <div className="flex flex-col  items-center gap-4 px-4 sm:px-6 md:px-8">
