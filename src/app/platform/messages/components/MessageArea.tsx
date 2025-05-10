@@ -208,10 +208,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         handleBackClick={handleBackClick}
       />
 
-      <div className="flex-1 w-full overflow-x-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%]  md:w-[100.7%] overflow-x-visible">
+      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'pb-16' : ''}`}>
+        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
           <div className="py-2 px-4 min-h-full">
-            <MessageList 
+            <MessageList
               messages={messages}
               currentUserId={currentUserId}
               selectedConversation={selectedConversation}
@@ -224,8 +224,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className="mt-auto">
-        <MessageInputArea 
+      <div className={isMobile ? '' : 'mt-auto'}>
+        <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
           onTyping={onTyping}
