@@ -1,6 +1,6 @@
 export default function RentEasyCopy() {
   // Decorative elements
-  const decorativeDividerStyle = "w-[15%] md:w-1/4 lg:w-2/5 h-[2px] bg-black"
+  const decorativeDividerStyle = " w-[0%] sm:w-[15%] md:w-1/4 lg:w-2/5 h-[2px] bg-black"
 
   // Container styles
   const sectionContainerStyle = "flex w-[100vw] items-center justify-center py-0"

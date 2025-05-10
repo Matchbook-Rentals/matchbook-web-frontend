@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { DeniedIcon, DeclinedApplicationIcon, ApplicationIcon } from '@/components/icons';
 import { MatchbookVerified } from '@/components/icons/views';
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,14 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { 
-  Dialog,
-  DialogContent,
-  DialogTrigger
-} from "@/components/ui/dialog";
-import SearchEditBar from '@/components/home-components/search-edit-bar';
-import { cn } from '@/lib/utils';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import EditTripDialog from './edit-trip-dialog';
 
 const getState = (stateInput: string): string => {
   // Normalize input by removing spaces and converting to uppercase
@@ -201,29 +194,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onDelete }) => {
             >
               Continue Search
             </Button>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  className="bg-background border border-gray-200 hover:bg-gray-100 text-[#404040] rounded-md px-4 py-2 text-sm font-medium h-9"
-                  variant="ghost"
-                >
-                  <Pencil className="h-4 w-4 mr-1" /> Edit
-                </Button>
-              </DialogTrigger>
-              {/* Apply mobile styles by default, revert for md+ */}
-              <DialogContent
-                className={cn(
-                  "w-fit bg-transparent border-none p-0 md:w-auto md:max-w-4xl  md:bg-background md:border py-2 px-2 lg:px-8",
-                  "md:top-[25vh] h-fit md:h-[200px] max-h-[89vh] overflow-y-auto  md:overflow-y-visible" // Default center on mobile, 25vh top on md+
-                )}
-              >
-                {/* Restore padding for md+ & hide header on mobile */}
-                <div className="mb-6 md:p-0 hidden md:block"> 
-                  <h2 className="text-2xl font-semibold">Edit Trip Details</h2>
-                </div>
-                <SearchEditBar trip={trip} />
-              </DialogContent>
-            </Dialog>
+            <EditTripDialog trip={trip} />
             <div className="hidden md:block">
               <Popover>
                 <PopoverTrigger asChild>

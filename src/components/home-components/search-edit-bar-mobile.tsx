@@ -348,7 +348,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     <motion.div // Keep motion.div for other potential animations (like sliding components)
       ref={componentRef}
       // Control width directly with className based on activeInput state
-      className={`flex flex-col mx-auto p-4 z-50 items-center bg-background rounded-3xl border border-black overflow-hidden ${activeInput !== null ? 'w-[85vw]' : 'w-[80vw]'} ${className || ''}`}
+      className={`flex flex-col mx-auto p-4 z-50 items-center bg-background rounded-3xl border border-black overflow-hidden ${activeInput !== null ? 'w-full' : 'w-full'} ${className || ''}`}
     // Removed animate and transition props for width
     >
       {/* Added Mobile Header */}
