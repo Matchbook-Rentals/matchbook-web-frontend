@@ -64,7 +64,7 @@ export const ProsConsGrid: React.FC<ProsConsGridProps> = ({
   );
 
   return (
-    <div className="container mx-auto px-4 my-36">
+    <div className="container mx-auto px-4">
       <h2 className={textStyles.title}>
         {title}
       </h2>

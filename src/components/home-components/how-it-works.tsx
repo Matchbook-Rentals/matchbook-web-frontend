@@ -22,7 +22,7 @@ export const HowItWorks = (): JSX.Element => {
   ];
 
   return (
-    <section className="flex flex-col w-full max-w-[1382px] mx-auto my-12 md:my-40 items-center gap-16 py-8">
+    <section className="flex flex-col w-full max-w-[1382px] mx-auto items-center gap-16 py-0">
       <h1 className="font-lora text-4xl font-semibold text-center text-[#271c1a] tracking-[-0.72px] leading-[52px]">
         How MatchBook Works
       </h1>

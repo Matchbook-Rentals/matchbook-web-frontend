@@ -47,8 +47,7 @@ export default function RecentArticle() {
 
   return (
     <section
-      // Reduced top margin for small screens, kept md height
-      className={`relative w-full ${PAGE_MARGIN} my-20 md:mt-[250px] md:h-[50vh]`}
+      className={`relative w-full ${PAGE_MARGIN} md:h-[50vh]`}
     >
       {/* Use flex-col by default, md:items-end for medium+ screens */}
       <div className="relative w-full h-full flex flex-col md:flex-row md:items-end">

@@ -7,7 +7,7 @@ export const BecomeHostCopy = (): JSX.Element => {
   const router = useRouter();
 
   return (
-    <section className="flex flex-col max-w-[1260px] my-60 w-full mx-auto items-center gap-9 py-8">
+    <section className="flex flex-col max-w-[1260px] w-full mx-auto items-center gap-9 py-0">
       <h1 className="w-full font-['Poppins',Helvetica] font-medium text-[#271c1a] text-5xl text-center tracking-[-0.96px] leading-[68px]">
         Interested in becoming a host?
       </h1>

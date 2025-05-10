@@ -47,7 +47,7 @@ export const RentersLoveMatchbook = (): JSX.Element => {
 
   return (
     <section className="relative w-full max-w-[990px] mx-auto">
-      <div className="flex flex-col items-center gap-16 py-12">
+      <div className="flex flex-col items-center gap-16 py-0">
         <h1 className="font-normal text-[#1d221b] text-5xl md:text-6xl text-center tracking-[-0.48px] leading-[52px]">
           Why Renters love MatchBook
         </h1>

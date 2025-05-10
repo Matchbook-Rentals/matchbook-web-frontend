@@ -58,17 +58,29 @@ import RecentArticle from "@/components/home-components/recent-article";
 const WebHomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Define the spacer class name variable
+  const spacerDivClassNames = "h-72 lg:h-80 ";
+  const shortSpacerClassNames = "h-36  lg:h-40 ";
+
   return (
     <div className="overflow-x-hidden">
-      <MatchbookHeader  />
+      <MatchbookHeader />
       <Hero />
+      <div className={shortSpacerClassNames} />
       <RentEasyCopy />
+      <div className={spacerDivClassNames} />
       <HowItWorks />
+      <div className={spacerDivClassNames} />
       <RentersLoveMatchbook />
+      <div className={spacerDivClassNames} />
       <BecomeHostCopy />
+      <div className={spacerDivClassNames} />
       <ProsConsGrid />
+      <div className={spacerDivClassNames} />
       <PlaceYouLove />
+      <div className={spacerDivClassNames} />
       <RecentArticle />
+      <div className={shortSpacerClassNames} />
       <Footer />
     </div>
   );
