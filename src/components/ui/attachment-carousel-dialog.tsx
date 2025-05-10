@@ -189,7 +189,6 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
                           </p>
                         )}
                         <Button
-                          variant="outline"
                           className="mt-6"
                           onClick={() => handleDownload(attachment)}
                         >
@@ -216,7 +215,6 @@ export const AttachmentCarouselDialog: React.FC<AttachmentCarouselDialogProps> =
         {withDownloadButton && attachments[currentIndex] && isImageFile(attachments[currentIndex].fileName || '') && (
           <div className="p-4 border-t flex justify-center">
             <Button 
-              variant="outline"
               size="sm"
               onClick={() => handleDownload(attachments[currentIndex])}
             >
