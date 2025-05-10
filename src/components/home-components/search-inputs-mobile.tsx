@@ -242,7 +242,7 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
                   suggestions.map((suggestion) => (
                     <div
                       key={suggestion.place_id}
-                      className="py-2 border-y text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="py-2  text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                       onClick={() => handleLocationSelect(suggestion.description, suggestion.place_id)}
                       onMouseEnter={() => prefetchGeocode(suggestion.description)}
                     >

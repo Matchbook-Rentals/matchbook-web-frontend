@@ -316,7 +316,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
                   PRESET_CITIES.map((city) => (
                     <div
                       key={city.description}
-                      className="py-2 border-y font-light text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="py-2 border-none font-light text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                       onClick={() => handleLocationSelect(city.description, undefined, city.lat, city.lng)}
                     >
                       {city.description}
@@ -326,7 +326,7 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
                   suggestions.map((suggestion) => (
                     <div
                       key={suggestion.place_id}
-                      className="py-2 border-y text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="py-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                       onClick={() => handleLocationSelect(suggestion.description, suggestion.place_id)}
                       onMouseEnter={() => prefetchGeocode(suggestion.description)}
                     >
