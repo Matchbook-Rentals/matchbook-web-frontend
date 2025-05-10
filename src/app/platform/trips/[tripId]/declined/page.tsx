@@ -17,7 +17,7 @@ export default function DeclinedPage() {
   const declinedListings: unknown[] = []; // Example: Assume empty for now
 
   const handleGoToSearch = () => {
-    router.push(`/platform/trips/${tripId}/search`);
+    router.push(`/platform/trips/${tripId}`);
   };
 
   return (

@@ -648,7 +648,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   }, [trip, lookup, triggerPopup]);
 
   const optimisticRemoveDislike = useCallback(async (listingId: string) => {
-    triggerPopup('back');
     try {
       // Skip if not disliked
       if (!lookup.dislikedIds.has(listingId)) return;
