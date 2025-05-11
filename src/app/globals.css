@@ -7,6 +7,12 @@
 
 @layer base {
   :root {
+    /* iOS Safe Area Variables */
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+
     --background: 0 100% 99.6%;
     /*--background: 0 100% 99.2%;*/
     --foreground: 0 0% 25.1%;
@@ -101,6 +107,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

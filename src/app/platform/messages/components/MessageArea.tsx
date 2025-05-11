@@ -196,7 +196,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border h-[calc(100vh-65px)] sm:h-[calc(100vh-65px)] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col box-border h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] sm:h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     <div className={messageContainerClassName}>
@@ -208,7 +208,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         handleBackClick={handleBackClick}
       />
 
-      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'pb-16' : ''}`}>
+      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'pb-16 mb-safe' : ''}`}>
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
           <div className="py-2 px-4 min-h-full">
             <MessageList

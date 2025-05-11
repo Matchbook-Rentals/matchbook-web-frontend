@@ -166,12 +166,30 @@ const config = {
       }
     }
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.pb-safe': {
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        },
+        '.mb-safe': {
+          marginBottom: 'env(safe-area-inset-bottom, 0px)',
+        },
+        '.ios-safe-bottom': {
+          bottom: 'env(safe-area-inset-bottom, 0px)',
+        }
+      }
+      addUtilities(newUtilities)
+    }
+  ],
   safelist: [
     'break-words',
     'break-all',
     'whitespace-pre-wrap',
-    'overflow-wrap-anywhere'
+    'overflow-wrap-anywhere',
+    'pb-safe'
   ]
 } satisfies Config
 

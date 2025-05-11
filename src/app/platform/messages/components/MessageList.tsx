@@ -272,7 +272,7 @@ const MessageList: React.FC<MessageListProps> = ({
           : 'bg-gray-100 text-black pr-5 pl-5 rounded-bl-none text-wrap font-normal border-gray-200';
 
         return (
-          <div key={`group-${groupIndex}`} className="mb-3 pr-1 md:pr-3">
+          <div key={`group-${groupIndex}`} className="mb-3 pr-1 md:pr-0">
             <div className={`flex ${justifyClass}`}>
               {showAvatar && (
                 <div className="relative self-end">
