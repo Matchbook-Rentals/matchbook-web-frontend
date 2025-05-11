@@ -19,6 +19,7 @@ interface MessageAreaProps {
   onBack?: () => void;
   onTyping?: (isTyping: boolean) => void;
   isOtherUserTyping?: boolean;
+  initialIsMobile?: boolean;
 }
 
 interface MessageFile {
@@ -37,13 +38,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   currentUserImage = "/placeholder-avatar.png",
   onBack,
   onTyping,
-  isOtherUserTyping = false
+  isOtherUserTyping = false,
+  initialIsMobile = false
 }) => {
   const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(initialIsMobile);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -196,7 +198,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] sm:h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] md:h-[calc(100vh-80px)] bg-background w-full ${isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''} ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
+  const messageContainerClassName = `flex flex-col box-border ${
+    isMobile
+      ? 'h-[100vh] pb-env(safe-area-inset-bottom,0px)'
+      : 'h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] sm:h-[calc(100vh-65px-env(safe-area-inset-bottom,0px))] md:h-[calc(100vh-80px)]'
+  } bg-background w-full ${
+    isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+  } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     <div className={messageContainerClassName}>

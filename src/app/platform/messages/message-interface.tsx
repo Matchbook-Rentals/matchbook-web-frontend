@@ -646,7 +646,11 @@ const MessageInterface = ({
           />
         </div>
         <div
-          className={`bg-background ${isMobile ? 'absolute inset-0 transition-transform duration-300 w-full' : 'static w-2/3 flex-1'} ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
+          className={`bg-background ${
+            isMobile
+              ? 'fixed top-0 left-0 right-0 bottom-0 z-50 transition-transform duration-300 w-full'
+              : 'static w-2/3 flex-1'
+          } ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
         >
           <MessageArea
             selectedConversation={selectedConversation}
@@ -657,6 +661,7 @@ const MessageInterface = ({
             onBack={toggleSidebar}
             onTyping={sendTypingStatus}
             isOtherUserTyping={isOtherUserTyping || false}
+            initialIsMobile={isMobile}
           />
         </div>
       </div>
