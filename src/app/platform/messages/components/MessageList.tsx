@@ -338,24 +338,31 @@ const MessageList: React.FC<MessageListProps> = ({
                       {/* Render image grid */}
                       {allImageAttachments.length > 0 && (
                         <div className={`${textMessages.length > 0 ? 'mt-2' : 'mt-0'}`}>
-                          <div className={`grid ${allImageAttachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
-                            {allImageAttachments.map((item, index) => (
-                              <div 
-                                key={`${item.messageId}-img-${index}`} 
-                                className="aspect-square h-[150px] relative overflow-hidden rounded cursor-pointer"
-                                onClick={() => openAttachmentCarousel(
-                                  allImageAttachments.map(i => i.attachment), 
-                                  index
-                                )}
-                              >
-                                <Image
-                                  src={item.attachment.url}
-                                  alt="Message Attachment"
-                                  layout="fill"
-                                  objectFit="cover"
-                                />
-                              </div>
-                            ))}
+                          <div className="flex flex-wrap gap-1">
+                            {allImageAttachments.map((item, index) => {
+                              const imageSize = allImageAttachments.length === 1 ? '250px' : '120px';
+                              return (
+                                <div
+                                  key={`${item.messageId}-img-${index}`}
+                                  className="relative overflow-hidden rounded cursor-pointer"
+                                  style={{
+                                    width: imageSize,
+                                    height: imageSize,
+                                  }}
+                                  onClick={() => openAttachmentCarousel(
+                                    allImageAttachments.map(i => i.attachment),
+                                    index
+                                  )}
+                                >
+                                  <Image
+                                    src={item.attachment.url}
+                                    alt="Message Attachment"
+                                    layout="fill"
+                                    objectFit="cover"
+                                  />
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -394,21 +401,28 @@ const MessageList: React.FC<MessageListProps> = ({
                             {/* Render attachments first */}
                             {isImagesOnly ? (
                               <div className="mb-2">
-                                <div className={`grid ${message.attachments.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-1`}>
-                                  {message.attachments.map((attachment: MessageFile, attIndex: number) => (
-                                    <div 
-                                      key={`${message.id}-captioned-img-${attIndex}`} 
-                                      className="aspect-square h-[150px] relative overflow-hidden rounded cursor-pointer"
-                                      onClick={() => openAttachmentCarousel(message.attachments, attIndex)}
-                                    >
-                                      <Image
-                                        src={attachment.url}
-                                        alt="Message Attachment"
-                                        layout="fill"
-                                        objectFit="cover"
-                                      />
-                                    </div>
-                                  ))}
+                                <div className="flex flex-wrap gap-1">
+                                  {message.attachments.map((attachment: MessageFile, attIndex: number) => {
+                                    const imageSize = message.attachments.length === 1 ? '250px' : '120px';
+                                    return (
+                                      <div
+                                        key={`${message.id}-captioned-img-${attIndex}`}
+                                        className="relative overflow-hidden rounded cursor-pointer"
+                                        style={{
+                                          width: imageSize,
+                                          height: imageSize,
+                                        }}
+                                        onClick={() => openAttachmentCarousel(message.attachments, attIndex)}
+                                      >
+                                        <Image
+                                          src={attachment.url}
+                                          alt="Message Attachment"
+                                          layout="fill"
+                                          objectFit="cover"
+                                        />
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             ) : (
