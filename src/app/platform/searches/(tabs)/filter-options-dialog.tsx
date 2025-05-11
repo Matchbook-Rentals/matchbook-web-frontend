@@ -486,7 +486,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -550,7 +550,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -591,7 +591,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -631,7 +631,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                           key={value}
                           icon={icon}
                           label={label}
-                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                          className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                             ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                             : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                             }`}
@@ -709,7 +709,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                             }
                             className='appearance-none w-[25px] h-[25px] border-[#70707045] border rounded-full cursor-pointer
                              relative flex items-center justify-center before:content-[""] before:w-[15px] before:h-[15px] before:rounded-full
-                             checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] hover:border-[#4F4F4F] transition-colors'
+                             checked:before:bg-[#4F4F4F] checked:border-[#4F4F4F] md:hover:border-[#4F4F4F] transition-colors'
                             onChange={() => { }}
                             onClick={() => {
                               // If clicking the currently selected option, clear the selection
@@ -765,7 +765,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
@@ -796,7 +796,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
@@ -827,7 +827,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] hover:bg-gray-100 transition-[background-color] duration-200 p-1 cursor-pointer box-border ${isSelected
+                      className={`h-[109px] w-[109px] md:hover:bg-gray-100 transition-[background-color] duration-200 p-1 cursor-pointer box-border ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
@@ -857,7 +857,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
@@ -887,7 +887,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}
@@ -920,7 +920,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       key={value}
                       icon={icon}
                       label={label}
-                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                      className={`h-[109px] w-[109px] p-1 cursor-pointer box-border md:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                         ? 'border-[#2D2F2E] border-[3px] !p-[3px]'
                         : 'border-[#2D2F2E40] border-[2px] !p-[4px]'
                         }`}

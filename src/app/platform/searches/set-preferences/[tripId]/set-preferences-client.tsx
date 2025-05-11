@@ -169,7 +169,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
                   key={value}
                   icon={icon}
                   label={label}
-                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border sm:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                     ? 'border-[#2D2F2E] border-[3px]'
                     : 'border-[#2D2F2E40] border-[2px]'
                     }`}
@@ -210,7 +210,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
                   key={value}
                   icon={icon}
                   label={label}
-                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border hover:bg-gray-100 ${isSelected
+                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border sm:hover:bg-gray-100 ${isSelected
                     ? 'border-[#2D2F2E] border-[3px]'
                     : 'border-[#2D2F2E40] border-[2px]'
                     }`}
@@ -252,7 +252,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
                   key={value}
                   icon={icon}
                   label={label}
-                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
+                  className={`h-[231.361px] w-[153.441px] cursor-pointer box-border sm:hover:bg-gray-100 transition-[background-color] duration-200 ${isSelected
                     ? 'border-[#2D2F2E] border-[3px]'
                     : 'border-[#2D2F2E40] border-[2px]'
                     }`}
