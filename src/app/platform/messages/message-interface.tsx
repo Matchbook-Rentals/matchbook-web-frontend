@@ -66,13 +66,15 @@ interface MessageData {
 
 /**
  * Custom hook to detect mobile devices
+ * Accepts initial mobile state from server-side detection
  */
-const useMobileDetect = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const useMobileDetect = (initialIsMobile = false) => {
+  const [isMobile, setIsMobile] = useState(initialIsMobile);
 
   const checkMobile = () => setIsMobile(window.innerWidth < 768);
 
   useEffect(() => {
+    // Only do client-side detection after initial render
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -255,9 +257,18 @@ const clearTypingTimeout = (
 /**
  * Main Message Interface Component
  */
-const MessageInterface = ({ conversations: initialConversations, user }: { conversations: ExtendedConversation[], user: { id: string, imageUrl?: string | null, publicMetadata?: { role?: string } } }) => {
+const MessageInterface = ({
+  conversations: initialConversations,
+  user,
+  initialIsMobile = false
+}: {
+  conversations: ExtendedConversation[],
+  user: { id: string, imageUrl?: string | null, publicMetadata?: { role?: string } },
+  initialIsMobile?: boolean
+}) => {
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
+  // Always show the conversation list first on mobile
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [tabs, setTabs] = useState<'all' | 'Host' | 'Tenant'>('all');
   const [unreadHostMessages, setUnreadHostMessages] = useState(0);
@@ -267,7 +278,7 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
   >({});
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const [isAdmin, setIsAdmin] = useState(false);
-  const isMobile = useMobileDetect();
+  const isMobile = useMobileDetect(initialIsMobile);
   const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
   const searchParams = useSearchParams(); // Get search params
 
@@ -457,7 +468,12 @@ const MessageInterface = ({ conversations: initialConversations, user }: { conve
 
     setSelectedConversationId(conversationId);
     selectedConversationIdRef.current = conversationId;
-    setSidebarVisible(!isMobile);
+
+    // On mobile, hide the sidebar when a conversation is selected to show the message area
+    if (isMobile) {
+      setSidebarVisible(false);
+    }
+
     const conv = allConversations.find((c) => c.id === conversationId);
     if (!conv) return;
 
