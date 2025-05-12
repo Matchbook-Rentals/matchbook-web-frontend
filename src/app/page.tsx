@@ -66,7 +66,7 @@ const WebHomePage = () => {
     <div className="overflow-x-hidden">
       <MatchbookHeader />
       <Hero />
-      <div className={shortSpacerClassNames} />
+      <div className={spacerDivClassNames} />
       <RentEasyCopy />
       <div className={spacerDivClassNames} />
       <HowItWorks />
@@ -80,7 +80,7 @@ const WebHomePage = () => {
       <PlaceYouLove />
       <div className={spacerDivClassNames} />
       <RecentArticle />
-      <div className={shortSpacerClassNames} />
+      <div className={spacerDivClassNames} />
       <Footer />
     </div>
   );
