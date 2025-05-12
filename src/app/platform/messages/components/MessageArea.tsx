@@ -200,7 +200,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const messageContainerClassName = `flex flex-col box-border ${
     isMobile
-      ? 'h-[100dvh] pb-[56px]'  // Add padding at the bottom to account for input area
+      ? 'h-[100dvh]'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
@@ -218,7 +218,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
       <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? '' : ''}`}>
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
-          <div className="py-2 px-4 min-h-full pb-20 md:pb-2">
+          <div className="py-2 px-4 min-h-full pb-12 md:pb-2">
             <MessageList
               messages={messages}
               currentUserId={currentUserId}
