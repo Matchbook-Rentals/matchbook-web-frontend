@@ -216,8 +216,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     <div
       className={`${isMobile ? 'fixed left-0 right-0 z-30 bg-background transition-all duration-300 pr-4 ios-safe-bottom pb-safe' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
-        transform: isMobile && isKeyboardVisible ? 'translateY(-10px)' : 'translateY(0)',
-        paddingBottom: isMobile ? 'calc(8px + env(safe-area-inset-bottom, 0px))' : undefined,
+        transform: isMobile && isKeyboardVisible ? 'translateY(00px)' : 'translateY(0)',
+        paddingBottom: isMobile ? '2px' : undefined,
       }}
     >
       {messageAttachments.length > 0 && (
