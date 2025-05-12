@@ -23,7 +23,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   handleBackClick
 }) => {
   return (
-    <div className='h-[72px] border-b-2 flex items-center'>
+    <div className='h-[72px] border-b-2 flex items-center pr-2'>
       {selectedConversation ? (
         <div className="w-full relative flex justify-between items-center ">
         <div className='flex space-x-4'>
