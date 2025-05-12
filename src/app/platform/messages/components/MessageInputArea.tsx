@@ -103,8 +103,26 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       const heightDifference = prevWindowHeight.current - height;
       const isKeyboard = heightDifference > 150; // Typical keyboard height is 200-300px
       setIsKeyboardVisible(isKeyboard);
+
+      // When keyboard appears, make sure the view doesn't scroll
+      if (isKeyboard) {
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      } else {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
     }
     prevWindowHeight.current = height;
+
+    // Cleanup
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
   }, [height, isMobile]);
 
   // Focus the textarea when the user taps on it
@@ -112,10 +130,14 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     const handleFocus = () => {
       if (isMobile) {
         setIsKeyboardVisible(true);
-        // Scroll the page to ensure the input is visible
+        // Prevent scrolling and keep input in view
+        document.body.style.overflow = 'hidden';
+
+        // Ensure input stays visible without allowing scrolling of the whole page
         setTimeout(() => {
           if (inputContainerRef.current) {
-            inputContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+            // Focus without allowing scroll of the parent container
+            inputContainerRef.current.scrollIntoView({ block: 'end' });
           }
         }, 300);
       }
@@ -125,6 +147,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       if (isMobile) {
         setTimeout(() => {
           setIsKeyboardVisible(false);
+          document.body.style.overflow = '';
         }, 100);
       }
     };
@@ -139,6 +162,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('focus', handleFocus);
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
+      document.body.style.overflow = '';
     };
   }, [isMobile, textareaRef]);
 
@@ -214,9 +238,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'relative z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
-        transform: isMobile && isKeyboardVisible ? 'translateY(00px)' : 'translateY(0)',
         paddingBottom: isMobile ? '8px' : undefined,
       }}
     >

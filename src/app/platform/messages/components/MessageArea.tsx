@@ -200,7 +200,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const messageContainerClassName = `flex flex-col box-border ${
     isMobile
-      ? 'h-[100dvh]'
+      ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
