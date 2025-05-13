@@ -198,12 +198,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border ${
+  const messageContainerClassName = `${
     isMobile
       ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
-    isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
+    isMobile ? 'transform transition-transform duration-300 ease-in-out relative' : 'flex flex-col'
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
@@ -218,21 +218,39 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'mt-16' : ''}`}>
-        <ScrollArea ref={scrollAreaRef} className={`${isMobile ? 'h-[calc(100dvh-120px)]' : 'h-full'} w-[101%] md:w-[100.7%] overflow-x-visible`}>
-          <div className={`px-4 min-h-full md:pb-2 ${isMobile ? 'pb-40' : 'py-2'}`}>
-            <MessageList
-              messages={messages}
-              currentUserId={currentUserId}
-              selectedConversation={selectedConversation}
-              participantInfo={participantInfo}
-              isOtherUserTyping={isOtherUserTyping}
-              handleFileClick={handleFileClick}
-            />
-            <div ref={bottomRef} className="h-1" />
-          </div>
-        </ScrollArea>
-      </div>
+      {isMobile ? (
+        <div className="fixed top-16 left-0 right-0 bottom-[64px] z-20 overflow-hidden">
+          <ScrollArea ref={scrollAreaRef} className="h-full w-full overflow-x-visible">
+            <div className="px-4 pb-4">
+              <MessageList
+                messages={messages}
+                currentUserId={currentUserId}
+                selectedConversation={selectedConversation}
+                participantInfo={participantInfo}
+                isOtherUserTyping={isOtherUserTyping}
+                handleFileClick={handleFileClick}
+              />
+              <div ref={bottomRef} className="h-1" />
+            </div>
+          </ScrollArea>
+        </div>
+      ) : (
+        <div className="flex-1 w-full overflow-x-hidden">
+          <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+            <div className="px-4 py-2 min-h-full">
+              <MessageList
+                messages={messages}
+                currentUserId={currentUserId}
+                selectedConversation={selectedConversation}
+                participantInfo={participantInfo}
+                isOtherUserTyping={isOtherUserTyping}
+                handleFileClick={handleFileClick}
+              />
+              <div ref={bottomRef} className="h-1" />
+            </div>
+          </ScrollArea>
+        </div>
+      )}
 
       <div className={isMobile ? 'fixed bottom-0 left-0 right-0 z-40' : 'mt-auto'}>
         <MessageInputArea
