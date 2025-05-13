@@ -99,23 +99,84 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // Simplified keyboard tracking - with fixed positioning we don't need complex detection
+  // Enhanced keyboard tracking with Visual Viewport API
   useEffect(() => {
-    // Just track height changes for potential future use
+    // Track height changes
     prevWindowHeight.current = height;
-  }, [height]);
+    
+    // Use Visual Viewport API if available for more accurate keyboard detection
+    const visualViewport = window.visualViewport;
+    if (visualViewport && isMobile) {
+      const handleResize = () => {
+        // Calculate if keyboard is likely visible based on viewport height change
+        const isKeyboardLikelyVisible = window.innerHeight - visualViewport.height > 150;
+        
+        // Set keyboard visibility state
+        setIsKeyboardVisible(isKeyboardLikelyVisible);
+        
+        // Force browser to recalculate dvh units when viewport changes
+        if (isKeyboardLikelyVisible) {
+          window.dispatchEvent(new Event('resize'));
+        }
+      };
+      
+      visualViewport.addEventListener('resize', handleResize);
+      visualViewport.addEventListener('scroll', handleResize);
+      
+      return () => {
+        visualViewport.removeEventListener('resize', handleResize);
+        visualViewport.removeEventListener('scroll', handleResize);
+      };
+    }
+  }, [height, isMobile]);
 
-  // Simplified focus handling for fixed positioning approach
+  // Enhanced focus handling to force dvh recalculation
   useEffect(() => {
+    // Helper function to force browser to recalculate dvh units
+    const forceDvhRecalculation = () => {
+      // First trick: temporarily modify viewport meta tag
+      const viewportMeta = document.querySelector('meta[name="viewport"]');
+      if (viewportMeta) {
+        const originalContent = viewportMeta.getAttribute('content');
+        // Add minimal-ui to force layout recalculation
+        viewportMeta.setAttribute('content', `${originalContent}, minimal-ui`);
+        
+        // Reset after a short delay
+        setTimeout(() => {
+          viewportMeta.setAttribute('content', originalContent || '');
+        }, 50);
+      }
+      
+      // Second trick: dispatch resize events
+      window.dispatchEvent(new Event('resize'));
+      
+      // Third trick: scroll slightly to trigger layout updates
+      setTimeout(() => {
+        window.scrollTo(0, window.scrollY + 1);
+        setTimeout(() => {
+          window.scrollTo(0, window.scrollY - 1);
+        }, 10);
+      }, 50);
+    };
+    
     const handleFocus = () => {
       if (isMobile) {
         setIsKeyboardVisible(true);
+        
+        // Force multiple recalculations with delays to catch keyboard animation
+        forceDvhRecalculation();
+        
+        // Additional forced recalculations to catch slow keyboard animations
+        setTimeout(forceDvhRecalculation, 300);
+        setTimeout(forceDvhRecalculation, 600);
       }
     };
 
     const handleBlur = () => {
       if (isMobile) {
         setIsKeyboardVisible(false);
+        // Force recalculation when keyboard disappears too
+        setTimeout(forceDvhRecalculation, 100);
       }
     };
 
