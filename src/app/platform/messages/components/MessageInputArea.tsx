@@ -81,15 +81,13 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
   const isMobile = useIsMobile();
 
   const prevConversationIdRef = useRef<string | null>(null);
-  const prevWindowHeight = useRef<number | undefined>(height);
 
   // State for controlling the Attachment Carousel Dialog
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
@@ -99,40 +97,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // Remove manual keyboard detection and let dvh handle it
-  useEffect(() => {
-    // Just track previous height for potential future use
-    prevWindowHeight.current = height;
-  }, [height]);
-
-  // Simplified focus handling to work with dvh
-  useEffect(() => {
-    const handleFocus = () => {
-      if (isMobile) {
-        setIsKeyboardVisible(true);
-      }
-    };
-
-    const handleBlur = () => {
-      if (isMobile) {
-        setTimeout(() => {
-          setIsKeyboardVisible(false);
-        }, 100);
-      }
-    };
-
-    if (textareaRef.current) {
-      textareaRef.current.addEventListener('focus', handleFocus);
-      textareaRef.current.addEventListener('blur', handleBlur);
-    }
-
-    return () => {
-      if (textareaRef.current) {
-        textareaRef.current.removeEventListener('focus', handleFocus);
-        textareaRef.current.removeEventListener('blur', handleBlur);
-      }
-    };
-  }, [isMobile, textareaRef]);
+  // No keyboard detection needed - removed
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
@@ -206,7 +171,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? 'z-30 bg-background pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
       }}

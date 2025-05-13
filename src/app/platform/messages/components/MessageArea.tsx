@@ -198,7 +198,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border  no-wrap${
+  const messageContainerClassName = `flex flex-col ${
     isMobile
       ? ' w-full h-[100dvh] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
