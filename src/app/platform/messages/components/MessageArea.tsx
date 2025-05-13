@@ -200,7 +200,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const messageContainerClassName = `flex flex-col box-border ${
     isMobile
-      ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
+      ? 'h-full max-h-[100%] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
@@ -208,7 +208,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <div className="sticky top-0 left-0 right-0 z-30 bg-background">
+      <div className="">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -234,7 +234,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className={isMobile ? 'sticky bottom-0 z-30' : 'mt-auto'}>
+      <div className={''}>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
