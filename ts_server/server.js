@@ -12,7 +12,7 @@ const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) :
 const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
 const REDIS_PORT = process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD || undefined;
-const REDIS_MESSAGE_TTL_SECONDS = process.env.REDIS_MESSAGE_TTL_SECONDS ? parseInt(process.env.REDIS_MESSAGE_TTL_SECONDS) : (24 * 60 * 60); // 24 hours default TTL for queued messages
+const REDIS_MESSAGE_TTL_SECONDS = process.env.REDIS_MESSAGE_TTL_SECONDS ? parseInt(process.env.REDIS_MESSAGE_TTL_SECONDS) : 5; // 5 seconds default TTL for queued messages
 const CLIENT_TIMEOUT_MS = 60000; // 60 seconds
 const PING_INTERVAL_MS = 25000; // 25 seconds
 

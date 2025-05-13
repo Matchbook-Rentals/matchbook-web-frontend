@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
-import { ScrollArea } from "@/components/ui/scroll-area";
+// Removed ScrollArea import as we're using native scrolling
 import { Button } from '@/components/ui/button';
 import MessageList from './MessageList';
 import MessageInputArea from './MessageInputArea';
@@ -43,11 +43,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [scrollAreaHeight, setScrollAreaHeight] = useState("55%");
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -58,20 +56,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     const handleResize = () => {
       checkIfMobile();
       
-      // On mobile, adjust the scroll area height based on window height
+      // On mobile, detect if keyboard is likely visible
       if (window.innerWidth < 768) {
-        // Use a smaller height value when keyboard is likely visible (based on window height)
         const isKeyboardLikelyVisible = window.innerHeight < window.outerHeight * 0.75;
         setKeyboardVisible(isKeyboardLikelyVisible);
         
-        if (isKeyboardLikelyVisible) {
-          // When keyboard is visible, give more space to the message list
-          setScrollAreaHeight("60%");
-        } else {
-          // Default height when keyboard is hidden
-          setScrollAreaHeight("100%");
-        }
-        
+        // Log for debugging
         console.log(`Window resized. Height: ${window.innerHeight}, Keyboard visible: ${isKeyboardLikelyVisible}`);
       }
     };
@@ -109,11 +99,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   const scrollToBottom = () => {
-    if (scrollAreaRef.current && bottomRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -125,15 +112,13 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     return () => clearTimeout(timer);
   }, [messages]);
   
-  // Also scroll to bottom when keyboard visibility changes
+  // Scroll to bottom when keyboard visibility changes
   useEffect(() => {
-    if (keyboardVisible) {
-      // Small delay to ensure layout has updated
-      const timer = setTimeout(() => {
-        scrollToBottom();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
+    // When keyboard visibility changes, scroll to bottom to ensure newest messages are visible
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 300);
+    return () => clearTimeout(timer);
   }, [keyboardVisible]);
 
   const handleFileClick = (file: MessageFile) => {
@@ -234,9 +219,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col ${
+  const messageContainerClassName = `grid grid-rows-[auto_1fr_auto] ${
     isMobile
-      ? ' w-full h-[100dvh] overflow-hidden'
+      ? 'w-full h-[100dvh] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
@@ -244,7 +229,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <div className="">
+      <div>
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -254,34 +239,26 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="flex-1 w-full overflow-x-hidden" style={{ maxHeight: scrollAreaHeight }}>
-        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
-          <div className="py-2 px-4 min-h-full md:pb-2">
-            <MessageList
-              messages={messages}
-              currentUserId={currentUserId}
-              selectedConversation={selectedConversation}
-              participantInfo={participantInfo}
-              isOtherUserTyping={isOtherUserTyping}
-              handleFileClick={handleFileClick}
-            />
-            <div ref={bottomRef} className="h-1" />
-          </div>
-        </ScrollArea>
+      <div className="overflow-y-auto overflow-x-hidden">
+        <div className="py-2 px-4 min-h-full md:pb-2">
+          <MessageList
+            messages={messages}
+            currentUserId={currentUserId}
+            selectedConversation={selectedConversation}
+            participantInfo={participantInfo}
+            isOtherUserTyping={isOtherUserTyping}
+            handleFileClick={handleFileClick}
+          />
+          <div ref={bottomRef} className="h-1" />
+        </div>
       </div>
 
-      <div className={''}>
+      <div>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
           onTyping={onTyping}
           handleFileClick={handleFileClick}
-          onKeyboardVisibilityChange={(isVisible) => {
-            setKeyboardVisible(isVisible);
-            setScrollAreaHeight(isVisible ? "70%" : "55%");
-            // Force a resize event to recalculate layout
-            window.dispatchEvent(new Event('resize'));
-          }}
         />
       </div>
 

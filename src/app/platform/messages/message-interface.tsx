@@ -283,6 +283,7 @@ const MessageInterface = ({
   const searchParams = useSearchParams(); // Get search params
 
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
+  const disconnectRefreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Callback for handling incoming messages from the WebSocket hook
   const onMessageReceivedHandler = useCallback((message: HookMessageData) => {
@@ -369,8 +370,23 @@ const MessageInterface = ({
 
   const onConnectionStatusChangeHandler = useCallback((status: { isConnected: boolean; circuitOpen: boolean }) => {
     console.log('[MessageInterface] Connection Status Changed:', status);
-    // You can update local state here if needed, e.g., for more complex UI based on connection status
-    // For now, the hook's returned isConnected and circuitOpen are used directly in JSX
+    if (!status.isConnected) {
+      // If not already set, start a timer to refresh the page after 5 seconds
+      if (disconnectRefreshTimerRef.current === null) {
+        console.log('[MessageInterface] WebSocket disconnected. Starting 5s refresh timer.');
+        disconnectRefreshTimerRef.current = setTimeout(() => {
+          console.log('[MessageInterface] WebSocket disconnected for >5s. Refreshing page.');
+          window.location.reload();
+        }, 5000); // 5 seconds
+      }
+    } else {
+      // If connected, clear any existing refresh timer
+      if (disconnectRefreshTimerRef.current !== null) {
+        console.log('[MessageInterface] WebSocket reconnected. Clearing refresh timer.');
+        clearTimeout(disconnectRefreshTimerRef.current);
+        disconnectRefreshTimerRef.current = null;
+      }
+    }
   }, []);
 
   const webSocketManager = useWebSocketManager({
@@ -629,6 +645,15 @@ const MessageInterface = ({
   const isOtherUserTyping =
     selectedConversationId && selectedConversation && user &&
     typingUsers[`${selectedConversationId}:${selectedConversation.participants.find((p) => p.userId !== user.id)?.userId}`]?.isTyping;
+
+  // Effect to clear the refresh timer on component unmount
+  useEffect(() => {
+    return () => {
+      if (disconnectRefreshTimerRef.current !== null) {
+        clearTimeout(disconnectRefreshTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-background">
