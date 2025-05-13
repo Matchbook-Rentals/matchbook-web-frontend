@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import TripGrid from './trip-grid';
 import { PAGE_MARGIN } from '@/constants/styles';
@@ -15,6 +15,7 @@ import {
   DialogOverlay,
   DialogTrigger,
 } from "@/components/ui/dialog"; // Import Dialog components
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 interface TripsContentProps {
   trips: Trip[];
@@ -23,6 +24,14 @@ interface TripsContentProps {
 const TripsContent: React.FC<TripsContentProps> = ({ trips }) => {
   const [showSearch, setShowSearch] = useState(trips.length === 0);
   const [showSearchPopup, setShowSearchPopup] = useState(false); // State for mobile pop-up
+  const { width } = useWindowSize();
+  
+  // Close the search popup when screen size becomes medium or larger
+  useEffect(() => {
+    if (width >= 640) { // sm breakpoint in Tailwind is 640px
+      setShowSearchPopup(false);
+    }
+  }, [width]);
 
   return (
     <> {/* Add opening Fragment tag */}
