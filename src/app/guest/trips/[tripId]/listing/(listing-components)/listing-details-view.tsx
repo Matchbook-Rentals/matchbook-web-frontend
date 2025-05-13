@@ -35,6 +35,7 @@ export default function ListingDetailsView({
       center: mapCenter,
       zoom: 14,
       scrollZoom: false,
+      dragPan: false,
     });
 
     mapRef.current = map;
