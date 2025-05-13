@@ -35,6 +35,7 @@ export default function ListingDetailsView({
       center: mapCenter,
       zoom: 14,
       scrollZoom: false,
+      dragPan: false,
     });
 
     mapRef.current = map;
@@ -68,20 +69,6 @@ export default function ListingDetailsView({
 
   return (
     <>
-      {/* Top control box (visible on large screens when details are hidden) */}
-      {!isDetailsVisible && (
-        <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col">
-              <p className="text-lg font-medium">{listing.title}</p>
-              <p className="text-sm">Hosted by {listing.user?.firstName}</p>
-            </div>
-            <div className="flex items-center gap-x-4">
-              <p className="text-lg font-medium">${listing.price?.toLocaleString()}/month</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
         <ListingImageCarousel listingImages={listing.listingImages || []} />
