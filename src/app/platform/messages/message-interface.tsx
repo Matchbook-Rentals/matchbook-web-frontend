@@ -352,7 +352,7 @@ const MessageInterface = ({
         return newState;
       });
     }
-  }, [user, /* webSocketManager.sendReadReceipt, webSocketManager.isConnected */]); // Dependencies will be updated by ESLint or manually after defining webSocketManager
+  }, [user, webSocketManager]);
 
   // Callback for handling typing indicators from the WebSocket hook
   const onTypingReceivedHandler = useCallback((typingData: HookMessageData) => {
@@ -433,7 +433,7 @@ const MessageInterface = ({
     }
     // The hook manages its own connection lifecycle and cleanup.
     // No need for socketRef.current.disconnect() or clearing timeouts here related to socket.
-  }, [user, initialConversations, searchParams]); // handleSelectConversation is memoized or stable
+  }, [user, initialConversations, searchParams, handleSelectConversation]);
 
   // We'll keep this effect since it's for the sidebar visibility, not keyboard related
   useEffect(() => {
@@ -523,7 +523,7 @@ const MessageInterface = ({
       // Server action to persist read status
       await markMessagesAsReadByTimestamp(conversationId, new Date(timestamp));
     }
-  }, [user, allConversations, webSocketManager.isConnected, webSocketManager.sendReadReceipt, isMobile]);
+  }, [user, allConversations, webSocketManager, isMobile]);
 
 
   const handleSendMessage = async (
@@ -628,6 +628,16 @@ const MessageInterface = ({
 
   const toggleSidebar = () => setSidebarVisible((prev) => !prev);
 
+  // Effect to clear the refresh timer on component unmount
+  useEffect(() => {
+    // Cleanup function to clear the refresh timer on component unmount
+    return () => {
+      if (disconnectRefreshTimerRef.current !== null) {
+        clearTimeout(disconnectRefreshTimerRef.current);
+      }
+    };
+  }, []);
+
   // Early return if user is not available
   if (!user) return null;
 
@@ -645,15 +655,6 @@ const MessageInterface = ({
   const isOtherUserTyping =
     selectedConversationId && selectedConversation && user &&
     typingUsers[`${selectedConversationId}:${selectedConversation.participants.find((p) => p.userId !== user.id)?.userId}`]?.isTyping;
-
-  // Effect to clear the refresh timer on component unmount
-  useEffect(() => {
-    return () => {
-      if (disconnectRefreshTimerRef.current !== null) {
-        clearTimeout(disconnectRefreshTimerRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="flex flex-col h-full bg-background">
