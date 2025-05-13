@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
-// Removed ScrollArea import as we're using native scrolling
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from '@/components/ui/button';
 import MessageList from './MessageList';
 import MessageInputArea from './MessageInputArea';
@@ -43,36 +43,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState<MessageFile | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    // Check for height changes that might indicate keyboard appearance
-    const handleResize = () => {
-      checkIfMobile();
-      
-      // On mobile, detect if keyboard is likely visible
-      if (window.innerWidth < 768) {
-        const isKeyboardLikelyVisible = window.innerHeight < window.outerHeight * 0.75;
-        setKeyboardVisible(isKeyboardLikelyVisible);
-        
-        // Log for debugging
-        console.log(`Window resized. Height: ${window.innerHeight}, Keyboard visible: ${isKeyboardLikelyVisible}`);
-      }
-    };
-
     checkIfMobile();
-    handleResize();
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', checkIfMobile);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', checkIfMobile);
     };
   }, []);
 
@@ -99,8 +84,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   };
 
   const scrollToBottom = () => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAreaRef.current && bottomRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
     }
   };
 
@@ -111,15 +99,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return () => clearTimeout(timer);
   }, [messages]);
-  
-  // Scroll to bottom when keyboard visibility changes
-  useEffect(() => {
-    // When keyboard visibility changes, scroll to bottom to ensure newest messages are visible
-    const timer = setTimeout(() => {
-      scrollToBottom();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [keyboardVisible]);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
@@ -219,9 +198,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `grid grid-rows-[auto_1fr_auto] ${
+  const messageContainerClassName = `flex flex-col box-border  no-wrap${
     isMobile
-      ? 'w-full h-[100dvh] overflow-hidden'
+      ? ' w-full h-[100dvh] overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
@@ -229,7 +208,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <div>
+      <div className="">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -239,21 +218,23 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="overflow-y-auto overflow-x-hidden">
-        <div className="py-2 px-4 min-h-full md:pb-2">
-          <MessageList
-            messages={messages}
-            currentUserId={currentUserId}
-            selectedConversation={selectedConversation}
-            participantInfo={participantInfo}
-            isOtherUserTyping={isOtherUserTyping}
-            handleFileClick={handleFileClick}
-          />
-          <div ref={bottomRef} className="h-1" />
-        </div>
+      <div className="flex-1 w-full overflow-x-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+          <div className="py-2 px-4 min-h-full md:pb-2">
+            <MessageList
+              messages={messages}
+              currentUserId={currentUserId}
+              selectedConversation={selectedConversation}
+              participantInfo={participantInfo}
+              isOtherUserTyping={isOtherUserTyping}
+              handleFileClick={handleFileClick}
+            />
+            <div ref={bottomRef} className="h-1" />
+          </div>
+        </ScrollArea>
       </div>
 
-      <div>
+      <div className={''}>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
