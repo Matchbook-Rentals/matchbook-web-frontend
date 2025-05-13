@@ -25,7 +25,31 @@ interface SupportDialogProps {
 }
 
 export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
-  // Form field data moved inside the component
+  // Style variables for consistent text styling
+  const styles = {
+    // Font family is consistent across all elements
+    fontFamily: "font-['Poppins',Helvetica]",
+    // Label styles
+    label: "font-medium text-[13px] text-[#212121] leading-4",
+    // Input/textarea/select field styles (with darker text for active input)
+    field: "bg-[#51515117] border-transparent text-[15px] font-normal text-[#212121] leading-5 py-2",
+    // Title style
+    title: "text-[28px] font-semibold text-[#212121] leading-8",
+    // Button style
+    button: "w-full bg-[#5c9ac5] hover:bg-[#5c9ac5]/90 text-white font-medium text-[15px] leading-5",
+    // Placeholder style for all components (including SelectValue)
+    placeholderText: "text-[#212121bf] opacity-70 font-normal",
+    // Placeholder style using Tailwind's placeholder: modifier (for Input and Textarea)
+    placeholderTailwind: "placeholder:text-[#212121bf] placeholder:opacity-70 placeholder:font-normal placeholder:font-['Poppins',Helvetica]",
+  };
+
+  // Form field data with placeholders
+  const formFields = [
+    { id: "subject", label: "Subject", placeholder: "Enter the subject of your request", type: "input" },
+    { id: "description", label: "Description", placeholder: "Provide a detailed description", type: "textarea" },
+    { id: "category", label: "Category", placeholder: "Select a category", type: "select" },
+  ];
+
   const categories = [
     { value: "general", label: "General" },
     { value: "technical", label: "Technical" },
@@ -41,80 +65,72 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* Adjusted max-width slightly to better fit the new content */}
       <DialogContent className="sm:max-w-lg bg-[#fcfcfc]">
-        {/* Using DialogHeader for title consistency, but applying new styles */}
         <DialogHeader className="items-center pb-4">
-          <DialogTitle className="text-[28px] font-semibold text-[#212121] leading-8 font-['Poppins',Helvetica]">
+          <DialogTitle className={`${styles.title} ${styles.fontFamily}`}>
             Submit Your Request
           </DialogTitle>
-          {/* Removed DialogDescription */}
         </DialogHeader>
 
-        {/* Form elements directly inside DialogContent */}
         <div className="flex flex-col items-center gap-4">
-          <div className="w-full">
-            <div className="flex flex-col gap-1">
-              <Label
-                htmlFor="subject"
-                className="font-medium text-[13px] text-[#212121] leading-4 font-['Poppins',Helvetica]"
-              >
-                Subject
-              </Label>
-              <Input
-                id="subject"
-                placeholder="Enter the subject of your request"
-                className="bg-[#51515117] border-transparent text-[15px] font-normal text-[#212121bf] leading-5 font-['Poppins',Helvetica] py-2"
-              />
-            </div>
-          </div>
-
-          <div className="w-full">
-            <div className="flex flex-col gap-1">
-              <Label
-                htmlFor="description"
-                className="font-medium text-[13px] text-[#212121] leading-4 font-['Outfit',Helvetica]"
-              >
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                placeholder="Provide a detailed description"
-                className="min-h-[76px] bg-[#51515117] border-transparent text-[15px] font-normal text-[#272727bf] leading-5 font-['Poppins',Helvetica] py-2"
-              />
-            </div>
-          </div>
-
-          <div className="w-full">
-            <div className="flex flex-col gap-1">
-              <Label
-                htmlFor="category"
-                className="font-medium text-[13px] text-[#212121] leading-4 font-['Poppins',Helvetica]"
-              >
-                Category
-              </Label>
-              <Select>
-                <SelectTrigger
-                  id="category"
-                  className="bg-[#51515117] border-transparent text-[15px] font-normal text-[#212121bf] leading-5 font-['Outfit',Helvetica] py-2"
+          {formFields.map((field) => (
+            <div key={field.id} className="w-full">
+              <div className="flex flex-col gap-1">
+                <Label
+                  htmlFor={field.id}
+                  className={`${styles.label} ${styles.fontFamily}`}
                 >
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.value} value={category.value}>
-                      {category.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  {field.label}
+                </Label>
+                
+                {field.type === "input" && (
+                  <Input
+                    id={field.id}
+                    placeholder={field.placeholder}
+                    className={`${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                  />
+                )}
+                
+                {field.type === "textarea" && (
+                  <Textarea
+                    id={field.id}
+                    placeholder={field.placeholder}
+                    className={`min-h-[76px] ${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                  />
+                )}
+                
+                {field.type === "select" && (
+                  <Select>
+                    <SelectTrigger
+                      id={field.id}
+                      className={`${styles.field} ${styles.fontFamily}`}
+                    >
+                      <SelectValue 
+                        placeholder={field.placeholder} 
+                        className={`${styles.fontFamily} ${styles.placeholderText}`}
+                      />
+                    </SelectTrigger>
+                    <SelectContent className={styles.fontFamily}>
+                      {categories.map((category) => (
+                        <SelectItem 
+                          key={category.value} 
+                          value={category.value}
+                          className={`${styles.fontFamily} text-[#212121]`}
+                        >
+                          {category.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
             </div>
-          </div>
+          ))}
 
           <div className="w-full py-2">
             <Button
               onClick={handleSubmit}
-              className="w-full bg-[#5c9ac5] hover:bg-[#5c9ac5]/90 text-white font-medium text-[15px] leading-5 font-['Poppins',Helvetica]"
+              className={`${styles.button} ${styles.fontFamily}`}
             >
               Submit
             </Button>
