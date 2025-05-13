@@ -105,7 +105,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     prevWindowHeight.current = height;
   }, [height]);
 
-  // Improved focus handling to work with dvh and ensure message container is scrolled
+  // Simplified focus handling to work with dvh
   useEffect(() => {
     const handleFocus = () => {
       if (isMobile) {
@@ -118,9 +118,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
               behavior: 'smooth',
               block: 'nearest'
             });
-            
-            // Also ensure document is scrolled to the bottom
-            document.documentElement.scrollTop = document.documentElement.scrollHeight;
           }
         }, 310);
       }
@@ -130,11 +127,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       if (isMobile) {
         setTimeout(() => {
           setIsKeyboardVisible(false);
-          
-          // When keyboard closes, make sure we're still scrolled to the bottom
-          setTimeout(() => {
-            document.documentElement.scrollTop = document.documentElement.scrollHeight;
-          }, 150);
         }, 100);
       }
     };
@@ -182,11 +174,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     if (textareaRef.current) {
       textareaRef.current.style.height = "44px";
     }
-    
-    // Ensure document is scrolled to the bottom after sending a message
-    setTimeout(() => {
-      document.documentElement.scrollTop = document.documentElement.scrollHeight;
-    }, 50);
     
     if (selectedConversation?.id) {
       localStorage.removeItem(getStorageKey(selectedConversation.id));
