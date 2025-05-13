@@ -286,6 +286,60 @@ const MessageInterface = ({
   const disconnectRefreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Callback for handling incoming messages from the WebSocket hook
+  // We'll initialize this later to avoid the reference error
+  const onMessageReceivedHandlerRef = useRef<(message: HookMessageData) => void>();
+
+  // Callback for handling typing indicators from the WebSocket hook
+  const onTypingReceivedHandler = useCallback((typingData: HookMessageData) => {
+    if (!user || typingData.senderId === user.id) return;
+    handleTypingMessage(typingData);
+  }, [user]);
+
+  // Callback for handling read receipts from the WebSocket hook
+  const onReadReceiptReceivedHandler = useCallback((receiptData: HookMessageData) => {
+    if (!user || receiptData.senderId === user.id || !receiptData.messageIds || !receiptData.timestamp) return;
+    setAllConversations((prev) =>
+      updateMessagesReadTimestamp(prev, receiptData.conversationId, receiptData.messageIds!, receiptData.timestamp!)
+    );
+  }, [user]);
+
+  const onConnectionStatusChangeHandler = useCallback((status: { isConnected: boolean; circuitOpen: boolean }) => {
+    console.log('[MessageInterface] Connection Status Changed:', status);
+    if (!status.isConnected) {
+      // If not already set, start a timer to refresh the page after 5 seconds
+      if (disconnectRefreshTimerRef.current === null) {
+        console.log('[MessageInterface] WebSocket disconnected. Starting 5s refresh timer.');
+        disconnectRefreshTimerRef.current = setTimeout(() => {
+          console.log('[MessageInterface] WebSocket disconnected for >5s. Refreshing page.');
+          window.location.reload();
+        }, 5000); // 5 seconds
+      }
+    } else {
+      // If connected, clear any existing refresh timer
+      if (disconnectRefreshTimerRef.current !== null) {
+        console.log('[MessageInterface] WebSocket reconnected. Clearing refresh timer.');
+        clearTimeout(disconnectRefreshTimerRef.current);
+        disconnectRefreshTimerRef.current = null;
+      }
+    }
+  }, []);
+  
+  // We need to implement the message handler after webSocketManager is initialized
+  const webSocketManager = useWebSocketManager({
+    socketUrl,
+    userId: user?.id || null,
+    onMessageReceived: (message) => {
+      // Use the ref to call the handler once it's been defined
+      if (onMessageReceivedHandlerRef.current) {
+        onMessageReceivedHandlerRef.current(message);
+      }
+    },
+    onTypingReceived: onTypingReceivedHandler,
+    onReadReceiptReceived: onReadReceiptReceivedHandler,
+    onConnectionStatusChange: onConnectionStatusChangeHandler,
+  });
+  
+  // Define the message handler after webSocketManager is initialized
   const onMessageReceivedHandler = useCallback((message: HookMessageData) => {
     if (!user) return;
     const currentSelectedId = selectedConversationIdRef.current;
@@ -353,58 +407,10 @@ const MessageInterface = ({
       });
     }
   }, [user, webSocketManager]);
-
-  // Callback for handling typing indicators from the WebSocket hook
-  const onTypingReceivedHandler = useCallback((typingData: HookMessageData) => {
-    if (!user || typingData.senderId === user.id) return;
-    handleTypingMessage(typingData);
-  }, [user]);
-
-  // Callback for handling read receipts from the WebSocket hook
-  const onReadReceiptReceivedHandler = useCallback((receiptData: HookMessageData) => {
-    if (!user || receiptData.senderId === user.id || !receiptData.messageIds || !receiptData.timestamp) return;
-    setAllConversations((prev) =>
-      updateMessagesReadTimestamp(prev, receiptData.conversationId, receiptData.messageIds!, receiptData.timestamp!)
-    );
-  }, [user]);
-
-  const onConnectionStatusChangeHandler = useCallback((status: { isConnected: boolean; circuitOpen: boolean }) => {
-    console.log('[MessageInterface] Connection Status Changed:', status);
-    if (!status.isConnected) {
-      // If not already set, start a timer to refresh the page after 5 seconds
-      if (disconnectRefreshTimerRef.current === null) {
-        console.log('[MessageInterface] WebSocket disconnected. Starting 5s refresh timer.');
-        disconnectRefreshTimerRef.current = setTimeout(() => {
-          console.log('[MessageInterface] WebSocket disconnected for >5s. Refreshing page.');
-          window.location.reload();
-        }, 5000); // 5 seconds
-      }
-    } else {
-      // If connected, clear any existing refresh timer
-      if (disconnectRefreshTimerRef.current !== null) {
-        console.log('[MessageInterface] WebSocket reconnected. Clearing refresh timer.');
-        clearTimeout(disconnectRefreshTimerRef.current);
-        disconnectRefreshTimerRef.current = null;
-      }
-    }
-  }, []);
-
-  const webSocketManager = useWebSocketManager({
-    socketUrl,
-    userId: user?.id || null,
-    onMessageReceived: onMessageReceivedHandler,
-    onTypingReceived: onTypingReceivedHandler,
-    onReadReceiptReceived: onReadReceiptReceivedHandler,
-    onConnectionStatusChange: onConnectionStatusChangeHandler,
-  });
-
-  // Update onMessageReceivedHandler dependencies now that webSocketManager is defined
+  
+  // Store the handler in a ref so it can be accessed in the callback
   useEffect(() => {
-    // This is a common pattern if a callback needs to access methods from the object it's part of.
-    // Here, onMessageReceivedHandler might need webSocketManager.sendReadReceipt.
-    // To avoid circular dependencies or stale closures, ensure all dependencies are correct.
-    // For simplicity, if onMessageReceivedHandler is stable or its dependencies are primitive,
-    // this might not be an issue. Let's assume current deps are fine or will be fixed by linter.
+    onMessageReceivedHandlerRef.current = onMessageReceivedHandler;
   }, [onMessageReceivedHandler]);
 
 
@@ -419,7 +425,10 @@ const MessageInterface = ({
         const conversationExists = initialConversations.some(conv => conv.id === convoIdFromQuery);
         if (conversationExists) {
           setTimeout(() => {
-            handleSelectConversation(convoIdFromQuery);
+            // Use the ref to avoid circular dependency
+            if (handleSelectConversationRef.current) {
+              handleSelectConversationRef.current(convoIdFromQuery);
+            }
             // The markMessagesAsReadByTimestamp was here, it's also in handleSelectConversation
             // Let's ensure it's consistently handled.
             // markMessagesAsReadByTimestamp(convoIdFromQuery, new Date()); // This is a server action
@@ -433,7 +442,7 @@ const MessageInterface = ({
     }
     // The hook manages its own connection lifecycle and cleanup.
     // No need for socketRef.current.disconnect() or clearing timeouts here related to socket.
-  }, [user, initialConversations, searchParams, handleSelectConversation]);
+  }, [user, initialConversations, searchParams]);
 
   // We'll keep this effect since it's for the sidebar visibility, not keyboard related
   useEffect(() => {
@@ -480,6 +489,9 @@ const MessageInterface = ({
     }
   };
 
+  // Define the ref for this handler too to avoid circular dependency issues
+  const handleSelectConversationRef = useRef<(conversationId: string) => Promise<void>>();
+
   const handleSelectConversation = useCallback(async (conversationId: string) => {
     if (!user) return;
 
@@ -524,6 +536,11 @@ const MessageInterface = ({
       await markMessagesAsReadByTimestamp(conversationId, new Date(timestamp));
     }
   }, [user, allConversations, webSocketManager, isMobile]);
+  
+  // Store the handler in a ref so it can be accessed safely
+  useEffect(() => {
+    handleSelectConversationRef.current = handleSelectConversation;
+  }, [handleSelectConversation]);
 
 
   const handleSendMessage = async (
