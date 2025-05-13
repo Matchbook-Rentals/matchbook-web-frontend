@@ -51,13 +51,34 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
+    
+    const handleResize = () => {
+      checkIfMobile();
+      
+      // When window is resized, ensure the scroll position is maintained
+      // This is especially important for mobile viewport changes
+      setTimeout(() => {
+        // Scroll the message container to the bottom
+        if (scrollAreaRef.current && bottomRef.current) {
+          const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+          if (scrollContainer) {
+            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+          }
+        }
+        
+        // Also ensure document is scrolled to the bottom
+        if (document.documentElement) {
+          document.documentElement.scrollTop = document.documentElement.scrollHeight;
+        }
+      }, 100);
+    };
 
     checkIfMobile();
 
-    window.addEventListener('resize', checkIfMobile);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', checkIfMobile);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -83,6 +104,40 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     }
   };
 
+  // Listen for scroll events on the scroll area
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      
+      const handleScroll = () => {
+        // If user scrolls to the bottom or near bottom of the scroll area, ensure container is also scrolled
+        if (scrollContainer) {
+          const scrollPosition = scrollContainer.scrollTop;
+          const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+          
+          // If user is at or very near bottom (within 20px), ensure message container is scrolled to bottom
+          if (maxScroll - scrollPosition < 20) {
+            // Force the message container to be scrolled to bottom as well
+            if (document.documentElement) {
+              document.documentElement.scrollTop = document.documentElement.scrollHeight;
+            }
+          }
+        }
+      };
+      
+      if (scrollContainer) {
+        scrollContainer.addEventListener('scroll', handleScroll);
+      }
+      
+      return () => {
+        if (scrollContainer) {
+          scrollContainer.removeEventListener('scroll', handleScroll);
+        }
+      };
+    }
+  }, []);
+
+  // Define scrollToBottom function
   const scrollToBottom = () => {
     if (scrollAreaRef.current && bottomRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
@@ -91,7 +146,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       }
     }
   };
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToBottom();
