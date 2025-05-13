@@ -21,7 +21,7 @@ export default async function MessagePage() {
   const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
 
   return (
-    <div className={` ${APP_PAGE_MARGIN} mx-auto min-h-[calc(100dvh-75px)]  sm:min-h-[calc(100dvh-75px)] md:min-h-[calc(100dvh-80px)]`}>
+    <div className={` ${APP_PAGE_MARGIN} mx-auto min-h-[calc(100vh-75px)]  sm:min-h-[calc(100vh-75px)] md:min-h-[calc(100vh-80px)]`}>
       <MessageInterface conversations={conversations} user={user} initialIsMobile={isMobileDevice} />
     </div>
   );

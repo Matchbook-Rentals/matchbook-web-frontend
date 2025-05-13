@@ -630,10 +630,10 @@ const MessageInterface = ({
     typingUsers[`${selectedConversationId}:${selectedConversation.participants.find((p) => p.userId !== user.id)?.userId}`]?.isTyping;
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-80px)] max-h-[calc(100dvh-80px)] overflow-hidden bg-background">
-      <div className="flex flex-1 overflow-hidden h-full">
+    <div className="flex flex-col min-h-[calc(100vh-65px)] bg-background">
+      <div className="flex flex-1 overflow-hidden relative">
         <div
-          className={`md:block h-full bg-background ${isMobile ? 'absolute inset-0 transition-transform duration-300 w-full' : 'static w-1/3 min-w-[310px] max-w-[380px]'} ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
+          className={`md:block h-[calc(100vh-65px)] bg-background ${isMobile ? 'absolute inset-0 transition-transform duration-300 w-full' : 'static w-1/3 min-w-[310px] max-w-[380px]'} ${isMobile && !sidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         >
           <ConversationList
             conversations={augmentedConversations} // Pass augmented conversations
@@ -648,8 +648,8 @@ const MessageInterface = ({
         <div
           className={`bg-background ${
             isMobile
-              ? 'absolute inset-0 z-50 transition-transform duration-300 w-full h-full'
-              : 'static w-2/3 flex-1 h-full'
+              ? 'fixed top-0 left-0 right-0 bottom-0 z-50 transition-transform duration-300 w-full'
+              : 'static w-2/3 flex-1'
           } ${isMobile && sidebarVisible ? 'translate-x-full' : 'translate-x-0'}`}
         >
           <MessageArea

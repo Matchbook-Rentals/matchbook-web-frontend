@@ -198,7 +198,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col h-full max-h-full overflow-hidden bg-background w-full ${
+  const messageContainerClassName = `flex flex-col box-border ${
+    isMobile
+      ? 'h-[100dvh] max-h-[100dvh] overflow-hidden'
+      : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
+  } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
@@ -214,9 +218,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="flex-1 w-full overflow-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-[calc(100dvh-160px)] pb-[20px] md:pb-[60px] w-full">
-          <div className="py-2 px-4">
+      <div className="flex-1 w-full overflow-x-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+          <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
               messages={messages}
               currentUserId={currentUserId}
@@ -230,7 +234,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className="sticky bottom-0 left-0 right-0 z-30 bg-background">
+      <div className={isMobile ? 'sticky bottom-0 z-30' : 'mt-auto'}>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
