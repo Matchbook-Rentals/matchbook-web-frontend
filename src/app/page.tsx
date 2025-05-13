@@ -65,7 +65,6 @@ const WebHomePage = () => {
   return (
     <div className="overflow-x-hidden">
       <MatchbookHeader />
-      <div className="mt-8" />
       <Hero />
       <div className={spacerDivClassNames} />
       <RentEasyCopy />

@@ -48,7 +48,7 @@ export default function MatchbookHeader({
   //}, 300)
 
   return (
-    <div className="mb-0 bg-background transition-all duration-100 ease-in z-30 pb-0 border-b">
+    <div className="mb-0 pb-2 bg-background transition-all duration-100 ease-in z-30 border-b">
       {!handleListProperty && (
         <CountdownDialog isOpen={defaultIsOpen} setIsOpen={setDefaultIsOpen} />
       )}
