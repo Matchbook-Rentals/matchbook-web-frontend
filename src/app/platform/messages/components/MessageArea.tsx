@@ -218,7 +218,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="flex-1 w-full overflow-x-hidden">
+      <div className="flex-1 w-full max-h-[55%] overflow-x-hidden">
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
