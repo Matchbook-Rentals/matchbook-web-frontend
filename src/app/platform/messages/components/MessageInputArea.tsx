@@ -96,12 +96,19 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
 
 
+  // Track if upload button is being interacted with
+  const [isUploadActive, setIsUploadActive] = useState(false);
+
   // Detect keyboard visibility by observing window height changes
   useEffect(() => {
     if (isMobile && height && prevWindowHeight.current) {
       // If window height decreases significantly, keyboard is likely visible
       const heightDifference = prevWindowHeight.current - height;
-      const isKeyboard = heightDifference > 150; // Typical keyboard height is 200-300px
+      
+      // Only detect keyboard if we're not interacting with the upload button
+      // Also increased the threshold to avoid false positives
+      const isKeyboard = !isUploadActive && heightDifference > 200;
+      
       setIsKeyboardVisible(isKeyboard);
 
       // When keyboard appears, make sure the view doesn't scroll
@@ -123,7 +130,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       document.body.style.position = '';
       document.body.style.width = '';
     };
-  }, [height, isMobile]);
+  }, [height, isMobile, isUploadActive]);
 
   // Focus the textarea when the user taps on it
   useEffect(() => {
@@ -338,11 +345,23 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         />
 
         <div className="flex items-center px-2">
-          <div className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}>
+          <div 
+            className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}
+            onTouchStart={() => setIsUploadActive(true)}
+            onTouchEnd={() => setTimeout(() => setIsUploadActive(false), 500)}
+            onMouseDown={() => setIsUploadActive(true)}
+            onMouseUp={() => setTimeout(() => setIsUploadActive(false), 500)}
+          >
             <UploadButton
               endpoint="messageUploader"
-              onClientUploadComplete={handleUploadFinish}
-              onUploadError={(error) => alert(error.message)}
+              onClientUploadComplete={(res) => {
+                handleUploadFinish(res);
+                setIsUploadActive(false);
+              }}
+              onUploadError={(error) => {
+                alert(error.message);
+                setIsUploadActive(false);
+              }}
               className="p-0"
               content={{
                 button: ({ ready, isUploading }) => (
