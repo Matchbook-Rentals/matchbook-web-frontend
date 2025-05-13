@@ -36,6 +36,7 @@ interface MessageInputAreaProps {
   selectedConversation: any;
   onTyping?: (isTyping: boolean) => void;
   handleFileClick: (file: MessageFile) => void;
+  onKeyboardVisibilityChange?: (isVisible: boolean) => void;
 }
 
 const getStorageKey = (conversationId: string) => `message_draft_${conversationId}`;
@@ -59,6 +60,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   selectedConversation,
   onTyping,
   handleFileClick,
+  onKeyboardVisibilityChange,
 }) => {
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
@@ -99,7 +101,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // Add keyboard detection with window resize event trigger
+  // Add keyboard detection with window resize trigger and parent notification
   useEffect(() => {
     if (!isMobile) return; // Only apply on mobile devices
     
@@ -113,6 +115,12 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       // Only trigger if keyboard wasn't already visible
       if (!isKeyboardVisible) {
         setIsKeyboardVisible(true);
+        
+        // Notify parent component about keyboard visibility
+        if (onKeyboardVisibilityChange) {
+          onKeyboardVisibilityChange(true);
+        }
+        
         // Small delay to ensure keyboard is fully shown
         setTimeout(triggerResize, 300);
       }
@@ -121,6 +129,12 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     const handleBlur = () => {
       if (isKeyboardVisible) {
         setIsKeyboardVisible(false);
+        
+        // Notify parent component about keyboard visibility
+        if (onKeyboardVisibilityChange) {
+          onKeyboardVisibilityChange(false);
+        }
+        
         // Small delay to ensure keyboard is fully hidden
         setTimeout(triggerResize, 300);
       }
@@ -139,7 +153,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
     };
-  }, [isMobile, isKeyboardVisible]);
+  }, [isMobile, isKeyboardVisible, onKeyboardVisibilityChange]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {

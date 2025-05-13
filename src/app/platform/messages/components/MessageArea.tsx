@@ -46,18 +46,43 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [scrollAreaHeight, setScrollAreaHeight] = useState("55%");
 
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    checkIfMobile();
+    // Check for height changes that might indicate keyboard appearance
+    const handleResize = () => {
+      checkIfMobile();
+      
+      // On mobile, adjust the scroll area height based on window height
+      if (window.innerWidth < 768) {
+        // Use a smaller height value when keyboard is likely visible (based on window height)
+        const isKeyboardLikelyVisible = window.innerHeight < window.outerHeight * 0.75;
+        setKeyboardVisible(isKeyboardLikelyVisible);
+        
+        if (isKeyboardLikelyVisible) {
+          // When keyboard is visible, give more space to the message list
+          setScrollAreaHeight("70%");
+        } else {
+          // Default height when keyboard is hidden
+          setScrollAreaHeight("55%");
+        }
+        
+        console.log(`Window resized. Height: ${window.innerHeight}, Keyboard visible: ${isKeyboardLikelyVisible}`);
+      }
+    };
 
-    window.addEventListener('resize', checkIfMobile);
+    checkIfMobile();
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', checkIfMobile);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -99,6 +124,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return () => clearTimeout(timer);
   }, [messages]);
+  
+  // Also scroll to bottom when keyboard visibility changes
+  useEffect(() => {
+    if (keyboardVisible) {
+      // Small delay to ensure layout has updated
+      const timer = setTimeout(() => {
+        scrollToBottom();
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [keyboardVisible]);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
@@ -218,7 +254,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="flex-1 w-full max-h-[55%] overflow-x-hidden">
+      <div className="flex-1 w-full overflow-x-hidden" style={{ maxHeight: scrollAreaHeight }}>
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
@@ -240,6 +276,12 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           selectedConversation={selectedConversation}
           onTyping={onTyping}
           handleFileClick={handleFileClick}
+          onKeyboardVisibilityChange={(isVisible) => {
+            setKeyboardVisible(isVisible);
+            setScrollAreaHeight(isVisible ? "70%" : "55%");
+            // Force a resize event to recalculate layout
+            window.dispatchEvent(new Event('resize'));
+          }}
         />
       </div>
 
