@@ -419,6 +419,7 @@ const MessageInterface = ({
     // No need for socketRef.current.disconnect() or clearing timeouts here related to socket.
   }, [user, initialConversations, searchParams]); // handleSelectConversation is memoized or stable
 
+  // We'll keep this effect since it's for the sidebar visibility, not keyboard related
   useEffect(() => {
     if (isMobile) {
       document.body.style.overflow = sidebarVisible ? 'hidden' : 'auto';

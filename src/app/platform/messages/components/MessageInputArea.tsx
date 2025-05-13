@@ -99,54 +99,17 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // Detect keyboard visibility by observing window height changes
+  // Remove manual keyboard detection and let dvh handle it
   useEffect(() => {
-    if (isMobile && height && prevWindowHeight.current) {
-      // If window height decreases significantly, keyboard is likely visible
-      const heightDifference = prevWindowHeight.current - height;
-      
-      // Only detect keyboard if we're not interacting with the upload button
-      // Also increased the threshold to avoid false positives
-      const isKeyboard = !isUploadActive && heightDifference > 200;
-      
-      setIsKeyboardVisible(isKeyboard);
-
-      // When keyboard appears, make sure the view doesn't scroll
-      if (isKeyboard) {
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
-      } else {
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-      }
-    }
+    // Just track previous height for potential future use
     prevWindowHeight.current = height;
+  }, [height]);
 
-    // Cleanup
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    };
-  }, [height, isMobile, isUploadActive]);
-
-  // Focus the textarea when the user taps on it
+  // Simplified focus handling to work with dvh
   useEffect(() => {
     const handleFocus = () => {
       if (isMobile) {
         setIsKeyboardVisible(true);
-        // Prevent scrolling and keep input in view
-        document.body.style.overflow = 'hidden';
-
-        // Ensure input stays visible without allowing scrolling of the whole page
-        setTimeout(() => {
-          if (inputContainerRef.current) {
-            // Focus without allowing scroll of the parent container
-            inputContainerRef.current.scrollIntoView({ block: 'end' });
-          }
-        }, 300);
       }
     };
 
@@ -154,7 +117,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       if (isMobile) {
         setTimeout(() => {
           setIsKeyboardVisible(false);
-          document.body.style.overflow = '';
         }, 100);
       }
     };
@@ -169,7 +131,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('focus', handleFocus);
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
-      document.body.style.overflow = '';
     };
   }, [isMobile, textareaRef]);
 
