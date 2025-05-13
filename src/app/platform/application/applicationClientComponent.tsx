@@ -89,11 +89,14 @@ export default function ApplicationClientComponent({ application }: { applicatio
   const [isLoading, setIsLoading] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
 
-  const [isMobile, setIsMobile] = useState(false);
+  // Better mobile detection - initialize as undefined and handle that state
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
   const windowSize = useWindowSize();
 
   useEffect(() => {
-    setIsMobile((windowSize?.width || 10000) < 640);
+    if (windowSize?.width !== undefined) {
+      setIsMobile(windowSize.width < 640);
+    }
   }, [windowSize?.width]);
 
   const onSelect = useCallback(() => {
@@ -300,6 +303,13 @@ export default function ApplicationClientComponent({ application }: { applicatio
 
   // Show loading UI while data is loading
   if (isDataLoading) {
+    // If we're on mobile or mobile state is undefined (initial render), show mobile skeleton
+    // This ensures mobile users see the mobile skeleton immediately while responsive detection happens
+    if (isMobile === true || isMobile === undefined && typeof window !== 'undefined' && window.innerWidth < 640) {
+      return <MobileApplicationSkeleton />;
+    }
+
+    // Desktop loading skeleton
     return (
       <div className={PAGE_MARGIN}>
         <div className="flex gap-2 mb-4 items-center">
@@ -308,57 +318,53 @@ export default function ApplicationClientComponent({ application }: { applicatio
           <div className="animate-pulse bg-muted h-6 w-28 rounded-md" />
         </div>
 
-        {isMobile ? (
-          <MobileApplicationSkeleton />
-        ) : (
-          <div className="flex gap-6 max-w-full overflow-x-hidden">
-            {/* Sidebar Navigation Skeleton */}
-            <div className="hidden lg:block pt-1 w-64 shrink-0">
-              <nav className="space-y-1">
-                {navigationItems.map((item, index) => (
-                  <div key={item.id} className="animate-pulse bg-muted h-10 w-full rounded-lg mb-2" />
-                ))}
-              </nav>
-            </div>
+        <div className="flex gap-6 max-w-full overflow-x-hidden">
+          {/* Sidebar Navigation Skeleton */}
+          <div className="hidden lg:block pt-1 w-64 shrink-0">
+            <nav className="space-y-1">
+              {navigationItems.map((item, index) => (
+                <div key={item.id} className="animate-pulse bg-muted h-10 w-full rounded-lg mb-2" />
+              ))}
+            </nav>
+          </div>
 
-            {/* Main Content Skeleton */}
-            <div className="relative flex-1 min-w-0">
-              <div className="p-6 overflow-y-auto min-h-[400px] border rounded-lg">
-                <div className="animate-pulse bg-muted h-8 w-48 mb-6 rounded-md" />
+          {/* Main Content Skeleton */}
+          <div className="relative flex-1 min-w-0">
+            <div className="p-6 overflow-y-auto min-h-[400px] border rounded-lg">
+              <div className="animate-pulse bg-muted h-8 w-48 mb-6 rounded-md" />
 
-                {/* Form fields skeletons */}
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
-                      <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
-                      <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                    </div>
-                  </div>
-
+              {/* Form fields skeletons */}
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="animate-pulse bg-muted h-5 w-36 rounded-md" />
+                    <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
                     <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
                   </div>
-
                   <div className="space-y-2">
                     <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
                     <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
                   </div>
                 </div>
-              </div>
 
-              {/* Navigation Buttons Skeletons */}
-              <div className="flex justify-between px-6 mt-4 mb-4">
-                <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
-                <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
+                <div className="space-y-2">
+                  <div className="animate-pulse bg-muted h-5 w-36 rounded-md" />
+                  <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
+                  <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
+                </div>
               </div>
             </div>
+
+            {/* Navigation Buttons Skeletons */}
+            <div className="flex justify-between px-6 mt-4 mb-4">
+              <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
+              <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
+            </div>
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -366,7 +372,7 @@ export default function ApplicationClientComponent({ application }: { applicatio
   return (
     <div className={PAGE_MARGIN}>
 
-      {isMobile ? (
+      {isMobile === true || (isMobile === undefined && typeof window !== 'undefined' && window.innerWidth < 640) ? (
         <MobileApplicationEdit />
       ) : (
         <div className="flex gap-6 max-w-full overflow-x-hidden">
