@@ -88,6 +88,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const isMobile = useIsMobile();
 
   const prevConversationIdRef = useRef<string | null>(null);
+  // Track if keyboard is visible
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   // State for controlling the Attachment Carousel Dialog
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
@@ -97,7 +99,47 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // No keyboard detection needed - removed
+  // Add keyboard detection with window resize event trigger
+  useEffect(() => {
+    if (!isMobile) return; // Only apply on mobile devices
+    
+    const triggerResize = () => {
+      // Dispatch a resize event to ensure layout recalculations
+      window.dispatchEvent(new Event('resize'));
+      console.log(`Window resize triggered due to keyboard ${isKeyboardVisible ? 'appearing' : 'disappearing'}`);
+    };
+    
+    const handleFocus = () => {
+      // Only trigger if keyboard wasn't already visible
+      if (!isKeyboardVisible) {
+        setIsKeyboardVisible(true);
+        // Small delay to ensure keyboard is fully shown
+        setTimeout(triggerResize, 300);
+      }
+    };
+
+    const handleBlur = () => {
+      if (isKeyboardVisible) {
+        setIsKeyboardVisible(false);
+        // Small delay to ensure keyboard is fully hidden
+        setTimeout(triggerResize, 300);
+      }
+    };
+
+    // Add event listeners to textarea
+    if (textareaRef.current) {
+      textareaRef.current.addEventListener('focus', handleFocus);
+      textareaRef.current.addEventListener('blur', handleBlur);
+    }
+
+    // Cleanup event listeners on unmount
+    return () => {
+      if (textareaRef.current) {
+        textareaRef.current.removeEventListener('focus', handleFocus);
+        textareaRef.current.removeEventListener('blur', handleBlur);
+      }
+    };
+  }, [isMobile, isKeyboardVisible]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
@@ -171,7 +213,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'z-30 bg-background pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? 'z-30 bg-background pr-4 transition-all duration-300' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
       }}
