@@ -208,7 +208,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <div className="fixed top-0 left-0 right-0 z-30 bg-background h-16">
+      <div className="sticky top-0 left-0 right-0 z-30 bg-background">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -218,9 +218,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'mt-16' : ''}`}>
-        <ScrollArea ref={scrollAreaRef} className={`${isMobile ? 'h-[calc(100dvh-120px)]' : 'h-full'} w-[101%] md:w-[100.7%] overflow-x-visible`}>
-          <div className={`px-4 min-h-full md:pb-2 ${isMobile ? 'pb-40' : 'py-2'}`}>
+      <div className="flex-1 w-full overflow-x-hidden">
+        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+          <div className={`py-2 px-4 min-h-full md:pb-2 ${isMobile ? 'pb-40' : ''}`}>
             <MessageList
               messages={messages}
               currentUserId={currentUserId}
