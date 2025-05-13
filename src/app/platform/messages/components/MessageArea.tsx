@@ -208,17 +208,19 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <ConversationHeader
-        selectedConversation={selectedConversation}
-        participantInfo={participantInfo}
-        onBack={onBack}
-        isMobile={isMobile}
-        handleBackClick={handleBackClick}
-      />
+      <div className={`${isMobile ? 'sticky top-0 z-30 bg-background' : ''}`}>
+        <ConversationHeader
+          selectedConversation={selectedConversation}
+          participantInfo={participantInfo}
+          onBack={onBack}
+          isMobile={isMobile}
+          handleBackClick={handleBackClick}
+        />
+      </div>
 
-      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? '' : ''}`}>
+      <div className={`flex-1 w-full overflow-x-hidden ${isMobile ? 'pt-2' : ''}`}>
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
-          <div className="py-2 px-4 min-h-full  md:pb-2">
+          <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
               messages={messages}
               currentUserId={currentUserId}
