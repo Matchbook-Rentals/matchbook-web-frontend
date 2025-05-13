@@ -99,13 +99,13 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Track if upload button is being interacted with
   const [isUploadActive, setIsUploadActive] = useState(false);
 
-  // Remove manual keyboard detection and let dvh handle it
+  // Simplified keyboard tracking - with fixed positioning we don't need complex detection
   useEffect(() => {
-    // Just track previous height for potential future use
+    // Just track height changes for potential future use
     prevWindowHeight.current = height;
   }, [height]);
 
-  // Simplified focus handling to work with dvh
+  // Simplified focus handling for fixed positioning approach
   useEffect(() => {
     const handleFocus = () => {
       if (isMobile) {
@@ -115,9 +115,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
     const handleBlur = () => {
       if (isMobile) {
-        setTimeout(() => {
-          setIsKeyboardVisible(false);
-        }, 100);
+        setIsKeyboardVisible(false);
       }
     };
 
@@ -206,7 +204,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? 'bg-background transition-all duration-300 pr-4 w-full' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
       }}
