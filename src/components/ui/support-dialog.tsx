@@ -25,22 +25,26 @@ interface SupportDialogProps {
 }
 
 export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
-  // Style variables for consistent text styling
+  // Style variables for consistent text styling with improved design
   const styles = {
     // Font family is consistent across all elements
     fontFamily: "font-['Poppins',Helvetica]",
-    // Label styles
-    label: "font-medium text-[13px] text-[#212121] leading-4",
-    // Input/textarea/select field styles (with darker text for active input)
-    field: "bg-[#51515117] border-transparent text-[15px] font-normal text-[#212121] leading-5 py-2",
-    // Title style
-    title: "text-[28px] font-semibold text-[#212121] leading-8",
-    // Button style
-    button: "w-full bg-[#5c9ac5] hover:bg-[#5c9ac5]/90 text-white font-medium text-[15px] leading-5",
-    // Placeholder style for all components (including SelectValue)
-    placeholderText: "text-[#212121bf] opacity-70 font-normal",
+    // Label styles - improved contrast and weight
+    label: "font-medium text-[14px] text-[#333333] leading-5 mb-1.5",
+    // Input/textarea/select field styles - better contrast with borders
+    field: "bg-[#F5F5F5] border border-[#CCCCCC] rounded-md text-[15px] font-normal text-[#333333] leading-5 py-3 px-4 focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] transition-all duration-200",
+    // Title style - larger, bolder for better hierarchy
+    title: "text-[22px] font-bold text-[#333333] leading-7",
+    // Button style - more vibrant with hover effects
+    button: "w-full bg-blueBrand hover:bg-blueBrand/80 text-white font-semibold text-[16px] leading-5 py-3 rounded-md transition-colors duration-300",
+    // Placeholder style for SelectValue
+    placeholderText: "text-[#555555] font-normal",
     // Placeholder style using Tailwind's placeholder: modifier (for Input and Textarea)
-    placeholderTailwind: "placeholder:text-[#212121bf] placeholder:opacity-70 placeholder:font-normal placeholder:font-['Poppins',Helvetica]",
+    placeholderTailwind: "placeholder:text-[#555555] placeholder:font-normal",
+    // Content container with improved spacing
+    container: "p-5 space-y-5",
+    // Form group with better spacing
+    formGroup: "w-full space-y-1.5",
   };
 
   // Form field data with placeholders
@@ -65,74 +69,76 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-[#fcfcfc]">
-        <DialogHeader className="items-center pb-4">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] bg-white rounded-lg shadow-lg">
+        <DialogHeader className="items-center pb-4 border-b border-gray-100">
           <DialogTitle className={`${styles.title} ${styles.fontFamily}`}>
             Submit Your Request
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className={`${styles.container} flex flex-col items-center`}>
           {formFields.map((field) => (
-            <div key={field.id} className="w-full">
-              <div className="flex flex-col gap-1">
-                <Label
-                  htmlFor={field.id}
-                  className={`${styles.label} ${styles.fontFamily}`}
-                >
-                  {field.label}
-                </Label>
-                
-                {field.type === "input" && (
-                  <Input
+            <div key={field.id} className={styles.formGroup}>
+              <Label
+                htmlFor={field.id}
+                className={`${styles.label} ${styles.fontFamily} flex items-center`}
+              >
+                {field.label}
+              </Label>
+              
+              {field.type === "input" && (
+                <Input
+                  id={field.id}
+                  placeholder={field.placeholder}
+                  required={field.id !== "category"}
+                  className={`${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                />
+              )}
+              
+              {field.type === "textarea" && (
+                <Textarea
+                  id={field.id}
+                  placeholder={field.placeholder}
+                  required={field.id !== "category"}
+                  className={`min-h-[120px] ${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                />
+              )}
+              
+              {field.type === "select" && (
+                <Select>
+                  <SelectTrigger
                     id={field.id}
-                    placeholder={field.placeholder}
-                    className={`${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
-                  />
-                )}
-                
-                {field.type === "textarea" && (
-                  <Textarea
-                    id={field.id}
-                    placeholder={field.placeholder}
-                    className={`min-h-[76px] ${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
-                  />
-                )}
-                
-                {field.type === "select" && (
-                  <Select>
-                    <SelectTrigger
-                      id={field.id}
-                      className={`${styles.field} ${styles.fontFamily}`}
-                    >
-                      <SelectValue 
-                        placeholder={field.placeholder} 
-                        className={`${styles.fontFamily} ${styles.placeholderText}`}
-                      />
-                    </SelectTrigger>
-                    <SelectContent className={styles.fontFamily}>
-                      {categories.map((category) => (
-                        <SelectItem 
-                          key={category.value} 
-                          value={category.value}
-                          className={`${styles.fontFamily} text-[#212121]`}
-                        >
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
+                    className={`${styles.field} ${styles.fontFamily}`}
+                  >
+                    <SelectValue 
+                      placeholder={field.placeholder} 
+                      className={`${styles.fontFamily} ${styles.placeholderText}`}
+                    />
+                  </SelectTrigger>
+                  <SelectContent 
+                    className={`${styles.fontFamily} bg-white border border-[#CCCCCC] rounded-md shadow-md`}
+                  >
+                    {categories.map((category) => (
+                      <SelectItem 
+                        key={category.value} 
+                        value={category.value}
+                        className={`${styles.fontFamily} text-[#333333] py-2 px-3 hover:bg-[#F5F5F5] cursor-pointer`}
+                      >
+                        {category.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           ))}
 
-          <div className="w-full py-2">
+          <div className="w-full mt-6">
             <Button
               onClick={handleSubmit}
               className={`${styles.button} ${styles.fontFamily}`}
             >
-              Submit
+              Submit 
             </Button>
           </div>
         </div>
