@@ -36,7 +36,6 @@ interface MessageInputAreaProps {
   selectedConversation: any;
   onTyping?: (isTyping: boolean) => void;
   handleFileClick: (file: MessageFile) => void;
-  onInputFocus?: (isFocused: boolean) => void;
 }
 
 const getStorageKey = (conversationId: string) => `message_draft_${conversationId}`;
@@ -60,7 +59,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   selectedConversation,
   onTyping,
   handleFileClick,
-  onInputFocus,
 }) => {
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
@@ -113,10 +111,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       if (isMobile) {
         setIsKeyboardVisible(true);
       }
-      // Notify parent component about input focus
-      if (onInputFocus) {
-        onInputFocus(true);
-      }
     };
 
     const handleBlur = () => {
@@ -124,10 +118,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         setTimeout(() => {
           setIsKeyboardVisible(false);
         }, 100);
-      }
-      // Notify parent component about input blur
-      if (onInputFocus) {
-        onInputFocus(false);
       }
     };
 
@@ -142,7 +132,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
     };
-  }, [isMobile, textareaRef, onInputFocus]);
+  }, [isMobile, textareaRef]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {

@@ -46,7 +46,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -92,15 +91,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       }
     }
   };
-  
-  // Handle input focus changes
-  const handleInputFocus = (isFocused: boolean) => {
-    setIsInputFocused(isFocused);
-    if (isFocused) {
-      // Scroll to bottom immediately when input is focused
-      setTimeout(scrollToBottom, 0);
-    }
-  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -109,13 +99,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return () => clearTimeout(timer);
   }, [messages]);
-  
-  // Effect to scroll to bottom when input gets focused
-  useEffect(() => {
-    if (isInputFocused) {
-      scrollToBottom();
-    }
-  }, [isInputFocused]);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
@@ -257,7 +240,6 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           selectedConversation={selectedConversation}
           onTyping={onTyping}
           handleFileClick={handleFileClick}
-          onInputFocus={handleInputFocus}
         />
       </div>
 
