@@ -33,7 +33,8 @@ export default function SearchListingDetailsView({
     return <div>Listing not found</div>;
   }
 
-  return ( <ListingDetailsView 
+  return (
+    <ListingDetailsView 
       listing={listing} 
       actions={actions} 
       className={className} 
@@ -127,24 +128,30 @@ function ListingDetailsView({
 
   return (
     <>
+      {/* Conditionally rendered top control box */}
+      {!isDetailsVisible && (
+        <div className="hidden lg:block sticky top-0 bg-background z-50 py-4 px-0 border-b-2 border-gray-200">
+          <div className='flex justify-between items-center'>
+            <div className='flex flex-col'>
+              <p className='text-lg font-medium'>{listing.title}</p>
+              <p className='text-sm'>Hosted by {listing.user?.firstName}</p>
+            </div>
+            <div className='flex items-center gap-x-4'>
+              <p className='text-lg font-medium'>${listing.price?.toLocaleString()}/month</p>
+              <DesktopActionButtons />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={cn("w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6", className)}>
         <ListingImageCarousel
           listingImages={listing.listingImages || []}
         />
         <div className='flex justify-between gap-x-8 relative'>
-          <div className='w-full lg:w-3/5'>
-            <ListingDescription listing={listing} isFlexible={false}/>
-
-            <h3 className="text-[24px] text-[#404040] font-medium py-3">Location</h3>
-
-            <div className=" pb-3 text-[#404040] text-[20px] font-normal">
-              {listing.distance >= 10
-                ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
-                : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
-            </div>
-          </div>
+          <ListingDescription listing={listing} showFullAmenities={showFullAmenities} />
           <div
-            className="w-1/2 h-fit max-w-[500px] lg:w-3/5 sticky top-[10%] hidden lg:block"
+            className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block"
           >
             <SearchListingDetailsBox
               listing={listing}
@@ -159,6 +166,14 @@ function ListingDetailsView({
         {/* Location section - conditionally rendered */}
         {!hideLocationSection && (
           <div className="pb-3 mt-3" ref={locationSectionRef}>
+            <h3 className="text-[24px] text-[#404040] font-medium mb-4">Location</h3>
+
+            <div className="pb-3 text-[#404040] text-[20px] font-normal">
+              {listing.distance >= 10
+                ? <p>{listing.distance?.toFixed(0)} miles from {state.trip.locationString} </p>
+                : <p>{listing.distance?.toFixed(1)} miles from {state.trip.locationString} </p>}
+
+            </div>
 
             <div className="w-full h-[526px] mt-4 relative" ref={mapContainerRef} >
               {/* Map container */}
