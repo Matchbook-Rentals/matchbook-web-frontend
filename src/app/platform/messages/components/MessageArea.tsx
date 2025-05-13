@@ -6,6 +6,8 @@ import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from '@/components/ui/button';
+import { useWindowSize } from '@/hooks/useWindowSize';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MessageList from './MessageList';
 import MessageInputArea from './MessageInputArea';
 import ConversationHeader from './ConversationHeader';
@@ -45,27 +47,40 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
-  const [isMobile, setIsMobile] = useState(initialIsMobile);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [inputHeight, setInputHeight] = useState(60); // Default input area height
+  const [headerHeight, setHeaderHeight] = useState(60); // Default header height
+  const headerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const { height } = useWindowSize();
 
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIfMobile();
-
-    window.addEventListener('resize', checkIfMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkIfMobile);
-    };
-  }, []);
 
   useEffect(() => {
     if (selectedConversation) {
       setIsExiting(false);
     }
   }, [selectedConversation]);
+  
+  // Measure header height with resize observer to keep it accurate
+  useEffect(() => {
+    if (headerRef.current) {
+      const updateHeaderHeight = () => {
+        const height = headerRef.current?.offsetHeight || 0;
+        setHeaderHeight(height);
+      };
+      
+      // Initial measurement
+      updateHeaderHeight();
+      
+      // Create resize observer to track size changes
+      const resizeObserver = new ResizeObserver(() => {
+        updateHeaderHeight();
+      });
+      
+      resizeObserver.observe(headerRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, []);
 
   const handleBackClick = () => {
     if (!onBack) return;
@@ -99,6 +114,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return () => clearTimeout(timer);
   }, [messages]);
+  
+  // Also scroll to bottom when keyboard visibility changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [isKeyboardVisible]);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
@@ -198,17 +222,14 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border  no-wrap${
-    isMobile
-      ? ' w-full h-[100dvh] overflow-hidden'
-      : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
-  } bg-background w-full ${
+  // Simpler class-based container - let it fill its parent naturally
+  const messageContainerClassName = `flex flex-col h-full w-full bg-background overflow-hidden ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
   return (
     <div className={messageContainerClassName}>
-      <div className="">
+      <div ref={headerRef} className="">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -219,7 +240,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       </div>
 
       <div className="flex-1 w-full overflow-x-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+        <ScrollArea 
+          ref={scrollAreaRef} 
+          className="w-[101%] md:w-[100.7%] overflow-x-visible h-full"
+        >
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
               messages={messages}
@@ -240,6 +264,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           selectedConversation={selectedConversation}
           onTyping={onTyping}
           handleFileClick={handleFileClick}
+          onKeyboardVisibilityChange={setIsKeyboardVisible}
+          onHeightChange={setInputHeight}
         />
       </div>
 

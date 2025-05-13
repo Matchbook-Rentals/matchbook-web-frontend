@@ -36,6 +36,8 @@ interface MessageInputAreaProps {
   selectedConversation: any;
   onTyping?: (isTyping: boolean) => void;
   handleFileClick: (file: MessageFile) => void;
+  onKeyboardVisibilityChange?: (isVisible: boolean) => void;
+  onHeightChange?: (height: number) => void;
 }
 
 const getStorageKey = (conversationId: string) => `message_draft_${conversationId}`;
@@ -59,10 +61,15 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   selectedConversation,
   onTyping,
   handleFileClick,
+  onKeyboardVisibilityChange,
+  onHeightChange,
 }) => {
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
+  
+  // Track component height for parent coordination
+  const componentRef = useRef<HTMLDivElement>(null);
 
   // Calculate dynamic border radius based on message length and screen width
   const calculateBorderRadius = (messageLength: number, screenWidth: number | undefined) => {
@@ -100,23 +107,63 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const [isUploadActive, setIsUploadActive] = useState(false);
 
   // Remove manual keyboard detection and let dvh handle it
+  // Monitor window height changes to detect keyboard visibility
   useEffect(() => {
-    // Just track previous height for potential future use
+    if (isMobile && height && prevWindowHeight.current) {
+      // If height significantly decreased, keyboard is likely visible
+      const heightDifference = prevWindowHeight.current - height;
+      const keyboardThreshold = prevWindowHeight.current * 0.15; // 15% threshold
+      const keyboardVisible = heightDifference > keyboardThreshold;
+      
+      if (keyboardVisible !== isKeyboardVisible) {
+        setIsKeyboardVisible(keyboardVisible);
+        if (onKeyboardVisibilityChange) {
+          onKeyboardVisibilityChange(keyboardVisible);
+        }
+        
+        // When keyboard state changes, report current height
+        if (componentRef.current && onHeightChange) {
+          setTimeout(() => {
+            onHeightChange(componentRef.current?.offsetHeight || 0);
+          }, 50); // Small delay to let layout settle
+        }
+      }
+    }
+    
     prevWindowHeight.current = height;
-  }, [height]);
+  }, [height, isMobile, isKeyboardVisible, onKeyboardVisibilityChange, onHeightChange]);
 
-  // Simplified focus handling to work with dvh
+  // Simpler focus/blur handling that doesn't try to override the height detection
   useEffect(() => {
     const handleFocus = () => {
       if (isMobile) {
+        // Focus always suggests keyboard is about to appear
         setIsKeyboardVisible(true);
+        if (onKeyboardVisibilityChange) {
+          onKeyboardVisibilityChange(true);
+        }
       }
     };
 
+    // On modern browsers/devices, we can rely on the window height detection
+    // This is just a backup for older devices
     const handleBlur = () => {
       if (isMobile) {
+        // Small delay to let height measurements settle
         setTimeout(() => {
-          setIsKeyboardVisible(false);
+          // Don't override height-based detection if it thinks keyboard is still visible
+          if (height && prevWindowHeight.current) {
+            const heightDifference = prevWindowHeight.current - height;
+            const keyboardStillVisible = heightDifference > (prevWindowHeight.current * 0.1);
+            
+            // Only update if height indicates keyboard is actually gone
+            if (!keyboardStillVisible) {
+              setIsKeyboardVisible(false);
+              if (onKeyboardVisibilityChange) {
+                onKeyboardVisibilityChange(false);
+              }
+            }
+          } 
         }, 100);
       }
     };
@@ -132,7 +179,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
     };
-  }, [isMobile, textareaRef]);
+  }, [isMobile, height, onKeyboardVisibilityChange]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
@@ -145,6 +192,29 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     }
     prevConversationIdRef.current = selectedConversation?.id || null;
   }, [selectedConversation]);
+  
+  // Track component height and report it to parent if needed
+  useEffect(() => {
+    const reportHeight = () => {
+      if (componentRef.current && onHeightChange) {
+        const height = componentRef.current.offsetHeight;
+        onHeightChange(height);
+      }
+    };
+    
+    // Report on initial render
+    reportHeight();
+    
+    // Create observer to track size changes
+    if (componentRef.current && onHeightChange) {
+      const resizeObserver = new ResizeObserver(() => {
+        reportHeight();
+      });
+      
+      resizeObserver.observe(componentRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, [onHeightChange, messageAttachments.length, newMessageInput.length]);
 
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
@@ -206,6 +276,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
+      ref={componentRef}
       className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
