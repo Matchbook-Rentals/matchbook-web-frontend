@@ -68,12 +68,6 @@ const SearchListingDetailsBox: React.FC<ListingDetailsBoxProps> = ({ listing, on
           <RejectIcon className={`${bigIcon} text-white`} />
         </button>
 
-        <button
-          onClick={onReturn}
-          className={`${smallButtonControl} bg-gradient-to-br from-[#6CC3FF] to-[#5B96BE]`}
-        >
-          <ReturnIcon className={`${smallIcon} text-white`} />
-        </button>
 
         <button
           onClick={onLike}
