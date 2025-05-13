@@ -91,6 +91,40 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       }
     }
   };
+  
+  // Track last scroll position and direction
+  const lastScrollTopRef = useRef(0);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  
+  useEffect(() => {
+    const scrollContainer = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    
+    const handleScroll = () => {
+      if (scrollContainer) {
+        const currentScrollTop = scrollContainer.scrollTop;
+        const scrollDifference = lastScrollTopRef.current - currentScrollTop;
+        
+        // If scrolling up more than 40px, blur the input to close keyboard
+        if (scrollDifference > 40 && isMobile) {
+          if (messageInputRef.current) {
+            messageInputRef.current.blur();
+          }
+        }
+        
+        lastScrollTopRef.current = currentScrollTop;
+      }
+    };
+    
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+    }
+    
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [isMobile]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -240,6 +274,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
           selectedConversation={selectedConversation}
           onTyping={onTyping}
           handleFileClick={handleFileClick}
+          textareaRef={messageInputRef}
         />
       </div>
 

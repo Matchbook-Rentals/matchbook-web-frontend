@@ -36,6 +36,7 @@ interface MessageInputAreaProps {
   selectedConversation: any;
   onTyping?: (isTyping: boolean) => void;
   handleFileClick: (file: MessageFile) => void;
+  textareaRef?: React.RefObject<HTMLTextAreaElement>;
 }
 
 const getStorageKey = (conversationId: string) => `message_draft_${conversationId}`;
@@ -59,6 +60,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   selectedConversation,
   onTyping,
   handleFileClick,
+  textareaRef: externalTextareaRef,
 }) => {
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
@@ -82,7 +84,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const internalTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = externalTextareaRef || internalTextareaRef; // Use external ref if provided, otherwise use internal ref
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { width, height } = useWindowSize();
