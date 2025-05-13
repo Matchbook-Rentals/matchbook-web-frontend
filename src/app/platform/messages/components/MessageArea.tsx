@@ -66,10 +66,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         
         if (isKeyboardLikelyVisible) {
           // When keyboard is visible, give more space to the message list
-          setScrollAreaHeight("70%");
+          setScrollAreaHeight("60%");
         } else {
           // Default height when keyboard is hidden
-          setScrollAreaHeight("55%");
+          setScrollAreaHeight("100%");
         }
         
         console.log(`Window resized. Height: ${window.innerHeight}, Keyboard visible: ${isKeyboardLikelyVisible}`);
