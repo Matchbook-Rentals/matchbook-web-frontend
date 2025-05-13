@@ -49,9 +49,9 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
 
   // Form field data with placeholders
   const formFields = [
+    { id: "category", label: "Category", placeholder: "Select a category", type: "select" },
     { id: "subject", label: "Subject", placeholder: "Enter the subject of your request", type: "input" },
     { id: "description", label: "Description", placeholder: "Provide a detailed description", type: "textarea" },
-    { id: "category", label: "Category", placeholder: "Select a category", type: "select" },
   ];
 
   const categories = [
