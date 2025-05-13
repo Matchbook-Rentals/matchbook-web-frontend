@@ -208,7 +208,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   return (
     <div className={messageContainerClassName}>
-      <div className="">
+      <div className="sticky top-0">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -234,7 +234,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className={''}>
+      <div className={'sticky bottom-0'}>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}

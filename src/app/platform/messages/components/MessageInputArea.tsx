@@ -110,6 +110,16 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     const handleFocus = () => {
       if (isMobile) {
         setIsKeyboardVisible(true);
+        
+        // Add scrollIntoView with 310ms delay when input is focused
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest'
+            });
+          }
+        }, 310);
       }
     };
 
