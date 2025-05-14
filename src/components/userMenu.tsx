@@ -56,7 +56,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const menuItems: MenuItem[] = [
     { id: 'home', label: 'Home', href: '/', section: 1 },
     { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
-    { id: 'application', label: 'Application', href: '/platform/application', requiresBeta: true, section: 1 },
+    { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 }, // Changed from adminOnlyVisible for consistency with previous logic
     {
