@@ -17,12 +17,6 @@ export default async function TermsPage() {
     // User already agreed to terms, redirect to home
     return redirect("/");
   }
-  
-  const handleAgree = async () => {
-    "use server";
-    await agreeToTerms();
-    return redirect("/");
-  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -492,7 +486,7 @@ export default async function TermsPage() {
       </div>
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <form action={handleAgree}>
+        <form action={agreeToTerms}>
           <Button 
             type="submit"
             className="w-full sm:w-auto"

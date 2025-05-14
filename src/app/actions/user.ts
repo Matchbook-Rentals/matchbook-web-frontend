@@ -1,6 +1,7 @@
 'use server'
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
 
 export async function createUser() {
@@ -33,7 +34,7 @@ export async function updateUserImage() {
 
   try {
     if (!clerkUser?.id) {
-      throw new Error('User ID is missing')
+      throw new Error('User ID is missing' + clerkUser)
     }
 
     const dbUser = await prisma?.user.findUnique({
@@ -95,10 +96,20 @@ export async function updateUserLogin(timestamp: Date) {
 
 export async function agreeToTerms() {
   const { userId } = auth();
-  const user = await currentUser();
+  const clerkUser = await currentUser();
 
-  if (!userId || !user) {
+  if (!userId || !clerkUser) {
     throw new Error("Not authenticated");
+  }
+
+  // Check if user exists in our database
+  const dbUser = await prisma.user.findUnique({
+    where: { id: userId }
+  });
+
+  // If user doesn't exist, create them first
+  if (!dbUser) {
+    await createUser();
   }
 
   // Update the user's agreedToTerms field with the current timestamp
@@ -107,7 +118,8 @@ export async function agreeToTerms() {
     data: { agreedToTerms: new Date() }
   });
 
-  return { success: true };
+  // Redirect to home page after agreement
+  return redirect("/");
 }
 
 export async function getAgreedToTerms() {
@@ -117,11 +129,17 @@ export async function getAgreedToTerms() {
     throw new Error("Not authenticated");
   }
 
+  // First check if user exists
   const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { agreedToTerms: true }
+    where: { id: userId }
   });
 
-  return user?.agreedToTerms;
+  // If user doesn't exist in our database, create them
+  if (!user) {
+    await createUser();
+    return null; // New user hasn't agreed to terms yet
+  }
+
+  return user.agreedToTerms;
 }
 
