@@ -473,6 +473,20 @@ const MessageInterface = ({
     // On mobile, hide the sidebar when a conversation is selected to show the message area
     if (isMobile) {
       setSidebarVisible(false);
+      
+      // Set a small timeout to ensure DOM updates before attempting to focus
+      setTimeout(() => {
+        // Find the scroll viewport and ensure it's focusable
+        const scrollViewport = document.querySelector('[data-radix-scroll-area-viewport]');
+        if (scrollViewport instanceof HTMLElement) {
+          scrollViewport.focus();
+          
+          // Also force clear any active element focus that might be preventing scrolling
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
+        }
+      }, 300);
     }
 
     const conv = allConversations.find((c) => c.id === conversationId);
