@@ -135,9 +135,20 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     return () => clearTimeout(timer);
   }, [messages]);
 
-  // Auto-scroll to bottom on component mount
+  // Auto-scroll to bottom and focus scroll area on component mount
   useEffect(() => {
     scrollToBottom();
+    
+    // Focus the scroll area to enable scrolling without needing a click first
+    if (scrollAreaRef.current) {
+      // Use setTimeout to ensure the focus happens after the component is fully rendered
+      setTimeout(() => {
+        const scrollViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+        if (scrollViewport instanceof HTMLElement) {
+          scrollViewport.focus();
+        }
+      }, 100);
+    }
   }, []);
 
   const handleFileClick = (file: MessageFile) => {
@@ -259,7 +270,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       </div>
 
       <div className="flex-1 w-full overflow-x-hidden">
-        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible">
+        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible" tabIndex={0}>
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
               messages={messages}
