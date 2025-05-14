@@ -249,7 +249,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </div>
 
       {/* Conversation List */}
-      <ScrollArea className="flex-1 py-2 w-[100%] md:w-[110%] pr-2 md:pr-8 pb-2 md:pb-6">
+      <ScrollArea className="flex-1 py-2 w-[100%] md:w-[110%] pr-2 md:pr-8 pb-12 md:pb-6">
         {filteredConversations && filteredConversations.length > 0 ? (
           filteredConversations.map((conv, index) => {
             const { displayName, imageUrl } = getParticipantInfo(conv, user);
