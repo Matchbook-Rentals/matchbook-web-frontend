@@ -8,6 +8,7 @@ import BookingGrid from './booking-grid';
 import BookingCard from './booking-card';
 
 // Add test bookings
+/* 
 const testBookings = [
   // Current booking
   {
@@ -102,20 +103,21 @@ const testBookings = [
     }
   }
 ];
+*/
 
 interface BookingsContentProps {
   bookings: Booking[];
 }
 
 const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
-  // For testing purposes, use the test bookings instead of real ones
-  const allBookings = [...testBookings];
+  // Use the bookings passed as props
+  const allBookings = bookings || [];
   
-  // Find current booking (first one in test bookings)
-  const currentBooking = allBookings[0];
+  // Find current booking (first one in bookings)
+  const currentBooking = allBookings.length > 0 ? allBookings[0] : null;
   
   // Other bookings (everything except current)
-  const otherBookings = allBookings.slice(1);
+  const otherBookings = allBookings.length > 0 ? allBookings.slice(1) : [];
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -179,9 +181,11 @@ const BookingsContent: React.FC<BookingsContentProps> = ({ bookings }) => {
       {allBookings.length > 0 ? (
         <div>
           {/* Current booking - full width */}
-          <div className="w-full mb-8">
-            <BookingCard booking={currentBooking} onDelete={() => {}} headerText="Current Booking" />
-          </div>
+          {currentBooking && (
+            <div className="w-full mb-8">
+              <BookingCard booking={currentBooking} onDelete={() => {}} headerText="Current Booking" />
+            </div>
+          )}
           
           {/* Other bookings - 3/4 width with filter */}
           <div className="flex flex-col md:flex-row gap-8">
