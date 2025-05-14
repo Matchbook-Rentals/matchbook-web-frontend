@@ -90,10 +90,12 @@ export default function SearchListingCard({ listing, status, className, style, d
     if (favIds.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full p-2"
+          className="bg-black/50 rounded-full p-2 touch-action-manipulation"
+          style={{ touchAction: 'manipulation' }}
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveLike(listing.id);
             e.stopPropagation();
+            e.preventDefault();
           }}
         >
           <Heart
@@ -105,14 +107,16 @@ export default function SearchListingCard({ listing, status, className, style, d
     } else if (dislikedIds.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full "
+          className="bg-black/50 rounded-full touch-action-manipulation"
+          style={{ touchAction: 'manipulation' }}
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveDislike(listing.id);
             e.stopPropagation();
+            e.preventDefault();
           }}
         >
           <RejectIcon
-            className="w-9 h-9 text-white cursor-pointer p-2 "
+            className="w-9 h-9 text-white cursor-pointer p-2"
           />
         </div>
       );
@@ -120,10 +124,12 @@ export default function SearchListingCard({ listing, status, className, style, d
 
     return (
       <div
-        className="bg-black/50 rounded-full p-2"
+        className="bg-black/50 rounded-full p-2 touch-action-manipulation"
+        style={{ touchAction: 'manipulation' }}
         onClick={(e: React.MouseEvent) => {
           optimisticLike(listing.id);
           e.stopPropagation();
+          e.preventDefault();
         }}
       >
         <Heart
@@ -138,18 +144,22 @@ export default function SearchListingCard({ listing, status, className, style, d
     // Don't navigate if clicking on action buttons or carousel controls
     if (
       (e.target as HTMLElement).closest('button') ||
-      (e.target as HTMLElement).closest('.carousel-controls')
+      (e.target as HTMLElement).closest('.carousel-controls') ||
+      (e.target as HTMLElement).closest('.bg-black\\/50') // Don't navigate when clicking heart buttons
     ) {
       return;
     }
 
-    window.open(`/platform/trips/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
+    // Delay navigation slightly to allow other click events to propagate (iOS fix)
+    setTimeout(() => {
+      window.open(`/platform/trips/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
+    }, 10);
   };
 
   return (
     <Card
       className={`w-full overflow-hidden border-0 max-w-[600px] shadow-0 shadow-none cursor-pointer ${className || ''}`}
-      style={style}
+      style={{...style, touchAction: 'manipulation'}}
       onMouseEnter={() => {
         setIsHovered(true)
         setHoveredListing(listing)
@@ -185,7 +195,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         </Carousel>
 
         {/* Action Buttons */}
-        <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`}>
+        <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`} onClick={(e) => e.stopPropagation()}>
           {getStatusIcon(status)}
         </div>
 

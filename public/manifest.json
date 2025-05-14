@@ -1,0 +1,22 @@
+{
+  "name": "Matchbook Rentals",
+  "short_name": "Matchbook",
+  "description": "Your place, all in one place",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/logo-small.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/heart-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

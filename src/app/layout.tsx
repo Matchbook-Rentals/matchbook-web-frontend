@@ -50,6 +50,13 @@ export default function RootLayout({
       <html lang="en" className="custom-scrollbar w-[100%] max-w-[100%]">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+          <meta name="theme-color" content="#4F46E5" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <meta name="apple-mobile-web-app-title" content="Matchbook" />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/logo-small.jpg" />
+          <script src="/register-sw.js" defer></script>
         </head>
         <body className={`${poppins.className}`}>
           <main>
