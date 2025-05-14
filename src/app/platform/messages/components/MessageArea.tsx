@@ -126,6 +126,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
   }, [isMobile]);
 
+  // Scroll to bottom when messages change
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToBottom();
@@ -133,6 +134,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
     return () => clearTimeout(timer);
   }, [messages]);
+
+  // Auto-scroll to bottom on component mount
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
