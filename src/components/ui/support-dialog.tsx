@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { createTicket } from "@/app/actions/tickets";
+import { useToast } from "@/components/ui/use-toast";
+import { useUser } from "@clerk/nextjs";
 
 interface SupportDialogProps {
   open: boolean;
@@ -25,6 +28,12 @@ interface SupportDialogProps {
 }
 
 export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [category, setCategory] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const { toast } = useToast();
+  const { user } = useUser();
   // Style variables for consistent text styling with improved design
   const styles = {
     // Font family is consistent across all elements
@@ -61,10 +70,85 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
     { value: "other", label: "Other" },
   ];
 
-  const handleSubmit = () => {
-    // TODO: Implement actual form submission logic here
-    console.log("Form submitted (placeholder)");
-    onOpenChange(false); // Close dialog on submit for now
+  const handleSubmit = async () => {
+    try {
+      // Validate form fields
+      if (!subject.trim()) {
+        toast({
+          variant: "destructive",
+          title: "Missing Information",
+          description: "Please enter a subject for your request."
+        });
+        return;
+      }
+
+      if (!description.trim()) {
+        toast({
+          variant: "destructive",
+          title: "Missing Information",
+          description: "Please provide details about your request."
+        });
+        return;
+      }
+
+      // Get user email - use user email if logged in, otherwise empty (will be caught by server validation)
+      const email = user?.primaryEmailAddress?.emailAddress || "";
+      const name = user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "";
+      
+      if (!email && !user) {
+        toast({
+          variant: "destructive",
+          title: "Sign in Required",
+          description: "Please sign in to submit a support request."
+        });
+        return;
+      }
+      
+      // Prepare ticket data
+      const ticketData = {
+        title: subject,
+        description: description,
+        email: email,
+        name: name,
+        category: category || "general",
+        pageUrl: window.location.href,
+        userAgent: navigator.userAgent
+      };
+
+      setIsSubmitting(true);
+      
+      // Submit the ticket
+      const result = await createTicket(ticketData);
+      
+      if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "We couldn't send your request. Please try again later."
+        });
+      } else {
+        toast({
+          variant: "default",
+          title: "Request Submitted",
+          description: "We've received your request and will get back to you soon."
+        });
+        
+        // Reset form and close dialog
+        setCategory("");
+        setSubject("");
+        setDescription("");
+        onOpenChange(false);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "We couldn't send your request. Please try again later."
+      });
+      console.error("Error submitting support request:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,6 +176,8 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                   placeholder={field.placeholder}
                   required={field.id !== "category"}
                   className={`${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                  value={field.id === "subject" ? subject : ""}
+                  onChange={(e) => field.id === "subject" && setSubject(e.target.value)}
                 />
               )}
               
@@ -101,11 +187,13 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                   placeholder={field.placeholder}
                   required={field.id !== "category"}
                   className={`min-h-[120px] ${styles.field} ${styles.fontFamily} ${styles.placeholderTailwind}`}
+                  value={field.id === "description" ? description : ""}
+                  onChange={(e) => field.id === "description" && setDescription(e.target.value)}
                 />
               )}
               
               {field.type === "select" && (
-                <Select>
+                <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger
                     id={field.id}
                     className={`${styles.field} ${styles.fontFamily}`}
@@ -118,13 +206,13 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
                   <SelectContent 
                     className={`${styles.fontFamily} bg-white border border-[#CCCCCC] rounded-md shadow-md`}
                   >
-                    {categories.map((category) => (
+                    {categories.map((categoryOption) => (
                       <SelectItem 
-                        key={category.value} 
-                        value={category.value}
+                        key={categoryOption.value} 
+                        value={categoryOption.value}
                         className={`${styles.fontFamily} text-[#333333] py-2 px-3 hover:bg-[#F5F5F5] cursor-pointer`}
                       >
-                        {category.label}
+                        {categoryOption.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -137,8 +225,9 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
             <Button
               onClick={handleSubmit}
               className={`${styles.button} ${styles.fontFamily}`}
+              disabled={isSubmitting}
             >
-              Submit 
+              {isSubmitting ? "Submitting..." : "Submit"} 
             </Button>
           </div>
         </div>
