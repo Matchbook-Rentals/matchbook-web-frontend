@@ -105,7 +105,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         const scrollDifference = lastScrollTopRef.current - currentScrollTop;
         
         // If scrolling up more than 40px, blur the input to close keyboard
-        if (scrollDifference > 40 && isMobile) {
+        if (scrollDifference > 10 && isMobile) {
           if (messageInputRef.current) {
             messageInputRef.current.blur();
           }
