@@ -63,7 +63,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   textareaRef: externalTextareaRef,
 }) => {
   // Style variables
-  const inputAreaClassNames = "flex-1 px-5 py-3 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
+  const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
 
   // Calculate dynamic border radius based on message length and screen width
@@ -289,9 +289,15 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
       >
         <textarea
           ref={textareaRef}
-          className={inputAreaClassNames}
+          className={`${inputAreaClassNames} flex items-center self-center my-auto`}
           placeholder="Type a message..."
           value={newMessageInput}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            paddingTop: '11px',  // Fine-tuned padding to vertically center text
+            paddingBottom: '11px',
+          }}
           onChange={(e) => {
             setNewMessageInput(e.target.value);
             const textarea = e.target;
