@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:lan": "next dev --hostname 0.0.0.0",
     "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
@@ -11,6 +12,7 @@
     "redis:up": "docker compose -f redis/docker-compose.yml up -d",
     "redis:down": "docker compose -f redis/docker-compose.yml down",
     "ws:dev": "npm run redis:up && node ts_server/server.js",
+    "ws:dev:lan": "npm run redis:up && SOCKET_IO_HOST=0.0.0.0 node ts_server/server.js",
     "ws:start": "node ts_server/server.js",
     "ws:start:js": "node ts_server/server.js",
     "ws:deploy": "npm install && npm run ws:start:js",

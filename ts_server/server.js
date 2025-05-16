@@ -9,6 +9,7 @@ const { Redis } = require('ioredis');
 
 // Environment variables with fallbacks
 const PORT = process.env.SOCKET_IO_PORT ? parseInt(process.env.SOCKET_IO_PORT) : 8080;
+const HOST = process.env.SOCKET_IO_HOST || undefined; // Host to bind to, defaults to all interfaces
 const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
 const REDIS_PORT = process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD || undefined;
@@ -20,6 +21,7 @@ const PING_INTERVAL_MS = 25000; // 25 seconds
 console.log('Socket.IO Server Starting');
 console.log('Environment variables:');
 console.log('SOCKET_IO_PORT:', process.env.SOCKET_IO_PORT || `(not set, using default ${PORT})`);
+console.log('SOCKET_IO_HOST:', process.env.SOCKET_IO_HOST || `(not set, binding to all interfaces)`);
 console.log('REDIS_HOST:', process.env.REDIS_HOST || `(not set, using default ${REDIS_HOST})`);
 console.log('REDIS_PORT:', process.env.REDIS_PORT || `(not set, using default ${REDIS_PORT})`);
 console.log('REDIS_PASSWORD:', process.env.REDIS_PASSWORD ? '(set)' : '(not set)');
@@ -703,8 +705,10 @@ app.get('/stats', (_, res) => {
 });
 
 // Start the server
-server.listen(PORT, () => {
-  console.log(`WebSocket Server running on port ${PORT}`);
+const listenOptions = HOST ? { port: PORT, host: HOST } : PORT;
+server.listen(listenOptions, () => {
+  const bindInfo = HOST ? `${HOST}:${PORT}` : `port ${PORT} (all interfaces)`;
+  console.log(`WebSocket Server running on ${bindInfo}`);
 });
 
 // Handle graceful shutdown
