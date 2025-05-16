@@ -30,6 +30,13 @@ interface MessageFile {
   fileSize?: number;
 }
 
+// Add VisualViewport type if not available
+declare global {
+  interface Window {
+    visualViewport?: VisualViewport;
+  }
+}
+
 const MessageArea: React.FC<MessageAreaProps> = ({
   selectedConversation,
   messages,
@@ -46,6 +53,11 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
+  const [viewportHeight, setViewportHeight] = useState<number>(window.innerHeight);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null);
+  const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('100%');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -60,6 +72,62 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       window.removeEventListener('resize', checkIfMobile);
     };
   }, []);
+
+  // Handle visual viewport changes for keyboard management
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleViewportChange = () => {
+      if (window.visualViewport) {
+        const newHeight = window.visualViewport.height;
+        setViewportHeight(newHeight);
+      }
+    };
+
+    // Initial setup
+    handleViewportChange();
+
+    // Listen for viewport changes
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange);
+      window.visualViewport.addEventListener('scroll', handleViewportChange);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleViewportChange);
+        window.visualViewport.removeEventListener('scroll', handleViewportChange);
+      }
+    };
+  }, [isMobile]);
+
+  // Calculate scroll area height dynamically
+  useEffect(() => {
+    const calculateScrollAreaHeight = () => {
+      if (!isMobile || !headerRef.current || !inputRef.current) {
+        setScrollAreaHeight('100%');
+        return;
+      }
+
+      const headerHeight = headerRef.current.offsetHeight;
+      const inputHeight = inputRef.current.offsetHeight;
+      const availableHeight = viewportHeight - headerHeight - inputHeight;
+      
+      setScrollAreaHeight(`${availableHeight}px`);
+    };
+
+    calculateScrollAreaHeight();
+    
+    // Recalculate on viewport or content changes
+    const resizeObserver = new ResizeObserver(calculateScrollAreaHeight);
+    
+    if (headerRef.current) resizeObserver.observe(headerRef.current);
+    if (inputRef.current) resizeObserver.observe(inputRef.current);
+    
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [isMobile, viewportHeight]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -251,15 +319,20 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   const messageContainerClassName = `flex flex-col box-border  no-wrap${
     isMobile
-      ? ' w-full h-[100dvh] overflow-hidden'
+      ? ' w-full overflow-hidden'
       : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
+  const containerStyle = isMobile ? { height: `${viewportHeight}px` } : {};
+
   return (
-    <div className={messageContainerClassName}>
-      <div className="sticky top-0">
+    <div 
+      ref={containerRef}
+      className={messageContainerClassName}
+      style={containerStyle}>
+      <div ref={headerRef} className="flex-shrink-0">
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -269,7 +342,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         />
       </div>
 
-      <div className="flex-1 w-full overflow-x-hidden">
+      <div className="flex-1 w-full overflow-hidden" style={isMobile ? { height: scrollAreaHeight } : {}}>
         <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible" tabIndex={0}>
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
@@ -285,7 +358,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div className={'sticky bottom-0'}>
+      <div ref={inputRef} className="flex-shrink-0">
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
