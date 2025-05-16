@@ -17,9 +17,10 @@ import {
 interface SearchEditBarDesktopProps {
   className?: string;
   trip: Trip; // Receive the full trip object
+  onClose?: () => void; // Optional close handler for dialog
 }
 
-const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, trip }) => {
+const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, trip, onClose }) => {
   const { toast } = useToast();
   // Initialize state directly from the trip prop
   const [activeContent, setActiveContent] = React.useState<'location' | 'date' | 'guests' | null>(null);

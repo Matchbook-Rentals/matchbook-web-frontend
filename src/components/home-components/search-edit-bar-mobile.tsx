@@ -19,6 +19,7 @@ interface Suggestion {
 interface SearchEditBarMobileProps {
   className?: string;
   trip: Trip; // Receive the full trip object
+  onClose?: () => void; // Optional close handler for dialog
 }
 
 const PRESET_CITIES = [
@@ -32,6 +33,7 @@ const PRESET_CITIES = [
 const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
   className,
   trip, // Use the passed trip prop
+  onClose,
 }) => {
   // const params = useParams(); // Removed
   const { toast } = useToast();
@@ -273,9 +275,9 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
                   onProceed={() => setActiveInput(4)} // Proceed to guests
                   minimumDateRange={{ months: 1 }}
                   maximumDateRange={{ months: 12 }}
-                // Pass flexibility props if MobileDateRange supports them
-                // onFlexibilityChange={setFlexibility}
-                // initialFlexibility={flexibility}
+                  onFlexibilityChange={setFlexibility}
+                  flexibleStart={flexibility.start}
+                  flexibleEnd={flexibility.end}
                 />
               )}
               {index === 4 && (
@@ -352,8 +354,18 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
     // Removed animate and transition props for width
     >
       {/* Added Mobile Header */}
-      <div className="w-full text-center mb-4">
-        <h2 className="text-xl font-semibold">Edit Trip Details</h2>
+      <div className="w-full flex items-center justify-between mb-4">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Close dialog"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
+        <h2 className="text-xl font-semibold flex-1 text-center">Edit Trip Details</h2>
+        {onClose && <div className="w-9" />} {/* Spacer for centering */}
       </div>
 
       {/* Location Input */}
@@ -402,17 +414,16 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       {/* Action Buttons */}
       <div className="flex gap-4 w-full mt-2">
         <button
-          onClick={handleReset}
-          disabled={!hasChanges()}
+          onClick={hasChanges() ? handleReset : onClose}
           className={`flex-1 py-2 px-4 rounded-full transition-colors border flex items-center justify-center gap-2
               ${hasChanges()
               ? 'border-red-500 text-red-500 hover:bg-red-50'
-              : 'border-gray-300 text-gray-300 cursor-not-allowed'
+              : 'border-gray-500 text-gray-500 hover:bg-gray-50'
             }`}
-          aria-label="Cancel changes"
+          aria-label={hasChanges() ? "Reset changes" : "Close dialog"}
         >
           <X className="h-5 w-5" />
-          <span>Cancel</span>
+          <span>{hasChanges() ? 'Reset' : 'Close'}</span>
         </button>
         <button
           onClick={handleSave}

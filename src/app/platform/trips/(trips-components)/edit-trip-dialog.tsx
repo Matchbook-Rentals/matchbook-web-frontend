@@ -49,11 +49,11 @@ const EditTripDialog: React.FC<EditTripDialogProps> = ({ trip }) => {
         <DialogContent
           className={cn(
             "min-w-[50vw] max-w-[80vw] sm:max-w-[60vw] bg-transparent border-none rounded-none  p-0 ",
-            "h-fit max-h-[89vh]"
+            "h-fit max-h-[89dvh]"
           )}
         >
-          <ScrollArea className="h-full max-h-[89vh] rounded-[15px]">
-            <SearchEditBar trip={trip} />
+          <ScrollArea className="h-full max-h-[89dvh] rounded-[15px]">
+            <SearchEditBar trip={trip} onClose={() => setOpen(false)} />
           </ScrollArea>
         </DialogContent>
       ) : (
@@ -67,7 +67,7 @@ const EditTripDialog: React.FC<EditTripDialogProps> = ({ trip }) => {
           <div className="mb-6 md:p-0">
             <h2 className="text-2xl font-semibold text-center">Edit Trip Details</h2>
           </div>
-            <SearchEditBar trip={trip} />
+            <SearchEditBar trip={trip} onClose={() => setOpen(false)} />
         </DialogContent>
       )}
     </Dialog>

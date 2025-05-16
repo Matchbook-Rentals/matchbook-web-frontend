@@ -7,6 +7,7 @@ import { Trip } from "@prisma/client"; // Add Trip type import
 interface SearchEditBarProps {
   className?: string;
   trip: Trip; // Receive the full trip object
+  onClose?: () => void; // Optional close handler for dialog
 }
 
 // Simple hook to check screen size (adjust breakpoint as needed)
@@ -30,7 +31,7 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
-const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, trip }) => {
+const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, trip, onClose }) => {
   // Use md breakpoint (768px) to switch between mobile and desktop
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -46,9 +47,9 @@ const SearchEditBar: React.FC<SearchEditBarProps> = ({ className, trip }) => {
   return (
     <div className={className}>
       {isMobile ? (
-        <SearchEditBarMobile trip={trip} />
+        <SearchEditBarMobile trip={trip} onClose={onClose} />
       ) : (
-        <SearchEditBarDesktop trip={trip} />
+        <SearchEditBarDesktop trip={trip} onClose={onClose} />
       )}
     </div>
   );
