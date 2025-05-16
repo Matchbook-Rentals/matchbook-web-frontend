@@ -309,7 +309,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       style: 'https://tiles.openfreemap.org/styles/bright',
       center,
       zoom: mapRenderZoom,
-      scrollZoom: false,
+      scrollZoom: true,
     });
     mapRef.current = map;
     setMapLoaded(true);
