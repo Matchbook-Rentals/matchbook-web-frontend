@@ -332,9 +332,9 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         (localFilters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
         (localFilters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
 
-      // Utilities filter
+      // Pets filter
       const matchesPets =
-        localFilters.pets.length === 0 || localFilters.utilities.length === 2 ||
+        localFilters.pets.length === 0 || localFilters.pets.length === 2 ||
         (localFilters.pets.includes('petsAllowed') && listing.petsAllowed) ||
         (localFilters.pets.includes('petsNotAllowed') && !listing.petsAllowed);
 

@@ -416,14 +416,14 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       // Utilities filter
       const matchesUtilities =
         filters.utilities.length === 0 || filters.utilities.length === 2 ||
-        (filters.utilities.includes('included') && listing.utilitiesIncluded) ||
-        (filters.utilities.includes('notIncluded') && !listing.utilitiesIncluded);
+        (filters.utilities.includes('utilitiesIncluded') && listing.utilitiesIncluded) ||
+        (filters.utilities.includes('utilitiesNotIncluded') && !listing.utilitiesIncluded);
 
       // Pets filter
       const matchesPets =
         filters.pets.length === 0 || filters.pets.length === 2 ||
-        (filters.pets.includes('allowed') && listing.petsAllowed) ||
-        (filters.pets.includes('notAllowed') && !listing.petsAllowed);
+        (filters.pets.includes('petsAllowed') && listing.petsAllowed) ||
+        (filters.pets.includes('petsNotAllowed') && !listing.petsAllowed);
 
       // Amenity filters
       const matchesAccessibility = filters.accessibility?.length === 0 ||
