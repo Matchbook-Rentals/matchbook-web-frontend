@@ -24,13 +24,13 @@ export const metadata: Metadata = {
 const localization={
   signIn: {
     start: {
-      title: 'Welcome to Matchbook',
+      title: 'Welcome to MatchBook',
       subtitle: 'Find a place you love'
     }
   },
   signUp: {
     start: {
-      title: 'Welcome to Matchbook',
+      title: 'Welcome to MatchBook',
       subtitle: 'Find a place you love'
     }
   },
