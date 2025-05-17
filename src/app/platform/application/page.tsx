@@ -14,7 +14,7 @@ export default async function ApplicationPage() {
 
   // For testing: Add artificial delay to simulate loading state
   // Use reasonable timeout value in production
-  //await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise((resolve) => setTimeout(resolve, 300));
 
   // Pass the application data and mobile state to the client component
   // The form will show empty if no application exists
