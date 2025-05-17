@@ -10,6 +10,7 @@ import CurrencyInput from '@/components/ui/currency-input';
 import { TallDialogContent, TallDialogTitle, TallDialogTrigger, TallDialogTriggerText } from '@/constants/styles';
 import { FilterIcon, UpdatedFilterIcon } from '@/components/icons';
 import { Wifi } from 'lucide-react'; // Import Wifi icon
+import { logger } from '@/lib/logger';
 
 interface FilterOptions {
   propertyTypes: string[];
@@ -803,7 +804,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
                       labelClassNames={`text-[14px]  font-normal leading-tight ${isSelected ? 'text-[#2D2F2E80]' : 'text-[#2D2F2E80]'
                         }`}
                       onClick={() => {
-                        console.log(localFilters)
+                        logger.debug('Filter selection clicked', { localFilters, value });
                         const updatedAmenities = isSelected
                           ? (localFilters.accessibility || []).filter(item => item !== value)
                           : [...(localFilters.accessibility || []), value];

@@ -13,6 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { PAGE_MARGIN, ApplicationItemHeaderStyles } from '@/constants/styles';
 import { PersonalInfo } from '../trips/(trips-components)/application-personal-info';
+import { logger } from '@/lib/logger';
 import { Identification } from '../trips/(trips-components)/application-identity';
 import { Income } from '../trips/(trips-components)/application-income';
 import Questionnaire from '../trips/(trips-components)/application-questionnaire';
@@ -61,10 +62,10 @@ export default function ApplicationClientComponent({ application }: { applicatio
     setIsDataLoading(true);
     try {
       if (application) {
-        console.log('Received user application from server:', application);
+        logger.debug('Received user application from server', application);
         initializeFromApplication(application);
       } else {
-        console.warn('No application found for user');
+        logger.warn('No application found for user');
         toast({
           title: "No Application Found",
           description: "You don't have an application yet. Please create one.",
@@ -72,7 +73,7 @@ export default function ApplicationClientComponent({ application }: { applicatio
         });
       }
     } catch (error) {
-      console.error('Error initializing application:', error);
+      logger.error('Error initializing application', error);
       toast({
         title: "Error",
         description: "Failed to load application data",
@@ -126,7 +127,7 @@ export default function ApplicationClientComponent({ application }: { applicatio
       case 2: {
         const residentialHistoryErrors = validateResidentialHistory(residentialHistory);
         setErrors('residentialHistory', residentialHistoryErrors as any);
-        console.log('residentialHistoryErrors', residentialHistoryErrors);
+        logger.debug('Residential history validation errors', residentialHistoryErrors);
         return Object.keys(residentialHistoryErrors).length === 0;
       }
       case 3: {
@@ -262,7 +263,7 @@ export default function ApplicationClientComponent({ application }: { applicatio
       });
       return;
     }
-    console.log('applicationData', applicationData);
+    logger.debug('Application data to submit', applicationData);
 
     setIsLoading(true);
     try {
@@ -276,7 +277,7 @@ export default function ApplicationClientComponent({ application }: { applicatio
         });
         if (result.application?.id) {
           let completeResult = await markComplete(result.application?.id);
-          console.log('completeResult', completeResult);
+          logger.debug('Complete application result', completeResult);
 
           // Redirect to dashboard or other appropriate page after successful submission
           router.push('/platform/dashboard');

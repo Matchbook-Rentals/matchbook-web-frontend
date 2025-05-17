@@ -3,6 +3,7 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
+import { logger } from '@/lib/logger';
 
 export async function createUser() {
 
@@ -57,7 +58,7 @@ export async function updateUserImage() {
     return { success: true };
 
   } catch (error) {
-    console.error('Error updating user image:', error)
+    logger.error('Error updating user image', error);
     return { success: false, error: 'Failed to update user image' }
   }
 }
@@ -89,7 +90,7 @@ export async function updateUserLogin(timestamp: Date) {
     return { success: true };
 
   } catch (error) {
-    console.error('Error updating user login timestamp:', error)
+    logger.error('Error updating user login timestamp', error);
     return { success: false, error: 'Failed to update login timestamp' }
   }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { logger } from '@/lib/logger';
 
 // Define AttachmentData for clarity, similar to the one in message-interface.tsx
 export interface AttachmentData {
@@ -106,7 +107,7 @@ export const useWebSocketManager = ({
     const wasOpen = circuitOpenRef.current; // Capture if it was open before changing it
 
     if (failureCountRef.current > 0 || wasOpen) {
-      console.log(`[WS_HOOK_CIRCUIT_BREAKER] Resetting failure count (${failureCountRef.current}) and closing circuit (wasOpen: ${wasOpen}).`);
+      logger.ws('Circuit breaker reset', { failureCount: failureCountRef.current, wasOpen });
     }
     failureCountRef.current = 0;
     circuitOpenRef.current = false; // Always mark circuit as closed internally
@@ -131,16 +132,16 @@ export const useWebSocketManager = ({
 
   const checkCircuitBreaker = useCallback(() => {
     failureCountRef.current++;
-    console.log(`[WS_HOOK_CIRCUIT_BREAKER] Failure count: ${failureCountRef.current}/${MAX_FAILURES}`);
+    logger.ws('Circuit breaker failure', { current: failureCountRef.current, max: MAX_FAILURES });
     if (failureCountRef.current > MAX_FAILURES && !circuitOpenRef.current) {
       circuitOpenRef.current = true;
       setIsCircuitOpenState(true);
       updateStatus(false, true); // When circuit opens, connection is effectively lost
-      console.warn(`[WS_HOOK_CIRCUIT_BREAKER] Opened after ${failureCountRef.current} consecutive failures. Halting connection attempts for ${CIRCUIT_RESET_DELAY / 1000}s.`);
+      logger.warn(`[WebSocket] Circuit breaker opened`, { failures: failureCountRef.current, delaySeconds: CIRCUIT_RESET_DELAY / 1000 });
 
       if (circuitResetTimeoutRef.current) clearTimeout(circuitResetTimeoutRef.current);
       circuitResetTimeoutRef.current = setTimeout(() => {
-        console.log('[WS_HOOK_CIRCUIT_BREAKER] Reset delay elapsed. Attempting to close circuit and reconnect.');
+        logger.ws('Circuit breaker reset delay elapsed');
         // circuitOpenRef.current = false; // Reset by resetCircuitBreaker
         // setIsCircuitOpenState(false);
         resetCircuitBreaker(); // This will set circuitOpenRef to false and update status
@@ -157,20 +158,20 @@ export const useWebSocketManager = ({
 
   const connectWithBackoff = useCallback((retryCount: number) => {
     if (!userId) {
-        console.log('[WS_HOOK_CONNECT] No userId, skipping connection.');
+        logger.ws('No userId, skipping connection');
         return;
     }
     if (socketRef.current && socketRef.current.connected) {
-      console.log('[WS_HOOK_CONNECT] Already connected.');
+      logger.ws('Already connected');
       return;
     }
     if (circuitOpenRef.current) {
-      console.log('[WS_HOOK_CONNECT] Circuit breaker is open. Connection attempt halted.');
+      logger.ws('Circuit breaker open, connection halted');
       return;
     }
 
     if (retryCount >= MAX_RETRIES) {
-      console.log(`[WS_HOOK_CONNECT] Maximum connection attempts (${MAX_RETRIES}) reached, stopping.`);
+      logger.ws('Max connection attempts reached', { max: MAX_RETRIES });
       checkCircuitBreaker(); // This might open the circuit if not already
       return;
     }
@@ -179,7 +180,7 @@ export const useWebSocketManager = ({
     const jitter = delay * (Math.random() * 0.3); // Jitter up to 30%
     const jitteredDelay = Math.floor(delay + jitter);
 
-    console.log(`[WS_HOOK_CONNECT_ATTEMPT] Attempt ${retryCount + 1}/${MAX_RETRIES}. Connecting to: ${socketUrl}. Delay before attempt: ${Math.round(jitteredDelay)}ms`);
+    logger.ws('Connection attempt', { attempt: retryCount + 1, max: MAX_RETRIES, url: socketUrl, delay: Math.round(jitteredDelay) });
 
     // Clear previous timeout if any
     if (reconnectTimeoutRef.current) {
@@ -207,30 +208,30 @@ export const useWebSocketManager = ({
             socketRef.current = socket;
 
             socket.on('connect', () => {
-                console.log(`[WS_HOOK_SOCKET_EVENT] Connected successfully. Socket ID: ${socket.id}, Transport: ${socket.io.engine.transport.name}`);
+                logger.ws('Connected successfully', { socketId: socket.id, transport: socket.io.engine.transport.name });
                 currentRetryCount.current = 0; // Reset our manual retry counter
                 resetCircuitBreaker();
                 updateStatus(true, false);
             });
 
             socket.on('disconnect', (reason, description) => {
-                console.warn(`[WS_HOOK_SOCKET_EVENT] Disconnected. Reason: "${reason}". Description:`, description || '(none)');
+                logger.warn('[WebSocket] Disconnected', { reason, description: description || '(none)' });
                 updateStatus(false, circuitOpenRef.current); // Keep circuit status as is
 
                 const retryableReasons = ['ping timeout', 'transport close', 'transport error', 'io server disconnect'];
                 if (retryableReasons.includes(reason) && !circuitOpenRef.current) {
-                    console.log(`[WS_HOOK_RECONNECT_LOGIC] Disconnect reason "${reason}" warrants retry. Scheduling attempt.`);
+                    logger.ws('Disconnect warrants retry', { reason });
                     // Don't increment currentRetryCount.current here, connectWithBackoff will handle it
                     connectWithBackoff(currentRetryCount.current + 1);
                 } else if (reason === 'io client disconnect') {
-                    console.log('[WS_HOOK_SOCKET_EVENT] Disconnected locally via socket.disconnect(). No automatic retry from hook.');
+                    logger.ws('Disconnected locally, no auto-retry');
                 } else {
-                     console.log(`[WS_HOOK_SOCKET_EVENT] Disconnect reason "${reason}" does not automatically trigger a retry by the hook.`);
+                     logger.ws('Disconnect does not trigger retry', { reason });
                 }
             });
 
             socket.on('connect_error', (error) => {
-                console.error(`[WS_HOOK_SOCKET_EVENT] Connection Error: ${error.message}`, error);
+                logger.error('[WebSocket] Connection error', { message: error.message, error });
                 updateStatus(false, circuitOpenRef.current);
                 checkCircuitBreaker(); // Increment failure, potentially open circuit
 
@@ -242,56 +243,56 @@ export const useWebSocketManager = ({
 
             socket.on('message', (data: any) => {
                 const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
-                console.log(`[WS_HOOK] Message Event Received. Type: "${dataType}". Data:`, JSON.stringify(data, null, 2));
+                logger.ws('Message received', { dataType, data });
                 onMessageReceived(data);
             });
 
             socket.on('file', (data: any) => {
                 const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
-                console.log(`[WS_HOOK] Message Event Received. Type: "${dataType}". Data:`, JSON.stringify(data, null, 2));
+                logger.ws('Message received', { dataType, data });
                 onMessageReceived(data);
             });
 
             socket.on('typing', (data) => {
-                console.log('[WS_HOOK_SOCKET_EVENT] Typing received:', data);
+                logger.ws('Typing event received', data);
                 onTypingReceived(data);
             });
 
             socket.on('read_receipt', (data) => {
-                console.log('[WS_HOOK_SOCKET_EVENT] Read receipt received:', data);
+                logger.ws('Read receipt received', data);
                 onReadReceiptReceived(data);
             });
 
             // For testing, useful to log these
-            socket.on('ping', () => console.log('[WS_HOOK_SOCKET_EVENT] Ping received from server'));
+            socket.on('ping', () => logger.ws('Ping received from server'));
             socket.on('pong', (latency) => {
-                console.log(`[WS_HOOK_SOCKET_EVENT] Pong received from server. Latency: ${latency}ms`);
+                logger.ws('Pong received from server', { latency });
                 // Successful pong can be a sign of a healthy connection, reset failure count
                 // if not fully relying on 'connect' for this.
                 if (failureCountRef.current > 0 && !circuitOpenRef.current) {
-                    console.log('[WS_HOOK_HEALTH] Pong received, resetting failure count.');
+                    logger.ws('Health check pong received, resetting failure count');
                     failureCountRef.current = 0; // Reset on successful pong if circuit isn't open
                 }
             });
-            socket.on('reconnect_attempt', (attempt) => console.log(`[WS_HOOK_SOCKET_EVENT] Socket.IO Reconnect attempt #${attempt}`));
+            socket.on('reconnect_attempt', (attempt) => logger.ws('Socket.IO reconnect attempt', { attempt }));
             socket.on('reconnect', (attempt) => {
-                console.log(`[WS_HOOK_SOCKET_EVENT] Socket.IO Reconnected successfully after ${attempt} attempts.`);
+                logger.ws('Socket.IO reconnected successfully', { attempts: attempt });
                 currentRetryCount.current = 0;
                 resetCircuitBreaker();
                 updateStatus(true, false);
             });
             socket.on('reconnect_error', (error) => {
-                console.error(`[WS_HOOK_SOCKET_EVENT] Socket.IO Reconnection error: ${error.message}`);
+                logger.error('[WebSocket] Socket.IO reconnection error', { message: error.message });
                 checkCircuitBreaker(); // Count this as a failure
             });
             socket.on('reconnect_failed', () => {
-                console.error('[WS_HOOK_SOCKET_EVENT] Socket.IO Reconnection failed after exceeding attempts.');
+                logger.error('[WebSocket] Socket.IO reconnection failed after exceeding attempts');
                 checkCircuitBreaker(); // Ensure circuit breaker logic runs
             });
 
 
         } catch (error) {
-            console.error('[WS_HOOK_CONNECT_ATTEMPT] Failed to create Socket.IO instance:', error);
+            logger.error('[WebSocket] Failed to create Socket.IO instance', error);
             checkCircuitBreaker();
             if (!circuitOpenRef.current) {
                 currentRetryCount.current = retryCount + 1;
@@ -308,10 +309,10 @@ export const useWebSocketManager = ({
 
   useEffect(() => {
     if (userId) {
-      console.log('[WS_HOOK_EFFECT] User ID present, initiating connection sequence.');
+      logger.ws('User ID present, initiating connection');
       // If socket exists and query needs update (e.g. userId changed), disconnect first
       if (socketRef.current && socketRef.current.io.opts.query.userId !== userId) {
-          console.log('[WS_HOOK_EFFECT] User ID changed, disconnecting old socket.');
+          logger.ws('User ID changed, disconnecting old socket');
           socketRef.current.disconnect();
           socketRef.current = null; // Ensure new socket is created
           // Reset states for the new connection attempt

@@ -11,6 +11,7 @@ import { updateTripFilters } from '@/app/actions/trips';
 import { CategoryType, getBooleanFilters, getFiltersByCategory, tripFilters } from '@/constants/filters';
 import { useActionPopup } from '@/hooks/use-action-popup'
 import ActionPopup from '@/app/platform/searches/(components)/action-popup'
+import { logger } from '@/lib/logger';
 
 interface ListingWithAvailability extends ListingAndImages {
   availableStart?: Date;
@@ -566,7 +567,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         }));
       }
     } catch (error) {
-      console.error('Failed to remove like:', error);
+      logger.error('Failed to remove like', error);
     }
   }, [trip, lookup, optimisticRemoveApply, triggerPopup]);
 
@@ -607,7 +608,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         }));
       }
     } catch (error) {
-      console.error('Failed to like listing:', error);
+      logger.error('Failed to like listing', error);
     }
   }, [trip, lookup, triggerPopup]);
 
@@ -643,7 +644,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         }));
       }
     } catch (error) {
-      console.error('Failed to dislike listing:', error);
+      logger.error('Failed to dislike listing', error);
     }
   }, [trip, lookup, triggerPopup]);
 
@@ -667,7 +668,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         }));
       }
     } catch (error) {
-      console.error('Failed to remove dislike:', error);
+      logger.error('Failed to remove dislike', error);
     }
   }, [trip, lookup, triggerPopup]);
 
@@ -691,7 +692,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
         }));
       }
     } catch (error) {
-      console.error('Failed to apply:', error);
+      logger.error('Failed to apply', error);
       // Rollback on error
       setLookup(prev => ({
         ...prev,

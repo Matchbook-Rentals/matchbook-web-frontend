@@ -4,6 +4,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { ListingAndImages } from '@/types';
 import AmenityListItem from '../../searches/(components)/amenity-list-item';
 import { iconAmenities } from '@/lib/amenities-list';
+import { logger } from '@/lib/logger';
 import {
   Dialog,
   DialogContent,
@@ -94,7 +95,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
         });
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message", error);
       toast({
         variant: "destructive",
         title: "Error",

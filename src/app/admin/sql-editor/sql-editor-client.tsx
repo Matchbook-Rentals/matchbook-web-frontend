@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { logger } from '@/lib/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -232,7 +233,7 @@ export default function SqlEditorClient({ models }: SqlEditorClientProps) {
         setModelRelations(result.data || [])
       }
     } catch (error) {
-      console.error('Error loading model relationships:', error)
+      logger.error('Error loading model relationships', error);
     }
   }, [])
 

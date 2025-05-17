@@ -11,7 +11,7 @@ import {
   createMessage,
 } from '@/app/actions/conversations';
 import { markMessagesAsReadByTimestamp } from '@/app/actions/messages';
-import { time } from 'console';
+import { logger } from '@/lib/logger';
 // Import the hook and its MessageData type
 import { useWebSocketManager, MessageData as HookMessageData } from '@/hooks/useWebSocketManager';
 
@@ -291,8 +291,7 @@ const MessageInterface = ({
 
 
     if (message.type !== 'typing') {
-      console.log('TYPE', message.type)
-      console.log("RECIEVED", message);
+      logger.debug('Message received', { type: message.type, message });
     }
 
     // Logic for message delivery confirmation (echoed back from server)
@@ -368,7 +367,7 @@ const MessageInterface = ({
   }, [user]);
 
   const onConnectionStatusChangeHandler = useCallback((status: { isConnected: boolean; circuitOpen: boolean }) => {
-    console.log('[MessageInterface] Connection Status Changed:', status);
+    logger.debug('[MessageInterface] Connection Status Changed', status);
     // You can update local state here if needed, e.g., for more complex UI based on connection status
     // For now, the hook's returned isConnected and circuitOpen are used directly in JSX
   }, []);
