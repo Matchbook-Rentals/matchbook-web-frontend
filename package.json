@@ -19,7 +19,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:server": "vitest run test/server",
-    "test:ui": "vitest run test/components"
+    "test:ui": "vitest run test/components",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:video": "RECORD_VIDEO=always playwright test",
+    "test:e2e:video:headed": "RECORD_VIDEO=always playwright test --headed",
+    "test:e2e:codegen": "playwright codegen localhost:3000"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.3",
@@ -109,6 +116,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/cors": "^2.8.17",
