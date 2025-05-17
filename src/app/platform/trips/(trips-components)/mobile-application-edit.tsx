@@ -28,14 +28,13 @@ import {
   validateQuestionnaire
 } from '@/utils/application-validation';
 
-export default function MobileApplicationEdit() {
+export default function MobileApplicationEdit({ application }: { application?: any | null }) {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
   const applicationId = searchParams.get('id') || (params.tripId ? `${params.tripId}_application` : undefined);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [isDataLoading, setIsDataLoading] = useState(true);
   const [validationErrors, setValidationErrors] = useState<Record<string, boolean>>({});
   const [openAccordion, setOpenAccordion] = useState<string>('___closed');
 
@@ -54,13 +53,17 @@ export default function MobileApplicationEdit() {
     checkCompletion
   } = useApplicationStore();
 
-  // Initialize store with application data - in standalone mode we'll use the parent page's data
+  // Initialize store with application data
   useEffect(() => {
-    // Only fetch application data if not in the standalone route (which already fetches it)
+    // If application prop is provided (from parent), use it directly
+    if (application) {
+      console.log('MobileApplicationEdit - Using application prop from parent:', application);
+      initializeFromApplication(application);
+      return;
+    }
+    
+    // Otherwise, fetch application data based on context (for trip-specific routes)
     const fetchApplicationData = async () => {
-      setIsDataLoading(true);
-      
-      // Check if we have a trip-specific application or need the default application
       try {
         // For trip-specific applications
         if (params.tripId) {
@@ -71,27 +74,6 @@ export default function MobileApplicationEdit() {
           if (result.success && result.application) {
             console.log('MobileApplicationEdit - Fetched trip application:', result.application);
             initializeFromApplication(result.application);
-            setIsDataLoading(false);
-            return;
-          }
-        }
-        
-        // If we're in the standalone route or if fetching by trip ID failed
-        if (!window.location.pathname.includes('/platform/application')) {
-          console.log('MobileApplicationEdit - Fetching default application');
-          const { getUserApplication } = await import('@/app/actions/applications');
-          const defaultApplication = await getUserApplication();
-          
-          if (defaultApplication) {
-            console.log('MobileApplicationEdit - Fetched default application:', defaultApplication);
-            initializeFromApplication(defaultApplication);
-          } else {
-            console.warn('MobileApplicationEdit - No application found for user');
-            toast({
-              title: "No Application Found",
-              description: "You don't have an application yet. Please create one.",
-              variant: "destructive",
-            });
           }
         }
       } catch (error) {
@@ -101,13 +83,13 @@ export default function MobileApplicationEdit() {
           description: "Failed to load application data",
           variant: "destructive",
         });
-      } finally {
-        setIsDataLoading(false);
       }
     };
     
-    fetchApplicationData();
-  }, [params.tripId, initializeFromApplication, toast]);
+    if (!application && params.tripId) {
+      fetchApplicationData();
+    }
+  }, [application, params.tripId, initializeFromApplication, toast]);
 
   const validateSection = (section: string): boolean => {
     let isValid = true;
@@ -227,13 +209,6 @@ export default function MobileApplicationEdit() {
     }
   };
 
-  // Import the Mobile skeleton
-  const MobileApplicationSkeleton = React.lazy(() => import('./mobile-application-skeleton'));
-  
-  // Show loading UI while data is loading
-  if (isDataLoading) {
-    return <MobileApplicationSkeleton />;
-  }
 
   return (
     <div className={PAGE_MARGIN}>

@@ -39,7 +39,13 @@ const navigationItems = [
   { id: 'questionnaire', label: 'Questionnaire' },
 ];
 
-export default function ApplicationClientComponent({ application }: { application: any }) {
+export default function ApplicationClientComponent({ 
+  application, 
+  isMobile: initialIsMobile = false 
+}: { 
+  application: any | null;
+  isMobile?: boolean;
+}) {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -59,42 +65,25 @@ export default function ApplicationClientComponent({ application }: { applicatio
 
   // Initialize store with application data received from the server component
   useEffect(() => {
-    setIsDataLoading(true);
-    try {
-      if (application) {
-        logger.debug('Received user application from server', application);
-        initializeFromApplication(application);
-      } else {
-        logger.warn('No application found for user');
-        toast({
-          title: "No Application Found",
-          description: "You don't have an application yet. Please create one.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      logger.error('Error initializing application', error);
-      toast({
-        title: "Error",
-        description: "Failed to load application data",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDataLoading(false);
+    // If application exists, pre-fill the form
+    if (application) {
+      logger.debug('Received user application from server', application);
+      initializeFromApplication(application);
     }
-  }, [application, initializeFromApplication, toast]);
+    // If no application, the form will show empty (default store state)
+  }, [application, initializeFromApplication]);
 
   // Carousel state
   const [api, setApi] = useState<CarouselApi>();
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  // Better mobile detection - initialize as undefined and handle that state
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
+  // Mobile detection - initialize with server-provided value
+  const [isMobile, setIsMobile] = useState<boolean>(initialIsMobile);
   const windowSize = useWindowSize();
 
   useEffect(() => {
+    // Update mobile state based on actual window size for responsive changes
     if (windowSize?.width !== undefined) {
       setIsMobile(windowSize.width < 640);
     }
@@ -299,82 +288,12 @@ export default function ApplicationClientComponent({ application }: { applicatio
     }
   };
 
-  // Import the loading skeletons
-  const MobileApplicationSkeleton = React.lazy(() => import('../trips/(trips-components)/mobile-application-skeleton'));
-
-  // Show loading UI while data is loading
-  if (isDataLoading) {
-    // If we're on mobile or mobile state is undefined (initial render), show mobile skeleton
-    // This ensures mobile users see the mobile skeleton immediately while responsive detection happens
-    if (isMobile === true || isMobile === undefined && typeof window !== 'undefined' && window.innerWidth < 640) {
-      return <MobileApplicationSkeleton />;
-    }
-
-    // Desktop loading skeleton
-    return (
-      <div className={PAGE_MARGIN}>
-        <div className="flex gap-2 mb-4 items-center">
-          <div className="animate-pulse bg-muted h-6 w-24 rounded-md" />
-          <div className="animate-pulse bg-muted h-5 w-3 rounded-full" />
-          <div className="animate-pulse bg-muted h-6 w-28 rounded-md" />
-        </div>
-
-        <div className="flex gap-6 max-w-full overflow-x-hidden">
-          {/* Sidebar Navigation Skeleton */}
-          <div className="hidden lg:block pt-1 w-64 shrink-0">
-            <nav className="space-y-1">
-              {navigationItems.map((item, index) => (
-                <div key={item.id} className="animate-pulse bg-muted h-10 w-full rounded-lg mb-2" />
-              ))}
-            </nav>
-          </div>
-
-          {/* Main Content Skeleton */}
-          <div className="relative flex-1 min-w-0">
-            <div className="p-6 overflow-y-auto min-h-[400px] border rounded-lg">
-              <div className="animate-pulse bg-muted h-8 w-48 mb-6 rounded-md" />
-
-              {/* Form fields skeletons */}
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
-                    <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
-                    <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="animate-pulse bg-muted h-5 w-36 rounded-md" />
-                  <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="animate-pulse bg-muted h-5 w-28 rounded-md" />
-                  <div className="animate-pulse bg-muted h-10 w-full rounded-md" />
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Buttons Skeletons */}
-            <div className="flex justify-between px-6 mt-4 mb-4">
-              <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
-              <div className="animate-pulse bg-muted h-10 w-20 rounded-md" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={PAGE_MARGIN}>
 
-      {isMobile === true || (isMobile === undefined && typeof window !== 'undefined' && window.innerWidth < 640) ? (
-        <MobileApplicationEdit />
+      {isMobile ? (
+        <MobileApplicationEdit application={application} />
       ) : (
         <div className="flex gap-6 max-w-full overflow-x-hidden">
           {/* Sidebar Navigation - Hidden on mobile */}
