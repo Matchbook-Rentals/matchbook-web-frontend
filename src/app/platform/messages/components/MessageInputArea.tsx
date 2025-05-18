@@ -98,6 +98,10 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
 
+
+  // Track if upload button is being interacted with
+  const [isUploadActive, setIsUploadActive] = useState(false);
+
   // Remove manual keyboard detection and let dvh handle it
   useEffect(() => {
     // Just track previous height for potential future use
@@ -323,14 +327,20 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         <div className="flex items-center px-2">
           <div 
             className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}
+            onTouchStart={() => setIsUploadActive(true)}
+            onTouchEnd={() => setTimeout(() => setIsUploadActive(false), 500)}
+            onMouseDown={() => setIsUploadActive(true)}
+            onMouseUp={() => setTimeout(() => setIsUploadActive(false), 500)}
           >
             <UploadButton
               endpoint="messageUploader"
               onClientUploadComplete={(res) => {
                 handleUploadFinish(res);
+                setIsUploadActive(false);
               }}
               onUploadError={(error) => {
                 alert(error.message);
+                setIsUploadActive(false);
               }}
               className="p-0"
               content={{
