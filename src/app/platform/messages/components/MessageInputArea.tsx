@@ -65,6 +65,12 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
+  
+  // Detect if device is iOS
+  const isIOS = () => {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  };
 
   // Calculate dynamic border radius based on message length and screen width
   const calculateBorderRadius = (messageLength: number, screenWidth: number | undefined) => {
@@ -109,16 +115,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     const handleFocus = () => {
       if (isMobile) {
         setIsKeyboardVisible(true);
-        
-        // Add scrollIntoView with 310ms delay when input is focused
-        setTimeout(() => {
-          if (textareaRef.current) {
-            textareaRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest'
-            });
-          }
-        }, 310);
       }
     };
 
@@ -215,9 +211,11 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? `${isIOS() ? 'fixed' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
+        left: isMobile && isIOS() ? '0' : undefined,
+        right: isMobile && isIOS() ? '0' : undefined,
       }}
     >
       {messageAttachments.length > 0 && (

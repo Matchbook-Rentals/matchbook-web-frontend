@@ -54,10 +54,17 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
   const [viewportHeight, setViewportHeight] = useState<number>(window.innerHeight);
+  const [initialHeight] = useState<number>(window.innerHeight); // Store initial height
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLDivElement>(null);
   const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('100%');
+  
+  // Detect if device is iOS
+  const isIOS = () => {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  };
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -132,8 +139,26 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   useEffect(() => {
     if (selectedConversation) {
       setIsExiting(false);
+      
+      // Force focus on the scroll area when conversation changes
+      if (isIOS() && isMobile) {
+        setTimeout(() => {
+          if (scrollAreaRef.current) {
+            const scrollViewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+            if (scrollViewport instanceof HTMLElement) {
+              scrollViewport.focus();
+              // Also blur any previously focused elements
+              const activeElement = document.activeElement;
+              if (activeElement && activeElement instanceof HTMLElement) {
+                activeElement.blur();
+              }
+              scrollViewport.focus();
+            }
+          }
+        }, 200);
+      }
     }
-  }, [selectedConversation]);
+  }, [selectedConversation, isMobile]);
 
   const handleBackClick = () => {
     if (!onBack) return;
@@ -214,10 +239,26 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         const scrollViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
         if (scrollViewport instanceof HTMLElement) {
           scrollViewport.focus();
+          
+          // On iOS, also try to prevent parent scroll by setting overflow on body
+          if (isIOS() && isMobile) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+          }
         }
       }, 100);
     }
-  }, []);
+    
+    // Cleanup function to restore body scroll
+    return () => {
+      if (isIOS() && isMobile) {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
+    };
+  }, [isMobile]);
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image
@@ -317,15 +358,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     );
   };
 
-  const messageContainerClassName = `flex flex-col box-border  no-wrap${
+  const messageContainerClassName = `flex flex-col box-border no-wrap${
     isMobile
-      ? ' w-full overflow-hidden'
-      : 'h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
+      ? ' w-full overflow-hidden fixed top-0 left-0'
+      : ' h-[calc(100dvh-65px)] sm:h-[calc(100dvh-65px)] md:h-[calc(100dvh-80px)]'
   } bg-background w-full ${
     isMobile ? 'transform transition-transform duration-300 ease-in-out' : ''
   } ${isMobile && isExiting ? 'translate-x-full' : 'translate-x-0'}`;
 
-  const containerStyle = isMobile ? { height: `${viewportHeight}px` } : {};
+  // On iOS, use initial height to prevent extra space when keyboard appears
+  const containerStyle = isMobile ? { height: `${isIOS() ? initialHeight : viewportHeight}px` } : {};
 
   return (
     <div 
@@ -343,7 +385,20 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       </div>
 
       <div className="flex-1 w-full overflow-hidden" style={isMobile ? { height: scrollAreaHeight } : {}}>
-        <ScrollArea ref={scrollAreaRef} className="h-full w-[101%] md:w-[100.7%] overflow-x-visible" tabIndex={0}>
+        <ScrollArea 
+          ref={scrollAreaRef} 
+          className="h-full w-[101%] md:w-[100.7%] overflow-x-visible" 
+          tabIndex={0}
+          onTouchStart={() => {
+            // Ensure focus on touch for iOS
+            if (isIOS() && isMobile && scrollAreaRef.current) {
+              const scrollViewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+              if (scrollViewport instanceof HTMLElement) {
+                scrollViewport.focus();
+              }
+            }
+          }}
+        >
           <div className="py-2 px-4 min-h-full md:pb-2">
             <MessageList
               messages={messages}
