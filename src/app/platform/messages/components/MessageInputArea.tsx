@@ -165,6 +165,8 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     prevConversationIdRef.current = selectedConversation?.id || null;
   }, [selectedConversation]);
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
     if (!hasContent) return;
@@ -229,19 +231,22 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     if (!files?.length) return;
     const formData = new FormData();
     Array.from(files).forEach(file => formData.append('files', file));
+    setIsUploading(true);
     try {
       const res = await fetch('/api/uploadthing/uploadFiles', { method: 'POST', body: formData });
       const data = (await res.json()) as UploadData[];
       handleUploadFinish(data);
     } catch (err: any) {
       alert(err.message);
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
     }
-    e.target.value = '';
   };
 
   return (
     <div
-      className={`${isMobile ? `${isIOS() ? 'fixed' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? `${isIOS() ? 'sticky' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
         left: isMobile && isIOS() ? '0' : undefined,
@@ -368,7 +373,11 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
               onClick={handleDelayedClick}
               disabled={!selectedConversation}
             >
-              <PaperclipIcon className="w-5 h-5" />
+              {isUploading ? (
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+              ) : (
+                <PaperclipIcon className="w-5 h-5" />
+              )}
             </button>
           </div>
 
