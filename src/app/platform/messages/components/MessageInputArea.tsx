@@ -6,6 +6,7 @@ import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useClientLogger } from '@/hooks/useClientLogger';
 
 // Import the new AttachmentCarouselDialog
 import { AttachmentCarouselDialog, AttachmentFileItem } from '@/components/ui/attachment-carousel-dialog';
@@ -62,6 +63,9 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   handleFileClick,
   textareaRef: externalTextareaRef,
 }) => {
+  // Initialize client logger
+  const logger = useClientLogger();
+  
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
@@ -123,6 +127,23 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         setTimeout(() => {
           setIsKeyboardVisible(false);
         }, 100);
+        
+        // Log only on iOS devices using our client logger
+        if (isIOS()) {
+          // Use async/await in an IIFE to handle the async logger
+          (async () => {
+            try {
+              await logger.info("THIS IS FROM IOS BLUR", {
+                currentInput: newMessageInput,
+                conversationId: selectedConversation?.id || 'none',
+                timestamp: new Date().toISOString()
+              });
+              console.log("iOS blur log sent successfully");
+            } catch (error) {
+              console.error("Failed to send iOS blur log:", error);
+            }
+          })();
+        }
       }
     };
 
@@ -137,7 +158,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
     };
-  }, [isMobile, textareaRef]);
+  }, [isMobile, textareaRef, logger, newMessageInput, selectedConversation?.id]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
