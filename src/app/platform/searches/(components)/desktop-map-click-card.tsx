@@ -13,6 +13,7 @@ import AmenityListItem from './amenity-list-item';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { MatchbookVerified } from '@/components/icons';
 import { iconAmenities } from '@/lib/amenities-list';
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot'; // Import the snapshot hook
 
 interface DesktopListingCardProps {
   listing: {
@@ -33,17 +34,21 @@ interface DesktopListingCardProps {
   };
   distance?: number;
   onClose: () => void;
+  customSnapshot?: any; // Optional custom snapshot with enhanced functions
 }
 
-const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distance, onClose }) => {
+const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distance, onClose, customSnapshot }) => {
   const router = useRouter();
-  const { state, actions } = useTripContext();
+  const { state } = useTripContext();
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  
+  // Either use the custom snapshot passed in (if available) or get one from the hook
+  const listingsSnapshot = customSnapshot || useListingsSnapshot();
 
-  const { lookup } = state;
-  const { favIds, dislikedIds } = lookup;
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  // Use properties and functions from the snapshot
+  const isLiked = listingsSnapshot.isLiked(listing.id);
+  const isDisliked = listingsSnapshot.isDisliked(listing.id);
 
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
@@ -64,12 +69,12 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   const displayAmenities = calculateDisplayAmenities();
 
   const getStatusIcon = () => {
-    if (favIds?.has(listing.id)) {
+    if (isLiked) {
       return (
         <div
           className="bg-black/50 rounded-full p-2"
           onClick={(e: React.MouseEvent) => {
-            optimisticRemoveLike(listing.id);
+            listingsSnapshot.optimisticRemoveLike(listing.id);
             e.stopPropagation();
           }}
         >
@@ -79,12 +84,12 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
           />
         </div>
       );
-    } else if (dislikedIds?.has(listing.id)) {
+    } else if (isDisliked) {
       return (
         <div
           className="bg-black/50 rounded-full"
           onClick={(e: React.MouseEvent) => {
-            optimisticRemoveDislike(listing.id);
+            listingsSnapshot.optimisticRemoveDislike(listing.id);
             e.stopPropagation();
           }}
         >
@@ -97,7 +102,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
       <div
         className="bg-black/50 rounded-full p-2"
         onClick={(e: React.MouseEvent) => {
-          optimisticLike(listing.id);
+          listingsSnapshot.optimisticLike(listing.id);
           e.stopPropagation();
         }}
       >

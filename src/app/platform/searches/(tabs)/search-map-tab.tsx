@@ -237,7 +237,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         listing: {
           ...listing,
           isLiked,
-          isDisliked
+          isDisliked,
+          customSnapshot: enhancedSnapshot // Attach the enhanced snapshot to each marker
         },
         color: getListingStatus(listing)
       };

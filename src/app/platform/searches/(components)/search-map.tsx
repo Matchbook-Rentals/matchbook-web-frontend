@@ -416,6 +416,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
+                  customSnapshot={markers[0]?.listing?.customSnapshot} // Pass the custom snapshot from markers
                 />
               </div>
               <div className="block md:hidden">
@@ -424,6 +425,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
                   className="top-4 left-1/2 transform -translate-x-1/2 w-96"
+                  customSnapshot={markers[0]?.listing?.customSnapshot} // Pass the custom snapshot from markers
                 />
               </div>
             </>

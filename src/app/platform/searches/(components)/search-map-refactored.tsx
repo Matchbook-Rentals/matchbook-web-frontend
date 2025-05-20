@@ -477,6 +477,9 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
                   listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
+                  isLiked={selectedMarker.listing.isLiked || false}
+                  isDisliked={selectedMarker.listing.isDisliked || false}
+                  tripId={selectedMarker.listing.tripId || ''}
                   onLike={() => handleLike(selectedMarker.listing.id)}
                   onDislike={() => handleDislike(selectedMarker.listing.id)}
                 />
@@ -486,6 +489,9 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
                   listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
+                  isLiked={selectedMarker.listing.isLiked || false}
+                  isDisliked={selectedMarker.listing.isDisliked || false}
+                  tripId={selectedMarker.listing.tripId || ''}
                   onLike={() => handleLike(selectedMarker.listing.id)}
                   onDislike={() => handleDislike(selectedMarker.listing.id)}
                   className="top-4 left-1/2 transform -translate-x-1/2 w-96"
