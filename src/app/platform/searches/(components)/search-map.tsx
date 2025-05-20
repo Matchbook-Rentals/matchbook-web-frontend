@@ -9,12 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import DesktopListingCard from './desktop-map-click-card';
 import ListingCard from './desktop-map-click-card';
 
-interface ClusterMarker {
-  lat: number;
-  lng: number;
-  count: number;
-  listingIds: string[];
-}
+// No longer using clustering
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -41,9 +36,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const clusterMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const [mapLoaded, setMapLoaded] = useState(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
-  const [clusters, setClusters] = useState<ClusterMarker[]>([]);
   const [currentZoom, setCurrentZoom] = useState(zoom);
-  const [clickedCluster, setClickedCluster] = useState<ClusterMarker | null>(null);
+  const [clickedCluster, setClickedCluster] = useState<null>(null);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -82,124 +76,28 @@ const SearchMap: React.FC<SearchMapProps> = ({
     useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
   };
 
-  /** Create clusters based on visible markers and zoom level using a grid */
-  const createClusters = (zoomLevel: number): ClusterMarker[] => {
+  /** Get visible markers within the current bounds */
+  const getVisibleMarkers = (): MapMarker[] => {
     if (!mapRef.current) return [];
-
+    
     const bounds = mapRef.current.getBounds();
-    const visibleMarkers = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)));
-
-    if (visibleMarkers.length === 0) return [];
-
-    // Dynamic pixel radius based on zoom, similar to original logic
-    let baseClusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
-    // Halve the radius if in fullscreen mode for *less* aggressive clustering
-    const clusterPixelRadius = baseClusterPixelRadius;
-
-    const grid = new Map<string, MapMarker[]>();
-    const visitedRevised = new Set<string>();
-    const revisedClusters: ClusterMarker[] = [];
-
-    // Helper to get grid cell key from pixel coordinates
-    const getGridKey = (point: maplibregl.Point): string => {
-      // Use clusterPixelRadius for grid cell size
-      const col = Math.floor(point.x / clusterPixelRadius);
-      const row = Math.floor(point.y / clusterPixelRadius);
-      return `${col}_${row}`;
-    };
-
-    // 1. Assign markers to grid cells
-    visibleMarkers.forEach(marker => {
-      const point = mapRef.current!.project([marker.lng, marker.lat]);
-      const key = getGridKey(point);
-      if (!grid.has(key)) {
-        grid.set(key, []);
-      }
-      grid.get(key)!.push(marker);
-    });
-
-    // 2. Iterate through markers to form clusters using BFS and grid
-    visibleMarkers.forEach(marker => {
-        if (visitedRevised.has(marker.listing.id)) return;
-
-        // Start a new potential cluster using BFS
-        const clusterQueue: MapMarker[] = [marker];
-        visitedRevised.add(marker.listing.id);
-        const currentClusterMembers: MapMarker[] = [];
-
-        while (clusterQueue.length > 0) {
-            const currentMarker = clusterQueue.shift()!;
-            currentClusterMembers.push(currentMarker);
-
-            const point = mapRef.current!.project([currentMarker.lng, currentMarker.lat]);
-            const currentCellCol = Math.floor(point.x / clusterPixelRadius);
-            const currentCellRow = Math.floor(point.y / clusterPixelRadius);
-
-            // Check neighboring cells for potential members
-            for (let dx = -1; dx <= 1; dx++) {
-                for (let dy = -1; dy <= 1; dy++) {
-                    const key = `${currentCellCol + dx}_${currentCellRow + dy}`;
-                    if (grid.has(key)) {
-                        grid.get(key)!.forEach(neighbor => {
-                            // Check if neighbor is already visited *before* distance calculation
-                            if (!visitedRevised.has(neighbor.listing.id)) {
-                                const distance = calculatePixelDistance(currentMarker.lat, currentMarker.lng, neighbor.lat, neighbor.lng);
-                                if (distance < clusterPixelRadius) {
-                                    visitedRevised.add(neighbor.listing.id);
-                                    clusterQueue.push(neighbor);
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }
-
-        // Create the final cluster from members found in BFS
-        if (currentClusterMembers.length > 0) {
-            let totalLat = 0;
-            let totalLng = 0;
-            const listingIds: string[] = [];
-            currentClusterMembers.forEach(m => {
-                totalLat += m.lat;
-                totalLng += m.lng;
-                listingIds.push(m.listing.id);
-            });
-            revisedClusters.push({
-                lat: totalLat / currentClusterMembers.length,
-                lng: totalLng / currentClusterMembers.length,
-                count: currentClusterMembers.length,
-                listingIds: listingIds
-            });
-        }
-    });
-
-    return revisedClusters;
+    return markers.filter(marker => 
+      bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat))
+    );
   };
 
 
-  /** Render individual or cluster markers */
-  const renderMarkers = (clusters: ClusterMarker[], zoom: number) => {
+  /** Render markers */
+  const renderMarkers = () => {
     if (!mapRef.current) return;
+    
+    // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current.clear();
-    clusterMarkersRef.current.forEach(marker => marker.remove());
-    clusterMarkersRef.current.clear();
-
-    const shouldCluster = zoom < 17;
-    console.log('SHOULD CLUSTER' ,zoom, shouldCluster)
-    if (!shouldCluster) {
-      const bounds = mapRef.current.getBounds();
-      markers
-        .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
-        .forEach(marker => createSingleMarker(marker));
-    } else {
-      clusters.forEach(cluster => {
-        cluster.count === 1
-          ? createSingleMarker(markers.find(m => m.listing.id === cluster.listingIds[0])!)
-          : createClusterMarker(cluster);
-      });
-    }
+    clusterMarkersRef.current.clear(); // Keep the ref but don't use it
+    
+    // Get visible markers and render them individually
+    getVisibleMarkers().forEach(marker => createSingleMarker(marker));
   };
 
   /** Create a single marker */
@@ -227,50 +125,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
     markersRef.current.set(marker.listing.id, mapMarker);
   };
 
-  /** Create a cluster marker with updated click behavior */
-  const createClusterMarker = (cluster: ClusterMarker) => {
-    if (!mapRef.current) return;
-    const el = document.createElement('div');
-    el.className = 'cluster-marker';
-    el.style.cssText = `
-      width: 36px; height: 36px; border-radius: 50%; background-color: #FF0000; color: white;
-      display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
-    `;
-    el.innerText = `${cluster.count}`;
-    // Store listing IDs on the element for hover detection
-    el.dataset.listingIds = cluster.listingIds.join(',');
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      useVisibleListingsStore.getState().setVisibleListingIds(cluster.listingIds);
-      setClickedCluster(cluster);
-
-      // Always zoom in by 2 levels, capped at max zoom
-      const currentZoom = mapRef.current!.getZoom();
-      const newZoom = Math.min(currentZoom + 2, mapRef.current!.getMaxZoom());
-
-      mapRef.current!.flyTo({
-        center: [cluster.lng, cluster.lat],
-        zoom: newZoom,
-        duration: 500,
-      });
-    });
-    const clusterMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
-      .setLngLat([cluster.lng, cluster.lat])
-      .addTo(mapRef.current);
-    clusterMarkersRef.current.set(`cluster-${cluster.listingIds.join('-')}`, clusterMarker);
-  };
+  // No longer using cluster markers
 
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
     const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
       const el = marker.getElement();
-      const isCluster = el.classList.contains('cluster-marker');
-      if (isCluster) {
-        el.style.backgroundColor = color;
-      } else {
-        el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
-      }
+      el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
       el.style.zIndex = zIndex;
     };
 
@@ -281,20 +142,6 @@ const SearchMap: React.FC<SearchMapProps> = ({
         setColor(marker, '#404040', '2');
       } else {
         setColor(marker, '#FF0000');
-      }
-    });
-
-    clusterMarkersRef.current.forEach((marker) => {
-      const el = marker.getElement();
-      const listingIdsStr = el.dataset.listingIds || '';
-      const clusterListingIds = listingIdsStr.split(',');
-      const isHovered = hoveredListing && clusterListingIds.includes(hoveredListing.id);
-      const isClicked = !isFullscreen && clickedCluster && clusterListingIds.join('-') === clickedCluster.listingIds.join('-');
-
-      if (isHovered || isClicked) {
-        setColor(marker, '#404040', '2'); // Highlight color
-      } else {
-        setColor(marker, '#FF0000', '1'); // Default color
       }
     });
   };
@@ -333,12 +180,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         const newZoom = mapRef.current.getZoom();
         setCurrentZoom(newZoom);
         updateVisibleMarkers();
-        const newClusters = createClusters(newZoom);
-        setClusters(newClusters);
         
         // Only render markers if not skipping render
         if (!skipRender) {
-          renderMarkers(newClusters, newZoom);
+          renderMarkers();
         }
         
         updateMarkerColors();
@@ -350,9 +195,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
         
         updateVisibleMarkers();
         const newZoom = mapRef.current.getZoom();
-        const newClusters = createClusters(newZoom);
-        setClusters(newClusters);
-        renderMarkers(newClusters, newZoom);
+        setCurrentZoom(newZoom);
+        renderMarkers();
         updateMarkerColors();
         
         // Make sure we set this to true
@@ -473,9 +317,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       
       try {
         updateVisibleMarkers();
-        const newClusters = createClusters(currentZoom);
-        setClusters(newClusters);
-        renderMarkers(newClusters, currentZoom);
+        renderMarkers();
       } catch (e) {
         console.error("Error updating markers:", e);
       }
@@ -497,9 +339,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       try {
         if (!isFullscreen) {
           updateVisibleMarkers();
-          const newClusters = createClusters(currentZoom);
-          setClusters(newClusters);
-          renderMarkers(newClusters, currentZoom);
+          renderMarkers();
         }
         
         // Ensure map resizes properly after fullscreen toggle
