@@ -21,6 +21,7 @@ interface SearchMapProps {
   zoom?: number;
   height?: string;
   onClose: () => void;
+  onCenterChanged?: (lng: number, lat: number) => void;
 }
 
 const SearchMapMobile: React.FC<SearchMapProps> = ({
@@ -28,7 +29,8 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   markers = [],
   zoom = 12,
   height = '526px',
-  onClose
+  onClose,
+  onCenterChanged = () => {}
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -252,46 +254,144 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     });
   };
 
-  // Initial map setup
+  // Initialize map only once with no dependencies
   useEffect(() => {
+    // Return early if we don't have what we need to initialize or map already exists
     if (!mapContainerRef.current || !center) return;
+    if (mapRef.current) return; // Map already initialized
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      center: center,
-      zoom: zoom,
-      scrollZoom: false,
-    });
+    try {
+      const map = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: 'https://tiles.openfreemap.org/styles/bright',
+        center: center,
+        zoom: zoom,
+        scrollZoom: false,
+        failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
+      });
 
-    mapRef.current = map;
-    setMapLoaded(true);
+      mapRef.current = map;
+      
+      // Handle map load errors
+      map.on('error', (e) => {
+        console.error('MapLibre GL error:', e);
+      });
+      
+      setMapLoaded(true);
 
-    const updateMarkers = () => {
-      const newZoom = map.getZoom();
-      setCurrentZoom(newZoom);
-      const newClusters = createClusters(newZoom);
-      renderMarkers(newClusters);
-      updateMarkerColors();
-    };
+      // Define updateMarkers function to be used across event handlers
+      const updateMarkers = (skipRender = false) => {
+        if (!mapRef.current) return;
+        
+        const newZoom = mapRef.current.getZoom();
+        setCurrentZoom(newZoom);
+        const newClusters = createClusters(newZoom);
+        
+        // Only render if not skipping
+        if (!skipRender) {
+          renderMarkers(newClusters);
+        }
+        
+        updateMarkerColors();
+      };
 
-    // Set up event listeners
-    map.on('load', updateMarkers);
-    map.on('zoomend', updateMarkers);
-    map.on('moveend', updateMarkers);
-    map.on('click', () => {
-      setSelectedMarker(null);
-      setClickedCluster(null);
-    });
+      // Set up event listeners with improved handling
+      map.on('load', () => {
+        if (!mapRef.current) return;
+        
+        // Initial markers
+        const newZoom = mapRef.current.getZoom();
+        setCurrentZoom(newZoom);
+        const newClusters = createClusters(newZoom);
+        renderMarkers(newClusters);
+        updateMarkerColors();
+        
+        // Make sure we set this to true
+        setMapLoaded(true);
+      });
+      
+      map.on('zoomend', () => {
+        // Store current center to maintain user's view
+        if (!mapRef.current) return;
+        const currentCenter = mapRef.current.getCenter();
+        
+        // Update markers
+        updateMarkers();
+        
+        // Restore center to avoid jumps
+        if (mapRef.current) {
+          mapRef.current.setCenter(currentCenter);
+        }
+      });
+      
+      map.on('moveend', () => {
+        if (!mapRef.current) return;
+        
+        // Report center change to parent
+        const newCenter = mapRef.current.getCenter();
+        onCenterChanged(newCenter.lng, newCenter.lat);
+        
+        // Update markers without re-rendering
+        updateMarkers(true);
+      });
+      
+      map.on('click', () => {
+        setSelectedMarker(null);
+        setClickedCluster(null);
+      });
+      
+      // Add idle event for synchronized updates
+      map.on('idle', () => {
+        // Safe time to update markers when the map is not actively changing
+        if (mapRef.current && !mapRef.current.isMoving() && !mapRef.current.isZooming()) {
+          const newClusters = createClusters(mapRef.current.getZoom());
+          updateMarkerColors();
+        }
+      });
+    } catch (error) {
+      console.error('Failed to initialize mobile map:', error);
+      setMapLoaded(false);
+    }
 
     // Cleanup
     return () => {
-      map.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, [center, markers, zoom]);
+  }, []); // Empty dependency array - only run once
 
+  // Update center when center prop changes without reinitializing the map
+  useEffect(() => {
+    if (!mapRef.current || !center || !mapLoaded) return;
+    
+    // Get the current view bounds
+    const bounds = mapRef.current.getBounds();
+    const currentCenter = mapRef.current.getCenter();
+    
+    // Only update center if:
+    // 1. This appears to be the initial load (center way off)
+    // 2. The center point is not within the current view bounds
+    // 3. User hasn't manually moved the map
+    const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 || 
+                         Math.abs(currentCenter.lat - center[1]) > 1;
+    
+    const centerPoint = new maplibregl.LngLat(center[0], center[1]);
+    const isOutsideView = !bounds.contains(centerPoint) && !mapRef.current.isMoving();
+    
+    if (isInitialLoad || isOutsideView) {
+      // Use flyTo with a short duration - user likely hasn't interacted yet
+      mapRef.current.flyTo({
+        center: center,
+        duration: 500,
+        essential: true
+      });
+    }
+  }, [center, mapLoaded]); // Include center in dependencies to respond to prop changes
+  
   // Handle panning to hovered location
   useEffect(() => {
     if (mapRef.current && shouldPanTo) {
@@ -304,25 +404,48 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     }
   }, [shouldPanTo, clearPanTo, zoom]);
   
+  // Handle marker changes using debouncing to prevent frequent re-renders
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return;
+    
+    // Don't re-render if map is being dragged or manipulated
+    try {
+      if (mapRef.current.isEasing() || mapRef.current.isMoving() || mapRef.current.isZooming()) {
+        return;
+      }
+    } catch (e) {
+      console.error("Error checking map state:", e);
+      return;
+    }
+    
+    // Define a safe update function with more aggressive debouncing
+    const safelyUpdateMarkers = () => {
+      if (!mapRef.current) return;
+      
+      try {
+        const newClusters = createClusters(currentZoom);
+        renderMarkers(newClusters);
+        updateMarkerColors();
+      } catch (e) {
+        console.error("Error updating mobile map markers:", e);
+      }
+    };
+    
+    // Use a longer delay (200ms) to prevent too frequent updates
+    const timeoutId = setTimeout(safelyUpdateMarkers, 200);
+    return () => clearTimeout(timeoutId);
+  }, [markers, mapLoaded, currentZoom]);
+  
   // Update marker colors when state changes
   useEffect(() => {
-    if (mapLoaded) {
+    if (mapLoaded && mapRef.current) {
       updateMarkerColors();
     }
   }, [mapLoaded, selectedMarker, clickedCluster]);
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
-      {/* Listing Card */}
-      {selectedMarker && selectedMarker.listing && center && (
-        <ListingCard
-          listing={selectedMarker.listing}
-          distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
-          onClose={() => setSelectedMarker(null)}
-          className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
-        />
-      )}
-
+      {/* Close button - always show this regardless of map state */}
       <Button
         onClick={onClose}
         className="fixed bottom-[13vh] left-1/2 transform -translate-x-1/2 z-50 gap-x-2 px-5 max-w-[300px] text-[16px] font-montserrat font-medium rounded-full bg-charcoalBrand text-background"
@@ -330,40 +453,73 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         <RejectIcon className="h-5 w-5 mb-[2px]" />
         Close
       </Button>
+      
+      {mapLoaded === true && mapRef.current && (
+        <>
+          {/* Listing Card */}
+          {selectedMarker && selectedMarker.listing && center && (
+            <ListingCard
+              listing={selectedMarker.listing}
+              distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+              onClose={() => setSelectedMarker(null)}
+              className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
+            />
+          )}
 
-      {/* Zoom controls */}
-      <div className="absolute top-2 right-2 z-10 flex flex-col">
-        <button
-          onClick={() => mapRef.current?.zoomIn()}
-          className="bg-white p-2 rounded-md shadow mb-1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
-          </svg>
-        </button>
-        <button
-          onClick={() => mapRef.current?.zoomOut()}
-          className="bg-white p-2 rounded-md shadow"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
-          </svg>
-        </button>
-      </div>
+          {/* Zoom controls */}
+          <div className="absolute top-2 right-2 z-10 flex flex-col">
+            <button
+              onClick={() => mapRef.current?.zoomIn()}
+              className="bg-white p-2 rounded-md shadow mb-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
+              </svg>
+            </button>
+            <button
+              onClick={() => mapRef.current?.zoomOut()}
+              className="bg-white p-2 rounded-md shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
+              </svg>
+            </button>
+          </div>
+        </>
+      )}
+      
+      {/* Fallback UI when map fails to load */}
+      {mapLoaded === false && (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
+          <div className="text-gray-700 text-lg mb-3">Unable to load map</div>
+          <div className="text-sm text-gray-500 max-w-[80%] text-center px-4">
+            The map could not be loaded due to browser limitations. 
+            Please try using a different browser or device.
+          </div>
+          <div className="mt-6">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800"
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

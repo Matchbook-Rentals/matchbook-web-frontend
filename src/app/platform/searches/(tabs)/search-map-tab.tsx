@@ -8,6 +8,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 
 interface MapMarker {
   lat: number;
@@ -49,12 +50,16 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { listings, showListings, likedListings, trip } = state;
+  const { showListings, likedListings, trip } = state;
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
+
+  // Use the new snapshot hook for stable listings data
+  const listingsSnapshot = useListingsSnapshot();
+  const listings = listingsSnapshot.listings;
 
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
@@ -110,24 +115,33 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const displayListings = [...showListings];
 
   const getListingStatus = (listing: ListingAndImages) => {
-    if (state.lookup.requestedIds.has(listing.id)) {
+    if (listingsSnapshot.isRequested(listing.id)) {
       return 'blue';
     }
-    if (state.lookup.dislikedIds.has(listing.id)) {
+    if (listingsSnapshot.isDisliked(listing.id)) {
       return 'black';
     }
-    if (state.lookup.favIds.has(listing.id)) {
+    if (listingsSnapshot.isLiked(listing.id)) {
       return 'green';
     }
     return 'red';
   };
 
-  const listingsWithStatus = state.listings.map((listing) => ({
+  const listingsWithStatus = listings.map((listing) => ({
     ...listing,
     status: getListingStatus(listing)
   }));
 
-  const center = { lat: trip?.latitude, lng: trip?.longitude };
+  // Calculate center once and don't change it unnecessarily
+  const [initialCenter] = useState({ 
+    lat: trip?.latitude || 0,
+    lng: trip?.longitude || 0
+  });
+  
+  // Keep track of the current map center separate from the initial center
+  const [currentMapCenter, setCurrentMapCenter] = useState(initialCenter);
+  
+  // Create markers from the display listings
   const markers: MapMarker[] = displayListings.map((listing) => ({
     title: listing.title,
     lat: listing.latitude,
@@ -136,8 +150,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     color: getListingStatus(listing)
   }));
 
-  const defaultCenter = { lat: 0, lng: 0 };
-  const mapCenter = center ? { lat: center.lat, lng: center.lng } : defaultCenter;
+  // Use the current map center for the map, fallback to initial center
+  const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
 
   const handleTabChange = () => {
     const params = new URLSearchParams(searchParams);
@@ -230,6 +244,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             }))}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
+            onCenterChanged={(lng, lat) => {
+              // Update the current map center but don't re-center the map
+              setCurrentMapCenter({ lat, lng });
+            }}
           />
         </div>
       </div>
@@ -254,6 +272,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                 lng: marker.lng
               }))}
               onClose={() => setIsSlideMapOpen(false)}
+              onCenterChanged={(lng, lat) => {
+                // Update the current map center but don't re-center the map
+                setCurrentMapCenter({ lat, lng });
+              }}
             />
           </motion.div>
         )}

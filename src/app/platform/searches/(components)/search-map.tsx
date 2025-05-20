@@ -23,6 +23,7 @@ interface SearchMapProps {
   height?: string;
   isFullscreen?: boolean;
   setIsFullscreen?: (value: boolean) => void;
+  onCenterChanged?: (lng: number, lat: number) => void;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -32,6 +33,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   height = '526px',
   isFullscreen = false,
   setIsFullscreen = () => {},
+  onCenterChanged = () => {},
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -297,55 +299,148 @@ const SearchMap: React.FC<SearchMapProps> = ({
     });
   };
 
-  // **Map Initialization and Event Handlers**
+  // **Map Initialization and Event Handlers** 
+  // Only initialize map once and never re-create it on prop changes
   useEffect(() => {
+    // Return early if we don't have what we need to initialize
     if (!mapContainerRef.current || !center) return;
-
+    if (mapRef.current) return; // Map already initialized
 
     let mapRenderZoom = currentZoom || zoom || 12;
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      center,
-      zoom: mapRenderZoom,
-      scrollZoom: true,
-    });
-    mapRef.current = map;
-    setMapLoaded(true);
+    try {
+      const map = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: 'https://tiles.openfreemap.org/styles/bright',
+        center,
+        zoom: mapRenderZoom,
+        scrollZoom: true,
+        failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
+      });
+      
+      mapRef.current = map;
+      setMapLoaded(true);
+      
+      // Handle map load errors
+      map.on('error', (e) => {
+        console.error('MapLibre GL error:', e);
+      });
 
-    const updateMarkers = () => {
-      const newZoom = map.getZoom();
-      console.log('NEW ZOOM', newZoom);
-      setCurrentZoom(newZoom);
-      updateVisibleMarkers();
-      const newClusters = createClusters(newZoom);
-      setClusters(newClusters);
-      renderMarkers(newClusters, newZoom);
-      updateMarkerColors();
-    };
-
-    map.on('load', updateMarkers);
-    map.on('zoomend', updateMarkers);
-    map.on('moveend', () => {
-      updateVisibleMarkers();
-      updateMarkers();
-    });
-    map.on('click', () => {
-      setSelectedMarker(null);
-      setClickedCluster(null);
-      if (!isFullscreen) {
-        setClickedMarkerId(null);
+      // Define updateMarkers function - used in multiple event handlers
+      const updateMarkers = (skipRender = false) => {
+        if (!mapRef.current) return;
+        
+        const newZoom = mapRef.current.getZoom();
+        setCurrentZoom(newZoom);
         updateVisibleMarkers();
-      }
-    });
+        const newClusters = createClusters(newZoom);
+        setClusters(newClusters);
+        
+        // Only render markers if not skipping render
+        if (!skipRender) {
+          renderMarkers(newClusters, newZoom);
+        }
+        
+        updateMarkerColors();
+      };
+      
+      // On initial load, just update the visible markers and render them
+      map.on('load', () => {
+        if (!mapRef.current) return; // Safety check
+        
+        updateVisibleMarkers();
+        const newZoom = mapRef.current.getZoom();
+        const newClusters = createClusters(newZoom);
+        setClusters(newClusters);
+        renderMarkers(newClusters, newZoom);
+        updateMarkerColors();
+        
+        // Make sure we set this to true
+        setMapLoaded(true);
+      });
+      
+      // On zoom, update markers but preserve center
+      map.on('zoomend', () => {
+        // Get current center before updating
+        const currentCenter = mapRef.current!.getCenter();
+        updateMarkers();
+        // Re-center the map if needed - this ensures user interactions are preserved
+        if (mapRef.current) {
+          mapRef.current.setCenter(currentCenter);
+        }
+      });
+      
+      // On move, only update visible listings without re-rendering the whole map
+      map.on('moveend', () => {
+        if (!mapRef.current) return;
+        
+        // Report center change to parent
+        const newCenter = mapRef.current.getCenter();
+        onCenterChanged(newCenter.lng, newCenter.lat);
+        
+        // Update visible listings
+        updateVisibleMarkers();
+        // Update markers but skip rendering to prevent flashy behavior
+        updateMarkers(true);
+      });
+      
+      map.on('click', () => {
+        setSelectedMarker(null);
+        setClickedCluster(null);
+        if (!isFullscreen) {
+          setClickedMarkerId(null);
+          updateVisibleMarkers();
+        }
+      });
+      
+      // Add idle event for synchronized updates
+      map.on('idle', () => {
+        updateVisibleMarkers();
+      });
+    } catch (error) {
+      console.error('Failed to initialize map:', error);
+      // Set a flag to indicate map failed to load, so we can show fallback UI
+      setMapLoaded(false);
+    }
 
     return () => {
-      map.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, [center, zoom, isFullscreen]);
+  }, []); // Empty dependency array - only run once
+
+  // Update center when center prop changes without reinitializing the map
+  useEffect(() => {
+    if (!mapRef.current || !center || !mapLoaded) return;
+    
+    // Get the current view bounds
+    const bounds = mapRef.current.getBounds();
+    const currentCenter = mapRef.current.getCenter();
+    
+    // Check if we should update center based on:
+    // 1. This appears to be the initial load (center way off)
+    // 2. The center point is not within the current view bounds
+    // 3. User hasn't manually moved the map
+    const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 || 
+                         Math.abs(currentCenter.lat - center[1]) > 1;
+    
+    const centerPoint = new maplibregl.LngLat(center[0], center[1]);
+    const isOutsideView = !bounds.contains(centerPoint) && !mapRef.current.isMoving();
+    
+    // Only fly to a new center if one of the conditions is met
+    if (isInitialLoad || isOutsideView) {
+      // Use flyTo with a short duration to smoothly transition
+      mapRef.current.flyTo({
+        center: center,
+        duration: 500,
+        essential: true
+      });
+    }
+  }, [center, mapLoaded]); // Include center in dependencies to respond to prop changes
 
   // **State Sync Effects**
   useEffect(() => {
@@ -357,28 +452,85 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen]);
 
+  // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {
-    if (!isFullscreen && mapRef.current) {
-      updateVisibleMarkers();
-      const newClusters = createClusters(currentZoom);
-      setClusters(newClusters);
-      renderMarkers(newClusters, currentZoom);
+    // Only proceed if we have a loaded map
+    if (!mapRef.current || !mapLoaded) return;
+    
+    // Don't re-render if map is being dragged
+    try {
+      if (mapRef.current.isEasing() || mapRef.current.isMoving() || mapRef.current.isZooming()) {
+        return;
+      }
+    } catch (e) {
+      console.error("Error checking map state:", e);
+      return;
     }
-  }, [isFullscreen, markers]);
+    
+    // Debounce marker updates to reduce flickering
+    const safelyUpdateMarkers = () => {
+      if (!mapRef.current) return;
+      
+      try {
+        updateVisibleMarkers();
+        const newClusters = createClusters(currentZoom);
+        setClusters(newClusters);
+        renderMarkers(newClusters, currentZoom);
+      } catch (e) {
+        console.error("Error updating markers:", e);
+      }
+    };
+    
+    // Use a longer delay to prevent too frequent updates
+    const timeoutId = setTimeout(safelyUpdateMarkers, 200);
+    return () => clearTimeout(timeoutId);
+  }, [markers, mapLoaded, currentZoom]);
+  
+  // Handle fullscreen toggle
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return;
+    
+    // Define a function to safely update the map after fullscreen toggle
+    const safelyHandleFullscreenChange = () => {
+      if (!mapRef.current) return;
+      
+      try {
+        if (!isFullscreen) {
+          updateVisibleMarkers();
+          const newClusters = createClusters(currentZoom);
+          setClusters(newClusters);
+          renderMarkers(newClusters, currentZoom);
+        }
+        
+        // Ensure map resizes properly after fullscreen toggle
+        mapRef.current.resize();
+      } catch (e) {
+        console.error("Error handling fullscreen change:", e);
+      }
+    };
+    
+    // Small delay to ensure the container has resized
+    const timeoutId = setTimeout(safelyHandleFullscreenChange, 200);
+    return () => clearTimeout(timeoutId);
+  }, [isFullscreen, mapLoaded, currentZoom]);
 
 
   const handleFullscreen = () => {
-    let newZoom = isFullscreen ? currentZoom - 1 : currentZoom + 1;
-    let maxZoom = Math.min(newZoom, 14);
-
-    setCurrentZoom(maxZoom);
+    // Don't adjust zoom when toggling fullscreen - just toggle the state
     setIsFullscreen(!isFullscreen);
+    
+    // Schedule a resize after the state change is processed
+    setTimeout(() => {
+      if (mapRef.current) {
+        mapRef.current.resize();
+      }
+    }, 50);
   }
 
   // **Render**
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {mapLoaded && (
+      {mapLoaded === true && mapRef.current && (
         <>
           <div className="absolute top-2 right-2 z-10 flex flex-col">
             <button onClick={() => mapRef.current?.zoomIn()} className="bg-white p-2 rounded-md shadow mb-1">
@@ -424,6 +576,25 @@ const SearchMap: React.FC<SearchMapProps> = ({
             </>
           )}
         </>
+      )}
+      
+      {/* Fallback UI when map fails to load */}
+      {mapLoaded === false && (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
+          <div className="text-gray-700 mb-3">Unable to load map</div>
+          <div className="text-sm text-gray-500 max-w-md text-center px-4">
+            The map could not be loaded due to browser limitations. 
+            Please try using a different browser or device.
+          </div>
+          <div className="mt-6">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800"
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
