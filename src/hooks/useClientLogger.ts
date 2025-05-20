@@ -19,8 +19,11 @@ export function useClientLogger() {
   const router = useRouter()
   const [deviceType, setDeviceType] = useState<DeviceType>('web')
 
-  // Detect device type on mount
+  // Detect device type on mount - safe for SSR
   useEffect(() => {
+    // Skip during SSR
+    if (typeof navigator === 'undefined') return;
+    
     const userAgent = navigator.userAgent.toLowerCase()
     if (/iphone|ipad|ipod/.test(userAgent)) {
       setDeviceType('ios')
@@ -31,7 +34,7 @@ export function useClientLogger() {
     }
   }, [])
 
-  // Get current pathname
+  // Get current pathname - safely handles SSR
   const getCurrentPathname = useCallback(() => {
     if (typeof window !== 'undefined') {
       return window.location.pathname
