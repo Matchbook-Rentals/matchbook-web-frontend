@@ -15,12 +15,14 @@ interface SearchListingsGridProps {
   listings: ListingAndImages[];
   withCallToAction?: boolean;
   height?: string;
+  customSnapshot?: any; // Allow passing custom snapshot with overridden functions
 }
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   listings,
   withCallToAction = false,
-  height
+  height,
+  customSnapshot
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
@@ -33,8 +35,8 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
   
-  // Get stable listings snapshot and actions
-  const listingsSnapshot = useListingsSnapshot();
+  // Get stable listings snapshot and actions - use custom snapshot if provided
+  const listingsSnapshot = customSnapshot || useListingsSnapshot();
   // const [currentPage, setCurrentPage] = useState(1); // Removed pagination state
   const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
   // const listingsPerPage = gridColumns * 3; // Removed pagination calculation
@@ -274,6 +276,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                     className="listing-card"
                     detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
                     detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
+                    customSnapshot={customSnapshot} // Pass in the custom snapshot if provided
                   />
                 );
              })}

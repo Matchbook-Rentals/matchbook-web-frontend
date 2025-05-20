@@ -27,6 +27,7 @@ interface SearchListingCardProps {
   className?: string;
   detailsClassName?: string;
   detailsStyle?: React.CSSProperties;
+  customSnapshot?: any; // Allow passing custom snapshot with overridden functions
 }
 
 const SearchListingCardSnapshot: React.FC<SearchListingCardProps> = ({
@@ -35,6 +36,7 @@ const SearchListingCardSnapshot: React.FC<SearchListingCardProps> = ({
   className = '',
   detailsClassName = '',
   detailsStyle = {},
+  customSnapshot
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isCardHovered, setIsCardHovered] = useState(false);
@@ -42,8 +44,8 @@ const SearchListingCardSnapshot: React.FC<SearchListingCardProps> = ({
   const { state } = useTripContext();
   const router = useRouter();
 
-  // Either use the snapshot hook or fall back to the context directly
-  const listingSnapshot = useListingsSnapshot();
+  // Either use the custom snapshot passed in or fall back to the hook
+  const listingSnapshot = customSnapshot || useListingsSnapshot();
   
   // Determine status from snapshot instead of props
   const getStatus = useCallback(() => {

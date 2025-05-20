@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
@@ -57,9 +57,67 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
-  // Use the new snapshot hook for stable listings data
+  // Use the new snapshot hook for stable listings data and to track like/dislike changes
   const listingsSnapshot = useListingsSnapshot();
   const listings = listingsSnapshot.listings;
+  const [likeChangeCounter, setLikeChangeCounter] = useState(0); // Track like/dislike changes
+  
+  // Keep track of original shown listings to prevent them from disappearing when liked
+  const [originalShowListings, setOriginalShowListings] = useState<ListingAndImages[]>([]);
+  
+  // Update the original listings only when showListings changes due to filter changes, not likes
+  useEffect(() => {
+    console.log("Updating original show listings", showListings.length);
+    setOriginalShowListings(showListings);
+  }, [trip?.searchRadius, trip?.minPrice, trip?.maxPrice]); // Only dependencies that indicate filter changes
+  
+  // Initialize originalShowListings on first load
+  useEffect(() => {
+    if (originalShowListings.length === 0 && showListings.length > 0) {
+      console.log("Initial population of originalShowListings", showListings.length);
+      setOriginalShowListings(showListings);
+    }
+  }, [showListings, originalShowListings.length]);
+  
+  // Get a reference to the original like/dislike actions
+  const originalLike = listingsSnapshot.optimisticLike;
+  const originalDislike = listingsSnapshot.optimisticDislike;
+  const originalRemoveLike = listingsSnapshot.optimisticRemoveLike;
+  const originalRemoveDislike = listingsSnapshot.optimisticRemoveDislike;
+  
+  // Override the like/dislike functions to trigger marker updates
+  const optimisticLike = useCallback(async (listingId: string) => {
+    await originalLike(listingId);
+    setLikeChangeCounter(prev => prev + 1); // Increment to trigger re-renders
+    console.log("Added like, updating markers");
+  }, [originalLike]);
+  
+  const optimisticDislike = useCallback(async (listingId: string) => {
+    await originalDislike(listingId);
+    setLikeChangeCounter(prev => prev + 1);
+    console.log("Added dislike, updating markers");
+  }, [originalDislike]);
+  
+  const optimisticRemoveLike = useCallback(async (listingId: string) => {
+    await originalRemoveLike(listingId);
+    setLikeChangeCounter(prev => prev + 1);
+    console.log("Removed like, updating markers");
+  }, [originalRemoveLike]);
+  
+  const optimisticRemoveDislike = useCallback(async (listingId: string) => {
+    await originalRemoveDislike(listingId);
+    setLikeChangeCounter(prev => prev + 1);
+    console.log("Removed dislike, updating markers");
+  }, [originalRemoveDislike]);
+  
+  // Override the listingsSnapshot object with our custom functions
+  const enhancedSnapshot = useMemo(() => ({
+    ...listingsSnapshot,
+    optimisticLike,
+    optimisticDislike,
+    optimisticRemoveLike,
+    optimisticRemoveDislike
+  }), [listingsSnapshot, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
 
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
@@ -111,8 +169,26 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
   }, [trip?.searchRadius]);
 
-  // Using this instead of showListings as we might want to add back in liked listings
-  const displayListings = [...showListings];
+  // Combine current showListings with any original listings that were liked
+  // This prevents liked listings from disappearing from the map
+  const displayListings = useMemo(() => {
+    // Start with current showListings
+    const result = [...showListings];
+    
+    // Add back any original listings that were liked but now missing from showListings
+    originalShowListings.forEach(originalListing => {
+      // Check if this original listing is now liked
+      if (enhancedSnapshot.isLiked(originalListing.id)) {
+        // Check if it's missing from current showListings
+        if (!showListings.some(listing => listing.id === originalListing.id)) {
+          console.log(`Adding back liked listing ${originalListing.id} to map view`);
+          result.push(originalListing);
+        }
+      }
+    });
+    
+    return result;
+  }, [showListings, originalShowListings, enhancedSnapshot]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
@@ -122,7 +198,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       return 'black';
     }
     if (listingsSnapshot.isLiked(listing.id)) {
-      return 'green';
+      return 'blue'; // Changed from 'green' to 'blue' to match marker color
     }
     return 'red';
   };
@@ -141,14 +217,32 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // Keep track of the current map center separate from the initial center
   const [currentMapCenter, setCurrentMapCenter] = useState(initialCenter);
   
-  // Create markers from the display listings
-  const markers: MapMarker[] = displayListings.map((listing) => ({
-    title: listing.title,
-    lat: listing.latitude,
-    lng: listing.longitude,
-    listing: listing,
-    color: getListingStatus(listing)
-  }));
+  // Create markers from the display listings - using useMemo to only rebuild when needed
+  const markers: MapMarker[] = useMemo(() => {
+    // This function will run when displayListings changes or when likeChangeCounter changes
+    console.log(`Rebuilding markers after like change. Counter: ${likeChangeCounter}`);
+    
+    return displayListings.map((listing) => {
+      // Add isLiked and isDisliked properties based on the enhanced snapshot state
+      const isLiked = enhancedSnapshot.isLiked(listing.id);
+      const isDisliked = enhancedSnapshot.isDisliked(listing.id);
+      
+      // Log each marker we're creating for debugging
+      console.log(`Creating marker for listing ${listing.id}, isLiked: ${isLiked}`);
+      
+      return {
+        title: listing.title,
+        lat: listing.latitude,
+        lng: listing.longitude,
+        listing: {
+          ...listing,
+          isLiked,
+          isDisliked
+        },
+        color: getListingStatus(listing)
+      };
+    });
+  }, [displayListings, enhancedSnapshot, likeChangeCounter, getListingStatus]);
 
   // Use the current map center for the map, fallback to initial center
   const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
@@ -172,7 +266,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           <div className="w-full md:w-3/5 md:pr-4">
             {displayListings.length > 0 ? (
               // Pass calculatedHeight to the height prop
-              <SearchListingsGrid listings={[...showListings]} height={calculatedHeight.toString()} />
+              <SearchListingsGrid 
+                listings={displayListings} 
+                height={calculatedHeight.toString()} 
+                customSnapshot={enhancedSnapshot} 
+              />
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
                 <p className="text-gray-600 text-center">
@@ -237,11 +335,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
             height={`${calculatedHeight}px`}
-            markers={markers.map((marker) => ({
-              ...marker,
-              lat: marker.lat,
-              lng: marker.lng
-            }))}
+            markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
             onCenterChanged={(lng, lat) => {
@@ -266,11 +360,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               center={[mapCenter.lng, mapCenter.lat]}
               zoom={zoomLevel}
               height="100vh"
-              markers={markers.map((marker) => ({
-                ...marker,
-                lat: marker.lat,
-                lng: marker.lng
-              }))}
+              markers={markers}
               onClose={() => setIsSlideMapOpen(false)}
               onCenterChanged={(lng, lat) => {
                 // Update the current map center but don't re-center the map

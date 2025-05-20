@@ -70,7 +70,11 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   // Function to create a single marker
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
-    const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
+    // Set initial color based on liked status
+    const initialColor = marker.listing.isLiked ? '#0000FF' : '#FF0000';
+    console.log(`Mobile: Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
+    
+    const mapMarker = new maplibregl.Marker({ color: initialColor })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
     mapMarker.getElement().style.cursor = 'pointer';
@@ -103,8 +107,12 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     };
 
     markersRef.current.forEach((marker, id) => {
+      const correspondingMarker = markers.find(m => m.listing.id === id);
+      
       if (selectedMarker?.listing.id === id) {
         setColor(marker, '#404040', '2');
+      } else if (correspondingMarker?.listing.isLiked) {
+        setColor(marker, '#0000FF'); // Blue color for liked listings
       } else {
         setColor(marker, '#FF0000');
       }
@@ -296,7 +304,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     if (mapLoaded && mapRef.current) {
       updateMarkerColors();
     }
-  }, [mapLoaded, selectedMarker, clickedCluster]);
+  }, [mapLoaded, selectedMarker, clickedCluster, markers]);
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>

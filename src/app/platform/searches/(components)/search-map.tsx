@@ -103,7 +103,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
   /** Create a single marker */
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
-    const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
+    // Set initial color based on liked status
+    const initialColor = marker.listing.isLiked ? '#0000FF' : '#FF0000';
+    console.log(`Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
+    
+    const mapMarker = new maplibregl.Marker({ color: initialColor })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
     mapMarker.getElement().style.cursor = 'pointer';
@@ -136,10 +140,19 @@ const SearchMap: React.FC<SearchMapProps> = ({
     };
 
     markersRef.current.forEach((marker, id) => {
+      const correspondingMarker = markers.find(m => m.listing.id === id);
+      
+      // Debug log to check what's happening
+      if (correspondingMarker) {
+        console.log(`Updating marker ${id}, isLiked: ${correspondingMarker.listing.isLiked}`);
+      }
+      
       if (isFullscreen && selectedMarker?.listing.id === id) {
         setColor(marker, '#404040', '2');
       } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
         setColor(marker, '#404040', '2');
+      } else if (correspondingMarker?.listing.isLiked) {
+        setColor(marker, '#0000FF'); // Blue color for liked listings
       } else {
         setColor(marker, '#FF0000');
       }
@@ -294,7 +307,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     setTimeout(updateVisibleMarkers, 300);
   }, [filters, searchRadius, queryParams]);
 
-  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen]);
+  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen, markers]);
 
   // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {

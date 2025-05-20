@@ -260,7 +260,7 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
     if (!mapRef.current) return;
     
     // Determine marker color based on like/dislike status
-    const color = marker.listing.isLiked ? '#00AA00' : 
+    const color = marker.listing.isLiked ? '#0000FF' : 
                  marker.listing.isDisliked ? '#AA0000' : '#FF0000';
     
     const mapMarker = new maplibregl.Marker({ color })
@@ -340,7 +340,7 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
       } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
         setColor(marker, '#404040', '2');
       } else if (correspondingMarker?.listing.isLiked) {
-        setColor(marker, '#00AA00');
+        setColor(marker, '#0000FF');
       } else if (correspondingMarker?.listing.isDisliked) {
         setColor(marker, '#AA0000');
       } else {
