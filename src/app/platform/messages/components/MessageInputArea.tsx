@@ -6,7 +6,6 @@ import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useClientLogger } from '@/hooks/useClientLogger';
 
 // Import the new AttachmentCarouselDialog
 import { AttachmentCarouselDialog, AttachmentFileItem } from '@/components/ui/attachment-carousel-dialog';
@@ -63,16 +62,12 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   handleFileClick,
   textareaRef: externalTextareaRef,
 }) => {
-  // Initialize client logger
-  const logger = useClientLogger();
-  
   // Style variables
   const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
   
-  // Detect if device is iOS - safe for SSR
+  // Detect if device is iOS
   const isIOS = () => {
-    if (typeof navigator === 'undefined') return false;
     return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   };
@@ -98,6 +93,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const internalTextareaRef = useRef<HTMLTextAreaElement>(null);
   const textareaRef = externalTextareaRef || internalTextareaRef; // Use external ref if provided, otherwise use internal ref
   const inputContainerRef = useRef<HTMLDivElement>(null);
+  const uploadContainerRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { width, height } = useWindowSize();
   const isMobile = useIsMobile();
@@ -108,6 +104,19 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   // State for controlling the Attachment Carousel Dialog
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
+
+  // Ref for native file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Click handler with delay to work around iOS keyboard dismissal timing
+  const handleDelayedClick = () => {
+    // Only delay on mobile when textarea is focused
+    if (isMobile && isKeyboardVisible) {
+      textareaRef.current?.blur();
+      setTimeout(() => fileInputRef.current?.click(), 300);
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
 
   // Remove manual keyboard detection and let dvh handle it
   useEffect(() => {
@@ -142,7 +151,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         textareaRef.current.removeEventListener('blur', handleBlur);
       }
     };
-  }, [isMobile, textareaRef, logger, newMessageInput, selectedConversation?.id]);
+  }, [isMobile, textareaRef]);
 
   useEffect(() => {
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
@@ -214,11 +223,29 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     setIsAttachmentCarouselOpen(true);
   };
 
+  // Handle native file selection and upload via backend
+  const handleNativeFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    const formData = new FormData();
+    Array.from(files).forEach(file => formData.append('files', file));
+    try {
+      const res = await fetch('/api/uploadthing/uploadFiles', { method: 'POST', body: formData });
+      const data = (await res.json()) as UploadData[];
+      handleUploadFinish(data);
+    } catch (err: any) {
+      alert(err.message);
+    }
+    e.target.value = '';
+  };
+
   return (
     <div
-      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? `${isIOS() ? 'fixed' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
+        left: isMobile && isIOS() ? '0' : undefined,
+        right: isMobile && isIOS() ? '0' : undefined,
       }}
     >
       {messageAttachments.length > 0 && (
@@ -296,39 +323,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
             paddingBottom: '11px',
           }}
           onChange={(e) => {
-            const newValue = e.target.value;
-            setNewMessageInput(newValue);
-            
-            // Log the rendered HTML when input contains DEVLOG
-            if (newValue.includes('DEVLOG') && inputContainerRef.current) {
-              // Create a log of the rendered HTML
-              const container = inputContainerRef.current.parentElement;
-              if (container) {
-                // Log both to console and to our client logger system
-                console.log('DEVLOG HTML Structure:', container.outerHTML);
-                
-                // Use the client logger on all platforms
-                (async () => {
-                  try {
-                    await logger.info("DEVLOG HTML STRUCTURE", 
-                      {
-                        html: container.outerHTML.substring(0, 5000), // Limit size to avoid issues
-                        inputContainerRefExists: !!inputContainerRef.current,
-                        textareaRefExists: !!textareaRef.current,
-                        viewportHeight: typeof window !== 'undefined' ? window.innerHeight : 0,
-                        viewportWidth: typeof window !== 'undefined' ? window.innerWidth : 0,
-                        isMobile: isMobile,
-                        isIOS: isIOS()
-                      }
-                    );
-                    console.log("DEVLOG log sent successfully");
-                  } catch (error) {
-                    console.error("Failed to log HTML structure:", error);
-                  }
-                })();
-              }
-            }
-            
+            setNewMessageInput(e.target.value);
             const textarea = e.target;
             textarea.style.height = "44px";
             const scrollHeight = textarea.scrollHeight;
@@ -355,33 +350,26 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
         <div className="flex items-center px-2">
           <div 
-            className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}
+            className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""} relative`}
+            ref={uploadContainerRef}
           >
-            <UploadButton
-              endpoint="messageUploader"
-              onClientUploadComplete={(res) => {
-                handleUploadFinish(res);
-              }}
-              onUploadError={(error) => {
-                alert(error.message);
-              }}
-              className="p-0"
-              content={{
-                button: ({ ready, isUploading }) => (
-                  <div className="relative">
-                    {!isUploading && <PaperclipIcon className="w-5 h-5 text-gray-600" />}
-                    {isUploading && (
-                      <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
-                    )}
-                  </div>
-                ),
-                allowedContent: 'Image upload'
-              }}
-              appearance={{
-                button: 'bg-parent focus-within:ring-black w-8 data-[state="uploading"]:after:hidden',
-                allowedContent: 'hidden'
-              }}
+            {/* Hidden file input for delayed trigger */}
+            <input
+              type="file"
+              multiple
+              hidden
+              ref={fileInputRef}
+              onChange={handleNativeFiles}
             />
+            {/* Paperclip button with 300ms delay on click */}
+            <button
+              type="button"
+              className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
+              onClick={handleDelayedClick}
+              disabled={!selectedConversation}
+            >
+              <PaperclipIcon className="w-5 h-5" />
+            </button>
           </div>
 
           <button
