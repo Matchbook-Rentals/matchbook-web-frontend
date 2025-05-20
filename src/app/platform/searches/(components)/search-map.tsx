@@ -103,15 +103,53 @@ const SearchMap: React.FC<SearchMapProps> = ({
   /** Create a single marker */
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
-    // Set initial color based on liked status
-    const initialColor = marker.listing.isLiked ? '#0000FF' : '#FF0000';
-    console.log(`Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
     
-    const mapMarker = new maplibregl.Marker({ color: initialColor })
+    // Create a custom HTML element for the price bubble
+    const el = document.createElement('div');
+    el.className = 'price-bubble-marker';
+    
+    // Determine marker color based on like/dislike status
+    const bgColor = marker.listing.isLiked ? '#0000FF' : 
+                   marker.listing.isDisliked ? '#AA0000' : '#FF0000';
+    
+    // Format the price for display
+    const price = marker.listing.calculatedPrice || marker.listing.price;
+    const formattedPrice = price 
+      ? `$${price.toLocaleString()}`
+      : 'N/A';
+    
+    // Set the CSS for the marker
+    el.style.cssText = `
+      padding: 6px 10px;
+      border-radius: 16px;
+      background-color: ${bgColor};
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      min-width: 40px;
+      text-align: center;
+      border: 2px solid white;
+    `;
+    
+    // Set the inner HTML with the price
+    el.innerHTML = formattedPrice;
+    
+    console.log(`Creating price bubble marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, price: ${formattedPrice}`);
+    
+    const mapMarker = new maplibregl.Marker({ 
+      element: el,
+      anchor: 'center'
+    })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
-    mapMarker.getElement().style.cursor = 'pointer';
-    mapMarker.getElement().addEventListener('click', (e) => {
+    
+    el.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isFullscreen) {
         setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
@@ -135,7 +173,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const updateMarkerColors = () => {
     const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
       const el = marker.getElement();
-      el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
+      const isPriceBubble = el.classList.contains('price-bubble-marker');
+      
+      if (isPriceBubble) {
+        // For price bubble markers, update the background color
+        el.style.backgroundColor = color;
+      } else {
+        // Fallback for any standard markers (should not occur, but just in case)
+        el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
+      }
+      
       el.style.zIndex = zIndex;
     };
 
@@ -153,8 +200,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         setColor(marker, '#404040', '2');
       } else if (correspondingMarker?.listing.isLiked) {
         setColor(marker, '#0000FF'); // Blue color for liked listings
+      } else if (correspondingMarker?.listing.isDisliked) {
+        setColor(marker, '#AA0000'); // Dark red for disliked listings
       } else {
-        setColor(marker, '#FF0000');
+        setColor(marker, '#FF0000'); // Red for regular listings
       }
     });
   };

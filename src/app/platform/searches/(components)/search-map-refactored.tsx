@@ -259,15 +259,50 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
     
-    // Determine marker color based on like/dislike status
-    const color = marker.listing.isLiked ? '#0000FF' : 
-                 marker.listing.isDisliked ? '#AA0000' : '#FF0000';
+    // Create a custom HTML element for the price bubble
+    const el = document.createElement('div');
+    el.className = 'price-bubble-marker';
     
-    const mapMarker = new maplibregl.Marker({ color })
+    // Determine marker color based on like/dislike status
+    const bgColor = marker.listing.isLiked ? '#0000FF' : 
+                  marker.listing.isDisliked ? '#AA0000' : '#FF0000';
+    
+    // Format the price for display
+    const price = marker.listing.calculatedPrice || marker.listing.price;
+    const formattedPrice = price 
+      ? `$${price.toLocaleString()}`
+      : 'N/A';
+    
+    // Set the CSS for the marker
+    el.style.cssText = `
+      padding: 6px 10px;
+      border-radius: 16px;
+      background-color: ${bgColor};
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      min-width: 40px;
+      text-align: center;
+      border: 2px solid white;
+    `;
+    
+    // Set the inner HTML with the price
+    el.innerHTML = formattedPrice;
+    
+    const mapMarker = new maplibregl.Marker({ 
+      element: el,
+      anchor: 'center'
+    })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
-    mapMarker.getElement().style.cursor = 'pointer';
-    mapMarker.getElement().addEventListener('click', (e) => {
+    
+    el.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isFullscreen) {
         setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
@@ -288,16 +323,66 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
   /** Create a cluster marker with updated click behavior */
   const createClusterMarker = (cluster: ClusterMarker) => {
     if (!mapRef.current) return;
+    
+    // Get price information from the clustered listings
+    const clusterListings = cluster.listingIds.map(id => 
+      localMarkers.find(m => m.listing.id === id)?.listing
+    ).filter(Boolean);
+    
+    // Find min and max prices
+    let minPrice = Infinity;
+    let maxPrice = 0;
+    
+    clusterListings.forEach(listing => {
+      const price = listing?.calculatedPrice || listing?.price || 0;
+      if (price > 0) {
+        minPrice = Math.min(minPrice, price);
+        maxPrice = Math.max(maxPrice, price);
+      }
+    });
+    
+    // Format price display based on range
+    let priceText = '';
+    if (minPrice === Infinity || maxPrice === 0) {
+      priceText = `${cluster.count}`;
+    } else if (minPrice === maxPrice) {
+      priceText = `$${minPrice.toLocaleString()}`;
+    } else {
+      priceText = `$${minPrice.toLocaleString()} - $${maxPrice.toLocaleString()}`;
+    }
+    
     const el = document.createElement('div');
     el.className = 'cluster-marker';
+    
+    // Different styling for price range vs count
+    const isCountOnly = priceText === `${cluster.count}`;
+    const width = isCountOnly ? '36px' : 'auto';
+    const padding = isCountOnly ? '0px' : '6px 10px';
+    
     el.style.cssText = `
-      width: 36px; height: 36px; border-radius: 50%; background-color: #FF0000; color: white;
-      display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
+      width: ${width};
+      height: 36px;
+      padding: ${padding};
+      border-radius: ${isCountOnly ? '50%' : '16px'};
+      background-color: #FF0000;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: ${isCountOnly ? '14px' : '12px'};
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      border: 2px solid white;
+      cursor: pointer;
+      user-select: none;
+      ${isCountOnly ? '' : 'min-width: 40px; text-align: center;'}
     `;
-    el.innerText = `${cluster.count}`;
+    
+    el.innerText = isCountOnly ? priceText : `${cluster.count}: ${priceText}`;
+    
     // Store listing IDs on the element for hover detection
     el.dataset.listingIds = cluster.listingIds.join(',');
+    
     el.addEventListener('click', (e) => {
       e.stopPropagation();
       useVisibleListingsStore.getState().setVisibleListingIds(cluster.listingIds);
@@ -313,9 +398,11 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
         duration: 500,
       });
     });
+    
     const clusterMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
       .setLngLat([cluster.lng, cluster.lat])
       .addTo(mapRef.current);
+    
     clusterMarkersRef.current.set(`cluster-${cluster.listingIds.join('-')}`, clusterMarker);
   };
 
@@ -324,9 +411,12 @@ const SearchMapRefactored: React.FC<SearchMapProps> = ({
     const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
       const el = marker.getElement();
       const isCluster = el.classList.contains('cluster-marker');
-      if (isCluster) {
+      const isPriceBubble = el.classList.contains('price-bubble-marker');
+      
+      if (isCluster || isPriceBubble) {
         el.style.backgroundColor = color;
-      } else {
+      } else if (!isPriceBubble) {
+        // For any other marker types (fallback)
         el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
       }
       el.style.zIndex = zIndex;
