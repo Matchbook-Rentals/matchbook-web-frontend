@@ -1,304 +1,294 @@
-import React, { useState, useCallback } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ListingAndImages } from '@/types';
-import { useListingHoverStore } from '@/store/listing-hover-store';
-import { formatDate } from '@/lib/utils';
-import { ListingStatus } from '@/constants/enums';
-import dynamic from 'next/dynamic';
-import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
-import { useTripContext } from '@/contexts/trip-context-provider';
+import Image from 'next/image'
+import { Card } from "@/components/ui/card"
+import { MoreHorizontal, Star, ChevronLeft, ChevronRight, Heart } from "lucide-react"
+import { ListingAndImages } from "@/types"
+import { useState, useRef, useEffect } from 'react'
+import { useTripContext } from '@/contexts/trip-context-provider'
+import { RejectIcon } from '@/components/svgs/svg-components'
+import { useListingHoverStore } from '@/store/listing-hover-store'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { ArrowLeft, ArrowRight, QuestionMarkIcon } from '@/components/icons'
+import { ListingStatus } from '@/constants/enums'
 
-// Dynamically import Carousel to avoid SSR issues
-const Carousel = dynamic(() => import('@/components/ui/carousel').then(mod => mod.Carousel), { ssr: false });
-const CarouselContent = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselContent), { ssr: false });
-const CarouselItem = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselItem), { ssr: false });
-const CarouselPrevious = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselPrevious), { ssr: false });
-const CarouselNext = dynamic(() => import('@/components/ui/carousel').then(mod => mod.CarouselNext), { ssr: false });
+const TITLE_MAX_LENGTH = 40
 
 interface SearchListingCardProps {
-  listing: ListingAndImages;
-  status?: ListingStatus;
+  listing: ListingAndImages
+  status: ListingStatus
+  className?: string
+  style?: React.CSSProperties
+  detailsClassName?: string
+  detailsStyle?: React.CSSProperties
   callToAction?: {
-    label: string;
-    action: () => void;
-    className?: string;
-  };
-  className?: string;
-  detailsClassName?: string;
-  detailsStyle?: React.CSSProperties;
-  customSnapshot?: any; // Allow passing custom snapshot with overridden functions
+    label: string
+    action: () => void
+    className?: string
+  }
+  contextLabel?: {
+    label: string
+    action: () => void
+    className?: string
+  }
+  customSnapshot?: any // Allow passing custom snapshot with overridden functions
 }
 
-const SearchListingCardSnapshot: React.FC<SearchListingCardProps> = ({
-  listing,
-  callToAction,
-  className = '',
-  detailsClassName = '',
-  detailsStyle = {},
-  customSnapshot
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isCardHovered, setIsCardHovered] = useState(false);
-  const { setHoveredListing, panToLocation } = useListingHoverStore();
-  const { state } = useTripContext();
-  const router = useRouter();
+export default function SearchListingCard({ 
+  listing, 
+  status, 
+  className, 
+  style, 
+  detailsClassName, 
+  detailsStyle, 
+  callToAction, 
+  contextLabel,
+  customSnapshot 
+}: SearchListingCardProps) {
+  const [isHovered, setIsHovered] = useState(false)
+  const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
+  const router = useRouter()
+  const { userId } = useAuth()
+  const { state, actions } = useTripContext()
+  let isFlexible = state.trip.flexibleStart || state.trip.flexibleEnd;
 
-  // Either use the custom snapshot passed in or fall back to the hook
-  const listingSnapshot = customSnapshot || useListingsSnapshot();
-  
-  // Determine status from snapshot instead of props
-  const getStatus = useCallback(() => {
-    if (listingSnapshot.isRequested(listing.id)) {
-      return ListingStatus.Applied;
+  // Create ref for the image container and state for dimensions
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (imageContainerRef.current) {
+        setDimensions({
+          width: imageContainerRef.current.clientWidth,
+          height: imageContainerRef.current.clientHeight,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  // Either use the custom snapshot passed in or fall back to the context
+  const snapshot = customSnapshot || { 
+    isLiked: (id: string) => state.lookup.favIds.has(id),
+    isDisliked: (id: string) => state.lookup.dislikedIds.has(id),
+    optimisticLike: actions.optimisticLike,
+    optimisticDislike: actions.optimisticDislike,
+    optimisticRemoveLike: actions.optimisticRemoveLike,
+    optimisticRemoveDislike: actions.optimisticRemoveDislike
+  };
+
+  const getStatusStyles = (status: ListingStatus) => {
+    if (snapshot.isLiked(listing.id)) {
+      return 'bg-primaryBrand'
+    } else if (snapshot.isDisliked(listing.id)) {
+      return 'bg-pinkBrand'
     }
-    if (listingSnapshot.isDisliked(listing.id)) {
-      return ListingStatus.Dislike;
-    }
-    if (listingSnapshot.isLiked(listing.id)) {
-      return ListingStatus.Favorite;
-    }
-    return ListingStatus.None;
-  }, [listing.id, listingSnapshot]);
 
-  const status = getStatus();
-
-  // Handlers for actions using snapshot
-  const handleLike = async () => {
-    await listingSnapshot.optimisticLike(listing.id);
-  };
-
-  const handleDislike = async () => {
-    await listingSnapshot.optimisticDislike(listing.id);
-  };
-
-  const handleRemoveLike = async () => {
-    await listingSnapshot.optimisticRemoveLike(listing.id);
-  };
-
-  const handleRemoveDislike = async () => {
-    await listingSnapshot.optimisticRemoveDislike(listing.id);
-  };
-  
-  // Function to handle "show on map" click
-  const handleShowOnMap = () => {
-    panToLocation(listing.latitude, listing.longitude);
-  };
-
-  // Functions to handle mouse events for hover state
-  const handleMouseEnter = () => {
-    setIsCardHovered(true);
-    setHoveredListing(listing);
-  };
-
-  const handleMouseLeave = () => {
-    setIsCardHovered(false);
-    setHoveredListing(null);
-  };
-
-  const handleImageMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleImageMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  // Format price
-  const formattedPrice = listing.price ? `$${listing.price.toLocaleString()}` : 'Contact for price';
-
-  // Determine primary image and other images
-  const primaryImage = listing.listingImages?.[0]?.url || '/placeholderImages/image_1.jpg';
-  const images = listing.listingImages || [];
-
-  // Determine date formatting
-  const dateStart = listing.availableStart ? formatDate(new Date(listing.availableStart)) : null;
-  const dateEnd = listing.availableEnd ? formatDate(new Date(listing.availableEnd)) : null;
-
-  const renderActionButtons = () => {
     switch (status) {
-      case ListingStatus.Favorite:
-        return (
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={handleRemoveLike}
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors"
-            >
-              Unlike
-            </button>
-            {callToAction && (
-              <button
-                onClick={callToAction.action}
-                className={`flex-1 px-3 py-1 rounded transition-colors ${callToAction.className}`}
-              >
-                {callToAction.label}
-              </button>
-            )}
-          </div>
-        );
-      case ListingStatus.Dislike:
-        return (
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={handleRemoveDislike}
-              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded transition-colors"
-            >
-              Undislike
-            </button>
-          </div>
-        );
       case ListingStatus.Applied:
-        return callToAction ? (
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={callToAction.action}
-              className={`flex-1 px-3 py-1 rounded transition-colors ${callToAction.className}`}
-            >
-              {callToAction.label}
-            </button>
-          </div>
-        ) : null;
+        return 'bg-primaryBrand'
+      case ListingStatus.None:
       default:
-        return (
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={handleLike}
-              className="flex-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors"
-            >
-              Like
-            </button>
-            <button
-              onClick={handleDislike}
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors"
-            >
-              Dislike
-            </button>
-          </div>
-        );
+        return 'bg-transparent hover:bg-white/60'
     }
+  }
+
+  const getStatusIcon = (status: ListingStatus) => {
+    if (snapshot.isLiked(listing.id)) {
+      return (
+        <div
+          className="bg-black/50 rounded-full p-2"
+          onClick={(e: React.MouseEvent) => {
+            snapshot.optimisticRemoveLike(listing.id);
+            e.stopPropagation();
+          }}
+        >
+          <Heart
+            className="w-6 h-6 text-white cursor-pointer fill-red-500"
+            strokeWidth={2}
+          />
+        </div>
+      );
+    } else if (snapshot.isDisliked(listing.id)) {
+      return (
+        <div
+          className="bg-black/50 rounded-full "
+          onClick={(e: React.MouseEvent) => {
+            snapshot.optimisticRemoveDislike(listing.id);
+            e.stopPropagation();
+          }}
+        >
+          <RejectIcon
+            className="w-9 h-9 text-white cursor-pointer p-2 "
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className="bg-black/50 rounded-full p-2"
+        onClick={(e: React.MouseEvent) => {
+          snapshot.optimisticLike(listing.id);
+          e.stopPropagation();
+        }}
+      >
+        <Heart
+          className="w-6 h-6 text-white cursor-pointer"
+          strokeWidth={2}
+        />
+      </div>
+    );
+  }
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't navigate if clicking on action buttons or carousel controls
+    if (
+      (e.target as HTMLElement).closest('button') ||
+      (e.target as HTMLElement).closest('.carousel-controls')
+    ) {
+      return;
+    }
+
+    window.open(`/platform/trips/${state.trip.id}/listing/${listing.id}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <div
-      className={`w-full rounded-lg overflow-hidden h-auto transition-shadow hover:shadow-md max-w-sm ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <Card
+      className={`w-full overflow-hidden border-0 max-w-[600px] shadow-0 shadow-none cursor-pointer ${className || ''}`}
+      style={style}
+      onMouseEnter={() => {
+        setIsHovered(true)
+        setHoveredListing(listing)
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false)
+        setHoveredListing(null)
+      }}
+      onClick={handleCardClick}
     >
-      <div className="relative">
-        <div
-          className="relative h-48 w-full"
-          onMouseEnter={handleImageMouseEnter}
-          onMouseLeave={handleImageMouseLeave}
-        >
-          {images.length > 1 ? (
-            <Carousel>
-              <CarouselContent>
-                {images.map((image, index) => (
-                  <CarouselItem key={index} className="h-48">
-                    <img
-                      src={image.url}
-                      alt={`${listing.title} - Image ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                <CarouselPrevious className="left-2 bg-black/40 hover:bg-black/60 border-none" />
-                <CarouselNext className="right-2 bg-black/40 hover:bg-black/60 border-none" />
-              </div>
-            </Carousel>
-          ) : (
-            <img
-              src={primaryImage}
-              alt={listing.title}
-              className="w-full h-full object-cover"
-            />
-          )}
-
-          {/* Price Tag */}
-          <div className="absolute bottom-2 left-2 bg-white/90 px-2 py-1 rounded text-gray-800 font-semibold">
-            {formattedPrice}/month
+      <div ref={imageContainerRef} className="relative rounded-lg  mx-auto max-w-[600px] sm:aspect-[317/321]">
+        <Carousel className="w-full h-full" opts={{ loop: true }}>
+          <CarouselContent>
+            {listing.listingImages.map((image, index) => (
+              <CarouselItem key={index} className="relative">
+                <div className="aspect-[450/320] sm:aspect-[317/321] relative w-full h-full">
+                  <Image
+                    src={image.url}
+                    alt={`${listing.title} - Image ${index + 1}`}
+                    fill
+                    className="rounded-lg object-cover"
+                    sizes="(max-width: 267px) 100vw, 267px"
+                    priority={index === 0}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <CarouselPrevious Icon={ArrowLeft} className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] " />
+            <CarouselNext Icon={ArrowRight} className="right-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pr-[4px] " />
           </div>
-
-          {/* Status Badge */}
-          {status !== ListingStatus.None && (
-            <div
-              className={`absolute top-2 right-2 px-2 py-1 rounded text-white font-medium ${
-                status === ListingStatus.Favorite
-                  ? 'bg-green-500'
-                  : status === ListingStatus.Dislike
-                  ? 'bg-red-500'
-                  : 'bg-blue-500'
-              }`}
-            >
-              {status === ListingStatus.Favorite
-                ? 'Liked'
-                : status === ListingStatus.Dislike
-                ? 'Disliked'
-                : 'Applied'}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className={`p-4 bg-white ${detailsClassName}`} style={detailsStyle}>
-        <div className="flex justify-between items-start">
-          <h3 className="text-lg font-medium text-gray-800 mb-1 line-clamp-1">
-            {listing.title}
-          </h3>
-          <button
-            onClick={handleShowOnMap}
-            className="text-sm text-blue-500 hover:text-blue-700 whitespace-nowrap"
-          >
-            Show on map
-          </button>
-        </div>
-
-        <div className="text-sm text-gray-600 mb-2">
-          {listing.bedrooms?.length || listing.roomCount || 0} beds •{' '}
-          {listing.bathroomCount} baths •{' '}
-          {listing.squareFootage ? `${listing.squareFootage.toLocaleString()} sqft` : 'N/A sqft'}
-        </div>
-
-        {/* Availability dates */}
-        {(dateStart || dateEnd) && (
-          <div className="text-sm text-green-600 mb-2">
-            Available: {dateStart || 'Now'} {dateEnd ? `- ${dateEnd}` : ''}
-          </div>
-        )}
-
-        {/* Furniture and utilities status */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          {listing.furnished && (
-            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-              Furnished
-            </span>
-          )}
-          {listing.utilitiesIncluded && (
-            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-              Utilities Included
-            </span>
-          )}
-          {listing.petsAllowed && (
-            <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-              Pets Allowed
-            </span>
-          )}
-        </div>
-
-        <Link 
-          href={`/platform/trips/${listing.tripId}/listing/${listing.id}`} 
-          className="block text-sm text-blue-600 hover:text-blue-800 underline mb-3"
-        >
-          View Details
-        </Link>
+        </Carousel>
 
         {/* Action Buttons */}
-        {renderActionButtons()}
-      </div>
-    </div>
-  );
-};
+        <div className={`absolute top-2 right-2 z-10 transition-opacity duration-300 opacity-60`}>
+          {getStatusIcon(status)}
+        </div>
 
-export default SearchListingCardSnapshot;
+        {/* Conditional render context banner only */}
+        {contextLabel && (
+          <div className="absolute top-5 mx-auto flex justify-center  w-full">
+            <button
+              onClick={contextLabel.action}
+              className={`w-4/5 py-2 px-4 text-center rounded-xl ${contextLabel.className || 'bg-white/60 hover:bg-white/80'}`}
+            >
+              {contextLabel.label}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div
+        className={`pt-1 flex flex-col text-[14px] sm:min-h-[80px] ${detailsClassName || ''}`}
+        style={detailsStyle}
+      >
+        {/* Listing Title */}
+        <div className="flex justify-between text-[14px]  font-medium gap-x-2 items-start">
+          <h3 className="truncate whitespace-nowrap">
+            {listing.title.length > TITLE_MAX_LENGTH
+              ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
+              : listing.title}
+          </h3>
+        </div>
+
+        {/* Listing Category and Rating */}
+        <div className='flex justify-between mt-2'>
+          {`${listing.category === 'singleFamily' ? 'Home' :
+            listing.category ? (listing.category.charAt(0).toUpperCase() + listing.category.slice(1).toLowerCase()) : 'Property'} in
+            ${listing.locationString ? (listing.locationString.split(',').at(-2)?.trim() || listing.locationString) : 'Location'}`}
+          <div className="flex items-center">
+            <Star className="w-3 h-3 fill-charcoalBrand text-charcoalBrand" />
+            <span className="">{(listing as any).rating ?? 4.9}</span>
+          </div>
+        </div>
+
+        {/* Listing Price and beds */}
+        <div className="flex items-center justify-between mt-2">
+          <div className="">
+            ${listing.price?.toLocaleString() || 2350}
+            <span className=""> month</span>
+          </div>
+          <div className="">
+            {listing.roomCount || 4} bds | {listing.bathroomCount || 2} ba
+          </div>
+        </div>
+        {/* Show flexible dates if isFlexible is true */}
+        {!!isFlexible && (
+          <p className="text-sm  mt-1">
+            Available {' '}
+            {listing.availableStart?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.startDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })} - {listing.availableEnd?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            }) || state.trip.endDate?.toLocaleDateString('en-gb', {
+              day: '2-digit',
+              month: 'short'
+            })}
+          </p>
+        )}
+      </div>
+
+      {callToAction && (
+        <div className=" pt-2 ">
+          <button
+            onClick={() => callToAction.action()}
+            className={`w-full py-2 px-4 rounded-lg ${callToAction.className || 'bg-blueBrand/90 text-white hover:bg-blueBrand'}`}
+          >
+            {callToAction.label}
+          </button>
+        </div>
+      )}
+
+      {/* Display the image container's dimensions at the bottom of the card */}
+      {/* <div className="text-center text-xs text-gray-500 pb-2">
+        Dimensions: {dimensions.width}px x {dimensions.height}px
+      </div> */}
+    </Card>
+  )
+}
