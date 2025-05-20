@@ -53,20 +53,33 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
-  const [viewportHeight, setViewportHeight] = useState<number>(window.innerHeight);
-  const [initialHeight] = useState<number>(window.innerHeight); // Store initial height
+  // Use safe initialization for window properties during server rendering
+  const [viewportHeight, setViewportHeight] = useState<number>(0); // Initialize to 0
+  const [initialHeight, setInitialHeight] = useState<number>(0); // Initialize to 0
+  
+  // Update heights when component mounts on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setViewportHeight(window.innerHeight);
+      setInitialHeight(window.innerHeight);
+    }
+  }, []);
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLDivElement>(null);
   const [scrollAreaHeight, setScrollAreaHeight] = useState<string>('100%');
   
-  // Detect if device is iOS
+  // Detect if device is iOS - safe for SSR
   const isIOS = () => {
+    if (typeof navigator === 'undefined') return false;
     return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   };
 
   useEffect(() => {
+    // Skip during SSR
+    if (typeof window === 'undefined') return;
+    
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -82,7 +95,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
 
   // Handle visual viewport changes for keyboard management
   useEffect(() => {
-    if (!isMobile) return;
+    // Skip during SSR and if not mobile
+    if (typeof window === 'undefined' || !isMobile) return;
 
     const handleViewportChange = () => {
       if (window.visualViewport) {

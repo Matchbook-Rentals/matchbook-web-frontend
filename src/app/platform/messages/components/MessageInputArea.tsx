@@ -70,8 +70,9 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
   
-  // Detect if device is iOS
+  // Detect if device is iOS - safe for SSR
   const isIOS = () => {
+    if (typeof navigator === 'undefined') return false;
     return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   };
@@ -127,23 +128,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         setTimeout(() => {
           setIsKeyboardVisible(false);
         }, 100);
-        
-        // Log only on iOS devices using our client logger
-        if (isIOS()) {
-          // Use async/await in an IIFE to handle the async logger
-          (async () => {
-            try {
-              await logger.info("THIS IS FROM IOS BLUR", {
-                currentInput: newMessageInput,
-                conversationId: selectedConversation?.id || 'none',
-                timestamp: new Date().toISOString()
-              });
-              console.log("iOS blur log sent successfully");
-            } catch (error) {
-              console.error("Failed to send iOS blur log:", error);
-            }
-          })();
-        }
       }
     };
 
@@ -232,11 +216,9 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
   return (
     <div
-      className={`${isMobile ? `${isIOS() ? 'fixed' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
-        left: isMobile && isIOS() ? '0' : undefined,
-        right: isMobile && isIOS() ? '0' : undefined,
       }}
     >
       {messageAttachments.length > 0 && (
@@ -314,7 +296,39 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
             paddingBottom: '11px',
           }}
           onChange={(e) => {
-            setNewMessageInput(e.target.value);
+            const newValue = e.target.value;
+            setNewMessageInput(newValue);
+            
+            // Log the rendered HTML when input contains DEVLOG
+            if (newValue.includes('DEVLOG') && inputContainerRef.current) {
+              // Create a log of the rendered HTML
+              const container = inputContainerRef.current.parentElement;
+              if (container) {
+                // Log both to console and to our client logger system
+                console.log('DEVLOG HTML Structure:', container.outerHTML);
+                
+                // Use the client logger on all platforms
+                (async () => {
+                  try {
+                    await logger.info("DEVLOG HTML STRUCTURE", 
+                      {
+                        html: container.outerHTML.substring(0, 5000), // Limit size to avoid issues
+                        inputContainerRefExists: !!inputContainerRef.current,
+                        textareaRefExists: !!textareaRef.current,
+                        viewportHeight: typeof window !== 'undefined' ? window.innerHeight : 0,
+                        viewportWidth: typeof window !== 'undefined' ? window.innerWidth : 0,
+                        isMobile: isMobile,
+                        isIOS: isIOS()
+                      }
+                    );
+                    console.log("DEVLOG log sent successfully");
+                  } catch (error) {
+                    console.error("Failed to log HTML structure:", error);
+                  }
+                })();
+              }
+            }
+            
             const textarea = e.target;
             textarea.style.height = "44px";
             const scrollHeight = textarea.scrollHeight;
