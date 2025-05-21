@@ -43,8 +43,10 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
   
-  // Either use the custom snapshot passed in (if available) or get one from the hook
-  const listingsSnapshot = customSnapshot || useListingsSnapshot();
+  // Always call the hook unconditionally to comply with rules of hooks
+  const snapshotFromHook = useListingsSnapshot();
+  // Then use either the custom snapshot or the one from the hook
+  const listingsSnapshot = customSnapshot || snapshotFromHook;
 
   // Use properties and functions from the snapshot
   const isLiked = listingsSnapshot.isLiked(listing.id);

@@ -35,8 +35,10 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
   
-  // Get stable listings snapshot and actions - use custom snapshot if provided
-  const listingsSnapshot = customSnapshot || useListingsSnapshot();
+  // Always call the hook unconditionally to comply with rules of hooks
+  const snapshotFromHook = useListingsSnapshot();
+  // Then use either the custom snapshot or the one from the hook
+  const listingsSnapshot = customSnapshot || snapshotFromHook;
   // const [currentPage, setCurrentPage] = useState(1); // Removed pagination state
   const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
   // const listingsPerPage = gridColumns * 3; // Removed pagination calculation
