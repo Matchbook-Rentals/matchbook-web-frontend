@@ -192,15 +192,15 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
-      return 'blue';
+      return '#5c9ac5'; // Use the specific blue color
     }
     if (listingsSnapshot.isDisliked(listing.id)) {
       return 'black';
     }
     if (listingsSnapshot.isLiked(listing.id)) {
-      return 'blue'; // Changed from 'green' to 'blue' to match marker color
+      return '#5c9ac5'; // Blue with white text for liked listings
     }
-    return 'red';
+    return 'white'; // Default is white with charcoal border and text
   };
 
   const listingsWithStatus = listings.map((listing) => ({

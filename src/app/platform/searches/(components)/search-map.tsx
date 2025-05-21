@@ -109,8 +109,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
     el.className = 'price-bubble-marker';
     
     // Determine marker color based on like/dislike status
-    const bgColor = marker.listing.isLiked ? '#0000FF' : 
-                   marker.listing.isDisliked ? '#AA0000' : '#FF0000';
+    const bgColor = marker.listing.isLiked ? '#5c9ac5' : 
+                   marker.listing.isDisliked ? '#404040' : '#FFFFFF';
+    
+    // Determine text color based on background color
+    const textColor = (bgColor === '#FFFFFF') ? '#404040' : '#FFFFFF';
+    
+    // Determine border color based on text color (inverse)
+    const borderColor = (textColor === '#FFFFFF') ? '#FFFFFF' : '#404040';
     
     // Format the price for display
     const price = marker.listing.calculatedPrice || marker.listing.price;
@@ -123,7 +129,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       padding: 6px 10px;
       border-radius: 16px;
       background-color: ${bgColor};
-      color: white;
+      color: ${textColor};
       font-weight: bold;
       font-size: 12px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -134,7 +140,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       user-select: none;
       min-width: 40px;
       text-align: center;
-      border: 2px solid white;
+      border: 2px solid ${borderColor};
     `;
     
     // Set the inner HTML with the price
@@ -171,22 +177,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
-    const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
-      const el = marker.getElement();
-      const isPriceBubble = el.classList.contains('price-bubble-marker');
-      
-      if (isPriceBubble) {
-        // For price bubble markers, update the background color
-        el.style.backgroundColor = color;
-      } else {
-        // Fallback for any standard markers (should not occur, but just in case)
-        el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
-      }
-      
-      el.style.zIndex = zIndex;
-    };
-
     markersRef.current.forEach((marker, id) => {
+      const el = marker.getElement();
       const correspondingMarker = markers.find(m => m.listing.id === id);
       
       // Debug log to check what's happening
@@ -194,16 +186,37 @@ const SearchMap: React.FC<SearchMapProps> = ({
         console.log(`Updating marker ${id}, isLiked: ${correspondingMarker.listing.isLiked}`);
       }
       
+      // Handle different states for the markers
       if (isFullscreen && selectedMarker?.listing.id === id) {
-        setColor(marker, '#404040', '2');
+        // Selected state in fullscreen: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '2';
       } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
-        setColor(marker, '#404040', '2');
+        // Hovered or clicked state: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
-        setColor(marker, '#0000FF'); // Blue color for liked listings
+        // Liked state: blue with white text and border
+        el.style.backgroundColor = '#5c9ac5';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '1';
       } else if (correspondingMarker?.listing.isDisliked) {
-        setColor(marker, '#AA0000'); // Dark red for disliked listings
+        // Disliked state: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '0';
       } else {
-        setColor(marker, '#FF0000'); // Red for regular listings
+        // Default state: white with charcoal text and border
+        el.style.backgroundColor = '#FFFFFF';
+        el.style.color = '#404040';
+        el.style.border = '1px solid #404040';
+        el.style.zIndex = '';
       }
     });
   };

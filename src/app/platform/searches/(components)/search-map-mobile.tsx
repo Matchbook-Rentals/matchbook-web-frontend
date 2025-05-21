@@ -70,18 +70,57 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   // Function to create a single marker
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
-    // Set initial color based on liked status
-    const initialColor = marker.listing.isLiked ? '#0000FF' : '#FF0000';
+    
+    // Create a custom HTML element for the price bubble
+    const el = document.createElement('div');
+    el.className = 'price-bubble-marker';
+    
+    // Set initial color based on liked status (white with charcoal border by default)
+    const initialColor = marker.listing.isLiked ? '#5c9ac5' : '#FFFFFF';
+    const textColor = marker.listing.isLiked ? '#FFFFFF' : '#404040'; // Charcoal text for default
+    
     console.log(`Mobile: Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
     
-    const mapMarker = new maplibregl.Marker({ color: initialColor })
+    // Format the price for display if available
+    const price = marker.listing.calculatedPrice || marker.listing.price;
+    const formattedPrice = price 
+      ? `$${price.toLocaleString()}`
+      : 'N/A';
+    
+    // Set the CSS for the marker
+    el.style.cssText = `
+      padding: 6px 10px;
+      border-radius: 16px;
+      background-color: ${initialColor};
+      color: ${textColor};
+      font-weight: bold;
+      font-size: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      min-width: 40px;
+      text-align: center;
+      border: 2px solid ${textColor === '#FFFFFF' ? '#404040' : '#FFFFFF'};
+    `;
+    
+    // Set the inner HTML with the price
+    el.innerHTML = formattedPrice;
+    
+    const mapMarker = new maplibregl.Marker({ 
+      element: el,
+      anchor: 'center'
+    })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
-    mapMarker.getElement().style.cursor = 'pointer';
-    mapMarker.getElement().addEventListener('click', (e) => {
+    
+    el.addEventListener('click', (e) => {
       e.stopPropagation();
       setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
     });
+    
     markersRef.current.set(marker.listing.id, mapMarker);
   };
 
@@ -100,21 +139,28 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
   // Function to update marker colors based on state
   const updateMarkerColors = () => {
-    const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
-      const el = marker.getElement();
-      el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
-      el.style.zIndex = zIndex;
-    };
-
     markersRef.current.forEach((marker, id) => {
+      const el = marker.getElement();
       const correspondingMarker = markers.find(m => m.listing.id === id);
       
       if (selectedMarker?.listing.id === id) {
-        setColor(marker, '#404040', '2');
+        // Selected state: charcoal background with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '2px solid #FFFFFF';
+        el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
-        setColor(marker, '#0000FF'); // Blue color for liked listings
+        // Liked state: blue background with white text and border
+        el.style.backgroundColor = '#5c9ac5';
+        el.style.color = '#FFFFFF';
+        el.style.border = '2px solid #FFFFFF';
+        el.style.zIndex = '1';
       } else {
-        setColor(marker, '#FF0000');
+        // Default state: white background with charcoal text and border
+        el.style.backgroundColor = '#FFFFFF';
+        el.style.color = '#404040';
+        el.style.border = '2px solid #404040';
+        el.style.zIndex = '';
       }
     });
   };
