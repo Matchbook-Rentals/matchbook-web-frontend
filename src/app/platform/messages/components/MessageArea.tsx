@@ -30,13 +30,6 @@ interface MessageFile {
   fileSize?: number;
 }
 
-// Add VisualViewport type if not available
-declare global {
-  interface Window {
-    visualViewport?: VisualViewport;
-  }
-}
-
 const MessageArea: React.FC<MessageAreaProps> = ({
   selectedConversation,
   messages,
@@ -384,11 +377,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const containerStyle = isMobile ? { height: `${isIOS() ? initialHeight : viewportHeight}px` } : {};
 
   return (
-    <div 
-      ref={containerRef}
-      className={messageContainerClassName}
-      style={containerStyle}>
-      <div ref={headerRef} className="flex-shrink-0">
+    <div className={messageContainerClassName} style={containerStyle}>
+      <div className="sticky top-0" ref={headerRef}>
         <ConversationHeader
           selectedConversation={selectedConversation}
           participantInfo={participantInfo}
@@ -427,7 +417,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         </ScrollArea>
       </div>
 
-      <div ref={inputRef} className="flex-shrink-0">
+      <div className="sticky bottom-0" ref={inputRef}>
         <MessageInputArea
           onSendMessage={onSendMessage}
           selectedConversation={selectedConversation}
