@@ -1,24 +1,28 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { ListingAndImages } from '@/types';
 import SearchListingCard from './search-listing-card';
+import SearchListingCardSnapshot from './search-listing-card-snapshot';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingStatus } from '@/constants/enums';
 import HoveredListingInfo from './hovered-listing-info';
 import { useMapSelectionStore } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 // Remove Loader2 import
 
 interface SearchListingsGridProps {
   listings: ListingAndImages[];
   withCallToAction?: boolean;
   height?: string;
+  customSnapshot?: any; // Allow passing custom snapshot with overridden functions
 }
 
 const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   listings,
   withCallToAction = false,
-  height
+  height,
+  customSnapshot
 }) => {
   const ITEMS_PER_LOAD = 18; // Load 6 rows (18 items for 3 columns)
   const [displayedListings, setDisplayedListings] = useState<ListingAndImages[]>([]);
@@ -30,6 +34,11 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   // const sentinelRef = useRef<HTMLDivElement>(null); // Removed sentinel ref
   const { state, actions } = useTripContext();
   const { optimisticApply, optimisticRemoveApply } = actions;
+  
+  // Always call the hook unconditionally to comply with rules of hooks
+  const snapshotFromHook = useListingsSnapshot();
+  // Then use either the custom snapshot or the one from the hook
+  const listingsSnapshot = customSnapshot || snapshotFromHook;
   // const [currentPage, setCurrentPage] = useState(1); // Removed pagination state
   const [gridColumns, setGridColumns] = useState(1); // Keep for responsive grid layout
   // const listingsPerPage = gridColumns * 3; // Removed pagination calculation
@@ -179,13 +188,13 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [displayedListings, updateMaxDetailsHeight]);
 
   const getListingStatus = (listing: ListingAndImages) => {
-    if (state.lookup.requestedIds.has(listing.id)) {
+    if (listingsSnapshot.isRequested(listing.id)) {
       return ListingStatus.Applied;
     }
-    if (state.lookup.dislikedIds.has(listing.id)) {
+    if (listingsSnapshot.isDisliked(listing.id)) {
       return ListingStatus.Dislike;
     }
-    if (state.lookup.favIds.has(listing.id)) {
+    if (listingsSnapshot.isLiked(listing.id)) {
       return ListingStatus.Favorite;
     }
     return ListingStatus.None;
@@ -261,7 +270,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (
-                  <SearchListingCard
+                  <SearchListingCardSnapshot
                     key={listing.id}
                     listing={listing}
                     status={status}
@@ -269,6 +278,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
                     className="listing-card"
                     detailsClassName={`listing-details ${maxDetailsHeight ? 'transition-all duration-200' : ''}`}
                     detailsStyle={{ minHeight: maxDetailsHeight ? `${maxDetailsHeight}px` : undefined }}
+                    customSnapshot={customSnapshot} // Pass in the custom snapshot if provided
                   />
                 );
              })}

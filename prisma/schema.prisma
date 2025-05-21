@@ -72,6 +72,7 @@ model User {
   Lease              Lease[]
   tickets            Ticket[]
   applicationErrors  ApplicationError[] // Relation to application errors logged for this user
+  clientLogs         ClientLog[] // Relation to client logs submitted by this user
 }
 
 model UserPreferences {
@@ -965,6 +966,25 @@ model ApplicationError {
 
   @@index([createdAt])
   @@index([userId])
+}
+
+model ClientLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  level     String   // debug, info, warn, error
+  message   String   @db.Text
+  data      String?  @db.Text // JSON stringified data
+  metadata  String?  @db.Text // JSON stringified metadata
+  userId    String?  // Optional: link to user if they were logged in
+  device    String?  // ios, android, web
+  pathname  String?  // The URL path where the log was recorded
+  userAgent String?  @db.Text // Browser/client information
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([userId])
+  @@index([level])
 }
 
 model ListingInCreation {

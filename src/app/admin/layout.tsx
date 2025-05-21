@@ -1,7 +1,7 @@
 import React from 'react'
 import PlatformNavbar from '@/components/platform-components/platformNavbar'
+import AdminSidebar from '@/components/admin/AdminSidebar'
 import { Toaster } from '@/components/ui/toaster'
-import { PAGE_MARGIN } from '@/constants/styles'
 import { checkRole } from '@/utils/roles'
 import { redirect } from 'next/navigation'
 
@@ -20,11 +20,14 @@ export default async function AdminLayout({
   }
   
   return (
-    <div className={`min-h-screen bg-background flex flex-col ${PAGE_MARGIN}`}>
+    <div className="min-h-screen bg-background flex flex-col">
       <PlatformNavbar />
-      <main className="flex-grow">
-        {children}
-      </main>
+      <div className="flex flex-1">
+        <AdminSidebar />
+        <main className="flex-grow p-6">
+          {children}
+        </main>
+      </div>
       <Toaster />
     </div>
   )

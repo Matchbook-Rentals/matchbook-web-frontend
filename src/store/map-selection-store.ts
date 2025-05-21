@@ -12,6 +12,8 @@ export interface MapMarker {
       fullName: string;
       createdAt: Date;
     };
+    isLiked?: boolean; // Added for marker coloring
+    isDisliked?: boolean; // Added for marker coloring
   };
 }
 

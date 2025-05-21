@@ -6,8 +6,6 @@ import { FilePreview } from '@/components/ui/file-preview';
 import { isImageFile } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-// Import the new AttachmentCarouselDialog
 import { AttachmentCarouselDialog, AttachmentFileItem } from '@/components/ui/attachment-carousel-dialog';
 
 interface MessageFile {
@@ -62,31 +60,29 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   handleFileClick,
   textareaRef: externalTextareaRef,
 }) => {
-  // Style variables
   const inputAreaClassNames = "flex-1 px-5 focus:outline-none text-black resize-none w-full min-h-[44px] max-h-[132px] overflow-y-hidden leading-relaxed font-jakarta";
   const inputContainerClassNames = "flex items-center mb-4 bg-white border-gray-300 border focus:outline-none w-full focus:ring-1 focus:ring-black overflow-hidden transition-all duration-300 ease-in-out";
 
-  // Calculate dynamic border radius based on message length and screen width
+  const isIOS = () => {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  };
+
   const calculateBorderRadius = (messageLength: number, screenWidth: number | undefined) => {
     if (messageLength === 0) return '9999px';
-
-    if (messageLength > 60) {
-      return screenWidth && screenWidth >= 768 ? '1.25rem' : '0.375rem';
-    } else if (messageLength > 40) {
-      return screenWidth && screenWidth >= 768 ? '1.5rem' : '0.5rem';
-    } else if (messageLength > 20) {
-      return screenWidth && screenWidth >= 768 ? '2rem' : '0.75rem';
-    } else {
-      return screenWidth && screenWidth >= 768 ? '3rem' : '1.5rem';
-    }
+    if (messageLength > 60) return screenWidth && screenWidth >= 768 ? '1.25rem' : '0.375rem';
+    else if (messageLength > 40) return screenWidth && screenWidth >= 768 ? '1.5rem' : '0.5rem';
+    else if (messageLength > 20) return screenWidth && screenWidth >= 768 ? '2rem' : '0.75rem';
+    else return screenWidth && screenWidth >= 768 ? '3rem' : '1.5rem';
   };
 
   const [newMessageInput, setNewMessageInput] = useState('');
   const [messageAttachments, setMessageAttachments] = useState<MessageFile[]>([]);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const internalTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const textareaRef = externalTextareaRef || internalTextareaRef; // Use external ref if provided, otherwise use internal ref
+  const textareaRef = externalTextareaRef || internalTextareaRef;
   const inputContainerRef = useRef<HTMLDivElement>(null);
+  const uploadContainerRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { width, height } = useWindowSize();
   const isMobile = useIsMobile();
@@ -94,43 +90,33 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
   const prevConversationIdRef = useRef<string | null>(null);
   const prevWindowHeight = useRef<number | undefined>(height);
 
-  // State for controlling the Attachment Carousel Dialog
   const [isAttachmentCarouselOpen, setIsAttachmentCarouselOpen] = useState(false);
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
 
+  // Ref for native file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Click handler with delay to work around iOS keyboard dismissal timing
+  const handleDelayedClick = () => {
+    if (isMobile && isKeyboardVisible) {
+      textareaRef.current?.blur();
+      setTimeout(() => fileInputRef.current?.click(), 300);
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
 
-  // Track if upload button is being interacted with
-  const [isUploadActive, setIsUploadActive] = useState(false);
-
-  // Remove manual keyboard detection and let dvh handle it
   useEffect(() => {
-    // Just track previous height for potential future use
     prevWindowHeight.current = height;
   }, [height]);
 
-  // Simplified focus handling to work with dvh
   useEffect(() => {
     const handleFocus = () => {
-      if (isMobile) {
-        setIsKeyboardVisible(true);
-        
-        // Add scrollIntoView with 310ms delay when input is focused
-        setTimeout(() => {
-          if (textareaRef.current) {
-            textareaRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest'
-            });
-          }
-        }, 310);
-      }
+      if (isMobile) setIsKeyboardVisible(true);
     };
 
     const handleBlur = () => {
       if (isMobile) {
-        setTimeout(() => {
-          setIsKeyboardVisible(false);
-        }, 100);
+        setTimeout(() => setIsKeyboardVisible(false), 100);
       }
     };
 
@@ -151,20 +137,18 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     if (selectedConversation?.id !== prevConversationIdRef.current && prevConversationIdRef.current !== null) {
       setNewMessageInput('');
       setMessageAttachments([]);
-
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "44px";
-      }
+      if (textareaRef.current) textareaRef.current.style.height = "44px";
     }
     prevConversationIdRef.current = selectedConversation?.id || null;
   }, [selectedConversation]);
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleSend = () => {
     const hasContent = newMessageInput.trim() || messageAttachments.length > 0;
     if (!hasContent) return;
 
     const messageContent = newMessageInput.trim();
-
     if (messageAttachments.length > 0) {
       onSendMessage(messageContent, messageAttachments);
     } else {
@@ -173,14 +157,10 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
     setNewMessageInput('');
     setMessageAttachments([]);
-    
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "44px";
-    }
+    if (textareaRef.current) textareaRef.current.style.height = "44px";
     
     if (selectedConversation?.id) {
       localStorage.removeItem(getStorageKey(selectedConversation.id));
-      
       const recentChangeData = localStorage.getItem(getRecentConversationKey());
       if (recentChangeData) {
         const recentChange: RecentConversationChange = JSON.parse(recentChangeData);
@@ -211,17 +191,36 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
     setMessageAttachments(prev => [...prev, ...attachments]);
   };
 
-  // Function to open the attachment carousel
   const openAttachmentCarousel = (index: number) => {
     setCarouselInitialIndex(index);
     setIsAttachmentCarouselOpen(true);
   };
 
+  const handleNativeFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    const formData = new FormData();
+    Array.from(files).forEach(file => formData.append('files', file));
+    setIsUploading(true);
+    try {
+      const res = await fetch('/api/uploadthing/uploadFiles', { method: 'POST', body: formData });
+      const data = (await res.json()) as UploadData[];
+      handleUploadFinish(data);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
+    }
+  };
+
   return (
     <div
-      className={`${isMobile ? 'sticky bottom-0 z-30 bg-background transition-all duration-300 pr-4' : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
+      className={`${isMobile ? `${isIOS() ? 'sticky' : 'sticky'} bottom-0 z-30 bg-background transition-all duration-300 pr-4` : 'relative pr-0 pb-1 md:pl-4 bg-transparent'} overflow-x-hidden`}
       style={{
         paddingBottom: isMobile ? '8px' : undefined,
+        left: isMobile && isIOS() ? '0' : undefined,
+        right: isMobile && isIOS() ? '0' : undefined,
       }}
     >
       {messageAttachments.length > 0 && (
@@ -295,7 +294,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            paddingTop: '11px',  // Fine-tuned padding to vertically center text
+            paddingTop: '11px',
             paddingBottom: '11px',
           }}
           onChange={(e) => {
@@ -313,9 +312,7 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
               }
               onTyping(true);
               typingTimeoutRef.current = setTimeout(() => {
-                if (onTyping) {
-                  onTyping(false);
-                }
+                if (onTyping) onTyping(false);
               }, 3000);
             }
           }}
@@ -326,39 +323,28 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
 
         <div className="flex items-center px-2">
           <div 
-            className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""}`}
-            onTouchStart={() => setIsUploadActive(true)}
-            onTouchEnd={() => setTimeout(() => setIsUploadActive(false), 500)}
-            onMouseDown={() => setIsUploadActive(true)}
-            onMouseUp={() => setTimeout(() => setIsUploadActive(false), 500)}
+            className={`p-2 ${!selectedConversation ? "opacity-50 pointer-events-none" : ""} relative`}
+            ref={uploadContainerRef}
           >
-            <UploadButton
-              endpoint="messageUploader"
-              onClientUploadComplete={(res) => {
-                handleUploadFinish(res);
-                setIsUploadActive(false);
-              }}
-              onUploadError={(error) => {
-                alert(error.message);
-                setIsUploadActive(false);
-              }}
-              className="p-0"
-              content={{
-                button: ({ ready, isUploading }) => (
-                  <div className="relative">
-                    {!isUploading && <PaperclipIcon className="w-5 h-5 text-gray-600" />}
-                    {isUploading && (
-                      <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
-                    )}
-                  </div>
-                ),
-                allowedContent: 'Image upload'
-              }}
-              appearance={{
-                button: 'bg-parent focus-within:ring-black w-8 data-[state="uploading"]:after:hidden',
-                allowedContent: 'hidden'
-              }}
+            <input
+              type="file"
+              multiple
+              hidden
+              ref={fileInputRef}
+              onChange={handleNativeFiles}
             />
+            <button
+              type="button"
+              className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
+              onClick={handleDelayedClick}
+              disabled={!selectedConversation}
+            >
+              {isUploading ? (
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+              ) : (
+                <PaperclipIcon className="w-5 h-5" />
+              )}
+            </button>
           </div>
 
           <button
@@ -373,7 +359,6 @@ const MessageInputArea: React.FC<MessageInputAreaProps> = ({
         </div>
       </div>
 
-      {/* Use the new AttachmentCarouselDialog component */}
       {messageAttachments.length > 0 && (
         <AttachmentCarouselDialog
           attachments={messageAttachments as AttachmentFileItem[]}

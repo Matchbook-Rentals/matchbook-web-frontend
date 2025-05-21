@@ -9,12 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import DesktopListingCard from './desktop-map-click-card';
 import ListingCard from './desktop-map-click-card';
 
-interface ClusterMarker {
-  lat: number;
-  lng: number;
-  count: number;
-  listingIds: string[];
-}
+// No longer using clustering
 
 interface SearchMapProps {
   center: [number, number] | null;
@@ -23,6 +18,7 @@ interface SearchMapProps {
   height?: string;
   isFullscreen?: boolean;
   setIsFullscreen?: (value: boolean) => void;
+  onCenterChanged?: (lng: number, lat: number) => void;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -32,6 +28,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   height = '526px',
   isFullscreen = false,
   setIsFullscreen = () => {},
+  onCenterChanged = () => {},
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -39,9 +36,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const clusterMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const [mapLoaded, setMapLoaded] = useState(false);
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
-  const [clusters, setClusters] = useState<ClusterMarker[]>([]);
   const [currentZoom, setCurrentZoom] = useState(zoom);
-  const [clickedCluster, setClickedCluster] = useState<ClusterMarker | null>(null);
+  const [clickedCluster, setClickedCluster] = useState<null>(null);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -80,134 +76,86 @@ const SearchMap: React.FC<SearchMapProps> = ({
     useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
   };
 
-  /** Create clusters based on visible markers and zoom level using a grid */
-  const createClusters = (zoomLevel: number): ClusterMarker[] => {
+  /** Get visible markers within the current bounds */
+  const getVisibleMarkers = (): MapMarker[] => {
     if (!mapRef.current) return [];
-
+    
     const bounds = mapRef.current.getBounds();
-    const visibleMarkers = markers.filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)));
-
-    if (visibleMarkers.length === 0) return [];
-
-    // Dynamic pixel radius based on zoom, similar to original logic
-    let baseClusterPixelRadius = Math.max(40, 100 - zoomLevel * 4);
-    // Halve the radius if in fullscreen mode for *less* aggressive clustering
-    const clusterPixelRadius = baseClusterPixelRadius;
-
-    const grid = new Map<string, MapMarker[]>();
-    const visitedRevised = new Set<string>();
-    const revisedClusters: ClusterMarker[] = [];
-
-    // Helper to get grid cell key from pixel coordinates
-    const getGridKey = (point: maplibregl.Point): string => {
-      // Use clusterPixelRadius for grid cell size
-      const col = Math.floor(point.x / clusterPixelRadius);
-      const row = Math.floor(point.y / clusterPixelRadius);
-      return `${col}_${row}`;
-    };
-
-    // 1. Assign markers to grid cells
-    visibleMarkers.forEach(marker => {
-      const point = mapRef.current!.project([marker.lng, marker.lat]);
-      const key = getGridKey(point);
-      if (!grid.has(key)) {
-        grid.set(key, []);
-      }
-      grid.get(key)!.push(marker);
-    });
-
-    // 2. Iterate through markers to form clusters using BFS and grid
-    visibleMarkers.forEach(marker => {
-        if (visitedRevised.has(marker.listing.id)) return;
-
-        // Start a new potential cluster using BFS
-        const clusterQueue: MapMarker[] = [marker];
-        visitedRevised.add(marker.listing.id);
-        const currentClusterMembers: MapMarker[] = [];
-
-        while (clusterQueue.length > 0) {
-            const currentMarker = clusterQueue.shift()!;
-            currentClusterMembers.push(currentMarker);
-
-            const point = mapRef.current!.project([currentMarker.lng, currentMarker.lat]);
-            const currentCellCol = Math.floor(point.x / clusterPixelRadius);
-            const currentCellRow = Math.floor(point.y / clusterPixelRadius);
-
-            // Check neighboring cells for potential members
-            for (let dx = -1; dx <= 1; dx++) {
-                for (let dy = -1; dy <= 1; dy++) {
-                    const key = `${currentCellCol + dx}_${currentCellRow + dy}`;
-                    if (grid.has(key)) {
-                        grid.get(key)!.forEach(neighbor => {
-                            // Check if neighbor is already visited *before* distance calculation
-                            if (!visitedRevised.has(neighbor.listing.id)) {
-                                const distance = calculatePixelDistance(currentMarker.lat, currentMarker.lng, neighbor.lat, neighbor.lng);
-                                if (distance < clusterPixelRadius) {
-                                    visitedRevised.add(neighbor.listing.id);
-                                    clusterQueue.push(neighbor);
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }
-
-        // Create the final cluster from members found in BFS
-        if (currentClusterMembers.length > 0) {
-            let totalLat = 0;
-            let totalLng = 0;
-            const listingIds: string[] = [];
-            currentClusterMembers.forEach(m => {
-                totalLat += m.lat;
-                totalLng += m.lng;
-                listingIds.push(m.listing.id);
-            });
-            revisedClusters.push({
-                lat: totalLat / currentClusterMembers.length,
-                lng: totalLng / currentClusterMembers.length,
-                count: currentClusterMembers.length,
-                listingIds: listingIds
-            });
-        }
-    });
-
-    return revisedClusters;
+    return markers.filter(marker => 
+      bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat))
+    );
   };
 
 
-  /** Render individual or cluster markers */
-  const renderMarkers = (clusters: ClusterMarker[], zoom: number) => {
+  /** Render markers */
+  const renderMarkers = () => {
     if (!mapRef.current) return;
+    
+    // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current.clear();
-    clusterMarkersRef.current.forEach(marker => marker.remove());
-    clusterMarkersRef.current.clear();
-
-    const shouldCluster = zoom < 17;
-    console.log('SHOULD CLUSTER' ,zoom, shouldCluster)
-    if (!shouldCluster) {
-      const bounds = mapRef.current.getBounds();
-      markers
-        .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
-        .forEach(marker => createSingleMarker(marker));
-    } else {
-      clusters.forEach(cluster => {
-        cluster.count === 1
-          ? createSingleMarker(markers.find(m => m.listing.id === cluster.listingIds[0])!)
-          : createClusterMarker(cluster);
-      });
-    }
+    clusterMarkersRef.current.clear(); // Keep the ref but don't use it
+    
+    // Get visible markers and render them individually
+    getVisibleMarkers().forEach(marker => createSingleMarker(marker));
   };
 
   /** Create a single marker */
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
-    const mapMarker = new maplibregl.Marker({ color: '#FF0000' })
+    
+    // Create a custom HTML element for the price bubble
+    const el = document.createElement('div');
+    el.className = 'price-bubble-marker';
+    
+    // Determine marker color based on like/dislike status
+    const bgColor = marker.listing.isLiked ? '#5c9ac5' : 
+                   marker.listing.isDisliked ? '#404040' : '#FFFFFF';
+    
+    // Determine text color based on background color
+    const textColor = (bgColor === '#FFFFFF') ? '#404040' : '#FFFFFF';
+    
+    // Determine border color based on text color (inverse)
+    const borderColor = (textColor === '#FFFFFF') ? '#FFFFFF' : '#404040';
+    
+    // Format the price for display
+    const price = marker.listing.calculatedPrice || marker.listing.price;
+    const formattedPrice = price 
+      ? `$${price.toLocaleString()}`
+      : 'N/A';
+    
+    // Set the CSS for the marker
+    el.style.cssText = `
+      padding: 6px 10px;
+      border-radius: 16px;
+      background-color: ${bgColor};
+      color: ${textColor};
+      font-weight: bold;
+      font-size: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      min-width: 40px;
+      text-align: center;
+      border: 2px solid ${borderColor};
+    `;
+    
+    // Set the inner HTML with the price
+    el.innerHTML = formattedPrice;
+    
+    console.log(`Creating price bubble marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, price: ${formattedPrice}`);
+    
+    const mapMarker = new maplibregl.Marker({ 
+      element: el,
+      anchor: 'center'
+    })
       .setLngLat([marker.lng, marker.lat])
       .addTo(mapRef.current);
-    mapMarker.getElement().style.cursor = 'pointer';
-    mapMarker.getElement().addEventListener('click', (e) => {
+    
+    el.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isFullscreen) {
         setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
@@ -225,127 +173,193 @@ const SearchMap: React.FC<SearchMapProps> = ({
     markersRef.current.set(marker.listing.id, mapMarker);
   };
 
-  /** Create a cluster marker with updated click behavior */
-  const createClusterMarker = (cluster: ClusterMarker) => {
-    if (!mapRef.current) return;
-    const el = document.createElement('div');
-    el.className = 'cluster-marker';
-    el.style.cssText = `
-      width: 36px; height: 36px; border-radius: 50%; background-color: #FF0000; color: white;
-      display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid white; cursor: pointer; user-select: none;
-    `;
-    el.innerText = `${cluster.count}`;
-    // Store listing IDs on the element for hover detection
-    el.dataset.listingIds = cluster.listingIds.join(',');
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      useVisibleListingsStore.getState().setVisibleListingIds(cluster.listingIds);
-      setClickedCluster(cluster);
-
-      // Always zoom in by 2 levels, capped at max zoom
-      const currentZoom = mapRef.current!.getZoom();
-      const newZoom = Math.min(currentZoom + 2, mapRef.current!.getMaxZoom());
-
-      mapRef.current!.flyTo({
-        center: [cluster.lng, cluster.lat],
-        zoom: newZoom,
-        duration: 500,
-      });
-    });
-    const clusterMarker = new maplibregl.Marker({ element: el, anchor: 'center' })
-      .setLngLat([cluster.lng, cluster.lat])
-      .addTo(mapRef.current);
-    clusterMarkersRef.current.set(`cluster-${cluster.listingIds.join('-')}`, clusterMarker);
-  };
+  // No longer using cluster markers
 
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
-    const setColor = (marker: maplibregl.Marker, color: string, zIndex = '') => {
-      const el = marker.getElement();
-      const isCluster = el.classList.contains('cluster-marker');
-      if (isCluster) {
-        el.style.backgroundColor = color;
-      } else {
-        el.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
-      }
-      el.style.zIndex = zIndex;
-    };
-
     markersRef.current.forEach((marker, id) => {
-      if (isFullscreen && selectedMarker?.listing.id === id) {
-        setColor(marker, '#404040', '2');
-      } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
-        setColor(marker, '#404040', '2');
-      } else {
-        setColor(marker, '#FF0000');
-      }
-    });
-
-    clusterMarkersRef.current.forEach((marker) => {
       const el = marker.getElement();
-      const listingIdsStr = el.dataset.listingIds || '';
-      const clusterListingIds = listingIdsStr.split(',');
-      const isHovered = hoveredListing && clusterListingIds.includes(hoveredListing.id);
-      const isClicked = !isFullscreen && clickedCluster && clusterListingIds.join('-') === clickedCluster.listingIds.join('-');
-
-      if (isHovered || isClicked) {
-        setColor(marker, '#404040', '2'); // Highlight color
+      const correspondingMarker = markers.find(m => m.listing.id === id);
+      
+      // Debug log to check what's happening
+      if (correspondingMarker) {
+        console.log(`Updating marker ${id}, isLiked: ${correspondingMarker.listing.isLiked}`);
+      }
+      
+      // Handle different states for the markers
+      if (isFullscreen && selectedMarker?.listing.id === id) {
+        // Selected state in fullscreen: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '2';
+      } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
+        // Hovered or clicked state: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '2';
+      } else if (correspondingMarker?.listing.isLiked) {
+        // Liked state: blue with white text and border
+        el.style.backgroundColor = '#5c9ac5';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '1';
+      } else if (correspondingMarker?.listing.isDisliked) {
+        // Disliked state: charcoal with white text and border
+        el.style.backgroundColor = '#404040';
+        el.style.color = '#FFFFFF';
+        el.style.border = '1px solid #FFFFFF';
+        el.style.zIndex = '0';
       } else {
-        setColor(marker, '#FF0000', '1'); // Default color
+        // Default state: white with charcoal text and border
+        el.style.backgroundColor = '#FFFFFF';
+        el.style.color = '#404040';
+        el.style.border = '1px solid #404040';
+        el.style.zIndex = '';
       }
     });
   };
 
-  // **Map Initialization and Event Handlers**
+  // **Map Initialization and Event Handlers** 
+  // Only initialize map once and never re-create it on prop changes
   useEffect(() => {
+    // Return early if we don't have what we need to initialize
     if (!mapContainerRef.current || !center) return;
-
+    if (mapRef.current) return; // Map already initialized
 
     let mapRenderZoom = currentZoom || zoom || 12;
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      center,
-      zoom: mapRenderZoom,
-      scrollZoom: true,
-    });
-    mapRef.current = map;
-    setMapLoaded(true);
+    try {
+      const map = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: 'https://tiles.openfreemap.org/styles/bright',
+        center,
+        zoom: mapRenderZoom,
+        scrollZoom: true,
+        failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
+      });
+      
+      mapRef.current = map;
+      setMapLoaded(true);
+      
+      // Handle map load errors
+      map.on('error', (e) => {
+        console.error('MapLibre GL error:', e);
+      });
 
-    const updateMarkers = () => {
-      const newZoom = map.getZoom();
-      console.log('NEW ZOOM', newZoom);
-      setCurrentZoom(newZoom);
-      updateVisibleMarkers();
-      const newClusters = createClusters(newZoom);
-      setClusters(newClusters);
-      renderMarkers(newClusters, newZoom);
-      updateMarkerColors();
-    };
-
-    map.on('load', updateMarkers);
-    map.on('zoomend', updateMarkers);
-    map.on('moveend', () => {
-      updateVisibleMarkers();
-      updateMarkers();
-    });
-    map.on('click', () => {
-      setSelectedMarker(null);
-      setClickedCluster(null);
-      if (!isFullscreen) {
-        setClickedMarkerId(null);
+      // Define updateMarkers function - used in multiple event handlers
+      const updateMarkers = (skipRender = false) => {
+        if (!mapRef.current) return;
+        
+        const newZoom = mapRef.current.getZoom();
+        setCurrentZoom(newZoom);
         updateVisibleMarkers();
-      }
-    });
+        
+        // Only render markers if not skipping render
+        if (!skipRender) {
+          renderMarkers();
+        }
+        
+        updateMarkerColors();
+      };
+      
+      // On initial load, just update the visible markers and render them
+      map.on('load', () => {
+        if (!mapRef.current) return; // Safety check
+        
+        updateVisibleMarkers();
+        const newZoom = mapRef.current.getZoom();
+        setCurrentZoom(newZoom);
+        renderMarkers();
+        updateMarkerColors();
+        
+        // Make sure we set this to true
+        setMapLoaded(true);
+      });
+      
+      // On zoom, update markers but preserve center
+      map.on('zoomend', () => {
+        // Get current center before updating
+        const currentCenter = mapRef.current!.getCenter();
+        updateMarkers();
+        // Re-center the map if needed - this ensures user interactions are preserved
+        if (mapRef.current) {
+          mapRef.current.setCenter(currentCenter);
+        }
+      });
+      
+      // On move, only update visible listings without re-rendering the whole map
+      map.on('moveend', () => {
+        if (!mapRef.current) return;
+        
+        // Report center change to parent
+        const newCenter = mapRef.current.getCenter();
+        onCenterChanged(newCenter.lng, newCenter.lat);
+        
+        // Update visible listings
+        updateVisibleMarkers();
+        // Update markers but skip rendering to prevent flashy behavior
+        updateMarkers(true);
+      });
+      
+      map.on('click', () => {
+        setSelectedMarker(null);
+        setClickedCluster(null);
+        if (!isFullscreen) {
+          setClickedMarkerId(null);
+          updateVisibleMarkers();
+        }
+      });
+      
+      // Add idle event for synchronized updates
+      map.on('idle', () => {
+        updateVisibleMarkers();
+      });
+    } catch (error) {
+      console.error('Failed to initialize map:', error);
+      // Set a flag to indicate map failed to load, so we can show fallback UI
+      setMapLoaded(false);
+    }
 
     return () => {
-      map.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, [center, zoom, isFullscreen]);
+  }, []); // Empty dependency array - only run once
+
+  // Update center when center prop changes without reinitializing the map
+  useEffect(() => {
+    if (!mapRef.current || !center || !mapLoaded) return;
+    
+    // Get the current view bounds
+    const bounds = mapRef.current.getBounds();
+    const currentCenter = mapRef.current.getCenter();
+    
+    // Check if we should update center based on:
+    // 1. This appears to be the initial load (center way off)
+    // 2. The center point is not within the current view bounds
+    // 3. User hasn't manually moved the map
+    const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 || 
+                         Math.abs(currentCenter.lat - center[1]) > 1;
+    
+    const centerPoint = new maplibregl.LngLat(center[0], center[1]);
+    const isOutsideView = !bounds.contains(centerPoint) && !mapRef.current.isMoving();
+    
+    // Only fly to a new center if one of the conditions is met
+    if (isInitialLoad || isOutsideView) {
+      // Use flyTo with a short duration to smoothly transition
+      mapRef.current.flyTo({
+        center: center,
+        duration: 500,
+        essential: true
+      });
+    }
+  }, [center, mapLoaded]); // Include center in dependencies to respond to prop changes
 
   // **State Sync Effects**
   useEffect(() => {
@@ -355,30 +369,83 @@ const SearchMap: React.FC<SearchMapProps> = ({
     setTimeout(updateVisibleMarkers, 300);
   }, [filters, searchRadius, queryParams]);
 
-  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen]);
+  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen, markers]);
 
+  // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {
-    if (!isFullscreen && mapRef.current) {
-      updateVisibleMarkers();
-      const newClusters = createClusters(currentZoom);
-      setClusters(newClusters);
-      renderMarkers(newClusters, currentZoom);
+    // Only proceed if we have a loaded map
+    if (!mapRef.current || !mapLoaded) return;
+    
+    // Don't re-render if map is being dragged
+    try {
+      if (mapRef.current.isEasing() || mapRef.current.isMoving() || mapRef.current.isZooming()) {
+        return;
+      }
+    } catch (e) {
+      console.error("Error checking map state:", e);
+      return;
     }
-  }, [isFullscreen, markers]);
+    
+    // Debounce marker updates to reduce flickering
+    const safelyUpdateMarkers = () => {
+      if (!mapRef.current) return;
+      
+      try {
+        updateVisibleMarkers();
+        renderMarkers();
+      } catch (e) {
+        console.error("Error updating markers:", e);
+      }
+    };
+    
+    // Use a longer delay to prevent too frequent updates
+    const timeoutId = setTimeout(safelyUpdateMarkers, 200);
+    return () => clearTimeout(timeoutId);
+  }, [markers, mapLoaded, currentZoom]);
+  
+  // Handle fullscreen toggle
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return;
+    
+    // Define a function to safely update the map after fullscreen toggle
+    const safelyHandleFullscreenChange = () => {
+      if (!mapRef.current) return;
+      
+      try {
+        if (!isFullscreen) {
+          updateVisibleMarkers();
+          renderMarkers();
+        }
+        
+        // Ensure map resizes properly after fullscreen toggle
+        mapRef.current.resize();
+      } catch (e) {
+        console.error("Error handling fullscreen change:", e);
+      }
+    };
+    
+    // Small delay to ensure the container has resized
+    const timeoutId = setTimeout(safelyHandleFullscreenChange, 200);
+    return () => clearTimeout(timeoutId);
+  }, [isFullscreen, mapLoaded, currentZoom]);
 
 
   const handleFullscreen = () => {
-    let newZoom = isFullscreen ? currentZoom - 1 : currentZoom + 1;
-    let maxZoom = Math.min(newZoom, 14);
-
-    setCurrentZoom(maxZoom);
+    // Don't adjust zoom when toggling fullscreen - just toggle the state
     setIsFullscreen(!isFullscreen);
+    
+    // Schedule a resize after the state change is processed
+    setTimeout(() => {
+      if (mapRef.current) {
+        mapRef.current.resize();
+      }
+    }, 50);
   }
 
   // **Render**
   return (
     <div style={{ height }} ref={mapContainerRef}>
-      {mapLoaded && (
+      {mapLoaded === true && mapRef.current && (
         <>
           <div className="absolute top-2 right-2 z-10 flex flex-col">
             <button onClick={() => mapRef.current?.zoomIn()} className="bg-white p-2 rounded-md shadow mb-1">
@@ -411,6 +478,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
+                  customSnapshot={markers[0]?.listing?.customSnapshot} // Pass the custom snapshot from markers
                 />
               </div>
               <div className="block md:hidden">
@@ -419,11 +487,31 @@ const SearchMap: React.FC<SearchMapProps> = ({
                   distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
                   onClose={() => setSelectedMarker(null)}
                   className="top-4 left-1/2 transform -translate-x-1/2 w-96"
+                  customSnapshot={markers[0]?.listing?.customSnapshot} // Pass the custom snapshot from markers
                 />
               </div>
             </>
           )}
         </>
+      )}
+      
+      {/* Fallback UI when map fails to load */}
+      {mapLoaded === false && (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
+          <div className="text-gray-700 mb-3">Unable to load map</div>
+          <div className="text-sm text-gray-500 max-w-md text-center px-4">
+            The map could not be loaded due to browser limitations. 
+            Please try using a different browser or device.
+          </div>
+          <div className="mt-6">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800"
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
