@@ -27,6 +27,7 @@ interface PreferencesData {
   furnished: boolean;
   unfurnished: boolean;
   utilitiesIncluded: boolean;
+  utilitiesNotIncluded: boolean;
   singleFamily: boolean;
   apartment: boolean;
   privateRoom: boolean;
@@ -119,6 +120,7 @@ export default function SetPreferencesClient({ tripId, updatePreferences }: SetP
         furnished: filters.furnished,
         unfurnished: filters.unfurnished,
         utilitiesIncluded: filters.utilities.includes('utilitiesIncluded'),
+        utilitiesNotIncluded: filters.utilities.includes('utilitiesNotIncluded'),
         singleFamily: filters.propertyTypes.includes('singleFamily'),
         apartment: filters.propertyTypes.includes('apartment'),
         privateRoom: filters.propertyTypes.includes('privateRoom'),
