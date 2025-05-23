@@ -11,6 +11,53 @@ import ListingCard from './desktop-map-click-card';
 
 // No longer using clustering
 
+// Threshold for switching to simple markers when there are too many listings
+const SIMPLE_MARKER_THRESHOLD = 30;
+
+// Simple marker color configuration (for >30 listings)
+const MARKER_COLORS = {
+  DEFAULT: {
+    primary: '#404040',   // Charcoal outer circle
+    secondary: '#FFFFFF'  // White inner circle
+  },
+  HOVER: {
+    primary: '#c68087',   // Pink outer circle
+    secondary: '#FFFFFF'  // White inner circle
+  },
+  LIKED: {
+    primary: '#000000',   // Black outer circle
+    secondary: '#5c9ac5'  // Blue inner circle
+  },
+  DISLIKED: {
+    primary: '#FFFFFF',   // White outer circle
+    secondary: '#404040'  // Charcoal inner circle
+  }
+};
+
+// Price bubble marker color configuration (for ≤30 listings)
+const PRICE_BUBBLE_COLORS = {
+  DEFAULT: {
+    background: '#FFFFFF',
+    text: '#404040',
+    border: '#404040'
+  },
+  HOVER: {
+    background: '#404040',
+    text: '#FFFFFF',
+    border: '#404040'
+  },
+  LIKED: {
+    background: '#c68087',
+    text: '#FFFFFF',
+    border: '#FFFFFF'
+  },
+  DISLIKED: {
+    background: '#404040',
+    text: '#FFFFFF',
+    border: '#FFFFFF'
+  }
+};
+
 interface SearchMapProps {
   center: [number, number] | null;
   markers?: MapMarker[];
@@ -104,79 +151,121 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
     
-    // Create a custom HTML element for the price bubble
-    const el = document.createElement('div');
-    el.className = 'price-bubble-marker';
+    const visibleMarkers = getVisibleMarkers();
+    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
     
-    // Determine marker color based on like/dislike status
-    const bgColor = marker.listing.isLiked ? '#5c9ac5' : 
-                   marker.listing.isDisliked ? '#404040' : '#FFFFFF';
-    
-    // Determine text color based on background color
-    const textColor = (bgColor === '#FFFFFF') ? '#404040' : '#FFFFFF';
-    
-    // Determine border color based on text color (inverse)
-    const borderColor = (textColor === '#FFFFFF') ? '#FFFFFF' : '#404040';
-    
-    // Format the price for display
-    const price = marker.listing.calculatedPrice || marker.listing.price;
-    const formattedPrice = price 
-      ? `$${price.toLocaleString()}`
-      : 'N/A';
-    
-    // Set the CSS for the marker
-    el.style.cssText = `
-      padding: 6px 10px;
-      border-radius: 16px;
-      background-color: ${bgColor};
-      color: ${textColor};
-      font-weight: bold;
-      font-size: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      min-width: 40px;
-      text-align: center;
-      border: 1px solid ${borderColor};
-    `;
-    
-    // Set the inner HTML with the price
-    el.innerHTML = formattedPrice;
-    
-    console.log(`Creating price bubble marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, price: ${formattedPrice}`);
-    
-    const mapMarker = new maplibregl.Marker({ 
-      element: el,
-      anchor: 'center'
-    })
-      .setLngLat([marker.lng, marker.lat])
-      .addTo(mapRef.current);
-    
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (isFullscreen) {
-        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
-      } else {
-        setClickedMarkerId(curr => {
-          if (curr === marker.listing.id) {
-            updateVisibleMarkers();
-            return null;
-          }
-          useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
-          return marker.listing.id;
-        });
+    if (shouldUseSimpleMarkers) {
+      // Use simple black MapLibre marker with configurable inner circle for high-density views
+      const mapMarker = new maplibregl.Marker({ 
+        color: MARKER_COLORS.DEFAULT.primary,
+        scale: 0.7 // Make them smaller
+      })
+        .setLngLat([marker.lng, marker.lat])
+        .addTo(mapRef.current);
+      
+      const markerElement = mapMarker.getElement();
+      markerElement.style.cursor = 'pointer';
+      
+      // Customize the inner circle to default color
+      const innerCircle = markerElement.querySelector('svg circle:last-child');
+      if (innerCircle) {
+        innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
       }
-    });
-    markersRef.current.set(marker.listing.id, mapMarker);
+      markerElement.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isFullscreen) {
+          setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+        } else {
+          setClickedMarkerId(curr => {
+            if (curr === marker.listing.id) {
+              updateVisibleMarkers();
+              return null;
+            }
+            useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+            return marker.listing.id;
+          });
+        }
+      });
+      markersRef.current.set(marker.listing.id, mapMarker);
+    } else {
+      // Use custom price bubble markers for normal density
+      const el = document.createElement('div');
+      el.className = 'price-bubble-marker';
+      
+      // Determine marker color based on like/dislike status for price bubbles
+      let colors;
+      if (marker.listing.isLiked) {
+        colors = PRICE_BUBBLE_COLORS.LIKED;
+      } else if (marker.listing.isDisliked) {
+        colors = PRICE_BUBBLE_COLORS.DISLIKED;
+      } else {
+        colors = PRICE_BUBBLE_COLORS.DEFAULT;
+      }
+      const { background: bgColor, text: textColor, border: borderColor } = colors;
+      
+      // Format the price for display
+      const price = marker.listing.calculatedPrice || marker.listing.price;
+      const formattedPrice = price 
+        ? `$${price.toLocaleString()}`
+        : 'N/A';
+      
+      // Set the CSS for the marker
+      el.style.cssText = `
+        padding: 6px 10px;
+        border-radius: 16px;
+        background-color: ${bgColor};
+        color: ${textColor};
+        font-weight: bold;
+        font-size: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        min-width: 40px;
+        text-align: center;
+        border: 1px solid ${borderColor};
+      `;
+      
+      // Set the inner HTML with the price
+      el.innerHTML = formattedPrice;
+      
+      console.log(`Creating price bubble marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, price: ${formattedPrice}`);
+      
+      const mapMarker = new maplibregl.Marker({ 
+        element: el,
+        anchor: 'center'
+      })
+        .setLngLat([marker.lng, marker.lat])
+        .addTo(mapRef.current);
+      
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isFullscreen) {
+          setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+        } else {
+          setClickedMarkerId(curr => {
+            if (curr === marker.listing.id) {
+              updateVisibleMarkers();
+              return null;
+            }
+            useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+            return marker.listing.id;
+          });
+        }
+      });
+      markersRef.current.set(marker.listing.id, mapMarker);
+    }
   };
 
   // No longer using cluster markers
 
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
+    const visibleMarkers = getVisibleMarkers();
+    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
+    
     markersRef.current.forEach((marker, id) => {
       const el = marker.getElement();
       const correspondingMarker = markers.find(m => m.listing.id === id);
@@ -186,36 +275,57 @@ const SearchMap: React.FC<SearchMapProps> = ({
         console.log(`Updating marker ${id}, isLiked: ${correspondingMarker.listing.isLiked}`);
       }
       
-      // Handle different states for the markers
+      // Handle simple markers (MapLibre markers when >30 listings)
+      if (shouldUseSimpleMarkers) {
+        const innerCircle = el.querySelector('svg circle:last-child');
+        const markerShape = el.querySelector('svg g:nth-child(2)');
+        
+        if (!markerShape || !innerCircle) return;
+        
+        if (isFullscreen && selectedMarker?.listing.id === id) {
+          markerShape.setAttribute('fill', MARKER_COLORS.HOVER.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.HOVER.secondary);
+        } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
+          markerShape.setAttribute('fill', MARKER_COLORS.HOVER.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.HOVER.secondary);
+        } else if (correspondingMarker?.listing.isLiked) {
+          markerShape.setAttribute('fill', MARKER_COLORS.LIKED.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.LIKED.secondary);
+        } else if (correspondingMarker?.listing.isDisliked) {
+          markerShape.setAttribute('fill', MARKER_COLORS.DISLIKED.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.DISLIKED.secondary);
+        } else {
+          markerShape.setAttribute('fill', MARKER_COLORS.DEFAULT.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
+        }
+        return;
+      }
+      
+      // Handle custom price bubble markers (when ≤30 listings)
       if (isFullscreen && selectedMarker?.listing.id === id) {
-        // Selected state in fullscreen: charcoal with white text and border
-        el.style.backgroundColor = '#404040';
-        el.style.color = '#FFFFFF';
-        el.style.border = '1px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
+        el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
       } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
-        // Hovered or clicked state: charcoal with white text and border
-        el.style.backgroundColor = '#404040';
-        el.style.color = '#FFFFFF';
-        el.style.border = '1px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
+        el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
-        // Liked state: blue with white text and border
-        el.style.backgroundColor = '#5c9ac5';
-        el.style.color = '#FFFFFF';
-        el.style.border = '1px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.LIKED.background;
+        el.style.color = PRICE_BUBBLE_COLORS.LIKED.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.LIKED.border}`;
         el.style.zIndex = '1';
       } else if (correspondingMarker?.listing.isDisliked) {
-        // Disliked state: charcoal with white text and border
-        el.style.backgroundColor = '#404040';
-        el.style.color = '#FFFFFF';
-        el.style.border = '1px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.DISLIKED.background;
+        el.style.color = PRICE_BUBBLE_COLORS.DISLIKED.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.DISLIKED.border}`;
         el.style.zIndex = '0';
       } else {
-        // Default state: white with charcoal text and border
-        el.style.backgroundColor = '#FFFFFF';
-        el.style.color = '#404040';
-        el.style.border = '1px solid #404040';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
+        el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '';
       }
     });

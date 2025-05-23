@@ -9,6 +9,53 @@ import ListingCard from './mobile-map-click-listing-card';
 
 // No longer using clustering
 
+// Threshold for switching to simple markers when there are too many listings
+const SIMPLE_MARKER_THRESHOLD = 30;
+
+// Simple marker color configuration (for >30 listings)
+const MARKER_COLORS = {
+  DEFAULT: {
+    primary: '#404040',   // Charcoal outer circle
+    secondary: '#404040'  // Charcoal inner circle
+  },
+  HOVER: {
+    primary: '#FFFFFF',   // White outer circle
+    secondary: '#404040'  // Charcoal inner circle
+  },
+  LIKED: {
+    primary: '#000000',   // Black outer circle
+    secondary: '#5c9ac5'  // Blue inner circle
+  },
+  DISLIKED: {
+    primary: '#FFFFFF',   // White outer circle
+    secondary: '#404040'  // Charcoal inner circle
+  }
+};
+
+// Price bubble marker color configuration (for ≤30 listings)
+const PRICE_BUBBLE_COLORS = {
+  DEFAULT: {
+    background: '#FFFFFF',
+    text: '#404040',
+    border: '#404040'
+  },
+  HOVER: {
+    background: '#404040',
+    text: '#FFFFFF',
+    border: '#FFFFFF'
+  },
+  LIKED: {
+    background: '#5c9ac5',
+    text: '#FFFFFF',
+    border: '#FFFFFF'
+  },
+  DISLIKED: {
+    background: '#404040',
+    text: '#FFFFFF',
+    border: '#FFFFFF'
+  }
+};
+
 interface SearchMapProps {
   center: [number, number] | null;
   markers?: MapMarker[];
@@ -71,57 +118,89 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const createSingleMarker = (marker: MapMarker) => {
     if (!mapRef.current) return;
     
-    // Create a custom HTML element for the price bubble
-    const el = document.createElement('div');
-    el.className = 'price-bubble-marker';
+    const visibleMarkers = getVisibleMarkers();
+    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
     
-    // Set initial color based on liked status (white with charcoal border by default)
-    const initialColor = marker.listing.isLiked ? '#5c9ac5' : '#FFFFFF';
-    const textColor = marker.listing.isLiked ? '#FFFFFF' : '#404040'; // Charcoal text for default
-    
-    console.log(`Mobile: Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
-    
-    // Format the price for display if available
-    const price = marker.listing.calculatedPrice || marker.listing.price;
-    const formattedPrice = price 
-      ? `$${price.toLocaleString()}`
-      : 'N/A';
-    
-    // Set the CSS for the marker
-    el.style.cssText = `
-      padding: 6px 10px;
-      border-radius: 16px;
-      background-color: ${initialColor};
-      color: ${textColor};
-      font-weight: bold;
-      font-size: 12px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      min-width: 40px;
-      text-align: center;
-      border: 2px solid ${textColor === '#FFFFFF' ? '#404040' : '#FFFFFF'};
-    `;
-    
-    // Set the inner HTML with the price
-    el.innerHTML = formattedPrice;
-    
-    const mapMarker = new maplibregl.Marker({ 
-      element: el,
-      anchor: 'center'
-    })
-      .setLngLat([marker.lng, marker.lat])
-      .addTo(mapRef.current);
-    
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
-    });
-    
-    markersRef.current.set(marker.listing.id, mapMarker);
+    if (shouldUseSimpleMarkers) {
+      // Use simple black MapLibre marker with configurable inner circle for high-density views
+      const mapMarker = new maplibregl.Marker({ 
+        color: MARKER_COLORS.DEFAULT.primary,
+        scale: 0.7 // Make them smaller
+      })
+        .setLngLat([marker.lng, marker.lat])
+        .addTo(mapRef.current);
+      
+      const markerElement = mapMarker.getElement();
+      markerElement.style.cursor = 'pointer';
+      
+      // Customize the inner circle to default color
+      const innerCircle = markerElement.querySelector('svg circle:last-child');
+      if (innerCircle) {
+        innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
+      }
+      markerElement.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+      });
+      markersRef.current.set(marker.listing.id, mapMarker);
+    } else {
+      // Use custom price bubble markers for normal density
+      const el = document.createElement('div');
+      el.className = 'price-bubble-marker';
+      
+      // Set initial color based on liked status for price bubbles
+      let colors;
+      if (marker.listing.isLiked) {
+        colors = PRICE_BUBBLE_COLORS.LIKED;
+      } else {
+        colors = PRICE_BUBBLE_COLORS.DEFAULT;
+      }
+      const { background: initialColor, text: textColor, border: borderColor } = colors;
+      
+      console.log(`Mobile: Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
+      
+      // Format the price for display if available
+      const price = marker.listing.calculatedPrice || marker.listing.price;
+      const formattedPrice = price 
+        ? `$${price.toLocaleString()}`
+        : 'N/A';
+      
+      // Set the CSS for the marker
+      el.style.cssText = `
+        padding: 6px 10px;
+        border-radius: 16px;
+        background-color: ${initialColor};
+        color: ${textColor};
+        font-weight: bold;
+        font-size: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        min-width: 40px;
+        text-align: center;
+        border: 2px solid ${borderColor};
+      `;
+      
+      // Set the inner HTML with the price
+      el.innerHTML = formattedPrice;
+      
+      const mapMarker = new maplibregl.Marker({ 
+        element: el,
+        anchor: 'center'
+      })
+        .setLngLat([marker.lng, marker.lat])
+        .addTo(mapRef.current);
+      
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+      });
+      
+      markersRef.current.set(marker.listing.id, mapMarker);
+    }
   };
 
   // No longer using cluster markers
@@ -139,27 +218,52 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
 
   // Function to update marker colors based on state
   const updateMarkerColors = () => {
+    const visibleMarkers = getVisibleMarkers();
+    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
+    
     markersRef.current.forEach((marker, id) => {
       const el = marker.getElement();
       const correspondingMarker = markers.find(m => m.listing.id === id);
       
+      // Handle simple markers (MapLibre markers when >30 listings)
+      if (shouldUseSimpleMarkers) {
+        const innerCircle = el.querySelector('svg circle:last-child');
+        const markerShape = el.querySelector('svg g:nth-child(2)');
+        
+        if (!markerShape || !innerCircle) return;
+        
+        if (selectedMarker?.listing.id === id) {
+          markerShape.setAttribute('fill', MARKER_COLORS.HOVER.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.HOVER.secondary);
+        } else if (correspondingMarker?.listing.isLiked) {
+          markerShape.setAttribute('fill', MARKER_COLORS.LIKED.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.LIKED.secondary);
+        } else if (correspondingMarker?.listing.isDisliked) {
+          markerShape.setAttribute('fill', MARKER_COLORS.DISLIKED.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.DISLIKED.secondary);
+        } else {
+          markerShape.setAttribute('fill', MARKER_COLORS.DEFAULT.primary);
+          innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
+        }
+        return;
+      }
+      
+      // Handle custom price bubble markers (when ≤30 listings)
       if (selectedMarker?.listing.id === id) {
-        // Selected state: charcoal background with white text and border
-        el.style.backgroundColor = '#404040';
-        el.style.color = '#FFFFFF';
-        el.style.border = '2px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
+        el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
+        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
-        // Liked state: blue background with white text and border
-        el.style.backgroundColor = '#5c9ac5';
-        el.style.color = '#FFFFFF';
-        el.style.border = '2px solid #FFFFFF';
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.LIKED.background;
+        el.style.color = PRICE_BUBBLE_COLORS.LIKED.text;
+        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.LIKED.border}`;
         el.style.zIndex = '1';
       } else {
-        // Default state: white background with charcoal text and border
-        el.style.backgroundColor = '#FFFFFF';
-        el.style.color = '#404040';
-        el.style.border = '2px solid #404040';
+        // Default state
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
+        el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
+        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '';
       }
     });
@@ -253,7 +357,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       map.on('idle', () => {
         // Safe time to update markers when the map is not actively changing
         if (mapRef.current && !mapRef.current.isMoving() && !mapRef.current.isZooming()) {
-          const newClusters = createClusters(mapRef.current.getZoom());
+          // No longer using clustering, just update marker colors
           updateMarkerColors();
         }
       });
@@ -332,8 +436,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       if (!mapRef.current) return;
       
       try {
-        const newClusters = createClusters(currentZoom);
-        renderMarkers(newClusters);
+        renderMarkers();
         updateMarkerColors();
       } catch (e) {
         console.error("Error updating mobile map markers:", e);
