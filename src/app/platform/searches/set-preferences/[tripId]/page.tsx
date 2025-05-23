@@ -9,6 +9,7 @@ interface PreferencesData {
   furnished: boolean;
   unfurnished: boolean;
   utilitiesIncluded: boolean;
+  utilitiesNotIncluded: boolean;
   singleFamily: boolean;
   apartment: boolean;
   privateRoom: boolean;
