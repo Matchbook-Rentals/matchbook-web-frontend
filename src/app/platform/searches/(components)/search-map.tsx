@@ -140,7 +140,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       user-select: none;
       min-width: 40px;
       text-align: center;
-      border: 2px solid ${borderColor};
+      border: 1px solid ${borderColor};
     `;
     
     // Set the inner HTML with the price
