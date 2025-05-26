@@ -19,6 +19,10 @@ export const fetchListingsFromDb = async () => {
         bedrooms: true,
         listingImages: true,
       },
+      take: 100,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     return listings;
   } catch (error) {
