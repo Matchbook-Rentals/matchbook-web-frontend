@@ -33,6 +33,10 @@ const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
         unavailablePeriods: true,
         bookings: true,
       },
+      take: 100,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     const updatedListings = listings.map((listing) => {
       listing.user = user;
