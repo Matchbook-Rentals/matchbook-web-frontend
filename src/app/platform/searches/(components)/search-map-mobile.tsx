@@ -478,8 +478,8 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
               distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
               onClose={() => setSelectedMarker(null)}
               className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
-              // Pass the snapshot from the marker data, or the one from this component's hook
-              customSnapshot={selectedMarker.listing.customSnapshot || listingsSnapshot}
+              // Pass the local, up-to-date listingsSnapshot from SearchMapMobile
+              customSnapshot={listingsSnapshot}
             />
           )}
           {/* Zoom controls */}
