@@ -144,11 +144,29 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // State to control map fullscreen view
   const [isFullscreen, setIsFullscreen] = useState(false);
   
+  const [isClient, setIsClient] = useState(false);
+  const [isDesktopView, setIsDesktopView] = useState(false);
   // State to track clicked marker ID
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
+
+  useEffect(() => {
+    setIsClient(true);
+    const checkScreenSize = () => {
+      setIsDesktopView(window.innerWidth >= 768); // Tailwind's 'md' breakpoint
+    };
+
+    checkScreenSize(); // Initial check
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
+
 
   useEffect(() => {
     const setHeight = () => {
@@ -345,18 +363,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         )}
 
         {/* Mobile-only Map button */}
-        <Button
-          onClick={() => setIsSlideMapOpen(true)}
-          className="fixed md:hidden text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
-        >
-          <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
-          Map
-        </Button>
+        {isClient && !isDesktopView && (
+          <Button
+            onClick={() => setIsSlideMapOpen(true)}
+            className="fixed text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+          >
+            <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
+            Map
+          </Button>
+        )}
 
         {/* Map container for Desktop - adjust width based on fullscreen state */}
-        <div className={`w-full hidden md:block ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
-          <SearchMap
-            center={[mapCenter.lng, mapCenter.lat]}
+        {isClient && isDesktopView && (
+          <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
+            <SearchMap
+              center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
             height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
             markers={markers}
@@ -370,13 +391,15 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             onClickedMarkerChange={setClickedMarkerId}
           />
         </div>
+        )}
       </div>
 
       {/* Mobile Slide-Up Map Overlay */}
+      {isClient && !isDesktopView && (
       <AnimatePresence>
         {isSlideMapOpen && (
           <motion.div
-            className="fixed top-0 left-0 w-full h-full bg-white z-50 md:hidden"
+            className="fixed top-0 left-0 w-full h-full bg-white z-50"
             variants={slideUpVariants}
             initial="initial"
             animate="animate"
@@ -397,6 +420,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      )}
     </>
   );
 };
