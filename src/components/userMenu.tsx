@@ -97,15 +97,15 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }, [isSignedIn, userRole]);
 
-  const handleImageUpdate = useCallback(() => {
-    const currentTime = Date.now();
-    if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
-      updateUserImage();
-      setLastUpdateTime(currentTime);
-      setCanUpdate(false);
-      setTimeout(() => setCanUpdate(true), 60000); // One minute cooldown
-    }
-  }, [canUpdate, lastUpdateTime]);
+  // const handleImageUpdate = useCallback(() => {
+  //   const currentTime = Date.now();
+  //   if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
+  //     updateUserImage();
+  //     setLastUpdateTime(currentTime);
+  //     setCanUpdate(false);
+  //     setTimeout(() => setCanUpdate(true), 60000); // One minute cooldown
+  //   }
+  // }, [canUpdate, lastUpdateTime]);
   
   // Periodically update notifications and user image
   useEffect(() => {
@@ -115,14 +115,14 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
     // Set up periodic updates
     const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
-    const imageUpdateIntervalId = setInterval(handleImageUpdate, IMAGE_UPDATE_TIME_LIMIT);
+    // const imageUpdateIntervalId = setInterval(handleImageUpdate, IMAGE_UPDATE_TIME_LIMIT);
 
     // Clean up on unmount
     return () => {
       clearInterval(notificationIntervalId);
-      clearInterval(imageUpdateIntervalId);
+      // clearInterval(imageUpdateIntervalId);
     };
-  }, [fetchNotifications, handleImageUpdate]);
+  }, [fetchNotifications]);
 
 
   const handleNotificationClick = async (notificationId: string) => {
