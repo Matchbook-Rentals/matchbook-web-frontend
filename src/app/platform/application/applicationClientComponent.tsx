@@ -290,7 +290,7 @@ export default function ApplicationClientComponent({
 
 
   return (
-    <div className={PAGE_MARGIN}>
+    <div className={`${PAGE_MARGIN} mt-4`}>
 
       {isMobile ? (
         <MobileApplicationEdit application={application} />
