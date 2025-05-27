@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { RejectIcon } from '@/components/icons';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import ListingCard from './mobile-map-click-listing-card';
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot'; // Import the snapshot hook
 
 // No longer using clustering
 
@@ -14,7 +15,7 @@ interface MarkerStyles {
   MARKER_COLORS: {
     DEFAULT: { primary: string; secondary: string };
     HOVER: { primary: string; secondary: string };
-    LIKED: { primary: string; secondary: string };
+    LIKED: { primary: string; secondary: string }; // LIKED may not be used directly for marker body, but for icon
     DISLIKED: { primary: string; secondary: string };
   };
   PRICE_BUBBLE_COLORS: {
@@ -60,14 +61,15 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
+  // clusterMarkersRef is not used but kept to minimize structural diff for now
   const clusterMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
-  const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const { shouldPanTo, clearPanTo } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
-  const [clickedCluster, setClickedCluster] = useState<null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const markersDataRef = useRef<MapMarker[]>(markers);
+
+  const listingsSnapshot = useListingsSnapshot(); // Use the snapshot hook
 
   // Local calculateDistance function for listing card distance display
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -92,317 +94,253 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   /** Get visible markers within the current bounds */
   const getVisibleMarkers = (): MapMarker[] => {
     if (!mapRef.current) return [];
-    
     const bounds = mapRef.current.getBounds();
-    return markers.filter(marker => 
+    // Use markersDataRef.current as it's updated with the prop
+    return markersDataRef.current.filter(marker =>
       bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat))
     );
   };
 
   // Function to create a single marker
-  const createSingleMarker = (marker: MapMarker) => {
+  const createSingleMarker = (markerData: MapMarker) => {
     if (!mapRef.current) return;
-    
+
     const visibleMarkers = getVisibleMarkers();
     const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
-    
+
+    const isSelected = selectedMarker?.listing.id === markerData.listing.id;
+    const isLiked = listingsSnapshot.isLiked(markerData.listing.id);
+    // isDisliked is not directly used for initial simple marker color, but for price bubbles and updates
+    // const isDisliked = listingsSnapshot.isDisliked(markerData.listing.id);
+
+
     if (shouldUseSimpleMarkers) {
-      // Check if this marker is currently selected (mobile equivalent of hover)
-      const isSelected = selectedMarker?.listing.id === marker.listing.id;
-      
-      // Use simple black MapLibre marker with configurable inner circle for high-density views
-      const mapMarker = new maplibregl.Marker({ 
+      const mapMarkerInstance = new maplibregl.Marker({
         color: isSelected ? markerStyles.MARKER_COLORS.HOVER.primary : markerStyles.MARKER_COLORS.DEFAULT.primary,
-        scale: 0.7 // Make them smaller
+        scale: 0.7
       })
-        .setLngLat([marker.lng, marker.lat])
+        .setLngLat([markerData.lng, markerData.lat])
         .addTo(mapRef.current);
-      
-      const markerElement = mapMarker.getElement();
+
+      const markerElement = mapMarkerInstance.getElement();
       markerElement.style.cursor = 'pointer';
       markerElement.style.overflow = 'visible';
-      
-      // Customize the inner circle based on state
+
       const innerCircle = markerElement.querySelector('svg circle:last-child');
       if (innerCircle) {
         innerCircle.setAttribute('fill', isSelected ? markerStyles.MARKER_COLORS.HOVER.secondary : markerStyles.MARKER_COLORS.DEFAULT.secondary);
       }
-      
-      // Add heart icon if liked
-      if (marker.listing.isLiked) {
+
+      if (isLiked) {
         const svg = markerElement.querySelector('svg');
         if (svg) {
           svg.style.overflow = 'visible';
-          // Create and add heart icon
           if (markerStyles.HEART_ICON.withBackground) {
             const heartGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             heartGroup.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform);
             heartGroup.setAttribute('class', 'marker-heart-icon');
             
-            // Add white background circle for contrast
             const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            bgCircle.setAttribute('cx', '0');
-            bgCircle.setAttribute('cy', '0');
+            bgCircle.setAttribute('cx', '0'); bgCircle.setAttribute('cy', '0');
             bgCircle.setAttribute('r', markerStyles.HEART_ICON.backgroundCircle.radius);
             bgCircle.setAttribute('fill', markerStyles.HEART_ICON.backgroundCircle.fill);
             bgCircle.setAttribute('stroke', markerStyles.HEART_ICON.backgroundCircle.stroke);
             bgCircle.setAttribute('stroke-width', markerStyles.HEART_ICON.backgroundCircle.strokeWidth);
             
-            // Add heart path
             const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             heartPath.setAttribute('d', 'M0 -2.5C-1.5 -4.5 -4.5 -3.5 -4.5 -1.5C-4.5 0.5 0 4.5 0 4.5C0 4.5 4.5 0.5 4.5 -1.5C4.5 -3.5 1.5 -4.5 0 -2.5');
             heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
             heartPath.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerScale);
             
-            heartGroup.appendChild(bgCircle);
-            heartGroup.appendChild(heartPath);
+            heartGroup.appendChild(bgCircle); heartGroup.appendChild(heartPath);
             svg.appendChild(heartGroup);
           } else {
-            // Heart without background
             const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             heartPath.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
             heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
             heartPath.setAttribute('transform', `${markerStyles.HEART_ICON.simpleMarkerTransform} scale(0.5)`);
             heartPath.setAttribute('class', 'marker-heart-icon');
             heartPath.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
-            
             svg.appendChild(heartPath);
           }
         }
       }
       markerElement.addEventListener('click', (e) => {
         e.stopPropagation();
-        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+        setSelectedMarker(prev => (prev?.listing.id === markerData.listing.id ? null : markerData));
       });
-      markersRef.current.set(marker.listing.id, mapMarker);
+      markersRef.current.set(markerData.listing.id, mapMarkerInstance);
     } else {
-      // Use custom price bubble markers for normal density
+      // Custom price bubble markers
       const el = document.createElement('div');
       el.className = 'price-bubble-marker';
-      
-      // Set initial color for price bubbles based on selection state
-      const isSelected = selectedMarker?.listing.id === marker.listing.id;
-      const colors = isSelected ? markerStyles.PRICE_BUBBLE_COLORS.HOVER : markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
-      const { background: initialColor, text: textColor, border: borderColor } = colors;
-      
-      
-      // Format the price for display if available
-      const price = marker.listing.calculatedPrice || marker.listing.price;
-      const formattedPrice = (price !== null && price !== undefined) 
+
+      const isDisliked = listingsSnapshot.isDisliked(markerData.listing.id);
+      let colors;
+      if (isSelected) {
+        colors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
+      } else if (isDisliked) {
+        colors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
+      } else {
+        colors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
+      }
+      const { background: bgColor, text: textColor, border: borderColor } = colors;
+
+      const price = markerData.listing.calculatedPrice || markerData.listing.price;
+      const formattedPrice = (price !== null && price !== undefined)
         ? `$${price.toLocaleString()}`
         : 'N/A';
-      
-      // Set the CSS for the marker
+
       el.style.cssText = `
-        padding: 6px 10px;
-        border-radius: 16px;
-        background-color: ${initialColor};
-        color: ${textColor};
-        font-weight: bold;
-        font-size: 12px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        user-select: none;
-        min-width: 40px;
-        text-align: center;
-        border: 2px solid ${borderColor};
-        z-index: ${isSelected ? '2' : ''};
-        overflow: visible;
+        padding: 6px 10px; border-radius: 16px; background-color: ${bgColor};
+        color: ${textColor}; font-weight: bold; font-size: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3); display: flex; justify-content: center;
+        align-items: center; cursor: pointer; user-select: none; min-width: 40px;
+        text-align: center; border: 1px solid ${borderColor}; /* Mobile uses 1px border from example */
+        z-index: ${isSelected ? '2' : (isDisliked ? '0' : '1')}; overflow: visible;
       `;
-      
-      // Set the inner HTML with the price and heart if liked
-      if (marker.listing.isLiked) {
+
+      if (isLiked) {
         el.innerHTML = `
           <span style="position: relative;">
             ${formattedPrice}
-            <svg style="
-              position: absolute;
-              top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
-              right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
-              width: ${markerStyles.HEART_ICON.size};
-              height: ${markerStyles.HEART_ICON.size};
-              fill: ${markerStyles.HEART_ICON.color};
-              filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
-            " viewBox="0 0 16 16">
+            <svg style="position: absolute; top: ${markerStyles.HEART_ICON.priceBubblePosition.top}; right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+                      width: ${markerStyles.HEART_ICON.size}; height: ${markerStyles.HEART_ICON.size}; fill: ${markerStyles.HEART_ICON.color};
+                      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
             </svg>
-          </span>
-        `;
+          </span>`;
       } else {
         el.innerHTML = formattedPrice;
       }
-      
-      const mapMarker = new maplibregl.Marker({ 
-        element: el,
-        anchor: 'center'
-      })
-        .setLngLat([marker.lng, marker.lat])
+
+      const mapMarkerInstance = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([markerData.lng, markerData.lat])
         .addTo(mapRef.current);
-      
+
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
+        setSelectedMarker(prev => (prev?.listing.id === markerData.listing.id ? null : markerData));
       });
-      
-      markersRef.current.set(marker.listing.id, mapMarker);
+      markersRef.current.set(markerData.listing.id, mapMarkerInstance);
     }
   };
 
-  // No longer using cluster markers
-
-  // Function to render markers
   const renderMarkers = () => {
     if (!mapRef.current) return;
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current.clear();
-    clusterMarkersRef.current.clear(); // Keep the ref but don't use it
+    clusterMarkersRef.current.clear(); 
 
-    // Get visible markers and render them individually
     markersDataRef.current.forEach(marker => createSingleMarker(marker));
+    updateMarkerColors(); // Ensure colors are correct after re-render
   };
 
-  // Function to update marker colors based on state
   const updateMarkerColors = () => {
+    if (!mapRef.current) return;
     const visibleMarkers = getVisibleMarkers();
     const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
-    
-    markersRef.current.forEach((marker, id) => {
-      const el = marker.getElement();
-      const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
-      
-      // Handle simple markers (MapLibre markers when >30 listings)
+
+    markersRef.current.forEach((mapLibreMarker, id) => {
+      const el = mapLibreMarker.getElement();
+      const correspondingMarkerData = markersDataRef.current.find(m => m.listing.id === id);
+      if (!correspondingMarkerData) return;
+
+      const isSelected = selectedMarker?.listing.id === id;
+      const isLiked = listingsSnapshot.isLiked(id);
+      const isDisliked = listingsSnapshot.isDisliked(id);
+
       if (shouldUseSimpleMarkers) {
         const svg = el.querySelector('svg');
         const innerCircle = el.querySelector('svg circle:last-child');
-        const markerShape = el.querySelector('svg g:nth-child(2)');
-        
+        const markerShape = el.querySelector('svg g:nth-child(2)'); // Path for the main marker body
+
         if (!markerShape || !innerCircle || !svg) return;
-        
-        // Ensure SVG has overflow visible
         svg.style.overflow = 'visible';
-        
-        // Update marker colors based on state
-        if (selectedMarker?.listing.id === id) {
+
+        if (isSelected) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
-        } else if (correspondingMarker?.listing.isDisliked) {
+        } else if (isDisliked) { // Disliked takes precedence over default if not selected
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.secondary);
         } else {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.secondary);
         }
-        
-        // Handle heart icon for liked markers
-        // Use a class to reliably identify heart elements
+
         const existingHeart = svg.querySelector('.marker-heart-icon');
-        
-        if (correspondingMarker?.listing.isLiked) {
-          // Add heart if it doesn't exist
+        if (isLiked) {
           if (!existingHeart) {
             if (markerStyles.HEART_ICON.withBackground) {
-              const heartGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-              heartGroup.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform);
-              heartGroup.setAttribute('class', 'marker-heart-icon');
-              
-              // Add white background circle for contrast
-              const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-              bgCircle.setAttribute('cx', '0');
-              bgCircle.setAttribute('cy', '0');
-              bgCircle.setAttribute('r', markerStyles.HEART_ICON.backgroundCircle.radius);
-              bgCircle.setAttribute('fill', markerStyles.HEART_ICON.backgroundCircle.fill);
-              bgCircle.setAttribute('stroke', markerStyles.HEART_ICON.backgroundCircle.stroke);
-              bgCircle.setAttribute('stroke-width', markerStyles.HEART_ICON.backgroundCircle.strokeWidth);
-              
-              // Add heart path
-              const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-              heartPath.setAttribute('d', 'M0 -2.5C-1.5 -4.5 -4.5 -3.5 -4.5 -1.5C-4.5 0.5 0 4.5 0 4.5C0 4.5 4.5 0.5 4.5 -1.5C4.5 -3.5 1.5 -4.5 0 -2.5');
-              heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
-              heartPath.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerScale);
-              
-              heartGroup.appendChild(bgCircle);
-              heartGroup.appendChild(heartPath);
-              svg.appendChild(heartGroup);
+                const heartGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                heartGroup.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform);
+                heartGroup.setAttribute('class', 'marker-heart-icon');
+                const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                bgCircle.setAttribute('cx', '0'); bgCircle.setAttribute('cy', '0');
+                bgCircle.setAttribute('r', markerStyles.HEART_ICON.backgroundCircle.radius);
+                bgCircle.setAttribute('fill', markerStyles.HEART_ICON.backgroundCircle.fill);
+                bgCircle.setAttribute('stroke', markerStyles.HEART_ICON.backgroundCircle.stroke);
+                bgCircle.setAttribute('stroke-width', markerStyles.HEART_ICON.backgroundCircle.strokeWidth);
+                const heartPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                heartPathElement.setAttribute('d', 'M0 -2.5C-1.5 -4.5 -4.5 -3.5 -4.5 -1.5C-4.5 0.5 0 4.5 0 4.5C0 4.5 4.5 0.5 4.5 -1.5C4.5 -3.5 1.5 -4.5 0 -2.5');
+                heartPathElement.setAttribute('fill', markerStyles.HEART_ICON.color);
+                heartPathElement.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerScale);
+                heartGroup.appendChild(bgCircle); heartGroup.appendChild(heartPathElement);
+                svg.appendChild(heartGroup);
             } else {
-              // Heart without background
-              const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-              heartPath.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
-              heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
-              heartPath.setAttribute('transform', `${markerStyles.HEART_ICON.simpleMarkerTransform} scale(0.5)`);
-              heartPath.setAttribute('class', 'marker-heart-icon');
-              heartPath.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
-              
-              svg.appendChild(heartPath);
+                const heartPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                heartPathElement.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
+                heartPathElement.setAttribute('fill', markerStyles.HEART_ICON.color);
+                heartPathElement.setAttribute('transform', `${markerStyles.HEART_ICON.simpleMarkerTransform} scale(0.5)`);
+                heartPathElement.setAttribute('class', 'marker-heart-icon');
+                heartPathElement.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
+                svg.appendChild(heartPathElement);
             }
           }
         } else {
-          // Remove heart if it exists and not liked
-          if (existingHeart) {
-            existingHeart.remove();
-          }
+          if (existingHeart) existingHeart.remove();
         }
-        
-        return;
-      }
-      
-      // Handle custom price bubble markers (when ≤30 listings)
-      if (selectedMarker?.listing.id === id) {
-        el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
-        el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
-        el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
-        el.style.zIndex = '2';
-      } else if (correspondingMarker?.listing.isLiked) {
-        // For mobile, when selected (equivalent to hover), maintain the hover state
-        if (selectedMarker?.listing.id === id) {
-          el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
-          el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
-          el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
+      } else { // Price bubble markers
+        let currentColors;
+        if (isSelected) {
+          currentColors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
           el.style.zIndex = '2';
+        } else if (isDisliked) {
+          currentColors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
+          el.style.zIndex = '0';
         } else {
-          // Keep default colors for liked listings - only the heart indicates liked status
-          el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
-          el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
-          el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+          currentColors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
           el.style.zIndex = '1';
         }
-        
-        // Update the heart icon if needed
-        if (!el.querySelector('svg')) {
-          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
-          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
-          el.innerHTML = `
-            <span style="position: relative;">
-              ${formattedPrice}
-              <svg style="
-                position: absolute;
-                top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
-                right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
-                width: ${markerStyles.HEART_ICON.size};
-                height: ${markerStyles.HEART_ICON.size};
-                fill: ${markerStyles.HEART_ICON.color};
-                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
-              " viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-              </svg>
-            </span>
-          `;
-        }
-      } else {
-        // Default state
-        el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
-        el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
-        el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
-        el.style.zIndex = '';
-        
-        // Remove heart icon if it exists
-        const heartIcon = el.querySelector('svg');
-        if (heartIcon) {
-          const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
-          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
-          el.innerHTML = formattedPrice;
+        el.style.backgroundColor = currentColors.background;
+        el.style.color = currentColors.text;
+        el.style.border = `1px solid ${currentColors.border}`; // Mobile uses 1px border
+
+        const price = correspondingMarkerData.listing.calculatedPrice || correspondingMarkerData.listing.price;
+        const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+        const heartSVGMarkup = `
+          <svg style="position: absolute; top: ${markerStyles.HEART_ICON.priceBubblePosition.top}; right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+                    width: ${markerStyles.HEART_ICON.size}; height: ${markerStyles.HEART_ICON.size}; fill: ${markerStyles.HEART_ICON.color};
+                    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+          </svg>`;
+
+        if (isLiked) {
+          // Ensure span exists, then add SVG or update content
+          let span = el.querySelector('span');
+          if (!span) {
+            el.innerHTML = `<span style="position: relative;">${formattedPrice}</span>`;
+            span = el.querySelector('span');
+          }
+          if (span && !span.querySelector('svg')) {
+             span.innerHTML = `${formattedPrice}${heartSVGMarkup}`;
+          } else if (span) { // Span and SVG exist, ensure price is correct
+            span.firstChild!.textContent = formattedPrice;
+          }
+        } else {
+            // Remove heart: Set innerHTML to just the price, removing the span and SVG
+            el.innerHTML = formattedPrice;
         }
       }
     });
@@ -420,86 +358,44 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         style: 'https://tiles.openfreemap.org/styles/bright',
         center: center,
         zoom: zoom,
-        scrollZoom: false,
-        failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
+        scrollZoom: true, // Typically enabled for mobile maps for better UX
+        failIfMajorPerformanceCaveat: false,
       });
-
       mapRef.current = map;
-      
-      // Handle map load errors
-      map.on('error', (e) => {
-        console.error('MapLibre GL error:', e);
-      });
-      
       setMapLoaded(true);
 
-      // Define updateMarkers function to be used across event handlers
-      const updateMarkers = (skipRender = false) => {
+      map.on('error', (e) => console.error('MapLibre GL error:', e));
+
+      const handleMapInteractionEnd = () => { // Covers moveend, zoomend
         if (!mapRef.current) return;
-        
         const newZoom = mapRef.current.getZoom();
-        setCurrentZoom(newZoom);
+        const mapCenter = mapRef.current.getCenter();
         
-        // Only render if not skipping
-        if (!skipRender) {
-          renderMarkers();
+        let needsRender = false;
+        if (newZoom !== currentZoom) {
+            setCurrentZoom(newZoom);
+            needsRender = true; // Zoom change might cross SIMPLE_MARKER_THRESHOLD
         }
-        
-        updateMarkerColors();
+        onCenterChanged(mapCenter.lng, mapCenter.lat);
+
+        if(needsRender) {
+            renderMarkers(); // This calls createSingleMarker which depends on visible count
+        } else {
+            updateMarkerColors(); // Just update colors if no structural change
+        }
       };
 
-      // Set up event listeners with improved handling
       map.on('load', () => {
         if (!mapRef.current) return;
-        
-        // Initial markers
-        const newZoom = mapRef.current.getZoom();
-        setCurrentZoom(newZoom);
-        renderMarkers();
-        updateMarkerColors();
-        
-        // Make sure we set this to true
-        setMapLoaded(true);
+        setCurrentZoom(mapRef.current.getZoom());
+        renderMarkers(); // Initial render
       });
-      
-      map.on('zoomend', () => {
-        // Store current center to maintain user's view
-        if (!mapRef.current) return;
-        const currentCenter = mapRef.current.getCenter();
-        
-        // Update markers
-        updateMarkers();
-        
-        // Restore center to avoid jumps
-        if (mapRef.current) {
-          mapRef.current.setCenter(currentCenter);
-        }
-      });
-      
-      map.on('moveend', () => {
-        if (!mapRef.current) return;
-        
-        // Report center change to parent
-        const newCenter = mapRef.current.getCenter();
-        onCenterChanged(newCenter.lng, newCenter.lat);
-        
-        // Update markers without re-rendering
-        updateMarkers(true);
-      });
-      
+      map.on('zoomend', handleMapInteractionEnd);
+      map.on('moveend', handleMapInteractionEnd);
       map.on('click', () => {
-        setSelectedMarker(null);
-        setClickedCluster(null);
+        setSelectedMarker(null); // Deselect on map click
       });
-      
-      // Add idle event for synchronized updates
-      map.on('idle', () => {
-        // Safe time to update markers when the map is not actively changing
-        if (mapRef.current && !mapRef.current.isMoving() && !mapRef.current.isZooming()) {
-          // No longer using clustering, just update marker colors
-          updateMarkerColors();
-        }
-      });
+      // 'idle' can be too frequent, covered by zoom/moveend
     } catch (error) {
       console.error('Failed to initialize mobile map:', error);
       setMapLoaded(false);
@@ -514,108 +410,53 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, []); // Empty dependency array - only run once
+  }, []); // Initialize map only once
 
-  // Update center when center prop changes without reinitializing the map
   useEffect(() => {
     if (!mapRef.current || !center || !mapLoaded) return;
-    
-    // Get the current view bounds
-    const bounds = mapRef.current.getBounds();
-    const currentCenter = mapRef.current.getCenter();
-    
-    // Only update center if:
-    // 1. This appears to be the initial load (center way off)
-    // 2. The center point is not within the current view bounds
-    // 3. User hasn't manually moved the map
-    const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 || 
-                         Math.abs(currentCenter.lat - center[1]) > 1;
-    
-    const centerPoint = new maplibregl.LngLat(center[0], center[1]);
-    const isOutsideView = !bounds.contains(centerPoint) && !mapRef.current.isMoving();
-    
-    if (isInitialLoad || isOutsideView) {
-      // Use flyTo with a short duration - user likely hasn't interacted yet
-      mapRef.current.flyTo({
-        center: center,
-        duration: 500,
-        essential: true
-      });
+    const currentMapCenter = mapRef.current.getCenter();
+    const isInitialLoadOrFar = Math.abs(currentMapCenter.lng - center[0]) > 0.1 || Math.abs(currentMapCenter.lat - center[1]) > 0.1;
+    if (isInitialLoadOrFar && !mapRef.current.isMoving()) {
+      mapRef.current.flyTo({ center: center, duration: 500, essential: true });
     }
-  }, [center, mapLoaded]); // Include center in dependencies to respond to prop changes
-  
-  // Handle panning to hovered location
+  }, [center, mapLoaded]);
+
   useEffect(() => {
     if (mapRef.current && shouldPanTo) {
-      mapRef.current.easeTo({
-        center: [shouldPanTo.lng, shouldPanTo.lat],
-        duration: 1500,
-        zoom: zoom
-      });
+      mapRef.current.easeTo({ center: [shouldPanTo.lng, shouldPanTo.lat], duration: 1500, zoom: mapRef.current.getZoom() }); // Keep current zoom
       clearPanTo();
     }
-  }, [shouldPanTo, clearPanTo, zoom]);
-  
-  // Store previous markers to detect real changes
-  const prevMarkersRef = useRef<MapMarker[]>([]);
-  
-  // Update markers data ref whenever markers prop changes
+  }, [shouldPanTo, clearPanTo]);
+
+  // Update markersDataRef when markers prop changes
   useEffect(() => {
     markersDataRef.current = markers;
-  }, [markers]);
-  
-  // Handle marker changes using debouncing to prevent frequent re-renders
-  useEffect(() => {
-    if (!mapRef.current || !mapLoaded) return;
-    
-    // Don't re-render if map is being dragged or manipulated
-    try {
-      if (mapRef.current.isEasing() || mapRef.current.isMoving() || mapRef.current.isZooming()) {
-        return;
-      }
-    } catch (e) {
-      console.error("Error checking map state:", e);
-      return;
-    }
-    
-    // Check if markers have actually changed position or count
-    const markersChanged = markers.length !== prevMarkersRef.current.length ||
-      markers.some((marker, index) => {
-        const prevMarker = prevMarkersRef.current[index];
-        return !prevMarker || 
-               marker.listing.id !== prevMarker.listing.id ||
-               marker.lat !== prevMarker.lat ||
-               marker.lng !== prevMarker.lng;
-      });
-    
-    // Define a safe update function with more aggressive debouncing
-    const safelyUpdateMarkers = () => {
-      if (!mapRef.current) return;
-      
-      try {
-        // Only re-render markers if positions/count changed
-        if (markersChanged) {
-          renderMarkers();
-          prevMarkersRef.current = [...markers];
-        }
-        // Always update colors to reflect current state
-        updateMarkerColors();
-      } catch (e) {
-        console.error("Error updating mobile map markers:", e);
-      }
-    };
-    
-    // Use a longer delay (200ms) to prevent too frequent updates
-    const timeoutId = setTimeout(safelyUpdateMarkers, 200);
-    return () => clearTimeout(timeoutId);
-  }, [markers, mapLoaded, currentZoom]);
-  
-  // Update marker colors when state changes
-  useEffect(() => {
+    // If map is loaded, re-render markers as data has changed
     if (mapLoaded && mapRef.current) {
+        // Check if map is being manipulated to avoid race conditions
+        if (!mapRef.current.isEasing() && !mapRef.current.isMoving() && !mapRef.current.isZooming()) {
+            renderMarkers();
+        } else {
+            // If map is busy, defer rendering to idle state or next interaction end
+            const onIdleOnce = () => {
+                if (mapRef.current) { // Check again as it might be removed
+                    renderMarkers();
+                    mapRef.current.off('idle', onIdleOnce);
+                }
+            };
+            mapRef.current.on('idle', onIdleOnce);
+        }
+    }
+  }, [markers, mapLoaded]); // Add mapLoaded here
+
+  // Update marker colors when selection or like/dislike state changes
+   useEffect(() => {
+    if (mapLoaded && mapRef.current) {
+      // Debounce or throttle if this becomes too frequent
       updateMarkerColors();
     }
-  }, [mapLoaded, selectedMarker, clickedCluster]);
+  }, [mapLoaded, selectedMarker, listingsSnapshot.favoriteIds, listingsSnapshot.dislikedIds, currentZoom]);
+
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>
@@ -637,9 +478,10 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
               distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
               onClose={() => setSelectedMarker(null)}
               className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
+              // Pass the snapshot from the marker data, or the one from this component's hook
+              customSnapshot={selectedMarker.listing.customSnapshot || listingsSnapshot}
             />
           )}
-
           {/* Zoom controls */}
           <div className="absolute top-2 right-2 z-10 flex flex-col">
             <button
