@@ -44,11 +44,6 @@ const PRICE_BUBBLE_COLORS = {
     text: '#FFFFFF',
     border: '#FFFFFF'
   },
-  LIKED: {
-    background: '#5c9ac5',
-    text: '#FFFFFF',
-    border: '#FFFFFF'
-  },
   DISLIKED: {
     background: '#404040',
     text: '#FFFFFF',
@@ -83,6 +78,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
   const [clickedCluster, setClickedCluster] = useState<null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
+  const markersDataRef = useRef<MapMarker[]>(markers);
 
   // Local calculateDistance function for listing card distance display
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -148,20 +144,15 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       const el = document.createElement('div');
       el.className = 'price-bubble-marker';
       
-      // Set initial color based on liked status for price bubbles
-      let colors;
-      if (marker.listing.isLiked) {
-        colors = PRICE_BUBBLE_COLORS.LIKED;
-      } else {
-        colors = PRICE_BUBBLE_COLORS.DEFAULT;
-      }
+      // Set initial color for price bubbles based on selection state
+      const isSelected = selectedMarker?.listing.id === marker.listing.id;
+      const colors = isSelected ? PRICE_BUBBLE_COLORS.HOVER : PRICE_BUBBLE_COLORS.DEFAULT;
       const { background: initialColor, text: textColor, border: borderColor } = colors;
       
-      console.log(`Mobile: Creating marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, color: ${initialColor}`);
       
       // Format the price for display if available
       const price = marker.listing.calculatedPrice || marker.listing.price;
-      const formattedPrice = price 
+      const formattedPrice = (price !== null && price !== undefined) 
         ? `$${price.toLocaleString()}`
         : 'N/A';
       
@@ -182,10 +173,30 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         min-width: 40px;
         text-align: center;
         border: 2px solid ${borderColor};
+        z-index: ${isSelected ? '2' : ''};
       `;
       
-      // Set the inner HTML with the price
-      el.innerHTML = formattedPrice;
+      // Set the inner HTML with the price and heart if liked
+      if (marker.listing.isLiked) {
+        el.innerHTML = `
+          <span style="position: relative;">
+            ${formattedPrice}
+            <svg style="
+              position: absolute;
+              top: -8px;
+              right: -8px;
+              width: 8px;
+              height: 8px;
+              fill: #FF6B6B;
+              filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+            " viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+            </svg>
+          </span>
+        `;
+      } else {
+        el.innerHTML = formattedPrice;
+      }
       
       const mapMarker = new maplibregl.Marker({ 
         element: el,
@@ -223,7 +234,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     
     markersRef.current.forEach((marker, id) => {
       const el = marker.getElement();
-      const correspondingMarker = markers.find(m => m.listing.id === id);
+      const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
       
       // Handle simple markers (MapLibre markers when >30 listings)
       if (shouldUseSimpleMarkers) {
@@ -255,16 +266,55 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
-        el.style.backgroundColor = PRICE_BUBBLE_COLORS.LIKED.background;
-        el.style.color = PRICE_BUBBLE_COLORS.LIKED.text;
-        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.LIKED.border}`;
-        el.style.zIndex = '1';
+        // For mobile, when selected (equivalent to hover), maintain the hover state
+        if (selectedMarker?.listing.id === id) {
+          el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
+          el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
+          el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
+          el.style.zIndex = '2';
+        } else {
+          // Keep default colors for liked listings - only the heart indicates liked status
+          el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
+          el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
+          el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+          el.style.zIndex = '1';
+        }
+        
+        // Update the heart icon if needed
+        if (!el.querySelector('svg')) {
+          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+          el.innerHTML = `
+            <span style="position: relative;">
+              ${formattedPrice}
+              <svg style="
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                width: 8px;
+                height: 8px;
+                fill: #FF6B6B;
+                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+              " viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+              </svg>
+            </span>
+          `;
+        }
       } else {
         // Default state
         el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
         el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
         el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '';
+        
+        // Remove heart icon if it exists
+        const heartIcon = el.querySelector('svg');
+        if (heartIcon) {
+          const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
+          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+          el.innerHTML = formattedPrice;
+        }
       }
     });
   };
@@ -417,6 +467,14 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     }
   }, [shouldPanTo, clearPanTo, zoom]);
   
+  // Store previous markers to detect real changes
+  const prevMarkersRef = useRef<MapMarker[]>([]);
+  
+  // Update markers data ref whenever markers prop changes
+  useEffect(() => {
+    markersDataRef.current = markers;
+  }, [markers]);
+  
   // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return;
@@ -431,12 +489,27 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       return;
     }
     
+    // Check if markers have actually changed position or count
+    const markersChanged = markers.length !== prevMarkersRef.current.length ||
+      markers.some((marker, index) => {
+        const prevMarker = prevMarkersRef.current[index];
+        return !prevMarker || 
+               marker.listing.id !== prevMarker.listing.id ||
+               marker.lat !== prevMarker.lat ||
+               marker.lng !== prevMarker.lng;
+      });
+    
     // Define a safe update function with more aggressive debouncing
     const safelyUpdateMarkers = () => {
       if (!mapRef.current) return;
       
       try {
-        renderMarkers();
+        // Only re-render markers if positions/count changed
+        if (markersChanged) {
+          renderMarkers();
+          prevMarkersRef.current = [...markers];
+        }
+        // Always update colors to reflect current state
         updateMarkerColors();
       } catch (e) {
         console.error("Error updating mobile map markers:", e);
@@ -453,7 +526,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     if (mapLoaded && mapRef.current) {
       updateMarkerColors();
     }
-  }, [mapLoaded, selectedMarker, clickedCluster, markers]);
+  }, [mapLoaded, selectedMarker, clickedCluster]);
 
   return (
     <div style={{ height }} className="font-montserrat" ref={mapContainerRef}>

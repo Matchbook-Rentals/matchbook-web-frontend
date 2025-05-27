@@ -46,11 +46,6 @@ const PRICE_BUBBLE_COLORS = {
     text: '#FFFFFF',
     border: '#404040'
   },
-  LIKED: {
-    background: '#c68087',
-    text: '#FFFFFF',
-    border: '#FFFFFF'
-  },
   DISLIKED: {
     background: '#404040',
     text: '#FFFFFF',
@@ -85,6 +80,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const [clickedCluster, setClickedCluster] = useState<null>(null);
+  const markersDataRef = useRef<MapMarker[]>(markers);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -192,10 +188,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const el = document.createElement('div');
       el.className = 'price-bubble-marker';
       
-      // Determine marker color based on like/dislike status for price bubbles
+      // Determine marker color based on hover/dislike status for price bubbles
       let colors;
-      if (marker.listing.isLiked) {
-        colors = PRICE_BUBBLE_COLORS.LIKED;
+      // Check if this marker is currently hovered
+      const isHovered = hoveredListing?.id === marker.listing.id || (!isFullscreen && clickedMarkerId === marker.listing.id);
+      
+      if (isHovered) {
+        colors = PRICE_BUBBLE_COLORS.HOVER;
       } else if (marker.listing.isDisliked) {
         colors = PRICE_BUBBLE_COLORS.DISLIKED;
       } else {
@@ -205,7 +204,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       
       // Format the price for display
       const price = marker.listing.calculatedPrice || marker.listing.price;
-      const formattedPrice = price 
+      const formattedPrice = (price !== null && price !== undefined) 
         ? `$${price.toLocaleString()}`
         : 'N/A';
       
@@ -226,12 +225,31 @@ const SearchMap: React.FC<SearchMapProps> = ({
         min-width: 40px;
         text-align: center;
         border: 1px solid ${borderColor};
+        z-index: ${isHovered ? '2' : ''};
       `;
       
-      // Set the inner HTML with the price
-      el.innerHTML = formattedPrice;
+      // Set the inner HTML with the price and heart if liked
+      if (marker.listing.isLiked) {
+        el.innerHTML = `
+          <span style="position: relative;">
+            ${formattedPrice}
+            <svg style="
+              position: absolute;
+              top: -8px;
+              right: -8px;
+              width: 8px;
+              height: 8px;
+              fill: #FF6B6B;
+              filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+            " viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+            </svg>
+          </span>
+        `;
+      } else {
+        el.innerHTML = formattedPrice;
+      }
       
-      console.log(`Creating price bubble marker for ${marker.listing.id}, isLiked: ${marker.listing.isLiked}, price: ${formattedPrice}`);
       
       const mapMarker = new maplibregl.Marker({ 
         element: el,
@@ -266,14 +284,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
     const visibleMarkers = getVisibleMarkers();
     const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
     
+    
     markersRef.current.forEach((marker, id) => {
       const el = marker.getElement();
-      const correspondingMarker = markers.find(m => m.listing.id === id);
+      const correspondingMarker = markersDataRef.current.find(m => m.listing.id === id);
       
-      // Debug log to check what's happening
-      if (correspondingMarker) {
-        console.log(`Updating marker ${id}, isLiked: ${correspondingMarker.listing.isLiked}`);
-      }
       
       // Handle simple markers (MapLibre markers when >30 listings)
       if (shouldUseSimpleMarkers) {
@@ -312,21 +327,126 @@ const SearchMap: React.FC<SearchMapProps> = ({
         el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
+        
+        // If also liked, add the heart icon while maintaining hover state
+        if (correspondingMarker?.listing.isLiked) {
+          // Only add heart if it doesn't exist
+          if (!el.querySelector('svg')) {
+            const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+            const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+            
+            // Create elements instead of using innerHTML to preserve state
+            const span = document.createElement('span');
+            span.style.position = 'relative';
+            span.textContent = formattedPrice;
+            
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 16 16');
+            svg.style.cssText = `
+              position: absolute;
+              top: -8px;
+              right: -8px;
+              width: 8px;
+              height: 8px;
+              fill: #FF6B6B;
+              filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+            `;
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('fill-rule', 'evenodd');
+            path.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
+            
+            svg.appendChild(path);
+            span.appendChild(svg);
+            
+            // Clear and append to preserve hover state
+            el.textContent = '';
+            el.appendChild(span);
+          }
+        } else {
+          // Remove heart if it exists when not liked
+          const svg = el.querySelector('svg');
+          if (svg) {
+            svg.remove();
+            const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
+            const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+            // Just update the text content of the span
+            const span = el.querySelector('span');
+            if (span) {
+              span.textContent = formattedPrice;
+            } else {
+              el.textContent = formattedPrice;
+            }
+          }
+        }
       } else if (correspondingMarker?.listing.isLiked) {
-        el.style.backgroundColor = PRICE_BUBBLE_COLORS.LIKED.background;
-        el.style.color = PRICE_BUBBLE_COLORS.LIKED.text;
-        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.LIKED.border}`;
+        // Keep default colors for liked listings - only the heart indicates liked status
+        el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
+        el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
+        el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '1';
+        
+        // Update the heart icon if needed
+        if (!el.querySelector('svg')) {
+          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+          el.innerHTML = `
+            <span style="position: relative;">
+              ${formattedPrice}
+              <svg style="
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                width: 8px;
+                height: 8px;
+                fill: #FF6B6B;
+                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+              " viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+              </svg>
+            </span>
+          `;
+        }
       } else if (correspondingMarker?.listing.isDisliked) {
         el.style.backgroundColor = PRICE_BUBBLE_COLORS.DISLIKED.background;
         el.style.color = PRICE_BUBBLE_COLORS.DISLIKED.text;
         el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.DISLIKED.border}`;
         el.style.zIndex = '0';
+        
+        // Remove heart icon if it exists
+        const heartIcon = el.querySelector('svg');
+        if (heartIcon) {
+          heartIcon.remove();
+          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+          // Just update the text content of the span
+          const span = el.querySelector('span');
+          if (span) {
+            span.textContent = formattedPrice;
+          } else {
+            el.textContent = formattedPrice;
+          }
+        }
       } else {
         el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
         el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
         el.style.border = `1px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '';
+        
+        // Remove heart icon if it exists
+        const heartIcon = el.querySelector('svg');
+        if (heartIcon) {
+          heartIcon.remove();
+          const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+          const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+          // Just update the text content of the span
+          const span = el.querySelector('span');
+          if (span) {
+            span.textContent = formattedPrice;
+          } else {
+            el.textContent = formattedPrice;
+          }
+        }
       }
     });
   };
@@ -479,8 +599,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
     setTimeout(updateVisibleMarkers, 300);
   }, [filters, searchRadius, queryParams]);
 
-  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen, markers]);
+  useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen]);
 
+  // Store previous markers to detect real changes
+  const prevMarkersRef = useRef<MapMarker[]>([]);
+  
+  // Update markers data ref whenever markers prop changes
+  useEffect(() => {
+    markersDataRef.current = markers;
+  }, [markers]);
+  
   // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {
     // Only proceed if we have a loaded map
@@ -496,13 +624,32 @@ const SearchMap: React.FC<SearchMapProps> = ({
       return;
     }
     
+    // Check if markers have actually changed position or count
+    const markersChanged = markers.length !== prevMarkersRef.current.length ||
+      markers.some((marker, index) => {
+        const prevMarker = prevMarkersRef.current[index];
+        return !prevMarker || 
+               marker.listing.id !== prevMarker.listing.id ||
+               marker.lat !== prevMarker.lat ||
+               marker.lng !== prevMarker.lng;
+      });
+    
+    
     // Debounce marker updates to reduce flickering
     const safelyUpdateMarkers = () => {
       if (!mapRef.current) return;
       
       try {
         updateVisibleMarkers();
-        renderMarkers();
+        
+        // Only re-render markers if positions/count changed
+        if (markersChanged) {
+          renderMarkers();
+          prevMarkersRef.current = [...markers];
+        } else {
+          // Just update colors if only like/dislike states changed
+          updateMarkerColors();
+        }
       } catch (e) {
         console.error("Error updating markers:", e);
       }

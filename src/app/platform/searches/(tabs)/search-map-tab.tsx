@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
+import { calculateRent } from '@/lib/calculate-rent';
 
 interface MapMarker {
   lat: number;
@@ -57,67 +58,27 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const [calculatedHeight, setCalculatedHeight] = useState(0);
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
-  // Use the new snapshot hook for stable listings data and to track like/dislike changes
+  // Use the new snapshot hook for stable listings data
   const listingsSnapshot = useListingsSnapshot();
   const listings = listingsSnapshot.listings;
-  const [likeChangeCounter, setLikeChangeCounter] = useState(0); // Track like/dislike changes
   
   // Keep track of original shown listings to prevent them from disappearing when liked
   const [originalShowListings, setOriginalShowListings] = useState<ListingAndImages[]>([]);
   
   // Update the original listings only when showListings changes due to filter changes, not likes
   useEffect(() => {
-    console.log("Updating original show listings", showListings.length);
     setOriginalShowListings(showListings);
   }, [trip?.searchRadius, trip?.minPrice, trip?.maxPrice]); // Only dependencies that indicate filter changes
   
   // Initialize originalShowListings on first load
   useEffect(() => {
     if (originalShowListings.length === 0 && showListings.length > 0) {
-      console.log("Initial population of originalShowListings", showListings.length);
       setOriginalShowListings(showListings);
     }
   }, [showListings, originalShowListings.length]);
   
-  // Get a reference to the original like/dislike actions
-  const originalLike = listingsSnapshot.optimisticLike;
-  const originalDislike = listingsSnapshot.optimisticDislike;
-  const originalRemoveLike = listingsSnapshot.optimisticRemoveLike;
-  const originalRemoveDislike = listingsSnapshot.optimisticRemoveDislike;
-  
-  // Override the like/dislike functions to trigger marker updates
-  const optimisticLike = useCallback(async (listingId: string) => {
-    await originalLike(listingId);
-    setLikeChangeCounter(prev => prev + 1); // Increment to trigger re-renders
-    console.log("Added like, updating markers");
-  }, [originalLike]);
-  
-  const optimisticDislike = useCallback(async (listingId: string) => {
-    await originalDislike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Added dislike, updating markers");
-  }, [originalDislike]);
-  
-  const optimisticRemoveLike = useCallback(async (listingId: string) => {
-    await originalRemoveLike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Removed like, updating markers");
-  }, [originalRemoveLike]);
-  
-  const optimisticRemoveDislike = useCallback(async (listingId: string) => {
-    await originalRemoveDislike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Removed dislike, updating markers");
-  }, [originalRemoveDislike]);
-  
-  // Override the listingsSnapshot object with our custom functions
-  const enhancedSnapshot = useMemo(() => ({
-    ...listingsSnapshot,
-    optimisticLike,
-    optimisticDislike,
-    optimisticRemoveLike,
-    optimisticRemoveDislike
-  }), [listingsSnapshot, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
+  // Use the listings snapshot directly without overriding functions
+  const enhancedSnapshot = listingsSnapshot;
 
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
@@ -181,7 +142,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
       if (enhancedSnapshot.isLiked(originalListing.id)) {
         // Check if it's missing from current showListings
         if (!showListings.some(listing => listing.id === originalListing.id)) {
-          console.log(`Adding back liked listing ${originalListing.id} to map view`);
           result.push(originalListing);
         }
       }
@@ -217,18 +177,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // Keep track of the current map center separate from the initial center
   const [currentMapCenter, setCurrentMapCenter] = useState(initialCenter);
   
+  // Extract just the IDs we need for marker generation to avoid unnecessary rebuilds
+  const favoriteIdsArray = useMemo(() => Array.from(enhancedSnapshot.favoriteIds), [enhancedSnapshot.favoriteIds]);
+  const dislikedIdsArray = useMemo(() => Array.from(enhancedSnapshot.dislikedIds), [enhancedSnapshot.dislikedIds]);
+  
   // Create markers from the display listings - using useMemo to only rebuild when needed
   const markers: MapMarker[] = useMemo(() => {
-    // This function will run when displayListings changes or when likeChangeCounter changes
-    console.log(`Rebuilding markers after like change. Counter: ${likeChangeCounter}`);
-    
     return displayListings.map((listing) => {
       // Add isLiked and isDisliked properties based on the enhanced snapshot state
-      const isLiked = enhancedSnapshot.isLiked(listing.id);
-      const isDisliked = enhancedSnapshot.isDisliked(listing.id);
+      const isLiked = favoriteIdsArray.includes(listing.id);
+      const isDisliked = dislikedIdsArray.includes(listing.id);
       
-      // Log each marker we're creating for debugging
-      console.log(`Creating marker for listing ${listing.id}, isLiked: ${isLiked}`);
+      // Ensure price data persists - preserve both original price and calculated price
+      const originalPrice = listing.shortestLeasePrice || listing.price || 0;
+      const calculatedPrice = trip ? calculateRent({ listing, trip }) : (listing.price || originalPrice);
+      
       
       return {
         title: listing.title,
@@ -236,6 +199,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         lng: listing.longitude,
         listing: {
           ...listing,
+          price: listing.price || calculatedPrice, // Preserve current price or use calculated
+          calculatedPrice, // Always ensure calculatedPrice is available
           isLiked,
           isDisliked,
           customSnapshot: enhancedSnapshot // Attach the enhanced snapshot to each marker
@@ -243,7 +208,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         color: getListingStatus(listing)
       };
     });
-  }, [displayListings, enhancedSnapshot, likeChangeCounter, getListingStatus]);
+  }, [displayListings, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
 
   // Use the current map center for the map, fallback to initial center
   const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
