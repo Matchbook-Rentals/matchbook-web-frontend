@@ -175,16 +175,24 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       const el = document.createElement('div');
       el.className = 'price-bubble-marker';
 
-      const isDisliked = listingsSnapshot.isDisliked(markerData.listing.id);
-      let colors;
+      const isDisliked = listingsSnapshot.isDisliked(markerData.listing.id); // isLiked is already defined via listingsSnapshot
+      let colorsForCss;
       if (isSelected) {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
-      } else if (isDisliked) {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
-      } else {
-        colors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
+        colorsForCss = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
+      } else if (isDisliked && !isLiked) { // Disliked and not liked (as liked takes z-index precedence)
+        colorsForCss = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
+      } else { // Covers Default and Liked (not selected)
+        colorsForCss = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
       }
-      const { background: bgColor, text: textColor, border: borderColor } = colors;
+      const { background: bgColor, text: textColor, border: borderColor } = colorsForCss;
+
+      let zIndexValue = '0'; // Default for 'nothing else' / lowest tier
+      if (isSelected) {
+        zIndexValue = '2'; // Highest tier
+      } else if (isLiked) {
+        zIndexValue = '1'; // Middle tier
+      }
+      // If disliked (and not selected, not liked), it will use zIndexValue '0'
 
       const price = markerData.listing.calculatedPrice || markerData.listing.price;
       const formattedPrice = (price !== null && price !== undefined)
@@ -197,7 +205,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         box-shadow: 0 2px 4px rgba(0,0,0,0.3); display: flex; justify-content: center;
         align-items: center; cursor: pointer; user-select: none; min-width: 40px;
         text-align: center; border: 1px solid ${borderColor}; /* Mobile uses 1px border from example */
-        z-index: ${isSelected ? '2' : (isDisliked ? '0' : '1')}; overflow: visible;
+        z-index: ${zIndexValue}; overflow: visible;
       `;
 
       if (isLiked) {
@@ -303,19 +311,29 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         }
       } else { // Price bubble markers
         let currentColors;
+        let zIndexValue = '0'; // Default z-index for 'nothing' / lowest tier
+
         if (isSelected) {
           currentColors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
-          el.style.zIndex = '2';
-        } else if (isDisliked) {
-          currentColors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
-          el.style.zIndex = '0';
-        } else {
+          zIndexValue = '2'; // Highest tier
+        } else if (isLiked) {
+          // A liked marker that is not selected. Color is default, z-index is middle.
           currentColors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
-          el.style.zIndex = '1';
+          zIndexValue = '1'; // Middle tier
+        } else if (isDisliked) {
+          // A disliked marker that is not selected and not liked.
+          currentColors = markerStyles.PRICE_BUBBLE_COLORS.DISLIKED;
+          zIndexValue = '0'; // Lowest tier
+        } else {
+          // A default marker (not selected, not liked, not disliked).
+          currentColors = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
+          zIndexValue = '0'; // Lowest tier
         }
+
         el.style.backgroundColor = currentColors.background;
         el.style.color = currentColors.text;
-        el.style.border = `1px solid ${currentColors.border}`; // Mobile uses 1px border
+        el.style.border = `1px solid ${currentColors.border}`;
+        el.style.zIndex = zIndexValue;
 
         const price = correspondingMarkerData.listing.calculatedPrice || correspondingMarkerData.listing.price;
         const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
