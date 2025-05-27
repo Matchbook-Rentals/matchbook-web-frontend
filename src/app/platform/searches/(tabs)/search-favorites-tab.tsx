@@ -57,13 +57,13 @@ export default function SearchFavoritesTab() {
     if (!state.hasApplication) {
       toast({
         title: "No Application Found",
-        description: "You need to complete your application before applying to properties.",
+        description: "You need to complete your application before applying to properties. (Coming soon!)",
         variant: "destructive",
-        action: (
-          <ToastAction altText="Go to Application" onClick={() => router.push(`${pathname}?tab=applications`, { scroll: true })}>
-            Go to Application
-          </ToastAction>
-        ),
+        //action: (
+        //  <ToastAction altText="Go to Application" >
+        //    Go to Application
+        //  </ToastAction>
+        //),
       });
       return;
     }

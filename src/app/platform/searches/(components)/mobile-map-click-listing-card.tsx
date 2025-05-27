@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
 import { useTripContext } from '@/contexts/trip-context-provider';
+import { useListingsSnapshot } from '@/hooks/useListingsSnapshot'; // Import the snapshot hook
 import { RejectIcon } from '@/components/svgs/svg-components';
 import { Heart, Star } from 'lucide-react';
 import { ListingStatus } from '@/constants/enums';
@@ -36,6 +37,7 @@ interface ListingCardProps {
   // Allow parent to override the container positioning/styling
   className?: string;
   status?: ListingStatus;
+  customSnapshot?: any; // Optional custom snapshot with enhanced functions
 }
 
 // Custom hook to detect media query matches
@@ -56,9 +58,9 @@ function useMediaQuery(query: string): boolean {
   return matches;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, className, status = ListingStatus.None }) => {
+const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, className, status = ListingStatus.None, customSnapshot }) => {
   const router = useRouter();
-  const { state, actions } = useTripContext();
+  const { state } = useTripContext(); // actions and lookup no longer needed for like/dislike here
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -69,9 +71,13 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
     ? "bottom-2 left-2" // bottom left for medium and above
     : "top-2 left-1/2 transform -translate-x-1/2"; // top middle for smaller screens
 
-  const { lookup } = state;
-  const { favIds, dislikedIds } = lookup;
-  const { optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike } = actions;
+  // Use the pattern from DesktopListingCard
+  const snapshotFromHook = useListingsSnapshot();
+  const listingsSnapshot = customSnapshot || snapshotFromHook;
+
+  // Use properties and functions from the resolved listingsSnapshot
+  const isLiked = listingsSnapshot.isLiked(listing.id);
+  const isDisliked = listingsSnapshot.isDisliked(listing.id);
 
   // Constants for styling
   const sectionStyles = 'border-b pb-3 pt-3';
@@ -92,12 +98,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
   const displayAmenities = calculateDisplayAmenities();
 
   const getStatusIcon = () => {
-    if (favIds?.has(listing.id)) {
+    if (isLiked) {
       return (
         <div
           className="bg-black/50 rounded-full p-2"
           onClick={(e: React.MouseEvent) => {
-            optimisticRemoveLike(listing.id);
+            listingsSnapshot.optimisticRemoveLike(listing.id);
             e.stopPropagation();
           }}
         >
@@ -107,12 +113,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
           />
         </div>
       );
-    } else if (dislikedIds?.has(listing.id)) {
+    } else if (isDisliked) {
       return (
         <div
           className="bg-black/50 rounded-full"
           onClick={(e: React.MouseEvent) => {
-            optimisticRemoveDislike(listing.id);
+            listingsSnapshot.optimisticRemoveDislike(listing.id);
             e.stopPropagation();
           }}
         >
@@ -127,7 +133,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
       <div
         className="bg-black/50 rounded-full p-2"
         onClick={(e: React.MouseEvent) => {
-          optimisticLike(listing.id);
+          listingsSnapshot.optimisticLike(listing.id);
           e.stopPropagation();
         }}
       >

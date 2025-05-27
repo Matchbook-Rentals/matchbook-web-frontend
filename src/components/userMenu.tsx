@@ -97,32 +97,32 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     }
   }, [isSignedIn, userRole]);
 
-  const handleImageUpdate = useCallback(() => {
-    const currentTime = Date.now();
-    if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
-      updateUserImage();
-      setLastUpdateTime(currentTime);
-      setCanUpdate(false);
-      setTimeout(() => setCanUpdate(true), 60000); // One minute cooldown
-    }
-  }, [canUpdate, lastUpdateTime]);
+  // const handleImageUpdate = useCallback(() => {
+  //   const currentTime = Date.now();
+  //   if (canUpdate && currentTime - lastUpdateTime >= IMAGE_UPDATE_TIME_LIMIT) {
+  //     updateUserImage();
+  //     setLastUpdateTime(currentTime);
+  //     setCanUpdate(false);
+  //     setTimeout(() => setCanUpdate(true), 60000); // One minute cooldown
+  //   }
+  // }, [canUpdate, lastUpdateTime]);
   
   // Periodically update notifications and user image
   useEffect(() => {
     // Initial fetch
     fetchNotifications();
-    handleImageUpdate();
+    //handleImageUpdate();
 
     // Set up periodic updates
     const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
-    const imageUpdateIntervalId = setInterval(handleImageUpdate, IMAGE_UPDATE_TIME_LIMIT);
+    // const imageUpdateIntervalId = setInterval(handleImageUpdate, IMAGE_UPDATE_TIME_LIMIT);
 
     // Clean up on unmount
     return () => {
       clearInterval(notificationIntervalId);
-      clearInterval(imageUpdateIntervalId);
+      // clearInterval(imageUpdateIntervalId);
     };
-  }, [fetchNotifications, handleImageUpdate]);
+  }, [fetchNotifications]);
 
 
   const handleNotificationClick = async (notificationId: string) => {
@@ -343,29 +343,30 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                   const sectionChanged = item.section !== lastSection;
                   lastSection = item.section; // Update lastSection for the next iteration
 
-                  const buttonContent = (
-                    <button
-                      onClick={item.onClick ? item.onClick : () => setIsMenuOpen(false)}
-                      className={`w-full px-4 py-3 text-left text-sm font-medium ${
-                        isItemEnabled
-                          ? 'text-gray-800 hover:bg-gray-50'
-                          : 'text-gray-400 cursor-not-allowed'
-                      }`}
-                      disabled={!isItemEnabled}
-                    >
-                      {label}
-                    </button>
-                  );
 
                   return (
                     <React.Fragment key={item.id}>
                       {sectionChanged && lastSection > 1 && <div className="border-t border-gray-200" />}
                       {href && isItemEnabled ? (
-                        <Link href={href} passHref>
-                          {buttonContent}
+                        <Link 
+                          href={href} 
+                          className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {label}
                         </Link>
                       ) : (
-                        buttonContent
+                        <button
+                          onClick={item.onClick ? item.onClick : () => setIsMenuOpen(false)}
+                          className={`w-full px-4 py-3 text-left text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset ${
+                            isItemEnabled
+                              ? 'text-gray-800 hover:bg-gray-50'
+                              : 'text-gray-400 cursor-not-allowed'
+                          }`}
+                          disabled={!isItemEnabled}
+                        >
+                          {label}
+                        </button>
                       )}
                     </React.Fragment>
                   );
@@ -384,7 +385,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                 <SignOutButton>
                   <button
                     onClick={() => {}}
-                    className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50"
+                    className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset"
                   >
                     Sign Out
                   </button>
@@ -406,10 +407,12 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
           <PopoverContent  className="p-0">
             <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
-                <Link href="/sign-in">
-                  <button className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Sign In</button>
+                <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset">
+                  Sign In
                 </Link>
-                <button onClick={() => setIsSupportOpen(true)} className=" px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50">Get help</button>
+                <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset">
+                  Get help
+                </button>
               </div>
             </div>
           </PopoverContent>

@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
+import { calculateRent } from '@/lib/calculate-rent';
+import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { X } from 'lucide-react';
 
 interface MapMarker {
   lat: number;
@@ -34,6 +37,70 @@ const slideUpVariants = {
   }
 };
 
+// Marker style configuration
+const MARKER_STYLES = {
+  // Threshold for switching to simple markers when there are too many listings
+  SIMPLE_MARKER_THRESHOLD: 30,
+  
+  // Simple marker color configuration (for >30 listings)
+  MARKER_COLORS: {
+    DEFAULT: {
+      primary: '#404040',   // Charcoal outer circle
+      secondary: '#FFFFFF'  // White inner circle
+    },
+    HOVER: {
+      primary: '#5c9ac5',   // Pink outer circle
+      secondary: '#FFFFFF'  // White inner circle
+    },
+    LIKED: {
+      primary: '#000000',   // Black outer circle
+      secondary: '#5c9ac5'  // Blue inner circle
+    },
+    DISLIKED: {
+      primary: '#FFFFFF',   // White outer circle
+      secondary: '#404040'  // Charcoal inner circle
+    }
+  },
+  
+  // Price bubble marker color configuration (for ≤30 listings)
+  PRICE_BUBBLE_COLORS: {
+    DEFAULT: {
+      background: '#FFFFFF',
+      text: '#404040',
+      border: '#404040'
+    },
+    HOVER: {
+      background: '#404040',
+      text: '#FFFFFF',
+      border: '#404040'
+    },
+    DISLIKED: {
+      background: '#404040',
+      text: '#FFFFFF',
+      border: '#FFFFFF'
+    }
+  },
+  
+  // Heart icon configuration
+  HEART_ICON: {
+    color: '#FF6B6B',
+    simpleMarkerTransform: 'translate(20, 4)',
+    simpleMarkerScale: 'scale(1.5)',
+    priceBubblePosition: {
+      top: '-8px',
+      right: '-8px'
+    },
+    size: '12px',
+    withBackground: true, // Whether to show white background circle
+    backgroundCircle: {
+      radius: '6',
+      fill: 'white',
+      stroke: '#404040',
+      strokeWidth: '0.5'
+    }
+  }
+};
+
 // Add this function to determine zoom level based on radius
 const getZoomLevel = (radius: number | undefined): number => {
   if (!radius) return 7; // Default zoom if radius is undefined
@@ -54,70 +121,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState<string | number>('calc(100vh - 80px)');
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
-  // Use the new snapshot hook for stable listings data and to track like/dislike changes
+  // Use the new snapshot hook for stable listings data
   const listingsSnapshot = useListingsSnapshot();
   const listings = listingsSnapshot.listings;
-  const [likeChangeCounter, setLikeChangeCounter] = useState(0); // Track like/dislike changes
   
-  // Keep track of original shown listings to prevent them from disappearing when liked
-  const [originalShowListings, setOriginalShowListings] = useState<ListingAndImages[]>([]);
+  // Get the visible listings store state
+  const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
+  const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
   
-  // Update the original listings only when showListings changes due to filter changes, not likes
-  useEffect(() => {
-    console.log("Updating original show listings", showListings.length);
-    setOriginalShowListings(showListings);
-  }, [trip?.searchRadius, trip?.minPrice, trip?.maxPrice]); // Only dependencies that indicate filter changes
+  // Remove the complex original listings tracking - no longer needed
   
-  // Initialize originalShowListings on first load
-  useEffect(() => {
-    if (originalShowListings.length === 0 && showListings.length > 0) {
-      console.log("Initial population of originalShowListings", showListings.length);
-      setOriginalShowListings(showListings);
-    }
-  }, [showListings, originalShowListings.length]);
-  
-  // Get a reference to the original like/dislike actions
-  const originalLike = listingsSnapshot.optimisticLike;
-  const originalDislike = listingsSnapshot.optimisticDislike;
-  const originalRemoveLike = listingsSnapshot.optimisticRemoveLike;
-  const originalRemoveDislike = listingsSnapshot.optimisticRemoveDislike;
-  
-  // Override the like/dislike functions to trigger marker updates
-  const optimisticLike = useCallback(async (listingId: string) => {
-    await originalLike(listingId);
-    setLikeChangeCounter(prev => prev + 1); // Increment to trigger re-renders
-    console.log("Added like, updating markers");
-  }, [originalLike]);
-  
-  const optimisticDislike = useCallback(async (listingId: string) => {
-    await originalDislike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Added dislike, updating markers");
-  }, [originalDislike]);
-  
-  const optimisticRemoveLike = useCallback(async (listingId: string) => {
-    await originalRemoveLike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Removed like, updating markers");
-  }, [originalRemoveLike]);
-  
-  const optimisticRemoveDislike = useCallback(async (listingId: string) => {
-    await originalRemoveDislike(listingId);
-    setLikeChangeCounter(prev => prev + 1);
-    console.log("Removed dislike, updating markers");
-  }, [originalRemoveDislike]);
-  
-  // Override the listingsSnapshot object with our custom functions
-  const enhancedSnapshot = useMemo(() => ({
-    ...listingsSnapshot,
-    optimisticLike,
-    optimisticDislike,
-    optimisticRemoveLike,
-    optimisticRemoveDislike
-  }), [listingsSnapshot, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
+  // Use the listings snapshot directly without overriding functions
+  const enhancedSnapshot = listingsSnapshot;
 
   // New state to control the mobile slide-map overlay
   const [isSlideMapOpen, setIsSlideMapOpen] = useState(false);
@@ -125,9 +143,30 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   
   // State to control map fullscreen view
   const [isFullscreen, setIsFullscreen] = useState(false);
+  
+  const [isClient, setIsClient] = useState(false);
+  const [isDesktopView, setIsDesktopView] = useState(false);
+  // State to track clicked marker ID
+  const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
+
+  useEffect(() => {
+    setIsClient(true);
+    const checkScreenSize = () => {
+      setIsDesktopView(window.innerWidth >= 768); // Tailwind's 'md' breakpoint
+    };
+
+    checkScreenSize(); // Initial check
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
+
 
   useEffect(() => {
     const setHeight = () => {
@@ -169,26 +208,17 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
   }, [trip?.searchRadius]);
 
-  // Combine current showListings with any original listings that were liked
-  // This prevents liked listings from disappearing from the map
+  // Combine liked listings at the top with remaining showListings
   const displayListings = useMemo(() => {
-    // Start with current showListings
-    const result = [...showListings];
+    // Create a Set of liked listing IDs for efficient lookup
+    const likedIds = new Set(likedListings.map(l => l.id));
     
-    // Add back any original listings that were liked but now missing from showListings
-    originalShowListings.forEach(originalListing => {
-      // Check if this original listing is now liked
-      if (enhancedSnapshot.isLiked(originalListing.id)) {
-        // Check if it's missing from current showListings
-        if (!showListings.some(listing => listing.id === originalListing.id)) {
-          console.log(`Adding back liked listing ${originalListing.id} to map view`);
-          result.push(originalListing);
-        }
-      }
-    });
+    // Filter showListings to exclude already liked ones to avoid duplicates
+    const nonLikedShowListings = showListings.filter(listing => !likedIds.has(listing.id));
     
-    return result;
-  }, [showListings, originalShowListings, enhancedSnapshot]);
+    // Return liked listings first, then the rest
+    return [...likedListings, ...nonLikedShowListings];
+  }, [showListings, likedListings]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
@@ -217,18 +247,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // Keep track of the current map center separate from the initial center
   const [currentMapCenter, setCurrentMapCenter] = useState(initialCenter);
   
+  // Extract just the IDs we need for marker generation to avoid unnecessary rebuilds
+  const favoriteIdsArray = useMemo(() => Array.from(enhancedSnapshot.favoriteIds), [enhancedSnapshot.favoriteIds]);
+  const dislikedIdsArray = useMemo(() => Array.from(enhancedSnapshot.dislikedIds), [enhancedSnapshot.dislikedIds]);
+  
   // Create markers from the display listings - using useMemo to only rebuild when needed
   const markers: MapMarker[] = useMemo(() => {
-    // This function will run when displayListings changes or when likeChangeCounter changes
-    console.log(`Rebuilding markers after like change. Counter: ${likeChangeCounter}`);
-    
     return displayListings.map((listing) => {
       // Add isLiked and isDisliked properties based on the enhanced snapshot state
-      const isLiked = enhancedSnapshot.isLiked(listing.id);
-      const isDisliked = enhancedSnapshot.isDisliked(listing.id);
+      const isLiked = favoriteIdsArray.includes(listing.id);
+      const isDisliked = dislikedIdsArray.includes(listing.id);
       
-      // Log each marker we're creating for debugging
-      console.log(`Creating marker for listing ${listing.id}, isLiked: ${isLiked}`);
+      // Ensure price data persists - preserve both original price and calculated price
+      const originalPrice = listing.shortestLeasePrice || listing.price || 0;
+      const calculatedPrice = trip ? calculateRent({ listing, trip }) : (listing.price || originalPrice);
+      
       
       return {
         title: listing.title,
@@ -236,6 +269,8 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         lng: listing.longitude,
         listing: {
           ...listing,
+          price: listing.price || calculatedPrice, // Preserve current price or use calculated
+          calculatedPrice, // Always ensure calculatedPrice is available
           isLiked,
           isDisliked,
           customSnapshot: enhancedSnapshot // Attach the enhanced snapshot to each marker
@@ -243,7 +278,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         color: getListingStatus(listing)
       };
     });
-  }, [displayListings, enhancedSnapshot, likeChangeCounter, getListingStatus]);
+  }, [displayListings, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
 
   // Use the current map center for the map, fallback to initial center
   const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
@@ -265,12 +300,31 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {/* Grid container - hide when fullscreen */}
         {!isFullscreen && (
           <div className="w-full md:w-3/5 md:pr-4">
+            {/* Show indicator when filtering to a single listing */}
+            {visibleListingIds && visibleListingIds.length === 1 && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+                <span className="text-sm text-blue-800">
+                  Showing selected listing only
+                </span>
+                <button
+                  onClick={() => {
+                    setVisibleListingIds(null);
+                    // Also clear the clicked marker to remove the highlight
+                    setClickedMarkerId(null);
+                  }}
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium"
+                >
+                  Clear filter
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
             {displayListings.length > 0 ? (
               // Pass calculatedHeight to the height prop
-              <SearchListingsGrid 
-                listings={displayListings} 
-                height={calculatedHeight.toString()} 
-                customSnapshot={enhancedSnapshot} 
+              <SearchListingsGrid
+                listings={displayListings}
+                height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
+                customSnapshot={enhancedSnapshot}
               />
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
@@ -282,19 +336,14 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[50vh]">
-                <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
+                <p className="font-montserrat-regular text-2xl mb-5">No more listings to show!</p>
                 <p>
-                  You can {numFavorites > 0 ? 'look at your favorites' : ''}
-                  {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
-                  {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.
+                  {numFilteredOut > 0 ? 'Try adjusting your filters to see more listings.' : 'Check back later for new listings.'}
                 </p>
 
-                {(numFavorites > 0 || numFilteredOut > 0) && (
+                {numFilteredOut > 0 && (
                   <p className="mt-3">
-                    {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
-                    {numFavorites > 0 && numFilteredOut > 0 && ' & '}
-                    {numFilteredOut > 0 && `${numFilteredOut} listings filtered out`}
-                    .
+                    {`${numFilteredOut} listings are currently filtered out.`}
                   </p>
                 )}
 
@@ -307,14 +356,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                       Adjust Filters
                     </button>
                   )}
-                  {numFavorites > 0 && (
-                    <button
-                      onClick={() => handleTabChange()}
-                      className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
-                    >
-                      View Favorites
-                    </button>
-                  )}
                 </div>
               </div>
             )}
@@ -322,36 +363,43 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         )}
 
         {/* Mobile-only Map button */}
-        <Button
-          onClick={() => setIsSlideMapOpen(true)}
-          className="fixed md:hidden text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
-        >
-          <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
-          Map
-        </Button>
+        {isClient && !isDesktopView && (
+          <Button
+            onClick={() => setIsSlideMapOpen(true)}
+            className="fixed text-sm gap-x-2 px-5 font-light max-w-[300px] text-[16px] bottom-[13vh] left-1/2 transform -translate-x-1/2 rounded-full bg-charcoalBrand text-background z-50"
+          >
+            <MapViewIcon stroke="white" className='scale-90 ' strokeWidth={1.0} />
+            Map
+          </Button>
+        )}
 
         {/* Map container for Desktop - adjust width based on fullscreen state */}
-        <div className={`w-full hidden md:block ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
-          <SearchMap
-            center={[mapCenter.lng, mapCenter.lat]}
+        {isClient && isDesktopView && (
+          <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
+            <SearchMap
+              center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
-            height={`${calculatedHeight}px`}
+            height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
             markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
+            markerStyles={MARKER_STYLES}
             onCenterChanged={(lng, lat) => {
               // Update the current map center but don't re-center the map
               setCurrentMapCenter({ lat, lng });
             }}
+            onClickedMarkerChange={setClickedMarkerId}
           />
         </div>
+        )}
       </div>
 
       {/* Mobile Slide-Up Map Overlay */}
+      {isClient && !isDesktopView && (
       <AnimatePresence>
         {isSlideMapOpen && (
           <motion.div
-            className="fixed top-0 left-0 w-full h-full bg-white z-50 md:hidden"
+            className="fixed top-0 left-0 w-full h-full bg-white z-50"
             variants={slideUpVariants}
             initial="initial"
             animate="animate"
@@ -362,6 +410,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               zoom={zoomLevel}
               height="100vh"
               markers={markers}
+              markerStyles={MARKER_STYLES}
               onClose={() => setIsSlideMapOpen(false)}
               onCenterChanged={(lng, lat) => {
                 // Update the current map center but don't re-center the map
@@ -371,6 +420,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      )}
     </>
   );
 };

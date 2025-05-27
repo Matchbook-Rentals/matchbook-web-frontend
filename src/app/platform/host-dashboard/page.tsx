@@ -2,10 +2,11 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import HostDashboardClient from "./host-dashboard-client";
-import { fetchListingsFromDb } from "./_actions";
+// import { fetchListingsFromDb } from "./_actions";
 
-export default async function HostDashboard() {
-  const userDbProperties = await fetchListingsFromDb();
+export default function HostDashboard() {
+  // Commented out to avoid duplicate fetching - data is now provided by layout through context
+  // const userDbProperties = await fetchListingsFromDb();
 
   return (
     <div className="md:w-4/5 w-[95%] mx-auto">
@@ -20,7 +21,7 @@ export default async function HostDashboard() {
           Add a property
         </Link>
       </Button>
-      <HostDashboardClient properties={userDbProperties} />
+      <HostDashboardClient />
     </div>
   );
 }
