@@ -157,7 +157,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
     if (!mapRef.current) return;
     
     const visibleMarkers = getVisibleMarkers();
-    const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const threshold = isFullscreenRef.current ? 60 : markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
     
     if (shouldUseSimpleMarkers) {
       // Check if this marker is currently hovered or selected
@@ -351,7 +352,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
     const visibleMarkers = getVisibleMarkers();
-    const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const threshold = isFullscreenRef.current ? 60 : markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
     
     
     markersRef.current.forEach((marker, id) => {
