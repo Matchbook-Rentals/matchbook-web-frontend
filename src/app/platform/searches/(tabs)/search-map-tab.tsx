@@ -10,6 +10,8 @@ import { MapViewIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useListingsSnapshot } from '@/hooks/useListingsSnapshot';
 import { calculateRent } from '@/lib/calculate-rent';
+import { useVisibleListingsStore } from '@/store/visible-listings-store';
+import { X } from 'lucide-react';
 
 interface MapMarker {
   lat: number;
@@ -125,6 +127,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   // Use the new snapshot hook for stable listings data
   const listingsSnapshot = useListingsSnapshot();
   const listings = listingsSnapshot.listings;
+  
+  // Get the visible listings store state
+  const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
+  const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
   
   // Keep track of original shown listings to prevent them from disappearing when liked
   const [originalShowListings, setOriginalShowListings] = useState<ListingAndImages[]>([]);
@@ -294,6 +300,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {/* Grid container - hide when fullscreen */}
         {!isFullscreen && (
           <div className="w-full md:w-3/5 md:pr-4">
+            {/* Show indicator when filtering to a single listing */}
+            {visibleListingIds && visibleListingIds.length === 1 && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+                <span className="text-sm text-blue-800">
+                  Showing selected listing only
+                </span>
+                <button
+                  onClick={() => setVisibleListingIds(null)}
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium"
+                >
+                  Clear filter
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
             {displayListings.length > 0 ? (
               // Pass calculatedHeight to the height prop
               <SearchListingsGrid 

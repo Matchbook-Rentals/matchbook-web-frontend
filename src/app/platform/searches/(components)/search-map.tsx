@@ -70,6 +70,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const [clickedCluster, setClickedCluster] = useState<null>(null);
   const markersDataRef = useRef<MapMarker[]>(markers);
+  const clickedMarkerIdRef = useRef<string | null>(null);
+  const isFullscreenRef = useRef<boolean>(isFullscreen);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -98,11 +100,26 @@ const SearchMap: React.FC<SearchMapProps> = ({
     return R * c;
   };
 
+  // Keep refs in sync with state
+  useEffect(() => {
+    clickedMarkerIdRef.current = clickedMarkerId;
+  }, [clickedMarkerId]);
+
+  useEffect(() => {
+    isFullscreenRef.current = isFullscreen;
+  }, [isFullscreen]);
+
   /** Update visible listings based on current map bounds */
   const updateVisibleMarkers = () => {
     if (!mapRef.current) return;
+    
+    // Don't update visible markers if we have a clicked marker in non-fullscreen mode
+    if (!isFullscreenRef.current && clickedMarkerIdRef.current) {
+      return;
+    }
+    
     const bounds = mapRef.current.getBounds();
-    const visibleIds = markers
+    const visibleIds = markersDataRef.current
       .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
       .map(marker => marker.listing.id);
     useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
@@ -208,14 +225,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (isFullscreen) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
-          setClickedMarkerId(curr => {
-            if (curr === marker.listing.id) {
-              updateVisibleMarkers();
-              return null;
-            }
-            useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
-            return marker.listing.id;
-          });
+          // In non-fullscreen mode, always set the clicked marker as the only visible listing
+          setClickedMarkerId(marker.listing.id);
+          useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
         }
       });
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -300,14 +312,9 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (isFullscreen) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
-          setClickedMarkerId(curr => {
-            if (curr === marker.listing.id) {
-              updateVisibleMarkers();
-              return null;
-            }
-            useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
-            return marker.listing.id;
-          });
+          // In non-fullscreen mode, always set the clicked marker as the only visible listing
+          setClickedMarkerId(marker.listing.id);
+          useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
         }
       });
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -573,7 +580,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
         
         const newZoom = mapRef.current.getZoom();
         setCurrentZoom(newZoom);
-        updateVisibleMarkers();
+        
+        // Only update visible markers if we don't have a clicked marker
+        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+          updateVisibleMarkers();
+        }
         
         // Only render markers if not skipping render
         if (!skipRender) {
@@ -587,7 +598,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
       map.on('load', () => {
         if (!mapRef.current) return; // Safety check
         
-        updateVisibleMarkers();
+        // Only update visible markers if we don't have a clicked marker
+        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+          updateVisibleMarkers();
+        }
         const newZoom = mapRef.current.getZoom();
         setCurrentZoom(newZoom);
         renderMarkers();
@@ -616,8 +630,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         const newCenter = mapRef.current.getCenter();
         onCenterChanged(newCenter.lng, newCenter.lat);
         
-        // Update visible listings
-        updateVisibleMarkers();
+        // Update visible listings only if we don't have a clicked marker
+        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+          updateVisibleMarkers();
+        }
         // Update markers but skip rendering to prevent flashy behavior
         updateMarkers(true);
       });
@@ -627,13 +643,17 @@ const SearchMap: React.FC<SearchMapProps> = ({
         setClickedCluster(null);
         if (!isFullscreen) {
           setClickedMarkerId(null);
+          // Update visible markers to show all listings in bounds
           updateVisibleMarkers();
         }
       });
       
       // Add idle event for synchronized updates
       map.on('idle', () => {
-        updateVisibleMarkers();
+        // Only update if we don't have a clicked marker in non-fullscreen mode
+        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+          updateVisibleMarkers();
+        }
       });
     } catch (error) {
       console.error('Failed to initialize map:', error);
