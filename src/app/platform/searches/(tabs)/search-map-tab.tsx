@@ -121,7 +121,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
-  const [calculatedHeight, setCalculatedHeight] = useState(0);
+  const [calculatedHeight, setCalculatedHeight] = useState<string | number>('calc(100vh - 80px)');
   const [currentComponentHeight, setCurrentComponentHeight] = useState(0);
 
   // Use the new snapshot hook for stable listings data
@@ -303,10 +303,10 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             )}
             {displayListings.length > 0 ? (
               // Pass calculatedHeight to the height prop
-              <SearchListingsGrid 
-                listings={displayListings} 
-                height={calculatedHeight.toString()} 
-                customSnapshot={enhancedSnapshot} 
+              <SearchListingsGrid
+                listings={displayListings}
+                height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
+                customSnapshot={enhancedSnapshot}
               />
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
@@ -358,7 +358,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
           <SearchMap
             center={[mapCenter.lng, mapCenter.lat]}
             zoom={zoomLevel}
-            height={`${calculatedHeight}px`}
+            height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
             markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}

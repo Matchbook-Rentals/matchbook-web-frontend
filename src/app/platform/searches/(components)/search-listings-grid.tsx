@@ -243,12 +243,24 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
 
   // When showing a single listing (filtered), use auto height instead of fixed height
   const isSingleListing = filteredListings.length === 1;
+
+  const getEffectiveHeight = () => {
+    if (isSingleListing) return 'auto';
+    if (!height) return '640px'; // Default height if none provided
+
+    // If height is a string and already contains a unit or calc(), use it directly
+    if (typeof height === 'string' && (height.includes('px') || height.includes('vh') || height.includes('%') || height.includes('calc'))) {
+      return height;
+    }
+    // Otherwise, assume it's a number (or a string representing a number) and append 'px'
+    return `${height}px`;
+  };
   
   return (
     // Use the height prop for minHeight, keep flex structure
     <div
       className="relative flex flex-col h-full"
-      style={{ height: isSingleListing ? 'auto' : (height ? `${height}px` : '640px') }} // Auto height for single listing
+      style={{ height: getEffectiveHeight() }} // Auto height for single listing or calculated/default
     >
       {/* --- Removed Loading Spinner Overlay --- */}
 
