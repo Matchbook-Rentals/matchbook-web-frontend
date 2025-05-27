@@ -149,7 +149,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     clusterMarkersRef.current.clear(); // Keep the ref but don't use it
     
     // Get visible markers and render them individually
-    getVisibleMarkers().forEach(marker => createSingleMarker(marker));
+    markersDataRef.current.forEach(marker => createSingleMarker(marker));
   };
 
   /** Create a single marker */
