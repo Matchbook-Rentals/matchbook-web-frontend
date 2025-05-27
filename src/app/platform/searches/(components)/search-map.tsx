@@ -443,6 +443,40 @@ const SearchMap: React.FC<SearchMapProps> = ({
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
+
+        // Handle heart icon for selected marker in fullscreen
+        if (correspondingMarker?.listing.isLiked) {
+          // Only add heart if it doesn't exist
+          if (!el.querySelector('svg')) {
+            const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
+            const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+            
+            el.innerHTML = `
+              <span style="position: relative;">
+                ${formattedPrice}
+                <svg style="
+                  position: absolute;
+                  top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
+                  right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+                  width: ${markerStyles.HEART_ICON.size};
+                  height: ${markerStyles.HEART_ICON.size};
+                  fill: ${markerStyles.HEART_ICON.color};
+                  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+                " viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                </svg>
+              </span>
+            `;
+          }
+        } else {
+          // Remove heart if it exists and not liked
+          const svg = el.querySelector('svg');
+          if (svg) {
+            const price = correspondingMarker?.listing.calculatedPrice || correspondingMarker?.listing.price;
+            const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+            el.textContent = formattedPrice; // Resets to just price
+          }
+        }
       } else if (hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id)) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
