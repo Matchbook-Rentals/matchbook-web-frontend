@@ -117,7 +117,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { showListings, likedListings, trip } = state;
+  const { showListings, likedListings, trip, filters } = state; // Destructure filters
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
