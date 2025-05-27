@@ -84,12 +84,28 @@ export async function getListingHousingRequests(listingId: string): Promise<Requ
 }
 
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+async function HostDashboardDataWrapper({ children }: { children: React.ReactNode }) {
   const listings = await fetchListingsFromDb();
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 
   return (
     <HostPropertiesProvider listings={listings} getListingHousingRequests={getListingHousingRequests}>
       {children}
     </HostPropertiesProvider>
+  );
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <React.Suspense fallback={
+      <div className="md:w-4/5 w-[95%] mx-auto flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+        <p className="text-gray-600 text-lg">Loading your properties...</p>
+      </div>
+    }>
+      <HostDashboardDataWrapper>
+        {children}
+      </HostDashboardDataWrapper>
+    </React.Suspense>
   );
 }
