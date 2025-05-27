@@ -132,20 +132,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const visibleListingIds = useVisibleListingsStore((state) => state.visibleListingIds);
   const setVisibleListingIds = useVisibleListingsStore((state) => state.setVisibleListingIds);
   
-  // Keep track of original shown listings to prevent them from disappearing when liked
-  const [originalShowListings, setOriginalShowListings] = useState<ListingAndImages[]>([]);
-  
-  // Update the original listings only when showListings changes due to filter changes, not likes
-  useEffect(() => {
-    setOriginalShowListings(showListings);
-  }, [trip?.searchRadius, trip?.minPrice, trip?.maxPrice]); // Only dependencies that indicate filter changes
-  
-  // Initialize originalShowListings on first load
-  useEffect(() => {
-    if (originalShowListings.length === 0 && showListings.length > 0) {
-      setOriginalShowListings(showListings);
-    }
-  }, [showListings, originalShowListings.length]);
+  // Remove the complex original listings tracking - no longer needed
   
   // Use the listings snapshot directly without overriding functions
   const enhancedSnapshot = listingsSnapshot;
@@ -203,25 +190,17 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
   }, [trip?.searchRadius]);
 
-  // Combine current showListings with any original listings that were liked
-  // This prevents liked listings from disappearing from the map
+  // Combine liked listings at the top with remaining showListings
   const displayListings = useMemo(() => {
-    // Start with current showListings
-    const result = [...showListings];
+    // Create a Set of liked listing IDs for efficient lookup
+    const likedIds = new Set(likedListings.map(l => l.id));
     
-    // Add back any original listings that were liked but now missing from showListings
-    originalShowListings.forEach(originalListing => {
-      // Check if this original listing is now liked
-      if (enhancedSnapshot.isLiked(originalListing.id)) {
-        // Check if it's missing from current showListings
-        if (!showListings.some(listing => listing.id === originalListing.id)) {
-          result.push(originalListing);
-        }
-      }
-    });
+    // Filter showListings to exclude already liked ones to avoid duplicates
+    const nonLikedShowListings = showListings.filter(listing => !likedIds.has(listing.id));
     
-    return result;
-  }, [showListings, originalShowListings, enhancedSnapshot]);
+    // Return liked listings first, then the rest
+    return [...likedListings, ...nonLikedShowListings];
+  }, [showListings, likedListings]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
@@ -339,19 +318,14 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-[50vh]">
-                <p className="font-montserrat-regular text-2xl mb-5">You&apos;re out of listings!</p>
+                <p className="font-montserrat-regular text-2xl mb-5">No more listings to show!</p>
                 <p>
-                  You can {numFavorites > 0 ? 'look at your favorites' : ''}
-                  {numFavorites > 0 && numFilteredOut > 0 ? ' or ' : ''}
-                  {numFilteredOut > 0 ? 'alter your filters' : ''} to see more.
+                  {numFilteredOut > 0 ? 'Try adjusting your filters to see more listings.' : 'Check back later for new listings.'}
                 </p>
 
-                {(numFavorites > 0 || numFilteredOut > 0) && (
+                {numFilteredOut > 0 && (
                   <p className="mt-3">
-                    {numFavorites > 0 && `You have ${numFavorites} listings in your favorites`}
-                    {numFavorites > 0 && numFilteredOut > 0 && ' & '}
-                    {numFilteredOut > 0 && `${numFilteredOut} listings filtered out`}
-                    .
+                    {`${numFilteredOut} listings are currently filtered out.`}
                   </p>
                 )}
 
@@ -362,14 +336,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                       className="px-3 py-1 bg-background text-[#404040] rounded-md hover:bg-gray-100 border-2"
                     >
                       Adjust Filters
-                    </button>
-                  )}
-                  {numFavorites > 0 && (
-                    <button
-                      onClick={() => handleTabChange()}
-                      className="px-4 py-1 bg-[#4F4F4F] text-background rounded-md hover:bg-[#404040]"
-                    >
-                      View Favorites
                     </button>
                   )}
                 </div>
