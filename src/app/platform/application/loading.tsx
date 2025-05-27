@@ -9,7 +9,7 @@ export default function ApplicationLoading() {
   const userAgent = headers().get('user-agent') || '';
   const isMobile = /mobile|android|iphone|ipad|phone/i.test(userAgent);
   return (
-    <div className={PAGE_MARGIN}>
+    <div className={`${PAGE_MARGIN} mt-4`}>
       {isMobile ? (
         /* Mobile Skeleton */
         <div className="w-full max-w-3xl mx-auto">
