@@ -111,7 +111,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   useEffect(() => {
     // Initial fetch
     fetchNotifications();
-    handleImageUpdate();
+    //handleImageUpdate();
 
     // Set up periodic updates
     const notificationIntervalId = setInterval(fetchNotifications, NOTIFICATION_REFRESH_INTERVAL);
