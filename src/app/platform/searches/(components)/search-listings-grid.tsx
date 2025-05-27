@@ -241,11 +241,14 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
   }, [visibleListingIds, setVisibleListingIds]); // Keep dependencies for now as reset logic is tied to them
 
 
+  // When showing a single listing (filtered), use auto height instead of fixed height
+  const isSingleListing = filteredListings.length === 1;
+  
   return (
     // Use the height prop for minHeight, keep flex structure
     <div
       className="relative flex flex-col h-full"
-      style={{ height: height ? `${height}px` : '640px' }} // Use height prop, provide fallback
+      style={{ height: isSingleListing ? 'auto' : (height ? `${height}px` : '640px') }} // Auto height for single listing
     >
       {/* --- Removed Loading Spinner Overlay --- */}
 
@@ -263,10 +266,10 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
           {/* Make ScrollArea grow */}
           <ScrollArea
             ref={scrollAreaRef}
-            className={`flex-grow w-[103%] sm:w-full h-${height}px mx-auto rounded-md pb-16 md:pb-2 pr-3`}
-            // Remove explicit height style, let flexbox handle it
+            className={`${isSingleListing ? '' : 'flex-grow'} w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-2 pr-3`}
+            style={{ height: isSingleListing ? 'auto' : undefined }}
           >
-            <div ref={gridRef} className="grid grid-cols-1 justify-items-center sm:justify-items-start sm:grid-cols-2 min-[1100px]:grid-cols-3 gap-8 pb-12">
+            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center  ${isSingleListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-4' : 'pb-12'}`}>
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (

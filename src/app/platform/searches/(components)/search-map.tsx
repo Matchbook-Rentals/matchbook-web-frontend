@@ -49,6 +49,7 @@ interface SearchMapProps {
   setIsFullscreen?: (value: boolean) => void;
   markerStyles: MarkerStyles;
   onCenterChanged?: (lng: number, lat: number) => void;
+  onClickedMarkerChange?: (markerId: string | null) => void;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -60,6 +61,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   setIsFullscreen = () => {},
   markerStyles,
   onCenterChanged = () => {},
+  onClickedMarkerChange = () => {},
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -103,7 +105,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   // Keep refs in sync with state
   useEffect(() => {
     clickedMarkerIdRef.current = clickedMarkerId;
-  }, [clickedMarkerId]);
+    onClickedMarkerChange(clickedMarkerId);
+  }, [clickedMarkerId, onClickedMarkerChange]);
 
   useEffect(() => {
     isFullscreenRef.current = isFullscreen;
@@ -225,9 +228,18 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (isFullscreen) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
-          // In non-fullscreen mode, always set the clicked marker as the only visible listing
-          setClickedMarkerId(marker.listing.id);
-          useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+          // In non-fullscreen mode, toggle selection
+          setClickedMarkerId(prev => {
+            if (prev === marker.listing.id) {
+              // Clicking same marker - deselect it
+              useVisibleListingsStore.getState().setVisibleListingIds(null);
+              return null;
+            } else {
+              // Clicking different marker - select it
+              useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+              return marker.listing.id;
+            }
+          });
         }
       });
       markersRef.current.set(marker.listing.id, mapMarker);
@@ -312,9 +324,18 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (isFullscreen) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
-          // In non-fullscreen mode, always set the clicked marker as the only visible listing
-          setClickedMarkerId(marker.listing.id);
-          useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+          // In non-fullscreen mode, toggle selection
+          setClickedMarkerId(prev => {
+            if (prev === marker.listing.id) {
+              // Clicking same marker - deselect it
+              useVisibleListingsStore.getState().setVisibleListingIds(null);
+              return null;
+            } else {
+              // Clicking different marker - select it
+              useVisibleListingsStore.getState().setVisibleListingIds([marker.listing.id]);
+              return marker.listing.id;
+            }
+          });
         }
       });
       markersRef.current.set(marker.listing.id, mapMarker);

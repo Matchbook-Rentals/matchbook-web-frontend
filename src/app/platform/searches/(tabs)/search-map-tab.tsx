@@ -156,6 +156,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   
   // State to control map fullscreen view
   const [isFullscreen, setIsFullscreen] = useState(false);
+  
+  // State to track clicked marker ID
+  const [clickedMarkerId, setClickedMarkerId] = useState<string | null>(null);
 
   // New state for zoom level based on trip.searchRadius
   const [zoomLevel, setZoomLevel] = useState(getZoomLevel(trip?.searchRadius || 50));
@@ -307,7 +310,11 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
                   Showing selected listing only
                 </span>
                 <button
-                  onClick={() => setVisibleListingIds(null)}
+                  onClick={() => {
+                    setVisibleListingIds(null);
+                    // Also clear the clicked marker to remove the highlight
+                    setClickedMarkerId(null);
+                  }}
                   className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm font-medium"
                 >
                   Clear filter
@@ -394,6 +401,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               // Update the current map center but don't re-center the map
               setCurrentMapCenter({ lat, lng });
             }}
+            onClickedMarkerChange={setClickedMarkerId}
           />
         </div>
       </div>
