@@ -35,6 +35,70 @@ const slideUpVariants = {
   }
 };
 
+// Marker style configuration
+const MARKER_STYLES = {
+  // Threshold for switching to simple markers when there are too many listings
+  SIMPLE_MARKER_THRESHOLD: 30,
+  
+  // Simple marker color configuration (for >30 listings)
+  MARKER_COLORS: {
+    DEFAULT: {
+      primary: '#404040',   // Charcoal outer circle
+      secondary: '#FFFFFF'  // White inner circle
+    },
+    HOVER: {
+      primary: '#5c9ac5',   // Pink outer circle
+      secondary: '#FFFFFF'  // White inner circle
+    },
+    LIKED: {
+      primary: '#000000',   // Black outer circle
+      secondary: '#5c9ac5'  // Blue inner circle
+    },
+    DISLIKED: {
+      primary: '#FFFFFF',   // White outer circle
+      secondary: '#404040'  // Charcoal inner circle
+    }
+  },
+  
+  // Price bubble marker color configuration (for ≤30 listings)
+  PRICE_BUBBLE_COLORS: {
+    DEFAULT: {
+      background: '#FFFFFF',
+      text: '#404040',
+      border: '#404040'
+    },
+    HOVER: {
+      background: '#404040',
+      text: '#FFFFFF',
+      border: '#404040'
+    },
+    DISLIKED: {
+      background: '#404040',
+      text: '#FFFFFF',
+      border: '#FFFFFF'
+    }
+  },
+  
+  // Heart icon configuration
+  HEART_ICON: {
+    color: '#FF6B6B',
+    simpleMarkerTransform: 'translate(20, 4)',
+    simpleMarkerScale: 'scale(1.5)',
+    priceBubblePosition: {
+      top: '-8px',
+      right: '-8px'
+    },
+    size: '12px',
+    withBackground: true, // Whether to show white background circle
+    backgroundCircle: {
+      radius: '6',
+      fill: 'white',
+      stroke: '#404040',
+      strokeWidth: '0.5'
+    }
+  }
+};
+
 // Add this function to determine zoom level based on radius
 const getZoomLevel = (radius: number | undefined): number => {
   if (!radius) return 7; // Default zoom if radius is undefined
@@ -304,6 +368,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
+            markerStyles={MARKER_STYLES}
             onCenterChanged={(lng, lat) => {
               // Update the current map center but don't re-center the map
               setCurrentMapCenter({ lat, lng });
@@ -327,6 +392,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               zoom={zoomLevel}
               height="100vh"
               markers={markers}
+              markerStyles={MARKER_STYLES}
               onClose={() => setIsSlideMapOpen(false)}
               onCenterChanged={(lng, lat) => {
                 // Update the current map center but don't re-center the map

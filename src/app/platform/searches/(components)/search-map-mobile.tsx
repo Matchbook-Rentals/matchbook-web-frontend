@@ -9,53 +9,41 @@ import ListingCard from './mobile-map-click-listing-card';
 
 // No longer using clustering
 
-// Threshold for switching to simple markers when there are too many listings
-const SIMPLE_MARKER_THRESHOLD = 30;
-
-// Simple marker color configuration (for >30 listings)
-const MARKER_COLORS = {
-  DEFAULT: {
-    primary: '#404040',   // Charcoal outer circle
-    secondary: '#404040'  // Charcoal inner circle
-  },
-  HOVER: {
-    primary: '#FFFFFF',   // White outer circle
-    secondary: '#404040'  // Charcoal inner circle
-  },
-  LIKED: {
-    primary: '#000000',   // Black outer circle
-    secondary: '#5c9ac5'  // Blue inner circle
-  },
-  DISLIKED: {
-    primary: '#FFFFFF',   // White outer circle
-    secondary: '#404040'  // Charcoal inner circle
-  }
-};
-
-// Price bubble marker color configuration (for ≤30 listings)
-const PRICE_BUBBLE_COLORS = {
-  DEFAULT: {
-    background: '#FFFFFF',
-    text: '#404040',
-    border: '#404040'
-  },
-  HOVER: {
-    background: '#404040',
-    text: '#FFFFFF',
-    border: '#FFFFFF'
-  },
-  DISLIKED: {
-    background: '#404040',
-    text: '#FFFFFF',
-    border: '#FFFFFF'
-  }
-};
+interface MarkerStyles {
+  SIMPLE_MARKER_THRESHOLD: number;
+  MARKER_COLORS: {
+    DEFAULT: { primary: string; secondary: string };
+    HOVER: { primary: string; secondary: string };
+    LIKED: { primary: string; secondary: string };
+    DISLIKED: { primary: string; secondary: string };
+  };
+  PRICE_BUBBLE_COLORS: {
+    DEFAULT: { background: string; text: string; border: string };
+    HOVER: { background: string; text: string; border: string };
+    DISLIKED: { background: string; text: string; border: string };
+  };
+  HEART_ICON: {
+    color: string;
+    simpleMarkerTransform: string;
+    simpleMarkerScale: string;
+    priceBubblePosition: { top: string; right: string };
+    size: string;
+    withBackground: boolean;
+    backgroundCircle: {
+      radius: string;
+      fill: string;
+      stroke: string;
+      strokeWidth: string;
+    };
+  };
+}
 
 interface SearchMapProps {
   center: [number, number] | null;
   markers?: MapMarker[];
   zoom?: number;
   height?: string;
+  markerStyles: MarkerStyles;
   onClose: () => void;
   onCenterChanged?: (lng: number, lat: number) => void;
 }
@@ -65,6 +53,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   markers = [],
   zoom = 12,
   height = '526px',
+  markerStyles,
   onClose,
   onCenterChanged = () => {}
 }) => {
@@ -115,12 +104,15 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     if (!mapRef.current) return;
     
     const visibleMarkers = getVisibleMarkers();
-    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
+    const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
     
     if (shouldUseSimpleMarkers) {
+      // Check if this marker is currently selected (mobile equivalent of hover)
+      const isSelected = selectedMarker?.listing.id === marker.listing.id;
+      
       // Use simple black MapLibre marker with configurable inner circle for high-density views
       const mapMarker = new maplibregl.Marker({ 
-        color: MARKER_COLORS.DEFAULT.primary,
+        color: isSelected ? markerStyles.MARKER_COLORS.HOVER.primary : markerStyles.MARKER_COLORS.DEFAULT.primary,
         scale: 0.7 // Make them smaller
       })
         .setLngLat([marker.lng, marker.lat])
@@ -128,11 +120,55 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       
       const markerElement = mapMarker.getElement();
       markerElement.style.cursor = 'pointer';
+      markerElement.style.overflow = 'visible';
       
-      // Customize the inner circle to default color
+      // Customize the inner circle based on state
       const innerCircle = markerElement.querySelector('svg circle:last-child');
       if (innerCircle) {
-        innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
+        innerCircle.setAttribute('fill', isSelected ? markerStyles.MARKER_COLORS.HOVER.secondary : markerStyles.MARKER_COLORS.DEFAULT.secondary);
+      }
+      
+      // Add heart icon if liked
+      if (marker.listing.isLiked) {
+        const svg = markerElement.querySelector('svg');
+        if (svg) {
+          svg.style.overflow = 'visible';
+          // Create and add heart icon
+          if (markerStyles.HEART_ICON.withBackground) {
+            const heartGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            heartGroup.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform);
+            heartGroup.setAttribute('class', 'marker-heart-icon');
+            
+            // Add white background circle for contrast
+            const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            bgCircle.setAttribute('cx', '0');
+            bgCircle.setAttribute('cy', '0');
+            bgCircle.setAttribute('r', markerStyles.HEART_ICON.backgroundCircle.radius);
+            bgCircle.setAttribute('fill', markerStyles.HEART_ICON.backgroundCircle.fill);
+            bgCircle.setAttribute('stroke', markerStyles.HEART_ICON.backgroundCircle.stroke);
+            bgCircle.setAttribute('stroke-width', markerStyles.HEART_ICON.backgroundCircle.strokeWidth);
+            
+            // Add heart path
+            const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            heartPath.setAttribute('d', 'M0 -2.5C-1.5 -4.5 -4.5 -3.5 -4.5 -1.5C-4.5 0.5 0 4.5 0 4.5C0 4.5 4.5 0.5 4.5 -1.5C4.5 -3.5 1.5 -4.5 0 -2.5');
+            heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
+            heartPath.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerScale);
+            
+            heartGroup.appendChild(bgCircle);
+            heartGroup.appendChild(heartPath);
+            svg.appendChild(heartGroup);
+          } else {
+            // Heart without background
+            const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            heartPath.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
+            heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
+            heartPath.setAttribute('transform', `${markerStyles.HEART_ICON.simpleMarkerTransform} scale(0.5)`);
+            heartPath.setAttribute('class', 'marker-heart-icon');
+            heartPath.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
+            
+            svg.appendChild(heartPath);
+          }
+        }
       }
       markerElement.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -146,7 +182,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       
       // Set initial color for price bubbles based on selection state
       const isSelected = selectedMarker?.listing.id === marker.listing.id;
-      const colors = isSelected ? PRICE_BUBBLE_COLORS.HOVER : PRICE_BUBBLE_COLORS.DEFAULT;
+      const colors = isSelected ? markerStyles.PRICE_BUBBLE_COLORS.HOVER : markerStyles.PRICE_BUBBLE_COLORS.DEFAULT;
       const { background: initialColor, text: textColor, border: borderColor } = colors;
       
       
@@ -174,6 +210,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         text-align: center;
         border: 2px solid ${borderColor};
         z-index: ${isSelected ? '2' : ''};
+        overflow: visible;
       `;
       
       // Set the inner HTML with the price and heart if liked
@@ -183,11 +220,11 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
             ${formattedPrice}
             <svg style="
               position: absolute;
-              top: -8px;
-              right: -8px;
-              width: 8px;
-              height: 8px;
-              fill: #FF6B6B;
+              top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
+              right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+              width: ${markerStyles.HEART_ICON.size};
+              height: ${markerStyles.HEART_ICON.size};
+              fill: ${markerStyles.HEART_ICON.color};
               filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
             " viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
@@ -230,7 +267,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   // Function to update marker colors based on state
   const updateMarkerColors = () => {
     const visibleMarkers = getVisibleMarkers();
-    const shouldUseSimpleMarkers = visibleMarkers.length > SIMPLE_MARKER_THRESHOLD;
+    const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
     
     markersRef.current.forEach((marker, id) => {
       const el = marker.getElement();
@@ -238,45 +275,97 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       
       // Handle simple markers (MapLibre markers when >30 listings)
       if (shouldUseSimpleMarkers) {
+        const svg = el.querySelector('svg');
         const innerCircle = el.querySelector('svg circle:last-child');
         const markerShape = el.querySelector('svg g:nth-child(2)');
         
-        if (!markerShape || !innerCircle) return;
+        if (!markerShape || !innerCircle || !svg) return;
         
+        // Ensure SVG has overflow visible
+        svg.style.overflow = 'visible';
+        
+        // Update marker colors based on state
         if (selectedMarker?.listing.id === id) {
-          markerShape.setAttribute('fill', MARKER_COLORS.HOVER.primary);
-          innerCircle.setAttribute('fill', MARKER_COLORS.HOVER.secondary);
-        } else if (correspondingMarker?.listing.isLiked) {
-          markerShape.setAttribute('fill', MARKER_COLORS.LIKED.primary);
-          innerCircle.setAttribute('fill', MARKER_COLORS.LIKED.secondary);
+          markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
+          innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
         } else if (correspondingMarker?.listing.isDisliked) {
-          markerShape.setAttribute('fill', MARKER_COLORS.DISLIKED.primary);
-          innerCircle.setAttribute('fill', MARKER_COLORS.DISLIKED.secondary);
+          markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.primary);
+          innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.secondary);
         } else {
-          markerShape.setAttribute('fill', MARKER_COLORS.DEFAULT.primary);
-          innerCircle.setAttribute('fill', MARKER_COLORS.DEFAULT.secondary);
+          markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.primary);
+          innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.secondary);
         }
+        
+        // Handle heart icon for liked markers
+        // Use a class to reliably identify heart elements
+        const existingHeart = svg.querySelector('.marker-heart-icon');
+        
+        if (correspondingMarker?.listing.isLiked) {
+          // Add heart if it doesn't exist
+          if (!existingHeart) {
+            if (markerStyles.HEART_ICON.withBackground) {
+              const heartGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+              heartGroup.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerTransform);
+              heartGroup.setAttribute('class', 'marker-heart-icon');
+              
+              // Add white background circle for contrast
+              const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              bgCircle.setAttribute('cx', '0');
+              bgCircle.setAttribute('cy', '0');
+              bgCircle.setAttribute('r', markerStyles.HEART_ICON.backgroundCircle.radius);
+              bgCircle.setAttribute('fill', markerStyles.HEART_ICON.backgroundCircle.fill);
+              bgCircle.setAttribute('stroke', markerStyles.HEART_ICON.backgroundCircle.stroke);
+              bgCircle.setAttribute('stroke-width', markerStyles.HEART_ICON.backgroundCircle.strokeWidth);
+              
+              // Add heart path
+              const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              heartPath.setAttribute('d', 'M0 -2.5C-1.5 -4.5 -4.5 -3.5 -4.5 -1.5C-4.5 0.5 0 4.5 0 4.5C0 4.5 4.5 0.5 4.5 -1.5C4.5 -3.5 1.5 -4.5 0 -2.5');
+              heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
+              heartPath.setAttribute('transform', markerStyles.HEART_ICON.simpleMarkerScale);
+              
+              heartGroup.appendChild(bgCircle);
+              heartGroup.appendChild(heartPath);
+              svg.appendChild(heartGroup);
+            } else {
+              // Heart without background
+              const heartPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              heartPath.setAttribute('d', 'M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314');
+              heartPath.setAttribute('fill', markerStyles.HEART_ICON.color);
+              heartPath.setAttribute('transform', `${markerStyles.HEART_ICON.simpleMarkerTransform} scale(0.5)`);
+              heartPath.setAttribute('class', 'marker-heart-icon');
+              heartPath.style.filter = 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))';
+              
+              svg.appendChild(heartPath);
+            }
+          }
+        } else {
+          // Remove heart if it exists and not liked
+          if (existingHeart) {
+            existingHeart.remove();
+          }
+        }
+        
         return;
       }
       
       // Handle custom price bubble markers (when ≤30 listings)
       if (selectedMarker?.listing.id === id) {
-        el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
-        el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
-        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
+        el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
+        el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
+        el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
       } else if (correspondingMarker?.listing.isLiked) {
         // For mobile, when selected (equivalent to hover), maintain the hover state
         if (selectedMarker?.listing.id === id) {
-          el.style.backgroundColor = PRICE_BUBBLE_COLORS.HOVER.background;
-          el.style.color = PRICE_BUBBLE_COLORS.HOVER.text;
-          el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.HOVER.border}`;
+          el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
+          el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
+          el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
           el.style.zIndex = '2';
         } else {
           // Keep default colors for liked listings - only the heart indicates liked status
-          el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
-          el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
-          el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+          el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
+          el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
+          el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
           el.style.zIndex = '1';
         }
         
@@ -289,11 +378,11 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
               ${formattedPrice}
               <svg style="
                 position: absolute;
-                top: -8px;
-                right: -8px;
-                width: 8px;
-                height: 8px;
-                fill: #FF6B6B;
+                top: ${markerStyles.HEART_ICON.priceBubblePosition.top};
+                right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
+                width: ${markerStyles.HEART_ICON.size};
+                height: ${markerStyles.HEART_ICON.size};
+                fill: ${markerStyles.HEART_ICON.color};
                 filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
               " viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
@@ -303,9 +392,9 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
         }
       } else {
         // Default state
-        el.style.backgroundColor = PRICE_BUBBLE_COLORS.DEFAULT.background;
-        el.style.color = PRICE_BUBBLE_COLORS.DEFAULT.text;
-        el.style.border = `2px solid ${PRICE_BUBBLE_COLORS.DEFAULT.border}`;
+        el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
+        el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
+        el.style.border = `2px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
         el.style.zIndex = '';
         
         // Remove heart icon if it exists
