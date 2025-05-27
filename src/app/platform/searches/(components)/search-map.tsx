@@ -160,8 +160,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
     const shouldUseSimpleMarkers = visibleMarkers.length > markerStyles.SIMPLE_MARKER_THRESHOLD;
     
     if (shouldUseSimpleMarkers) {
-      // Check if this marker is currently hovered
-      const isHovered = hoveredListing?.id === marker.listing.id || (!isFullscreen && clickedMarkerId === marker.listing.id);
+      // Check if this marker is currently hovered or selected
+      const isHovered = hoveredListing?.id === marker.listing.id || 
+                       (!isFullscreenRef?.current && clickedMarkerId === marker.listing.id) ||
+                       (isFullscreenRef?.current && selectedMarker?.listing.id === marker.listing.id);
       
       // Use simple black MapLibre marker with configurable inner circle for high-density views
       const mapMarker = new maplibregl.Marker({ 
@@ -225,7 +227,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       }
       markerElement.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (isFullscreen) {
+        if (isFullscreenRef?.current) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
           // In non-fullscreen mode, toggle selection
@@ -250,8 +252,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
       
       // Determine marker color based on hover/dislike status for price bubbles
       let colors;
-      // Check if this marker is currently hovered
-      const isHovered = hoveredListing?.id === marker.listing.id || (!isFullscreen && clickedMarkerId === marker.listing.id);
+      // Check if this marker is currently hovered or selected
+      const isHovered = hoveredListing?.id === marker.listing.id || 
+                       (!isFullscreenRef?.current && clickedMarkerId === marker.listing.id) ||
+                       (isFullscreenRef?.current && selectedMarker?.listing.id === marker.listing.id);
       
       if (isHovered) {
         colors = markerStyles.PRICE_BUBBLE_COLORS.HOVER;
@@ -321,7 +325,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (isFullscreen) {
+        if (isFullscreenRef?.current) {
           setSelectedMarker(prev => (prev?.listing.id === marker.listing.id ? null : marker));
         } else {
           // In non-fullscreen mode, toggle selection
@@ -367,10 +371,10 @@ const SearchMap: React.FC<SearchMapProps> = ({
         svg.style.overflow = 'visible';
         
         // Update marker colors based on state
-        if (isFullscreen && selectedMarker?.listing.id === id) {
+        if (isFullscreenRef.current && selectedMarker?.listing.id === id) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
-        } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
+        } else if (hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id)) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
         } else if (correspondingMarker?.listing.isDisliked) {
@@ -434,12 +438,12 @@ const SearchMap: React.FC<SearchMapProps> = ({
       }
       
       // Handle custom price bubble markers (when ≤30 listings)
-      if (isFullscreen && selectedMarker?.listing.id === id) {
+      if (isFullscreenRef.current && selectedMarker?.listing.id === id) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
         el.style.zIndex = '2';
-      } else if (hoveredListing?.id === id || (!isFullscreen && clickedMarkerId === id)) {
+      } else if (hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id)) {
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
@@ -581,7 +585,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const map = new maplibregl.Map({
         container: mapContainerRef.current,
         style: 'https://tiles.openfreemap.org/styles/bright',
-        center,
+        center: center || [0, 0], // Provide fallback center
         zoom: mapRenderZoom,
         scrollZoom: true,
         failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
@@ -660,9 +664,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
       });
       
       map.on('click', () => {
-        setSelectedMarker(null);
+        if (isFullscreenRef.current) {
+          setSelectedMarker(null);
+        }
         setClickedCluster(null);
-        if (!isFullscreen) {
+        if (!isFullscreenRef.current) {
           setClickedMarkerId(null);
           // Update visible markers to show all listings in bounds
           updateVisibleMarkers();
@@ -678,6 +684,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
       });
     } catch (error) {
       console.error('Failed to initialize map:', error);
+      console.error('Map center:', center);
+      console.error('Map container:', mapContainerRef.current);
       // Set a flag to indicate map failed to load, so we can show fallback UI
       setMapLoaded(false);
     }
@@ -754,12 +762,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
       return;
     }
     
+    // Create a map of previous markers by ID for efficient lookup
+    const prevMarkersMap = new Map(
+      prevMarkersRef.current.map(m => [m.listing.id, m])
+    );
+    
     // Check if markers have actually changed position or count
     const markersChanged = markers.length !== prevMarkersRef.current.length ||
-      markers.some((marker, index) => {
-        const prevMarker = prevMarkersRef.current[index];
+      markers.some((marker) => {
+        const prevMarker = prevMarkersMap.get(marker.listing.id);
         return !prevMarker || 
-               marker.listing.id !== prevMarker.listing.id ||
                marker.lat !== prevMarker.lat ||
                marker.lng !== prevMarker.lng;
       });
@@ -820,6 +832,16 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const handleFullscreen = () => {
     // Don't adjust zoom when toggling fullscreen - just toggle the state
     setIsFullscreen(!isFullscreen);
+    
+    // Clear selections when switching modes
+    if (!isFullscreen) {
+      // Entering fullscreen - clear non-fullscreen selection
+      setClickedMarkerId(null);
+      useVisibleListingsStore.getState().setVisibleListingIds(null);
+    } else {
+      // Exiting fullscreen - clear fullscreen selection
+      setSelectedMarker(null);
+    }
     
     // Schedule a resize after the state change is processed
     setTimeout(() => {
