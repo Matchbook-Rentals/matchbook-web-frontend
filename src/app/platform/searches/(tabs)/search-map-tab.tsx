@@ -206,7 +206,17 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   useEffect(() => {
     setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
-  }, [trip?.searchRadius]);
+  }, [trip?.searchRadius, filters]); // Add filters to dependency array
+
+  // Reset the map center when trip location changes or filters change
+  useEffect(() => {
+    if (trip?.latitude !== undefined && trip?.longitude !== undefined) {
+      setCurrentMapCenter({
+        lat: trip.latitude,
+        lng: trip.longitude
+      });
+    }
+  }, [trip?.latitude, trip?.longitude, filters]); // Add filters to dependency array
 
   // Combine liked listings at the top with remaining showListings
   const displayListings = useMemo(() => {
