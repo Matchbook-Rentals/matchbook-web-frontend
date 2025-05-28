@@ -68,6 +68,8 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const markersDataRef = useRef<MapMarker[]>(markers);
+  const [retryCount, setRetryCount] = useState(0);
+  const [mapInitFailed, setMapInitFailed] = useState(false);
 
   const listingsSnapshot = useListingsSnapshot(); // Use the snapshot hook
 
@@ -369,55 +371,79 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     // Return early if we don't have what we need to initialize or map already exists
     if (!mapContainerRef.current || !center) return;
     if (mapRef.current) return; // Map already initialized
+    if (mapInitFailed) return; // Don't retry if we've already failed
 
-    try {
-      const map = new maplibregl.Map({
-        container: mapContainerRef.current,
-        style: 'https://tiles.openfreemap.org/styles/bright',
-        center: center,
-        zoom: zoom,
-        scrollZoom: true, // Typically enabled for mobile maps for better UX
-        failIfMajorPerformanceCaveat: false,
-      });
-      mapRef.current = map;
-      setMapLoaded(true);
+    const retryDelays = [200, 400, 600]; // Retry delays in ms
 
-      map.on('error', (e) => console.error('MapLibre GL error:', e));
+    const initializeMap = () => {
+      try {
+        const map = new maplibregl.Map({
+          container: mapContainerRef.current,
+          style: 'https://tiles.openfreemap.org/styles/bright',
+          center: center,
+          zoom: zoom,
+          scrollZoom: true, // Typically enabled for mobile maps for better UX
+          failIfMajorPerformanceCaveat: false,
+        });
+        mapRef.current = map;
+        setMapLoaded(true);
 
-      const handleMapInteractionEnd = () => { // Covers moveend, zoomend
-        if (!mapRef.current) return;
-        const newZoom = mapRef.current.getZoom();
-        const mapCenter = mapRef.current.getCenter();
+        map.on('error', (e) => console.error('MapLibre GL error:', e));
+
+        const handleMapInteractionEnd = () => { // Covers moveend, zoomend
+          if (!mapRef.current) return;
+          const newZoom = mapRef.current.getZoom();
+          const mapCenter = mapRef.current.getCenter();
+          
+          let needsRender = false;
+          if (newZoom !== currentZoom) {
+              setCurrentZoom(newZoom);
+              needsRender = true; // Zoom change might cross SIMPLE_MARKER_THRESHOLD
+          }
+          onCenterChanged(mapCenter.lng, mapCenter.lat);
+
+          if(needsRender) {
+              renderMarkers(); // This calls createSingleMarker which depends on visible count
+          } else {
+              updateMarkerColors(); // Just update colors if no structural change
+          }
+        };
+
+        map.on('load', () => {
+          if (!mapRef.current) return;
+          setCurrentZoom(mapRef.current.getZoom());
+          renderMarkers(); // Initial render
+        });
+        map.on('zoomend', handleMapInteractionEnd);
+        map.on('moveend', handleMapInteractionEnd);
+        map.on('click', () => {
+          setSelectedMarker(null); // Deselect on map click
+        });
+        // 'idle' can be too frequent, covered by zoom/moveend
+      } catch (error) {
+        console.error('Failed to initialize mobile map:', error);
+        console.error('Map center:', center);
+        console.error('Map container:', mapContainerRef.current);
+        console.error('Retry count:', retryCount);
         
-        let needsRender = false;
-        if (newZoom !== currentZoom) {
-            setCurrentZoom(newZoom);
-            needsRender = true; // Zoom change might cross SIMPLE_MARKER_THRESHOLD
-        }
-        onCenterChanged(mapCenter.lng, mapCenter.lat);
-
-        if(needsRender) {
-            renderMarkers(); // This calls createSingleMarker which depends on visible count
+        // If we have retries left, schedule the next attempt
+        if (retryCount < retryDelays.length) {
+          const delay = retryDelays[retryCount];
+          console.log(`Retrying mobile map initialization in ${delay}ms...`);
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, delay);
         } else {
-            updateMarkerColors(); // Just update colors if no structural change
+          // No more retries, mark as failed
+          console.error('Mobile map initialization failed after all retries');
+          setMapLoaded(false);
+          setMapInitFailed(true);
         }
-      };
+      }
+    };
 
-      map.on('load', () => {
-        if (!mapRef.current) return;
-        setCurrentZoom(mapRef.current.getZoom());
-        renderMarkers(); // Initial render
-      });
-      map.on('zoomend', handleMapInteractionEnd);
-      map.on('moveend', handleMapInteractionEnd);
-      map.on('click', () => {
-        setSelectedMarker(null); // Deselect on map click
-      });
-      // 'idle' can be too frequent, covered by zoom/moveend
-    } catch (error) {
-      console.error('Failed to initialize mobile map:', error);
-      setMapLoaded(false);
-    }
+    // Attempt to initialize the map
+    initializeMap();
 
     // Cleanup
     return () => {
@@ -428,7 +454,7 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, []); // Initialize map only once
+  }, [retryCount]); // Add retryCount as dependency to trigger retries
 
   useEffect(() => {
     if (!mapRef.current || !center || !mapLoaded) return;
@@ -546,11 +572,11 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
       )}
       
       {/* Fallback UI when map fails to load */}
-      {mapLoaded === false && (
+      {mapInitFailed && (
         <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
           <div className="text-gray-700 text-lg mb-3">Unable to load map</div>
           <div className="text-sm text-gray-500 max-w-[80%] text-center px-4">
-            The map could not be loaded due to browser limitations. 
+            The map could not be loaded after multiple attempts. 
             Please try using a different browser or device.
           </div>
           <div className="mt-6">

@@ -74,6 +74,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const markersDataRef = useRef<MapMarker[]>(markers);
   const clickedMarkerIdRef = useRef<string | null>(null);
   const isFullscreenRef = useRef<boolean>(isFullscreen);
+  const [retryCount, setRetryCount] = useState(0);
+  const [mapInitFailed, setMapInitFailed] = useState(false);
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
@@ -614,117 +616,137 @@ const SearchMap: React.FC<SearchMapProps> = ({
     // Return early if we don't have what we need to initialize
     if (!mapContainerRef.current || !center) return;
     if (mapRef.current) return; // Map already initialized
+    if (mapInitFailed) return; // Don't retry if we've already failed
 
+    const retryDelays = [200, 400, 600]; // Retry delays in ms
     let mapRenderZoom = currentZoom || zoom || 12;
 
-    try {
-      const map = new maplibregl.Map({
-        container: mapContainerRef.current,
-        style: 'https://tiles.openfreemap.org/styles/bright',
-        center: center || [0, 0], // Provide fallback center
-        zoom: mapRenderZoom,
-        scrollZoom: true,
-        failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
-      });
-      
-      mapRef.current = map;
-      setMapLoaded(true);
-      
-      // Handle map load errors
-      map.on('error', (e) => {
-        console.error('MapLibre GL error:', e);
-      });
-
-      // Define updateMarkers function - used in multiple event handlers
-      const updateMarkers = (skipRender = false) => {
-        if (!mapRef.current) return;
+    const initializeMap = () => {
+      try {
+        const map = new maplibregl.Map({
+          container: mapContainerRef.current,
+          style: 'https://tiles.openfreemap.org/styles/bright',
+          center: center || [0, 0], // Provide fallback center
+          zoom: mapRenderZoom,
+          scrollZoom: true,
+          failIfMajorPerformanceCaveat: false, // Try to render even on low-end devices
+        });
         
-        const newZoom = mapRef.current.getZoom();
-        setCurrentZoom(newZoom);
-        
-        // Only update visible markers if we don't have a clicked marker
-        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
-          updateVisibleMarkers();
-        }
-        
-        // Only render markers if not skipping render
-        if (!skipRender) {
-          renderMarkers();
-        }
-        
-        updateMarkerColors();
-      };
-      
-      // On initial load, just update the visible markers and render them
-      map.on('load', () => {
-        if (!mapRef.current) return; // Safety check
-        
-        // Only update visible markers if we don't have a clicked marker
-        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
-          updateVisibleMarkers();
-        }
-        const newZoom = mapRef.current.getZoom();
-        setCurrentZoom(newZoom);
-        renderMarkers();
-        updateMarkerColors();
-        
-        // Make sure we set this to true
+        mapRef.current = map;
         setMapLoaded(true);
-      });
-      
-      // On zoom, update markers but preserve center
-      map.on('zoomend', () => {
-        // Get current center before updating
-        const currentCenter = mapRef.current!.getCenter();
-        updateMarkers();
-        // Re-center the map if needed - this ensures user interactions are preserved
-        if (mapRef.current) {
-          mapRef.current.setCenter(currentCenter);
-        }
-      });
-      
-      // On move, only update visible listings without re-rendering the whole map
-      map.on('moveend', () => {
-        if (!mapRef.current) return;
         
-        // Report center change to parent
-        const newCenter = mapRef.current.getCenter();
-        onCenterChanged(newCenter.lng, newCenter.lat);
+        // Handle map load errors
+        map.on('error', (e) => {
+          console.error('MapLibre GL error:', e);
+        });
+
+        // Define updateMarkers function - used in multiple event handlers
+        const updateMarkers = (skipRender = false) => {
+          if (!mapRef.current) return;
+          
+          const newZoom = mapRef.current.getZoom();
+          setCurrentZoom(newZoom);
+          
+          // Only update visible markers if we don't have a clicked marker
+          if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+            updateVisibleMarkers();
+          }
+          
+          // Only render markers if not skipping render
+          if (!skipRender) {
+            renderMarkers();
+          }
+          
+          updateMarkerColors();
+        };
         
-        // Update visible listings only if we don't have a clicked marker
-        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
-          updateVisibleMarkers();
+        // On initial load, just update the visible markers and render them
+        map.on('load', () => {
+          if (!mapRef.current) return; // Safety check
+          
+          // Only update visible markers if we don't have a clicked marker
+          if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+            updateVisibleMarkers();
+          }
+          const newZoom = mapRef.current.getZoom();
+          setCurrentZoom(newZoom);
+          renderMarkers();
+          updateMarkerColors();
+          
+          // Make sure we set this to true
+          setMapLoaded(true);
+        });
+        
+        // On zoom, update markers but preserve center
+        map.on('zoomend', () => {
+          // Get current center before updating
+          const currentCenter = mapRef.current!.getCenter();
+          updateMarkers();
+          // Re-center the map if needed - this ensures user interactions are preserved
+          if (mapRef.current) {
+            mapRef.current.setCenter(currentCenter);
+          }
+        });
+        
+        // On move, only update visible listings without re-rendering the whole map
+        map.on('moveend', () => {
+          if (!mapRef.current) return;
+          
+          // Report center change to parent
+          const newCenter = mapRef.current.getCenter();
+          onCenterChanged(newCenter.lng, newCenter.lat);
+          
+          // Update visible listings only if we don't have a clicked marker
+          if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+            updateVisibleMarkers();
+          }
+          // Update markers but skip rendering to prevent flashy behavior
+          updateMarkers(true);
+        });
+        
+        map.on('click', () => {
+          if (isFullscreenRef.current) {
+            setSelectedMarker(null);
+          }
+          setClickedCluster(null);
+          if (!isFullscreenRef.current) {
+            setClickedMarkerId(null);
+            // Update visible markers to show all listings in bounds
+            updateVisibleMarkers();
+          }
+        });
+        
+        // Add idle event for synchronized updates
+        map.on('idle', () => {
+          // Only update if we don't have a clicked marker in non-fullscreen mode
+          if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
+            updateVisibleMarkers();
+          }
+        });
+      } catch (error) {
+        console.error('Failed to initialize map:', error);
+        console.error('Map center:', center);
+        console.error('Map container:', mapContainerRef.current);
+        console.error('Retry count:', retryCount);
+        
+        // If we have retries left, schedule the next attempt
+        if (retryCount < retryDelays.length) {
+          const delay = retryDelays[retryCount];
+          console.log(`Retrying map initialization in ${delay}ms...`);
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, delay);
+        } else {
+          // No more retries, mark as failed
+          console.error('Map initialization failed after all retries');
+          setMapLoaded(false);
+          setMapInitFailed(true);
         }
-        // Update markers but skip rendering to prevent flashy behavior
-        updateMarkers(true);
-      });
-      
-      map.on('click', () => {
-        if (isFullscreenRef.current) {
-          setSelectedMarker(null);
-        }
-        setClickedCluster(null);
-        if (!isFullscreenRef.current) {
-          setClickedMarkerId(null);
-          // Update visible markers to show all listings in bounds
-          updateVisibleMarkers();
-        }
-      });
-      
-      // Add idle event for synchronized updates
-      map.on('idle', () => {
-        // Only update if we don't have a clicked marker in non-fullscreen mode
-        if (isFullscreenRef.current || !clickedMarkerIdRef.current) {
-          updateVisibleMarkers();
-        }
-      });
-    } catch (error) {
-      console.error('Failed to initialize map:', error);
-      console.error('Map center:', center);
-      console.error('Map container:', mapContainerRef.current);
-      // Set a flag to indicate map failed to load, so we can show fallback UI
-      setMapLoaded(false);
-    }
+      }
+    };
+
+    // Attempt to initialize the map
+    initializeMap();
 
     return () => {
       if (mapRef.current) {
@@ -734,7 +756,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
       markersRef.current.clear();
       clusterMarkersRef.current.clear();
     };
-  }, []); // Empty dependency array - only run once
+  }, [retryCount]); // Add retryCount as dependency to trigger retries
 
   // Update center when center prop changes without reinitializing the map
   useEffect(() => {
@@ -950,11 +972,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
       )}
       
       {/* Fallback UI when map fails to load */}
-      {mapLoaded === false && (
+      {mapInitFailed && (
         <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
           <div className="text-gray-700 mb-3">Unable to load map</div>
           <div className="text-sm text-gray-500 max-w-md text-center px-4">
-            The map could not be loaded due to browser limitations. 
+            The map could not be loaded after multiple attempts. 
             Please try using a different browser or device.
           </div>
           <div className="mt-6">
