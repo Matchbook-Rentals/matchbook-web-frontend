@@ -265,7 +265,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
             )}
           </PopoverTrigger>
-          <PopoverContent  className="p-0">
+          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
             <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="border-b border-gray-200">
                 <div className="px-4 py-3">
@@ -316,7 +316,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               </div>
             )}
           </PopoverTrigger>
-          <PopoverContent className="p-0">
+          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               {/* Render menu items from the structure */}
               {(() => {
@@ -404,7 +404,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
               <UserIcon className="text-charcoal h-[32px] w-[32px]" />
             </div>
           </PopoverTrigger>
-          <PopoverContent  className="p-0">
+          <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-0">
             <div className=" rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
               <div className="flex flex-col">
                 <Link href="/sign-in" className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:ring-inset">
