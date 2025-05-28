@@ -204,6 +204,18 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     }
   }, [isSlideMapOpen]);
 
+  // Combine liked listings at the top with remaining showListings
+  const displayListings = useMemo(() => {
+    // Create a Set of liked listing IDs for efficient lookup
+    const likedIds = new Set(likedListings.map(l => l.id));
+    
+    // Filter showListings to exclude already liked ones to avoid duplicates
+    const nonLikedShowListings = showListings.filter(listing => !likedIds.has(listing.id));
+    
+    // Return liked listings first, then the rest
+    return [...likedListings, ...nonLikedShowListings];
+  }, [showListings, likedListings]);
+
   // Effect to adjust map center and zoom when filters or trip details change (TROUBLESHOOTING MODE)
   useEffect(() => {
     /*
@@ -245,18 +257,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     setZoomLevel(getZoomLevel(trip?.searchRadius || 100)); // Use 100 as fallback for searchRadius
 
   }, [filters, displayListings, trip?.latitude, trip?.longitude, trip?.searchRadius]);
-
-  // Combine liked listings at the top with remaining showListings
-  const displayListings = useMemo(() => {
-    // Create a Set of liked listing IDs for efficient lookup
-    const likedIds = new Set(likedListings.map(l => l.id));
-    
-    // Filter showListings to exclude already liked ones to avoid duplicates
-    const nonLikedShowListings = showListings.filter(listing => !likedIds.has(listing.id));
-    
-    // Return liked listings first, then the rest
-    return [...likedListings, ...nonLikedShowListings];
-  }, [showListings, likedListings]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
