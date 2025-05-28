@@ -212,7 +212,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     //   // ... logic to calculate bounds and set zoom/center based on listings ...
     //   // Example:
     //   // let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
-    //   // displayListings.forEach(listing => { /* ... update bounds ... */ });
+    //   // displayListings.forEach(listing => { / * ... update bounds ... * / }); // Escaped inner comment
     //   // const newCenterLat = (minLat + maxLat) / 2;
     //   // const newCenterLng = (minLng + maxLng) / 2;
     //   // setCurrentMapCenter({ lat: newCenterLat, lng: newCenterLng });
