@@ -782,6 +782,15 @@ const SearchMap: React.FC<SearchMapProps> = ({
   useEffect(() => {
     markersDataRef.current = markers;
   }, [markers]);
+
+  // Effect to update map's zoom when the zoom prop changes
+  useEffect(() => {
+    if (mapRef.current && mapLoaded && zoom !== undefined) {
+      if (mapRef.current.getZoom() !== zoom) {
+        mapRef.current.setZoom(zoom);
+      }
+    }
+  }, [zoom, mapLoaded]);
   
   // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {
