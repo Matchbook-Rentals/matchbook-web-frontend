@@ -103,13 +103,13 @@ const MARKER_STYLES = {
 
 // Add this function to determine zoom level based on radius
 const getZoomLevel = (radius: number | undefined): number => {
-  if (!radius) return 7; // Default zoom if radius is undefined
+  if (!radius) return 6; // Default zoom if radius is undefined
 
-  if (radius >= 100) return 6;
-  if (radius >= 65) return 7;
-  if (radius >= 40) return 8;
-  if (radius >= 20) return 9;
-  return 9; // Default for anything less than 20
+  if (radius >= 100) return 5;
+  if (radius >= 65) return 6;
+  if (radius >= 40) return 7;
+  if (radius >= 20) return 8;
+  return 8; // Default for anything less than 20
 };
 
 const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
