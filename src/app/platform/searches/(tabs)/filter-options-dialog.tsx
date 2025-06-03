@@ -44,7 +44,7 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   onOpenChange,
   className,
 }) => {
-  const { state: { filters: contextFilters, listings }, actions: { updateFilters } } = useTripContext();
+  const { state: { filters: contextFilters, listings, showListings, likedListings }, actions: { updateFilters } } = useTripContext();
   const [localFilters, setLocalFilters] = useState(contextFilters);
   const [priceInputs, setPriceInputs] = useState({
     min: `$${contextFilters.minPrice || ''}`,
@@ -298,8 +298,10 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
   ];
 
   // Calculate filtered listings count based on local filters
+  // This matches the logic in search-map-tab.tsx where we combine liked listings with filtered listings
   const filteredListingsCount = useMemo(() => {
-    return listings.filter(listing => {
+    // First, filter all listings based on the local filters
+    const filteredListings = listings.filter(listing => {
       // Property type filter
       const matchesPropertyType = localFilters.propertyTypes.length === 0 ||
         localFilters.propertyTypes.includes(listing.category);
@@ -378,8 +380,17 @@ const FilterOptionsDialog: React.FC<FilterOptionsDialogProps> = ({
         matchesBasics && // Renamed from matchesClimateControl
         matchesLuxury &&
         matchesLaundry;
-    }).length;
-  }, [listings, localFilters]);
+    });
+    
+    // Get IDs of filtered listings
+    const filteredIds = new Set(filteredListings.map(l => l.id));
+    
+    // Include liked listings that aren't already in the filtered set
+    const likedNotInFiltered = likedListings.filter(listing => !filteredIds.has(listing.id));
+    
+    // Return combined count: filtered listings + liked listings not already included
+    return filteredListings.length + likedNotInFiltered.length;
+  }, [listings, localFilters, likedListings]);
 
   // Reset local filters when dialog opens
   useEffect(() => {
