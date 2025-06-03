@@ -170,7 +170,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, distance, onClose, c
             <CarouselContent>
               {listing.listingImages.map((image, index) => (
                 <CarouselItem key={index} className="relative h-40 w-full">
-                  <Image src={image.url} alt={listing.title} fill className="object-cover" />
+                  <Image src={image.url} alt={listing.title} fill className="object-cover" unoptimized />
                 </CarouselItem>
               ))}
             </CarouselContent>

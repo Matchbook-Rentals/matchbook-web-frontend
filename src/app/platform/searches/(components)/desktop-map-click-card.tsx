@@ -137,7 +137,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             <CarouselContent>
               {listing.listingImages.map((image, index) => (
                 <CarouselItem key={index} className="relative h-40 w-full">
-                  <Image src={image.url} alt={listing.title} fill className="object-cover" />
+                  <Image src={image.url} alt={listing.title} fill className="object-cover" unoptimized />
                 </CarouselItem>
               ))}
             </CarouselContent>
