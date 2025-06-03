@@ -50,6 +50,7 @@ interface SearchMapProps {
   markerStyles: MarkerStyles;
   onCenterChanged?: (lng: number, lat: number) => void;
   onClickedMarkerChange?: (markerId: string | null) => void;
+  onResetRequest?: (resetFn: () => void) => void;
 }
 
 const SearchMap: React.FC<SearchMapProps> = ({
@@ -62,6 +63,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   markerStyles,
   onCenterChanged = () => {},
   onClickedMarkerChange = () => {},
+  onResetRequest,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -758,34 +760,43 @@ const SearchMap: React.FC<SearchMapProps> = ({
     };
   }, [retryCount]); // Add retryCount as dependency to trigger retries
 
-  // Update center when center prop changes without reinitializing the map
+  // Only fly to center on initial load when map is way off
   useEffect(() => {
     if (!mapRef.current || !center || !mapLoaded) return;
     
-    // Get the current view bounds
-    const bounds = mapRef.current.getBounds();
     const currentCenter = mapRef.current.getCenter();
     
-    // Check if we should update center based on:
-    // 1. This appears to be the initial load (center way off)
-    // 2. The center point is not within the current view bounds
-    // 3. User hasn't manually moved the map
+    // Only recenter if this appears to be the initial load (center way off)
     const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 || 
                          Math.abs(currentCenter.lat - center[1]) > 1;
     
-    const centerPoint = new maplibregl.LngLat(center[0], center[1]);
-    const isOutsideView = !bounds.contains(centerPoint) && !mapRef.current.isMoving();
-    
-    // Only fly to a new center if one of the conditions is met
-    if (isInitialLoad || isOutsideView) {
+    if (isInitialLoad) {
       // Use flyTo with a short duration to smoothly transition
       mapRef.current.flyTo({
         center: center,
         duration: 500,
-        essential: true
+        essential: true,
+        zoom: zoom,
       });
     }
-  }, [center, mapLoaded]); // Include center in dependencies to respond to prop changes
+  }, [mapLoaded]); // Only depend on mapLoaded for initial positioning
+
+  // Create reset function and pass it to parent
+  useEffect(() => {
+    if (onResetRequest && mapRef.current && center) {
+      const resetMap = () => {
+        if (mapRef.current && center) {
+          mapRef.current.flyTo({
+            center: center,
+            zoom: zoom,
+            duration: 500,
+            essential: true
+          });
+        }
+      };
+      onResetRequest(resetMap);
+    }
+  }, [onResetRequest, center, zoom, mapLoaded]);
 
   // **State Sync Effects**
   useEffect(() => {
@@ -793,7 +804,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     setClickedMarkerId(null);
     setClickedCluster(null);
     setTimeout(updateVisibleMarkers, 300);
-  }, [filters, searchRadius, queryParams]);
+  }, [queryParams]);
 
   useEffect(updateMarkerColors, [hoveredListing, clickedMarkerId, selectedMarker, clickedCluster, isFullscreen]);
 
@@ -805,14 +816,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
     markersDataRef.current = markers;
   }, [markers]);
 
-  // Effect to update map's zoom when the zoom prop changes
-  useEffect(() => {
-    if (mapRef.current && mapLoaded && zoom !== undefined) {
-      if (mapRef.current.getZoom() !== zoom) {
-        mapRef.current.setZoom(zoom);
-      }
-    }
-  }, [zoom, mapLoaded]);
+  // Effect to update map's zoom when the zoom prop changes (removed - handled in center effect)
+  // The zoom is now handled together with center changes in the effect above
   
   // Handle marker changes using debouncing to prevent frequent re-renders
   useEffect(() => {

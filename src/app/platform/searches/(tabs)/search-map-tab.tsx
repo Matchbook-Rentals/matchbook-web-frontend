@@ -216,47 +216,67 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     return [...likedListings, ...nonLikedShowListings];
   }, [showListings, likedListings]);
 
-  // Effect to adjust map center and zoom when filters or trip details change (TROUBLESHOOTING MODE)
+  // Effect to set initial map center and zoom ONLY when trip location changes
+  // This prevents the map from jumping back when user pans/zooms
   useEffect(() => {
-    /*
-    // --- This is where the original logic based on displayListings would go ---
-    // if (displayListings && displayListings.length > 0) {
-    //   // ... logic to calculate bounds and set zoom/center based on listings ...
-    //   // Example:
-    //   // let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
-    //   // displayListings.forEach(listing => { / * ... update bounds ... * / }); // Escaped inner comment
-    //   // const newCenterLat = (minLat + maxLat) / 2;
-    //   // const newCenterLng = (minLng + maxLng) / 2;
-    //   // setCurrentMapCenter({ lat: newCenterLat, lng: newCenterLng });
-    //   // const latSpan = maxLat - minLat;
-    //   // const lngSpan = maxLng - minLng;
-    //   // const maxSpanDegrees = Math.max(latSpan, lngSpan);
-    //   // const effectiveRadius = (maxSpanDegrees * 69) / 2 * 1.2; 
-    //   // setZoomLevel(getZoomLevel(effectiveRadius > 0 ? effectiveRadius : undefined));
-    // } else {
-    //   // Fallback if no displayListings
-    //   setCurrentMapCenter({ 
-    //     lat: trip?.latitude !== undefined ? trip.latitude : 0, 
-    //     lng: trip?.longitude !== undefined ? trip.longitude : 0 
-    //   });
-    //   setZoomLevel(getZoomLevel(trip?.searchRadius || 50)); // Original fallback
-    // }
-    */
-
-    // --- Troubleshooting: Always set center and zoom based on trip data ---
-    // console.log('Troubleshooting map effect: Forcing center and zoom based on trip data and filters.');
+    // Only update center if this is truly a location change (not just a filter change)
     if (trip?.latitude !== undefined && trip?.longitude !== undefined) {
-      setCurrentMapCenter({ 
-        lat: trip.latitude, 
-        lng: trip.longitude 
-      });
-    } else {
-      // Fallback if trip location is undefined, to prevent errors
+      // Check if this is actually a different location than what we already have
+      const isNewLocation = 
+        Math.abs((currentMapCenter.lat || 0) - trip.latitude) > 0.001 || 
+        Math.abs((currentMapCenter.lng || 0) - trip.longitude) > 0.001;
+      
+      if (isNewLocation) {
+        setCurrentMapCenter({ 
+          lat: trip.latitude, 
+          lng: trip.longitude 
+        });
+      }
+    } else if (currentMapCenter.lat === 0 && currentMapCenter.lng === 0) {
+      // Only set fallback if we don't have any center yet
       setCurrentMapCenter({ lat: 0, lng: 0 }); 
     }
-    setZoomLevel(getZoomLevel(trip?.searchRadius || 100)); // Use 100 as fallback for searchRadius
 
-  }, [filters, displayListings, trip?.latitude, trip?.longitude, trip?.searchRadius]);
+  }, [trip?.latitude, trip?.longitude]); // Removed filters and displayListings from dependencies
+  
+  // Separate effect for zoom level updates based on search radius
+  useEffect(() => {
+    if (trip?.searchRadius !== undefined) {
+      setZoomLevel(getZoomLevel(trip.searchRadius));
+    }
+  }, [trip?.searchRadius]);
+  
+  // Create a ref to pass the reset function to the map
+  const mapResetRef = useRef<(() => void) | null>(null);
+  
+  // Reset map center and zoom when user changes filter settings
+  useEffect(() => {
+    // Call the reset function if it exists
+    if (mapResetRef.current && trip?.latitude !== undefined && trip?.longitude !== undefined) {
+      mapResetRef.current();
+    }
+  }, [
+    // Only watch actual filter values that users can change
+    filters?.minPrice,
+    filters?.maxPrice,
+    filters?.minBedrooms,
+    filters?.minBeds,
+    filters?.minBathrooms,
+    filters?.furnished,
+    filters?.unfurnished,
+    filters?.searchRadius,
+    // Watch array lengths to detect changes (not the arrays themselves to avoid reference issues)
+    filters?.propertyTypes?.length,
+    filters?.utilities?.length,
+    filters?.pets?.length,
+    filters?.accessibility?.length,
+    filters?.location?.length,
+    filters?.parking?.length,
+    filters?.kitchen?.length,
+    filters?.basics?.length,
+    filters?.luxury?.length,
+    filters?.laundry?.length
+  ]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
@@ -415,7 +435,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {isClient && isDesktopView && (
           <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
             <SearchMap
-              center={[mapCenter.lng, mapCenter.lat]}
+              center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
             zoom={zoomLevel}
             height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
             markers={markers}
@@ -427,6 +447,9 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               setCurrentMapCenter({ lat, lng });
             }}
             onClickedMarkerChange={setClickedMarkerId}
+            onResetRequest={(resetFn) => {
+              mapResetRef.current = resetFn;
+            }}
           />
         </div>
         )}
@@ -444,7 +467,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             exit="exit"
           >
             <SearchMapMobile
-              center={[mapCenter.lng, mapCenter.lat]}
+              center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
               zoom={zoomLevel}
               height="100vh"
               markers={markers}
