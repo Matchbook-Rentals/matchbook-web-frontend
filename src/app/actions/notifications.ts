@@ -3,9 +3,8 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
 import { Notification, Prisma } from '@prisma/client'
-import { Resend } from 'resend'
-import NotificationEmailTemplate from '@/components/email-templates/notification-email'
-import { NotificationEmailData, SendNotificationEmailInput, SendNotificationEmailResponse } from '@/types'
+import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/notification-email-config'
+import { sendNotificationEmail } from '@/lib/send-notification-email'
 
 
 type GetNotificationsResponse =
@@ -18,7 +17,13 @@ type CreateNotificationResponse =
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
-
+type CreateNotificationWithEmailInput = CreateNotificationInput & {
+  emailData?: {
+    senderName?: string;
+    conversationId?: string;
+    [key: string]: any;
+  };
+};
 
 async function checkAuth() {
   const { userId } = auth();
@@ -28,52 +33,23 @@ async function checkAuth() {
   return userId;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Email sending has been moved to a secure utility function
+// This prevents it from being exposed as a public server action
 
-export async function sendNotificationEmail({
-  to,
-  subject,
-  emailData
-}: SendNotificationEmailInput): Promise<SendNotificationEmailResponse> {
+export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse>;
+export async function createNotification(notificationData: CreateNotificationWithEmailInput): Promise<CreateNotificationResponse>;
+export async function createNotification(notificationData: CreateNotificationInput | CreateNotificationWithEmailInput): Promise<CreateNotificationResponse> {
   try {
-    // Check authentication
-    await checkAuth();
+    // Extract the core notification data (without emailData)
+    const dbData: CreateNotificationInput = 'emailData' in notificationData
+      ? (() => {
+          const { emailData, ...rest } = notificationData;
+          return rest;
+        })()
+      : notificationData;
 
-    // Validate environment variables
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY is not configured');
-      return { success: false, error: 'Email service not configured' };
-    }
-
-    // Send the email using Resend
-    const { data, error } = await resend.emails.send({
-      from: 'notifications <info@matchbookrentals.com>',
-      to: [to],
-      subject: subject,
-      react: NotificationEmailTemplate(emailData),
-    });
-
-    if (error) {
-      console.error('Failed to send notification email:', error);
-      return { success: false, error: 'Failed to send email' };
-    }
-
-    if (!data?.id) {
-      console.error('No email ID returned from Resend');
-      return { success: false, error: 'Invalid response from email service' };
-    }
-
-    return { success: true, emailId: data.id };
-  } catch (error) {
-    console.error('Error in sendNotificationEmail:', error);
-    return { success: false, error: 'Failed to send notification email' };
-  }
-}
-
-export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse> {
-  try {
     const notification = await prisma.notification.create({
-      data: notificationData,
+      data: dbData,
     })
 
     // Send notification email if conditions are met
@@ -86,21 +62,25 @@ export async function createNotification(notificationData: CreateNotificationInp
         });
 
         if (user?.email) {
-          const emailData: NotificationEmailData = {
-            companyName: 'Matchbook Rentals',
-            headerText: 'New Notification',
-            contentTitle: 'You have a new notification',
-            contentText: notification.content,
-            buttonText: 'View Details',
-            buttonUrl: `${process.env.NEXT_PUBLIC_URL}${notification.url}`,
-            companyAddress: '123 Main Street',
-            companyCity: 'San Francisco, CA 94102',
-            companyWebsite: 'matchbookrentals.com'
-          };
+          // Extract emailData for customization
+          const customEmailData = 'emailData' in notificationData ? notificationData.emailData : undefined;
+          
+          // Build notification-specific email content
+          const emailData = buildNotificationEmailData(
+            notification.actionType,
+            {
+              content: notification.content,
+              url: notification.url
+            },
+            user,
+            customEmailData
+          );
+
+          const subject = getNotificationEmailSubject(notification.actionType);
 
           const emailResult = await sendNotificationEmail({
             to: user.email,
-            subject: 'New Notification - Matchbook Rentals',
+            subject,
             emailData
           });
 

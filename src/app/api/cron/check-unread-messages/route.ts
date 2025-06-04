@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
+import { createNotification } from '@/app/actions/notifications';
 
 // Define the expected structure for a notification input
 // This should align with the fields defined in your `prisma.schema` for Notification
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     const messagesToNotify = await prisma.message.findMany({
       where: {
         isRead: false,
-        notificaitonSentAt: null,
+        notificationSentAt: null,
         createdAt: {
           lte: twoMinutesAgo,
         },
@@ -56,7 +57,15 @@ export async function GET(request: Request) {
 
     console.log(`Cron job: Found ${messagesToNotify.length} messages to process for notifications.`);
 
-    const notificationsToCreate = [];
+    const notificationsToCreate: Array<{
+      userId: string;
+      actionType: string;
+      actionId: string;
+      content: string;
+      url: string;
+      senderName: string;
+      conversationId: string;
+    }> = [];
     const messageIdsToUpdate: string[] = [];
 
     // 4. & 5. Determine recipients and prepare notifications
@@ -82,6 +91,8 @@ export async function GET(request: Request) {
           actionId: message.id,
           content: `You have a new message from ${senderName}.`, // Simple content
           url: `/platform/messages?convo=${message.conversation.id}`, // Link notification to the conversation
+          senderName: senderName, // Add sender name for email customization
+          conversationId: message.conversation.id // Add conversation ID for email URL
         });
       }
       // Add message ID to list for updating notificationSentAt status
@@ -91,34 +102,60 @@ export async function GET(request: Request) {
     // Remove duplicates before creating notifications (in case multiple messages trigger for same user/convo)
     // Note: This simple approach creates one notification per *message* per recipient.
     // A more advanced approach could group notifications per conversation.
-    const uniqueNotifications = Array.from(new Map(notificationsToCreate.map(n => [`${n.userId}-${n.relatedId}-${n.content}`, n])).values());
+    const uniqueNotifications = Array.from(new Map(notificationsToCreate.map(n => [`${n.userId}-${n.content}`, n])).values());
 
+    // 6. Create notifications using our enhanced createNotification function (includes emails)
+    // and update messages to mark as processed
+    let notificationResults = 0;
+    let notificationErrors = 0;
 
-    // 6. Create notifications and update messages within a transaction
     if (uniqueNotifications.length > 0 && messageIdsToUpdate.length > 0) {
       console.log(`Cron job: Creating ${uniqueNotifications.length} notifications and updating ${messageIdsToUpdate.length} messages.`);
+
+      // Create notifications one by one using our enhanced createNotification function
+      // This ensures emails are sent and proper validation is done
+      for (const notificationData of uniqueNotifications) {
+        try {
+          const result = await createNotification({
+            userId: notificationData.userId,
+            content: notificationData.content,
+            url: notificationData.url,
+            actionType: notificationData.actionType,
+            actionId: notificationData.actionId,
+            emailData: {
+              senderName: notificationData.senderName,
+              conversationId: notificationData.conversationId
+            }
+          });
+          
+          if (result.success) {
+            notificationResults++;
+          } else {
+            notificationErrors++;
+            console.error('Cron job: Failed to create notification:', result.error);
+          }
+        } catch (error) {
+          notificationErrors++;
+          console.error('Cron job: Error creating notification:', error);
+        }
+      }
+
+      // Update messages to mark notifications as sent (separate transaction)
       try {
-        const [notificationResult, messageUpdateResult] = await prisma.$transaction([
-          prisma.notification.createMany({
-            data: uniqueNotifications,
-            skipDuplicates: true, // Avoid errors if a similar notification was somehow created concurrently
-          }),
-          prisma.message.updateMany({
-            where: {
-              id: {
-                in: messageIdsToUpdate,
-              },
+        const messageUpdateResult = await prisma.message.updateMany({
+          where: {
+            id: {
+              in: messageIdsToUpdate,
             },
-            data: {
-              notificaitonSentAt: new Date(),
-            },
-          }),
-        ]);
-        console.log(`Cron job: Created ${notificationResult.count} notifications. Updated ${messageUpdateResult.count} messages.`);
-      } catch (transactionError) {
-         console.error('Cron job: Transaction failed!', transactionError);
-         // Decide how to handle partial failures if necessary
-         return NextResponse.json({ success: false, error: 'Transaction failed during notification creation/message update' }, { status: 500 });
+          },
+          data: {
+            notificationSentAt: new Date(),
+          },
+        });
+        console.log(`Cron job: Created ${notificationResults} notifications (${notificationErrors} errors). Updated ${messageUpdateResult.count} messages.`);
+      } catch (messageUpdateError) {
+        console.error('Cron job: Failed to update messages:', messageUpdateError);
+        return NextResponse.json({ success: false, error: 'Failed to update message notification status' }, { status: 500 });
       }
     } else {
        console.log('Cron job: No valid notifications to create or messages to update after processing.');
@@ -127,7 +164,8 @@ export async function GET(request: Request) {
     return NextResponse.json({
       success: true,
       processedMessages: messageIdsToUpdate.length,
-      createdNotifications: uniqueNotifications.length, // Use unique count here
+      createdNotifications: notificationResults || 0,
+      notificationErrors: notificationErrors || 0,
     });
 
   } catch (error) {
