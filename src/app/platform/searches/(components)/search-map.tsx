@@ -13,6 +13,7 @@ import ListingCard from './desktop-map-click-card';
 
 interface MarkerStyles {
   SIMPLE_MARKER_THRESHOLD: number;
+  FULLSCREEN_SIMPLE_MARKER_THRESHOLD: number;
   MARKER_COLORS: {
     DEFAULT: { primary: string; secondary: string };
     HOVER: { primary: string; secondary: string };
@@ -168,7 +169,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     if (!mapRef.current) return;
 
     const visibleMarkers = getVisibleMarkers();
-    const threshold = isFullscreenRef.current ? 60 : markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
     const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
 
     if (shouldUseSimpleMarkers) {
@@ -371,7 +372,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   /** Update marker colors based on state */
   const updateMarkerColors = () => {
     const visibleMarkers = getVisibleMarkers();
-    const threshold = isFullscreenRef.current ? 60 : markerStyles.SIMPLE_MARKER_THRESHOLD;
+    const threshold = isFullscreenRef.current ? markerStyles.FULLSCREEN_SIMPLE_MARKER_THRESHOLD : markerStyles.SIMPLE_MARKER_THRESHOLD;
     const shouldUseSimpleMarkers = visibleMarkers.length > threshold;
 
 
@@ -908,10 +909,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
       if (!mapRef.current) return;
 
       try {
-        if (!isFullscreen) {
-          updateVisibleMarkers();
-          renderMarkers();
-        }
+        // Always re-render markers when fullscreen mode changes
+        // because the threshold changes and marker types switch
+        updateVisibleMarkers();
+        renderMarkers();
+        updateMarkerColors();
 
         // Ensure map resizes properly after fullscreen toggle
         mapRef.current.resize();

@@ -41,6 +41,8 @@ const slideUpVariants = {
 const MARKER_STYLES = {
   // Threshold for switching to simple markers when there are too many listings
   SIMPLE_MARKER_THRESHOLD: 30,
+  // Threshold for fullscreen mode (should be 2x the regular threshold)
+  FULLSCREEN_SIMPLE_MARKER_THRESHOLD: 60,
   
   // Simple marker color configuration (for >30 listings)
   MARKER_COLORS: {
