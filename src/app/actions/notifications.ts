@@ -3,6 +3,9 @@ import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
 import { Notification, Prisma } from '@prisma/client'
+import { Resend } from 'resend'
+import NotificationEmailTemplate from '@/components/email-templates/notification-email'
+import { NotificationEmailData, SendNotificationEmailInput, SendNotificationEmailResponse } from '@/types'
 
 
 type GetNotificationsResponse =
@@ -25,12 +28,93 @@ async function checkAuth() {
   return userId;
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export async function sendNotificationEmail({
+  to,
+  subject,
+  emailData
+}: SendNotificationEmailInput): Promise<SendNotificationEmailResponse> {
+  try {
+    // Check authentication
+    await checkAuth();
+
+    // Validate environment variables
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is not configured');
+      return { success: false, error: 'Email service not configured' };
+    }
+
+    // Send the email using Resend
+    const { data, error } = await resend.emails.send({
+      from: 'notifications <info@matchbookrentals.com>',
+      to: [to],
+      subject: subject,
+      react: NotificationEmailTemplate(emailData),
+    });
+
+    if (error) {
+      console.error('Failed to send notification email:', error);
+      return { success: false, error: 'Failed to send email' };
+    }
+
+    if (!data?.id) {
+      console.error('No email ID returned from Resend');
+      return { success: false, error: 'Invalid response from email service' };
+    }
+
+    return { success: true, emailId: data.id };
+  } catch (error) {
+    console.error('Error in sendNotificationEmail:', error);
+    return { success: false, error: 'Failed to send notification email' };
+  }
+}
+
 export async function createNotification(notificationData: CreateNotificationInput): Promise<CreateNotificationResponse> {
   try {
     const notification = await prisma.notification.create({
       data: notificationData,
     })
-    revalidatePath('/notifications') // Adjust the path as needed
+
+    // Send notification email if conditions are met
+    if (true) { // TODO: Replace with user settings check
+      try {
+        // Get user email
+        const user = await prisma.user.findUnique({
+          where: { id: notificationData.userId },
+          select: { email: true, firstName: true }
+        });
+
+        if (user?.email) {
+          const emailData: NotificationEmailData = {
+            companyName: 'Matchbook Rentals',
+            headerText: 'New Notification',
+            contentTitle: 'You have a new notification',
+            contentText: notification.content,
+            buttonText: 'View Details',
+            buttonUrl: `${process.env.NEXT_PUBLIC_URL}${notification.url}`,
+            companyAddress: '123 Main Street',
+            companyCity: 'San Francisco, CA 94102',
+            companyWebsite: 'matchbookrentals.com'
+          };
+
+          const emailResult = await sendNotificationEmail({
+            to: user.email,
+            subject: 'New Notification - Matchbook Rentals',
+            emailData
+          });
+
+          if (!emailResult.success) {
+            console.error('Failed to send notification email:', emailResult.error);
+          }
+        }
+      } catch (emailError) {
+        // Log email error but don't fail notification creation
+        console.error('Error sending notification email:', emailError);
+      }
+    }
+
+    revalidatePath('/notifications')
     return { success: true, notification }
   } catch (error) {
     console.error('Failed to create notification:', error)
