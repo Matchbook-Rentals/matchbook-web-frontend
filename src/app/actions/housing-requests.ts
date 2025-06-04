@@ -8,6 +8,48 @@ import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 
 
+export async function getHousingRequestById(housingRequestId: string) {
+  try {
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: {
+        id: housingRequestId,
+      },
+      include: {
+        user: {
+          include: {
+            applications: {
+              include: {
+                verificationImages: true,
+                incomes: true,
+                identifications: true,
+                residentialHistories: true,
+              }
+            }
+          }
+        },
+      },
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    // Manually fetch trip data to handle potential null cases
+    try {
+      const trip = await prisma.trip.findUnique({
+        where: { id: housingRequest.tripId }
+      });
+      return { ...housingRequest, trip };
+    } catch (error) {
+      console.warn(`Failed to fetch trip ${housingRequest.tripId} for housing request ${housingRequest.id}:`, error);
+      return { ...housingRequest, trip: null };
+    }
+  } catch (error) {
+    console.error('Error fetching housing request:', error);
+    throw new Error('Failed to fetch housing request');
+  }
+}
+
 export async function getHousingRequestsByListingId(listingId: string) {
   try {
     const housingRequests = await prisma.housingRequest.findMany({

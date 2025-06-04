@@ -3,6 +3,25 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { PAGE_MARGIN } from "@/constants/styles";
+import { HousingRequest, User, Application, Income, ResidentialHistory } from "@prisma/client";
+import Link from "next/link";
+
+interface HousingRequestWithUser extends HousingRequest {
+  user: User & {
+    applications: (Application & {
+      incomes: Income[];
+      residentialHistories: ResidentialHistory[];
+    })[];
+  };
+  trip?: any;
+}
+
+interface ApplicationDetailsProps {
+  housingRequestId: string;
+  housingRequest: HousingRequestWithUser;
+  listingId: string;
+}
 
 // Data for the application
 const guestDetails = {
@@ -95,26 +114,38 @@ const questionnaire = {
   },
 };
 
-export const WebApplication = (): JSX.Element => {
+export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId }: ApplicationDetailsProps): JSX.Element => {
+  const application = housingRequest.user.applications[0];
+  const user = housingRequest.user;
+  
+  // Get user name from actual data
+  const getUserName = () => {
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    return user.email || guestDetails.name;
+  };
+
+  // Helper function to format currency
+  const formatCurrency = (amount: number) => 
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+
   return (
     <main className="bg-white flex flex-row justify-center w-full">
-      <div className="bg-white w-full max-w-[1920px] relative px-6 py-4">
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 mb-8 text-sm font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-          <span>Applications</span>
-          <img
-            className="w-2.5 h-[9px]"
-            alt="Breadcrumb separator"
-            src="/polygon-1.svg"
-          />
-          <span>{guestDetails.name}</span>
-        </nav>
+      <div className={`bg-white w-full max-w-[1920px] relative ${PAGE_MARGIN} py-4`}>
+        {/* Back Navigation */}
+        <Link href={`/platform/host-dashboard/${listingId}?tab=applications`} className="hover:underline flex items-center gap-2 mb-8">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back
+        </Link>
 
         {/* Action Buttons */}
         <div className="flex gap-4 mb-12">
           <Button
             variant="outline"
-            className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] text-colorsred [font-family:'Poppins',Helvetica] font-medium"
+            className="w-[290px] h-[63px] rounded-[5px] border-[1.5px] border-[#ff3b30] text-[#ff3b30] [font-family:'Poppins',Helvetica] font-medium"
           >
             Decline
           </Button>
@@ -426,15 +457,15 @@ export const WebApplication = (): JSX.Element => {
               <ChevronDownIcon className="w-6 h-6" />
             </div>
 
-            {incomeDetails.map((income, index) => (
+{(application?.incomes && application.incomes.length > 0 ? application.incomes : incomeDetails).map((income, index) => (
               <React.Fragment key={index}>
                 <div className="grid grid-cols-3 gap-4 mt-6">
                   <div>
                     <p className="text-base font-light text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
-                      {income.source}
+                      {application?.incomes ? `Source ${index + 1}` : income.source}
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {income.description}
+                      {application?.incomes ? (income.sourceDescription || 'No description provided') : income.description}
                     </p>
                   </div>
                   <div>
@@ -442,7 +473,7 @@ export const WebApplication = (): JSX.Element => {
                       Monthly Amount
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {income.monthlyAmount}
+                      {application?.incomes ? formatCurrency(income.monthlyAmount || 0) : income.monthlyAmount}
                     </p>
                   </div>
                   <div className="flex items-center">
@@ -454,7 +485,7 @@ export const WebApplication = (): JSX.Element => {
                     </Button>
                   </div>
                 </div>
-                {index < incomeDetails.length - 1 && (
+                {index < (application?.incomes?.length || incomeDetails.length) - 1 && (
                   <Separator className="my-4" />
                 )}
               </React.Fragment>
