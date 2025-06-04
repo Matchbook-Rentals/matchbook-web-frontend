@@ -89,6 +89,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
               className={`w-full h-full object-cover rounded-lg ${isMainImageLoaded ? 'block' : 'hidden'}`} // Hide until loaded
               onLoad={() => setIsMainImageLoaded(true)}
               onError={() => setIsMainImageLoaded(true)} // Stop pulse on error too
+              draggable={false}
+              style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
             />
           )}
            {/* Fallback pulse if array has items but index is somehow invalid */}
@@ -114,6 +116,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                           src={image.url}
                           alt={`${image.category} image ${image.rank}`}
                           className="object-cover w-full h-full rounded-lg"
+                          draggable={false}
+                          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                         />
                       </div>
                     ))}
@@ -153,6 +157,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                         // onLoad/onError only relevant for the active image to update the state
                         onLoad={() => { if (index === activeImage) setIsMainImageLoaded(true); }}
                         onError={() => { if (index === activeImage) setIsMainImageLoaded(true); }} // Stop pulse on error
+                        draggable={false}
+                        style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                       />
                       <p className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm z-10">
                         {index + 1} / {uniqueImages.length}
@@ -189,6 +195,8 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                       src={image.url}
                       alt={`${image.category} image ${image.rank}`}
                       className="object-contain w-full h-full min-h-[200px] max-h-[400px]"
+                      draggable={false}
+                      style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                     />
                     <p className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
                       {index + 1} / {uniqueImages.length}
