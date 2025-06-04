@@ -38,6 +38,11 @@ export async function GET(request: Request) {
                 userId: true,
               },
             },
+            listing: {
+              select: {
+                title: true,
+              },
+            },
           },
         },
         sender: { // Include sender info for notification content
@@ -65,6 +70,8 @@ export async function GET(request: Request) {
       url: string;
       senderName: string;
       conversationId: string;
+      listingTitle: string;
+      messageContent: string;
     }> = [];
     const messageIdsToUpdate: string[] = [];
 
@@ -76,6 +83,7 @@ export async function GET(request: Request) {
       }
 
       const senderName = message.sender.firstName || message.sender.email || 'Someone';
+      const listingTitle = message.conversation.listing?.title || 'Property';
       const participants = message.conversation.participants;
 
       for (const participant of participants) {
@@ -89,10 +97,12 @@ export async function GET(request: Request) {
           userId: participant.userId,
           actionType: 'message', // Use the enum value
           actionId: message.id,
-          content: `You have a new message from ${senderName}.`, // Simple content
+          content: `You have a new message from ${senderName}.`, // Keep informative content for in-app
           url: `/platform/messages?convo=${message.conversation.id}`, // Link notification to the conversation
           senderName: senderName, // Add sender name for email customization
-          conversationId: message.conversation.id // Add conversation ID for email URL
+          conversationId: message.conversation.id, // Add conversation ID for email URL
+          listingTitle: listingTitle, // Add listing title for email
+          messageContent: message.content || 'New message' // Actual message content for email
         });
       }
       // Add message ID to list for updating notificationSentAt status
@@ -124,7 +134,9 @@ export async function GET(request: Request) {
             actionId: notificationData.actionId,
             emailData: {
               senderName: notificationData.senderName,
-              conversationId: notificationData.conversationId
+              conversationId: notificationData.conversationId,
+              listingTitle: notificationData.listingTitle,
+              messageContent: notificationData.messageContent
             }
           });
           

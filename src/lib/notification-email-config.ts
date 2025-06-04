@@ -6,6 +6,8 @@ export interface NotificationEmailConfig {
   contentTitle: string;
   buttonText: string;
   getContentText?: (content: string, notification?: any) => string;
+  getHeaderText?: (notification?: any) => string;
+  getContentTitle?: (notification?: any) => string;
 }
 
 export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig> = {
@@ -30,13 +32,19 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
   // Message notifications
   message: {
     subject: 'New Message - MatchBook Rentals',
-    headerText: 'New Message!',
-    contentTitle: 'You have a new message',
+    headerText: 'New Message!', // This will be dynamically replaced
+    contentTitle: 'You have a new message', // This will be dynamically replaced
     buttonText: 'Read here',
     getContentText: (content, notification) => {
-      // Extract sender name from the content format "You have a new message from [name]."
+      // Return the actual message content from email data
+      return notification?.messageContent || content;
+    },
+    getHeaderText: (notification) => {
       const senderName = notification?.senderName || 'someone';
       return `New Message from ${senderName}`;
+    },
+    getContentTitle: (notification) => {
+      return notification?.listingTitle || 'You have a new message';
     }
   },
 
@@ -99,16 +107,18 @@ export function buildNotificationEmailData(
   additionalData?: {
     senderName?: string;
     conversationId?: string;
+    listingTitle?: string;
     [key: string]: any;
   }
 ): NotificationEmailData {
   const config = getNotificationEmailConfig(actionType);
+  const notificationContext = { user, ...additionalData };
   
   return {
     companyName: 'MatchBook',
-    headerText: config.headerText,
-    contentTitle: config.contentTitle,
-    contentText: config.getContentText?.(notification.content, { user, ...additionalData }) || notification.content,
+    headerText: config.getHeaderText?.(notificationContext) || config.headerText,
+    contentTitle: config.getContentTitle?.(notificationContext) || config.contentTitle,
+    contentText: config.getContentText?.(notification.content, notificationContext) || notification.content,
     buttonText: config.buttonText,
     buttonUrl: `${process.env.NEXT_PUBLIC_URL}${notification.url}`,
     companyAddress: '',

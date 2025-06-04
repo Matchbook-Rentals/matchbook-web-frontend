@@ -103,7 +103,7 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                   <td className="message-wrapper" style={{ backgroundColor: '#e7ebe2', borderRadius: '20px', padding: '20px' }}>
                     <table width="100%" cellPadding="0" cellSpacing="0" border="0">
                       <tr>
-                        <td style={{ fontWeight: 'bold', paddingBottom: '15px', fontSize: '16px' }}>
+                        <td style={{ fontWeight: 'bold', paddingBottom: '15px', fontSize: '16px', textAlign: 'center' }}>
                           {contentTitle}
                         </td>
                       </tr>

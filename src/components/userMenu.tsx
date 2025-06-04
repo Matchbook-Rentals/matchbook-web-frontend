@@ -168,7 +168,315 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
 
   const handleSettings = () => {
     openUserProfile({
-    //  customPages: [
+      customPages: [
+        {
+          label: 'Notifications',
+          url: '/notifications',
+          mount: async (el) => {
+            const content = document.createElement('div');
+            content.className = 'p-4';
+            
+            // Create initial HTML structure
+            content.innerHTML = `
+              <h2 class="text-xl font-bold mb-4">Email Notification Settings</h2>
+              <div id="loading-state" class="text-center py-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p class="text-sm text-gray-500 mt-2">Loading preferences...</p>
+              </div>
+              <div id="notification-settings" class="space-y-6 hidden">
+                
+                <!-- Messages & Communication -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Messages & Communication</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">New Message</label>
+                      <p class="text-xs text-gray-500">Get notified when you receive new messages</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="new-message-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">New Conversation</label>
+                      <p class="text-xs text-gray-500">Get notified when someone starts a new conversation with you</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="new-conversation-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Applications & Matching -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Applications & Matching</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">New Application Received</label>
+                      <p class="text-xs text-gray-500">Get notified when you receive new rental applications</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="application-received-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Application Approved</label>
+                      <p class="text-xs text-gray-500">Get notified when your rental application is approved</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="application-approved-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Application Declined</label>
+                      <p class="text-xs text-gray-500">Get notified when your rental application is declined</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="application-declined-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Reviews & Verification -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Reviews & Verification</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Host Review Requests</label>
+                      <p class="text-xs text-gray-500">Get notified when asked to submit a review for a host</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="host-review-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Renter Review Requests</label>
+                      <p class="text-xs text-gray-500">Get notified when asked to submit a review for a renter</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="renter-review-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Landlord Info Requests</label>
+                      <p class="text-xs text-gray-500">Get notified about previous landlord information requests</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="landlord-info-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Verification Completed</label>
+                      <p class="text-xs text-gray-500">Get notified when your renter verification is completed</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="verification-completed-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Bookings & Stays -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Bookings & Stays</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Booking Completed</label>
+                      <p class="text-xs text-gray-500">Get notified when a booking is completed</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="booking-completed-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Booking Canceled</label>
+                      <p class="text-xs text-gray-500">Get notified when a booking is canceled</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="booking-canceled-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Move Out Upcoming</label>
+                      <p class="text-xs text-gray-500">Get notified when your move out date is approaching</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="move-out-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Move In Upcoming</label>
+                      <p class="text-xs text-gray-500">Get notified when your move in date is approaching</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="move-in-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Payments -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Payments</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Payment Successful</label>
+                      <p class="text-xs text-gray-500">Get notified when payments are processed successfully</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="payment-success-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Payment Failed</label>
+                      <p class="text-xs text-gray-500">Get notified when payments fail to process</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="payment-failed-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- External Communications -->
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">External Communications</h3>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="text-sm font-medium text-gray-900">Off-Platform Host Communications</label>
+                      <p class="text-xs text-gray-500">Get notified about communications with off-platform hosts</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" class="sr-only peer" id="off-platform-toggle">
+                      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="error-state" class="text-center py-4 hidden">
+                <p class="text-sm text-red-500">Failed to load notification preferences. Please try again.</p>
+              </div>
+            `;
+            el.appendChild(content);
+
+            // Load current preferences and set up event handlers
+            try {
+              const response = await fetch('/api/user/notification-preferences');
+              const data = await response.json();
+              
+              if (data.success) {
+                const prefs = data.preferences;
+                
+                // Set initial toggle states
+                const toggles = [
+                  { id: '#new-message-toggle', key: 'emailNewMessageNotifications' },
+                  { id: '#new-conversation-toggle', key: 'emailNewConversationNotifications' },
+                  { id: '#application-received-toggle', key: 'emailApplicationReceivedNotifications' },
+                  { id: '#application-approved-toggle', key: 'emailApplicationApprovedNotifications' },
+                  { id: '#application-declined-toggle', key: 'emailApplicationDeclinedNotifications' },
+                  { id: '#host-review-toggle', key: 'emailSubmitHostReviewNotifications' },
+                  { id: '#renter-review-toggle', key: 'emailSubmitRenterReviewNotifications' },
+                  { id: '#landlord-info-toggle', key: 'emailLandlordInfoRequestNotifications' },
+                  { id: '#verification-completed-toggle', key: 'emailVerificationCompletedNotifications' },
+                  { id: '#booking-completed-toggle', key: 'emailBookingCompletedNotifications' },
+                  { id: '#booking-canceled-toggle', key: 'emailBookingCanceledNotifications' },
+                  { id: '#move-out-toggle', key: 'emailMoveOutUpcomingNotifications' },
+                  { id: '#move-in-toggle', key: 'emailMoveInUpcomingNotifications' },
+                  { id: '#payment-success-toggle', key: 'emailPaymentSuccessNotifications' },
+                  { id: '#payment-failed-toggle', key: 'emailPaymentFailedNotifications' },
+                  { id: '#off-platform-toggle', key: 'emailOffPlatformHostNotifications' }
+                ];
+                
+                toggles.forEach(({ id, key }) => {
+                  const toggle = content.querySelector(id) as HTMLInputElement;
+                  if (toggle) {
+                    toggle.checked = prefs[key] || false;
+                  }
+                });
+                
+                // Add event handlers
+                const updatePreference = async (key: string, value: boolean) => {
+                  try {
+                    const updateResponse = await fetch('/api/user/notification-preferences', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ [key]: value })
+                    });
+                    
+                    if (!updateResponse.ok) {
+                      throw new Error('Failed to update preference');
+                    }
+                  } catch (error) {
+                    console.error('Error updating notification preference:', error);
+                    // Revert the toggle
+                    (event.target as HTMLInputElement).checked = !value;
+                  }
+                };
+                
+                // Add event handlers for all toggles
+                toggles.forEach(({ id, key }) => {
+                  const toggle = content.querySelector(id) as HTMLInputElement;
+                  if (toggle) {
+                    toggle.addEventListener('change', (e) => {
+                      updatePreference(key, (e.target as HTMLInputElement).checked);
+                    });
+                  }
+                });
+                
+                // Show the settings and hide loading
+                content.querySelector('#loading-state')?.classList.add('hidden');
+                content.querySelector('#notification-settings')?.classList.remove('hidden');
+              } else {
+                // Show error state
+                content.querySelector('#loading-state')?.classList.add('hidden');
+                content.querySelector('#error-state')?.classList.remove('hidden');
+              }
+            } catch (error) {
+              console.error('Error loading notification preferences:', error);
+              // Show error state
+              content.querySelector('#loading-state')?.classList.add('hidden');
+              content.querySelector('#error-state')?.classList.remove('hidden');
+            }
+          },
+          unmount: (el) => {
+            if (el) el.innerHTML = '';
+          },
+          mountIcon: (el) => {
+            const icon = document.createElement('div');
+            icon.innerHTML = `<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+            </svg>`;
+            icon.className = 'text-lg flex items-center justify-center';
+            el.appendChild(icon);
+          },
+          unmountIcon: (el) => {
+            if (el) el.innerHTML = '';
+          },
+        }
+      ]
+    });
     //    {
     //      label: 'Terms',
     //      url: '/terms',
@@ -272,7 +580,6 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     //      },
     //    }
     //  ]
-    });
   };
 
   return (
