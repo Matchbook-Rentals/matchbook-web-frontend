@@ -49,7 +49,7 @@ const MARKER_STYLES = {
       secondary: '#FFFFFF'  // White inner circle
     },
     HOVER: {
-      primary: '#5c9ac5',   // Pink outer circle
+      primary: '#4caf50',   // Pink outer circle
       secondary: '#FFFFFF'  // White inner circle
     },
     LIKED: {
@@ -70,9 +70,9 @@ const MARKER_STYLES = {
       border: '#404040'
     },
     HOVER: {
-      background: '#404040',
+      background: '#4caf50',
       text: '#FFFFFF',
-      border: '#404040'
+      border: '#4caf50'
     },
     DISLIKED: {
       background: '#404040',
