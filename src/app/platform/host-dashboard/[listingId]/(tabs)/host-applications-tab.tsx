@@ -1,16 +1,21 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import ApplicationsSidebar from '../(components)/host-applications-sidebar';
 import { ListingAndImages, RequestWithUser } from '@/types';
 import ApplicationDetails from '../(components)/host-application-details';
 
 interface ApplicationsTabProps {
-  listing: ListingAndImages; // Replace 'any' with the actual type of listing
-  housingRequests: RequestWithUser[]; // Replace 'any[]' with the actual type of housingRequests
-  setHousingRequests: React.Dispatch<React.SetStateAction<RequestWithUser[]>>; // Replace 'any[]' with the actual type of housingRequests
+  listing: ListingAndImages;
+  housingRequests: RequestWithUser[];
 }
 
-const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests, setHousingRequests }) => {
+const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests: initialHousingRequests }) => {
+  const [housingRequests, setHousingRequests] = useState<RequestWithUser[]>(initialHousingRequests);
   const [selectedApplication, setSelectedApplication] = useState<RequestWithUser | null>(housingRequests[0] || null);
+
+  useEffect(() => {
+    setHousingRequests(initialHousingRequests);
+  }, [initialHousingRequests]);
 
   useEffect(() => {
     if (housingRequests.length > 0) {

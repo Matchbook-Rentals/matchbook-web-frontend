@@ -15,11 +15,36 @@ export async function getHousingRequestsByListingId(listingId: string) {
         listingId: listingId,
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            applications: {
+              include: {
+                verificationImages: true,
+                incomes: true,
+                identifications: true,
+              }
+            }
+          }
+        },
       },
     });
 
-    return housingRequests;
+    // Manually fetch trip data for each housing request to handle potential null cases
+    const housingRequestsWithTrips = await Promise.all(
+      housingRequests.map(async (request) => {
+        try {
+          const trip = await prisma.trip.findUnique({
+            where: { id: request.tripId }
+          });
+          return { ...request, trip };
+        } catch (error) {
+          console.warn(`Failed to fetch trip ${request.tripId} for housing request ${request.id}:`, error);
+          return { ...request, trip: null };
+        }
+      })
+    );
+
+    return housingRequestsWithTrips;
   } catch (error) {
     console.error('Error fetching housing requests:', error);
     throw new Error('Failed to fetch housing requests');
