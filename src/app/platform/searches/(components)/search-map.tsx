@@ -872,7 +872,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     // Use a longer delay to prevent too frequent updates
     const timeoutId = setTimeout(safelyUpdateMarkers, 200);
     return () => clearTimeout(timeoutId);
-  }, [markers, mapLoaded, currentZoom]);
+  }, [markers, mapLoaded, currentZoom, hoveredListing, clickedMarkerId, selectedMarker, isFullscreen]);
   
   // Handle fullscreen toggle
   useEffect(() => {
