@@ -181,6 +181,8 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const markerElement = mapMarker.getElement();
       markerElement.style.cursor = 'pointer';
       markerElement.style.overflow = 'visible';
+      // Add z-index based on hover state
+      markerElement.style.zIndex = isHovered ? '10' : '1';
       
       // Customize the inner circle based on state
       const innerCircle = markerElement.querySelector('svg circle:last-child');
@@ -294,7 +296,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         min-width: 40px;
         text-align: center;
         border: 1px solid ${borderColor};
-        z-index: ${isHovered ? '2' : ''};
+        z-index: ${isHovered ? '10' : '1'};
         overflow: visible;
       `;
       
@@ -380,15 +382,19 @@ const SearchMap: React.FC<SearchMapProps> = ({
         if (isFullscreenRef.current && selectedMarker?.listing.id === id) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
+          el.style.zIndex = '5';
         } else if (hoveredListing?.id === id || (!isFullscreenRef.current && clickedMarkerId === id)) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.HOVER.secondary);
+          el.style.zIndex = '10';
         } else if (correspondingMarker?.listing.isDisliked) {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DISLIKED.secondary);
+          el.style.zIndex = '1';
         } else {
           markerShape.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.primary);
           innerCircle.setAttribute('fill', markerStyles.MARKER_COLORS.DEFAULT.secondary);
+          el.style.zIndex = '1';
         }
         
         // Handle heart icon for liked markers
@@ -448,7 +454,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
-        el.style.zIndex = '2';
+        el.style.zIndex = '5';
 
         // Handle heart icon for selected marker in fullscreen
         if (correspondingMarker?.listing.isLiked) {
@@ -487,7 +493,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.HOVER.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.HOVER.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.HOVER.border}`;
-        el.style.zIndex = '2';
+        el.style.zIndex = '10';
         
         // If also liked, add the heart icon while maintaining hover state
         if (correspondingMarker?.listing.isLiked) {
@@ -592,7 +598,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         el.style.backgroundColor = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.background;
         el.style.color = markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.text;
         el.style.border = `1px solid ${markerStyles.PRICE_BUBBLE_COLORS.DEFAULT.border}`;
-        el.style.zIndex = '';
+        el.style.zIndex = '1';
         
         // Remove heart icon if it exists
         const heartIcon = el.querySelector('svg');
