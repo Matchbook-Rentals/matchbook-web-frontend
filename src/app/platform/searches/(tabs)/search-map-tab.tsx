@@ -3,6 +3,7 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
 import SearchMapMobile from '../(components)/search-map-mobile';
+import SelectedListingDetails from '../(components)/selected-listing-details';
 import { ListingAndImages } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -400,12 +401,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             )}
             {displayListings.length > 0 ? (
-              // Pass calculatedHeight to the height prop
-              <SearchListingsGrid
-                listings={displayListings}
-                height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
-                customSnapshot={enhancedSnapshot}
-              />
+              // Check if we have exactly 1 selected listing and use SelectedListingDetails instead
+              visibleListingIds && visibleListingIds.length === 1 ? (
+                <SelectedListingDetails
+                  listing={displayListings[0]}
+                  customSnapshot={enhancedSnapshot}
+                  height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
+                />
+              ) : (
+                // Pass calculatedHeight to the height prop
+                <SearchListingsGrid
+                  listings={displayListings}
+                  height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
+                  customSnapshot={enhancedSnapshot}
+                />
+              )
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
                 <p className="text-gray-600 text-center">
