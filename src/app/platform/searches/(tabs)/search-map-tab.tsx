@@ -98,6 +98,15 @@ const MARKER_STYLES = {
       stroke: '#404040',
       strokeWidth: '0.5'
     }
+  },
+  
+  // Z-index configuration for marker layering
+  Z_INDEX: {
+    HOVER: '10',        // Highest priority - currently hovered markers
+    SELECTED: '5',      // Selected marker in fullscreen mode
+    LIKED: '3',         // Liked/favorited markers
+    DEFAULT: '1',       // Default markers
+    DISLIKED: '0'       // Lowest priority - disliked markers
   }
 };
 
