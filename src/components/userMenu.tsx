@@ -52,23 +52,44 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     updateUserLogin(new Date());
   }, []);
 
-  // Define the menu structure
-  const menuItems: MenuItem[] = [
+  // Check if user is on host side
+  const isHostSide = pathname?.startsWith('/platform/host-dashboard') || pathname?.startsWith('/platform/host/');
+
+  // Define the menu structure with conditional items based on host/renter side
+  const menuItems: MenuItem[] = isHostSide ? [
+    // Host side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
-    { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 }, // Changed from adminOnlyVisible for consistency with previous logic
+    { id: 'properties', label: 'Your Properties', href: '/platform/host-dashboard', requiresBeta: true, section: 1 },
+    { id: 'applications', label: 'Applications', href: '/platform/host/applications', requiresBeta: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/platform/host/bookings', requiresBeta: true, section: 1 },
+    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
-      label: (pathname) => pathname.startsWith('/platform/host-dashboard') ? 'Switch to Renting' : 'Switch to Hosting',
-      href: (pathname) => pathname.startsWith('/platform/host-dashboard') ? '/platform/bookings' : '/platform/host-dashboard',
+      label: 'Switch to Renting',
+      href: '/platform/trips',
       requiresAdmin: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
-    { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, section: 4 }, // Changed from adminOnlyVisible
+    { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
+  ] : [
+    // Renter side menu items
+    { id: 'home', label: 'Home', href: '/', section: 1 },
+    { id: 'searches', label: 'Searches', href: '/platform/trips', requiresBeta: true, section: 1 },
+    { id: 'application', label: 'Application', href: '/platform/application', requiresAdmin: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/platform/bookings', requiresBeta: true, section: 1 },
+    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 },
+    {
+      id: 'switch-mode',
+      label: 'Switch to Hosting',
+      href: '/platform/host-dashboard',
+      requiresAdmin: true,
+      section: 3
+    },
+    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
+    { id: 'verification', label: 'Verification', href: '/platform/verification', requiresAdmin: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
