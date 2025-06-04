@@ -1,5 +1,6 @@
 import { MoreHorizontalIcon } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -143,12 +144,14 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
                 </div>
 
                 <div className="flex gap-4">
-                  <Button
-                    variant="outline"
-                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                  >
-                    Application Details
-                  </Button>
+                  <Link href={`/platform/host-dashboard/${listing.id}/${app.id}`}>
+                    <Button
+                      variant="outline"
+                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
+                    >
+                      Application Details
+                    </Button>
+                  </Link>
                   <Button
                     variant="outline"
                     size="icon"
