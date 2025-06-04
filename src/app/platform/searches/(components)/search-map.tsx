@@ -181,8 +181,14 @@ const SearchMap: React.FC<SearchMapProps> = ({
       const markerElement = mapMarker.getElement();
       markerElement.style.cursor = 'pointer';
       markerElement.style.overflow = 'visible';
-      // Add z-index based on hover state
-      markerElement.style.zIndex = isHovered ? '10' : '1';
+      // Add z-index based on hover state, then liked, then default
+      if (isHovered) {
+        markerElement.style.zIndex = '10';
+      } else if (marker.listing.isLiked) {
+        markerElement.style.zIndex = '3';
+      } else {
+        markerElement.style.zIndex = '1';
+      }
       
       // Customize the inner circle based on state
       const innerCircle = markerElement.querySelector('svg circle:last-child');
