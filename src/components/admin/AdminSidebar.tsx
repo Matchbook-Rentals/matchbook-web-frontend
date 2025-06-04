@@ -36,6 +36,13 @@ const adminNavItems = [
     </svg>
   },
   { 
+    name: 'Notifications', 
+    href: '/admin/notifications',
+    icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM11 19a2 2 0 104 0m-4 0a2 2 0 114 0M6 12v-2a6 6 0 1112 0v2l3 3H3l3-3z" />
+    </svg>
+  },
+  { 
     name: 'Upload Article', 
     href: '/admin/upload-article',
     icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
