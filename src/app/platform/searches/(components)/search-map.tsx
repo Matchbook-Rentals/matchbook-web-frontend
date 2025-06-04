@@ -56,6 +56,7 @@ interface SearchMapProps {
   isFullscreen?: boolean;
   setIsFullscreen?: (value: boolean) => void;
   markerStyles: MarkerStyles;
+  selectedMarkerId?: string | null;
   onCenterChanged?: (lng: number, lat: number) => void;
   onClickedMarkerChange?: (markerId: string | null) => void;
   onResetRequest?: (resetFn: () => void) => void;
@@ -69,6 +70,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   isFullscreen = false,
   setIsFullscreen = () => { },
   markerStyles,
+  selectedMarkerId = null,
   onCenterChanged = () => { },
   onClickedMarkerChange = () => { },
   onResetRequest,
@@ -84,6 +86,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
   const markersDataRef = useRef<MapMarker[]>(markers);
   const clickedMarkerIdRef = useRef<string | null>(null);
   const isFullscreenRef = useRef<boolean>(isFullscreen);
+  const isExternalUpdate = useRef<boolean>(false);
   const [retryCount, setRetryCount] = useState(0);
   const [mapInitFailed, setMapInitFailed] = useState(false);
 
@@ -117,8 +120,20 @@ const SearchMap: React.FC<SearchMapProps> = ({
   // Keep refs in sync with state
   useEffect(() => {
     clickedMarkerIdRef.current = clickedMarkerId;
-    onClickedMarkerChange(clickedMarkerId);
+    // Only notify parent if this is not an external update
+    if (!isExternalUpdate.current) {
+      onClickedMarkerChange(clickedMarkerId);
+    }
+    isExternalUpdate.current = false; // Reset flag
   }, [clickedMarkerId, onClickedMarkerChange]);
+
+  // Sync external selectedMarkerId prop with internal clickedMarkerId state
+  useEffect(() => {
+    if (selectedMarkerId !== clickedMarkerId) {
+      isExternalUpdate.current = true; // Mark as external update
+      setClickedMarkerId(selectedMarkerId);
+    }
+  }, [selectedMarkerId, clickedMarkerId]);
 
   useEffect(() => {
     isFullscreenRef.current = isFullscreen;

@@ -479,6 +479,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
             markerStyles={MARKER_STYLES}
+            selectedMarkerId={clickedMarkerId}
             onCenterChanged={(lng, lat) => {
               // Update the current map center but don't re-center the map
               setCurrentMapCenter({ lat, lng });
