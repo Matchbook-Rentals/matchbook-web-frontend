@@ -117,7 +117,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { showListings, likedListings, trip, filters } = state; // Destructure filters
+  const { showListings, likedListings, trip, filters, lookup } = state; // Destructure filters & lookup
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
@@ -311,10 +311,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   
   // Create markers from the display listings - using useMemo to only rebuild when needed
   const markers: MapMarker[] = useMemo(() => {
+    // Use favIds and dislikedIds from TripContext lookup as primary
+    const contextFavIds = lookup.favIds;
+    const contextDislikedIds = lookup.dislikedIds;
+
     return displayListings.map((listing) => {
-      // Add isLiked and isDisliked properties based on the enhanced snapshot state
-      const isLiked = favoriteIdsArray.includes(listing.id);
-      const isDisliked = dislikedIdsArray.includes(listing.id);
+      // Prioritize context's favIds, then snapshot's favoriteIds
+      const isLikedByContext = contextFavIds.has(listing.id);
+      const isLikedBySnapshot = favoriteIdsArray.includes(listing.id); // favoriteIdsArray is from listingsSnapshot.favoriteIds
+      const isLiked = isLikedByContext || isLikedBySnapshot;
+      
+      // Prioritize context's dislikedIds, then snapshot's dislikedIds
+      // Ensure a disliked listing isn't also marked as liked
+      const isDislikedByContext = contextDislikedIds.has(listing.id);
+      const isDislikedBySnapshot = dislikedIdsArray.includes(listing.id); // dislikedIdsArray is from listingsSnapshot.dislikedIds
+      const isDisliked = (isDislikedByContext || isDislikedBySnapshot) && !isLiked;
       
       // Ensure price data persists - preserve both original price and calculated price
       const originalPrice = listing.shortestLeasePrice || listing.price || 0;
@@ -336,7 +347,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         color: getListingStatus(listing)
       };
     });
-  }, [displayListings, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
+  }, [displayListings, lookup, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
 
   // Use the current map center for the map, fallback to initial center
   const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
