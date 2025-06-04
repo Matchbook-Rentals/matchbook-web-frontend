@@ -403,16 +403,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             {displayListings.length > 0 ? (
               // Check if we have exactly 1 selected listing and use SelectedListingDetails instead
               visibleListingIds && visibleListingIds.length === 1 ? (
-                <SelectedListingDetails
-                  listing={displayListings[0]}
-                  customSnapshot={enhancedSnapshot}
-                  height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
-                />
+                (() => {
+                  const selectedListing = displayListings.find(listing => listing.id === visibleListingIds[0]);
+                  return selectedListing ? (
+                    <SelectedListingDetails
+                      listing={selectedListing}
+                      customSnapshot={enhancedSnapshot}
+                      height={`${calculatedHeight-80}px`}
+                    />
+                  ) : null;
+                })()
               ) : (
                 // Pass calculatedHeight to the height prop
                 <SearchListingsGrid
                   listings={displayListings}
-                  height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
+                  height={`${calculatedHeight-80}px`}
                   customSnapshot={enhancedSnapshot}
                 />
               )

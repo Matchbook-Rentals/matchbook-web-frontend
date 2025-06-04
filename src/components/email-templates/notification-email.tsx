@@ -1,5 +1,4 @@
 import React from 'react';
-import { Facebook, Instagram, Twitter, BookText as TikTok } from 'lucide-react';
 
 interface NotificationEmailProps {
   companyName: string;
@@ -130,30 +129,42 @@ const NotificationEmailTemplate: React.FC<NotificationEmailProps> = ({
                       <tr>
                         <td align="center" style={{ padding: '0 8px' }}>
                           <a href="https://www.facebook.com/matchbookrentals">
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#1877f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <Facebook size={16} color="white" />
-                            </div>
+                            <img 
+                              src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
+                              alt="Facebook"
+                              width="32"
+                              height="32"
+                            />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
                           <a href="https://www.instagram.com/matchbookrentals">
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#E4405F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <Instagram size={16} color="white" />
-                            </div>
+                            <img 
+                              src="https://img.icons8.com/?size=100&id=32323&format=png&color=000000"
+                              alt="Instagram"
+                              width="32"
+                              height="32"
+                            />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
                           <a href="https://twitter.com/matchbookrent">
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#1da1f2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <Twitter size={16} color="white" />
-                            </div>
+                            <img 
+                              src="https://img.icons8.com/?size=100&id=ClbD5JTFM7FA&format=png&color=000000"
+                              alt="X (Twitter)"
+                              width="32"
+                              height="32"
+                            />
                           </a>
                         </td>
                         <td align="center" style={{ padding: '0 8px' }}>
                           <a href="https://www.tiktok.com/@matchbookrentals">
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <TikTok size={16} color="white" />
-                            </div>
+                            <img 
+                              src="https://img.icons8.com/?size=100&id=118640&format=png&color=000000"
+                              alt="TikTok"
+                              width="32"
+                              height="32"
+                            />
                           </a>
                         </td>
                       </tr>
