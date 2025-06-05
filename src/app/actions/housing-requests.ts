@@ -27,6 +27,7 @@ export async function getHousingRequestById(housingRequestId: string) {
             }
           }
         },
+        listing: true,
       },
     });
 

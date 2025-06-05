@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { PAGE_MARGIN } from "@/constants/styles";
-import { HousingRequest, User, Application, Income, ResidentialHistory } from "@prisma/client";
+import { HousingRequest, User, Application, Income, ResidentialHistory, Listing } from "@prisma/client";
 import Link from "next/link";
+import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
 
 interface HousingRequestWithUser extends HousingRequest {
   user: User & {
@@ -14,6 +15,7 @@ interface HousingRequestWithUser extends HousingRequest {
       residentialHistories: ResidentialHistory[];
     })[];
   };
+  listing: Listing;
   trip?: any;
 }
 
@@ -130,6 +132,80 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
   const formatCurrency = (amount: number) => 
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 
+  // Helper function to format dates
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return 'N/A';
+    return new Intl.DateTimeFormat('en-US', { 
+      day: 'numeric', 
+      month: 'short', 
+      year: '2-digit' 
+    }).format(new Date(date));
+  };
+
+  // Helper function to calculate length of stay
+  const calculateLengthOfStay = () => {
+    if (!housingRequest.startDate || !housingRequest.endDate) return 'N/A';
+    const start = new Date(housingRequest.startDate);
+    const end = new Date(housingRequest.endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return `${diffDays} days`;
+  };
+
+  // Helper function to calculate monthly rent
+  const getMonthlyRent = () => {
+    if (!housingRequest.startDate || !housingRequest.endDate || !housingRequest.listing) {
+      return 0;
+    }
+    
+    const trip = {
+      startDate: new Date(housingRequest.startDate),
+      endDate: new Date(housingRequest.endDate)
+    };
+    
+    return calculateRent({
+      listing: housingRequest.listing,
+      trip: trip
+    });
+  };
+
+  // Helper function to calculate total booking earnings
+  const getTotalBookingEarnings = () => {
+    if (!housingRequest.startDate || !housingRequest.endDate) return 0;
+    
+    const monthlyRent = getMonthlyRent();
+    const stayLength = calculateStayLength(
+      new Date(housingRequest.startDate), 
+      new Date(housingRequest.endDate)
+    );
+    
+    // Calculate total based on months and partial days
+    const totalMonths = stayLength.months + (stayLength.days / 30);
+    return monthlyRent * totalMonths;
+  };
+
+  // Helper function to calculate total monthly income
+  const getTotalMonthlyIncome = () => {
+    return application?.incomes?.reduce((acc, cur) => acc + Number(cur.monthlyAmount || 0), 0) || 0;
+  };
+
+  // Helper function to calculate rent-to-income ratio
+  const getRentToIncomeRatio = () => {
+    const monthlyRent = getMonthlyRent();
+    const monthlyIncome = getTotalMonthlyIncome();
+    
+    if (monthlyIncome === 0) return { percentage: 'N/A', status: 'Unknown' };
+    
+    const ratio = (monthlyRent / monthlyIncome) * 100;
+    const percentage = Math.round(ratio);
+    
+    let status = 'Poor';
+    if (ratio <= 30) status = 'Great';
+    else if (ratio <= 40) status = 'Good';
+    
+    return { percentage: `${percentage}%`, status };
+  };
+
   return (
     <main className="bg-white flex flex-row justify-center w-full">
       <div className={`bg-white w-full max-w-[1920px] relative ${PAGE_MARGIN} py-4`}>
@@ -171,7 +247,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           <div className="flex gap-8 mb-4">
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.earnings.monthlyRent}
+                {formatCurrency(getMonthlyRent())}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Monthly Rent
@@ -179,7 +255,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </div>
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.earnings.deposit}
+                {formatCurrency(housingRequest.listing?.depositSize || 0)}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Deposit
@@ -187,7 +263,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </div>
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.earnings.totalBookingEarnings}
+                {formatCurrency(getTotalBookingEarnings())}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Total Booking Earnings
@@ -205,7 +281,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           <div className="flex gap-8 mb-4">
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.dates.moveIn}
+                {formatDate(housingRequest.startDate)}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Move in
@@ -213,7 +289,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </div>
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.dates.moveOut}
+                {formatDate(housingRequest.endDate)}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Move out
@@ -221,7 +297,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
             </div>
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {financialDetails.dates.lengthOfStay}
+                {calculateLengthOfStay()}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
                 Length of stay
@@ -239,33 +315,34 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           <div className="flex gap-8 mb-4">
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {guestDetails.rating}
+                {user.averageRating || 'N/A'}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {guestDetails.averageRating}
+                Average Rating
               </p>
             </div>
             <div>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {guestDetails.household.income}
+                {formatCurrency(getTotalMonthlyIncome())}
               </p>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {guestDetails.household.incomeLabel}
+                Household income
               </p>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Helvetica-Regular',Helvetica]">
-                  {guestDetails.household.rentToIncomeRatio}
+                  {getRentToIncomeRatio().percentage}
                 </p>
-                <img
-                  className="w-[89px] h-[30px]"
-                  alt="Vector"
-                  src="/vector.svg"
-                />
-                <p className="text-sm font-normal text-[#39b54a] [font-family:'Poppins',Helvetica]">
-                  {guestDetails.household.rentToIncomeStatus}
-                </p>
+                <div className={`px-3 py-1 rounded border bg-background ${
+                  getRentToIncomeRatio().status === 'Great' ? 'border-[#39b54a] text-[#39b54a]' : 
+                  getRentToIncomeRatio().status === 'Good' ? 'border-[#f39c12] text-[#f39c12]' : 
+                  'border-[#e74c3c] text-[#e74c3c]'
+                }`}>
+                  <p className="text-sm font-normal [font-family:'Poppins',Helvetica]">
+                    {getRentToIncomeRatio().status}
+                  </p>
+                </div>
               </div>
               <p className="text-base font-normal text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
                 Rent to income ratio
@@ -279,7 +356,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Adults
               </p>
               <p className="text-[28px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica]">
-                {guestDetails.household_members.adults}
+                {application?.numberOfAdults || 1}
               </p>
             </div>
             <div>
@@ -287,7 +364,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Kids
               </p>
               <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {guestDetails.household_members.kids}
+                {application?.numberOfChildren || 0}
               </p>
             </div>
             <div>
@@ -295,7 +372,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Dogs
               </p>
               <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {guestDetails.household_members.dogs}
+                {application?.numberOfDogs || 0}
               </p>
             </div>
             <div>
@@ -303,7 +380,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Cats
               </p>
               <p className="text-[28px] font-medium text-[#3f3f3f] [font-family:'Montserrat',Helvetica]">
-                {guestDetails.household_members.cats}
+                {application?.numberOfCats || 0}
               </p>
             </div>
           </div>
@@ -317,14 +394,11 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
           </h2>
 
           <div className="flex gap-6 mb-4">
-            {guestDetails.guests.map((guest, index) => (
-              <button
-                key={index}
-                className={`text-base font-normal ${guest.active ? "text-black underline" : "text-[#b3b2b3]"} [font-family:'Poppins',Helvetica]`}
-              >
-                {guest.name}
-              </button>
-            ))}
+            <button
+              className="text-base font-normal text-black underline [font-family:'Poppins',Helvetica]"
+            >
+              {getUserName()}
+            </button>
           </div>
 
           <div className="flex gap-16 mt-4">
@@ -333,7 +407,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Rating
               </p>
               <p className="text-[26px] font-normal text-[#3f3f3f] [font-family:'Poppins',Helvetica] mt-2">
-                {guestDetails.rating}
+                {user.averageRating || 'NO RATING'}
               </p>
             </div>
             <div>
@@ -371,13 +445,13 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <ChevronDownIcon className="w-6 h-6" />
             </div>
 
-            {residentialHistory.map((residence, index) => (
+{(application?.residentialHistories && application.residentialHistories.length > 0 ? application.residentialHistories : []).map((residence, index) => (
               <div key={index} className="mt-6">
                 <h3 className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                  {residence.type}
+                  {index === 0 ? 'Current Residence' : `Past Residence ${index}`}
                 </h3>
                 <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                  {residence.ownership}
+                  {residence.isOwned ? 'Applicant owns this residence' : 'Applicant rents this residence'}
                 </p>
 
                 <div className="grid grid-cols-3 gap-4 mb-4">
@@ -386,7 +460,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       Address
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {residence.address}
+                      {`${residence.street} ${residence.city}, ${residence.state} ${residence.zipCode}` || 'NO ADDRESS PROVIDED'}
                     </p>
                   </div>
                   <div>
@@ -394,7 +468,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       Monthly Payment
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {residence.monthlyPayment}
+                      {residence.monthlyPayment ? formatCurrency(+residence.monthlyPayment) : 'NO PAYMENT INFO'}
                     </p>
                   </div>
                   <div>
@@ -402,12 +476,12 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       Length of residence
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {residence.lengthOfResidence}
+                      {residence.durationOfTenancy + ' months' || 'NO DURATION PROVIDED'}
                     </p>
                   </div>
                 </div>
 
-                {residence.propertyManager && (
+                {residence.landlordFirstName && residence.landlordLastName && (
                   <>
                     <Separator className="my-4" />
                     <div className="grid grid-cols-3 gap-4">
@@ -416,7 +490,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                           Property Manager Name
                         </p>
                         <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.propertyManager.name}
+                          {residence.landlordFirstName + ' ' + residence.landlordLastName || 'NO NAME PROVIDED'}
                         </p>
                       </div>
                       <div>
@@ -424,7 +498,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                           Phone Number
                         </p>
                         <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.propertyManager.phone}
+                          {residence.landlordPhoneNumber || 'NO PHONE PROVIDED'}
                         </p>
                       </div>
                       <div>
@@ -432,18 +506,26 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                           Email
                         </p>
                         <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                          {residence.propertyManager.email}
+                          {residence.landlordEmail || 'NO EMAIL PROVIDED'}
                         </p>
                       </div>
                     </div>
                   </>
                 )}
 
-                {index < residentialHistory.length - 1 && (
+                {index < (application?.residentialHistories?.length || 0) - 1 && (
                   <Separator className="my-6" />
                 )}
               </div>
             ))}
+            
+            {(!application?.residentialHistories || application.residentialHistories.length === 0) && (
+              <div className="mt-6">
+                <p className="text-lg font-bold text-red-500 [font-family:'Poppins',Helvetica]">
+                  NO RESIDENTIAL HISTORY PROVIDED
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -465,7 +547,7 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                       {application?.incomes ? `Source ${index + 1}` : income.source}
                     </p>
                     <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mt-1">
-                      {application?.incomes ? (income.sourceDescription || 'No description provided') : income.description}
+                      {application?.incomes ? (income.source || 'No description provided') : income.source}
                     </p>
                   </div>
                   <div>
@@ -508,18 +590,22 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Criminal Record
               </h3>
               <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                {questionnaire.criminal.question}
+                Have you been convicted of a felony or misdemeanor offense in the past 7 years?
               </p>
               <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {questionnaire.criminal.answer}
+                {application?.felony !== undefined ? (application.felony ? 'Yes' : 'No') : 'NO ANSWER PROVIDED'}
               </p>
 
-              <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                {questionnaire.criminal.followUp}
-              </p>
-              <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {questionnaire.criminal.followUpAnswer}
-              </p>
+              {application?.felony && (
+                <>
+                  <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
+                    Please provide the date, and nature of the conviction.
+                  </p>
+                  <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
+                    {application?.felony || 'NO DETAILS PROVIDED'}
+                  </p>
+                </>
+              )}
             </div>
 
             <Separator className="my-6" />
@@ -529,18 +615,22 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 Eviction History
               </h3>
               <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                {questionnaire.eviction.question}
+                Have you been evicted from a rental property in the past 7 years?
               </p>
               <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {questionnaire.eviction.answer}
+                {application?.evicted !== undefined ? (application.evicted ? 'Yes' : 'No') : 'NO ANSWER PROVIDED'}
               </p>
 
-              <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
-                {questionnaire.eviction.followUp}
-              </p>
-              <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
-                {questionnaire.eviction.followUpAnswer}
-              </p>
+              {application?.evicted && (
+                <>
+                  <p className="text-lg font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-2">
+                    Please explain the circumstances surrounding the eviction, including the reason for the eviction, and the outcome.
+                  </p>
+                  <p className="text-base font-medium text-[#4f4f4f] [font-family:'Poppins',Helvetica] mb-4">
+                    {application?.evictedExplanation || 'NO DETAILS PROVIDED'}
+                  </p>
+                </>
+              )}
             </div>
           </CardContent>
         </Card>
