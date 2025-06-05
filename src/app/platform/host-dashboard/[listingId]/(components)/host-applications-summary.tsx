@@ -33,7 +33,7 @@ const ApplicationSummary: React.FC<ApplicationSummaryProps> = ({ trip, applicati
 
   // TODO: get these from the listing
   const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
-  const monthlyRent = calculateRent({ listing: currListing, trip: trip });
+  const monthlyRent = currListing ? calculateRent({ listing: currListing, trip: trip }) : 0;
 
   // const calculatedPrice = lengthOfStayMonths ? calculatePrice(lengthOfStayMonths) : null;
   const calculatedPrice = monthlyRent;

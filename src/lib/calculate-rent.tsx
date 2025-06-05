@@ -1,10 +1,15 @@
 import { Listing, Trip } from "@prisma/client";
 interface RentParams {
-  listing: Listing;
+  listing: Listing | null;
   trip: Trip;
 }
 
 export function calculateRent({ listing, trip, }: RentParams): number {
+  if (!listing) {
+    console.warn('calculateRent called with null listing');
+    return 0;
+  }
+  
   const { shortestLeaseLength, longestLeaseLength, shortestLeasePrice, longestLeasePrice } = listing;
   const { startDate, endDate } = trip;
   const lengthOfStay = calculateLengthOfStay(startDate, endDate).months;

@@ -8,6 +8,48 @@ import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 
 
+export async function getHousingRequestById(housingRequestId: string) {
+  try {
+    const housingRequest = await prisma.housingRequest.findUnique({
+      where: {
+        id: housingRequestId,
+      },
+      include: {
+        user: {
+          include: {
+            applications: {
+              include: {
+                verificationImages: true,
+                incomes: true,
+                identifications: true,
+                residentialHistories: true,
+              }
+            }
+          }
+        },
+      },
+    });
+
+    if (!housingRequest) {
+      throw new Error('Housing request not found');
+    }
+
+    // Manually fetch trip data to handle potential null cases
+    try {
+      const trip = await prisma.trip.findUnique({
+        where: { id: housingRequest.tripId }
+      });
+      return { ...housingRequest, trip };
+    } catch (error) {
+      console.warn(`Failed to fetch trip ${housingRequest.tripId} for housing request ${housingRequest.id}:`, error);
+      return { ...housingRequest, trip: null };
+    }
+  } catch (error) {
+    console.error('Error fetching housing request:', error);
+    throw new Error('Failed to fetch housing request');
+  }
+}
+
 export async function getHousingRequestsByListingId(listingId: string) {
   try {
     const housingRequests = await prisma.housingRequest.findMany({
@@ -15,11 +57,36 @@ export async function getHousingRequestsByListingId(listingId: string) {
         listingId: listingId,
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            applications: {
+              include: {
+                verificationImages: true,
+                incomes: true,
+                identifications: true,
+              }
+            }
+          }
+        },
       },
     });
 
-    return housingRequests;
+    // Manually fetch trip data for each housing request to handle potential null cases
+    const housingRequestsWithTrips = await Promise.all(
+      housingRequests.map(async (request) => {
+        try {
+          const trip = await prisma.trip.findUnique({
+            where: { id: request.tripId }
+          });
+          return { ...request, trip };
+        } catch (error) {
+          console.warn(`Failed to fetch trip ${request.tripId} for housing request ${request.id}:`, error);
+          return { ...request, trip: null };
+        }
+      })
+    );
+
+    return housingRequestsWithTrips;
   } catch (error) {
     console.error('Error fetching housing requests:', error);
     throw new Error('Failed to fetch housing requests');

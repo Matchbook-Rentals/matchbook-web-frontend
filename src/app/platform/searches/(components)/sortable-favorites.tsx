@@ -141,6 +141,7 @@ const SortableFavorites: React.FC<SortableFavoritesProps> = ({
                         alt={listing.title}
                         fill
                         className="object-cover rounded"
+                        unoptimized
                       />
                     </div>
                   )}

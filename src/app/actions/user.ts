@@ -144,3 +144,160 @@ export async function getAgreedToTerms() {
   return user.agreedToTerms;
 }
 
+export async function updateNotificationPreferences(preferences: {
+  // Messages & Communication
+  emailNewMessageNotifications?: boolean;
+  emailNewConversationNotifications?: boolean;
+  
+  // Applications & Matching  
+  emailApplicationReceivedNotifications?: boolean;
+  emailApplicationApprovedNotifications?: boolean;
+  emailApplicationDeclinedNotifications?: boolean;
+  
+  // Reviews & Verification
+  emailSubmitHostReviewNotifications?: boolean;
+  emailSubmitRenterReviewNotifications?: boolean;
+  emailLandlordInfoRequestNotifications?: boolean;
+  emailVerificationCompletedNotifications?: boolean;
+  
+  // Bookings & Stays
+  emailBookingCompletedNotifications?: boolean;
+  emailBookingCanceledNotifications?: boolean;
+  emailMoveOutUpcomingNotifications?: boolean;
+  emailMoveInUpcomingNotifications?: boolean;
+  
+  // Payments
+  emailPaymentSuccessNotifications?: boolean;
+  emailPaymentFailedNotifications?: boolean;
+  
+  // External Communications
+  emailOffPlatformHostNotifications?: boolean;
+}) {
+  'use server'
+
+  const clerkUser = await currentUser();
+
+  try {
+    if (!clerkUser?.id) {
+      throw new Error('User ID is missing');
+    }
+
+    // Ensure user exists
+    const dbUser = await prisma.user.findUnique({
+      where: { id: clerkUser.id },
+      include: { preferences: true }
+    });
+
+    if (!dbUser) {
+      await createUser();
+    }
+
+    // Check if user preferences exist, create if not
+    if (!dbUser?.preferences) {
+      await prisma.userPreferences.create({
+        data: {
+          userId: clerkUser.id,
+          listingType: 'apartment',
+          bedroomCount: 1,
+          bathroomCount: 1,
+          ...preferences
+        }
+      });
+    } else {
+      // Update existing preferences
+      await prisma.userPreferences.update({
+        where: { userId: clerkUser.id },
+        data: preferences
+      });
+    }
+
+    return { success: true };
+
+  } catch (error) {
+    logger.error('Error updating notification preferences', error);
+    return { success: false, error: 'Failed to update notification preferences' };
+  }
+}
+
+export async function getNotificationPreferences() {
+  'use server'
+
+  const clerkUser = await currentUser();
+
+  try {
+    if (!clerkUser?.id) {
+      return { success: false, error: 'User not authenticated' };
+    }
+
+    const userPreferences = await prisma.userPreferences.findUnique({
+      where: { userId: clerkUser.id },
+      select: {
+        // Messages & Communication
+        emailNewMessageNotifications: true,
+        emailNewConversationNotifications: true,
+        
+        // Applications & Matching  
+        emailApplicationReceivedNotifications: true,
+        emailApplicationApprovedNotifications: true,
+        emailApplicationDeclinedNotifications: true,
+        
+        // Reviews & Verification
+        emailSubmitHostReviewNotifications: true,
+        emailSubmitRenterReviewNotifications: true,
+        emailLandlordInfoRequestNotifications: true,
+        emailVerificationCompletedNotifications: true,
+        
+        // Bookings & Stays
+        emailBookingCompletedNotifications: true,
+        emailBookingCanceledNotifications: true,
+        emailMoveOutUpcomingNotifications: true,
+        emailMoveInUpcomingNotifications: true,
+        
+        // Payments
+        emailPaymentSuccessNotifications: true,
+        emailPaymentFailedNotifications: true,
+        
+        // External Communications
+        emailOffPlatformHostNotifications: true,
+      }
+    });
+
+    return { 
+      success: true, 
+      preferences: userPreferences || {
+        // Messages & Communication
+        emailNewMessageNotifications: false,
+        emailNewConversationNotifications: false,
+        
+        // Applications & Matching  
+        emailApplicationReceivedNotifications: false,
+        emailApplicationApprovedNotifications: false,
+        emailApplicationDeclinedNotifications: false,
+        
+        // Reviews & Verification
+        emailSubmitHostReviewNotifications: false,
+        emailSubmitRenterReviewNotifications: false,
+        emailLandlordInfoRequestNotifications: false,
+        emailVerificationCompletedNotifications: false,
+        
+        // Bookings & Stays
+        emailBookingCompletedNotifications: false,
+        emailBookingCanceledNotifications: false,
+        emailMoveOutUpcomingNotifications: false,
+        emailMoveInUpcomingNotifications: false,
+        
+        // Payments
+        emailPaymentSuccessNotifications: false,
+        emailPaymentFailedNotifications: false,
+        
+        // External Communications
+        emailOffPlatformHostNotifications: false,
+      }
+    };
+
+  } catch (error) {
+    logger.error('Error getting notification preferences', error);
+    return { success: false, error: 'Failed to get notification preferences' };
+  }
+}
+

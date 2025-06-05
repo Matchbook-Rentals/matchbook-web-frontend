@@ -3,6 +3,7 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import SearchListingsGrid from '../(components)/search-listings-grid';
 import SearchMap from '../(components)/search-map';
 import SearchMapMobile from '../(components)/search-map-mobile';
+import SelectedListingDetails from '../(components)/selected-listing-details';
 import { ListingAndImages } from '@/types';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -41,6 +42,8 @@ const slideUpVariants = {
 const MARKER_STYLES = {
   // Threshold for switching to simple markers when there are too many listings
   SIMPLE_MARKER_THRESHOLD: 30,
+  // Threshold for fullscreen mode (should be 2x the regular threshold)
+  FULLSCREEN_SIMPLE_MARKER_THRESHOLD: 60,
   
   // Simple marker color configuration (for >30 listings)
   MARKER_COLORS: {
@@ -49,7 +52,7 @@ const MARKER_STYLES = {
       secondary: '#FFFFFF'  // White inner circle
     },
     HOVER: {
-      primary: '#5c9ac5',   // Pink outer circle
+      primary: '#4caf50',   // Pink outer circle
       secondary: '#FFFFFF'  // White inner circle
     },
     LIKED: {
@@ -70,9 +73,9 @@ const MARKER_STYLES = {
       border: '#404040'
     },
     HOVER: {
-      background: '#404040',
+      background: '#4caf50',
       text: '#FFFFFF',
-      border: '#404040'
+      border: '#4caf50'
     },
     DISLIKED: {
       background: '#404040',
@@ -98,18 +101,27 @@ const MARKER_STYLES = {
       stroke: '#404040',
       strokeWidth: '0.5'
     }
+  },
+  
+  // Z-index configuration for marker layering
+  Z_INDEX: {
+    HOVER: '10',        // Highest priority - currently hovered markers
+    SELECTED: '5',      // Selected marker in fullscreen mode
+    LIKED: '3',         // Liked/favorited markers
+    DEFAULT: '1',       // Default markers
+    DISLIKED: '0'       // Lowest priority - disliked markers
   }
 };
 
 // Add this function to determine zoom level based on radius
 const getZoomLevel = (radius: number | undefined): number => {
-  if (!radius) return 7; // Default zoom if radius is undefined
+  if (!radius) return 6; // Default zoom if radius is undefined
 
-  if (radius >= 100) return 6;
-  if (radius >= 65) return 7;
-  if (radius >= 40) return 8;
-  if (radius >= 20) return 9;
-  return 9; // Default for anything less than 20
+  if (radius >= 100) return 5;
+  if (radius >= 65) return 6;
+  if (radius >= 40) return 7;
+  if (radius >= 20) return 8;
+  return 8; // Default for anything less than 20
 };
 
 const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
@@ -117,7 +129,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { state } = useTripContext();
-  const { showListings, likedListings, trip } = state;
+  const { showListings, likedListings, trip, filters, lookup } = state; // Destructure filters & lookup
   const containerRef = useRef<HTMLDivElement>(null);
   const [startY, setStartY] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(0);
@@ -204,10 +216,6 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     }
   }, [isSlideMapOpen]);
 
-  useEffect(() => {
-    setZoomLevel(getZoomLevel(trip?.searchRadius || 50));
-  }, [trip?.searchRadius]);
-
   // Combine liked listings at the top with remaining showListings
   const displayListings = useMemo(() => {
     // Create a Set of liked listing IDs for efficient lookup
@@ -219,6 +227,68 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
     // Return liked listings first, then the rest
     return [...likedListings, ...nonLikedShowListings];
   }, [showListings, likedListings]);
+
+  // Effect to set initial map center and zoom ONLY when trip location changes
+  // This prevents the map from jumping back when user pans/zooms
+  useEffect(() => {
+    // Only update center if this is truly a location change (not just a filter change)
+    if (trip?.latitude !== undefined && trip?.longitude !== undefined) {
+      // Check if this is actually a different location than what we already have
+      const isNewLocation = 
+        Math.abs((currentMapCenter.lat || 0) - trip.latitude) > 0.001 || 
+        Math.abs((currentMapCenter.lng || 0) - trip.longitude) > 0.001;
+      
+      if (isNewLocation) {
+        setCurrentMapCenter({ 
+          lat: trip.latitude, 
+          lng: trip.longitude 
+        });
+      }
+    } else if (currentMapCenter.lat === 0 && currentMapCenter.lng === 0) {
+      // Only set fallback if we don't have any center yet
+      setCurrentMapCenter({ lat: 0, lng: 0 }); 
+    }
+
+  }, [trip?.latitude, trip?.longitude]); // Removed filters and displayListings from dependencies
+  
+  // Separate effect for zoom level updates based on search radius
+  useEffect(() => {
+    if (trip?.searchRadius !== undefined) {
+      setZoomLevel(getZoomLevel(trip.searchRadius));
+    }
+  }, [trip?.searchRadius]);
+  
+  // Create a ref to pass the reset function to the map
+  const mapResetRef = useRef<(() => void) | null>(null);
+  
+  // Reset map center and zoom when user changes filter settings
+  useEffect(() => {
+    // Call the reset function if it exists
+    if (mapResetRef.current && trip?.latitude !== undefined && trip?.longitude !== undefined) {
+      mapResetRef.current();
+    }
+  }, [
+    // Only watch actual filter values that users can change
+    filters?.minPrice,
+    filters?.maxPrice,
+    filters?.minBedrooms,
+    filters?.minBeds,
+    filters?.minBathrooms,
+    filters?.furnished,
+    filters?.unfurnished,
+    filters?.searchRadius,
+    // Watch array lengths to detect changes (not the arrays themselves to avoid reference issues)
+    filters?.propertyTypes?.length,
+    filters?.utilities?.length,
+    filters?.pets?.length,
+    filters?.accessibility?.length,
+    filters?.location?.length,
+    filters?.parking?.length,
+    filters?.kitchen?.length,
+    filters?.basics?.length,
+    filters?.luxury?.length,
+    filters?.laundry?.length
+  ]);
 
   const getListingStatus = (listing: ListingAndImages) => {
     if (listingsSnapshot.isRequested(listing.id)) {
@@ -253,10 +323,21 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
   
   // Create markers from the display listings - using useMemo to only rebuild when needed
   const markers: MapMarker[] = useMemo(() => {
+    // Use favIds and dislikedIds from TripContext lookup as primary
+    const contextFavIds = lookup.favIds;
+    const contextDislikedIds = lookup.dislikedIds;
+
     return displayListings.map((listing) => {
-      // Add isLiked and isDisliked properties based on the enhanced snapshot state
-      const isLiked = favoriteIdsArray.includes(listing.id);
-      const isDisliked = dislikedIdsArray.includes(listing.id);
+      // Prioritize context's favIds, then snapshot's favoriteIds
+      const isLikedByContext = contextFavIds.has(listing.id);
+      const isLikedBySnapshot = favoriteIdsArray.includes(listing.id); // favoriteIdsArray is from listingsSnapshot.favoriteIds
+      const isLiked = isLikedByContext || isLikedBySnapshot;
+      
+      // Prioritize context's dislikedIds, then snapshot's dislikedIds
+      // Ensure a disliked listing isn't also marked as liked
+      const isDislikedByContext = contextDislikedIds.has(listing.id);
+      const isDislikedBySnapshot = dislikedIdsArray.includes(listing.id); // dislikedIdsArray is from listingsSnapshot.dislikedIds
+      const isDisliked = (isDislikedByContext || isDislikedBySnapshot) && !isLiked;
       
       // Ensure price data persists - preserve both original price and calculated price
       const originalPrice = listing.shortestLeasePrice || listing.price || 0;
@@ -278,7 +359,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         color: getListingStatus(listing)
       };
     });
-  }, [displayListings, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
+  }, [displayListings, lookup, favoriteIdsArray, dislikedIdsArray, getListingStatus, trip, enhancedSnapshot]);
 
   // Use the current map center for the map, fallback to initial center
   const mapCenter = { lat: currentMapCenter.lat, lng: currentMapCenter.lng };
@@ -320,12 +401,26 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
               </div>
             )}
             {displayListings.length > 0 ? (
-              // Pass calculatedHeight to the height prop
-              <SearchListingsGrid
-                listings={displayListings}
-                height={typeof calculatedHeight === 'number' ? calculatedHeight.toString() : calculatedHeight}
-                customSnapshot={enhancedSnapshot}
-              />
+              // Check if we have exactly 1 selected listing and use SelectedListingDetails instead
+              visibleListingIds && visibleListingIds.length === 1 ? (
+                (() => {
+                  const selectedListing = displayListings.find(listing => listing.id === visibleListingIds[0]);
+                  return selectedListing ? (
+                    <SelectedListingDetails
+                      listing={selectedListing}
+                      customSnapshot={enhancedSnapshot}
+                      height={`${calculatedHeight-80}px`}
+                    />
+                  ) : null;
+                })()
+              ) : (
+                // Pass calculatedHeight to the height prop
+                <SearchListingsGrid
+                  listings={displayListings}
+                  height={`${calculatedHeight-80}px`}
+                  customSnapshot={enhancedSnapshot}
+                />
+              )
             ) : listings.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[50vh]">
                 <p className="text-gray-600 text-center">
@@ -377,18 +472,22 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
         {isClient && isDesktopView && (
           <div className={`w-full ${isFullscreen ? 'md:w-full' : 'md:w-2/5'} mt-4 md:mt-0`}>
             <SearchMap
-              center={[mapCenter.lng, mapCenter.lat]}
+              center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
             zoom={zoomLevel}
             height={typeof calculatedHeight === 'number' ? `${calculatedHeight}px` : calculatedHeight}
             markers={markers}
             isFullscreen={isFullscreen}
             setIsFullscreen={setIsFullscreen}
             markerStyles={MARKER_STYLES}
+            selectedMarkerId={clickedMarkerId}
             onCenterChanged={(lng, lat) => {
               // Update the current map center but don't re-center the map
               setCurrentMapCenter({ lat, lng });
             }}
             onClickedMarkerChange={setClickedMarkerId}
+            onResetRequest={(resetFn) => {
+              mapResetRef.current = resetFn;
+            }}
           />
         </div>
         )}
@@ -406,7 +505,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
             exit="exit"
           >
             <SearchMapMobile
-              center={[mapCenter.lng, mapCenter.lat]}
+              center={[trip?.longitude || mapCenter.lng, trip?.latitude || mapCenter.lat]}
               zoom={zoomLevel}
               height="100vh"
               markers={markers}

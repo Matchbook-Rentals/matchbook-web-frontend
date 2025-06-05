@@ -137,7 +137,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             <CarouselContent>
               {listing.listingImages.map((image, index) => (
                 <CarouselItem key={index} className="relative h-40 w-full">
-                  <Image src={image.url} alt={listing.title} fill className="object-cover" />
+                  <Image src={image.url} alt={listing.title} fill className="object-cover" unoptimized />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -318,18 +318,6 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
               </div>
             )}
 
-            {/* See Full Details Button */}
-            <div className="border-t border-gray-200 p-4">
-              <Link
-                href={`/platform/trips/${state.trip.id}/listing/${listing.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <button className="px-4 py-2 bg-[#404040]/80 hover:bg-[#404040] text-white font-medium rounded text-center transition-colors w-full">
-                  See full details
-                </button>
-              </Link>
-            </div>
           </div>
         </ScrollArea>
       </div>

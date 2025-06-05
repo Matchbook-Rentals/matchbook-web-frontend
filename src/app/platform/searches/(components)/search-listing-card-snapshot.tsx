@@ -190,6 +190,7 @@ export default function SearchListingCard({
                     className="rounded-lg object-cover"
                     sizes="(max-width: 267px) 100vw, 267px"
                     priority={index === 0}
+                    unoptimized
                   />
                 </div>
               </CarouselItem>

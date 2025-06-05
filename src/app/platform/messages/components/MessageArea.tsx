@@ -196,6 +196,21 @@ const MessageArea: React.FC<MessageAreaProps> = ({
   const lastScrollTopRef = useRef(0);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   
+
+  // Track if we should auto-scroll (only when user is at bottom)
+  const shouldAutoScrollRef = useRef(true);
+  
+  // Check if user is at bottom of scroll area
+  const isAtBottom = () => {
+    if (!scrollAreaRef.current) return true;
+    const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+    if (!scrollContainer) return true;
+    
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+    return scrollTop + clientHeight >= scrollHeight - 50; // 50px threshold
+  };
+
+  // Update auto-scroll flag when user scrolls
   useEffect(() => {
     const scrollContainer = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
     
@@ -203,6 +218,9 @@ const MessageArea: React.FC<MessageAreaProps> = ({
       if (scrollContainer) {
         const currentScrollTop = scrollContainer.scrollTop;
         const scrollDifference = lastScrollTopRef.current - currentScrollTop;
+        
+        // Update auto-scroll flag based on position
+        shouldAutoScrollRef.current = isAtBottom();
         
         // If scrolling up more than 40px, blur the input to close keyboard
         if (scrollDifference > 20 && isMobile) {
@@ -226,18 +244,23 @@ const MessageArea: React.FC<MessageAreaProps> = ({
     };
   }, [isMobile]);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages change, but only if user was already at bottom
   useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToBottom();
-    }, 100);
-
-    return () => clearTimeout(timer);
+    if (shouldAutoScrollRef.current) {
+      const timer = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
   }, [messages]);
 
-  // Auto-scroll to bottom and focus scroll area on component mount
+  // Initial setup effect - only runs once per conversation change
   useEffect(() => {
+    if (!selectedConversation) return;
+    
+    // Always scroll to bottom for new conversation
     scrollToBottom();
+    shouldAutoScrollRef.current = true;
     
     // Focus the scroll area to enable scrolling without needing a click first
     if (scrollAreaRef.current) {
@@ -265,7 +288,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({
         document.body.style.width = '';
       }
     };
-  }, [isMobile]);
+  }, [selectedConversation?.id]); // Only depend on conversation ID, not isMobile
 
   const handleFileClick = (file: MessageFile) => {
     // Only open the dialog if the file is an image

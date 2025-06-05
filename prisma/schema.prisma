@@ -43,6 +43,7 @@ model User {
   emailVerified   DateTime?
   imageUrl        String?
   hashedPassword  String?
+  role            String    @default("user") // User role (user, admin, etc.)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   lastLogin       DateTime?
@@ -101,6 +102,35 @@ model UserPreferences {
   television         Boolean  @default(false)
   hairDryer          Boolean  @default(false)
   iron               Boolean  @default(false)
+
+  // Email notification preferences
+  // Messages & Communication
+  emailNewMessageNotifications      Boolean @default(false)
+  emailNewConversationNotifications Boolean @default(false)
+  
+  // Applications & Matching  
+  emailApplicationReceivedNotifications Boolean @default(false)
+  emailApplicationApprovedNotifications Boolean @default(false)
+  emailApplicationDeclinedNotifications Boolean @default(false)
+  
+  // Reviews & Verification
+  emailSubmitHostReviewNotifications    Boolean @default(false)
+  emailSubmitRenterReviewNotifications  Boolean @default(false)
+  emailLandlordInfoRequestNotifications Boolean @default(false)
+  emailVerificationCompletedNotifications Boolean @default(false)
+  
+  // Bookings & Stays
+  emailBookingCompletedNotifications  Boolean @default(false)
+  emailBookingCanceledNotifications   Boolean @default(false)
+  emailMoveOutUpcomingNotifications   Boolean @default(false)
+  emailMoveInUpcomingNotifications    Boolean @default(false)
+  
+  // Payments
+  emailPaymentSuccessNotifications Boolean @default(false)
+  emailPaymentFailedNotifications  Boolean @default(false)
+  
+  // External Communications
+  emailOffPlatformHostNotifications Boolean @default(false)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

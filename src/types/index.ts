@@ -96,3 +96,26 @@ export interface SuggestedLocation {
   lat: number | null;
   lng: number | null;
 }
+
+// Notification Email Types
+export interface NotificationEmailData {
+  companyName: string;
+  headerText: string;
+  contentTitle: string;
+  contentText: string;
+  buttonText: string;
+  buttonUrl: string;
+  companyAddress: string;
+  companyCity: string;
+  companyWebsite: string;
+}
+
+export interface SendNotificationEmailInput {
+  to: string;
+  subject: string;
+  emailData: NotificationEmailData;
+}
+
+export type SendNotificationEmailResponse =
+  | { success: true; emailId: string }
+  | { success: false; error: string };
