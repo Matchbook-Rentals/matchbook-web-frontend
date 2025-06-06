@@ -1157,8 +1157,8 @@ const [listingBasics, setListingBasics] = useState({
   }
 
   return (
-    <main className="bg-white flex flex-row justify-center w-full min-h-screen">
-      <div className="bg-white overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
+    <main className="bg-background flex flex-row justify-center w-full min-h-screen">
+      <div className="bg-background overflow-hidden w-full max-w-[1920px] relative py-12 pb-32">
         {/* Progress bar component - hidden on success page */}
         {currentStep !== 9 && (
           <ProgressBar 
@@ -1197,7 +1197,7 @@ const [listingBasics, setListingBasics] = useState({
 
         {/* Footer with navigation buttons - fixed to bottom */}
         {currentStep !== 9 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+          <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 z-10">
             <Separator className="w-full" />
             <div className="flex justify-between mx-auto w-full max-w-[891px] py-4">
               <Button 

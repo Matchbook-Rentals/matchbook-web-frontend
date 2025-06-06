@@ -55,7 +55,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         {/* Save & Exit button */}
         <div className="absolute w-[106px] h-[29px] top-0 left-[777px]">
           <div 
-            className="h-[29px] bg-white rounded-[15px] border-[0.5px] border-solid border-[#0000004c] cursor-pointer"
+            className="h-[29px] bg-background rounded-[15px] border-[0.5px] border-solid border-[#0000004c] cursor-pointer"
             onClick={onSaveExit}
           >
             <div className="relative w-[89px] h-5 top-1 left-2">

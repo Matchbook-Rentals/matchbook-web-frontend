@@ -136,7 +136,7 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
                 label={type.name}
                 className={`h-[295px] w-[196px] cursor-pointer box-border  ${
                   isTypeSelected
-                    ? "border-[3px] border-solid border-black shadow-[0px_4px_4px_#00000040]"
+                    ? "border-[3px] bg-background border-solid border-black shadow-[0px_4px_4px_#00000040]"
                     : "border border-solid border-[#0000004c]"
                 }`}
                 labelClassNames={`font-['Poppins',Helvetica] font-medium text-[#2d2f2e99] text-2xl text-center`}

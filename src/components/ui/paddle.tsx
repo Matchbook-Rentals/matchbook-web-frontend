@@ -15,7 +15,7 @@ const Paddle: React.FC<PaddleProps> = ({ label, icon, className, labelClassNames
   return (
     <Card
       className={cn(
-        "w-[155px] h-[175px] text-charcoal flex flex-col items-center justify-between py-2 border-[1px] border-[#E3E3E3] rounded-[30px]",
+        "w-[155px] h-[175px] text-charcoal flex flex-col bg-background items-center justify-between py-2 border-[1px] border-[#E3E3E3] rounded-[30px]",
         className
       )}
       onClick={onClick}
