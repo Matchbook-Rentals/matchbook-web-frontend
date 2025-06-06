@@ -13,6 +13,7 @@ import { Notification } from '@prisma/client';
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
+import { checkClientBetaAccess } from '@/utils/roles';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 60000 // five minutes
@@ -45,7 +46,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   
   // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
-  const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta';
+  const hasBetaAccess = checkClientBetaAccess(userRole);
   const isAdmin = userRole === 'admin'; // Use actual admin role check
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   ];
 
   const fetchNotifications = useCallback(async () => {
-    if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta')) {
+    if (isSignedIn && checkClientBetaAccess(userRole)) {
       try {
         const result = await getNotifications();
         if (result.success && Array.isArray(result.notifications)) {

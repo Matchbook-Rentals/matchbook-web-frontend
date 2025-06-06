@@ -8,6 +8,7 @@ import GuestTypeCounter from "./GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { DisabledDesktopInputs } from "./disabled-inputs.tsx"
 import { createTrip } from "@/app/actions/trips";
+import { checkClientBetaAccess } from '@/utils/roles';
 import { useRouter } from "next/navigation";
 
 interface SearchInputsDesktopProps {
@@ -32,7 +33,7 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
     const checkAccess = async () => {
       if (isSignedIn && user) {
         const userRole = user.publicMetadata.role as string;
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
+        setHasAccess(checkClientBetaAccess(userRole));
       } else {
         setHasAccess(false);
       }
