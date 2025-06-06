@@ -8,6 +8,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { UserButton } from "@clerk/nextjs";
 import { useAuth, useUser } from "@clerk/nextjs";
 import UserMenu from "../userMenu";
+import { checkClientBetaAccess } from '@/utils/roles';
 
 
 interface MatchbookHeaderProps {
@@ -30,7 +31,7 @@ export default function MatchbookHeader({
     const checkAccess = async () => {
       if (isSignedIn && user) {
         const userRole = user.publicMetadata.role as string;
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
+        setHasAccess(checkClientBetaAccess(userRole));
       }
     };
 

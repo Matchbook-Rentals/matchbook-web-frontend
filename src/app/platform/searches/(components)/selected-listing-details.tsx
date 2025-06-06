@@ -120,7 +120,11 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
       <ScrollArea className="w-full" style={{ height }}>
         <div className="w-full px-4 pb-8">
           {/* Image Carousel */}
-          <div className="relative h-64 w-full mb-6 rounded-lg overflow-hidden">
+          <div 
+            className="relative h-64 w-full mb-6 rounded-lg overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             <Carousel keyboardControls={false} opts={{ loop: true }}>
               <CarouselContent>
                 {listing.listingImages.map((image, index) => (
@@ -129,11 +133,7 @@ const SelectedListingDetails: React.FC<SelectedListingDetailsProps> = ({
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <div 
-                className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
+              <div className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                 <CarouselPrevious
                   Icon={ArrowLeft}
                   className="left-2 text-white border-none hover:text-white bg-black/40 hover:bg-black/20 pl-[4px] z-20"

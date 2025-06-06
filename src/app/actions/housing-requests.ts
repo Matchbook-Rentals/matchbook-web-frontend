@@ -21,12 +21,17 @@ export async function getHousingRequestById(housingRequestId: string) {
               include: {
                 verificationImages: true,
                 incomes: true,
-                identifications: true,
+                identifications: {
+                  include: {
+                    idPhotos: true,
+                  }
+                },
                 residentialHistories: true,
               }
             }
           }
         },
+        listing: true,
       },
     });
 

@@ -5,6 +5,7 @@ import SearchContainer from "./searchContainer";
 import Countdown from "../marketing-landing-components/countdown";
 import { Button } from "@/components/ui/button"; // Import Button
 import { useAuth, useUser } from "@clerk/nextjs"; // Import Clerk hooks
+import { checkClientBetaAccess } from '@/utils/roles';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +27,7 @@ const Hero: React.FC = () => {
       if (isSignedIn && user) {
         const userRole = user.publicMetadata.role as string;
         // Allow access for specific roles
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
+        setHasAccess(checkClientBetaAccess(userRole));
       } else {
         // No access if not signed in or user data is unavailable
         setHasAccess(false);

@@ -3,6 +3,8 @@ import prisma from "@/lib/prismadb";
 import { currentUser, User, auth } from "@clerk/nextjs/server";
 import { HostPropertiesProvider } from "@/contexts/host-properties-provider";
 import { ListingAndImages, RequestWithUser } from "@/types";
+import { checkHostAccess } from "@/utils/roles";
+import { redirect } from "next/navigation";
 
 const fetchListingsFromDb = async (): Promise<ListingAndImages[]> => {
   'use server';
@@ -95,7 +97,14 @@ async function HostDashboardDataWrapper({ children }: { children: React.ReactNod
   );
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  // Check for host access at layout level for stronger protection
+  const hasHostAccess = await checkHostAccess()
+  
+  if (!hasHostAccess) {
+    redirect('/unauthorized')
+  }
+
   return (
     <React.Suspense fallback={
       <div className="md:w-4/5 w-[95%] mx-auto flex flex-col items-center justify-center min-h-[400px] space-y-4">

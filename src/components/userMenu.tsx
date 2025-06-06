@@ -13,6 +13,7 @@ import { Notification } from '@prisma/client';
 import { MenuIcon, UserIcon } from '@/components/svgs/svg-components';
 import { Bell } from 'lucide-react';
 import { SupportDialog } from '@/components/ui/support-dialog';
+import { checkClientBetaAccess, checkClientHostAccess } from '@/utils/roles';
 
 const IMAGE_UPDATE_TIME_LIMIT = 300000 // five minutes
 const NOTIFICATION_REFRESH_INTERVAL = 60000 // five minutes
@@ -25,6 +26,7 @@ interface MenuItem {
   onClick?: () => void;
   requiresBeta?: boolean; // Requires beta_user, moderator, or admin
   requiresAdmin?: boolean; // Requires admin
+  requiresHostAccess?: boolean; // Requires host_beta, moderator, or admin
   adminOnlyVisible?: boolean; // Only visible to admin
   section: number; // For grouping and dividers
 }
@@ -45,7 +47,8 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   
   // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
-  const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user';
+  const hasBetaAccess = checkClientBetaAccess(userRole);
+  const hasHostAccess = checkClientHostAccess(userRole);
   const isAdmin = userRole === 'admin'; // Use actual admin role check
 
   useEffect(() => {
@@ -67,7 +70,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       id: 'switch-mode',
       label: 'Switch to Renting',
       href: '/platform/trips',
-      requiresAdmin: true,
+      requiresBeta: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
@@ -84,7 +87,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       id: 'switch-mode',
       label: 'Switch to Hosting',
       href: '/platform/host-dashboard',
-      requiresAdmin: true,
+      requiresHostAccess: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
@@ -94,7 +97,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   ];
 
   const fetchNotifications = useCallback(async () => {
-    if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user')) {
+    if (isSignedIn && checkClientBetaAccess(userRole)) {
       try {
         const result = await getNotifications();
         if (result.success && Array.isArray(result.notifications)) {
@@ -661,6 +664,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
                     isItemEnabled = false;
                   }
                   if (item.requiresAdmin && !isAdmin) {
+                    isItemEnabled = false;
+                  }
+                  if (item.requiresHostAccess && !hasHostAccess) {
                     isItemEnabled = false;
                   }
 
