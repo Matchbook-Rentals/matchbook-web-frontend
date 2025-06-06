@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
       if (isSignedIn && user) {
         const userRole = user.publicMetadata.role as string;
         // Allow access for specific roles
-        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user');
+        setHasAccess(userRole === 'moderator' || userRole === 'admin' || userRole === 'beta_user' || userRole === 'host_beta');
       } else {
         // No access if not signed in or user data is unavailable
         setHasAccess(false);
