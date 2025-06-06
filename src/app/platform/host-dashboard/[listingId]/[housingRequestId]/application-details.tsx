@@ -1,10 +1,11 @@
 import { ChevronDownIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { PAGE_MARGIN } from "@/constants/styles";
-import { HousingRequest, User, Application, Income, ResidentialHistory, Listing } from "@prisma/client";
+import { HousingRequest, User, Application, Income, ResidentialHistory, Listing, Identification, IDPhoto } from "@prisma/client";
 import Link from "next/link";
 import { calculateRent, calculateLengthOfStay as calculateStayLength } from "@/lib/calculate-rent";
 
@@ -13,6 +14,9 @@ interface HousingRequestWithUser extends HousingRequest {
     applications: (Application & {
       incomes: Income[];
       residentialHistories: ResidentialHistory[];
+      identifications: (Identification & {
+        idPhotos: IDPhoto[];
+      })[];
     })[];
   };
   listing: Listing;
@@ -414,12 +418,38 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               <p className="text-[15px] font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
                 Identification
               </p>
-              <Button
-                variant="outline"
-                className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
-              >
-                View ID
-              </Button>
+              {application?.identifications && application.identifications.length > 0 && application.identifications[0].idPhotos.length > 0 ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
+                    >
+                      View ID
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                      <DialogTitle className="text-center">Identification Document - {application.identifications[0].idType}</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex justify-center">
+                      <img 
+                        src={application.identifications[0].idPhotos[0].url} 
+                        alt="Identification document"
+                        className="max-w-full max-h-[70vh] object-contain"
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <Button
+                  variant="outline"
+                  disabled
+                  className="h-[31px] mt-2 rounded-[5px] border-[1.5px] border-gray-300 text-gray-300 text-xs font-medium [font-family:'Poppins',Helvetica]"
+                >
+                  No ID Available
+                </Button>
+              )}
             </div>
             <div>
               <p className="text-[15px] font-normal text-[#4f4f4f] [font-family:'Poppins',Helvetica]">
@@ -559,12 +589,38 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <Button
-                      variant="outline"
-                      className="h-[41px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
-                    >
-                      View Proof of income
-                    </Button>
+                    {application?.incomes && income.imageUrl ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="h-[41px] rounded-[5px] border-[1.5px] border-[#5c9ac5] text-[#5c9ac5] text-xs font-medium [font-family:'Poppins',Helvetica]"
+                          >
+                            View Proof of income
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-3xl">
+                          <DialogHeader>
+                            <DialogTitle className="text-center">Proof of Income - {application?.incomes ? `Source ${index + 1}` : income.source}</DialogTitle>
+                          </DialogHeader>
+                          <div className="flex justify-center">
+                            <img 
+                              src={income.imageUrl} 
+                              alt="Proof of income document"
+                              className="max-w-full max-h-[70vh] object-contain"
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        disabled
+                        className="h-[41px] rounded-[5px] border-[1.5px] border-gray-300 text-gray-300 text-xs font-medium [font-family:'Poppins',Helvetica]"
+                      >
+                        No Proof Available
+                      </Button>
+                    )}
                   </div>
                 </div>
                 {index < (application?.incomes?.length || incomeDetails.length) - 1 && (
