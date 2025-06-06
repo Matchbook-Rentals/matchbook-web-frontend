@@ -45,7 +45,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   
   // Determine user roles and access levels
   const userRole = user?.publicMetadata?.role as string | undefined;
-  const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user';
+  const hasBetaAccess = userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta';
   const isAdmin = userRole === 'admin'; // Use actual admin role check
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       id: 'switch-mode',
       label: 'Switch to Renting',
       href: '/platform/trips',
-      requiresAdmin: true,
+      requiresBeta: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
@@ -84,7 +84,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
       id: 'switch-mode',
       label: 'Switch to Hosting',
       href: '/platform/host-dashboard',
-      requiresAdmin: true,
+      requiresBeta: true,
       section: 3
     },
     { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
@@ -94,7 +94,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   ];
 
   const fetchNotifications = useCallback(async () => {
-    if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user')) {
+    if (isSignedIn && (userRole === 'admin' || userRole === 'moderator' || userRole === 'beta_user' || userRole === 'host_beta')) {
       try {
         const result = await getNotifications();
         if (result.success && Array.isArray(result.notifications)) {

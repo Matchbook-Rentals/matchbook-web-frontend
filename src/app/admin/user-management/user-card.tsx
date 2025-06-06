@@ -69,6 +69,8 @@ export function UserCard({ user }: UserCardProps) {
         return <Shield className="h-4 w-4 text-blue-500" />
       case 'beta_user':
         return <UserCheck className="h-4 w-4 text-green-500" />
+      case 'host_beta':
+        return <UserCheck className="h-4 w-4 text-purple-500" />
       default:
         return <UserX className="h-4 w-4 text-gray-500" />
     }
@@ -246,6 +248,19 @@ export function UserCard({ user }: UserCardProps) {
                     disabled={loading !== null}
                   >
                     {loading === 'beta_user' ? "Setting..." : "Make Beta User"}
+                  </Button>
+                </form>
+
+                <form action={handleRoleChange}>
+                  <Input type="hidden" value={user.id} name="id" />
+                  <Input type="hidden" value="host_beta" name="role" />
+                  <Button 
+                    type="submit" 
+                    variant="secondary" 
+                    className="w-full"
+                    disabled={loading !== null}
+                  >
+                    {loading === 'host_beta' ? "Setting..." : "Make Host Beta"}
                   </Button>
                 </form>
               </div>
