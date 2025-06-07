@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import Link from "next/link";
 import { ListingAndImages } from "@/types";
+import { PAGE_MARGIN } from "@/constants/styles";
 
 interface HostDashboardListingsTabProps {
   listings: ListingAndImages[] | null;
@@ -172,7 +173,7 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
   };
 
   return (
-    <div className="flex">
+    <div className={`${PAGE_MARGIN} flex`}>
       {/* Filter sidebar */}
       <div className="w-[201px] mr-8">
         <h1 className="font-medium text-[#3f3f3f] text-[32px] [font-family:'Poppins',Helvetica]">
