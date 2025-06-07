@@ -144,7 +144,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
                 </div>
 
                 <div className="flex gap-4">
-                  <Link href={`/platform/host-dashboard/${listing.id}/${app.id}`}>
+                  <Link href={`/platform/host-dashboard/${listing.id}/${app.id}?from=listing`}>
                     <Button
                       variant="outline"
                       className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"

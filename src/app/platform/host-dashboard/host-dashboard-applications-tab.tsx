@@ -496,7 +496,7 @@ export default function HostDashboardApplicationsTab({ housingRequests: propHous
                 </div>
 
                 <div className="flex gap-4">
-                  <Link href={`/platform/host-dashboard/${app.listingId}/${app.id}`}>
+                  <Link href={`/platform/host-dashboard/${app.listingId}/${app.id}?from=dashboard`}>
                     <Button
                       variant="outline"
                       className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
