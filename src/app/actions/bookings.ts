@@ -133,3 +133,58 @@ export async function deleteBooking(id: string): Promise<void> {
   });
 }
 
+// Get all bookings for the current host's listings
+export async function getHostBookings() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      console.log('No userId found in auth for bookings');
+      return []; // Return empty array instead of throwing error
+    }
+
+    console.log('Fetching bookings for userId:', userId);
+
+    const bookings = await prisma.booking.findMany({
+      where: { 
+        listing: {
+          userId: userId // Get bookings where the listing belongs to the current user (host)
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        listing: {
+          select: {
+            title: true,
+            imageSrc: true,
+            streetAddress1: true,
+            city: true,
+            state: true,
+            postalCode: true
+          }
+        },
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        trip: {
+          select: {
+            numAdults: true,
+            numPets: true,
+            numChildren: true
+          }
+        }
+      }
+    });
+
+    console.log('Found bookings:', bookings.length);
+    return bookings;
+  } catch (error) {
+    console.error('Error in getHostBookings:', error);
+    // Return empty array instead of throwing error to prevent page crash
+    return [];
+  }
+}
+

@@ -230,3 +230,72 @@ export async function optimisticRemoveApplyDb(tripId: string, listingId: string)
     return { success: false };
   }
 }
+
+// Get all housing requests for the current host's listings
+export async function getHostHousingRequests() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      console.log('No userId found in auth');
+      return []; // Return empty array instead of throwing error
+    }
+
+    console.log('Fetching housing requests for userId:', userId);
+
+    const housingRequests = await prisma.housingRequest.findMany({
+      where: {
+        listing: {
+          userId: userId // Get housing requests where the listing belongs to the current user (host)
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        listing: {
+          select: {
+            title: true,
+            streetAddress1: true,
+            city: true,
+            state: true,
+            postalCode: true
+          }
+        }
+      }
+    });
+
+    // Manually fetch trip data for each housing request to handle potential null cases
+    const housingRequestsWithTrips = await Promise.all(
+      housingRequests.map(async (request) => {
+        try {
+          const trip = await prisma.trip.findUnique({
+            where: { id: request.tripId },
+            select: {
+              numAdults: true,
+              numPets: true,
+              numChildren: true,
+              minPrice: true,
+              maxPrice: true
+            }
+          });
+          return { ...request, trip };
+        } catch (error) {
+          console.warn(`Failed to fetch trip ${request.tripId} for housing request ${request.id}:`, error);
+          return { ...request, trip: null };
+        }
+      })
+    );
+
+    console.log('Found housing requests:', housingRequestsWithTrips.length);
+    return housingRequestsWithTrips;
+  } catch (error) {
+    console.error('Error in getHostHousingRequests:', error);
+    // Return empty array instead of throwing error to prevent page crash
+    return [];
+  }
+}

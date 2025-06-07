@@ -1,55 +1,30 @@
-"use client";
-
 import React from "react";
-import { useHostProperties } from "@/contexts/host-properties-provider";
-import TabSelector from "@/components/ui/tab-selector";
-import HostDashboardListingsTab from "./host-dashboard-listings-tab";
-import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
-import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
-import { PAGE_MARGIN } from "@/constants/styles";
+import { getHostListings } from "@/app/actions/listings";
+import { getHostBookings } from "@/app/actions/bookings";
+import { getHostHousingRequests } from "@/app/actions/housing-requests";
+import HostDashboardClient from "./host-dashboard-client";
 
-export default function HostDashboard() {
-  const { listings } = useHostProperties();
+export default async function HostDashboard() {
+  console.log('HostDashboard: Starting data fetch...');
   
-  const handleTabChange = (value: string) => {
-    console.log('Tab changed to:', value);
-  };
+  // Fetch all data server-side
+  const [listings, bookings, housingRequests] = await Promise.all([
+    getHostListings(),
+    getHostBookings(),
+    getHostHousingRequests()
+  ]);
 
-
-
-  // Define tabs
-  const tabs = [
-    {
-      value: 'listings',
-      label: 'Your Listings',
-      content: <HostDashboardListingsTab listings={listings} />
-    },
-    {
-      value: 'bookings',
-      label: 'Your Bookings',
-      content: <HostDashboardBookingsTab />
-    },
-    {
-      value: 'applications',
-      label: 'Your Applications',
-      content: <HostDashboardApplicationsTab />
-    }
-  ];
+  console.log('HostDashboard: Data fetched successfully');
+  console.log('- listings count:', listings.length);
+  console.log('- bookings count:', bookings.length);
+  console.log('- housingRequests count:', housingRequests.length);
+  console.log('- housingRequests sample:', housingRequests[0]);
 
   return (
-    <div className={`bg-background ${PAGE_MARGIN} flex flex-row justify-center w-full`}>
-      <div className="bg-background  overflow-hidden w-full max-w-[1920px] relative">
-        <div className="max-w-[1373px] mx-auto">
-          <TabSelector
-            tabs={tabs}
-            defaultTab="listings"
-            useUrlParams={false}
-            onTabChange={handleTabChange}
-            tabsListClassName="border-0"
-            className="border-0"
-          />
-        </div>
-      </div>
-    </div>
+    <HostDashboardClient 
+      listings={listings}
+      bookings={bookings}
+      housingRequests={housingRequests}
+    />
   );
 }

@@ -164,7 +164,11 @@ const sampleBookings: BookingWithRelations[] = [
   }
 ];
 
-export default function HostDashboardBookingsTab() {
+interface HostDashboardBookingsTabProps {
+  bookings?: any[]; // Using any for now since we need to define the proper type
+}
+
+export default function HostDashboardBookingsTab({ bookings: propBookings }: HostDashboardBookingsTabProps) {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -244,9 +248,12 @@ export default function HostDashboardBookingsTab() {
     return parts.join(", ");
   };
 
+  // Use real bookings if available, otherwise fall back to sample data
+  const bookingsToUse = propBookings && propBookings.length > 0 ? propBookings : sampleBookings;
+
   // Filter bookings based on selected filters and search term
   const filteredBookings = useMemo(() => {
-    let filtered = sampleBookings;
+    let filtered = bookingsToUse;
     
     // Apply status filters
     if (selectedFilters.length > 0) {
@@ -286,7 +293,7 @@ export default function HostDashboardBookingsTab() {
     }
     
     return filtered;
-  }, [selectedFilters, searchTerm]);
+  }, [bookingsToUse, selectedFilters, searchTerm]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
@@ -362,7 +369,7 @@ export default function HostDashboardBookingsTab() {
       <div className="flex-1">
         {filteredBookings.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
-            {sampleBookings.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
+            {bookingsToUse.length === 0 ? "No bookings yet. Your confirmed bookings will appear here." : "No bookings match the selected filters."}
           </div>
         ) : (
           paginatedBookings.map((booking) => {

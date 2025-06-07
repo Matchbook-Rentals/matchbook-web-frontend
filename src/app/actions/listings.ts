@@ -312,3 +312,41 @@ export const getUserDraftListings = async (): Promise<ListingAndImages[]> => {
   }
 }
 
+// Get all listings for the current host user
+export const getHostListings = async (): Promise<ListingAndImages[]> => {
+  try {
+    const userId = await checkAuth();
+    console.log('Fetching listings for userId:', userId);
+    
+    const hostListings = await prisma.listing.findMany({
+      where: { 
+        userId: userId,
+        status: { not: "draft" } // Exclude draft listings
+      },
+      include: {
+        listingImages: true,
+        bedrooms: true,
+        unavailablePeriods: true,
+        user: true,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    
+    console.log('Found listings:', hostListings.length);
+    
+    return hostListings.map(listing => ({
+      ...listing,
+      distance: undefined,
+      listingImages: listing.listingImages,
+      bedrooms: listing.bedrooms,
+      unavailablePeriods: listing.unavailablePeriods,
+    }));
+  } catch (error) {
+    console.error('Error in getHostListings:', error);
+    // Return empty array instead of throwing error to prevent page crash
+    return [];
+  }
+}
+

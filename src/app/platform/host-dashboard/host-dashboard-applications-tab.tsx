@@ -1,14 +1,13 @@
 "use client";
 
 import { MoreHorizontalIcon, Search } from "lucide-react";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { RequestWithUser } from '@/types';
-import { useHostProperties } from "@/contexts/host-properties-provider";
 
 // Filter options
 const filterOptions = [
@@ -319,59 +318,20 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
   };
 };
 
-export default function HostDashboardApplicationsTab() {
-  const { listings, getListingHousingRequests } = useHostProperties();
+interface HostDashboardApplicationsTabProps {
+  housingRequests?: RequestWithUser[];
+}
+
+export default function HostDashboardApplicationsTab({ housingRequests: propHousingRequests }: HostDashboardApplicationsTabProps) {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [realHousingRequests, setRealHousingRequests] = useState<RequestWithUser[]>([]);
-  const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
 
-  // Fetch housing requests for all listings
-  useEffect(() => {
-    const fetchAllHousingRequests = async () => {
-      if (!listings || listings.length === 0) {
-        setLoading(false);
-        return;
-      }
+  // Debug logging
+  console.log('HostDashboardApplicationsTab received propHousingRequests:', propHousingRequests);
+  console.log('propHousingRequests length:', propHousingRequests?.length || 0);
 
-      try {
-        const allRequests: RequestWithUser[] = [];
-        
-        // Fetch housing requests for each listing
-        for (const listing of listings) {
-          try {
-            const requests = await getListingHousingRequests(listing.id);
-            if (requests && Array.isArray(requests)) {
-              // Add listing info to each request for display purposes
-              const requestsWithListing = requests.map((request: RequestWithUser) => ({
-                ...request,
-                listing: {
-                  title: listing.title,
-                  streetAddress1: listing.streetAddress1,
-                  city: listing.city,
-                  state: listing.state,
-                  postalCode: listing.postalCode
-                }
-              }));
-              allRequests.push(...requestsWithListing);
-            }
-          } catch (error) {
-            console.error(`Error fetching housing requests for listing ${listing.id}:`, error);
-          }
-        }
-        
-        setRealHousingRequests(allRequests);
-      } catch (error) {
-        console.error('Error fetching housing requests:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAllHousingRequests();
-  }, [listings, getListingHousingRequests]);
 
   // Toggle filter
   const toggleFilter = (filterId: string) => {
@@ -383,13 +343,15 @@ export default function HostDashboardApplicationsTab() {
   };
 
   // Use real data if available, otherwise fall back to sample data
-  const housingRequestsToUse = realHousingRequests.length > 0 ? realHousingRequests : sampleHousingRequests;
+  const housingRequestsToUse = propHousingRequests && propHousingRequests.length > 0 ? propHousingRequests : sampleHousingRequests;
   
-  // Convert housing requests to display format
-  const applications = housingRequestsToUse.map(formatHousingRequestForDisplay);
-
+  console.log('housingRequestsToUse:', housingRequestsToUse);
+  console.log('Using real data?', propHousingRequests && propHousingRequests.length > 0);
+  
   // Filter and search applications
   const filteredApplications = useMemo(() => {
+    // Convert housing requests to display format
+    const applications = housingRequestsToUse.map(formatHousingRequestForDisplay);
     let filtered = applications;
     
     // Apply status filters
@@ -417,7 +379,7 @@ export default function HostDashboardApplicationsTab() {
     }
     
     return filtered;
-  }, [applications, selectedFilters, searchTerm]);
+  }, [housingRequestsToUse, selectedFilters, searchTerm]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
@@ -489,13 +451,9 @@ export default function HostDashboardApplicationsTab() {
 
       {/* Application cards */}
       <div className="flex flex-col gap-5 flex-1">
-        {loading ? (
+        {filteredApplications.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
-            Loading applications...
-          </div>
-        ) : filteredApplications.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            {applications.length === 0 ? "No applications yet." : "No applications match your filters."}
+            {housingRequestsToUse.length === 0 ? "No applications yet." : "No applications match your filters."}
           </div>
         ) : (
           paginatedApplications.map((app) => (
