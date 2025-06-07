@@ -5,6 +5,7 @@ import { useHostProperties } from "@/contexts/host-properties-provider";
 import TabSelector from "@/components/ui/tab-selector";
 import HostDashboardListingsTab from "./host-dashboard-listings-tab";
 import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
+import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
 import { PAGE_MARGIN } from "@/constants/styles";
 
 export default function HostDashboard() {
@@ -15,15 +16,6 @@ export default function HostDashboard() {
   };
 
 
-  // Your Applications tab content (placeholder)
-  const yourApplicationsContent = (
-    <div className="flex justify-center items-center min-h-[400px]">
-      <div className="text-center text-gray-500">
-        <h3 className="text-lg font-semibold mb-2">Your Applications</h3>
-        <p>Your tenant applications will appear here</p>
-      </div>
-    </div>
-  );
 
   // Define tabs
   const tabs = [
@@ -40,11 +32,7 @@ export default function HostDashboard() {
     {
       value: 'applications',
       label: 'Your Applications',
-      content: (
-        <div key="applications-content">
-          {yourApplicationsContent}
-        </div>
-      )
+      content: <HostDashboardApplicationsTab />
     }
   ];
 
