@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { ListingAndImages } from "@/types";
 import { PAGE_MARGIN } from "@/constants/styles";
+import CalendarDialog from "@/components/ui/calendar-dialog";
 
 interface HostDashboardListingsTabProps {
   listings: ListingAndImages[] | null;
@@ -286,12 +287,12 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
                     </Button>
                   </Link>
 
-                  <Button
-                    variant="outline"
-                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                  >
-                    Manage Calendar
-                  </Button>
+                  <CalendarDialog 
+                    bookings={listing.bookings || []}
+                    unavailabilities={listing.unavailablePeriods || []}
+                    triggerText="View Calendar"
+                    listingId={listing.id}
+                  />
 
                   <Button
                     variant="outline"
