@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import TabSelector from "@/components/ui/tab-selector";
 import HostDashboardListingsTab from "./host-dashboard-listings-tab";
 import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
@@ -19,6 +20,22 @@ export default function HostDashboardClient({
   bookings, 
   housingRequests 
 }: HostDashboardClientProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  // Initialize active tab from URL params or default to 'listings'
+  const getInitialTab = () => {
+    const tabFromUrl = searchParams.get('tab');
+    const validTabs = ['listings', 'bookings', 'applications'];
+    
+    if (tabFromUrl && validTabs.includes(tabFromUrl)) {
+      return tabFromUrl;
+    }
+    return 'listings';
+  };
+  
+  const [activeTab, setActiveTab] = useState(getInitialTab);
+
   // Debug logging
   console.log('HostDashboardClient received data:');
   console.log('- listings:', listings?.length || 0);
@@ -26,8 +43,28 @@ export default function HostDashboardClient({
   console.log('- housingRequests:', housingRequests?.length || 0);
   console.log('- housingRequests data:', housingRequests);
 
+  // Update active tab when URL params change
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    const validTabs = ['listings', 'bookings', 'applications'];
+    
+    if (tabFromUrl && validTabs.includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    } else if (!tabFromUrl) {
+      setActiveTab('listings');
+    }
+  }, [searchParams]);
+
   const handleTabChange = (value: string) => {
     console.log('Tab changed to:', value);
+    
+    // Update URL immediately using native browser API
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', value);
+    window.history.replaceState({}, '', url.toString());
+    
+    // Then update tab state
+    setActiveTab(value);
   };
 
   // Define tabs
@@ -57,6 +94,7 @@ export default function HostDashboardClient({
             tabs={tabs}
             defaultTab="listings"
             useUrlParams={false}
+            activeTabValue={activeTab}
             onTabChange={handleTabChange}
             tabsListClassName="border-0"
             className="border-0"
