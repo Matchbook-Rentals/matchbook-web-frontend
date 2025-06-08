@@ -281,7 +281,7 @@ const SearchListingsGrid: React.FC<SearchListingsGridProps> = ({
             className={`${isSingleListing ? '' : 'flex-grow'} w-[103%] sm:w-full mx-auto rounded-md pb-16 md:pb-2 pr-3`}
             style={{ height: isSingleListing ? 'auto' : undefined }}
           >
-            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center  ${isSingleListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-4' : 'pb-12'}`}>
+            <div ref={gridRef} className={`grid grid-cols-1 justify-items-center ${isSingleListing ? 'sm:justify-items-center' : 'sm:grid-cols-2 sm:justify-items-start min-[1100px]:grid-cols-3'} gap-8 ${isSingleListing ? 'pb-0' : 'pb-12'}`}>
               {displayedListings.map((listing) => {
                 const status = getListingStatus(listing);
                 return (

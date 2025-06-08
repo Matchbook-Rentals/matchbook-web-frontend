@@ -40,7 +40,7 @@ const SearchesPage: React.FC = () => {
     { label: 'Application', value: 'application', content: <ApplicationTab />, textSize: tabSize },
   ];
   return (
-    <div className="flex flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
+    <div className="flex test flex-col items-center px-1 sm:px-2 md:px-4 lg:px-6 xl:px-6 w-[95%] mx-auto">
       <button onClick={consoleLogs}>Log State</button>
       <SearchCarousel />
       <div className="flex  w-full ">
