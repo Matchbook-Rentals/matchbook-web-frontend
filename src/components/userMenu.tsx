@@ -65,9 +65,9 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const menuItems: MenuItem[] = isHostSide ? [
     // Host side menu items
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'properties', label: 'Your Properties', href: '/platform/host-dashboard', requiresBeta: true, section: 1 },
-    { id: 'applications', label: 'Applications', href: '/platform/host/applications', requiresBeta: true, section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/platform/host/bookings', requiresBeta: true, section: 1 },
+    { id: 'properties', label: 'Your Properties', href: '/platform/host-dashboard?tab=listings', requiresBeta: true, section: 1 },
+    { id: 'applications', label: 'Applications', href: '/platform/host-dashboard?tab=applications', requiresBeta: true, section: 1 },
+    { id: 'bookings', label: 'Bookings', href: '/platform/host-dashboard?tab=bookings', requiresBeta: true, section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/platform/messages?view=host', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
