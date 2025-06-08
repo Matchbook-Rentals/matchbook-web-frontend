@@ -260,19 +260,21 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
                   </div>
 
                   {listing.title && (
-                    <div className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[15px] leading-5 mt-1">
-                      {listing.title}
+                    <div className="flex justify-between mt-1">
+                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[16px] leading-5">
+                        {listing.title}
+                      </div>
+                      <div
+                        className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusColor}`}
+                      >
+                        {status}
+                      </div>
                     </div>
                   )}
 
-                  <div className="flex justify-between mt-2">
+                  <div className="mt-1">
                     <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
                       {formatDetails(listing)}
-                    </div>
-                    <div
-                      className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusColor}`}
-                    >
-                      {status}
                     </div>
                   </div>
                 </div>

@@ -383,59 +383,38 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                 key={booking.id}
                 className="mb-8 rounded-[5px] border border-solid border-[#6e504933]"
               >
-                <CardContent className="p-6">
-                  {/* Top section with property and price */}
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
+                <CardContent className="p-4">
+                  <div className="mb-2">
+                    <div className="flex justify-between">
                       <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                        {booking.listing?.title || "Property Title"}
-                      </h2>
-                      <p className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[15px] leading-5 mt-1">
                         {address}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl leading-4">
+                      </h2>
+                      <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
                         ${booking.monthlyRent?.toLocaleString() || "0"} / Month
                       </div>
-                      {booking.totalPrice && (
-                        <p className="[font-family:'Poppins',Helvetica] font-normal text-[#6e5049] text-[14px] mt-1">
-                          Total: ${booking.totalPrice.toLocaleString()}
-                        </p>
-                      )}
+                    </div>
+
+                    {booking.listing?.title && (
+                      <div className="flex justify-between mt-1">
+                        <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] pl-1 text-[16px] leading-5">
+                          {booking.listing.title}
+                        </div>
+                        <div
+                          className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${statusInfo.className}`}
+                        >
+                          {statusInfo.label}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-1">
+                      <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
+                        Guest: {booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest Name"} • {formatGuestInfo(booking.trip)} • {formatDateRange(booking.startDate, booking.endDate)}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Middle section with booking details */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-400" />
-                      <span className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px]">
-                        {booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest Name"}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Home className="h-4 w-4 text-gray-400" />
-                      <span className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px]">
-                        {formatGuestInfo(booking.trip)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400" />
-                      <span className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px]">
-                        {formatDateRange(booking.startDate, booking.endDate)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {statusInfo.icon}
-                      <span className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] ${statusInfo.className}`}>
-                        {statusInfo.label}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="flex items-center gap-4 mt-6">
+                  <div className="flex items-center gap-4 mt-8">
                     <Button
                       variant="outline"
                       className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
