@@ -450,3 +450,28 @@ export async function getRecentConversationsWithMessages(limit: number = 15) {
   });
   return conversations;
 }
+
+export async function findConversationBetweenUsers(listingId: string, otherUserId: string): Promise<{ conversationId: string | null }> {
+  try {
+    const userId = await checkAuth();
+
+    // Find the conversation between the current user and the other user for this listing
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        listingId: listingId,
+        isGroup: false,
+        participants: {
+          every: {
+            userId: { in: [userId, otherUserId] }
+          }
+        }
+      }
+    });
+
+    return { conversationId: conversation?.id || null };
+
+  } catch (error) {
+    console.error('Error finding conversation between users:', error);
+    return { conversationId: null };
+  }
+}

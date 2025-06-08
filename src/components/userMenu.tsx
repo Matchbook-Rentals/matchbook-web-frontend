@@ -36,6 +36,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
   const { openUserProfile } = useClerk();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(1);
@@ -55,8 +56,10 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     updateUserLogin(new Date());
   }, []);
 
-  // Check if user is on host side
-  const isHostSide = pathname?.startsWith('/platform/host-dashboard') || pathname?.startsWith('/platform/host/');
+  // Check if user is on host side - either by path or by view=host parameter
+  const isHostSide = pathname?.startsWith('/platform/host-dashboard') || 
+                     pathname?.startsWith('/platform/host/') ||
+                     searchParams.get('view') === 'host';
 
   // Define the menu structure with conditional items based on host/renter side
   const menuItems: MenuItem[] = isHostSide ? [
@@ -65,7 +68,7 @@ export default function UserMenu({ isSignedIn, color }: { isSignedIn: boolean, c
     { id: 'properties', label: 'Your Properties', href: '/platform/host-dashboard', requiresBeta: true, section: 1 },
     { id: 'applications', label: 'Applications', href: '/platform/host/applications', requiresBeta: true, section: 1 },
     { id: 'bookings', label: 'Bookings', href: '/platform/host/bookings', requiresBeta: true, section: 1 },
-    { id: 'inbox', label: 'Inbox', href: '/platform/messages', requiresBeta: true, section: 2 },
+    { id: 'inbox', label: 'Inbox', href: '/platform/messages?view=host', requiresBeta: true, section: 2 },
     {
       id: 'switch-mode',
       label: 'Switch to Renting',

@@ -97,6 +97,81 @@ export async function sendInitialMessage(listingId: string, content: string) {
   }
 }
 
+export async function sendHostMessage(listingId: string, guestUserId: string, content: string) {
+  'use server'
+  try {
+    const { userId: senderId } = auth();
+    if (!senderId) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // 1. Verify the sender is the host of the listing
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      return { success: false, error: 'Listing not found' };
+    }
+
+    if (listing.userId !== senderId) {
+      return { success: false, error: 'You are not the host of this listing' };
+    }
+
+    const receiverId = guestUserId;
+
+    // Prevent users from messaging themselves
+    if (senderId === receiverId) {
+      return { success: false, error: 'Cannot send a message to yourself' };
+    }
+
+    // 2. Find or create the conversation
+    let conversation = await prisma.conversation.findFirst({
+      where: {
+        listingId: listingId,
+        participants: {
+          every: {
+            userId: { in: [senderId, receiverId] }
+          }
+        }
+      }
+    });
+
+    if (!conversation) {
+      conversation = await prisma.conversation.create({
+        data: {
+          listingId: listingId,
+          participants: {
+            create: [
+              { userId: senderId },
+              { userId: receiverId }
+            ]
+          }
+        }
+      });
+    }
+
+    // 3. Create the message within the conversation
+    const message = await prisma.message.create({
+      data: {
+        content: content,
+        senderId: senderId,
+        conversationId: conversation.id,
+      },
+    });
+
+    return { success: true, message, conversationId: conversation.id };
+
+  } catch (error) {
+    console.error('Error sending host message:', error);
+    if (error.code === 'P2002') {
+       return { success: false, error: 'A conversation for this listing between these users might already exist or failed creation.' };
+    }
+    return { success: false, error: 'Failed to send message' };
+  }
+}
+
 // --- Start Updated markMessagesAsReadByTimestamp ---
 export async function markMessagesAsReadByTimestamp(conversationId: string, timestamp: Date) {
   try {

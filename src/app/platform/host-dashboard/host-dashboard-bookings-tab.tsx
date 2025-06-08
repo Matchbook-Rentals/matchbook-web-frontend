@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Calendar, Clock, Check, XCircle, User, Home, DollarSign, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 
 // Extended booking type with included relations
 type BookingWithRelations = {
@@ -422,12 +423,12 @@ export default function HostDashboardBookingsTab({ bookings: propBookings }: Hos
                       View Booking Details
                     </Button>
 
-                    <Button
-                      variant="outline"
+                    <MessageGuestDialog
+                      listingId={booking.listingId}
+                      guestName={booking.user ? `${booking.user.firstName} ${booking.user.lastName}` : "Guest"}
+                      guestUserId={booking.userId}
                       className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                    >
-                      Message Guest
-                    </Button>
+                    />
 
                     {booking.status === "upcoming" && (
                       <Button

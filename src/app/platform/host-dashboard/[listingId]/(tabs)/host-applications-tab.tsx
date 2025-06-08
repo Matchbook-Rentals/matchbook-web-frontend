@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ListingAndImages, RequestWithUser } from '@/types';
+import MessageGuestDialog from "@/components/ui/message-guest-dialog";
 
 // Filter options
 const filterOptions = [
@@ -52,6 +53,7 @@ const formatHousingRequestForDisplay = (request: RequestWithUser) => {
   
   return {
     id: request.id,
+    userId: request.userId,
     name,
     period,
     occupants,
@@ -152,6 +154,19 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingReque
                       Application Details
                     </Button>
                   </Link>
+                  <MessageGuestDialog
+                    listingId={listing.id}
+                    guestName={app.name}
+                    guestUserId={app.userId}
+                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
+                  >
+                    <Button
+                      variant="outline"
+                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
+                    >
+                      Message Applicant
+                    </Button>
+                  </MessageGuestDialog>
                   <Button
                     variant="outline"
                     size="icon"
