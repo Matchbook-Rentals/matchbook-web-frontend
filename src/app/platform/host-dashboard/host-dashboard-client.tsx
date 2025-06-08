@@ -1,53 +1,68 @@
-'use client';
+"use client";
 
-import React from 'react';
-import PropertyList from './property-list';
-import { Listing, ListingImage } from '@prisma/client';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { useHostProperties } from '@/contexts/host-properties-provider';
-import LoadingSpinner from '@/components/ui/spinner';
+import React from "react";
+import TabSelector from "@/components/ui/tab-selector";
+import HostDashboardListingsTab from "./host-dashboard-listings-tab";
+import HostDashboardBookingsTab from "./host-dashboard-bookings-tab";
+import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
+import { PAGE_MARGIN } from "@/constants/styles";
+import { ListingAndImages, RequestWithUser } from "@/types";
 
-const HostDashboardClient: React.FC = () => {
-  const { listings } = useHostProperties();
-  
-  // Handle empty state
-  if (!listings || listings.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4 text-gray-600">
-        <p className="text-lg">No properties found</p>
-        <p>Add your first property to get started!</p>
-      </div>
-    );
-  }
-  
-  // Group properties by status
-  const rented = listings.filter(p => p.status === "rented");
-  const booked = listings.filter(p => p.status === "booked");
-  const available = listings.filter(p => p.status === "available");
+interface HostDashboardClientProps {
+  listings: ListingAndImages[];
+  bookings: any[]; // Using any for now since we need to define the proper type
+  housingRequests: RequestWithUser[];
+}
+
+export default function HostDashboardClient({ 
+  listings, 
+  bookings, 
+  housingRequests 
+}: HostDashboardClientProps) {
+  // Debug logging
+  console.log('HostDashboardClient received data:');
+  console.log('- listings:', listings?.length || 0);
+  console.log('- bookings:', bookings?.length || 0);
+  console.log('- housingRequests:', housingRequests?.length || 0);
+  console.log('- housingRequests data:', housingRequests);
+
+  const handleTabChange = (value: string) => {
+    console.log('Tab changed to:', value);
+  };
+
+  // Define tabs
+  const tabs = [
+    {
+      value: 'listings',
+      label: 'Your Listings',
+      content: <HostDashboardListingsTab listings={listings} />
+    },
+    {
+      value: 'bookings',
+      label: 'Your Bookings',
+      content: <HostDashboardBookingsTab bookings={bookings} />
+    },
+    {
+      value: 'applications',
+      label: 'Your Applications',
+      content: <HostDashboardApplicationsTab housingRequests={housingRequests} />
+    }
+  ];
 
   return (
-    <Accordion type="multiple" className="w-full space-y-4">
-      <AccordionItem value="rented">
-        <AccordionTrigger>Rented</AccordionTrigger>
-        <AccordionContent>
-          <PropertyList properties={rented} filter="RENTED" />
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="booked">
-        <AccordionTrigger>Booked</AccordionTrigger>
-        <AccordionContent>
-          <PropertyList properties={booked} filter="BOOKED" />
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="available">
-        <AccordionTrigger>Available</AccordionTrigger>
-        <AccordionContent>
-          <PropertyList properties={available} filter="AVAILABLE" />
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div className={`bg-background ${PAGE_MARGIN} flex flex-row justify-center w-full`}>
+      <div className="bg-background  overflow-hidden w-full max-w-[1920px] relative">
+        <div className="max-w-[1373px] mx-auto">
+          <TabSelector
+            tabs={tabs}
+            defaultTab="listings"
+            useUrlParams={false}
+            onTabChange={handleTabChange}
+            tabsListClassName="border-0"
+            className="border-0"
+          />
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default HostDashboardClient;
-
+}

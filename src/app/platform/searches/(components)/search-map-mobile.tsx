@@ -456,14 +456,26 @@ const SearchMapMobile: React.FC<SearchMapProps> = ({
     };
   }, [retryCount]); // Add retryCount as dependency to trigger retries
 
+  // Only fly to center on initial load when map is way off (similar to desktop version)
   useEffect(() => {
     if (!mapRef.current || !center || !mapLoaded) return;
-    const currentMapCenter = mapRef.current.getCenter();
-    const isInitialLoadOrFar = Math.abs(currentMapCenter.lng - center[0]) > 0.1 || Math.abs(currentMapCenter.lat - center[1]) > 0.1;
-    if (isInitialLoadOrFar && !mapRef.current.isMoving()) {
-      mapRef.current.flyTo({ center: center, duration: 500, essential: true });
+
+    const currentCenter = mapRef.current.getCenter();
+
+    // Only recenter if this appears to be the initial load (center way off)
+    const isInitialLoad = Math.abs(currentCenter.lng - center[0]) > 1 ||
+      Math.abs(currentCenter.lat - center[1]) > 1;
+
+    if (isInitialLoad) {
+      // Use flyTo with a short duration to smoothly transition
+      mapRef.current.flyTo({
+        center: center,
+        duration: 500,
+        essential: true,
+        zoom: zoom,
+      });
     }
-  }, [center, mapLoaded]);
+  }, [mapLoaded]); // Only depend on mapLoaded for initial positioning
 
   useEffect(() => {
     if (mapRef.current && shouldPanTo) {

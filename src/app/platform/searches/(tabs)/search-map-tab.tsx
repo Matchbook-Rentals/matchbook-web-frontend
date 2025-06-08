@@ -377,7 +377,7 @@ const MapView: React.FC<MapViewProps> = ({ setIsFilterOpen }) => {
 
   return (
     <>
-      <div ref={containerRef} className="flex flex-col md:flex-row justify-center mx-auto w-full sm:px-2">
+      <div ref={containerRef} className="flex flex-col  md:flex-row justify-start md:justify-center mx-auto w-full sm:px-2">
         {/* Grid container - hide when fullscreen */}
         {!isFullscreen && (
           <div className="w-full md:w-3/5 md:pr-4">
