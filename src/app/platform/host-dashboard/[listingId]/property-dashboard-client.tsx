@@ -4,13 +4,20 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PAGE_MARGIN } from "@/constants/styles";
 import TabSelector from "@/components/ui/tab-selector";
+import MobileTabSelector from "@/components/ui/mobile-tab-selector";
 import { ListingAndImages, RequestWithUser } from '@/types';
 import ApplicationsTab from './(tabs)/host-applications-tab';
 import BookingsTab from './(tabs)/bookings-tab';
 import SummaryTab from './(tabs)/summary-tab';
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { FileText, Calendar, Star, Home, CalendarDays } from "lucide-react";
 
 const ReviewsContent = (): JSX.Element => {
   return <div className="mt-8">Reviews Content</div>;
+};
+
+const CalendarContent = (): JSX.Element => {
+  return <div className="mt-8">Calendar Content</div>;
 };
 
 interface PropertyDashboardClientProps {
@@ -26,11 +33,12 @@ export default function PropertyDashboardClient({
 }: PropertyDashboardClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const isMobile = useIsMobile();
   
   // Initialize active tab from URL params or default to 'applications'
   const getInitialTab = () => {
     const tabFromUrl = searchParams.get('tab');
-    const validTabs = ['applications', 'bookings', 'reviews', 'listing'];
+    const validTabs = ['applications', 'bookings', 'reviews', 'listing', 'calendar'];
     
     if (tabFromUrl && validTabs.includes(tabFromUrl)) {
       return tabFromUrl;
@@ -43,7 +51,7 @@ export default function PropertyDashboardClient({
   // Update active tab when URL params change
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
-    const validTabs = ['applications', 'bookings', 'reviews', 'listing'];
+    const validTabs = ['applications', 'bookings', 'reviews', 'listing', 'calendar'];
     
     if (tabFromUrl && validTabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
@@ -67,25 +75,47 @@ export default function PropertyDashboardClient({
   const tabs = [
     {
       value: "applications",
-      label: "Applications",
+      label: isMobile ? "Applications" : "Applications",
+      Icon: isMobile ? <FileText className="h-5 w-5" /> : undefined,
       content: <ApplicationsTab listing={listing} housingRequests={housingRequests} />,
     },
     {
       value: "bookings",
-      label: "Bookings",
+      label: isMobile ? "Bookings" : "Bookings",
+      Icon: isMobile ? <Calendar className="h-5 w-5" /> : undefined,
       content: <BookingsTab bookings={bookings} listingId={listing.id} />,
     },
     {
       value: "reviews",
-      label: "Reviews",
+      label: isMobile ? "Reviews" : "Reviews",
+      Icon: isMobile ? <Star className="h-5 w-5" /> : undefined,
       content: <ReviewsContent />,
     },
     {
       value: "listing",
-      label: "Listing",
+      label: isMobile ? "Listing" : "Listing",
+      Icon: isMobile ? <Home className="h-5 w-5" /> : undefined,
       content: <SummaryTab listing={listing} />,
     },
+    {
+      value: "calendar",
+      label: isMobile ? "Calendar" : "Calendar",
+      Icon: isMobile ? <CalendarDays className="h-5 w-5" /> : undefined,
+      content: <CalendarContent />,
+    },
   ];
+
+  if (isMobile) {
+    return (
+      <MobileTabSelector
+        tabs={tabs}
+        useUrlParams={false}
+        activeTabValue={activeTab}
+        onTabChange={handleTabChange}
+        className="bg-background"
+      />
+    );
+  }
 
   return (
     <div className={`${PAGE_MARGIN} min-h-screen pt-6`}>
