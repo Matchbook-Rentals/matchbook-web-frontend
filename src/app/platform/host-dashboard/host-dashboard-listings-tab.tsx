@@ -16,19 +16,36 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ListingAndImages } from "@/types";
 import { PAGE_MARGIN } from "@/constants/styles";
 import CalendarDialog from "@/components/ui/calendar-dialog";
 
-interface HostDashboardListingsTabProps {
-  listings: ListingAndImages[] | null;
+interface PaginationInfo {
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
-export default function HostDashboardListingsTab({ listings }: HostDashboardListingsTabProps) {
+interface HostDashboardListingsTabProps {
+  listings: ListingAndImages[] | null;
+  paginationInfo?: PaginationInfo;
+}
+
+export default function HostDashboardListingsTab({ listings, paginationInfo }: HostDashboardListingsTabProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [clientPage, setClientPage] = useState(1);
+  
+  // Client-side pagination settings
+  const clientItemsPerPage = 10; // Always paginate by 10 on client side
+  
+  // Server pagination info
+  const serverItemsPerPage = paginationInfo?.itemsPerPage || 100;
+  const serverPage = paginationInfo?.currentPage || 1;
 
   // Filter options
   const filterOptions = ["Rented", "Inactive", "Active"];
@@ -113,20 +130,43 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
   }, [listings, selectedFilters, searchTerm]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredListings.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  const totalCount = paginationInfo?.totalCount || filteredListings.length;
+  const totalClientPages = Math.ceil(filteredListings.length / clientItemsPerPage);
+  const totalServerPages = paginationInfo?.totalPages || 1;
+  
+  // Calculate which items to show based on client-side pagination
+  const startIndex = (clientPage - 1) * clientItemsPerPage;
+  const endIndex = startIndex + clientItemsPerPage;
   const paginatedListings = filteredListings.slice(startIndex, endIndex);
+
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setClientPage(newPage);
+    
+    // Check if we need to fetch more data from server
+    const totalItemsNeeded = newPage * clientItemsPerPage;
+    const currentServerOffset = (serverPage - 1) * serverItemsPerPage;
+    const currentServerEnd = currentServerOffset + (listings?.length || 0);
+    
+    if (totalItemsNeeded > currentServerEnd && serverPage < totalServerPages) {
+      // Need to fetch next batch from server
+      const url = new URL(window.location.href);
+      url.searchParams.set('page', (serverPage + 1).toString());
+      router.push(url.toString());
+    }
+  };
 
   // Reset to page 1 when filters or search term change
   React.useEffect(() => {
-    setCurrentPage(1);
+    setClientPage(1);
   }, [selectedFilters, searchTerm]);
 
   // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pages = [];
     const maxPagesToShow = 5;
+    const totalPages = totalClientPages;
+    const currentPage = clientPage;
     
     if (totalPages <= maxPagesToShow) {
       // Show all pages if total is less than max
@@ -234,7 +274,7 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
 
       {/* Listings */}
       <div className="flex-1">
-        {filteredListings.length === 0 && (
+        {paginatedListings.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             {listings?.length === 0 ? "No properties found. Add your first property to get started!" : "No properties match the selected filters."}
           </div>
@@ -310,10 +350,11 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
         })}
         
         {/* Pagination */}
-        {filteredListings.length > itemsPerPage && (
+        {filteredListings.length > clientItemsPerPage && (
           <div className="mt-8 flex justify-between items-center">
             <div className="text-sm text-gray-600">
-              Showing {startIndex + 1}-{Math.min(endIndex, filteredListings.length)} of {filteredListings.length} listings
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredListings.length)} of {filteredListings.length} filtered listings
+              {totalCount > filteredListings.length && ` (${totalCount} total)`}
             </div>
             
             <Pagination>
@@ -323,9 +364,9 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage > 1) setCurrentPage(currentPage - 1);
+                      if (clientPage > 1) handlePageChange(clientPage - 1);
                     }}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={clientPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                   />
                 </PaginationItem>
                 
@@ -338,9 +379,9 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
-                          setCurrentPage(pageNum as number);
+                          handlePageChange(pageNum as number);
                         }}
-                        isActive={currentPage === pageNum}
+                        isActive={clientPage === pageNum}
                         className="cursor-pointer"
                       >
                         {pageNum}
@@ -354,9 +395,9 @@ export default function HostDashboardListingsTab({ listings }: HostDashboardList
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                      if (clientPage < totalClientPages) handlePageChange(clientPage + 1);
                     }}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={clientPage === totalClientPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
                   />
                 </PaginationItem>
               </PaginationContent>

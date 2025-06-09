@@ -9,14 +9,23 @@ import HostDashboardApplicationsTab from "./host-dashboard-applications-tab";
 import { PAGE_MARGIN } from "@/constants/styles";
 import { ListingAndImages, RequestWithUser } from "@/types";
 
+interface PaginationInfo {
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  itemsPerPage: number;
+}
+
 interface HostDashboardClientProps {
   listings: ListingAndImages[];
+  listingsPagination?: PaginationInfo;
   bookings: any[]; // Using any for now since we need to define the proper type
   housingRequests: RequestWithUser[];
 }
 
 export default function HostDashboardClient({ 
   listings, 
+  listingsPagination,
   bookings, 
   housingRequests 
 }: HostDashboardClientProps) {
@@ -72,7 +81,7 @@ export default function HostDashboardClient({
     {
       value: 'listings',
       label: 'Your Listings',
-      content: <HostDashboardListingsTab listings={listings} />
+      content: <HostDashboardListingsTab listings={listings} paginationInfo={listingsPagination} />
     },
     {
       value: 'bookings',
