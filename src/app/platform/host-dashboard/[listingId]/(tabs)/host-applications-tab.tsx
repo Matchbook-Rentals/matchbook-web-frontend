@@ -1,11 +1,20 @@
-import { MoreHorizontalIcon } from "lucide-react";
-import React from "react";
+import { MoreHorizontalIcon, Search, Home } from "lucide-react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ListingAndImages, RequestWithUser } from '@/types';
 import MessageGuestDialog from "@/components/ui/message-guest-dialog";
+import TabLayout from "../../components/tab-layout";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // Filter options
 const filterOptions = [
@@ -68,119 +77,197 @@ interface ApplicationsTabProps {
 }
 
 const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ listing, housingRequests }) => {
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const isMobile = useIsMobile();
+
   // Convert housing requests to the format the UI expects
   const applications = housingRequests.map(formatHousingRequestForDisplay);
 
-  return (
-    <div className="flex mt-8">
-      {/* Left sidebar - using 15% width */}
-      <div className="w-[15%] mr-6">
-        <h1 className="text-[32px] text-[#3f3f3f] font-medium [font-family:'Poppins',Helvetica] mb-[45px]">
-          Review your Applications
-        </h1>
+  // Filter applications based on selected filters and search term
+  const filteredApplications = useMemo(() => {
+    let filtered = applications;
+    
+    // Apply status filters
+    if (selectedFilters.length > 0) {
+      filtered = filtered.filter(app => {
+        return selectedFilters.includes(app.status.toLowerCase());
+      });
+    }
+    
+    // Apply search filter
+    if (searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(app => {
+        // Search in applicant name
+        if (app.name.toLowerCase().includes(searchLower)) return true;
+        
+        // Search in period/dates
+        if (app.period.toLowerCase().includes(searchLower)) return true;
+        
+        return false;
+      });
+    }
+    
+    return filtered;
+  }, [applications, selectedFilters, searchTerm]);
 
-        {/* Filter section */}
-        <div className="flex flex-col w-full">
-          <div className="flex flex-col gap-6 py-6">
-            <div className="flex flex-col gap-4">
-              <div className="[font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
-                Filter by Status
-              </div>
+  // Toggle filter selection
+  const toggleFilter = (filter: string) => {
+    setSelectedFilters(prev => 
+      prev.includes(filter) 
+        ? prev.filter(f => f !== filter)
+        : [...prev, filter]
+    );
+  };
 
-              <div className="flex flex-col w-full gap-2">
-                {filterOptions.map((option) => (
-                  <div key={option.id} className="flex items-center gap-2">
-                    <Checkbox
-                      id={option.id}
-                      className="w-6 h-6 rounded-sm"
-                    />
-                    <label
-                      htmlFor={option.id}
-                      className="[font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5"
-                    >
-                      {option.label}
-                    </label>
-                  </div>
-                ))}
+  // Sidebar content
+  const sidebarContent = (
+    <>
+      <div className="py-6">
+        <div className="flex flex-col items-start gap-4">
+          <div className="self-stretch [font-family:'Outfit',Helvetica] font-medium text-[#271c1a] text-[15px] leading-5">
+            Filter by Status
+          </div>
+
+          <div className="flex flex-col w-60 items-start gap-2">
+            {filterOptions.map((option, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 w-full"
+              >
+                <Checkbox
+                  id={`filter-${index}`}
+                  className="w-6 h-6 rounded-sm"
+                  checked={selectedFilters.includes(option.id)}
+                  onCheckedChange={() => toggleFilter(option.id)}
+                />
+                <label
+                  htmlFor={`filter-${index}`}
+                  className="flex-1 [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFilter(option.id);
+                  }}
+                >
+                  {option.label}
+                </label>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
+      
+      {/* Search bar */}
+      <div className="mt-6 px-1">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search by name or dates..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full rounded-lg border border-solid border-[#6e504933] [font-family:'Outfit',Helvetica] font-normal text-[#271c1a] text-[15px]"
+          />
+        </div>
+      </div>
+    </>
+  );
 
-      {/* Application cards */}
-      <div className="flex flex-col gap-5 flex-1">
-        {applications.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No applications yet for this listing.
-          </div>
-        ) : (
-          applications.map((app) => (
-            <Card
-              key={app.id}
-              className="rounded-[5px] border border-solid border-[#6e504933]"
-            >
-              <CardContent className="p-4">
-                <div className="flex justify-between mb-1">
-                  <h3 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
-                    {app.name}
-                  </h3>
-                  <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl leading-4">
+  return (
+    <TabLayout
+      title="Applications"
+      sidebarContent={sidebarContent}
+      emptyStateMessage={applications.length === 0 ? "No applications yet for this listing." : "No applications match the selected filters."}
+    >
+      {filteredApplications.map((app) => {
+        const addressDisplay = isMobile 
+          ? (listing.streetAddress1 || `Property in ${listing.state || 'Unknown Location'}`)
+          : `${listing.streetAddress1 || ''} ${listing.city || ''}, ${listing.state || ''} ${listing.postalCode || ''}`;
+
+        return (
+          <Card
+            key={app.id}
+            className="mb-8 rounded-[5px] border border-solid border-[#6e504933]"
+          >
+            <CardContent className="p-4">
+              <div className="mb-2">
+                <div className="flex justify-between">
+                  <h2 className="[font-family:'Poppins',Helvetica] font-semibold text-[#271c1a] text-[17px] leading-6">
+                    {addressDisplay}
+                  </h2>
+                  <div className="[font-family:'Poppins',Helvetica] font-medium text-black text-xl text-right leading-4">
                     {app.price}
                   </div>
                 </div>
 
-                <div className="flex justify-between mb-2">
-                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
-                    {app.period}
+                <div className="flex justify-between mt-1">
+                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[16px] leading-5">
+                    Applicant: {app.name}
                   </div>
                   <div
                     className={`[font-family:'Poppins',Helvetica] font-medium text-[15px] leading-5 ${getStatusColor(app.status)}`}
                   >
-                    {app.status}
+                    {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
                   </div>
                 </div>
 
-                <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5 mb-8">
-                  {app.occupants}
+                <div className="mt-1">
+                  <div className="[font-family:'Poppins',Helvetica] font-normal text-[#271c1a] text-[15px] leading-5">
+                    {app.occupants} • {app.period}
+                  </div>
                 </div>
+              </div>
 
-                <div className="flex gap-4">
-                  <Link href={`/platform/host-dashboard/${listing.id}/${app.id}?from=listing`}>
-                    <Button
-                      variant="outline"
-                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                    >
-                      Application Details
-                    </Button>
-                  </Link>
-                  <MessageGuestDialog
-                    listingId={listing.id}
-                    guestName={app.name}
-                    guestUserId={app.userId}
-                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
-                  >
-                    <Button
-                      variant="outline"
-                      className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
-                    >
-                      Message Applicant
-                    </Button>
-                  </MessageGuestDialog>
+              <div className="flex items-center gap-4 mt-8">
+                <Link href={`/platform/host-dashboard/${listing.id}/${app.id}?from=listing`}>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] p-2 h-auto w-auto"
+                    className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
                   >
-                    <MoreHorizontalIcon className="h-5 w-5" />
+                    Application Details
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
-    </div>
+                </Link>
+
+                <MessageGuestDialog
+                  listingId={listing.id}
+                  guestName={app.name}
+                  guestUserId={app.userId}
+                  className="rounded-lg border border-solid border-[#6e504933] h-10 px-4 py-2 [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px]"
+                >
+                  <Button
+                    variant="outline"
+                    className="rounded-lg border border-solid border-[#6e504933] [font-family:'Poppins',Helvetica] font-medium text-[#050000] text-[15px] leading-5"
+                  >
+                    Message Applicant
+                  </Button>
+                </MessageGuestDialog>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-lg border-[1.5px] border-solid border-[#6e4f4933] h-10 w-10 p-2"
+                    >
+                      <MoreHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/platform/host-dashboard/${listing.id}`} className="cursor-pointer flex items-center gap-2">
+                        <Home className="h-4 w-4" />
+                        Manage Listing
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </TabLayout>
   );
 };
 
